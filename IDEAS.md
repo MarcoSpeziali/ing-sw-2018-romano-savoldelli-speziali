@@ -47,8 +47,6 @@ public class Player {
 
     @NetworkSynchronize(NetworkSynchronizationSide.Server)
     private int _goldCount;
-
-    ...
 }
 ```
 
