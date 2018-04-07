@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cards>
+    <card id="red_shade" nameKey="cards.private_cards.red_shade">
+        <objective pointsPerCompletion="$SHADE$">
+            <foreach die="DIE" filterColor="$RED$">
+                <take />
+            </foreach>
+        </objective>
+    </card>
+    <card id="yellow_shade" nameKey="cards.private_cards.yellow_shade">
+        <objective pointsPerCompletion="$SHADE$">
+            <foreach die="DIE" filterColor="$YELLOW$">
+                <take />
+            </foreach>
+        </objective>
+    </card>
+    <card id="green_shade" nameKey="cards.private_cards.green_shade">
+        <objective pointsPerCompletion="$SHADE$">
+            <foreach die="DIE" filterColor="$GREEN$">
+                <take />
+            </foreach>
+        </objective>
+    </card>
+    <card id="blue_shade" nameKey="cards.private_cards.blue_shade">
+        <objective pointsPerCompletion="$SHADE$">
+            <foreach die="DIE" filterColor="$BLUE$">
+                <take />
+            </foreach>
+        </objective>
+    </card>
+    <card id="purple_shade" nameKey="cards.private_cards.purple_shade">
+        <objective pointsPerCompletion="$SHADE$">
+            <foreach die="DIE" in="window" filterColor="$RED$">
+                <take />
+            </foreach>
+        </objective>
+    </card>
+</cards>
