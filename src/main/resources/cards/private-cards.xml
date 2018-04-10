@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cards>
     <card id="red_shade" nameKey="cards.private_cards.red_shade">
-        <objective pointsPerCompletion="$SHADE$">
-            <foreach die="DIE" filterColor="$RED$">
+        <objective pointsPerCompletion="shade">
+            <for-die die="DIE" in="$WINDOW$" filterColor="red">
                 <take />
-            </foreach>
+            </for-die>
         </objective>
     </card>
     <card id="yellow_shade" nameKey="cards.private_cards.yellow_shade">
-        <objective pointsPerCompletion="$SHADE$">
-            <foreach die="DIE" filterColor="$YELLOW$">
+        <objective pointsPerCompletion="shade">
+            <for-die die="DIE" in="$WINDOW$" filterColor="yellow">
                 <take />
-            </foreach>
+            </for-die>
         </objective>
     </card>
     <card id="green_shade" nameKey="cards.private_cards.green_shade">
-        <objective pointsPerCompletion="$SHADE$">
-            <foreach die="DIE" filterColor="$GREEN$">
+        <objective pointsPerCompletion="shade">
+            <for-die die="DIE" in="$WINDOW$" filterColor="green">
                 <take />
-            </foreach>
+            </for-die>
         </objective>
     </card>
     <card id="blue_shade" nameKey="cards.private_cards.blue_shade">
-        <objective pointsPerCompletion="$SHADE$">
-            <foreach die="DIE" filterColor="$BLUE$">
+        <objective pointsPerCompletion="shade">
+            <for-die die="DIE" in="$WINDOW$" filterColor="blue">
                 <take />
-            </foreach>
+            </for-die>
         </objective>
     </card>
     <card id="purple_shade" nameKey="cards.private_cards.purple_shade">
-        <objective pointsPerCompletion="$SHADE$">
-            <foreach die="DIE" in="window" filterColor="$RED$">
+        <objective pointsPerCompletion="shade">
+            <for-die die="DIE" in="$WINDOW$" filterColor="purple">
                 <take />
-            </foreach>
+            </for-die>
         </objective>
     </card>
 </cards>
