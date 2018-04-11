@@ -4,16 +4,11 @@
         <objective pointsPerCompletion="6">
             <for-row row="ROW" in="$WINDOW$">
                 <take-if predicate="distinct_color $ROW$" />
-                <!--
-                <if predicate="distinct_color $ROW$">
-                    <take />
-                </if>
-                -->
             </for-row>
         </objective>
     </card>
     <card id="column_color_variety" nameKey="cards.public_cards.column_color_variety">
-        <objective pointsPerCompletion="5" in="$WINDOW$">
+        <objective pointsPerCompletion="5">
             <for-column column="COLUMN" in="$WINDOW$">
                 <take-if predicate="distinct_color $COLUMN$" />
             </for-column>

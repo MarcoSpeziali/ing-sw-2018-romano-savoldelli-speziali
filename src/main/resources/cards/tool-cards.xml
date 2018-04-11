@@ -3,7 +3,7 @@
     <card id="grozing_pliers" nameKey="cards.tool_cards.grozing_pliers" initialCost="1">
         <effect root="start">
 	        <action id="start" effect="choose draft_pool 1" result="DIE" next="inc_dec"/>
-	        <action-group id="inc_dec" mode="xor">
+	        <action-group id="inc_dec" executionMode="choose 1">
                 <action effect="increment $DIE$ 1" constraint="not-6" />
                 <action effect="decrement $DIE$ 1" constraint="not-1" />
             </action-group>
@@ -48,7 +48,7 @@
     </card>
     <card id="glazing_hammer" nameKey="cards.tool_cards.glazing_hammer" initialCost="1">
         <effect constraint="player_turn">
-            <action effect="redraw all" />
+            <action effect="redraw $DRAFT_POOL_DICE$" />
         </effect>
         <constraints>
             <constraint-group id="player_turn" mode="and">
@@ -61,7 +61,7 @@
         <effect root="start" constraint="player_turn">
             <action id="start" effect="pick draft_pool 1" result="DIE" next="place"/>
             <action id="place" effetct="put $DIE$ window" next="side-effect" />
-            <action id="side-effect" effect="skip turn 2 $CURRENT_ROUND$ $CURRENT_PLAYER$" />
+            <action id="side-effect" effect="skip_turn 2 $CURRENT_ROUND$ $CURRENT_PLAYER$" />
         </effect>
         <constraints>
             <constraint-group id="player_turn" mode="and">
@@ -98,19 +98,6 @@
                 <action id="pick" effect="pick window 1 [color=$DIE_COLOR$]" result="DIE" next="put"/>
                 <action id="put" effect="put $DIE$ window"/>
             </action-group>
-            <!--
-            <action id="pick" effect="pick window 1 [color=$DIE_COLOR$]" result="DIE" next="put"/>
-            <action id="put" effect="put $DIE$ window" next="second"/>
-            <action-group id="second" optional="true" root="pick">
-                <action id="pick" effect="pick window 1 [color=$DIE_COLOR$]" result="DIE" next="put"/>
-                <action id="put" effect="put $DIE$ window"/>
-            </action-group>
-            -->
         </effect>
     </card>
 </cards>
-
-<!--
-choose 0..*
-repeat 0..*
--->
