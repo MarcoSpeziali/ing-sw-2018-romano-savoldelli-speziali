@@ -9,8 +9,597 @@
 
         <cell color="green" />
         <cell />
+        <cell shade="5"/>
+        <cell />
+        <cell shade="4"/>
+        
+        <cell shade="3"/>
+        <cell />
+        <cell color="red"/>
+        <cell />
+        <cell color ="green"/>
+
+        <cell shade="2"/>
+        <cell />
+        <cell />
+        <cell color="blue"/>
+        <cell color="yellow"/>
     </window>
     <window rows="4" columns="5" id="virtus" sibling="kaleidoscopic_dream" name="windows.virtus" difficulty="5">
+        <cell shade="4"/>
+        <cell />
+        <cell shade="2"/>
+        <cell shade="5"/>
+        <cell color="green"/>
 
+        <cell />
+        <cell />
+        <cell shade="6"/>
+        <cell color="green"/>
+        <cell shade="2"/>
+
+        <cell />
+        <cell shade="3"/>
+        <cell color="green"/>
+        <cell shade="4"/>
+        <cell />
+
+        <cell shade="5"/>
+        <cell color="green"/>
+        <cell shade="1"/>
+        <cell />
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="aurorae_magnificus" sibling="via_lux" name="windows.aurorae_magnificus" difficulty="5">
+        <cell shade="5"/>
+        <cell color="green"/>
+        <cell color="blude"/>
+        <cell color="purple"/>
+        <cell shade="2"/>
+
+        <cell color="purple"/>
+        <cell />
+        <cell />
+        <cell />
+        <cell color="yellow"/>
+
+        <cell color="yellow"/>
+        <cell />
+        <cell shade="6"/>
+        <cell />
+        <cell color="purple"/>
+
+        <cell shade="1"/>
+        <cell />
+        <cell />
+        <cell color="green"/>
+        <cell shade="4"/>
+    </window>
+    <window rows="4" columns="5" id="via_lux" sibling="aurorae_magnificus" name="windows.via_lux" difficulty="4">
+        <cell color="yellow"/>
+        <cell />
+        <cell shade="6"/>
+        <cell />
+        <cell />
+
+        <cell />
+        <cell shade="1"/>
+        <cell shade="5"/>
+        <cell />
+        <cell shade="2"/>
+
+        <cell shade="3"/>
+        <cell color="yellow"/>
+        <cell color="red"/>
+        <cell color="purple"/>
+        <cell />
+
+        <cell />
+        <cell />
+        <cell shade="4"/>
+        <cell shade="3"/>
+        <cell color="red"/>
+    </window>
+    <window rows="4" columns="5" id="sun_catcher" sibling="bellesguard" name="windows.sun_catcher" difficulty="3">
+        <cell />
+        <cell color="blue"/>
+        <cell shade="2"/>
+        <cell />
+        <cell color="yellow"/>
+
+        <cell />
+        <cell shade="4"/>
+        <cell />
+        <cell color="red"/>
+        <cell />
+
+        <cell />
+        <cell />
+        <cell shade="5"/>
+        <cell color="yellow"/>
+        <cell />
+
+        <cell color="green"/>
+        <cell shade="3"/>
+        <cell />
+        <cell />
+        <cell color="purple"/>
+    </window>
+    <window rows="4" columns="5" id="bellesguard" sibling="sun_catcher" name="window.bellesguard" difficulty="3">
+        <cell color="blue"/>
+        <cell shade="6"/>
+        <cell />
+        <cell />
+        <cell color="yellow"/>
+
+        <cell />
+        <cell shade="3"/>
+        <cell color="blue"/>
+        <cell />
+        <cell />
+
+        <cell />
+        <cell shade="5"/>
+        <cell shade="6"/>
+        <cell shade="2"/>
+        <cell />
+
+        <cell />
+        <cell shade="4"/>
+        <cell />
+        <cell shade="1"/>
+        <cell color="green"/>
+    </window>
+    <window rows="4" columns="5" id="firmitas" sibling="symphony_of_light" name="windows.firmitas" difficulty="5">
+        <cell color="purple"/>
+        <cell shade="6"/>
+        <cell />
+        <cell />
+        <cell shade="3"/>
+
+        <cell shade="5"/>
+        <cell color="purple"/>
+        <cell shade="3"/>
+        <cell />
+        <cell />
+
+        <cell />
+        <cell shade="2"/>
+        <cell color="purple"/>
+        <cell shade="1"/>
+        <cell />
+
+        <cell />    
+        <cell shade="1"/>
+        <cell shade="5"/>
+        <cell color="purple"/>
+        <cell shade="4"/>
+    </window>
+    <window rows="4" columns="5" id="symphony_of_light" sibling="firmitas" name="window.symphony_of_light" difficulty="6">
+        <cell shade="2"/>
+        <cell />
+        <cell shade="5"/>
+        <cell />
+        <cell shade="1"/>
+
+        <cell color="yellow"/>
+        <cell shade="6"/>  
+        <cell color="purple"/> 
+        <cell shade="2"/>
+        <cell color="red"/>
+
+        <cell />
+        <cell color="blue"/>
+        <cell shade="4"/>
+        <cell color="green"/>
+        <cell />
+
+        <cell />
+        <cell shade="3"/>
+        <cell />
+        <cell shade="5"/>
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="aurora_sagradis" name="industria" difficulty="4">
+        <cell color="red"/>
+        <cell />
+        <cell color="blue"/>
+        <cell />
+        <cell color="yellow"/>
+
+        <cell shade="4"/>
+        <cell color="purple"/>
+        <cell shade="3"/>
+        <cell color="green"/>
+        <cell shade="2"/>
+
+        <cell />
+        <cell shade="1"/>
+        <cell />
+        <cell shade="5"/>
+        <cell />
+
+        <cell />
+        <cell />
+        <cell shade="6"/>
+        <cell />
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="industria" sibling="aurora_sagradis" name="windows.industria" difficulty="5">
+        <cell shade="1"/>
+        <cell color="red"/>
+        <cell shade="3"/>
+        <cell />
+        <cell shade="6"/>
+
+        <cell shade="5"/>
+        <cell shade="4"/>
+        <cell color="red"/>
+        <cell shade="2"/>
+        <cell />
+
+        <cell />
+        <cell />
+        <cell shade="5"/>
+        <cell color="red"/>
+        <cell shade="1"/>
+
+        <cell />
+        <cell />
+        <cell />
+        <cell shade="3"/>
+        <cell color="red"/>
+    </window>
+    <window rows="4" columns="5" id="shadow_thief" sibling="battlo" name="window.shadow_thief" difficulty="5">
+        <cell shade="6"/>
+        <cell color="purple"/>
+        <cell />
+        <cell />
+        <cell shade="5"/>
+
+        <cell shade="5"/>
+        <cell />
+        <cell color="purple"/>
+        <cell />
+        <cell />
+
+        <cell color="red"/>
+        <cell shade="6"/>
+        <cell />
+        <cell color="purple"/>
+        <cell />
+
+        <cell color="yellow"/>
+        <cell color="red"/>
+        <cell shade="5"/>
+        <cell shade="4"/>
+        <cell shade="3"/>
+    </window>
+    <window rows="4" columns="5" id="battlo" sibling="shadow_thief" name="window.battlo" difficulty="5">
+        <cell />
+        <cell />
+        <cell shade="6"/>
+        <cell />
+        <cell />
+
+        <cell />
+        <cell shade="5"/>
+        <cell color="blue"/>
+        <cell shade="4"/>
+        <cell />
+
+        <cell shade="3"/>
+        <cell color="green"/>
+        <cell color="yellow"/>
+        <cell color="purple"/>
+        <cell shade="2"/>
+
+        <cell shade="1"/>
+        <cell shade="4"/>
+        <cell color="red"/>
+        <cell color="5"/>
+        <cell color="3"/>
+    </window>
+    <window rows="4" columns="5" id="gravitas" sibling="parental_drops" name="windows.gravitas" difficulty="5">
+        <cell shade="1"/>
+        <cell />
+        <cell shade="3"/>
+        <cell color="blue"/>
+        <cell />
+
+        <cell />
+        <cell shade="2"/>
+        <cell color="blue"/>
+        <cell />
+        <cell />
+
+        <cell shade="6"/>
+        <cell color="blue"/>
+        <cell />
+        <cell shade="4"/>
+        <cell />
+
+        <cell color="blue"/>
+        <cell shade="5"/>
+        <cell shade="2"/>
+        <cell />
+        <cell shade="1"/>
+    </window>
+    <window rows="4" columns="5" id="parental_drop" sibling="gravitas" name="windows.parental_drop" difficulty="3">
+        <cell />
+        <cell shade="4"/>
+        <cell />
+        <cell color="yellow"/>
+        <cell shade="6"/>
+
+        <cell color="red"/>
+        <cell />
+        <cell shade="2"/>
+        <cell />
+        <cell />
+
+        <cell />
+        <cell />
+        <cell color="red"/>
+        <cell color="purple"/>
+        <cell shade="1"/>
+
+        <cell color="blue"/>
+        <cell color="yellow"/>
+        <cell />
+        <cell />
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="lux_astram" sibling="chromatic_splendor" name="windows.lux_astram" difficulty="5">
+        <cell />
+        <cell shade="1"/>
+        <cell color="green"/>
+        <cell color="purple"/>
+        <cell shade="4"/>
+
+        <cell shade="6"/>
+        <cell color="purple"/>
+        <cell shade="2"/>
+        <cell shade="5"/>
+        <cell color="green"/>
+
+        <cell shade="1"/>
+        <cell color="green"/>
+        <cell shade="5"/>
+        <cell shade="3"/>
+        <cell color="purple"/>
+
+        <cell />
+        <cell />
+        <cell />
+        <cell />
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="chomatic_splendor" sibling="lux_astram" name="windows.chromatic_splendor" difficulty="4">
+        <cell />
+        <cell />
+        <cell color="green"/>
+        <cell />
+        <cell />
+
+        <cell shade="2"/>
+        <cell color="yellow"/>
+        <cell shade="5"/>
+        <cell color="blue"/>
+        <cell shade="1"/>
+
+        <cell />
+        <cell color="red"/>
+        <cell shade="3"/>
+        <cell color="purple"/>
+        <cell />
+
+        <cell shade="1"/>
+        <cell />
+        <cell shade="6"/>
+        <cell />
+        <cell shade="4"/>
+    </window>
+    <window rows="4" columns="5" id="firelight" sibling="luz_celestial" name="windows.firelight" difficulty="5">
+        <cell shade="3"/>
+        <cell shade="4"/>
+        <cell shade="1"/>
+        <cell shade="5"/>
+        <cell />
+
+        <cell />
+        <cell shade="6"/>
+        <cell shade="2"/>
+        <cell />
+        <cell color="yellow"/>
+
+        <cell />
+        <cell />
+        <cell />
+        <cell color="yellow"/>
+        <cell color="red"/>
+
+        <cell shade="5"/>
+        <cell />
+        <cell color="yellow"/>
+        <cell color="red"/>
+        <cell shade="6"/>
+    </window>
+    <window rows="4" columns="5" id="luz_celestial" sibling="firelight" name="windows.luz_celestial" difficulty="3">
+        <cell />
+        <cell />
+        <cell color="red"/>
+        <cell shade="5"/>
+        <cell />
+
+        <cell color="purple"/>
+        <cell shade="4"/>
+        <cell />
+        <cell color="green"/>
+        <cell shade="3"/>
+
+        <cell shade="6"/>
+        <cell />
+        <cell />
+        <cell color="blue"/>
+        <cell />
+
+        <cell />
+        <cell color="yellow"/>
+        <cell shade="2"/>
+        <cell />
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="water_of_life" sibling="ripples_of_light" name="window.ripples_of_light" difficulty="6">
+        <cell shade="6"/>
+        <cell color="blue"/>
+        <cell />
+        <cell />
+        <cell shade="1"/>
+
+        <cell />
+        <cell shade="5"/>
+        <cell color="blue"/>
+        <cell />
+        <cell />
+
+        <cell shade="4"/>
+        <cell color="red"/>
+        <cell shade="2"/>
+        <cell color="blue"/>
+        <cell />
+
+        <cell color="green"/>
+        <cell shade="6"/>
+        <cell color="yellow"/>
+        <cell shade="3"/>
+        <cell color="purple"/>
+    </window>
+    <window rows="4" columns="5" id="ripples_of_light" sibling="water_of_light" name="window.ripples_of_light" difficulty="5">
+        <cell />
+        <cell />
+        <cell />
+        <cell color="red"/>
+        <cell shade="5"/>
+
+        <cell />
+        <cell />
+        <cell color="purple"/>
+        <cell shade="4"/>
+        <cell color="blue"/>
+
+        <cell />
+        <cell color="blue"/>
+        <cell shade="3"/>
+        <cell color="yellow"/>
+        <cell shade="6"/>
+
+        <cell color="yellow"/>
+        <cell shade="2"/>
+        <cell color="green"/>
+        <cell shade="1"/>
+        <cell color="red"/>
+    </window>
+    <window rows="4" columns="5" id="lux_mundi" sibling="comitas" name="window.lux_mundi" difficulty="6">
+        <cell />
+        <cell />
+        <cell shade="1"/>
+        <cell />
+        <cell />
+
+        <cell shade="1"/>
+        <cell color="green"/>
+        <cell shade="3"/>
+        <cell color="blue"/>
+        <cell shade="2"/>
+
+        <cell color="blue"/>
+        <cell shade="5"/>
+        <cell shade="4"/>
+        <cell shade="6"/>
+        <cell color="green"/>
+
+        <cell />
+        <cell color="blue"/>
+        <cell shade="5"/>
+        <cell color="green"/>
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="comitas" sibling="lux_mundi" name="window.comitas" difficulty="5">
+        <cell color="yellow"/>
+        <cell />
+        <cell shade="2"/>
+        <cell />
+        <cell shade="6"/>
+
+        <cell />
+        <cell shade="4"/>
+        <cell />
+        <cell shade="5"/>
+        <cell color="yellow"/>
+
+        <cell />
+        <cell />
+        <cell />
+        <cell color="yellow"/>
+        <cell shade="5"/>
+
+        <cell shade="1"/>
+        <cell shade="2"/>
+        <cell color="yellow"/>
+        <cell shade="3"/>
+        <cell />
+    </window>
+    <window rows="4" columns="5" id="suns_glory" sibling="fulgor_del_cielo" name="windows.suns_glory" difficulty="6">
+        <cell shade="1"/>
+        <cell color="purple"/>
+        <cell color="yellow"/>
+        <cell />
+        <cell shade="4"/>
+
+        <cell color="purple"/>
+        <cell color="yellow"/>
+        <cell />
+        <cell />
+        <cell shade="6"/>
+
+        <cell color="yellow"/>
+        <cell />
+        <cell />
+        <cell shade="5"/>
+        <cell shade="3"/>
+
+        <cell />
+        <cell shade="5"/>
+        <cell shade="4"/>
+        <cell shade="2"/>
+        <cell shade="1"/>
+    </window>
+    <window rows="4" columns="5" id="fulgor_del_cielo" sibling="suns_glory" name="windows.fulgor_del_cielo" difficulty="5">
+        <cell />
+        <cell color="blue"/>
+        <cell color="red"/>
+        <cell />
+        <cell />
+
+        <cell />
+        <cell shade="4"/>
+        <cell shade="5"/>
+        <cell />
+        <cell color="blue"/>
+
+        <cell color="blue"/>
+        <cell shade="2"/>
+        <cell />
+        <cell color="red"/>
+        <cell shade="5"/>
+
+        <cell shade="6"/>
+        <cell color="red"/>
+        <cell shade="3"/>
+        <cell shade="1"/>
+        <cell />
     </window>
 </windows>
+
+

@@ -51,7 +51,7 @@
             <action effect="redraw $DRAFT_POOL_DICE$" />
         </effect>
         <constraints>
-            <constraint-group id="player_turn" mode="and">
+            <constraint-group id="player_turn">
                 <constraint>$PLAYER_TURN$ == 2</constraint>
                 <constraint>$PLAYER_TURN_PHASE$ == START</constraint>
             </constraint-group>
@@ -64,7 +64,7 @@
             <action id="side-effect" effect="skip_turn 2 $CURRENT_ROUND$ $CURRENT_PLAYER$" />
         </effect>
         <constraints>
-            <constraint-group id="player_turn" mode="and">
+            <constraint-group id="player_turn">
                 <constraint>$PLAYER_TURN$ == 1</constraint>
                 <constraint>$PLAYER_TURN_PHASE$ == END</constraint>
             </constraint-group>
