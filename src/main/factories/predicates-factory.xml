@@ -4,12 +4,10 @@
         <parameters>
             <parameter name="dice" class="it.polimi.ingsw.core.Die" isMultiple="true"/>
         </parameters>
-        <result class="java.lang.Boolean" isMultiple="false"/>
     </predicate>
     <predicate id="distinct_color" class="it.polimi.ingsw.core.instructions.predicates.DistinctColor">
         <parameters>
             <parameter name="dice" class="it.polimi.ingsw.core.Die" isMultiple="true"/>
         </parameters>
-        <result class="java.lang.Boolean" isMultiple="false"/>
     </predicate>
 </predicate>
