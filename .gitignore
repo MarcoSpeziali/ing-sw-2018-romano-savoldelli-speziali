@@ -104,6 +104,7 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 
 # Visual Studio Code
+.vscode
 .classpath
 .project
 .settings/
