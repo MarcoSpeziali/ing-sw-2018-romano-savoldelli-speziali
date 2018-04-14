@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <windows>
-    <window rows="4" columns="5" id="kaleidoscopic_dream" sibling="virtus" name="windows.kaleidoscopic_dream" difficulty="4">
+    <window rows="4" columns="5" id="kaleidoscopic_dream" sibling="firmitas" name="windows.kaleidoscopic_dream" difficulty="4">
         <cell color="yellow" />
         <cell color="blue" />
         <cell />
@@ -25,7 +25,7 @@
         <cell color="blue"/>
         <cell color="yellow"/>
     </window>
-    <window rows="4" columns="5" id="virtus" sibling="kaleidoscopic_dream" name="windows.virtus" difficulty="5">
+    <window rows="4" columns="5" id="virtus" sibling="symphony_of_light" name="windows.virtus" difficulty="5">
         <cell shade="4"/>
         <cell />
         <cell shade="2"/>
@@ -50,7 +50,7 @@
         <cell />
         <cell />
     </window>
-    <window rows="4" columns="5" id="aurorae_magnificus" sibling="via_lux" name="windows.aurorae_magnificus" difficulty="5">
+    <window rows="4" columns="5" id="aurorae_magnificus" sibling="aurora_sagradis" name="windows.aurorae_magnificus" difficulty="5">
         <cell shade="5"/>
         <cell color="green"/>
         <cell color="blude"/>
@@ -75,7 +75,7 @@
         <cell color="green"/>
         <cell shade="4"/>
     </window>
-    <window rows="4" columns="5" id="via_lux" sibling="aurorae_magnificus" name="windows.via_lux" difficulty="4">
+    <window rows="4" columns="5" id="via_lux" sibling="industria" name="windows.via_lux" difficulty="4">
         <cell color="yellow"/>
         <cell />
         <cell shade="6"/>
@@ -100,7 +100,7 @@
         <cell shade="3"/>
         <cell color="red"/>
     </window>
-    <window rows="4" columns="5" id="sun_catcher" sibling="bellesguard" name="windows.sun_catcher" difficulty="3">
+    <window rows="4" columns="5" id="sun_catcher" sibling="shadow_thief" name="windows.sun_catcher" difficulty="3">
         <cell />
         <cell color="blue"/>
         <cell shade="2"/>
@@ -125,7 +125,7 @@
         <cell />
         <cell color="purple"/>
     </window>
-    <window rows="4" columns="5" id="bellesguard" sibling="sun_catcher" name="window.bellesguard" difficulty="3">
+    <window rows="4" columns="5" id="bellesguard" sibling="battlo" name="window.bellesguard" difficulty="3">
         <cell color="blue"/>
         <cell shade="6"/>
         <cell />
@@ -150,7 +150,7 @@
         <cell shade="1"/>
         <cell color="green"/>
     </window>
-    <window rows="4" columns="5" id="firmitas" sibling="symphony_of_light" name="windows.firmitas" difficulty="5">
+    <window rows="4" columns="5" id="firmitas" sibling="kaleidoscopic_dream" name="windows.firmitas" difficulty="5">
         <cell color="purple"/>
         <cell shade="6"/>
         <cell />
@@ -175,7 +175,7 @@
         <cell color="purple"/>
         <cell shade="4"/>
     </window>
-    <window rows="4" columns="5" id="symphony_of_light" sibling="firmitas" name="window.symphony_of_light" difficulty="6">
+    <window rows="4" columns="5" id="symphony_of_light" sibling="virtus" name="window.symphony_of_light" difficulty="6">
         <cell shade="2"/>
         <cell />
         <cell shade="5"/>
@@ -200,7 +200,7 @@
         <cell shade="5"/>
         <cell />
     </window>
-    <window rows="4" columns="5" id="aurora_sagradis" name="industria" difficulty="4">
+    <window rows="4" columns="5" id="aurora_sagradis" name="aurorae_mangnificus" difficulty="4">
         <cell color="red"/>
         <cell />
         <cell color="blue"/>
@@ -225,7 +225,7 @@
         <cell />
         <cell />
     </window>
-    <window rows="4" columns="5" id="industria" sibling="aurora_sagradis" name="windows.industria" difficulty="5">
+    <window rows="4" columns="5" id="industria" sibling="via_lux" name="windows.industria" difficulty="5">
         <cell shade="1"/>
         <cell color="red"/>
         <cell shade="3"/>
@@ -250,7 +250,7 @@
         <cell shade="3"/>
         <cell color="red"/>
     </window>
-    <window rows="4" columns="5" id="shadow_thief" sibling="battlo" name="window.shadow_thief" difficulty="5">
+    <window rows="4" columns="5" id="shadow_thief" sibling="sun_catcher" name="window.shadow_thief" difficulty="5">
         <cell shade="6"/>
         <cell color="purple"/>
         <cell />
@@ -275,7 +275,7 @@
         <cell shade="4"/>
         <cell shade="3"/>
     </window>
-    <window rows="4" columns="5" id="battlo" sibling="shadow_thief" name="window.battlo" difficulty="5">
+    <window rows="4" columns="5" id="battlo" sibling="bellesguard" name="window.battlo" difficulty="5">
         <cell />
         <cell />
         <cell shade="6"/>
@@ -300,7 +300,7 @@
         <cell color="5"/>
         <cell color="3"/>
     </window>
-    <window rows="4" columns="5" id="gravitas" sibling="parental_drops" name="windows.gravitas" difficulty="5">
+    <window rows="4" columns="5" id="gravitas" sibling="water_of_life" name="windows.gravitas" difficulty="5">
         <cell shade="1"/>
         <cell />
         <cell shade="3"/>
@@ -325,7 +325,7 @@
         <cell />
         <cell shade="1"/>
     </window>
-    <window rows="4" columns="5" id="parental_drop" sibling="gravitas" name="windows.parental_drop" difficulty="3">
+    <window rows="4" columns="5" id="fractal_drops" sibling="ripples_of_light" name="windows.parental_drop" difficulty="3">
         <cell />
         <cell shade="4"/>
         <cell />
@@ -350,7 +350,7 @@
         <cell />
         <cell />
     </window>
-    <window rows="4" columns="5" id="lux_astram" sibling="chromatic_splendor" name="windows.lux_astram" difficulty="5">
+    <window rows="4" columns="5" id="lux_astram" sibling="lux_mundi" name="windows.lux_astram" difficulty="5">
         <cell />
         <cell shade="1"/>
         <cell color="green"/>
@@ -375,7 +375,7 @@
         <cell />
         <cell />
     </window>
-    <window rows="4" columns="5" id="chomatic_splendor" sibling="lux_astram" name="windows.chromatic_splendor" difficulty="4">
+    <window rows="4" columns="5" id="chomatic_splendor" sibling="comitas" name="windows.chromatic_splendor" difficulty="4">
         <cell />
         <cell />
         <cell color="green"/>
@@ -400,7 +400,7 @@
         <cell />
         <cell shade="4"/>
     </window>
-    <window rows="4" columns="5" id="firelight" sibling="luz_celestial" name="windows.firelight" difficulty="5">
+    <window rows="4" columns="5" id="firelight" sibling="sun's_glory" name="windows.firelight" difficulty="5">
         <cell shade="3"/>
         <cell shade="4"/>
         <cell shade="1"/>
@@ -425,7 +425,7 @@
         <cell color="red"/>
         <cell shade="6"/>
     </window>
-    <window rows="4" columns="5" id="luz_celestial" sibling="firelight" name="windows.luz_celestial" difficulty="3">
+    <window rows="4" columns="5" id="luz_celestial" sibling="fulgor_del_cielo" name="windows.luz_celestial" difficulty="3">
         <cell />
         <cell />
         <cell color="red"/>
@@ -450,7 +450,7 @@
         <cell />
         <cell />
     </window>
-    <window rows="4" columns="5" id="water_of_life" sibling="ripples_of_light" name="window.ripples_of_light" difficulty="6">
+    <window rows="4" columns="5" id="water_of_life" sibling="gravitas" name="window.ripples_of_light" difficulty="6">
         <cell shade="6"/>
         <cell color="blue"/>
         <cell />
@@ -475,7 +475,7 @@
         <cell shade="3"/>
         <cell color="purple"/>
     </window>
-    <window rows="4" columns="5" id="ripples_of_light" sibling="water_of_light" name="window.ripples_of_light" difficulty="5">
+    <window rows="4" columns="5" id="ripples_of_light" sibling="fractal_drops" name="window.ripples_of_light" difficulty="5">
         <cell />
         <cell />
         <cell />
@@ -500,7 +500,7 @@
         <cell shade="1"/>
         <cell color="red"/>
     </window>
-    <window rows="4" columns="5" id="lux_mundi" sibling="comitas" name="window.lux_mundi" difficulty="6">
+    <window rows="4" columns="5" id="lux_mundi" sibling="lux_astram" name="window.lux_mundi" difficulty="6">
         <cell />
         <cell />
         <cell shade="1"/>
@@ -525,7 +525,7 @@
         <cell color="green"/>
         <cell />
     </window>
-    <window rows="4" columns="5" id="comitas" sibling="lux_mundi" name="window.comitas" difficulty="5">
+    <window rows="4" columns="5" id="comitas" sibling="chromatic_splendor" name="window.comitas" difficulty="5">
         <cell color="yellow"/>
         <cell />
         <cell shade="2"/>
@@ -550,7 +550,7 @@
         <cell shade="3"/>
         <cell />
     </window>
-    <window rows="4" columns="5" id="suns_glory" sibling="fulgor_del_cielo" name="windows.suns_glory" difficulty="6">
+    <window rows="4" columns="5" id="suns_glory" sibling="firelight" name="windows.suns_glory" difficulty="6">
         <cell shade="1"/>
         <cell color="purple"/>
         <cell color="yellow"/>
@@ -575,7 +575,7 @@
         <cell shade="2"/>
         <cell shade="1"/>
     </window>
-    <window rows="4" columns="5" id="fulgor_del_cielo" sibling="suns_glory" name="windows.fulgor_del_cielo" difficulty="5">
+    <window rows="4" columns="5" id="fulgor_del_cielo" sibling="luz_celestial" name="windows.fulgor_del_cielo" difficulty="5">
         <cell />
         <cell color="blue"/>
         <cell color="red"/>
