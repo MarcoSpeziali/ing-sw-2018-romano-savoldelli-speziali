@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LM37.iml" filepath="$PROJECT_DIR$/LM37.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/main.iml" filepath="$PROJECT_DIR$/src/main/main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/test/test.iml" filepath="$PROJECT_DIR$/src/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apps/apps.iml" filepath="$PROJECT_DIR$/apps/apps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apps/client/client.iml" filepath="$PROJECT_DIR$/apps/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sagrada.iml" filepath="$PROJECT_DIR$/sagrada.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apps/server/server.iml" filepath="$PROJECT_DIR$/apps/server/server.iml" />
     </modules>
   </component>
 </project>

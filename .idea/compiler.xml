@@ -6,11 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="LM37" />
+        <module name="apps" />
+        <module name="client" />
+        <module name="lib" />
+        <module name="server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="LM37" target="1.5" />
+      <module name="apps" target="9" />
+      <module name="client" target="9" />
+      <module name="lib" target="9" />
+      <module name="sagrada" target="9" />
+      <module name="server" target="9" />
     </bytecodeTargetLevel>
   </component>
 </project>

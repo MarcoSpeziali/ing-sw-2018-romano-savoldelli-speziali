@@ -1,6 +1,7 @@
 # Idee e guide
 
 ## 1. Come trovare i client configurati come 'server'? (Marco)
+
 Quando un client si configura come server non è in grado di comunicare il suo indirizzo ip ad altre istanze del gioco, non essendoci un server centralizzato avente un indirizzo ip statico.
 La soluzione a cui ho pensato è di utilizzare un broadcast UDP al quale risponderanno solamente quei client che si sono configurati come server. Ovviemente il metodo presentato è utile solo nel caso in cui il server sia nella rete locale.
 
@@ -34,6 +35,7 @@ Il server risponderà in TCP, sulla porta specificata nel `body` della richiesta
 ```
 
 ## 2. Sincronizzazione degli oggetti automatica (Marco)
+
 Pensavo che per evitare di dover scrivere sempre lo stesso codice nelle classi da sincronizzare sarebbe stato bello creare delle annotazioni personalizzate con le quali marcare le classi e gli attributi da sincronizzare.
 
 La classe da sincronizzare potrebbe avere il seguente aspetto:
