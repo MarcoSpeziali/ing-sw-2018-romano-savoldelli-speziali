@@ -105,8 +105,13 @@ buildNumber.properties
 
 # Visual Studio Code
 .vscode
-.classpath
+.settings
+
+# Bins
+/**/.classpath
+/**/.project
+/**/target/
 .project
-.settings/
+.classpath
 
 # End of https://www.gitignore.io/api/java,maven,intellij
