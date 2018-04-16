@@ -7,10 +7,15 @@ CREATE TABLE IF NOT EXISTS player (
   wins_count INT DEFAULT 0 NOT NULL
 );
 
-CREATE TYPE PROTOCOL AS ENUM (
-  'socket',
-  'rmi'
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE pg_type.typname = 'protocol') THEN
+      CREATE TYPE PROTOCOL AS ENUM (
+        'socket',
+        'rmi'
+      );
+    END IF;
+END $$;
 
 CREATE TABLE IF NOT EXISTS session (
   id SERIAL PRIMARY KEY,
@@ -56,27 +61,27 @@ CREATE TABLE IF NOT EXISTS result (
 );
 
 -- FUNCTIONS --
-CREATE OR REPLACE FUNCTION update_statistics(res result)
-  AS $$
+CREATE OR REPLACE FUNCTION update_statistics()
+  RETURNS TRIGGER AS $$
 BEGIN
   UPDATE player
   SET
     player.played_games = player.played_games + 1,
-    player.total_points = player.total_points + res.points
-  WHERE player.id = res.player;
+    player.total_points = player.total_points + NEW.points
+  WHERE player.id = NEW.player;
 END;
 $$
 LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION update_win_count(m match)
-  AS $$
+CREATE OR REPLACE FUNCTION update_win_count()
+  RETURNS TRIGGER AS $$
 BEGIN
   UPDATE player
   SET
     player.wins_count = player.wins_count + ((
       SELECT r.player
       FROM result r
-      WHERE r.match = m.id
+      WHERE r.match = NEW.id
       GROUP BY r.match
       HAVING MAX(points)
     ) = player.id)::INT
@@ -85,7 +90,7 @@ BEGIN
     FROM match m2
     JOIN room r ON m2.room = r.id
     JOIN player_room pr ON r.id = pr.room
-    WHERE m2.id = m.id
+    WHERE m2.id = NEW.id
   );
 END;
 $$
@@ -96,10 +101,9 @@ LANGUAGE 'plpgsql';
 CREATE TRIGGER on_new_result
   AFTER INSERT
   ON result
-EXECUTE PROCEDURE update_statistics(NEW.player, NEW.points);
+EXECUTE PROCEDURE update_statistics();
 
 CREATE TRIGGER on_closed_match
   AFTER UPDATE OF ending_time
   ON match
-  WHEN (OLD.ending_time is NULL and NEW.ending_time is not NULL)
-EXECUTE PROCEDURE update_win_count(NEW);
+EXECUTE PROCEDURE update_win_count();

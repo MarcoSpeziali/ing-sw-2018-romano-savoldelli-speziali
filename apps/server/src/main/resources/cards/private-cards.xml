@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cards>
-    <card id="red_shade" nameKey="cards.private_cards.red_shade">
-        <objective pointsPerCompletion="shade">
+    <card id="red_shade" nameKey="cards.private_cards.red_shade.name">
+        <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.red_shade.description">
             <for-die die="DIE" in="$WINDOW$" filterColor="red">
                 <take />
             </for-die>
         </objective>
     </card>
-    <card id="yellow_shade" nameKey="cards.private_cards.yellow_shade">
-        <objective pointsPerCompletion="shade">
+    <card id="yellow_shade" nameKey="cards.private_cards.yellow_shade.name">
+        <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.yellow_shade.description">
             <for-die die="DIE" in="$WINDOW$" filterColor="yellow">
                 <take />
             </for-die>
         </objective>
     </card>
-    <card id="green_shade" nameKey="cards.private_cards.green_shade">
-        <objective pointsPerCompletion="shade">
+    <card id="green_shade" nameKey="cards.private_cards.green_shade.name">
+        <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.green_shade.description">
             <for-die die="DIE" in="$WINDOW$" filterColor="green">
                 <take />
             </for-die>
         </objective>
     </card>
-    <card id="blue_shade" nameKey="cards.private_cards.blue_shade">
-        <objective pointsPerCompletion="shade">
+    <card id="blue_shade" nameKey="cards.private_cards.blue_shade.name">
+        <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.blue_shade.description">
             <for-die die="DIE" in="$WINDOW$" filterColor="blue">
                 <take />
             </for-die>
         </objective>
     </card>
-    <card id="purple_shade" nameKey="cards.private_cards.purple_shade">
-        <objective pointsPerCompletion="shade">
+    <card id="purple_shade" nameKey="cards.private_cards.purple_shade.name">
+        <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.purple_shade.description">
             <for-die die="DIE" in="$WINDOW$" filterColor="purple">
                 <take />
             </for-die>
