@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS player (
-  id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY, -- int auto_increment
   username VARCHAR(32) UNIQUE NOT NULL,
-  password CHAR(32) NOT NULL,
+  password CHAR(32) NOT NULL, -- md5
   played_games INT DEFAULT 0 NOT NULL,
   total_points INT DEFAULT 0 NOT NULL,
   wins_count INT DEFAULT 0 NOT NULL
@@ -21,36 +21,36 @@ CREATE TABLE IF NOT EXISTS session (
   id SERIAL PRIMARY KEY,
   player INTEGER REFERENCES player (id) NOT NULL,
   creation_time TIMESTAMP DEFAULT current_timestamp NOT NULL,
-  invalidation_time TIMESTAMP,
-  token CHAR(32),
+  expiration_time TIMESTAMP,
+  token CHAR(32) NOT NULL,
   public_key CHAR(266) UNIQUE NOT NULL,
   protocol PROTOCOL NOT NULL,
   previous_session INTEGER REFERENCES session (id),
   ip CIDR NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS room (
+CREATE TABLE IF NOT EXISTS lobby (
   id SERIAL PRIMARY KEY,
   opening_time TIMESTAMP DEFAULT current_timestamp NOT NULL,
   closing_time TIMESTAMP,
   owner INTEGER REFERENCES player (id) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS private_room  (
+CREATE TABLE IF NOT EXISTS private_lobby  (
   access_token CHAR(8) NOT NULL
-) INHERITS (room);
+) INHERITS (lobby);
 
-CREATE TABLE IF NOT EXISTS player_room (
+CREATE TABLE IF NOT EXISTS player_lobby (
   player INTEGER REFERENCES player (id),
-  room INTEGER REFERENCES room (id),
-  PRIMARY KEY (player, room)
+  lobby INTEGER REFERENCES lobby (id),
+  PRIMARY KEY (player, lobby)
 );
 
 CREATE TABLE IF NOT EXISTS match (
   id SERIAL PRIMARY KEY,
   starting_time TIMESTAMP DEFAULT current_timestamp NOT NULL,
   ending_time TIMESTAMP,
-  room INTEGER REFERENCES room (id) NOT NULL
+  lobby INTEGER REFERENCES lobby (id) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS result (
@@ -81,15 +81,15 @@ BEGIN
     player.wins_count = player.wins_count + ((
       SELECT r.player
       FROM result r
-      WHERE r.match = NEW.id
+      WHERE r.match = NEW.id -- TODO: CHANGE ME
       GROUP BY r.match
       HAVING MAX(points)
     ) = player.id)::INT
   WHERE player.id IN (
     SELECT pr.player
     FROM match m2
-    JOIN room r ON m2.room = r.id
-    JOIN player_room pr ON r.id = pr.room
+    JOIN lobby r ON m2.lobby = r.id
+    JOIN player_lobby pr ON r.id = pr.lobby
     WHERE m2.id = NEW.id
   );
 END;
