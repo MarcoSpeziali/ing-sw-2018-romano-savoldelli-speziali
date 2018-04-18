@@ -842,7 +842,7 @@
 									"height": 13,
 									"autoResize": false,
 									"underline": false,
-									"text": "room",
+									"text": "lobby",
 									"horizontalAlignment": 2,
 									"verticalAlignment": 5,
 									"wordWrap": false
@@ -1153,7 +1153,7 @@
 									"height": 13,
 									"autoResize": false,
 									"underline": false,
-									"text": "player_room",
+									"text": "player_lobby",
 									"horizontalAlignment": 2,
 									"verticalAlignment": 5,
 									"wordWrap": false
@@ -2169,7 +2169,7 @@
 									"height": 13,
 									"autoResize": false,
 									"underline": false,
-									"text": "private_room",
+									"text": "private_lobby",
 									"horizontalAlignment": 2,
 									"verticalAlignment": 5,
 									"wordWrap": false
@@ -2680,7 +2680,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFLzntJC6EktCk="
 					},
-					"name": "room",
+					"name": "lobby",
 					"ownedElements": [
 						{
 							"_type": "ERDRelationship",
@@ -2841,7 +2841,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFLzntJC6EktCk="
 					},
-					"name": "player_room",
+					"name": "player_lobby",
 					"columns": [
 						{
 							"_type": "ERDColumn",
@@ -2961,7 +2961,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFixhqMxRMlt0s="
 							},
-							"name": "room",
+							"name": "lobby",
 							"type": "INTEGER",
 							"length": 0,
 							"primaryKey": false,
@@ -3114,7 +3114,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFLzntJC6EktCk="
 					},
-					"name": "private_room",
+					"name": "private_lobby",
 					"ownedElements": [
 						{
 							"_type": "ERDRelationship",
