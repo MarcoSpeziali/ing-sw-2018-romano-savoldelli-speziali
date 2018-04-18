@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-    <action id="choose" class="it.polimi.ingsw.core.actions.ChooseDieAction">
+    <action id="choose" class="it.polimi.ingsw.core.actions.ChooseDieAction" requiresUserInteraction="true">
         <parameters>
             <parameter name="from" class="it.polimi.ingsw.core.DieLocation" position="0" />
             <parameter name="quantity" class="java.lang.Integer" position="1" />
         </parameters>
         <result class="it.polimi.ingsw.core.Die" isMultiple="true" />
     </action>
-    <action id="choose_color" class="it.polimi.ingsw.core.actions.ChooseColorAction">
+    <action id="choose_color" class="it.polimi.ingsw.core.actions.ChooseColorAction" requiresUserInteraction="true">
         <parameters>
             <parameter name="from" class="it.polimi.ingsw.core.DieLocation" position="0" />
             <parameter name="quantity" class="java.lang.Integer" position="1" />
@@ -28,14 +28,16 @@
         </parameters>
         <result class="it.polimi.ingsw.core.Die" isMultiple="false" />
     </action>
-    <action id="pick" class="it.polimi.ingsw.core.actions.PickAction">
+    <action id="pick" class="it.polimi.ingsw.core.actions.PickAction" requiresUserInteraction="true">
         <parameters>
             <parameter name="from" class="it.polimi.ingsw.core.DieLocation" position="0" />
             <parameter name="quantity" class="java.lang.Integer" position="1" />
+            <parameter name="color" class="it.polimi.ingsw.core.GlassColor" position="2" default="null" />
+            <parameter name="shade" class="java.lang.Integer" position="3" default="0" />
         </parameters>
         <result class="it.polimi.ingsw.core.Die" isMultiple="true" />
     </action>
-    <action id="put" class="it.polimi.ingsw.core.actions.PutAction">
+    <action id="put" class="it.polimi.ingsw.core.actions.PutAction" requiresUserInteraction="true">
         <parameters>
             <parameter name="die" class="it.polimi.ingsw.core.Die" position="0" />
             <parameter name="location" class="it.polimi.ingsw.core.DieLocation" position="1" />
@@ -70,7 +72,7 @@
         </parameters>
         <result class="it.polimi.ingsw.core.Die" isMultiple="false" />
     </action>
-    <action id="set_val" class="it.polimi.ingsw.core.actions.SetValAction">
+    <action id="set_val" class="it.polimi.ingsw.core.actions.SetValAction" requiresUserInteraction="true">
         <parameters>
             <parameter name="die" class="it.polimi.ingsw.core.Die" position="0" />
         </parameters>

@@ -94,7 +94,7 @@
     <card id="tap_wheel" nameKey="cards.tool_cards.tap_wheel.name" initialCost="1">
         <effect root="start" descriptionKey="cards.tool_cards.tap_wheel.description">
             <action id="start" effect="choose_color round_track 1" result="DIE_COLOR" next="loop" />
-            <action-group id="loop" repititions="1..2" root="pick">
+            <action-group id="loop" repetitions="1..2" root="pick">
                 <action id="pick" effect="pick $window$ 1 [color=$DIE_COLOR$]" result="DIE" next="put"/>
                 <action id="put" effect="put $DIE$ $window$"/>
             </action-group>
