@@ -17,12 +17,14 @@ public class DecrementAction extends Action {
     }
 
     @Override
-    public Object run(Context context) throws ConstraintEvaluationException {
+    public Object run(Context context) {
         if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
             throw new ConstraintEvaluationException();
         }
 
-        this.die.setShade(this.die.getShade() - this.by);
+        Integer result = this.die.getShade() - this.by;
+
+        this.die.setShade(result <= 0 ? result + 6 : result);
         return this.die;
     }
 }

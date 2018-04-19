@@ -2,18 +2,19 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
+import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 
-import java.util.Random;
+public class SetValAction extends Action {
 
-public class RedrawAction extends Action {
-
+    private final UserInteractionProvider userInteractionProvider;
     private final Die die;
 
-    public RedrawAction(ActionData data, Die die) {
+    public SetValAction(ActionData data, UserInteractionProvider userInteractionProvider, Die die) {
         super(data);
 
         this.die = die;
+        this.userInteractionProvider = userInteractionProvider;
     }
 
     @Override
@@ -22,10 +23,7 @@ public class RedrawAction extends Action {
             throw new ConstraintEvaluationException();
         }
 
-        Random random = new Random(System.currentTimeMillis());
-
-        // random.nextInt(int bound) returns a number in the set [0, bound)
-        this.die.setShade(1 + random.nextInt(6));
+        this.die.setShade(this.userInteractionProvider.chooseShade(this.die));
         return this.die;
     }
 }

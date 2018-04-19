@@ -18,7 +18,7 @@ public class SwapAction extends Action {
     }
 
     @Override
-    public Object run(Context context) throws ConstraintEvaluationException {
+    public Object run(Context context) {
         if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
             throw new ConstraintEvaluationException();
         }

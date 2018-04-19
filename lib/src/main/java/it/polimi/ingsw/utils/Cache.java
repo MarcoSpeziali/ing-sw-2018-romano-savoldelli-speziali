@@ -4,7 +4,7 @@ public interface Cache<K, V> {
     /**
      * Checks whether the cache contains a particular key.
      * @param key The key to test.
-     * @return `True` if the cache contains the key, `false` otherwise.
+     * @return {@code True} if the cache contains the key, {@code false} otherwise.
      */
     boolean contains(K key);
 
@@ -24,7 +24,7 @@ public interface Cache<K, V> {
     /**
      * Gets the value associated with a particular key.
      * @param key The value's key.
-     * @return The value if the key exists in the cache, `null` otherwise.
+     * @return The value if the key exists in the cache, {@code null} otherwise.
      */
     V get(K key);
 

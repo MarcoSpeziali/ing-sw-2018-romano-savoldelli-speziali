@@ -1,19 +1,20 @@
 package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.core.locations.ChooseLocation;
 
 import java.util.Random;
+import java.util.stream.Collectors;
 
-public class RedrawAction extends Action {
+public class RedrawAllAction extends Action {
 
-    private final Die die;
+    private final ChooseLocation location;
 
-    public RedrawAction(ActionData data, Die die) {
+    public RedrawAllAction(ActionData data, ChooseLocation location) {
         super(data);
 
-        this.die = die;
+        this.location = location;
     }
 
     @Override
@@ -24,8 +25,8 @@ public class RedrawAction extends Action {
 
         Random random = new Random(System.currentTimeMillis());
 
-        // random.nextInt(int bound) returns a number in the set [0, bound)
-        this.die.setShade(1 + random.nextInt(6));
-        return this.die;
+        return this.location.getDice().stream()
+                .peek(die -> die.setShade(1 + random.nextInt(6)))
+                .collect(Collectors.toSet());
     }
 }

@@ -4,13 +4,11 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 
-import java.util.Random;
-
-public class RedrawAction extends Action {
+public class FlipAction extends Action {
 
     private final Die die;
 
-    public RedrawAction(ActionData data, Die die) {
+    public FlipAction(ActionData data, Die die) {
         super(data);
 
         this.die = die;
@@ -22,10 +20,8 @@ public class RedrawAction extends Action {
             throw new ConstraintEvaluationException();
         }
 
-        Random random = new Random(System.currentTimeMillis());
+        this.die.setShade(7 - this.die.getShade());
 
-        // random.nextInt(int bound) returns a number in the set [0, bound)
-        this.die.setShade(1 + random.nextInt(6));
         return this.die;
     }
 }

@@ -12,18 +12,19 @@ public class IncrementAction extends Action {
     public IncrementAction(ActionData data, Die die, Integer by) {
         super(data);
 
-        this.data = data;
         this.die = die;
         this.by = by;
     }
 
     @Override
-    public Object run(Context context) throws ConstraintEvaluationException {
+    public Object run(Context context) {
         if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
             throw new ConstraintEvaluationException();
         }
+        
+        Integer result = this.die.getShade() + this.by;
 
-        this.die.setShade(this.die.getShade() + this.by);
+        this.die.setShade(result > 6 ? result - 6 : result);
         return this.die;
     }
 }

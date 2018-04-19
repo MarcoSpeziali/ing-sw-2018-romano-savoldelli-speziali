@@ -1,44 +1,20 @@
 package it.polimi.ingsw.core.actions;
 
-import it.polimi.ingsw.core.*;
-import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
-import it.polimi.ingsw.core.locations.ChoosablePickLocation;
-import it.polimi.ingsw.core.locations.PickLocation;
-
-import java.util.Set;
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.locations.RandomPickLocation;
 
 public class PickAction extends Action {
 
-    protected final UserInteractionProvider userInteractionProvider;
-    protected final PickLocation from;
-    protected final Integer quantity;
-    protected final GlassColor color;
-    protected final Integer shade;
+    protected final RandomPickLocation from;
 
-    public PickAction(ActionData data, UserInteractionProvider userInteractionProvider, PickLocation from, Integer quantity, GlassColor color, Integer shade) {
+    public PickAction(ActionData data, RandomPickLocation from) {
         super(data);
 
         this.from = from;
-        this.quantity = quantity;
-        this.color = color;
-        this.shade = shade;
-        this.userInteractionProvider = userInteractionProvider;
     }
 
     @Override
-    public Object run(Context context) throws ConstraintEvaluationException {
-        if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
-        }
-
-        if (this.from instanceof ChoosablePickLocation) {
-            ChoosablePickLocation cpl = (ChoosablePickLocation) this.from;
-
-            Set<Die> chosenDice = this.userInteractionProvider.chooseDice(cpl, this.quantity, this.color, this.shade);
-            return this.userInteractionProvider.pickDice(chosenDice, this.quantity, this.color, this.shade);
-        }
-        else {
-            return this.from.getDice(this.quantity, this.color, this.shade);
-        }
+    public Object run(Context context) {
+        return this.from.getDie();
     }
 }

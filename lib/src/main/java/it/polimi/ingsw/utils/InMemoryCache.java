@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class InMemoryCache<K, V> implements Cache<K, V> {
 
     /**
-     * An `HashMap` is used to create the cache.
+     * An {@code HashMap} is used to create the cache.
      */
     private HashMap<K, V> hashMap;
 

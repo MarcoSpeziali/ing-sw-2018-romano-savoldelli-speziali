@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Represents a range of values.
@@ -37,7 +36,7 @@ public class Range<T extends Comparable<? super T>> {
     }
 
     /**
-     * Initializes `Range<T>` with the starting and the ending value.
+     * Initializes {@code Range<T>} with the starting and the ending value.
      *
      * @param start The stating value of the range.
      * @param end The ending value of the range.
@@ -59,13 +58,14 @@ public class Range<T extends Comparable<? super T>> {
     }
 
     /**
-     * Creates a `Range<K>` from a string representation.
+     * Creates a {@code Range<K>} from a string representation.
      * @param range The string representation.
      * @param separator The separator between the two values.
      * @param conversionProvider A function that takes the string value and converts it to the desired object.
      * @param <K> The desired object type.
-     * @return An instance of `Range<K>`
+     * @return An instance of {@code Range<K>}
      */
+    @SuppressWarnings("WeakerAccess")
     public static <K extends Comparable<? super K>> Range<K> fromString(String range, String separator, Function<String, K> conversionProvider) {
         String[] tokens = range.split(Pattern.quote(separator));
 
@@ -95,7 +95,7 @@ public class Range<T extends Comparable<? super T>> {
     /**
      * Determines if the range is valid.
      *
-     * @return `True` if range is valid, `false` otherwise.
+     * @return {@code True} if range is valid, {@code false} otherwise.
      */
     private boolean isValid() {
         return start.compareTo(end) <= 0;
@@ -104,16 +104,16 @@ public class Range<T extends Comparable<? super T>> {
     /**
      * Determines if the provided value is inside the range.
      * @param value The value to test.
-     * @return `True` if the value is inside Range, `false` otherwise.
+     * @return {@code True} if the value is inside Range, {@code false} otherwise.
      */
     public boolean containsValue(T value) {
         return this.start.compareTo(value) <= 0 && value.compareTo(this.end) <= 0;
     }
 
     /**
-     * Determines if this Range is inside the bounds of another range.
+     * Determines if this range is inside the bounds of another range.
      * @param range The parent range to test on.
-     * @return `True` if the current range is inside the provided one, `false` otherwise.
+     * @return {@code True} if the current range is inside the provided one, {@code false} otherwise.
      */
     public boolean isInsideRange(Range<T> range) {
         return range.containsValue(this.start) && range.containsValue(this.end);
@@ -122,17 +122,12 @@ public class Range<T extends Comparable<? super T>> {
     /**
      * Determines if another range is inside the bounds of this range.
      * @param range The child range to test.
-     * @return `True` if the current range is inside the provided one, `false` otherwise.
+     * @return {@code True} if the current range is inside the provided one, {@code false} otherwise.
      */
     public boolean containsRange(Range<T> range) {
         return this.containsValue(range.start) && this.containsValue(range.end);
     }
 
-    /**
-     * Presents the Range in readable format.
-     *
-     * @return The string representation of the Range.
-     */
     @Override
     public String toString() {
         return String.format("[%s - %s]", this.start, this.end);
