@@ -74,12 +74,14 @@ class RangeTest {
         String rangeRep = "2..6";
         Range<Integer> range = Range.fromString(rangeRep, "..", Integer::parseInt);
 
+        Assertions.assertNotNull(range);
         Assertions.assertEquals(2, range.getStart().intValue());
         Assertions.assertEquals(6, range.getEnd().intValue());
 
         rangeRep = "2";
         range = Range.fromString(rangeRep, "..", Integer::parseInt);
 
+        Assertions.assertNotNull(range);
         Assertions.assertEquals(2, range.getStart().intValue());
         Assertions.assertEquals(2, range.getEnd().intValue());
 

@@ -1,4 +1,7 @@
-package it.polimi.ingsw.core;
+package it.polimi.ingsw.core.locations;
+
+import it.polimi.ingsw.core.Die;
+import it.polimi.ingsw.core.GlassColor;
 
 import java.util.Set;
 

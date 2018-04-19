@@ -1,11 +1,12 @@
 package it.polimi.ingsw.utils;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-public class IterableRangeTest extends TestCase {
+public class IterableRangeTest {
 
-    public void testIterable() {
+    @Test
+    void testIterable() {
         IterableRange<Float> range = new IterableRange<>(12.6F, 22.99F, (val) -> ++val);
 
         Float iteratorVal = range.getStart();
@@ -18,7 +19,8 @@ public class IterableRangeTest extends TestCase {
         Assertions.assertEquals(23.6f, iteratorVal.floatValue());
     }
 
-    public void testIterableSameValue() {
+    @Test
+    void testIterableSameValue() {
         IterableRange<Integer> range = new IterableRange<>(1, 1, (val) -> ++val);
 
         Integer iteratorVal = range.getStart();

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.core;
+package it.polimi.ingsw.core.locations;
 
 import java.util.Set;
 
