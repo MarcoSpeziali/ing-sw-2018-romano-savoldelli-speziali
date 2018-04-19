@@ -1,5 +1,7 @@
 package it.polimi.ingsw.core;
 
+import it.polimi.ingsw.core.locations.ChooseLocation;
+
 import java.util.Set;
 
 public interface UserInteractionProvider {

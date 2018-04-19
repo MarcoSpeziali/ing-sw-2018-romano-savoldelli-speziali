@@ -1,12 +1,11 @@
 package it.polimi.ingsw.core;
 
-import it.polimi.ingsw.models.ObjectiveCard;
-import it.polimi.ingsw.models.ToolCard;
+import it.polimi.ingsw.models.*;
 
 public class Match {
 
     private static Match instance;
-    private Players[] players;
+    private Player[] players;
     private Round[] rounds;
     private int currentRoundIndex;
     private RoundTrack roundTrack;
@@ -15,7 +14,16 @@ public class Match {
     private ObjectiveCard[] publicObjectiveCards;
     private ToolCard[] toolcards;
 
-    private Match(Players[] players, Round[] rounds, RoundTrack roundTrack, Bag bag, DraftPool draftPool, ObjectiveCard[] publicObjectiveCards, ToolCard[] toolcards) {
+    public static Match getMatch(Player[] players, Round[] rounds, RoundTrack roundTrack, Bag bag, DraftPool draftPool, ObjectiveCard[] publicObjectiveCards, ToolCard[] toolcards) {
+        if (Match.instance == null) {
+            Match.instance = new Match(players, rounds, roundTrack, bag, draftPool, publicObjectiveCards, toolcards);
+            return Match.instance;
+        } else {
+            return Match.instance;
+        }
+    }
+
+    private Match(Player[] players, Round[] rounds, RoundTrack roundTrack, Bag bag, DraftPool draftPool, ObjectiveCard[] publicObjectiveCards, ToolCard[] toolcards) {
         this.players = players;
         this.rounds = rounds;
         this.roundTrack = roundTrack;
@@ -23,13 +31,5 @@ public class Match {
         this.draftPool = draftPool;
         this.publicObjectiveCards = publicObjectiveCards;
         this.toolcards = toolcards;
-    }
-
-    public Match getMatch(Players[] players, Round[] rounds, RoundTrack roundTrack, Bag bag, DraftPool draftPool, ObjectiveCard[] publicObjectiveCards, ToolCard[] toolcards) {
-        if (this.instance == null) {
-            return new Match(players, rounds, roundTrack, bag, draftPool, publicObjectiveCards, toolcards);
-        } else {
-            return instance;
-        }
     }
 }

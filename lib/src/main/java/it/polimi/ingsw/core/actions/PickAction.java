@@ -2,6 +2,8 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.*;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.core.locations.ChoosablePickLocation;
+import it.polimi.ingsw.core.locations.PickLocation;
 
 import java.util.Set;
 

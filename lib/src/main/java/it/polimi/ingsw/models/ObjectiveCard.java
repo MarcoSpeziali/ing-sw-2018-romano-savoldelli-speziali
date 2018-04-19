@@ -1,5 +1,7 @@
 package it.polimi.ingsw.models;
-import
+
+import it.polimi.ingsw.core.CardVisibility;
+import it.polimi.ingsw.core.Objective;
 
 public class ObjectiveCard extends Card{
     private String cardId;

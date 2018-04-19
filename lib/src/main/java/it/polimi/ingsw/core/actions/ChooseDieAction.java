@@ -2,6 +2,7 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.*;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.core.locations.ChooseLocation;
 
 public class ChooseDieAction extends Action {
 
