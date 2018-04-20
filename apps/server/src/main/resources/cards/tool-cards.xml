@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cards>
-    <card id="grozing_pliers" nameKey="cards.tool_cards.grozing_pliers" initialCost="1">
-        <effect root="start">
-	        <action id="start" effect="choose $draft_pool$ 1" result="DIE" next="inc_dec"/>
-	        <action-group id="inc_dec" executionMode="choose 1">
+    <card id="grozing_pliers" nameKey="cards.tool_cards.grozing_pliers.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.grozing_pliers.description">
+	        <action id="start" effect="choose_die $draft_pool$" result="DIE" next="inc_dec"/>
+	        <action-group id="inc_dec" chooseBetween="1">
                 <action effect="increment $DIE$ 1" constraint="not-6" />
                 <action effect="decrement $DIE$ 1" constraint="not-1" />
             </action-group>
@@ -13,42 +13,48 @@
             <constraint id="not-6">$DIE::getShade()$ != 6</constraint>
         </constraints>
     </card>
-    <card id="eglomise_brush" nameKey="cards.tool_cards.eglomise_brush" initialCost="1">
-        <effect root="start">
-	        <action id="start" effect="pick $window$ 1" result="DIE" next="place"/>
-	        <action id="place" effect="put $DIE$ $window$ [ignore_color=true]"/>
+    <card id="eglomise_brush" nameKey="cards.tool_cards.eglomise_brush.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.eglomise_brush.description">
+            <action id="start" effect="choose_position $window$" result="POS" next="pick"/>
+	        <action id="pick" effect="pick_at $window$ $POS$" result="DIE" next="choose_location"/>
+            <action id="choose_position" effect="choose_position_for_die $window$ $DIE$ [ignore_color=true]" result="POS" next="place" />
+	        <action id="place" effect="place $DIE$ $window$ $POS$"/>
         </effect>
     </card>
-    <card id="copper_foil_burnisher" nameKey="cards.tool_cards.copper_foil_burnisher" initialCost="1">
-        <effect root="start">
-	        <action id="start" effect="pick $window$ 1" result="DIE" next="place"/>
-            <action id="place" effect="put $DIE$ $window$ [ignore_shade=true]"/>
+    <card id="copper_foil_burnisher" nameKey="cards.tool_cards.copper_foil_burnisher.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.copper_foil_burnisher.description">
+            <action id="start" effect="choose_position $window$" result="POS" next="pick"/>
+            <action id="pick" effect="pick_at $window$ $POS$" result="DIE" next="choose_location"/>
+            <action id="choose_position" effect="choose_position_for_die $window$ $DIE$ [ignore_shade=true]" result="POS" next="place" />
+            <action id="place" effect="place $DIE$ $window$ $POS$"/>
         </effect>
     </card>
-    <card id="lathekin" nameKey="cards.tool_cards.lathekin" initialCost="1">
-        <effect root="start">
-            <action id="start" effect="pick $window$ 1" result="DIE" next="place_1"/>
-            <action id="place_1" effect="put $DIE$ $window$" next="pick_2"/>
-            <action id="pick_2" effect="pick $window$ 1" result="DIE_2" next="place_2"/>
-            <action id="place_2" effect="put $DIE_2$ $window$"/>
+    <card id="lathekin" nameKey="cards.tool_cards.lathekin.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.lathekin.description">
+            <action-group id="start" repetitions="2" root="start">
+                <action id="choose" effect="choose_position $window$" result="POS" next="pick"/>
+                <action id="pick" effect="pick_at $window$ $POS$" result="DIE" next="choose_position"/>
+                <action id="choose_position" effect="choose_position_for_die $window$ $DIE$ [ignore_color=true]" result="POS" next="place" />
+                <action id="place" effect="place $DIE$ $window$ $POS$"/>
+            </action-group>
         </effect>
     </card>
-    <card id="lens_cutter" nameKey="cards.tool_cards.lens_cutter" initialCost="1">
-        <effect root="start">
-            <action id="start" effect="choose $draft_pool$ 1" result="DIE_1"  next="pick_2"/>
-            <action id="pick_2" effect="choose round_track 1" result="DIE_2" next="swap"/>
+    <card id="lens_cutter" nameKey="cards.tool_cards.lens_cutter.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.lens_cutter.description">
+            <action id="start" effect="choose_die $draft_pool$" result="DIE_1"  next="choose_2"/>
+            <action id="choose_2" effect="choose_die $round_track$" result="DIE_2" next="swap"/>
             <action id="swap" effect="swap $DIE_1$ $DIE_2$" />
         </effect>
     </card>
-    <card id="flux_brush" nameKey="cards.tool_cards.flux_brush" initialCost="1">
-        <effect root="start">
-            <action id="start" effect="choose $draft_pool$ 1" result="DIE" next="redraw" />
+    <card id="flux_brush" nameKey="cards.tool_cards.flux_brush.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.flux_brush.description">
+            <action id="start" effect="choose_die $draft_pool$" result="DIE" next="redraw" />
             <action id="redraw" effect="redraw $DIE$" />
         </effect>
     </card>
-    <card id="glazing_hammer" nameKey="cards.tool_cards.glazing_hammer" initialCost="1">
-        <effect constraint="player_turn">
-            <action effect="redraw $draft_pool::getDice()$" />
+    <card id="glazing_hammer" nameKey="cards.tool_cards.glazing_hammer.name" initialCost="1">
+        <effect constraint="player_turn" descriptionKey="cards.tool_cards.glazing_hammer.description">
+            <action effect="redraw_all $draft_pool$" />
         </effect>
         <constraints>
             <constraint-group id="player_turn">
@@ -57,10 +63,12 @@
             </constraint-group>
         </constraints>
     </card>
-    <card id="running_pliers" nameKey="cards.tool_cards.running_pliers" initialCost="1">
-        <effect root="start" constraint="player_turn">
-            <action id="start" effect="pick $draft_pool$ 1" result="DIE" next="place"/>
-            <action id="place" effetct="put $DIE$ $window$" next="side-effect" />
+    <card id="running_pliers" nameKey="cards.tool_cards.running_pliers.name" initialCost="1">
+        <effect root="start" constraint="player_turn" descriptionKey="cards.tool_cards.running_pliers.description">
+            <action id="start" effect="choose_position $draft_pool$" result="POS" next="pick"/>
+            <action id="pick" effect="pick_at $draft_pool$ $POS$" result="DIE" next="choose_position"/>
+            <action id="choose_position" effect="choose_position_for_die $window$ $DIE$" result="POS" next="place" />
+            <action id="place" effetct="place $DIE$ $window$" next="side-effect" />
             <action id="side-effect" effect="skip_turn 2 $CURRENT_ROUND$ $CURRENT_PLAYER$" />
         </effect>
         <constraints>
@@ -70,33 +78,40 @@
             </constraint-group>
         </constraints>
     </card>
-    <card id="cork_backed_strainghtedge" nameKey="cards.tool_cards.cork_backed_strainghtedge" initialCost="1">
-        <effect root="start">
-            <action id="start" effect="pick $draft_pool$ 1" result="DIE" next="place"/>
-            <action id="place" effect="put $DIE$ $window$ [ignore_adjacency=true]"/>
+    <card id="cork_backed_strainghtedge" nameKey="cards.tool_cards.cork_backed_strainghtedge.name" initialCost="1">
+        <effect root="start" constraint="die_already_picked" descriptionKey="cards.tool_cards.cork_backed_strainghtedge.description">
+            <action id="choose_position" effect="choose_position_for_die $window$ $player_die$ [ignore_adjacency=true]" result="POS" next="place" />
+            <action id="place" effect="place $DIE$ $window$ $POS$"/>
         </effect>
+        <constraints>
+            <constraint id="die_already_picked">$player_die$ != null</constraint>
+        </constraints>
     </card>
-    <card id="grinding_stone" nameKey="cards.tool_cards.grinding_stone" initialCost="1">
-        <effect root="start">
-            <action id="start" effect="choose $draft_pool$ 1" result="DIE" next="flip"/>
+    <card id="grinding_stone" nameKey="cards.tool_cards.grinding_stone.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.grinding_stone.description">
+            <action id="start" effect="choose_die $draft_pool$" result="DIE" next="flip"/>
             <action id="flip" effect="flip $DIE$" />
         </effect>
     </card>
-    <card id="flux_remover" nameKey="cards.tool_cards.flux_remover" initialCost="1">
-        <effect root="start">
-            <action id="start" effect="pick $draft_pool$ 1" result="DIE" next="place-in-bag"/>
-            <action id="place-in-bag" effect="put $DIE$ bag" next="pick-bag"/>
-            <action id="pick-bag" effect="pick bag 1" result="DIE" next="choose-val"/>
-            <action id="choose-val" effect="set_val $DIE$" result="DIE" next="place"/>
-            <action id="place" effect="put $DIE$ $window$"/>
+    <card id="flux_remover" nameKey="cards.tool_cards.flux_remover.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.flux_remover.description">
+            <action id="choose" effect="choose_position $window$" result="POS" next="pick"/>
+            <action id="start" effect="pick_at $draft_pool$ $POS$" result="DIE" next="place-in-bag"/>
+            <action id="place-in-bag" effect="put $DIE$ $bag$" next="pick-bag"/>
+            <action id="pick-bag" effect="pick $bag$" result="DIE" next="choose-val"/>
+            <action id="choose-val" effect="set_val $DIE$" result="DIE" next="choose_position"/>
+            <action id="choose_position" effect="choose_position_for_die $window$ $DIE$" result="POS" next="place" />
+            <action id="place" effect="place $DIE$ $window$ $POS$"/>
         </effect>
     </card>
-    <card id="tap_wheel" nameKey="cards.tool_cards.tap_wheel" initialCost="1">
-        <effect root="start">
-            <action id="start" effect="choose_color round_track 1" result="DIE_COLOR" next="loop" />
-            <action-group id="loop" executionMode="repeat 1..2" root="pick">
-                <action id="pick" effect="pick $window$ 1 [color=$DIE_COLOR$]" result="DIE" next="put"/>
-                <action id="put" effect="put $DIE$ $window$"/>
+    <card id="tap_wheel" nameKey="cards.tool_cards.tap_wheel.name" initialCost="1">
+        <effect root="start" descriptionKey="cards.tool_cards.tap_wheel.description">
+            <action id="start" effect="choose_color $round_track$" result="DIE_COLOR" next="loop" />
+            <action-group id="loop" repetitions="1..2" root="choose">
+                <action id="choose" effect="choose_die $window$ [color=$DIE_COLOR$]" result="DIE" next="pick"/>
+                <action id="pick" effect="pick_die $window$ $DIE$" result="DIE" next="choose_position"/>
+                <action id="choose_position" effect="choose_position_for_die $window$ $DIE$" result="POS" next="place" />
+                <action id="place" effect="place $DIE$ $window$ $POS$"/>
             </action-group>
         </effect>
     </card>
