@@ -30,7 +30,7 @@
     </action>
     <action id="choose_position_for_die" class="it.polimi.ingsw.core.actions.ChoosePositionForDieAction" requiresUserInteraction="true">
         <parameters>
-            <parameter name="from" class="it.polimi.ingsw.core.locations.ChooseLocation" position="0" />
+            <parameter name="from" class="it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation" position="0" />
             <parameter name="die" class="it.polimi.ingsw.core.Die" position="1" />
             <parameter name="ignoreColor" class="java.lang.Boolean" default="false" optionalName="ignore_color" position="2" />
             <parameter name="ignoreShade" class="java.lang.Boolean" default="false" optionalName="ignore_shade" position="3" />
@@ -98,7 +98,7 @@
         </parameters>
         <result class="it.polimi.ingsw.core.Die" />
     </action>
-    <action id="redraw_all" class="it.polimi.ingsw.core.actions.RedrawAction">
+    <action id="redraw_all" class="it.polimi.ingsw.core.actions.RedrawAllAction">
         <parameters>
             <parameter name="location" class="it.polimi.ingsw.core.locations.ChooseLocation" />
         </parameters>

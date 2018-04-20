@@ -2,9 +2,10 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.constraints.ConstraintGroup;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
+import it.polimi.ingsw.utils.text.LocalizedString;
 
 /**
- * Holds the common data for an ExecutableAction.
+ * Holds the common data for an {@code ExecutableAction}.
  */
 public class ActionData {
 
@@ -17,6 +18,11 @@ public class ActionData {
      * The id of the next action.
      */
     private final String nextActionId;
+
+    /**
+     * The key of the string that describes the action.
+     */
+    private final String descriptionKey;
 
     /**
      * The constraint of the action.
@@ -38,6 +44,13 @@ public class ActionData {
     }
 
     /**
+     * @return The key of the string that describes the action.
+     */
+    public String getDescriptionKey() {
+        return descriptionKey;
+    }
+
+    /**
      * @return The constraint of the action.
      */
     public EvaluableConstraint getConstraint() {
@@ -45,14 +58,15 @@ public class ActionData {
     }
 
     /**
-     * Creates a new instance of `ActionData`.
+     * Creates a new instance of {@code ActionData}.
      * @param id The id of the action.
      * @param nextActionId The id of the next action.
      * @param constraint The constraint of the action.
      */
-    public ActionData(String id, String nextActionId, ConstraintGroup constraint) {
+    public ActionData(String id, String nextActionId, String descriptionKey, EvaluableConstraint constraint) {
         this.id = id;
         this.nextActionId = nextActionId;
+        this.descriptionKey = descriptionKey;
         this.constraint = constraint;
     }
 }

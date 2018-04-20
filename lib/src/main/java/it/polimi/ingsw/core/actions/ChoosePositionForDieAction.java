@@ -4,20 +4,26 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
-import it.polimi.ingsw.core.locations.ChooseLocation;
+import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
 
 public class ChoosePositionForDieAction extends Action {
 
     private final UserInteractionProvider userInteractionProvider;
-    private final ChooseLocation from;
+    private final RestrictedChoosablePutLocation from;
     private final Die die;
+    private final Boolean ignoreColor;
+    private final Boolean ignoreShade;
+    private final Boolean ignoreAdjacency;
 
-    public ChoosePositionForDieAction(ActionData data, UserInteractionProvider userInteractionProvider, ChooseLocation from, Die die) {
+    public ChoosePositionForDieAction(ActionData data, UserInteractionProvider userInteractionProvider, RestrictedChoosablePutLocation from, Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
         super(data);
 
         this.userInteractionProvider = userInteractionProvider;
         this.from = from;
         this.die = die;
+        this.ignoreColor = ignoreColor;
+        this.ignoreShade = ignoreShade;
+        this.ignoreAdjacency = ignoreAdjacency;
     }
 
     @Override
@@ -26,6 +32,6 @@ public class ChoosePositionForDieAction extends Action {
             throw new ConstraintEvaluationException();
         }
 
-        return this.userInteractionProvider.choosePosition(this.from, this.die);
+        return this.userInteractionProvider.choosePosition(this.from, this.die, this.ignoreColor, this.ignoreShade, this.ignoreAdjacency);
     }
 }

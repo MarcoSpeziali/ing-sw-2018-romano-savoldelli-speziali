@@ -3,6 +3,7 @@ package it.polimi.ingsw.core.actions;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.utils.MathUtils;
 
 public class IncrementAction extends Action {
 
@@ -23,8 +24,9 @@ public class IncrementAction extends Action {
         }
         
         Integer result = this.die.getShade() + this.by;
+        int modularResult = MathUtils.modular(result, 6);
 
-        this.die.setShade(result > 6 ? result - 6 : result);
+        this.die.setShade(modularResult == 0 ? 6 : modularResult);
         return this.die;
     }
 }

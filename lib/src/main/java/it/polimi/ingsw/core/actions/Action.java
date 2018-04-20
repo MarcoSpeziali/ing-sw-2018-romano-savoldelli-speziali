@@ -1,25 +1,25 @@
 package it.polimi.ingsw.core.actions;
 
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 
+/**
+ * Represents a single action which implements {@code ExecutableAction}
+ */
 public abstract class Action implements ExecutableAction {
+
+    /**
+     * The data of the action.
+     */
     protected ActionData data;
 
     @Override
-    public String getId() {
-        return this.data.getId();
+    public ActionData getActionData() {
+        return this.data;
     }
 
-    @Override
-    public String getNextActionId() {
-        return this.data.getNextActionId();
-    }
-
-    @Override
-    public EvaluableConstraint getActionConstraint() {
-        return this.data.getConstraint();
-    }
-
+    /**
+     * Instantiates an {@code Action}.
+     * @param data The data which identifies the action.
+     */
     public Action(ActionData data) {
         this.data = data;
     }

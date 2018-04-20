@@ -2,49 +2,68 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.Range;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a group of actions.
+ */
 public class ActionGroup implements ExecutableAction {
 
+    /**
+     * The data of the action group.
+     */
     private ActionData data;
 
+
+    /**
+     * A range of repetitions.
+     */
     private IterableRange<Integer> repetitionNumber;
 
+
+    /**
+     * The number of actions to be chosen.
+     */
     private Range<Integer> chooseBetween;
 
+    /**
+     * The actions to be executed.
+     */
     private Set<ExecutableAction> actions;
 
+    /**
+     * The callbacks used to interact with the player.
+     */
     private final ActionGroupCallbacks callbacks;
 
     @Override
-    public String getId() {
-        return this.data.getId();
+    public ActionData getActionData() {
+        return this.data;
     }
 
-    @Override
-    public String getNextActionId() {
-        return this.data.getNextActionId();
-    }
-
-    @Override
-    public EvaluableConstraint getActionConstraint() {
-        return this.data.getConstraint();
-    }
-
+    /**
+     * @return A range of repetitions.
+     */
     public IterableRange<Integer> getRepetitionNumber() {
         return this.repetitionNumber;
     }
 
+    /**
+     * @return The number of actions to be chosen.
+     */
     public Range<Integer> getChooseBetween() {
         return this.chooseBetween;
     }
 
+    /**
+     * @return The actions to be executed.
+     */
     public Set<ExecutableAction> getActions() {
         return this.actions;
     }
@@ -60,16 +79,6 @@ public class ActionGroup implements ExecutableAction {
         this.chooseBetween = chooseBetween;
         this.actions = actions;
         this.callbacks = callbacks;
-    }
-
-    public ActionGroup(ActionData data, Set<ExecutableAction> actions, ActionGroupCallbacks callbacks) {
-        this(
-            data,
-            new IterableRange<>(1, 1, val -> ++val),
-            null,
-            actions,
-            callbacks
-        );
     }
 
     @Override
@@ -94,7 +103,7 @@ public class ActionGroup implements ExecutableAction {
             // Otherwise only a subset of them get executed
             else {
                 results.addAll(
-                        callbacks.getChosenActions(this.actions).stream()
+                        callbacks.getChosenActions(this.actions, this.chooseBetween).stream()
                                 .map(action -> action.run(context))
                                 .collect(Collectors.toCollection(LinkedList::new))
                 );
@@ -121,13 +130,13 @@ public class ActionGroup implements ExecutableAction {
             // Otherwise only a subset of them get executed
             else {
                 results.addAll(
-                        callbacks.getChosenActions(this.actions).stream()
+                        callbacks.getChosenActions(this.actions, this.chooseBetween).stream()
                                 .map(action -> action.run(context))
                                 .collect(Collectors.toCollection(LinkedList::new))
                 );
             }
         }
 
-        return results.toArray();
+        return new HashSet<>(results);
     }
 }
