@@ -26,6 +26,6 @@ public class RedrawAction extends Action {
 
         // random.nextInt(int bound) returns a number in the set [0, bound)
         this.die.setShade(1 + random.nextInt(6));
-        return this.die;
+        return null;
     }
 }

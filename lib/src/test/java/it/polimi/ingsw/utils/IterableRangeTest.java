@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 public class IterableRangeTest {
 
     @Test
-    void testIterable() {
+    public void testIterable() {
         IterableRange<Float> range = new IterableRange<>(12.6F, 22.99F, (val) -> ++val);
 
         Float iteratorVal = range.getStart();
@@ -20,7 +20,7 @@ public class IterableRangeTest {
     }
 
     @Test
-    void testIterableSameValue() {
+    public void testIterableSameValue() {
         IterableRange<Integer> range = new IterableRange<>(1, 1, (val) -> ++val);
 
         Integer iteratorVal = range.getStart();

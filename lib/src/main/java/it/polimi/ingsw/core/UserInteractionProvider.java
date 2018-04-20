@@ -1,7 +1,6 @@
 package it.polimi.ingsw.core;
 
 import it.polimi.ingsw.core.locations.ChooseLocation;
-import it.polimi.ingsw.core.locations.PutLocation;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
 
 public interface UserInteractionProvider {

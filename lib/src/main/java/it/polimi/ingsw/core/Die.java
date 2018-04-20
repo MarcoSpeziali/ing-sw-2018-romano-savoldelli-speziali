@@ -1,5 +1,7 @@
 package it.polimi.ingsw.core;
 
+import java.util.Objects;
+
 public class Die {
     private GlassColor color;
 
@@ -26,5 +28,25 @@ public class Die {
     public Die(GlassColor color, Integer shade) {
         this.color = color;
         this.shade = shade;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof Die)) {
+            return false;
+        }
+
+        Die die = (Die) obj;
+
+        return this.color.equals(die.color) && this.shade.equals(die.shade);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.color, this.shade);
     }
 }

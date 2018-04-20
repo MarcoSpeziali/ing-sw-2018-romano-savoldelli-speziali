@@ -43,14 +43,12 @@
             <parameter name="die" class="it.polimi.ingsw.core.Die" position="0" />
             <parameter name="by" class="java.lang.Integer" position="1" />
         </parameters>
-        <result class="it.polimi.ingsw.core.Die" isMultiple="false" />
     </action>
     <action id="decrement" class="it.polimi.ingsw.core.actions.DecrementAction">
         <parameters>
             <parameter name="die" class="it.polimi.ingsw.core.Die" position="0" />
             <parameter name="by" class="java.lang.Integer" position="1" />
         </parameters>
-        <result class="it.polimi.ingsw.core.Die" isMultiple="false" />
     </action>
     <action id="pick" class="it.polimi.ingsw.core.actions.PickAction">
         <parameters>
@@ -90,19 +88,16 @@
             <parameter name="die1" class="it.polimi.ingsw.core.Die" position="0" />
             <parameter name="die2" class="it.polimi.ingsw.core.Die" position="1" />
         </parameters>
-        <result class="it.polimi.ingsw.core.Die" isMultiple="true" fixedMultiplicity="2" />
     </action>
     <action id="redraw" class="it.polimi.ingsw.core.actions.RedrawAction">
         <parameters>
             <parameter name="dice" class="it.polimi.ingsw.core.Die" />
         </parameters>
-        <result class="it.polimi.ingsw.core.Die" />
     </action>
     <action id="redraw_all" class="it.polimi.ingsw.core.actions.RedrawAllAction">
         <parameters>
             <parameter name="location" class="it.polimi.ingsw.core.locations.ChooseLocation" />
         </parameters>
-        <result class="it.polimi.ingsw.core.Die" isMultiple="true" />
     </action>
     <action id="skip_turn" class="it.polimi.ingsw.core.actions.SkipTurnAction">
         <parameters>
@@ -115,12 +110,10 @@
         <parameters>
             <parameter name="die" class="it.polimi.ingsw.core.Die" position="0" />
         </parameters>
-        <result class="it.polimi.ingsw.core.Die" isMultiple="false" />
     </action>
     <action id="set_val" class="it.polimi.ingsw.core.actions.SetValAction" requiresUserInteraction="true">
         <parameters>
             <parameter name="die" class="it.polimi.ingsw.core.Die" position="0" />
         </parameters>
-        <result class="it.polimi.ingsw.core.Die" isMultiple="false" />
     </action>
 </actions>

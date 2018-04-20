@@ -35,16 +35,21 @@ class RedrawAllActionTest {
                 .toArray(Die[]::new);
 
         ChooseLocation location = mock(ChooseLocation.class);
-        when(location.getDice()).thenReturn(Arrays.stream(dice).collect(Collectors.toSet()));
+        when(location.getDice()).thenReturn(Arrays.stream(dice).collect(Collectors.toList()));
 
         this.action = new RedrawAllAction(this.testData, location);
     }
 
     @Test
     void run() {
-        @SuppressWarnings({"unchecked", "SimplifyStreamApiCallChains"})
-        Die[] result = ((Set<Die>) this.action.run(this.context)).stream().toArray(Die[]::new);
+        Die[] before = this.dice.clone();
 
-        Assertions.assertEquals(this.dice.length, result.length);
+        this.action.run(this.context);
+
+        Assertions.assertEquals(this.dice.length, this.dice.length);
+
+        for (int i = 0; i < this.dice.length; i++) {
+            Assertions.assertEquals(this.dice[i].getColor(), before[i].getColor());
+        }
     }
 }

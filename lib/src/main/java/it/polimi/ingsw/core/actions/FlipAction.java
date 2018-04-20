@@ -21,7 +21,6 @@ public class FlipAction extends Action {
         }
 
         this.die.setShade(7 - this.die.getShade());
-
-        return this.die;
+        return null;
     }
 }

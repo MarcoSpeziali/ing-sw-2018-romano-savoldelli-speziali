@@ -28,53 +28,45 @@ class DecrementActionTest {
 
     @Test
     void testNonProblematicDecrement() {
+        Die before = this.die;
         action = new DecrementAction(this.testData, this.die, 2);
 
-        Object result = this.action.run(this.context);
+        this.action.run(this.context);
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(1, ((Die) result).getShade().intValue());
+        Assertions.assertEquals(before.getColor(), this.die.getColor());
+        Assertions.assertEquals(1, this.die.getShade().intValue());
     }
 
     @Test
     void testProblematicDecrement() {
+        Die before = this.die;
         action = new DecrementAction(this.testData, this.die, 3);
 
-        Object result = this.action.run(this.context);
+        this.action.run(this.context);
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(6, ((Die) result).getShade().intValue());
+        Assertions.assertEquals(before.getColor(), this.die.getColor());
+        Assertions.assertEquals(6, this.die.getShade().intValue());
     }
 
     @Test
     void testProblematicDecrement2() {
+        Die before = this.die;
         action = new DecrementAction(this.testData, this.die, 4);
 
-        Object result = this.action.run(this.context);
+        this.action.run(this.context);
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(5, ((Die) result).getShade().intValue());
+        Assertions.assertEquals(before.getColor(), this.die.getColor());
+        Assertions.assertEquals(5, this.die.getShade().intValue());
     }
 
     @Test
     void testProblematicDecrement3() {
+        Die before = this.die;
         action = new DecrementAction(this.testData, this.die, 6);
 
-        Object result = this.action.run(this.context);
+        this.action.run(this.context);
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(3, ((Die) result).getShade().intValue());
+        Assertions.assertEquals(before.getColor(), this.die.getColor());
+        Assertions.assertEquals(3, this.die.getShade().intValue());
     }
 }

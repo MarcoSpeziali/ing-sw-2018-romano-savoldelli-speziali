@@ -5,7 +5,6 @@ import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.core.locations.ChooseLocation;
 
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class RedrawAllAction extends Action {
 
@@ -25,8 +24,7 @@ public class RedrawAllAction extends Action {
 
         Random random = new Random(System.currentTimeMillis());
 
-        return this.location.getDice().stream()
-                .peek(die -> die.setShade(1 + random.nextInt(6)))
-                .collect(Collectors.toSet());
+        this.location.getDice().forEach(die -> die.setShade(1 + random.nextInt(6)));
+        return null;
     }
 }

@@ -24,6 +24,6 @@ public class SetValAction extends Action {
         }
 
         this.die.setShade(this.userInteractionProvider.chooseShade(this.die));
-        return this.die;
+        return null;
     }
 }

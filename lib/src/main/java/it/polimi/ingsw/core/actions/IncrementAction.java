@@ -27,6 +27,6 @@ public class IncrementAction extends Action {
         int modularResult = MathUtils.modular(result, 6);
 
         this.die.setShade(modularResult == 0 ? 6 : modularResult);
-        return this.die;
+        return null;
     }
 }

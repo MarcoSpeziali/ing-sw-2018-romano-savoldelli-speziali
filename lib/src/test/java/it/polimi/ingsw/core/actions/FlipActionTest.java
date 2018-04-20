@@ -30,72 +30,78 @@ class FlipActionTest {
     @Test
     void test1() {
         this.die.setShade(1);
-        Object result = this.action.run(this.context);
+        GlassColor preColor = this.die.getColor();
+        Integer preShade = this.die.getShade();
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(6, ((Die) result).getShade().intValue());
+        this.action.run(this.context);
+
+        Assertions.assertEquals(preColor, this.die.getColor());
+        Assertions.assertNotEquals(preShade, this.die.getShade());
+        Assertions.assertEquals(6, this.die.getShade().intValue());
     }
 
     @Test
     void test2() {
         this.die.setShade(2);
-        Object result = this.action.run(this.context);
+        GlassColor preColor = this.die.getColor();
+        Integer preShade = this.die.getShade();
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(5, ((Die) result).getShade().intValue());
+        this.action.run(this.context);
+
+        Assertions.assertEquals(preColor, this.die.getColor());
+        Assertions.assertNotEquals(preShade, this.die.getShade());
+        Assertions.assertEquals(5, this.die.getShade().intValue());
     }
 
     @Test
     void test3() {
         this.die.setShade(3);
-        Object result = this.action.run(this.context);
+        GlassColor preColor = this.die.getColor();
+        Integer preShade = this.die.getShade();
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(4, ((Die) result).getShade().intValue());
+        this.action.run(this.context);
+
+        Assertions.assertEquals(preColor, this.die.getColor());
+        Assertions.assertNotEquals(preShade, this.die.getShade());
+        Assertions.assertEquals(4, this.die.getShade().intValue());
     }
 
     @Test
     void test4() {
         this.die.setShade(4);
-        Object result = this.action.run(this.context);
+        GlassColor preColor = this.die.getColor();
+        Integer preShade = this.die.getShade();
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(3, ((Die) result).getShade().intValue());
+        this.action.run(this.context);
+
+        Assertions.assertEquals(preColor, this.die.getColor());
+        Assertions.assertNotEquals(preShade, this.die.getShade());
+        Assertions.assertEquals(3, this.die.getShade().intValue());
     }
 
     @Test
     void test5() {
         this.die.setShade(5);
-        Object result = this.action.run(this.context);
+        GlassColor preColor = this.die.getColor();
+        Integer preShade = this.die.getShade();
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(2, ((Die) result).getShade().intValue());
+        this.action.run(this.context);
+
+        Assertions.assertEquals(preColor, this.die.getColor());
+        Assertions.assertNotEquals(preShade, this.die.getShade());
+        Assertions.assertEquals(2, this.die.getShade().intValue());
     }
 
     @Test
     void test6() {
         this.die.setShade(6);
-        Object result = this.action.run(this.context);
+        GlassColor preColor = this.die.getColor();
+        Integer preShade = this.die.getShade();
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
-        Assertions.assertEquals(this.die.getShade(), ((Die) result).getShade());
-        Assertions.assertEquals(1, ((Die) result).getShade().intValue());
+        this.action.run(this.context);
+
+        Assertions.assertEquals(preColor, this.die.getColor());
+        Assertions.assertNotEquals(preShade, this.die.getShade());
+        Assertions.assertEquals(1, this.die.getShade().intValue());
     }
 }

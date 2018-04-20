@@ -1,6 +1,10 @@
 package it.polimi.ingsw.core.actions;
 
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.Die;
+import it.polimi.ingsw.core.GlassColor;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,15 +12,33 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SwapActionTest {
 
+    private SwapAction action;
+    private Context context = new Context();
+    private ActionData testData = new ActionData("test", null, null, null);
+    private Die die1;
+    private Die die2;
+
     @BeforeEach
     void setUp() {
-    }
+        this.die1 = new Die(GlassColor.PURPLE, 3);
+        this.die2 = new Die(GlassColor.YELLOW, 4);
 
-    @AfterEach
-    void tearDown() {
+        this.action = new SwapAction(this.testData, this.die1, this.die2);
     }
 
     @Test
     void run() {
+        GlassColor preColor1 = this.die1.getColor();
+        GlassColor preColor2 = this.die2.getColor();
+        Integer preShade1 = this.die1.getShade();
+        Integer preShade2 = this.die2.getShade();
+
+        this.action.run(this.context);
+
+        Assertions.assertEquals(preColor1, this.die2.getColor());
+        Assertions.assertEquals(preColor2, this.die1.getColor());
+
+        Assertions.assertEquals(preShade1, this.die2.getShade());
+        Assertions.assertEquals(preShade2, this.die1.getShade());
     }
 }

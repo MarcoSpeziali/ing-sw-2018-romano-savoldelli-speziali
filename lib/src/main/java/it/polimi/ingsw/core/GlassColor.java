@@ -53,4 +53,9 @@ public enum GlassColor {
                 throw new IllegalArgumentException();
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%d, %d, %d)", this.name().toLowerCase(), this.red, this.green, this.blue);
+    }
 }

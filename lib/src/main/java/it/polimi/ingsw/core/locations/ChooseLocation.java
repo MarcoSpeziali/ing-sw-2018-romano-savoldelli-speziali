@@ -2,9 +2,9 @@ package it.polimi.ingsw.core.locations;
 
 import it.polimi.ingsw.core.Die;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ChooseLocation {
-    Set<Integer> getLocations();
-    Set<Die> getDice();
+    List<Integer> getLocations();
+    List<Die> getDice();
 }

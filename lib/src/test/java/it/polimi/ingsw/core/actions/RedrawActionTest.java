@@ -25,10 +25,9 @@ class RedrawActionTest {
 
     @Test
     void run() {
-        Object result = this.action.run(this.context);
+        GlassColor preColor = this.die.getColor();
+        this.action.run(this.context);
 
-        Assertions.assertEquals(Die.class, result.getClass());
-        Assertions.assertSame(this.die, result);
-        Assertions.assertEquals(this.die.getColor(), ((Die) result).getColor());
+        Assertions.assertEquals(this.die.getColor(), preColor);
     }
 }

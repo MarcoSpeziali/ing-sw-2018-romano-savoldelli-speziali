@@ -1,8 +1,6 @@
 package it.polimi.ingsw.core.actions;
 
-import it.polimi.ingsw.core.constraints.ConstraintGroup;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
-import it.polimi.ingsw.utils.text.LocalizedString;
 
 /**
  * Holds the common data for an {@code ExecutableAction}.
