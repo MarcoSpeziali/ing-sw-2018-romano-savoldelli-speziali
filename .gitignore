@@ -104,10 +104,6 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
-# Visual Studio Code
-.vscode
-.settings
-
 # Bins
 /**/.classpath
 /**/.project
@@ -116,3 +112,11 @@ buildNumber.properties
 .classpath
 
 # End of https://www.gitignore.io/api/java,maven,intellij
+
+# Visual Studio Code
+.vscode
+.settings
+
+# SonarLint
+.idea/sonarlint.xml
+.idea/sonarlint-state.xml
