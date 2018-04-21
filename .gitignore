@@ -120,3 +120,4 @@ buildNumber.properties
 # SonarLint
 .idea/sonarlint.xml
 .idea/sonarlint-state.xml
+*.iml

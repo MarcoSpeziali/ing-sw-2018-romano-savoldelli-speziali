@@ -8,14 +8,12 @@ public class ToolCard extends Card {
     private int initialCost;
     private boolean usedOnce = false;
     private Effect effect;
-    //private Node rawEffect;
 
     public ToolCard(String cardId, String nameKey, int initialCost, Effect effect) {
         this.cardId = cardId;
         this.nameKey = nameKey;
         this.initialCost = initialCost;
         this.effect = effect;
-        //this.rawEffect = new Node();
     }
 
     public void activate() {
