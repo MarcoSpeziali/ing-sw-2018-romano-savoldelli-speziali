@@ -2,7 +2,6 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.UserInteractionProvider;
-import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.core.locations.ChooseLocation;
 
 public class ChoosePositionAction extends Action {
@@ -19,9 +18,7 @@ public class ChoosePositionAction extends Action {
 
     @Override
     public Object run(Context context) {
-        if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
-        }
+        super.run(context);
 
         return this.userInteractionProvider.choosePosition(this.from);
     }

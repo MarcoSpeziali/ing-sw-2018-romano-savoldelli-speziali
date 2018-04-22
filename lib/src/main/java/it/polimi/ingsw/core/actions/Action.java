@@ -1,5 +1,7 @@
 package it.polimi.ingsw.core.actions;
 
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 
 /**
  * Represents a single action which implements {@code ExecutableAction}
@@ -22,5 +24,14 @@ public abstract class Action implements ExecutableAction {
      */
     public Action(ActionData data) {
         this.data = data;
+    }
+
+    @Override
+    public Object run(Context context) {
+        if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
+            throw new ConstraintEvaluationException();
+        }
+
+        return null;
     }
 }

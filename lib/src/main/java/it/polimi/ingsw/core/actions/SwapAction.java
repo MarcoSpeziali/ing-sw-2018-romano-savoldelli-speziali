@@ -3,14 +3,13 @@ package it.polimi.ingsw.core.actions;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 
 public class SwapAction extends Action {
 
-    protected final Die die1;
-    protected final Die die2;
+    protected final VariableSupplier<Die> die1;
+    protected final VariableSupplier<Die> die2;
 
-    public SwapAction(ActionData data, Die die1, Die die2) {
+    public SwapAction(ActionData data, VariableSupplier<Die> die1, VariableSupplier<Die> die2) {
         super(data);
 
         this.die1 = die1;
@@ -19,18 +18,16 @@ public class SwapAction extends Action {
 
     @Override
     public Object run(Context context) {
-        if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
-        }
+        super.run(context);
 
-        GlassColor c1 = this.die1.getColor();
-        Integer s1 = this.die1.getShade();
+        GlassColor c1 = this.die1.get(context).getColor();
+        Integer s1 = this.die1.get(context).getShade();
 
-        this.die1.setColor(this.die2.getColor());
-        this.die1.setShade(this.die2.getShade());
+        this.die1.get(context).setColor(this.die2.get(context).getColor());
+        this.die1.get(context).setShade(this.die2.get(context).getShade());
 
-        this.die2.setColor(c1);
-        this.die2.setShade(s1);
+        this.die2.get(context).setColor(c1);
+        this.die2.get(context).setShade(s1);
 
         return null;
     }

@@ -3,22 +3,15 @@ package it.polimi.ingsw.core.actions;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.UserInteractionProvider;
-import it.polimi.ingsw.core.locations.ChooseLocation;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 class DecrementActionTest {
 
     private DecrementAction action;
-    private Context context = new Context();
-    private ActionData testData = new ActionData("test", null, null, null);
+    private Context context = Context.getSharedInstance();
+    private ActionData testData = new ActionData("test", null, null, null, null);
     private Die die;
 
     @BeforeEach
@@ -29,7 +22,7 @@ class DecrementActionTest {
     @Test
     void testNonProblematicDecrement() {
         Die before = this.die;
-        action = new DecrementAction(this.testData, this.die, 2);
+        action = new DecrementAction(this.testData, context -> this.die, context -> 2);
 
         this.action.run(this.context);
 
@@ -40,7 +33,7 @@ class DecrementActionTest {
     @Test
     void testProblematicDecrement() {
         Die before = this.die;
-        action = new DecrementAction(this.testData, this.die, 3);
+        action = new DecrementAction(this.testData, context -> this.die, context -> 3);
 
         this.action.run(this.context);
 
@@ -51,7 +44,7 @@ class DecrementActionTest {
     @Test
     void testProblematicDecrement2() {
         Die before = this.die;
-        action = new DecrementAction(this.testData, this.die, 4);
+        action = new DecrementAction(this.testData, context -> this.die, context -> 4);
 
         this.action.run(this.context);
 
@@ -62,7 +55,7 @@ class DecrementActionTest {
     @Test
     void testProblematicDecrement3() {
         Die before = this.die;
-        action = new DecrementAction(this.testData, this.die, 6);
+        action = new DecrementAction(this.testData, context -> this.die, context -> 6);
 
         this.action.run(this.context);
 

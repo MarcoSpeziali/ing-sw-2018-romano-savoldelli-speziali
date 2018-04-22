@@ -2,15 +2,14 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
-import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 
 public class PutAction extends Action {
 
-    private final Die die;
+    private final VariableSupplier<Die> die;
     private final RandomPutLocation location;
 
-    public PutAction(ActionData data, Die die, RandomPutLocation location) {
+    public PutAction(ActionData data, VariableSupplier<Die> die, RandomPutLocation location) {
         super(data);
 
         this.die = die;
@@ -19,11 +18,9 @@ public class PutAction extends Action {
 
     @Override
     public Object run(Context context) {
-        if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
-        }
+        super.run(context);
 
-        this.location.putDie(this.die);
+        this.location.putDie(this.die.get(context));
         return null;
     }
 }

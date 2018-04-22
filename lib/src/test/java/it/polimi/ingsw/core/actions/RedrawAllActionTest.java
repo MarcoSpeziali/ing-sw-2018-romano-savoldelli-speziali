@@ -4,25 +4,22 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.locations.ChooseLocation;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class RedrawAllActionTest {
 
     private RedrawAllAction action;
-    private Context context = new Context();
-    private ActionData testData = new ActionData("test", null, null, null);
+    private Context context = Context.getSharedInstance();
+    private ActionData testData = new ActionData("test", null, null, null, null);
     private Die[] dice;
 
     @BeforeEach

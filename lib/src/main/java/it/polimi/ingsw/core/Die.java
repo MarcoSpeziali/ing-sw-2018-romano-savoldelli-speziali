@@ -31,6 +31,11 @@ public class Die {
     }
 
     @Override
+    public String toString() {
+        return String.format("Die(%d, %s)", this.shade, this.color);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;

@@ -28,6 +28,11 @@ public class ActionData {
     private final EvaluableConstraint constraint;
 
     /**
+     * The name of the result, used by the next actions.
+     */
+    private final String resultIdentifier;
+
+    /**
      * @return The id of the action.
      */
     public String getId() {
@@ -56,15 +61,24 @@ public class ActionData {
     }
 
     /**
+     * @return The name of the result, used by the next actions.
+     */
+    public String getResultIdentifier() {
+        return resultIdentifier;
+    }
+
+    /**
      * Creates a new instance of {@code ActionData}.
      * @param id The id of the action.
      * @param nextActionId The id of the next action.
      * @param constraint The constraint of the action.
+     * @param resultIdentifier The name of the result, used by the next actions.
      */
-    public ActionData(String id, String nextActionId, String descriptionKey, EvaluableConstraint constraint) {
+    public ActionData(String id, String nextActionId, String descriptionKey, EvaluableConstraint constraint, String resultIdentifier) {
         this.id = id;
         this.nextActionId = nextActionId;
         this.descriptionKey = descriptionKey;
         this.constraint = constraint;
+        this.resultIdentifier = resultIdentifier;
     }
 }

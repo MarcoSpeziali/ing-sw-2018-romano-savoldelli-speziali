@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 class ChooseColorActionTest {
 
     private ChooseColorAction action;
-    private Context context = new Context();
-    private ActionData testData = new ActionData("test", null, null, null);
+    private Context context = Context.getSharedInstance();
+    private ActionData testData = new ActionData("test", null, null, null, null);
 
     @BeforeEach
     void setUp() {
@@ -26,7 +26,7 @@ class ChooseColorActionTest {
         when(interactionProvider.chooseDie(location, null, 0))
                 .thenReturn(new Die(GlassColor.GREEN, 4));
 
-        action = new ChooseColorAction(this.testData, interactionProvider, location, 0);
+        action = new ChooseColorAction(this.testData, interactionProvider, location, context -> 0);
     }
 
     @Test

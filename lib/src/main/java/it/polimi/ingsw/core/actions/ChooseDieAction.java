@@ -1,17 +1,19 @@
 package it.polimi.ingsw.core.actions;
 
-import it.polimi.ingsw.core.*;
-import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.core.locations.ChooseLocation;
 
 public class ChooseDieAction extends Action {
 
+    @SuppressWarnings("WeakerAccess")
     protected final UserInteractionProvider userInteractionProvider;
     protected final ChooseLocation from;
-    protected final GlassColor color;
-    protected final Integer shade;
+    protected final VariableSupplier<GlassColor> color;
+    protected final VariableSupplier<Integer> shade;
 
-    public ChooseDieAction(ActionData data, UserInteractionProvider userInteractionProvider, ChooseLocation from, GlassColor color, Integer shade) {
+    public ChooseDieAction(ActionData data, UserInteractionProvider userInteractionProvider, ChooseLocation from, VariableSupplier<GlassColor> color, VariableSupplier<Integer> shade) {
         super(data);
 
         this.userInteractionProvider = userInteractionProvider;
@@ -22,10 +24,8 @@ public class ChooseDieAction extends Action {
 
     @Override
     public Object run(Context context) {
-        if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
-        }
+        super.run(context);
 
-        return this.userInteractionProvider.chooseDie(this.from, this.color, this.shade);
+        return this.userInteractionProvider.chooseDie(this.from, this.color.get(context), this.shade.get(context));
     }
 }

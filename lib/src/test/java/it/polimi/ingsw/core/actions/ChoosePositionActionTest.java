@@ -13,8 +13,8 @@ import static org.mockito.Mockito.when;
 class ChoosePositionActionTest {
 
     private ChoosePositionAction action;
-    private Context context = new Context();
-    private ActionData testData = new ActionData("test", null, null, null);
+    private Context context = Context.getSharedInstance();
+    private ActionData testData = new ActionData("test", null, null, null, null);
 
     @BeforeEach
     void setUp() {

@@ -3,14 +3,13 @@ package it.polimi.ingsw.core.actions;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.UserInteractionProvider;
-import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 
 public class SetValAction extends Action {
 
     private final UserInteractionProvider userInteractionProvider;
-    private final Die die;
+    private final VariableSupplier<Die> die;
 
-    public SetValAction(ActionData data, UserInteractionProvider userInteractionProvider, Die die) {
+    public SetValAction(ActionData data, UserInteractionProvider userInteractionProvider, VariableSupplier<Die> die) {
         super(data);
 
         this.die = die;
@@ -19,11 +18,9 @@ public class SetValAction extends Action {
 
     @Override
     public Object run(Context context) {
-        if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
-        }
+        super.run(context);
 
-        this.die.setShade(this.userInteractionProvider.chooseShade(this.die));
+        this.die.get(context).setShade(this.userInteractionProvider.chooseShade(this.die.get(context)));
         return null;
     }
 }

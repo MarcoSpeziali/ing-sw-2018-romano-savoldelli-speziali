@@ -5,10 +5,8 @@ import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.Range;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Represents a group of actions.
@@ -35,7 +33,7 @@ public class ActionGroup implements ExecutableAction {
     /**
      * The actions to be executed.
      */
-    private Set<ExecutableAction> actions;
+    private List<ExecutableAction> actions;
 
     /**
      * The callbacks used to interact with the player.
@@ -64,15 +62,29 @@ public class ActionGroup implements ExecutableAction {
     /**
      * @return The actions to be executed.
      */
-    public Set<ExecutableAction> getActions() {
+    public List<ExecutableAction> getActions() {
         return this.actions;
     }
 
+    /**
+     * @return The callbacks used to interact with the player.
+     */
+    public ActionGroupCallbacks getCallbacks() {
+        return this.callbacks;
+    }
+
+    /**
+     * @param data The data of the action group.
+     * @param repetitionNumber A range of repetitions.
+     * @param chooseBetween The number of actions to be chosen.
+     * @param actions The actions to be executed.
+     * @param callbacks The callbacks used to interact with the player.
+     */
     public ActionGroup(
             ActionData data,
             IterableRange<Integer> repetitionNumber,
             Range<Integer> chooseBetween,
-            Set<ExecutableAction> actions,
+            List<ExecutableAction> actions,
             ActionGroupCallbacks callbacks) {
         this.data = data;
         this.repetitionNumber = repetitionNumber;
@@ -87,56 +99,74 @@ public class ActionGroup implements ExecutableAction {
             throw new ConstraintEvaluationException();
         }
 
-        // Since the results get append one by one it's more efficient to use a LinkedList
-        LinkedList<Object> results = new LinkedList<>();
+        context.snapshot("ActionGroup{" + this.data.getId() + "}", snapshot -> {
+            // Executes the mandatory repetitions
+            this.executeMandatoryRepetitions(snapshot);
 
+            // Executes the optional repetitions
+            this.executeOptionalRepetitions(snapshot);
+        });
+
+        return null;
+    }
+
+    /**
+     * Executes the mandatory repetitions.
+     * @param snapshot The {@link Context.Snapshot} that holds the variables of the current {@link ActionGroup}.
+     */
+    private void executeMandatoryRepetitions(Context.Snapshot snapshot) {
         // If the range is 3..7 the first 3 iterations are mandatory
         for (int i = 0; i < this.repetitionNumber.getStart(); i++) {
             // If chooseBetween is null every actions needs to be executed
             if (this.chooseBetween == null) {
-                results.addAll(
-                        this.actions.stream()
-                                .map(action -> action.run(context))
-                                .collect(Collectors.toCollection(LinkedList::new))
-                );
+                //noinspection SimplifyStreamApiCallChains
+                this.actions.forEach(getActionConsumer(snapshot));
             }
             // Otherwise only a subset of them get executed
             else {
-                results.addAll(
-                        callbacks.getChosenActions(this.actions, this.chooseBetween).stream()
-                                .map(action -> action.run(context))
-                                .collect(Collectors.toCollection(LinkedList::new))
-                );
+                //noinspection SimplifyStreamApiCallChains
+                callbacks.getChosenActions(this.actions, this.chooseBetween)
+                        .forEach(getActionConsumer(snapshot));
             }
         }
+    }
 
+    /**
+     * Executes the optional repetitions.
+     * @param snapshot The {@link Context.Snapshot} that holds the variables of the current {@link ActionGroup}.
+     */
+    private void executeOptionalRepetitions(Context.Snapshot snapshot) {
         // The mandatory repetitions have already been executed, now the optional ones needs to be processed
-        for (Integer index : this.repetitionNumber) {
+        for (int index = this.repetitionNumber.getStart(); index < this.repetitionNumber.getEnd(); index++) {
             // Whenever shouldRepeat returns false the process stops
             if (!this.callbacks.shouldRepeat(
-                    this.repetitionNumber.getStart() + index + 1,
+                    index,
                     this.repetitionNumber.getEnd())) {
                 break;
             }
 
             // If chooseBetween is null every actions needs to be executed
             if (this.chooseBetween == null) {
-                results.addAll(
-                        this.actions.stream()
-                                .map(action -> action.run(context))
-                                .collect(Collectors.toCollection(LinkedList::new))
-                );
+                //noinspection SimplifyStreamApiCallChains
+                this.actions.forEach(getActionConsumer(snapshot));
             }
             // Otherwise only a subset of them get executed
             else {
-                results.addAll(
-                        callbacks.getChosenActions(this.actions, this.chooseBetween).stream()
-                                .map(action -> action.run(context))
-                                .collect(Collectors.toCollection(LinkedList::new))
-                );
+                //noinspection SimplifyStreamApiCallChains
+                callbacks.getChosenActions(this.actions, this.chooseBetween)
+                        .forEach(getActionConsumer(snapshot));
             }
         }
+    }
 
-        return new HashSet<>(results);
+    private Consumer<? super ExecutableAction> getActionConsumer(Context.Snapshot snapshot) {
+        return executableAction -> {
+            if (executableAction.getActionData().getResultIdentifier() == null) {
+                executableAction.run(snapshot);
+            }
+            else {
+                snapshot.put(executableAction.getActionData().getResultIdentifier(), executableAction.run(snapshot));
+            }
+        };
     }
 }

@@ -15,6 +15,8 @@ public class PickAction extends Action {
 
     @Override
     public Object run(Context context) {
+        super.run(context);
+
         return this.from.pickDie();
     }
 }

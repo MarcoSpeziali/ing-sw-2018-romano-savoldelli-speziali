@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
@@ -38,6 +39,36 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      */
     public IterableRange(Range<T> range, UnaryOperator<T> incrementFunction) {
         this(range.start, range.end, incrementFunction);
+    }
+
+    /**
+     * Creates a {@link Range} from a string representation.
+     * @param range The string representation.
+     * @param separator The separator between the two values.
+     * @param conversionProvider A function that takes the string value and converts it to the desired object.
+     * @param incrementFunction The function used to increment the values.
+     * @param <K> The desired object type.
+     * @return An instance of {@link Range}
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static <K extends Comparable<? super K>> IterableRange<K> fromString(String range, String separator, Function<String, K> conversionProvider, UnaryOperator<K> incrementFunction) {
+        return new IterableRange<>(Objects.requireNonNull(
+                Range.fromString(range, separator, conversionProvider)),
+                incrementFunction
+        );
+    }
+
+    /**
+     * Creates a {@link Range} from a single value (i.e. {@link #getStart()} points to the same value as {@link #getEnd()})
+     * @param value The starting and ending value.
+     * @param incrementFunction The function used to increment the values.
+     * @param <K> The desired object type.
+     * @return An instance of {@link Range}
+     */
+    public static <K extends Comparable<? super K>> IterableRange<K> singleValued(K value, UnaryOperator<K> incrementFunction) {
+        return new IterableRange<>(Objects.requireNonNull(
+                Range.singleValued(value)
+        ), incrementFunction);
     }
 
     @Override

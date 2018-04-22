@@ -3,18 +3,15 @@ package it.polimi.ingsw.core.actions;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.GlassColor;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SwapActionTest {
 
     private SwapAction action;
-    private Context context = new Context();
-    private ActionData testData = new ActionData("test", null, null, null);
+    private Context context = Context.getSharedInstance();
+    private ActionData testData = new ActionData("test", null, null, null, null);
     private Die die1;
     private Die die2;
 
@@ -23,7 +20,7 @@ class SwapActionTest {
         this.die1 = new Die(GlassColor.PURPLE, 3);
         this.die2 = new Die(GlassColor.YELLOW, 4);
 
-        this.action = new SwapAction(this.testData, this.die1, this.die2);
+        this.action = new SwapAction(this.testData, context -> this.die1, context -> this.die2);
     }
 
     @Test

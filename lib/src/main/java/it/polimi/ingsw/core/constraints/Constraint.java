@@ -1,83 +1,90 @@
 package it.polimi.ingsw.core.constraints;
 
 import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.actions.VariableSupplier;
 
-import java.util.function.Supplier;
-
+/**
+ * Represents a single constraint composed by the operands and an operator.
+ */
 public class Constraint implements EvaluableConstraint {
 
+    /**
+     * The id of the constraint.
+     */
     private String id;
 
     /**
-     *
+     * The left operand.
+     * A {@code Supplier<Object>} id needed to make sure that the operand is as updated as possible.
      */
-    private Supplier<Object> leftOperand;
+    private VariableSupplier<Object> leftOperand;
 
     /**
-     *
+     * The evaluation's operator.
      */
     private Operator operator;
 
     /**
-     *
+     * The right operand.
+     * A {@code Supplier<Object>} id needed to make sure that the operand is as updated as possible.
      */
-    private Supplier<Object> rightOperand;
+    private VariableSupplier<Object> rightOperand;
 
     /**
-     * @return
+     * @return The id of the constraint.
      */
     public String getId() {
         return this.id;
     }
 
     /**
-     * @return
+     * @return The left operand.
      */
-    public Supplier<Object> getLeftOperand() {
+    public VariableSupplier<Object> getLeftOperand() {
         return this.leftOperand;
     }
 
     /**
-     * @return
+     * @return The evaluation's operator.
      */
     public Operator getOperator() {
         return this.operator;
     }
 
     /**
-     * @return
+     * @return The right operand.
      */
-    public Supplier<Object> getRightOperand() {
+    public VariableSupplier<Object> getRightOperand() {
         return this.rightOperand;
     }
 
     /**
-     * @param id
-     * @param leftOperand
-     * @param operator
-     * @param rightOperand
+     * @param id The id of the constraint.
+     * @param leftOperand The left operand.
+     * @param operator The evaluation's operator.
+     * @param rightOperand The right operand.
      */
-    public Constraint(String id, Supplier<Object> leftOperand, Operator operator, Supplier<Object> rightOperand) {
+    public Constraint(String id, VariableSupplier<Object> leftOperand, Operator operator, VariableSupplier<Object> rightOperand) {
         this.id = id;
         this.leftOperand = leftOperand;
         this.operator = operator;
         this.rightOperand = rightOperand;
-
-        if (!this.validateOperands()) {
-            throw new IllegalArgumentException(
-                    String.format("The operands must implement Comparable<?> when compared with %s", operator)
-            );
-        }
     }
 
-    private boolean validateOperands() {
+    /**
+     * @param context The context on which the constraints will be ran.
+     * @return {@code True} if the operands implements {@code Comparable<?>}, {@code false} otherwise; when {@link #operator}
+     * does not represent an equality comparison (>, >=, <, <=).
+     * {@code True} if {@link #operator} represents an equality comparison (==, !=).
+     */
+    private boolean validateOperands(Context context) {
         switch (this.operator) {
             case GREATER:
             case GREATER_EQUAL:
             case LESS:
             case LESS_EQUAL:
-                return this.leftOperand instanceof Comparable<?> &&
-                        this.rightOperand instanceof Comparable<?>;
+                return this.leftOperand.get(context) instanceof Comparable<?> &&
+                        this.rightOperand.get(context) instanceof Comparable<?>;
             case EQUALS:
             case NOT_EQUALS:
             default:
@@ -87,8 +94,14 @@ public class Constraint implements EvaluableConstraint {
 
     @Override
     public boolean evaluate(Context context) {
-        Object computedLeftOperand = this.leftOperand.get();
-        Object computedRightOperand = this.rightOperand.get();
+        if (!this.validateOperands(context)) {
+            throw new ClassCastException(
+                    String.format("The operands must implement Comparable<?> when compared with %s", operator)
+            );
+        }
+
+        Object computedLeftOperand = this.leftOperand.get(context);
+        Object computedRightOperand = this.rightOperand.get(context);
 
         if (this.operator == Operator.EQUALS) {
             return computedLeftOperand.equals(computedRightOperand);

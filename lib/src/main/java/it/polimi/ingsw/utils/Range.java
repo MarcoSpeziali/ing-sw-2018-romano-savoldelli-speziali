@@ -36,7 +36,7 @@ public class Range<T extends Comparable<? super T>> {
     }
 
     /**
-     * Initializes {@code Range<T>} with the starting and the ending value.
+     * Initializes {@link Range} with the starting and the ending value.
      *
      * @param start The stating value of the range.
      * @param end The ending value of the range.
@@ -58,12 +58,12 @@ public class Range<T extends Comparable<? super T>> {
     }
 
     /**
-     * Creates a {@code Range<K>} from a string representation.
+     * Creates a {@link Range} from a string representation.
      * @param range The string representation.
      * @param separator The separator between the two values.
      * @param conversionProvider A function that takes the string value and converts it to the desired object.
      * @param <K> The desired object type.
-     * @return An instance of {@code Range<K>}
+     * @return An instance of {@link Range}
      */
     @SuppressWarnings("WeakerAccess")
     public static <K extends Comparable<? super K>> Range<K> fromString(String range, String separator, Function<String, K> conversionProvider) {
@@ -90,6 +90,16 @@ public class Range<T extends Comparable<? super T>> {
         K end = (K) convertedTokens[1];
 
         return new Range<>(start, end);
+    }
+
+    /**
+     * Creates a {@link Range} from a single value (i.e. {@link #getStart()} points to the same value as {@link #getEnd()})
+     * @param value The starting and ending value.
+     * @param <K> The desired object type.
+     * @return An instance of {@link Range}
+     */
+    public static <K extends Comparable<? super K>> Range<K> singleValued(K value) {
+        return new Range<>(value, value);
     }
 
     /**

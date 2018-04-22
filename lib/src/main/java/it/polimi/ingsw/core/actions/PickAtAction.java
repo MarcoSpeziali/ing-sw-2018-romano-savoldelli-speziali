@@ -6,9 +6,9 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 public class PickAtAction extends Action {
 
     private final ChoosablePickLocation from;
-    private final Integer at;
+    private final VariableSupplier<Integer> at;
 
-    public PickAtAction(ActionData data, ChoosablePickLocation from, Integer at) {
+    public PickAtAction(ActionData data, ChoosablePickLocation from, VariableSupplier<Integer> at) {
         super(data);
 
         this.from = from;
@@ -17,6 +17,8 @@ public class PickAtAction extends Action {
 
     @Override
     public Object run(Context context) {
-        return this.from.pickDie(this.at);
+        super.run(context);
+
+        return this.from.pickDie(this.at.get(context));
     }
 }

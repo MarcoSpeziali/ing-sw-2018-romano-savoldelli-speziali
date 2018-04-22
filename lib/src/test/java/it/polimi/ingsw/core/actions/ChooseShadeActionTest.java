@@ -5,20 +5,18 @@ import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.core.locations.ChooseLocation;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ChooseShadeActionTest {
 
     private ChooseShadeAction action;
-    private Context context = new Context();
-    private ActionData testData = new ActionData("test", null, null, null);
+    private Context context = Context.getSharedInstance();
+    private ActionData testData = new ActionData("test", null, null, null, null);
 
     @BeforeEach
     void setUp() {
@@ -28,7 +26,7 @@ class ChooseShadeActionTest {
         when(interactionProvider.chooseDie(location, null, 0))
                 .thenReturn(new Die(GlassColor.GREEN, 4));
 
-        action = new ChooseShadeAction(this.testData, interactionProvider, location, null);
+        action = new ChooseShadeAction(this.testData, interactionProvider, location, context -> null);
     }
 
     @Test

@@ -7,18 +7,34 @@ import java.util.Set;
 
 public class ConstraintGroup implements EvaluableConstraint {
 
+    /**
+     * The constraint id.
+     */
     private String id;
 
+    /**
+     * The constraints of the {@link ConstraintGroup}.
+     */
     private Set<EvaluableConstraint> constraints;
 
-    public Set<EvaluableConstraint> getConstraints() {
-        return this.constraints;
-    }
-
+    /**
+     * @return The constraint id.
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @return The constraints of the {@link ConstraintGroup}.
+     */
+    public Set<EvaluableConstraint> getConstraints() {
+        return this.constraints;
+    }
+
+    /**
+     * @param id The constraint id.
+     * @param constraints The constraints of the {@link ConstraintGroup}.
+     */
     public ConstraintGroup(String id, Set<EvaluableConstraint> constraints) {
         this.id = id;
         this.constraints = constraints;
