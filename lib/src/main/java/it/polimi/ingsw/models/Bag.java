@@ -7,7 +7,6 @@ import it.polimi.ingsw.core.locations.RandomPutLocation;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
 
