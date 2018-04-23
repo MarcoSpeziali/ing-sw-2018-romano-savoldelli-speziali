@@ -1,5 +1,6 @@
 package it.polimi.ingsw.models;
 
+// FIXME: Window dovrebbe implementare RestrictedChoosablePutLocation, ChoosablePickLocation
 public class Window {
 
     private int difficulty;
@@ -7,6 +8,7 @@ public class Window {
     private int columns;
     private String id;
     private Window sibling;
+    // FIXME: Un'implementazione a matrice non è più comoda?
     private Cell[] cells;
 
     public Window(int difficulty, int rows, int columns, String id, Window sibling, Cell[] cells) {
