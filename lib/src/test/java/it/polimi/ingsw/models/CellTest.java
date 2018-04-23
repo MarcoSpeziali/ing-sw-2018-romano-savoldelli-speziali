@@ -39,7 +39,7 @@ class CellTest {
     }
 
     @Test
-    void putDieTest() throws AlreadyPutException {
+    void putDieTest() {
         blankCell.putDie(this.die);
         Assertions.assertTrue(blankCell.isOccupied());
         Assertions.assertThrows(AlreadyPutException.class, () ->
@@ -47,7 +47,7 @@ class CellTest {
     }
 
     @Test
-    void pickDieTest() throws AlreadyPutException {
+    void pickDieTest() {
         Assertions.assertThrows(NullPointerException.class, () -> blankCell.pickDie());
         blankCell.putDie(this.die);
         Assertions.assertEquals(this.die, blankCell.pickDie());

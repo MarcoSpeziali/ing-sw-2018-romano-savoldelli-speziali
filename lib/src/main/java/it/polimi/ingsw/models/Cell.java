@@ -8,7 +8,7 @@ import it.polimi.ingsw.core.locations.AlreadyPutException;
 public class Cell /* implements RandomPutLocation, RandomPickLocation */ {
 
     private GlassColor cellColor;
-    private Integer shade;
+    private Integer shade = 0;
     private Die die = null;
 
     public Cell(GlassColor cellColor) {

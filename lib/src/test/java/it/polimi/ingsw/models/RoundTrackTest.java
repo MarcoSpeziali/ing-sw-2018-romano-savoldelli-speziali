@@ -4,7 +4,6 @@ import it.polimi.ingsw.core.Die;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class RoundTrackTest {
@@ -13,7 +12,7 @@ class RoundTrackTest {
 
     @Test
     void getDieAtIndexTest() {
-        for(int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             Assertions.assertNull(roundTrack.getDieAtIndex(i));
         }
         Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> roundTrack.getDieAtIndex(-13));
@@ -26,7 +25,7 @@ class RoundTrackTest {
 
     @Test
     void setDieForCurrentRoundTest() {
-        for(int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             Die die = mock(Die.class);
             roundTrack.setDieForCurrentRound(die);
             Assertions.assertEquals(die, roundTrack.getDieAtIndex(i));

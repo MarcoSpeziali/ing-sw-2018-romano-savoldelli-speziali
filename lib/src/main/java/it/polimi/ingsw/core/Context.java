@@ -319,6 +319,9 @@ public class Context {
             this.hashMap = parentContext.hashMap;
         }
 
+        // context.get(x)
+        // parentContext.get(this.snapshotId + "::" + x)
+
         @Override
         public boolean containsKey(String key) {
             if (parentContext.containsKey(this.snapshotId + "::" + key)) {

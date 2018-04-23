@@ -1,7 +1,13 @@
 package it.polimi.ingsw.models;
 
+import it.polimi.ingsw.core.Die;
+import it.polimi.ingsw.core.locations.ChoosablePickLocation;
+import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
+
+import java.util.List;
+
 // FIXME: Window dovrebbe implementare RestrictedChoosablePutLocation, ChoosablePickLocation
-public class Window {
+public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation {
 
     private int difficulty;
     private int rows;
@@ -26,5 +32,45 @@ public class Window {
 
     public Cell[] getCells() {
         return cells;
+    }
+
+    @Override
+    public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
+        return null;
+    }
+
+    @Override
+    public void putDie(Die die, Integer location) {
+
+    }
+
+    @Override
+    public List<Integer> getLocations() {
+        return null;
+    }
+
+    @Override
+    public List<Die> getDice() {
+        return null;
+    }
+
+    @Override
+    public int getFreeSpace() {
+        return 0;
+    }
+
+    @Override
+    public Die pickDie(Die die) {
+        return null;
+    }
+
+    @Override
+    public Die pickDie(Integer location) {
+        return null;
+    }
+
+    @Override
+    public int getNumberOfDice() {
+        return 0;
     }
 }
