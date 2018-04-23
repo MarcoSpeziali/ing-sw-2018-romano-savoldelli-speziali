@@ -17,8 +17,8 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
     private List<Die> getMyList () {
 
         List<Die> myList = new LinkedList<>();
-        for (int i = 0; i < GlassColor.values().length; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 3*GlassColor.values().length; i++) {
+            for (int j = 0; j < 6; j++) {
                 myList.add(new Die(GlassColor.values()[i], j));
             }
         }
@@ -49,7 +49,6 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
     public int getFreeSpace() {
         return 90 - dieList.size();
     }
-
 }
 
 
