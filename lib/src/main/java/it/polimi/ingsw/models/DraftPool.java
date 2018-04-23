@@ -4,45 +4,49 @@ import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 
-import java.util.List;
+import java.util.LinkedList;
 
-// FIXME: DraftPool dovrebbe implementare ChoosablePickLocation, RandomPutLocation
-public class DraftPool implements ChoosablePickLocation, RandomPutLocation{
-    private Die[] dieArray;
+public class DraftPool implements ChoosablePickLocation {
+
+    private final LinkedList<Die> dice;
+
+    public DraftPool(int players) {
+
+        this.dice = new LinkedList<>();
+        Bag bag = new Bag();
+        for (int i = 0; i < 2 * players + 1; i++) {
+            this.dice.add(bag.pickDie());
+        }
+
+    }
 
     @Override
     public Die pickDie(Die die) {
-
+        if (this.dice.contains(die)) {
+            int idx = this.dice.indexOf(die);
+            return this.dice.remove(idx);
+        } else return null;
     }
 
     @Override
     public Die pickDie(Integer location) {
+        return this.dice.get(location);
+    }
+
+    @Override
+    public LinkedList<Integer> getLocations() {
+        //TODO implemetazione esatta?
         return null;
     }
 
     @Override
-    public List<Integer> getLocations() {
-        return null;
-    }
-
-    @Override
-    public List<Die> getDice() {
-        return null;3
+    public LinkedList<Die> getDice() {
+        return this.dice;
     }
 
     @Override
     public int getNumberOfDice() {
-        return 0;
+        return this.dice.size();
     }
 
-    @Override
-    public void putDie(Die die) {
-
-    }
-
-    @Override
-    public int getFreeSpace() {
-        return 0;
-    }
 }
-

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Bag implements RandomPutLocation, RandomPickLocation/* implements RandomPutLocation, RandomPickLocation */ {
+public class Bag implements RandomPutLocation, RandomPickLocation {
 
     private List<Die> dieList;
 
@@ -25,11 +25,9 @@ public class Bag implements RandomPutLocation, RandomPickLocation/* implements R
         return myList;
     }
 
-
     public Bag() {
         this.dieList = getMyList();
     }
-
 
     @Override
     public Die pickDie() {
@@ -39,7 +37,6 @@ public class Bag implements RandomPutLocation, RandomPickLocation/* implements R
 
     @Override
     public int getNumberOfDice() {
-
         return dieList.size();
     }
 

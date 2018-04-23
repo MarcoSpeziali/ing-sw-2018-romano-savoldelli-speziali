@@ -19,23 +19,15 @@ class CellTest {
     void getCellColorTest(){
 
         Assertions.assertEquals(GlassColor.BLUE, coloredCell.getCellColor());
-        Assertions.assertThrows(NullPointerException.class, () ->
-                shadedCell.getCellColor()
-        );
-        Assertions.assertThrows(NullPointerException.class, () ->
-                blankCell.getCellColor()
-        );
+        Assertions.assertNull(shadedCell.getCellColor());
+        Assertions.assertNull(blankCell.getCellColor());
     }
 
     @Test
     void getShadeTest() {
-        Assertions.assertEquals(4, shadedCell.getShade());
-        Assertions.assertThrows(NullPointerException.class, () ->
-                coloredCell.getShade()
-        );
-        Assertions.assertThrows(NullPointerException.class, () ->
-                blankCell.getShade()
-        );
+        Assertions.assertEquals(Integer.valueOf(4), shadedCell.getShade());
+        Assertions.assertEquals(Integer.valueOf(0), coloredCell.getShade());
+        Assertions.assertEquals(Integer.valueOf(0), blankCell.getShade());
     }
 
     @Test
@@ -48,15 +40,22 @@ class CellTest {
 
     @Test
     void pickDieTest() {
-        Assertions.assertThrows(NullPointerException.class, () -> blankCell.pickDie());
+        Assertions.assertNull(blankCell.pickDie());
         blankCell.putDie(this.die);
         Assertions.assertEquals(this.die, blankCell.pickDie());
     }
 
     @Test
-    void isOccupiedTest() throws AlreadyPutException {
+    void isOccupiedTest() {
         Assertions.assertFalse(blankCell.isOccupied());
         blankCell.putDie(this.die);
         Assertions.assertTrue(blankCell.isOccupied());
+    }
+
+    @Test
+    void getNumberOfDice() {
+        Assertions.assertEquals(0, blankCell.getNumberOfDice());
+        blankCell.putDie(die);
+        Assertions.assertEquals(1, blankCell.getNumberOfDice());
     }
 }
