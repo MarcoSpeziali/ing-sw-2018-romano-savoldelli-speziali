@@ -13,6 +13,7 @@ import java.util.Random;
 public class Bag implements RandomPutLocation, RandomPickLocation {
 
     private List<Die> dieList;
+    private int rand;
 
     private List<Die> getMyList () {
 
@@ -29,9 +30,22 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
         this.dieList = getMyList();
     }
 
+    private static int getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+    }
+
+
     @Override
     public Die pickDie() {
-        Random rand = new Random();
+
+
+        rand = getRandomNumberInRange(1, 90);
         return dieList.remove(rand.nextInt());
     }
 
