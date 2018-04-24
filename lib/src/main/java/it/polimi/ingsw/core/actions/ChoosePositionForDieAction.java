@@ -1,11 +1,9 @@
 package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.Die;
+import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
-
-import java.util.function.Supplier;
 
 public class ChoosePositionForDieAction extends Action {
 

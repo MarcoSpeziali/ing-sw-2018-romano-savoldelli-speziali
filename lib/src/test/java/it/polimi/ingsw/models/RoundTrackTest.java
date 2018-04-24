@@ -1,14 +1,19 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.Die;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
 class RoundTrackTest {
 
-    private RoundTrack roundTrack = new RoundTrack();
+    private RoundTrack roundTrack;
+
+    @BeforeEach
+    void setUp() {
+        this.roundTrack = new RoundTrack();
+    }
 
     @Test
     void getDieAtIndexTest() {

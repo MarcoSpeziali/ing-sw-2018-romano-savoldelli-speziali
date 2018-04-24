@@ -2,17 +2,17 @@
 <instructions>
     <instruction id="for-die" class="it.polimi.ingsw.core.instruction.ForDieInstruction">
         <exposed>
-            <variable name="die" class="it.polimi.ingsw.core.Die"/>
+            <variable name="die" class="it.polimi.ingsw.models.Die"/>
         </exposed>
     </instruction>
     <instruction id="for-row" class="it.polimi.ingsw.core.instruction.ForRowInstruction">
         <exposed>
-            <variable name="row" class="it.polimi.ingsw.core.Die" isMultiple="true"/>
+            <variable name="row" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
         </exposed>
     </instruction>
     <instruction id="for-column" class="it.polimi.ingsw.core.instruction.ForColumnInstruction">
         <exposed>
-            <variable name="column" class="it.polimi.ingsw.core.Die" isMultiple="true"/>
+            <variable name="column" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
         </exposed>
     </instruction>
     <instruction id="take-if" class="it.polimi.ingsw.core.instruction.TakeIfInstruction">

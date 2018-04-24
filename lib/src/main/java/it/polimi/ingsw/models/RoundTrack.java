@@ -1,7 +1,5 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.Die;
-
 public class RoundTrack {
 
     private Die[] rounds;

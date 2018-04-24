@@ -1,9 +1,7 @@
 package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.Die;
-
-import java.util.function.Supplier;
+import it.polimi.ingsw.models.Die;
 
 public class FlipAction extends Action {
 

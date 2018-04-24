@@ -2,6 +2,7 @@ package it.polimi.ingsw.core;
 
 import it.polimi.ingsw.core.locations.ChooseLocation;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
+import it.polimi.ingsw.models.Die;
 
 public interface UserInteractionProvider {
     Die chooseDie(ChooseLocation location, GlassColor glassColor, Integer shade);

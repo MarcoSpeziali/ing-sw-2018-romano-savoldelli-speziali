@@ -1,6 +1,5 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.locations.AlreadyPutException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;

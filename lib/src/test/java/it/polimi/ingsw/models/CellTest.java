@@ -1,19 +1,27 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.Die;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.locations.AlreadyPutException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
 class CellTest {
 
-    private Cell coloredCell = new Cell(GlassColor.BLUE);
-    private Cell shadedCell = new Cell(4);
-    private Cell blankCell = new Cell();
-    private Die die = mock(Die.class);
+    private Cell coloredCell;
+    private Cell shadedCell;
+    private Cell blankCell;
+    private Die die;
+
+    @BeforeEach
+    void setUp() {
+        this.coloredCell = new Cell(GlassColor.BLUE);
+        this.shadedCell = new Cell(4);
+        this.blankCell = new Cell();
+        this.die = mock(Die.class);
+    }
 
     @Test
     void getCellColorTest(){
@@ -53,7 +61,7 @@ class CellTest {
     }
 
     @Test
-    void getNumberOfDice() {
+    void getNumberOfDiceTest() {
         Assertions.assertEquals(0, blankCell.getNumberOfDice());
         blankCell.putDie(die);
         Assertions.assertEquals(1, blankCell.getNumberOfDice());

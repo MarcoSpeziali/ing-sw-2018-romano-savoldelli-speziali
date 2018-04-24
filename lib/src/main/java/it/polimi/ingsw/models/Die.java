@@ -1,4 +1,6 @@
-package it.polimi.ingsw.core;
+package it.polimi.ingsw.models;
+
+import it.polimi.ingsw.core.GlassColor;
 
 import java.util.Objects;
 
@@ -22,8 +24,6 @@ public class Die {
     public void setColor(GlassColor color) {
         this.color = color;
     }
-
-    public Die() { }
 
     public Die(GlassColor color, Integer shade) {
         this.color = color;

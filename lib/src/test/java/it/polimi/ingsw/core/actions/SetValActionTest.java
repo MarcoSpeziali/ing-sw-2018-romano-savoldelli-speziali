@@ -1,7 +1,7 @@
 package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.Die;
+import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.UserInteractionProvider;
 import org.junit.jupiter.api.Assertions;

@@ -1,13 +1,12 @@
 package it.polimi.ingsw.core;
 
 import it.polimi.ingsw.core.actions.*;
+import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.IterableRange;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class EffectTest {
 
