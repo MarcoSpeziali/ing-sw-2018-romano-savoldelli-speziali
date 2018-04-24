@@ -12,29 +12,25 @@ public abstract class Card {
     protected String backImageName;
     protected String frontImageName;
 
-    public Card (Image backImage, Image frontImage, LocalizedString title, LocalizedString descrtiption){
+    public Card (Image backImage, Image frontImage, LocalizedString title, LocalizedString description){
+
         this.backImage = backImage;
         this.frontImage = frontImage;
         this.title = title;
-        this.description = descrtiption;
+        this.description = description;
     }
 
     public Card (String backImagePath, String frontImagePath, LocalizedString title, LocalizedString description ){
+
         this.backImagePath = backImagePath;
         this.frontImagePath = frontImagePath;
         this.title = title;
         this. description = description;
 
-    } //c'è qualcosa che non va con i nomi penso ma non sono sicuro
-
-    public Card (String backImageName, String frontImageName, LocalizedString title, LocalizedString description){
-        this.backImageName = backImageName;
-        this.frontImageName = frontImageName;
-        this.title = title;
-        this.description = description;
     }
 
-    public void getBackImage() {
+
+    public Image getBackImage() {
         return this.backImage;
     }
 
@@ -42,11 +38,11 @@ public abstract class Card {
         return this.frontImage;
     }
 
-    public String getTitle() {
+    public LocalizedString getTitle() {
         return this.title;
     }
 
-    public String getDescription() {
+    public LocalizedString getDescription() {
         return this.description;
     }
 }

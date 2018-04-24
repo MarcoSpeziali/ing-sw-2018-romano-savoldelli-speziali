@@ -6,7 +6,7 @@ public class Player {
     private String profile; //FIXME dopo update dell'app client
     private ObjectiveCard[] privateObjectiveCard; //controllare lunghezza array
     private byte favourTokenCount;
-    private Die pikedDie;
+    private Die pickedDie;
 
     public Player(String profile,ObjectiveCard[] privateObjectiveCard, byte favourTokenCount, Die pikedDie ){
         this.profile = profile;

@@ -46,9 +46,8 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
 
 
         rand = getRandomNumberInRange(1, 90);
-        return dieList.remove(rand.nextInt());
+        return dieList.remove(rand); //FIX this
     }
-
     @Override
     public int getNumberOfDice() {
         return dieList.size();
