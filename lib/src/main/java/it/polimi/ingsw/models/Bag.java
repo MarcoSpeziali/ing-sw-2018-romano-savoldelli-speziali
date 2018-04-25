@@ -23,6 +23,10 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
         return dice;
     }
 
+    public int getNumberPerColor(GlassColor color) {
+        return dice.get(color);
+    }
+
     @Override
     public Die pickDie() {
         if (dice.isEmpty()) {

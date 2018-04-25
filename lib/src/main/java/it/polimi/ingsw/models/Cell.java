@@ -7,12 +7,12 @@ import it.polimi.ingsw.core.locations.RandomPutLocation;
 
 public class Cell implements RandomPutLocation, RandomPickLocation {
 
-    private GlassColor cellColor;
+    private GlassColor color;
     private Integer shade;
     private Die die;
 
-    public Cell(GlassColor cellColor) {
-        this.cellColor = cellColor;
+    public Cell(GlassColor color) {
+        this.color = color;
         this.shade = 0;
     }
 
@@ -25,8 +25,8 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
     }
 
     public GlassColor getColor() {
-        if (this.cellColor != null) {
-            return this.cellColor;
+        if (this.color != null) {
+            return this.color;
         }
         else return null;
     }

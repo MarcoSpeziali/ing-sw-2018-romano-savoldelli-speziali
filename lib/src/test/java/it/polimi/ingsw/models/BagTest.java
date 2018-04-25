@@ -22,6 +22,13 @@ class BagTest {
     }
 
     @Test
+    void getNumberPerColorTest() {
+        Assertions.assertEquals(18, bag.getNumberPerColor(GlassColor.BLUE));
+        GlassColor color = bag.pickDie().getColor();
+        Assertions.assertEquals(17, bag.getNumberPerColor(color));
+    }
+
+    @Test
     void pickDieTest() {
         List<Enum> list = Arrays.asList(GlassColor.values());
         Assertions.assertNotNull(bag.pickDie());
