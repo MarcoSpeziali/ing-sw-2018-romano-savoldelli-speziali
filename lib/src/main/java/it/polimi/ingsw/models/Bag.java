@@ -1,65 +1,51 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.locations.EmptyBagException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class Bag implements RandomPutLocation, RandomPickLocation {
 
-    private List<Die> dieList;
-    private int rand;
+    private Map<GlassColor, Integer> dice = new HashMap<>();
 
-    private List<Die> getMyList () {
-
-        List<Die> myList = new LinkedList<>();
-        for (int i = 0; i < 3*GlassColor.values().length; i++) {
-            for (int j = 0; j < 6; j++) {
-                myList.add(new Die(GlassColor.values()[i], j));
-            }
-        }
-        return myList;
-    }
 
     public Bag() {
-        this.dieList = getMyList();
-    }
-
-    private static int getRandomNumberInRange(int min, int max) {
-
-        if (min >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
+        for (GlassColor color : GlassColor.values()) {
+            dice.put(color, 18);
         }
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
     }
 
+    public Map<GlassColor, Integer> getDice() {
+        return dice;
+    }
 
     @Override
     public Die pickDie() {
-
-
-        rand = getRandomNumberInRange(1, 90);
-        return dieList.remove(rand); //FIX this
+        if (dice.isEmpty()) {
+            throw new EmptyBagException("The bag has no dice left!");
+        }
+        Random rand = new Random();
+        GlassColor randColor = GlassColor.values()[rand.nextInt((4) + 1)];
+        dice.merge(randColor, -1, Integer::sum);
+        return new Die(randColor, 0);
     }
     @Override
     public int getNumberOfDice() {
-        return dieList.size();
+        return dice.values().stream().reduce((sum, x) -> (sum+x)).orElse(0);
     }
 
     @Override
     public void putDie(Die die) {
-        this.dieList.add(die);
+        dice.merge(die.getColor(), 1, Integer::sum);
     }
 
     @Override
     public int getFreeSpace() {
-        return 90 - dieList.size();
+        return 90 - this.getNumberOfDice();
     }
 }
 

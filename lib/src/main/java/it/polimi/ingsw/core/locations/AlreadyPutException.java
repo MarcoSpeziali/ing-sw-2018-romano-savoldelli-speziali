@@ -5,4 +5,6 @@ public class AlreadyPutException extends RuntimeException {
     public AlreadyPutException(String message) {
         super(message);
     }
+
+    public AlreadyPutException() {}
 }

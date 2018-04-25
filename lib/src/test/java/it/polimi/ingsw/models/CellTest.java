@@ -24,11 +24,11 @@ class CellTest {
     }
 
     @Test
-    void getCellColorTest(){
+    void getColorTest(){
 
-        Assertions.assertEquals(GlassColor.BLUE, coloredCell.getCellColor());
-        Assertions.assertNull(shadedCell.getCellColor());
-        Assertions.assertNull(blankCell.getCellColor());
+        Assertions.assertEquals(GlassColor.BLUE, coloredCell.getColor());
+        Assertions.assertNull(shadedCell.getColor());
+        Assertions.assertNull(blankCell.getColor());
     }
 
     @Test
@@ -65,5 +65,12 @@ class CellTest {
         Assertions.assertEquals(0, blankCell.getNumberOfDice());
         blankCell.putDie(die);
         Assertions.assertEquals(1, blankCell.getNumberOfDice());
+    }
+
+    @Test
+    void getFreeSpaceTest() {
+        Assertions.assertEquals(1, blankCell.getFreeSpace());
+        blankCell.putDie(die);
+        Assertions.assertEquals(0, blankCell.getFreeSpace());
     }
 }

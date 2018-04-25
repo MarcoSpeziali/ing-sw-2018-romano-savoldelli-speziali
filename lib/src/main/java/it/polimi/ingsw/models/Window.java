@@ -141,13 +141,13 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
 
     private boolean cellMatches(Die die, int i, int j) {
-        if (die.getColor().equals(cells[i][j].getCellColor())) {
+        if (die.getColor().equals(cells[i][j].getColor())) {
             return true;
         } else return die.getShade().equals(cells[i][j].getShade());
     }
 
     private boolean cellIsBlank(int i, int j) {
-        return (cells[i][j].getCellColor() == null && cells[i][j].getShade() == 0);
+        return (cells[i][j].getColor() == null && cells[i][j].getShade() == 0);
     }
 
     private boolean isEdge(int i, int j) {

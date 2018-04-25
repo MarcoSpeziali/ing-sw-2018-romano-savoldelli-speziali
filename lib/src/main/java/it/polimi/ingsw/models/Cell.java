@@ -24,7 +24,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
         this.shade = 0;
     }
 
-    public GlassColor getCellColor() {
+    public GlassColor getColor() {
         if (this.cellColor != null) {
             return this.cellColor;
         }
@@ -32,10 +32,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
     }
 
     public Integer getShade() {
-        if (this.shade != null) {
-            return this.shade;
-        }
-        else return null;
+        return this.shade;
     }
 
     public boolean isOccupied() {

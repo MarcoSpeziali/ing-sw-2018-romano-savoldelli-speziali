@@ -25,7 +25,6 @@ class RoundTrackTest {
         Die die = mock(Die.class);
         roundTrack.setDieForCurrentRound(die);
         Assertions.assertEquals(die, roundTrack.getDieAtIndex(0));
-
     }
 
     @Test
@@ -36,5 +35,4 @@ class RoundTrackTest {
             Assertions.assertEquals(die, roundTrack.getDieAtIndex(i));
         }
     }
-
 }
