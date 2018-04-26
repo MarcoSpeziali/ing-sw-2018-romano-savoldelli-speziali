@@ -1,39 +1,42 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
-
 import java.util.LinkedList;
-import java.util.List;
 
 public class DraftPool implements ChoosablePickLocation {
 
-    private final LinkedList<Die> dice;
+    private LinkedList<Die> dice;
+    private int players;
+    private Bag bag;
 
-    public DraftPool(int players) {
-
+    public DraftPool(int players, Bag bag) {
+        this.players = players;
         this.dice = new LinkedList<>();
-        Bag bag = new Bag();
-        for (int i = 0; i < 2 * players + 1; i++) {
+        this.bag = bag;
+        for (int i = 0; i < 2 * players +1; i++) {
             this.dice.add(bag.pickDie());
         }
-
     }
 
     @Override
     public Die pickDie(Die die) {
-        if (this.dice.contains(die)) {
-            int idx = this.dice.indexOf(die);
-            return this.dice.remove(idx);
-        } else return null;
+        for (int i = 0; i < dice.size() ; i++) {
+            if(dice.get(i).equals(die)) {
+                return dice.remove(i);
+            }
+        }
+        return null;
     }
 
     @Override
     public Die pickDie(Integer location) {
-        return this.dice.get(location);
+        if (location < 0 || location > getNumberOfDice()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return this.dice.remove((int) location);
     }
 
     @Override
-    // TODO CHECKME!
     public LinkedList<Integer> getLocations() {
         LinkedList<Integer> locations = new LinkedList<>();
         for (int i = 0; i < dice.size(); i++) {
