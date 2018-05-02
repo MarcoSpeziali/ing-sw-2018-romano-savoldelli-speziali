@@ -1,8 +1,10 @@
 package it.polimi.ingsw.utils;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -12,18 +14,26 @@ import java.util.function.UnaryOperator;
  *
  * @param <T>
  */
-public class IterableRange<T extends Comparable<? super T>> extends Range<T> implements Iterable<T> {
+@SuppressWarnings("squid:S2055") // Range has a no-arg constructor
+public class IterableRange<T extends Comparable<? super T> & Serializable> extends Range<T> implements Iterable<T>, Serializable {
 
     // TODO: docs
-    private static final UnaryOperator<Integer> INTEGER_INCREMENT = val -> ++val;
-    private static final UnaryOperator<Float> FLOAT_INCREMENT = val -> ++val;
-    private static final UnaryOperator<Double> DOUBLE_INCREMENT = val -> ++val;
-    private static final UnaryOperator<Long> LONG_INCREMENT = val -> ++val;
-    private static final UnaryOperator<Byte> BYTE_INCREMENT = val -> ++val;
+    public static final UnaryOperator<Integer>  INTEGER_INCREMENT_FUNCTION  = val -> ++val;
+    public static final UnaryOperator<Float>    FLOAT_INCREMENT_FUNCTION    = val -> ++val;
+    public static final UnaryOperator<Double>   DOUBLE_INCREMENT_FUNCTION   = val -> ++val;
+    public static final UnaryOperator<Long>     LONG_INCREMENT_FUNCTION     = val -> ++val;
+    public static final UnaryOperator<Byte>     BYTE_INCREMENT_FUNCTION     = val -> ++val;
+
+    public static final UnaryOperator<Integer>  INTEGER_DECREMENT_FUNCTION  = val -> --val;
+    public static final UnaryOperator<Float>    FLOAT_DECREMENT_FUNCTION    = val -> --val;
+    public static final UnaryOperator<Double>   DOUBLE_DECREMENT_FUNCTION   = val -> --val;
+    public static final UnaryOperator<Long>     LONG_DECREMENT_FUNCTION     = val -> --val;
+    public static final UnaryOperator<Byte>     BYTE_DECREMENT_FUNCTION     = val -> --val;
 
     /**
      * The functional function used to increment the value of type {@code T}.
      */
+    @SuppressWarnings("squid:S1948")
     private final UnaryOperator<T> incrementFunction;
 
     /**
@@ -35,6 +45,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      */
     public IterableRange(T start, T end, UnaryOperator<T> incrementFunction) {
         super(start, end);
+        assert incrementFunction != null;
 
         this.incrementFunction = incrementFunction;
     }
@@ -45,7 +56,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @param incrementFunction The function used to increment the values.
      */
     public IterableRange(Range<T> range, UnaryOperator<T> incrementFunction) {
-        this(range.start, range.end, incrementFunction);
+        this(range == null ? null : range.start, range == null ? null : range.end, incrementFunction);
     }
 
     /**
@@ -58,7 +69,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @return An instance of {@link Range}
      */
     @SuppressWarnings("WeakerAccess")
-    public static <K extends Comparable<? super K>> IterableRange<K> fromString(String range, String separator, Function<String, K> conversionProvider, UnaryOperator<K> incrementFunction) {
+    public static <K extends Comparable<? super K> & Serializable> IterableRange<K> fromString(String range, String separator, Function<String, K> conversionProvider, UnaryOperator<K> incrementFunction) {
         return new IterableRange<>(Objects.requireNonNull(
                 Range.fromString(range, separator, conversionProvider)),
                 incrementFunction
@@ -72,7 +83,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @param <K> The desired object type.
      * @return An instance of {@link Range}
      */
-    public static <K extends Comparable<? super K>> IterableRange<K> singleValued(K value, UnaryOperator<K> incrementFunction) {
+    public static <K extends Comparable<? super K> & Serializable> IterableRange<K> singleValued(K value, UnaryOperator<K> incrementFunction) {
         return new IterableRange<>(Objects.requireNonNull(
                 Range.singleValued(value)
         ), incrementFunction);
@@ -83,7 +94,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @return An instance of {@link Range}
      */
     public static IterableRange<Integer> unitaryInteger() {
-        return IterableRange.singleValued(1, INTEGER_INCREMENT);
+        return IterableRange.singleValued(1, INTEGER_INCREMENT_FUNCTION);
     }
 
     /**
@@ -91,7 +102,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @return An instance of {@link Range}
      */
     public static IterableRange<Float> unitaryFloat() {
-        return IterableRange.singleValued(1F, FLOAT_INCREMENT);
+        return IterableRange.singleValued(1F, FLOAT_INCREMENT_FUNCTION);
     }
 
     /**
@@ -99,7 +110,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @return An instance of {@link Range}
      */
     public static IterableRange<Double> unitaryDouble() {
-        return IterableRange.singleValued(1D, DOUBLE_INCREMENT);
+        return IterableRange.singleValued(1D, DOUBLE_INCREMENT_FUNCTION);
     }
 
     /**
@@ -107,7 +118,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @return An instance of {@link Range}
      */
     public static IterableRange<Byte> unitaryByte() {
-        return IterableRange.singleValued((byte) 1, BYTE_INCREMENT);
+        return IterableRange.singleValued((byte) 1, BYTE_INCREMENT_FUNCTION);
     }
 
     /**
@@ -115,7 +126,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
      * @return An instance of {@link Range}
      */
     public static IterableRange<Long> unitaryLong() {
-        return IterableRange.singleValued(1L, LONG_INCREMENT);
+        return IterableRange.singleValued(1L, LONG_INCREMENT_FUNCTION);
     }
 
     @Override
@@ -131,6 +142,11 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
     }
 
     @Override
+    public Spliterator<T> spliterator() {
+        return new RangeSpliterator(this, this.incrementFunction);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof IterableRange<?>)) {
             return false;
@@ -140,6 +156,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
             @SuppressWarnings("unchecked")
             IterableRange<T> other = (IterableRange<T>) obj;
 
+            //noinspection ConstantConditions
             return super.equals(other) && this.incrementFunction.equals(other.incrementFunction);
         }
         catch (ClassCastException e) {
@@ -191,7 +208,7 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
 
         @Override
         public boolean hasNext() {
-            return !ranOnce || this.current.compareTo(range.end) < 0;
+            return !ranOnce || this.current.compareTo(Objects.requireNonNull(range.end)) < 0;
         }
 
         @Override
@@ -205,6 +222,69 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
             }
 
             throw new NoSuchElementException();
+        }
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
+    private class RangeSpliterator implements Spliterator<T> {
+
+        /**
+         * The range to iterate through.
+         */
+        private final Range<T> range;
+
+        /**
+         * An unary operator that, given a value of type {@code T} returns the value incremented.
+         */
+        private final UnaryOperator<T> incrementFunction;
+
+        /**
+         * The current value of the iterator sequence.
+         */
+        private T current;
+
+        /**
+         * {@code True} if the iterator has ran once.
+         */
+        private boolean ranOnce = false;
+
+        /**
+         * Creates a RangeIterator.
+         * @param range The range to iterate through.
+         * @param incrementFunction An unary operator that, given a value of type {@code T} returns the value incremented.
+         */
+        RangeSpliterator(Range<T> range, UnaryOperator<T> incrementFunction) {
+            this.range = range;
+            this.incrementFunction = incrementFunction;
+
+            this.current = range.start;
+        }
+
+        @Override
+        public boolean tryAdvance(Consumer<? super T> action) {
+            boolean hasNext = !ranOnce || this.current.compareTo(Objects.requireNonNull(range.end)) < 0;
+
+            if (hasNext) {
+                current = incrementFunction.apply(current);
+                action.accept(current);
+            }
+
+            return hasNext;
+        }
+
+        @Override
+        public Spliterator<T> trySplit() {
+            return null;
+        }
+
+        @Override
+        public long estimateSize() {
+            return Long.MAX_VALUE;
+        }
+
+        @Override
+        public int characteristics() {
+            return SORTED | NONNULL | IMMUTABLE | ORDERED | DISTINCT;
         }
     }
 }

@@ -11,6 +11,10 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
     private Integer shade;
     private Die die;
 
+    public Die getDie() {
+        return this.die;
+    }
+
     public Cell(GlassColor color) {
         this.color = color;
         this.shade = 0;
@@ -40,7 +44,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
     }
 
     @Override
-    public void putDie(Die die) throws AlreadyPutException {
+    public void putDie(Die die) {
         if (this.die == null) this.die = die;
         else {
             throw new AlreadyPutException("A die has already been put on this cell!");

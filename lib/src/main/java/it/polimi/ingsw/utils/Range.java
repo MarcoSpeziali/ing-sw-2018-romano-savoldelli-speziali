@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
@@ -10,10 +11,11 @@ import java.util.regex.Pattern;
  *
  * @param <T> The values type that must implement Comparable.
  */
-public class Range<T extends Comparable<? super T>> {
+public class Range<T extends Comparable<? super T> & Serializable> implements Serializable {
     /**
      * The stating value of the range.
      */
+    @SuppressWarnings("squid:S1948")
     protected final T start;
 
     /**
@@ -26,6 +28,7 @@ public class Range<T extends Comparable<? super T>> {
     /**
      * The ending value of the range.
      */
+    @SuppressWarnings("squid:S1948")
     protected final T end;
 
     /**
@@ -36,12 +39,23 @@ public class Range<T extends Comparable<? super T>> {
     }
 
     /**
+     * Needed by {@link Serializable}.
+     */
+    public Range() {
+        this.start = null;
+        this.end = null;
+    }
+
+    /**
      * Initializes {@link Range} with the starting and the ending value.
      *
      * @param start The stating value of the range.
      * @param end The ending value of the range.
      */
     public Range(T start, T end) {
+        assert start != null;
+        assert end != null;
+
         this.start = start;
         this.end = end;
 
@@ -66,7 +80,7 @@ public class Range<T extends Comparable<? super T>> {
      * @return An instance of {@link Range}
      */
     @SuppressWarnings("WeakerAccess")
-    public static <K extends Comparable<? super K>> Range<K> fromString(String range, String separator, Function<String, K> conversionProvider) {
+    public static <K extends Comparable<? super K> & Serializable> Range<K> fromString(String range, String separator, Function<String, K> conversionProvider) {
         String[] tokens = range.split(Pattern.quote(separator));
 
         if (tokens.length == 1 && tokens[0].equals("")) {
@@ -98,7 +112,7 @@ public class Range<T extends Comparable<? super T>> {
      * @param <K> The desired object type.
      * @return An instance of {@link Range}
      */
-    public static <K extends Comparable<? super K>> Range<K> singleValued(K value) {
+    public static <K extends Comparable<? super K> & Serializable> Range<K> singleValued(K value) {
         return new Range<>(value, value);
     }
 

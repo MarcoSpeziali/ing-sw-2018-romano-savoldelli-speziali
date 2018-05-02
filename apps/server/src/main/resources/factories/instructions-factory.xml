@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <instructions>
-    <instruction id="for-die" class="it.polimi.ingsw.core.instruction.ForDieInstruction">
+    <instruction id="for-die" class="it.polimi.ingsw.core.instructions.ForDieInstruction">
         <exposed>
             <variable name="die" class="it.polimi.ingsw.models.Die"/>
         </exposed>
-    </instruction>
-    <instruction id="for-row" class="it.polimi.ingsw.core.instruction.ForRowInstruction">
-        <exposed>
-            <variable name="row" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
-        </exposed>
-    </instruction>
-    <instruction id="for-column" class="it.polimi.ingsw.core.instruction.ForColumnInstruction">
-        <exposed>
-            <variable name="column" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
-        </exposed>
-    </instruction>
-    <instruction id="take-if" class="it.polimi.ingsw.core.instruction.TakeIfInstruction">
-        <parameters>
-            <parameter name="predicate" isPredicate="true"/>
-        </parameters>
-    </instruction>
-    <instruction id="take-min" class="it.polimi.ingsw.core.instruction.TakeMinInstruction"/>
-    <instruction id="take-max" class="it.polimi.ingsw.core.instruction.TakeMaxInstruction"/>
-    <instruction id="take-sum" class="it.polimi.ingsw.core.instruction.TakeSumInstruction"/>
-    <instruction id="take-rand" class="it.polimi.ingsw.core.instruction.TakeRandInstruction"/>
-    <instruction id="take-product" class="it.polimi.ingsw.core.instruction.TakeProductInstruction" />
-    <instruction id="count-dice" class="it.polimi.ingsw.core.instruction.CountDiceInstruction">
         <parameters>
             <parameter name="filterShade" class="java.lang.Integer" default="0" position="0"/>
             <parameter name="filterColor" class="it.polimi.ingsw.core.GlassColor" default="null" position="1"/>
         </parameters>
     </instruction>
-    <instruction id="count-diagonal" class="it.polimi.ingsw.core.instruction.CountDiagonalInstruction">
+    <instruction id="for-row" class="it.polimi.ingsw.core.instructions.ForRowInstruction">
+        <exposed>
+            <variable name="row" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
+        </exposed>
+    </instruction>
+    <instruction id="for-column" class="it.polimi.ingsw.core.instructions.ForColumnInstruction">
+        <exposed>
+            <variable name="column" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
+        </exposed>
+    </instruction>
+    <instruction id="take" class="it.polimi.ingsw.core.instructions.TakeInstruction"/>
+    <instruction id="take-shade" class="it.polimi.ingsw.core.instructions.TakeInstruction">
         <parameters>
-            <parameter name="filter" class="it.polimi.ingsw.core.instruction.DieFilter" default="0" position="0"/>
+            <parameter name="die" class="it.polimi.ingsw.models.Die"/>
+        </parameters>
+    </instruction>
+    <instruction id="take-if" class="it.polimi.ingsw.core.instructions.TakeIfInstruction">
+        <parameters>
+            <parameter name="predicate" isPredicate="true"/>
+        </parameters>
+    </instruction>
+    <instruction id="take-min" class="it.polimi.ingsw.core.instructions.TakeMinInstruction"/>
+    <instruction id="take-max" class="it.polimi.ingsw.core.instructions.TakeMaxInstruction"/>
+    <instruction id="take-sum" class="it.polimi.ingsw.core.instructions.TakeSumInstruction"/>
+    <instruction id="take-rand" class="it.polimi.ingsw.core.instructions.TakeRandInstruction"/>
+    <instruction id="take-product" class="it.polimi.ingsw.core.instructions.TakeProductInstruction" />
+    <instruction id="count-dice" class="it.polimi.ingsw.core.instructions.CountDiceInstruction">
+        <parameters>
+            <parameter name="filterShade" class="java.lang.Integer" default="0" position="0"/>
+            <parameter name="filterColor" class="it.polimi.ingsw.core.GlassColor" default="null" position="1"/>
+        </parameters>
+    </instruction>
+    <instruction id="count-diagonal" class="it.polimi.ingsw.core.instructions.CountDiagonalInstruction">
+        <parameters>
+            <parameter name="filter" class="it.polimi.ingsw.core.instructions.DieFilter" default="0" position="0"/>
             <parameter name="strictShade" class="java.lang.Integer" default="0" position="1"/>
             <parameter name="strictColor" class="it.polimi.ingsw.core.DieColor" default="null" position="2"/>
         </parameters>

@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 
 public class Context {
 
+    public static final String WINDOW = "window";
+    public static final String DRAFT_POOL = "draft_pool";
+    public static final String BAG = "bag";
+    public static final String ROUND_TRACK = "round_track";
+
     /**
      * The context's variables are stored into an {@link HashMap}.
      */
@@ -75,7 +80,7 @@ public class Context {
      *                              (<a href="{@docRoot}/java/util/Collection.html#optional-restrictions">optional</a>)
      */
     public boolean containsKey(String key) {
-        return this.hashMap.containsKey(key);
+        return this.hashMap.containsKey(key.toLowerCase());
     }
 
     /**
@@ -127,7 +132,7 @@ public class Context {
      *                              (<a href="{@docRoot}/java/util/Collection.html#optional-restrictions">optional</a>)
      */
     public Object get(String key) {
-        return this.hashMap.get(key);
+        return this.hashMap.get(key.toLowerCase());
     }
 
     /**
@@ -155,7 +160,7 @@ public class Context {
      *                                       or value prevents it from being stored in this map
      */
     public Object put(String key, Object value) {
-        return this.hashMap.put(key, value);
+        return this.hashMap.put(key.toLowerCase(), value);
     }
 
     /**
@@ -240,7 +245,7 @@ public class Context {
      * @since 1.8
      */
     public Object getOrDefault(String key, Object defaultValue) {
-        return this.hashMap.getOrDefault(key, defaultValue);
+        return this.hashMap.getOrDefault(key.toLowerCase(), defaultValue);
     }
 
     /**
