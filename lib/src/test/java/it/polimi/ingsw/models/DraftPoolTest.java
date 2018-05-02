@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-// FIXME: @see BagTest.java
 class DraftPoolTest {
     private DraftPool draftPool;
     private Die die;
@@ -18,20 +17,16 @@ class DraftPoolTest {
 
     @Test
     void pickDieTest() {
-        System.out.println(draftPool.getDice());
         int prevSize = draftPool.getNumberOfDice();
         Assertions.assertEquals(die, draftPool.pickDie(die));
         Assertions.assertEquals(prevSize - 1, draftPool.getNumberOfDice());
-        System.out.println(draftPool.getDice());
     }
 
     @Test
     void pickDie1Test() {
-        System.out.println(draftPool.getDice());
         int prevSize = draftPool.getNumberOfDice();
         draftPool.pickDie(1);
         Assertions.assertEquals(prevSize - 1, draftPool.getNumberOfDice());
-        System.out.println(draftPool.getDice());
         Assertions.assertThrows(IndexOutOfBoundsException.class, ()->draftPool.pickDie(-1));
         Assertions.assertThrows(IndexOutOfBoundsException.class, ()->draftPool.pickDie(100));
     }
