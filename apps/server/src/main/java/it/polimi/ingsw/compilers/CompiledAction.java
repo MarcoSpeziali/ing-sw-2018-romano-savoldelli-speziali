@@ -1,11 +1,13 @@
 package it.polimi.ingsw.compilers;
 
-import it.polimi.ingsw.core.actions.Action;
+import it.polimi.ingsw.compilers.utils.ActionParameter;
 import it.polimi.ingsw.core.actions.ActionData;
+import it.polimi.ingsw.core.actions.ExecutableAction;
 
-public class CompiledAction {
+// TODO: docs
+public class CompiledAction implements CompiledExecutableAction {
     private String actionId;
-    private Class<? extends Action> actionClass;
+    private Class<? extends ExecutableAction> actionClass;
     private ActionData actionData;
     private ActionParameter[] parameters;
     private Boolean requiresUserInteraction;
@@ -18,16 +20,18 @@ public class CompiledAction {
         this.actionId = actionId;
     }
 
-    public Class<? extends Action> getActionClass() {
-        return actionClass;
+    @Override
+    public ActionData getActionData() {
+        return actionData;
     }
 
-    public void setActionClass(Class<? extends Action> actionClass) {
+    public void setActionClass(Class<? extends ExecutableAction> actionClass) {
         this.actionClass = actionClass;
     }
 
-    public ActionData getActionData() {
-        return actionData;
+    @Override
+    public Class<? extends ExecutableAction> getClassToInstantiate() {
+        return actionClass;
     }
 
     public void setActionData(ActionData actionData) {

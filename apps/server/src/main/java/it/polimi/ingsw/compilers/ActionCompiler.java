@@ -1,8 +1,10 @@
 package it.polimi.ingsw.compilers;
 
+import it.polimi.ingsw.compilers.utils.ActionParameter;
+import it.polimi.ingsw.compilers.utils.ActionParameterValue;
 import it.polimi.ingsw.core.actions.Action;
 import it.polimi.ingsw.core.actions.ActionData;
-import it.polimi.ingsw.core.constraints.Constraint;
+import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.io.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.io.XmlUtils.xmlToMap;
 
+// TODO: docs
 public class ActionCompiler {
 
     private static final String ACTION_MAPPING_FILE = "factories/actions-factory.xml";
@@ -34,7 +37,7 @@ public class ActionCompiler {
         this.actionsMapping = getActionsMappingDocument();
     }
 
-    public CompiledAction compile(Node node, List<Constraint> constraints) throws ClassNotFoundException {
+    public CompiledAction compile(Node node, List<EvaluableConstraint> constraints) throws ClassNotFoundException {
         // This method only compiles a single <action ../>
         if (!node.getNodeName().equals(ACTION_NODE_NAME)) {
             throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action, instead of a " + node.getNodeName());
@@ -50,7 +53,7 @@ public class ActionCompiler {
         Map<String, Object> target = this.getTargetAction(rawAction.functionCall);
 
         // Gets the complete list of parameters matching the function call and the optional values
-        List<ActionParameter> params = this.getActionParameters(rawAction.functionCall);
+        List<ActionParameter> params = this.getActionParameters(rawAction.functionCall, target);
 
         // Creates the compiled action
         CompiledAction compiledAction = new CompiledAction();
@@ -72,8 +75,8 @@ public class ActionCompiler {
         return compiledAction;
     }
 
-    private Constraint getActionConstraint(List<Constraint> constraints, RawAction rawAction) {
-        Optional<Constraint> targetConstraint = Optional.empty();
+    private EvaluableConstraint getActionConstraint(List<EvaluableConstraint> constraints, RawAction rawAction) {
+        Optional<EvaluableConstraint> targetConstraint = Optional.empty();
 
         if (constraints != null) {
             targetConstraint = constraints.stream()
@@ -91,7 +94,7 @@ public class ActionCompiler {
     private Map<String, Object> getTargetAction(FunctionCall fnCall) {
         Map<String, Object>[] mapping = XmlUtils.getMapArray(
                 XmlUtils.getMap(actionsMapping, "actions"),
-                "action"
+                ACTION_NODE_NAME
         );
 
         Optional<Map<String, Object>> optionalMap = Arrays.stream(mapping)
@@ -105,9 +108,9 @@ public class ActionCompiler {
         return optionalMap.get();
     }
 
-    private List<ActionParameter> getActionParameters(FunctionCall fnCall) throws ClassNotFoundException {
-        Map<String, Object>[] targetParameters = XmlUtils.getMapArray(
-                XmlUtils.getMap(actionsMapping, "parameters"),
+    private List<ActionParameter> getActionParameters(FunctionCall fnCall, Map<String, Object> target) throws ClassNotFoundException {
+        Map<String, Object>[] targetParameters = XmlUtils.getMapArrayAnyway(
+                XmlUtils.getMap(target, "parameters"),
                 "parameter"
         );
 
@@ -252,7 +255,11 @@ public class ActionCompiler {
                 String[] parameters = matcher.group("params").trim().split("\\s+");
                 String optionalMatch = matcher.group("opts");
 
-                String[] optionalParameters = optionalMatch == null ? new String[0] : optionalMatch.trim().split("\\s+");
+                String[] optionalParameters = optionalMatch == null ?
+                        new String[0] :
+                        optionalMatch.trim()
+                                .replaceAll("\\s+", "")
+                                .split(",");
 
                 functionCall.parameters = new ArrayList<>(parameters.length + optionalParameters.length);
 
@@ -262,10 +269,12 @@ public class ActionCompiler {
                 }
 
                 for (String param : optionalParameters) {
-                    String name = param.split("\\s*=\\s*")[0];
-                    String value = param.split("\\s*=\\s*")[1];
+                    String[] tokens = param.split("\\s*=\\s*");
 
-                    ParameterCall p = new ParameterCall(name, value);
+                    String name = tokens[0];
+                    String value = tokens[1];
+
+                    ParameterCall p = new ParameterCall(value, name);
                     functionCall.parameters.add(p);
                 }
             }

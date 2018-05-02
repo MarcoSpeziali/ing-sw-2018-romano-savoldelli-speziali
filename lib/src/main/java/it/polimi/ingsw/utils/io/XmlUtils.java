@@ -6,6 +6,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.*;
 
+
+// TODO: docs
 public final class XmlUtils {
     private XmlUtils() {}
 
@@ -22,6 +24,10 @@ public final class XmlUtils {
         Map<String, List<Map<String, Object>>> temporaryChildren = new HashMap<>();
 
         for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i).getNodeName().equals("#text")) {
+                continue;
+            }
+
             if (!temporaryChildren.containsKey(children.item(i).getNodeName())) {
                 temporaryChildren.put(children.item(i).getNodeName(), new ArrayList<>());
             }
@@ -39,9 +45,7 @@ public final class XmlUtils {
             }
         });
 
-        if (children.getLength() == 0) {
-            hashMap.put("#text", node.getTextContent());
-        }
+        hashMap.put("#text", node.getTextContent());
 
         return hashMap;
     }
@@ -55,5 +59,17 @@ public final class XmlUtils {
         Object[] objects = (Object[]) objectMap.get(key);
         //noinspection unchecked
         return Arrays.stream(objects).toArray(Map[]::new);
+    }
+
+    public static Map<String, Object>[] getMapArrayAnyway(Map<String, Object> objectMap, String key) {
+        Object obj = objectMap.get(key);
+
+        if (obj instanceof Object[]) {
+            return getMapArray(objectMap, key);
+        }
+        else {
+            //noinspection unchecked
+            return new Map[] {(Map<String, Object>) obj};
+        }
     }
 }

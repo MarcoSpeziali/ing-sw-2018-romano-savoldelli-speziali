@@ -2,8 +2,8 @@ package it.polimi.ingsw.core.constraints;
 
 import it.polimi.ingsw.core.Context;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public class ConstraintGroup implements EvaluableConstraint {
 
@@ -15,7 +15,7 @@ public class ConstraintGroup implements EvaluableConstraint {
     /**
      * The constraints of the {@link ConstraintGroup}.
      */
-    private Set<EvaluableConstraint> constraints;
+    private List<EvaluableConstraint> constraints;
 
     /**
      * @return The constraint id.
@@ -27,7 +27,7 @@ public class ConstraintGroup implements EvaluableConstraint {
     /**
      * @return The constraints of the {@link ConstraintGroup}.
      */
-    public Set<EvaluableConstraint> getConstraints() {
+    public List<EvaluableConstraint> getConstraints() {
         return this.constraints;
     }
 
@@ -35,7 +35,7 @@ public class ConstraintGroup implements EvaluableConstraint {
      * @param id The constraint id.
      * @param constraints The constraints of the {@link ConstraintGroup}.
      */
-    public ConstraintGroup(String id, Set<EvaluableConstraint> constraints) {
+    public ConstraintGroup(String id, List<EvaluableConstraint> constraints) {
         this.id = id;
         this.constraints = constraints;
     }

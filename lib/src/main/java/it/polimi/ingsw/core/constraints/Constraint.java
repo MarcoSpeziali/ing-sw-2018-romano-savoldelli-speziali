@@ -33,6 +33,7 @@ public class Constraint implements EvaluableConstraint {
     /**
      * @return The id of the constraint.
      */
+    @Override
     public String getId() {
         return this.id;
     }
@@ -103,12 +104,21 @@ public class Constraint implements EvaluableConstraint {
         Object computedLeftOperand = this.leftOperand.get(context);
         Object computedRightOperand = this.rightOperand.get(context);
 
+        if (computedLeftOperand instanceof Number && computedRightOperand instanceof Number) {
+            computedLeftOperand = Double.parseDouble(computedLeftOperand.toString());
+            computedRightOperand = Double.parseDouble(computedRightOperand.toString());
+        }
+
         if (this.operator == Operator.EQUALS) {
-            return computedLeftOperand.equals(computedRightOperand);
+            return computedLeftOperand == null ?
+                    computedRightOperand == null :
+                    computedLeftOperand.equals(computedRightOperand);
         }
 
         if (this.operator == Operator.NOT_EQUALS) {
-            return !computedLeftOperand.equals(computedRightOperand);
+            return !(computedLeftOperand == null ?
+                    computedRightOperand == null :
+                    computedLeftOperand.equals(computedRightOperand));
         }
 
         Comparable lop = (Comparable<?>) computedLeftOperand;

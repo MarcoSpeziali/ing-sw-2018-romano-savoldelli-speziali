@@ -103,6 +103,46 @@ public class Range<T extends Comparable<? super T>> {
     }
 
     /**
+     * Creates an {@link Integer} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static Range<Integer> unitaryInteger() {
+        return Range.singleValued(1);
+    }
+
+    /**
+     * Creates an {@link Float} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static Range<Float> unitaryFloat() {
+        return Range.singleValued(1F);
+    }
+
+    /**
+     * Creates an {@link Double} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static Range<Double> unitaryDouble() {
+        return Range.singleValued(1D);
+    }
+
+    /**
+     * Creates an {@link Byte} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static Range<Byte> unitaryByte() {
+        return Range.singleValued((byte) 1);
+    }
+
+    /**
+     * Creates an {@link Long} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static Range<Long> unitaryLong() {
+        return Range.singleValued(1L);
+    }
+
+    /**
      * Determines if the range is valid.
      *
      * @return {@code True} if range is valid, {@code false} otherwise.

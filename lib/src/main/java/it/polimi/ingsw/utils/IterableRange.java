@@ -14,6 +14,13 @@ import java.util.function.UnaryOperator;
  */
 public class IterableRange<T extends Comparable<? super T>> extends Range<T> implements Iterable<T> {
 
+    // TODO: docs
+    private static final UnaryOperator<Integer> INTEGER_INCREMENT = val -> ++val;
+    private static final UnaryOperator<Float> FLOAT_INCREMENT = val -> ++val;
+    private static final UnaryOperator<Double> DOUBLE_INCREMENT = val -> ++val;
+    private static final UnaryOperator<Long> LONG_INCREMENT = val -> ++val;
+    private static final UnaryOperator<Byte> BYTE_INCREMENT = val -> ++val;
+
     /**
      * The functional function used to increment the value of type {@code T}.
      */
@@ -69,6 +76,46 @@ public class IterableRange<T extends Comparable<? super T>> extends Range<T> imp
         return new IterableRange<>(Objects.requireNonNull(
                 Range.singleValued(value)
         ), incrementFunction);
+    }
+
+    /**
+     * Creates an {@link Integer} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static IterableRange<Integer> unitaryInteger() {
+        return IterableRange.singleValued(1, INTEGER_INCREMENT);
+    }
+
+    /**
+     * Creates an {@link Float} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static IterableRange<Float> unitaryFloat() {
+        return IterableRange.singleValued(1F, FLOAT_INCREMENT);
+    }
+
+    /**
+     * Creates an {@link Double} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static IterableRange<Double> unitaryDouble() {
+        return IterableRange.singleValued(1D, DOUBLE_INCREMENT);
+    }
+
+    /**
+     * Creates an {@link Byte} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static IterableRange<Byte> unitaryByte() {
+        return IterableRange.singleValued((byte) 1, BYTE_INCREMENT);
+    }
+
+    /**
+     * Creates an {@link Long} {@link Range} as an unitary range.
+     * @return An instance of {@link Range}
+     */
+    public static IterableRange<Long> unitaryLong() {
+        return IterableRange.singleValued(1L, LONG_INCREMENT);
     }
 
     @Override
