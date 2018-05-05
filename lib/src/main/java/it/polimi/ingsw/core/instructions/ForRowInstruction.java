@@ -7,8 +7,6 @@ import it.polimi.ingsw.utils.IterableRange;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.stream.StreamSupport;
 
 public class ForRowInstruction extends Instruction {
     /**
@@ -31,30 +29,40 @@ public class ForRowInstruction extends Instruction {
 
     @Override
     public Integer run(Context context) {
+        // Gets the user-defined name for the exposed variable 'column'
         String exposedName = exposedVariableMapping.get(ROW_VARIABLE_NAME);
 
+        // Creates a snapshot for the sub-instructions
         Context.Snapshot snapshot = context.snapshot("for-row(" + exposedName + ")");
 
+        // Retrieves the window from the context
         Window window = (Window) context.get(Context.WINDOW);
 
-        Spliterator<Integer> indexSpliterator = new IterableRange<>(
+        // The results is the sum of each result of the iteration
+        Integer result = new IterableRange<>(
                 0,
                 window.getCells().length - 1,
                 IterableRange.INTEGER_INCREMENT_FUNCTION
-        ).spliterator();
-
-        Integer result = StreamSupport.stream(indexSpliterator,false)
-                .mapToInt(index -> {
+        ).stream().mapToInt(index -> {
+                    // The exposed variable gets put inside the snapshot
                     snapshot.put(exposedName, getDiceInRowFromWindow(window, index));
 
+                    // Returns the result of the sub-instructions
                     return super.run(snapshot);
                 }).sum();
 
+        // Reverts the context to its original state
         snapshot.revert();
 
         return result;
     }
 
+    /**
+     * Returns the dice in the row at {@code index}.
+     * @param window The window holding the dice.
+     * @param index The index of the row containing the wanted dice.
+     * @return The dice in the row at {@code index}.
+     */
     private static Die[] getDiceInRowFromWindow(Window window, int index) {
         Die[] rowDice = new Die[window.getCells().length];
 

@@ -21,11 +21,19 @@ public abstract class Instruction {
     }
 
     /**
-     * Runs the instruction.
+     * Runs the instruction, if no instructions are provided the default value of 0 is returned.
      * @param context The context that holds the variables needed by the instruction.
      * @return The number of times that the objective has been achieved.
      */
     public Integer run(Context context) {
+        if (this.instructions != null) {
+            if (this.instructions.isEmpty()) {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+
         return this.instructions.stream()
                 .mapToInt(instruction -> instruction.run(context))
                 .sum();

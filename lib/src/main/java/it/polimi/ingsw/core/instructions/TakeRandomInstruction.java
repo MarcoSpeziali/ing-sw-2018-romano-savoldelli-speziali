@@ -13,6 +13,7 @@ public class TakeRandomInstruction extends Instruction {
                 .mapToInt(instructions -> instructions.run(context))
                 .toArray();
 
+        // Selects a random value among the results of each sub-instruction
         return random.ints(1, 0, this.instructions.size())
                 .map(i -> results[i])
                 .findFirst()

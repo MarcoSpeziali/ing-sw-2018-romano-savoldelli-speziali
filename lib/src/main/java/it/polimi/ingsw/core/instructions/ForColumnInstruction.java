@@ -7,8 +7,6 @@ import it.polimi.ingsw.utils.IterableRange;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.stream.StreamSupport;
 
 public class ForColumnInstruction extends Instruction {
     /**
@@ -31,30 +29,40 @@ public class ForColumnInstruction extends Instruction {
 
     @Override
     public Integer run(Context context) {
+        // Gets the user-defined name for the exposed variable 'column'
         String exposedName = exposedVariableMapping.get(COLUMN_VARIABLE_NAME);
 
+        // Creates a snapshot for the sub-instructions
         Context.Snapshot snapshot = context.snapshot("for-column(" + exposedName + ")");
 
+        // Retrieves the window from the context
         Window window = (Window) context.get(Context.WINDOW);
 
-        Spliterator<Integer> indexSpliterator = new IterableRange<>(
+        // The results is the sum of each result of the iteration
+        Integer result = new IterableRange<>(
                 0,
                 window.getCells()[0].length - 1,
                 IterableRange.INTEGER_INCREMENT_FUNCTION
-        ).spliterator();
-
-        Integer result = StreamSupport.stream(indexSpliterator,false)
-                .mapToInt(index -> {
+        ).stream().mapToInt(index -> {
+                    // The exposed variable gets put inside the snapshot
                     snapshot.put(exposedName, getDiceInColumnFromWindow(window, index));
 
+                    // Returns the result of the sub-instructions
                     return super.run(snapshot);
                 }).sum();
 
+        // Reverts the context to its original state
         snapshot.revert();
 
         return result;
     }
 
+    /**
+     * Returns the dice in the column at {@code index}.
+     * @param window The window holding the dice.
+     * @param index The index of the column containing the wanted dice.
+     * @return The dice in the column at {@code index}.
+     */
     private static Die[] getDiceInColumnFromWindow(Window window, int index) {
         Die[] columnDice = new Die[window.getCells()[index].length];
 

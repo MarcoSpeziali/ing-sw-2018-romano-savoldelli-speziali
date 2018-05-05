@@ -8,6 +8,8 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Represents a range of iterable values.
@@ -144,6 +146,14 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
     @Override
     public Spliterator<T> spliterator() {
         return new RangeSpliterator(this, this.incrementFunction);
+    }
+
+    public Stream<T> stream() {
+        return StreamSupport.stream(this.spliterator(), false);
+    }
+
+    public Stream<T> parallelStream() {
+        return StreamSupport.stream(this.spliterator(), true);
     }
 
     @Override

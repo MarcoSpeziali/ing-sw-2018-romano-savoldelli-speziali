@@ -37,22 +37,30 @@ public class ForDieInstruction extends Instruction {
 
     @Override
     public Integer run(Context context) {
+        // Gets the user-defined name for the exposed variable 'die'
         String exposedName = exposedVariableMapping.get(DIE_VARIABLE_NAME);
 
+        // Creates a snapshot for the sub-instructions
         Context.Snapshot snapshot = context.snapshot("for-die(" + exposedName + ")");
 
+        // Retrieves the window from the context
         Window window = (Window) context.get(Context.WINDOW);
 
+        // The results is the sum of each result of the iteration over each die
         Integer result = window.getDice().stream()
+                // The dice collection gets filtered with the provided filters
                 .filter(die -> (
                         this.filterShade == 0 || die.getShade().equals(this.filterShade)) &&
                         (this.filterColor == null || die.getColor().equals(this.filterColor))
                 ).mapToInt(die -> {
+                    // The exposed variables get put inside the snapshot
                     snapshot.put(exposedName, die);
 
+                    // Returns the result of the sub-instructions
                     return super.run(snapshot);
                 }).sum();
 
+        // Reverts the context to its original state
         snapshot.revert();
 
         return result;

@@ -345,9 +345,9 @@ public class Context {
 
         @Override
         public Object put(String key, Object value) {
-            if (parentContext.containsKey(key)) {
-                return parentContext.put(key, value);
-            }
+//            if (parentContext.containsKey(key)) {
+//                return parentContext.put(key, value);
+//            } TODO: Discuss whether a snapshot should be able to replace values in its parent
 
             return parentContext.put(this.snapshotId + "::" + key, value);
         }
