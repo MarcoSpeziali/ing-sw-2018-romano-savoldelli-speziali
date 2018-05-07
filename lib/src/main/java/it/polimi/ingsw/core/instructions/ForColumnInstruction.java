@@ -64,7 +64,7 @@ public class ForColumnInstruction extends Instruction {
      * @return The dice in the column at {@code index}.
      */
     private static Die[] getDiceInColumnFromWindow(Window window, int index) {
-        Die[] columnDice = new Die[window.getCells()[index].length];
+        Die[] columnDice = new Die[window.getCells().length];
 
         for (int i = 0; i < columnDice.length; i++) {
             columnDice[i] = window.getCells()[i][index].getDie();

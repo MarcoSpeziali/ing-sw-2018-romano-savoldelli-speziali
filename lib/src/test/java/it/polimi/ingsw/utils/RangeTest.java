@@ -3,6 +3,8 @@ package it.polimi.ingsw.utils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 class RangeTest {
 
     @Test
@@ -96,5 +98,73 @@ class RangeTest {
         Range<Integer> range = new Range<>(15, 30);
 
         Assertions.assertEquals("[15 - 30]", range.toString());
+    }
+
+    @Test
+    void testUnitaryInteger() {
+        Range<Integer> range = Range.unitaryInteger();
+
+        Assertions.assertEquals(1, range.getStart().intValue());
+        Assertions.assertEquals(1, range.getEnd().intValue());
+    }
+
+    @Test
+    void testUnitaryFloat() {
+        Range<Float> range = Range.unitaryFloat();
+
+        Assertions.assertEquals(1F, range.getStart().floatValue());
+        Assertions.assertEquals(1F, range.getEnd().floatValue());
+    }
+
+    @Test
+    void testUnitaryDouble() {
+        Range<Double> range = Range.unitaryDouble();
+
+        Assertions.assertEquals(1D, range.getStart().doubleValue());
+        Assertions.assertEquals(1D, range.getEnd().doubleValue());
+    }
+
+    @Test
+    void testUnitaryByte() {
+        Range<Byte> range = Range.unitaryByte();
+
+        Assertions.assertEquals(1, range.getStart().byteValue());
+        Assertions.assertEquals(1, range.getEnd().byteValue());
+    }
+
+    @Test
+    void testUnitaryLong() {
+        Range<Long> range = Range.unitaryLong();
+
+        Assertions.assertEquals(1, range.getStart().longValue());
+        Assertions.assertEquals(1, range.getEnd().longValue());
+    }
+
+    @Test
+    @SuppressWarnings({"SimplifiableJUnitAssertion", "ConstantConditions", "ObjectEqualsNull", "EqualsWithItself", "EqualsBetweenInconvertibleTypes"})
+    void testEquals() {
+        Range<Integer> range = Range.unitaryInteger();
+
+        Assertions.assertFalse(range.equals(null));
+        Assertions.assertTrue(range.equals(range));
+        Assertions.assertFalse(range.equals(3));
+        Assertions.assertFalse(range.equals(Range.unitaryFloat()));
+        Assertions.assertTrue(range.equals(Range.unitaryInteger()));
+        Assertions.assertFalse(range.equals(Range.singleValued(4)));
+    }
+
+    @Test
+    void testHashCode() {
+        Range<Integer> range = Range.unitaryInteger();
+
+        Assertions.assertEquals(Objects.hash(range.getStart(), range.getEnd()), range.hashCode());
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        Range range = new Range();
+
+        Assertions.assertNull(range.getStart());
+        Assertions.assertNull(range.getEnd());
     }
 }

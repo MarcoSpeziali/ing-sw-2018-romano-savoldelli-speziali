@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ContextTest {
 
     @BeforeEach
@@ -50,7 +48,7 @@ class ContextTest {
 
         subSnapshot.put("snapshot_test", 12);
         Assertions.assertEquals(12, subSnapshot.get("snapshot_test"));
-        Assertions.assertNull(Context.getSharedInstance().get("abcd::efgh::snapshot_test"));
+        Assertions.assertEquals(12, Context.getSharedInstance().get("abcd::efgh::snapshot_test"));
 
         snapshot.revert();
 

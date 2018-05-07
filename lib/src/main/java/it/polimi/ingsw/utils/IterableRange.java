@@ -1,10 +1,7 @@
 package it.polimi.ingsw.utils;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -36,7 +33,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
      * The functional function used to increment the value of type {@code T}.
      */
     @SuppressWarnings("squid:S1948")
-    private final UnaryOperator<T> incrementFunction;
+    protected final UnaryOperator<T> incrementFunction;
 
     /**
      * Initializes {@code IterableRange<T>} with the starting and the ending value.
@@ -162,16 +159,11 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
             return false;
         }
 
-        try {
-            @SuppressWarnings("unchecked")
-            IterableRange<T> other = (IterableRange<T>) obj;
+        @SuppressWarnings("unchecked")
+        IterableRange<T> other = (IterableRange<T>) obj;
 
-            //noinspection ConstantConditions
-            return super.equals(other) && this.incrementFunction.equals(other.incrementFunction);
-        }
-        catch (ClassCastException e) {
-            return false;
-        }
+        //noinspection ConstantConditions
+        return super.equals(other) && this.incrementFunction.equals(other.incrementFunction);
     }
 
     @Override
@@ -274,6 +266,13 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
         public boolean tryAdvance(Consumer<? super T> action) {
             boolean hasNext = !ranOnce || this.current.compareTo(Objects.requireNonNull(range.end)) < 0;
 
+            if (!ranOnce) {
+                ranOnce = true;
+
+                action.accept(current);
+                return hasNext;
+            }
+
             if (hasNext) {
                 current = incrementFunction.apply(current);
                 action.accept(current);
@@ -294,7 +293,12 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
         @Override
         public int characteristics() {
-            return SORTED | NONNULL | IMMUTABLE | ORDERED | DISTINCT;
+            return NONNULL | IMMUTABLE | DISTINCT;
+        }
+
+        @Override
+        public Comparator<? super T> getComparator() {
+            return Comparator.naturalOrder();
         }
     }
 }

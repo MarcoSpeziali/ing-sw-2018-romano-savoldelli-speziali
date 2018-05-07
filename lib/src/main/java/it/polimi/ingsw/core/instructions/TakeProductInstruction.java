@@ -8,6 +8,7 @@ public class TakeProductInstruction extends Instruction {
         // Selects the product of the results of each sub-instruction
         return this.instructions.stream()
                 .mapToInt(instructions -> instructions.run(context))
-                .reduce(0, (result, instructionResult) -> result * instructionResult);
+                .reduce((result, instructionResult) -> result * instructionResult)
+                .orElse(0);
     }
 }

@@ -1,6 +1,9 @@
 package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.constraints.Constraint;
+import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.core.constraints.Operator;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.UserInteractionProvider;
@@ -46,6 +49,61 @@ class ActionGroupTest {
                 .thenReturn(new Die(GlassColor.BLUE, 2));
 
         this.actionGroupCallbacks = mock(ActionGroupCallbacks.class);
+    }
+
+    @Test
+    void testGetters() {
+        this.actionGroup = new ActionGroup(
+                this.actionData,
+                IterableRange.unitaryInteger(),
+                IterableRange.singleValued(15, IterableRange.INTEGER_INCREMENT_FUNCTION),
+                null,
+                this.actionGroupCallbacks
+        );
+
+        Assertions.assertEquals(IterableRange.unitaryInteger(), this.actionGroup.getRepetitionNumber());
+        Assertions.assertEquals(IterableRange.singleValued(15, IterableRange.INTEGER_INCREMENT_FUNCTION), this.actionGroup.getChooseBetween());
+        Assertions.assertNull(this.actionGroup.getActions());
+        Assertions.assertSame(this.actionGroupCallbacks, this.actionGroup.getCallbacks());
+    }
+
+    @Test
+    void testRun() {
+        this.actionGroup = new ActionGroup(
+                this.actionData,
+                IterableRange.unitaryInteger(),
+                IterableRange.singleValued(15, IterableRange.INTEGER_INCREMENT_FUNCTION),
+                null,
+                this.actionGroupCallbacks
+        );
+
+        Assertions.assertNull(this.actionGroup.run(Context.getSharedInstance()));
+    }
+
+    @Test
+    void testRunThrows() {
+        this.actionGroup = new ActionGroup(
+                new ActionData(
+                        "id",
+                        null,
+                        null,
+                        new Constraint(
+                                null,
+                                context -> 12,
+                                Operator.EQUALS,
+                                context -> 13
+                        ),
+                        null
+                ),
+                IterableRange.unitaryInteger(),
+                IterableRange.singleValued(15, IterableRange.INTEGER_INCREMENT_FUNCTION),
+                null,
+                this.actionGroupCallbacks
+        );
+
+        Assertions.assertThrows(ConstraintEvaluationException.class, () -> {
+            this.actionGroup.run(Context.getSharedInstance());
+        });
     }
 
     @Test
@@ -199,6 +257,42 @@ class ActionGroupTest {
     }
 
     @Test
+    void testOptionalRepetitionsWithChooseBetween() {
+        doNothing().when(this.choosablePutLocation).putDie(any(Die.class), eq(15));
+        when(this.actionGroupCallbacks.shouldRepeat(anyInt(), eq(5))).thenReturn(true);
+        when(this.actionGroupCallbacks.getChosenActions(any(), any())).thenAnswer(invocationOnMock -> {
+            @SuppressWarnings("unchecked")
+            List<ExecutableAction> actions = (List<ExecutableAction>) invocationOnMock.getArguments()[0];
+            return List.of(actions.get(0));
+        });
+
+        this.actionGroup = new ActionGroup(
+                this.actionData,
+                new IterableRange<>(0, 5, num -> ++num),
+                IterableRange.singleValued(4),
+                List.of(
+                        new PlaceAction(
+                                new ActionData(
+                                        "choose_color",
+                                        "choose_die",
+                                        null,
+                                        null,
+                                        null
+                                ),
+                                context -> new Die(GlassColor.RED, 4),
+                                this.choosablePutLocation,
+                                context -> 15
+                        )
+                ),
+                this.actionGroupCallbacks
+        );
+
+        this.actionGroup.run(this.context);
+
+        verify(this.choosablePutLocation, times(5)).putDie(any(Die.class), eq(15));
+    }
+
+    @Test
     void testOptionalRepetitionsWithMandatoryRepetitions() {
         doNothing().when(this.choosablePutLocation).putDie(any(Die.class), eq(15));
         when(this.actionGroupCallbacks.shouldRepeat(anyInt(), eq(7))).thenAnswer(invocationOnMock -> {
@@ -237,7 +331,7 @@ class ActionGroupTest {
     void testFixedChoice() {
         when(this.actionGroupCallbacks.getChosenActions(any(), any())).thenAnswer(invocationOnMock -> {
            @SuppressWarnings("unchecked")
-            List<ExecutableAction> actions = (List<ExecutableAction>) invocationOnMock.getArguments()[0];
+           List<ExecutableAction> actions = (List<ExecutableAction>) invocationOnMock.getArguments()[0];
            return List.of(actions.get(0));
         });
 

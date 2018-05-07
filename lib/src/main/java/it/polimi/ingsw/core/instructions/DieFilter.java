@@ -4,16 +4,16 @@ public enum DieFilter {
     SHADE,
     COLOR;
 
-    public static DieFilter fromString(String stringRep) {
-        stringRep = stringRep.toLowerCase().trim();
+    public static DieFilter fromString(String stringRepresentation) {
+        stringRepresentation = stringRepresentation.toLowerCase().trim();
 
-        switch (stringRep) {
+        switch (stringRepresentation) {
             case "shade":
                 return DieFilter.SHADE;
             case "color":
                 return DieFilter.COLOR;
             default:
-                return null;
+                throw new IllegalArgumentException("Unrecognized filter: " + stringRepresentation);
         }
     }
 }
