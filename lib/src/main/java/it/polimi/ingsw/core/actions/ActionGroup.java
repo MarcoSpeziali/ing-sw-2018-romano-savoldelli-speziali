@@ -96,7 +96,7 @@ public class ActionGroup implements ExecutableAction {
     @Override
     public Object run(Context context) {
         if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
+            throw new ConstraintEvaluationException(this.data.getConstraint().getId());
         }
 
         context.snapshot("ActionGroup{" + this.data.getId() + "}", snapshot -> {

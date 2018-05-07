@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // TODO: docs
+// TODO: Handle function calls (e.g. $DIE::getShade()$)
 public class ConstraintCompiler {
 
     private static final String CONSTRAINT_NODE_NAME = "constraint";

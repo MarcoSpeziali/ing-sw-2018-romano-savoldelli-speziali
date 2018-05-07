@@ -2,36 +2,36 @@
 <cards>
     <card id="red_shade" nameKey="cards.private_cards.red_shade.name">
         <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.red_shade.description">
-            <for-die die="DIE" in="$WINDOW$" filterColor="red">
-                <take />
+            <for-die die="DIE" filterColor="red">
+                <take-shade die="$DIE$" />
             </for-die>
         </objective>
     </card>
     <card id="yellow_shade" nameKey="cards.private_cards.yellow_shade.name">
         <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.yellow_shade.description">
-            <for-die die="DIE" in="$WINDOW$" filterColor="yellow">
-                <take />
+            <for-die die="DIE" filterColor="yellow">
+                <take-shade die="$DIE$" />
             </for-die>
         </objective>
     </card>
     <card id="green_shade" nameKey="cards.private_cards.green_shade.name">
         <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.green_shade.description">
-            <for-die die="DIE" in="$WINDOW$" filterColor="green">
-                <take />
+            <for-die die="DIE" filterColor="green">
+                <take-shade die="$DIE$" />
             </for-die>
         </objective>
     </card>
     <card id="blue_shade" nameKey="cards.private_cards.blue_shade.name">
         <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.blue_shade.description">
-            <for-die die="DIE" in="$WINDOW$" filterColor="blue">
-                <take />
+            <for-die die="DIE" filterColor="blue">
+                <take-shade die="$DIE$" />
             </for-die>
         </objective>
     </card>
     <card id="purple_shade" nameKey="cards.private_cards.purple_shade.name">
         <objective pointsPerCompletion="shade" descriptionKey="cards.private_cards.purple_shade.description">
-            <for-die die="DIE" in="$WINDOW$" filterColor="purple">
-                <take />
+            <for-die die="DIE" filterColor="purple">
+                <take-shade die="$DIE$" />
             </for-die>
         </objective>
     </card>

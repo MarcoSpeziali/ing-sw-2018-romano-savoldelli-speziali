@@ -4,8 +4,7 @@ import it.polimi.ingsw.core.Context;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
 
 class ConstraintGroupTest {
 
@@ -13,7 +12,7 @@ class ConstraintGroupTest {
     void testTrueEvaluation() {
         ConstraintGroup constraintGroup = new ConstraintGroup(
                 "test_id",
-                Stream.of(
+                List.of(
                         new Constraint(
                                 "test_id",
                                 context -> 10,
@@ -26,7 +25,7 @@ class ConstraintGroupTest {
                                 Operator.NOT_EQUALS,
                                 context -> 15
                         )
-                ).collect(Collectors.toList())
+                )
         );
 
         Assertions.assertTrue(constraintGroup.evaluate(Context.getSharedInstance()));
@@ -36,7 +35,7 @@ class ConstraintGroupTest {
     void testFalseEvaluation() {
         ConstraintGroup constraintGroup = new ConstraintGroup(
                 "test_id",
-                Stream.of(
+                List.of(
                         new Constraint(
                                 "test_id",
                                 context -> 19,
@@ -49,9 +48,35 @@ class ConstraintGroupTest {
                                 Operator.NOT_EQUALS,
                                 context -> 15
                         )
-                ).collect(Collectors.toList())
+                )
         );
 
         Assertions.assertFalse(constraintGroup.evaluate(Context.getSharedInstance()));
+    }
+
+    @Test
+    void testGetters() {
+        List<EvaluableConstraint> constraints = List.of(
+                new Constraint(
+                        "test_id",
+                        context -> 10,
+                        Operator.LESS,
+                        context -> 15
+                ),
+                new Constraint(
+                        "test_id",
+                        context -> 10,
+                        Operator.NOT_EQUALS,
+                        context -> 15
+                )
+        );
+
+        ConstraintGroup constraintGroup = new ConstraintGroup(
+                "test_id",
+                constraints
+        );
+
+        Assertions.assertEquals("test_id", constraintGroup.getId());
+        Assertions.assertSame(constraints, constraintGroup.getConstraints());
     }
 }
