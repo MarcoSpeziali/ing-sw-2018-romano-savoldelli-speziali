@@ -41,7 +41,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
     /**
      * Needed by {@link Serializable}.
      */
-    public Range() {
+    protected Range() {
         this.start = null;
         this.end = null;
     }
@@ -199,6 +199,10 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
         if (this == obj) {
             return true;
         }

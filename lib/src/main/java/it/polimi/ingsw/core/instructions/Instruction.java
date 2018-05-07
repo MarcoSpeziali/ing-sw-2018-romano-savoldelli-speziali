@@ -14,10 +14,19 @@ public abstract class Instruction {
     protected List<Instruction> instructions;
 
     /**
+     * Gets the instructions.
      * @return An ordered list of instructions which represents the inner instruction to execute.
      */
     public List<Instruction> getInstructions() {
         return this.instructions;
+    }
+
+    /**
+     * Sets the instructions.
+     * @param instructions An ordered list of instructions which represents the inner instruction to execute.
+     */
+    public void setInstructions(List<Instruction> instructions) {
+        this.instructions = instructions;
     }
 
     /**

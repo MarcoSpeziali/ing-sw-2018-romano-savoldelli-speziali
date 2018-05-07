@@ -29,7 +29,7 @@ public enum Operator {
             case "!=":
                 return Operator.NOT_EQUALS;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unrecognized operator: " + stringRepresentation);
         }
     }
 

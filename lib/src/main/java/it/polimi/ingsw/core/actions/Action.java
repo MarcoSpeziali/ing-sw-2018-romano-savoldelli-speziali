@@ -29,7 +29,7 @@ public abstract class Action implements ExecutableAction {
     @Override
     public Object run(Context context) {
         if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
-            throw new ConstraintEvaluationException();
+            throw new ConstraintEvaluationException(this.data.getConstraint().getId());
         }
 
         return null;

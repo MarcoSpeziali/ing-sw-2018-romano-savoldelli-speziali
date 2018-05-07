@@ -64,7 +64,7 @@ public class ForRowInstruction extends Instruction {
      * @return The dice in the row at {@code index}.
      */
     private static Die[] getDiceInRowFromWindow(Window window, int index) {
-        Die[] rowDice = new Die[window.getCells().length];
+        Die[] rowDice = new Die[window.getCells()[index].length];
 
         for (int i = 0; i < rowDice.length; i++) {
             rowDice[i] = window.getCells()[index][i].getDie();

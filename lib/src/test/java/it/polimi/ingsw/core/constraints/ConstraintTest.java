@@ -1,11 +1,9 @@
 package it.polimi.ingsw.core.constraints;
 
 import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.models.Cell;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ConstraintTest {
 
@@ -163,6 +161,39 @@ class ConstraintTest {
                 context -> 11,
                 Operator.LESS_EQUAL,
                 context -> 10
+        );
+
+        Assertions.assertFalse(constraint.evaluate(Context.getSharedInstance()));
+    }
+
+    @Test
+    void testNonComparable() {
+        Constraint constraint = new Constraint(
+                "test_id",
+                context -> new Cell(),
+                Operator.LESS_EQUAL,
+                context -> new Cell()
+        );
+
+        Assertions.assertThrows(ClassCastException.class, () -> constraint.evaluate(Context.getSharedInstance()));
+    }
+
+    @Test
+    void testNulls() {
+        Constraint constraint = new Constraint(
+                "test_id",
+                context -> null,
+                Operator.EQUALS,
+                context -> null
+        );
+
+        Assertions.assertTrue(constraint.evaluate(Context.getSharedInstance()));
+
+        constraint = new Constraint(
+                "test_id",
+                context -> null,
+                Operator.NOT_EQUALS,
+                context -> null
         );
 
         Assertions.assertFalse(constraint.evaluate(Context.getSharedInstance()));

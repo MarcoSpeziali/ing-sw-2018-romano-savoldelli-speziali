@@ -7,6 +7,10 @@ import java.util.Random;
 public class TakeRandomInstruction extends Instruction {
     @Override
     public Integer run(Context context) {
+        if (this.instructions.isEmpty()) {
+            return 0;
+        }
+
         Random random = new Random(System.currentTimeMillis());
 
         int[] results = this.instructions.stream()
