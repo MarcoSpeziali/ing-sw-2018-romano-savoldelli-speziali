@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CellTest {
 
@@ -17,9 +18,9 @@ class CellTest {
 
     @BeforeEach
     void setUp() {
-        this.coloredCell = new Cell(GlassColor.BLUE);
-        this.shadedCell = new Cell(4);
-        this.blankCell = new Cell();
+        this.coloredCell = new Cell(0, GlassColor.BLUE);
+        this.shadedCell = new Cell(4, null);
+        this.blankCell = new Cell(0, null);
         this.die = mock(Die.class);
     }
 
@@ -72,5 +73,22 @@ class CellTest {
         Assertions.assertEquals(1, blankCell.getFreeSpace());
         blankCell.putDie(die);
         Assertions.assertEquals(0, blankCell.getFreeSpace());
+    }
+
+    @Test
+    void isBlankTest() {
+        Assertions.assertTrue(blankCell.isBlank());
+        Assertions.assertFalse(coloredCell.isBlank());
+        Assertions.assertFalse(shadedCell.isBlank());
+    }
+
+    @Test
+    void canFitDieTest() {
+        when(die.getShade()).thenReturn(5);
+        when(die.getColor()).thenReturn(GlassColor.BLUE);
+        Assertions.assertTrue(coloredCell.canFitDie(die, false, false));
+        Assertions.assertFalse(shadedCell.canFitDie(die, false, false));
+        Assertions.assertTrue(blankCell.canFitDie(die, false, false));
+
     }
 }

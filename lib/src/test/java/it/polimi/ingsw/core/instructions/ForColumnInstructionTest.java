@@ -60,7 +60,7 @@ class ForColumnInstructionTest {
         when(window.getCells())
                 .then(invocationOnMock -> Arrays.stream(this.diceMatrix)
                         .map(diceRow -> Arrays.stream(diceRow).map(die -> {
-                            Cell cell = new Cell();
+                            Cell cell = new Cell(0, null);
                             cell.putDie(die);
                             return cell;
                         }).toArray(Cell[]::new))

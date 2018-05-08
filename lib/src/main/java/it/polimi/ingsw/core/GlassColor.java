@@ -38,6 +38,8 @@ public enum GlassColor {
     }
 
     public static GlassColor fromString(String rep) {
+        rep = rep.trim().toLowerCase();
+
         switch (rep) {
             case "red":
                 return GlassColor.RED;

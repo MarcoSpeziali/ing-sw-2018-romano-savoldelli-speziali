@@ -73,7 +73,7 @@ class CountDiagonalInstructionTest {
 
         for (int i = 0; i < dice.length; i++) {
             for (int j = 0; j < dice[i].length; j++) {
-                cells[i][j] = new Cell();
+                cells[i][j] = new Cell(0, null);
                 cells[i][j].putDie(dice[i][j]);
             }
         }

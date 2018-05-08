@@ -170,9 +170,9 @@ class ConstraintTest {
     void testNonComparable() {
         Constraint constraint = new Constraint(
                 "test_id",
-                context -> new Cell(),
+                context -> new Cell(0, null),
                 Operator.LESS_EQUAL,
-                context -> new Cell()
+                context -> new Cell(0, null)
         );
 
         Assertions.assertThrows(ClassCastException.class, () -> constraint.evaluate(Context.getSharedInstance()));

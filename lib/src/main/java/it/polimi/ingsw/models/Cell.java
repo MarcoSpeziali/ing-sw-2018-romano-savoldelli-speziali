@@ -11,21 +11,13 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
     private Integer shade;
     private Die die;
 
-    public Die getDie() {
-        return this.die;
-    }
-
-    public Cell(GlassColor color) {
+    public Cell(Integer shade, GlassColor color) {
         this.color = color;
-        this.shade = 0;
-    }
-
-    public Cell(int shade) {
         this.shade = shade;
     }
 
-    public Cell() {
-        this.shade = 0;
+    public Die getDie() {
+        return this.die;
     }
 
     public GlassColor getColor() {

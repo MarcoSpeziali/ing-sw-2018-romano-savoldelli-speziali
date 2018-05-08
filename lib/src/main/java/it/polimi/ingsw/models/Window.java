@@ -19,13 +19,13 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     private Window sibling;
     private Cell[][] cells;
 
-    public Window(int difficulty, int rows, int columns, String id, Window sibling) {
+    public Window(int difficulty, int rows, int columns, String id, Window sibling, Cell[][] cells) {
         this.difficulty = difficulty;
         this.rows = rows;
         this.columns = columns;
         this.id = id;
         this.sibling = sibling;
-        this.cells = new Cell[rows][columns];
+        this.cells = cells;
     }
 
     public int getDifficulty() {
@@ -149,10 +149,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     @Override
     public int getNumberOfDice() {
         return cells.length - getFreeSpace();
-    }
-
-    private boolean cellMatches(Die die, int i, int j) {
-        return die.getColor().equals(cells[i][j].getColor()) || die.getShade().equals(cells[i][j].getShade());
     }
 
     /*private boolean adjacencyRespected(Die die, int i, int j) {
