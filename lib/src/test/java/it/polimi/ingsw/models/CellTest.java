@@ -33,6 +33,12 @@ class CellTest {
     }
 
     @Test
+    void getDieTest() {
+        blankCell.putDie(die);
+        Assertions.assertSame(die, blankCell.getDie());
+    }
+
+    @Test
     void getShadeTest() {
         Assertions.assertEquals(Integer.valueOf(4), shadedCell.getShade());
         Assertions.assertEquals(Integer.valueOf(0), coloredCell.getShade());

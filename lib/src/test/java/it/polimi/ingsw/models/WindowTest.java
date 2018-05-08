@@ -1,43 +1,51 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.locations.AlreadyPutException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class WindowTest {
 
     private Window window;
     private Cell[][] cells;
+    private Die die;
 
     @BeforeEach
     void setUp() {
+        this.die = new Die(GlassColor.YELLOW,5);
 
-        this.cells = new Cell[3][4];
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                cells[i][j] = new Cell(0, null);
-            }
-
-        }
-
-        cells[0][1] = new Cell(5, null);
-        cells[0][3] = new Cell(0, GlassColor.GREEN);
-        cells[1][2] = new Cell(2, null);
-        cells[1][3] = new Cell(3, GlassColor.PURPLE);
-        cells[2][0] = new Cell(0, GlassColor.BLUE);
-        cells[2][1] = new Cell(2, null);
-        cells[2][2] = new Cell(0, GlassColor.RED);
-        cells[2][3] = new Cell(0, GlassColor.YELLOW);
-        cells[2][3] = new Cell(3, null);
-        cells[0][2] = new Cell(4, null);
+        this.cells = new Cell[][]{
+                {
+                        new Cell(0, null),
+                        new Cell(5, null),
+                        new Cell(4, null),
+                        new Cell(0, GlassColor.GREEN)
+                },
+                {
+                        new Cell(0, null),
+                        new Cell(0, null),
+                        new Cell(2, null),
+                        new Cell(0, GlassColor.PURPLE)
+                },
+                {
+                        new Cell(0, GlassColor.BLUE),
+                        new Cell(2, null),
+                        new Cell(0, GlassColor.RED),
+                        new Cell(0, GlassColor.YELLOW)
+                }
+        };
 
         this.window = new Window(22, 3, 4, "test", null, cells);
     }
+
     @Test
     void getDifficultyTest() {
         Assertions.assertEquals(22, window.getDifficulty());
@@ -59,34 +67,71 @@ class WindowTest {
     }
 
     @Test
+    // TODO
     void getPossiblePositionsForDie() {
+        List<Integer> admitted = List.of(0,1,4,11);
+        Assertions.assertTrue(window.getPossiblePositionsForDie(die, false, false, false).containsAll(admitted));
+        Assertions.assertEquals(6, window.getPossiblePositionsForDie(die, false, false, false).size());
     }
 
     @Test
-    void putDie() {
+    void putDieTest() {
+        window.putDie(die, 7);
+        Assertions.assertTrue(window.getDice().contains(die));
+        Assertions.assertThrows(AlreadyPutException.class, ()-> window.putDie(die, 7));
     }
 
     @Test
+    // TODO
     void getLocations() {
+        Assertions.assertTrue(window.getLocations().isEmpty());
+        window.putDie(die, 1);
+        Assertions.assertFalse(window.getLocations().isEmpty());
+        Assertions.assertTrue(window.getLocations().contains(1));
+        Assertions.assertFalse(window.getLocations().contains(0));
     }
 
     @Test
-    void getDice() {
+    void getDiceTest() {
+        //pick die con param die ha un errore suppongo in equals; inoltre getDice senza aver messo alcun dado
+        // restituisce una lista di null di dimensione rows*columns... ma ha zenzo? per le perzone falze!!11uno!
+        window.putDie(die, 7);
+        Assertions.assertTrue(window.getDice().contains(this.die));
+        window.pickDie(die);
+        Assertions.assertFalse(window.getDice().contains(die));
     }
 
     @Test
-    void getFreeSpace() {
+    void getFreeSpaceTest() {
+        Assertions.assertEquals(12, window.getFreeSpace());
+        window.putDie(die, 3);
+        Assertions.assertEquals(11, window.getFreeSpace());
     }
 
     @Test
-    void pickDie() {
+    void pickDieTest() {
+        window.putDie(die, 0);
+        Assertions.assertEquals(die, window.pickDie(0));
+        Assertions.assertNull(window.getCells()[0][0].getDie());
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> window.pickDie(30));
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> window.pickDie(-2));
+
     }
 
     @Test
-    void pickDie1() {
+    // TODO controllare lancio NullPointerException per motivo non ben chiaro
+    void pickDie1Test() {
+        window.putDie(die, 1);
+        Assertions.assertSame(die, window.pickDie(die));
+        int num = window.getNumberOfDice();
+        window.pickDie(die);
+        Assertions.assertEquals(window.getNumberOfDice(), num - 1);
     }
 
     @Test
-    void getNumberOfDice() {
+    void getNumberOfDiceTest() {
+        Assertions.assertEquals(0, window.getNumberOfDice());
+        window.putDie(mock(Die.class), 4);
+        Assertions.assertEquals(1,window.getNumberOfDice());
     }
 }

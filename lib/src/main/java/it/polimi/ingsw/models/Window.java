@@ -47,7 +47,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     /*@Override
     public boolean[][] getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
 
-        List<Integer> locations = this.getLocations(); // TODO(savdav96): getLocations ritorna le posizioni già occupate, ma non ricordo se dovesse essere così
+        List<Integer> locations = this.getLocations();
         boolean[][] admitted = new boolean[rows][columns];
 
         if (die.getShade() == 0) {
@@ -69,6 +69,11 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }*/
 
     @Override
+    /* FIXME problema di consistenza: putDie non controlla se la posizione è illegale, lo fa getPossiblePositionForDie,
+    * però è possiile che per mettere un dado venga chiamata putDie, bypassando il controllo... si potrebbe inserire un
+    * if in putDie, ma occorre passare come parametri anche ignoreColor ecc ecc, ma cosi si modificherebbe l'interface
+    * mettendoli a false di default il controllo però risulta imperfetto.
+    * */
     public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
         if (die.getShade() == 0) {
             throw new IllegalArgumentException("Die's shade must be set!");
@@ -92,13 +97,12 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 }
             }
         }
-
         return availablePositions;
     }
 
     @Override
     public void putDie(Die die, Integer location) {
-        this.cells[location / rows][location % rows].putDie(die);
+        this.cells[location / columns][location % columns].putDie(die);
     }
 
     @Override
@@ -148,7 +152,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     @Override
     public int getNumberOfDice() {
-        return cells.length - getFreeSpace();
+        return rows*columns - getFreeSpace();
     }
 
     /*private boolean adjacencyRespected(Die die, int i, int j) {
@@ -191,10 +195,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
 
     private boolean canHaveNeighbour(Die neighbourCandidate, int i, int j, boolean ignoreColor, boolean ignoreShade) {
-        if (i < 0 || j < 0) {
+        if ((i < 0 || j < 0) || i > rows - 1 || j > columns - 1) {
             return true;
         }
-
         return this.cells[i][j].canFitDie(neighbourCandidate, ignoreShade, ignoreColor);
     }
 
@@ -251,7 +254,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 edges.add((this.rows - 1) * this.columns + j);
             }
         }
-
         return edges;
     }
 }
