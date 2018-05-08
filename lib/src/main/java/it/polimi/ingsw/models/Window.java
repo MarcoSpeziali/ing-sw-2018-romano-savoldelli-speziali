@@ -2,10 +2,13 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
+import it.polimi.ingsw.utils.IterableRange;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation {
 
@@ -41,10 +44,10 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return cells;
     }
 
-    @Override
+    /*@Override
     public boolean[][] getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
 
-        List<Integer> locations = this.getLocations();
+        List<Integer> locations = this.getLocations(); // TODO(savdav96): getLocations ritorna le posizioni già occupate, ma non ricordo se dovesse essere così
         boolean[][] admitted = new boolean[rows][columns];
 
         if (die.getShade() == 0) {
@@ -55,14 +58,42 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
             return getInitialPositions(die, ignoreColor, ignoreShade);
         } else {
             for (int i : locations) {
-                if (    ((adjacencyRespected(die, i/rows, i%rows) || ignoreAdjacency)) &&
-                        ((cellMatches(die, i/rows, i%rows) || (ignoreColor || ignoreShade))) ||
-                        cellIsBlank(i/rows, i%rows)) {
-                    admitted[i/rows][i%rows] = true;
+                if (((adjacencyRespected(die, i / rows, i % rows) || ignoreAdjacency)) &&
+                        ((cellMatches(die, i / rows, i % rows) || (ignoreColor || ignoreShade))) ||
+                        cellIsBlank(i / rows, i % rows)) {
+                    admitted[i / rows][i % rows] = true;
                 }
             }
             return admitted;
         }
+    }*/
+
+    @Override
+    public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
+        if (die.getShade() == 0) {
+            throw new IllegalArgumentException("Die's shade must be set!");
+        }
+
+        if (die.getColor() == null) {
+            throw new IllegalArgumentException("Die's color must be set!");
+        }
+
+        if (this.getNumberOfDice() == 0) {
+            return this.getEdgesPositions(die, ignoreColor, ignoreShade, ignoreAdjacency);
+        }
+
+        List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
+
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.columns; j++) {
+                if (this.cells[i][j].canFitDie(die, ignoreColor, ignoreShade) &&
+                        (ignoreAdjacency || checkAdjacency(die, i, j, ignoreColor, ignoreShade))) {
+                    availablePositions.add(i * this.columns + j);
+                }
+            }
+        }
+
+        return availablePositions;
     }
 
     @Override
@@ -84,33 +115,25 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     @Override
     public List<Die> getDice() {
-        List<Die> list = new LinkedList<>();
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                list.add(cells[i][j].pickDie());
-            }
-        }
-        return list;
+        return Arrays.stream(this.cells)
+                .flatMap(Arrays::stream)
+                .map(Cell::getDie)
+                .collect(Collectors.toList());
     }
 
     @Override
     public int getFreeSpace() {
-        List<Integer> free = new ArrayList<>();
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                if (!cells[i][j].isOccupied()) {
-                    free.add(i * columns + j);
-                }
-            }
-        }
-        return free.size();
+        return Math.toIntExact(Arrays.stream(this.cells)
+                .flatMap(Arrays::stream)
+                .filter(cell -> !cell.isOccupied())
+                .count());
     }
 
     @Override
     public Die pickDie(Die die) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                if (cells[i][j].pickDie().equals(die)) {
+                if (cells[i][j].getDie().equals(die)) {
                     return cells[i][j].pickDie();
                 }
             }
@@ -129,53 +152,63 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
 
     private boolean cellMatches(Die die, int i, int j) {
-        if (die.getColor().equals(cells[i][j].getColor())) {
-            return true;
-        } else return die.getShade().equals(cells[i][j].getShade());
+        return die.getColor().equals(cells[i][j].getColor()) || die.getShade().equals(cells[i][j].getShade());
     }
 
-    private boolean adjacencyRespected(Die die, int i, int j) {
+    /*private boolean adjacencyRespected(Die die, int i, int j) {
         if (i == rows - 1) {
             if (j == columns - 1)
-                return  !cellMatches(die, i, j-1) &&
-                        !cellMatches(die, i-1, j);
+                return !cellMatches(die, i, j - 1) &&
+                        !cellMatches(die, i - 1, j);
             if (j == 0)
-                return  !cellMatches(die, i, j+1) &&
-                        !cellMatches(die, i-1, j);
+                return !cellMatches(die, i, j + 1) &&
+                        !cellMatches(die, i - 1, j);
             else
-                return  !cellMatches(die, i, j+1) &&
-                        !cellMatches(die, i, j-1) &&
-                        !cellMatches(die, i-1, j);
+                return !cellMatches(die, i, j + 1) &&
+                        !cellMatches(die, i, j - 1) &&
+                        !cellMatches(die, i - 1, j);
         }
         if (i == 0) {
             if (j == columns - 1)
-                return  !cellMatches(die, i, j-1) &&
-                        !cellMatches(die, i+1, j);
+                return !cellMatches(die, i, j - 1) &&
+                        !cellMatches(die, i + 1, j);
             if (j == 0)
-                return  !cellMatches(die, i, j+1) &&
-                        !cellMatches(die, i+1, j);
+                return !cellMatches(die, i, j + 1) &&
+                        !cellMatches(die, i + 1, j);
             else
-                return  !cellMatches(die, i, j+1) &&
-                        !cellMatches(die, i, j-1) &&
-                        !cellMatches(die, i+1, j);
+                return !cellMatches(die, i, j + 1) &&
+                        !cellMatches(die, i, j - 1) &&
+                        !cellMatches(die, i + 1, j);
 
         }
-        return  !cellMatches(die, i, j+1) &&
-                !cellMatches(die, i, j-1) &&
-                !cellMatches(die, i-1, j) &&
-                !cellMatches(die, i+1, j);
-        }
+        return !cellMatches(die, i, j + 1) &&
+                !cellMatches(die, i, j - 1) &&
+                !cellMatches(die, i - 1, j) &&
+                !cellMatches(die, i + 1, j);
+    }*/
 
-    private boolean cellIsBlank(int i, int j) {
-        return (cells[i][j].getColor() == null && cells[i][j].getShade() == 0);
+    private boolean checkAdjacency(Die die, int i, int j, boolean ignoreColor, boolean ignoreShade) {
+        return  canHaveNeighbour(die, i, j + 1, ignoreColor, ignoreShade) &&
+                canHaveNeighbour(die, i, j - 1, ignoreColor, ignoreShade) &&
+                canHaveNeighbour(die, i - 1, j, ignoreColor, ignoreShade) &&
+                canHaveNeighbour(die, i + 1, j, ignoreColor, ignoreShade);
     }
 
+    private boolean canHaveNeighbour(Die neighbourCandidate, int i, int j, boolean ignoreColor, boolean ignoreShade) {
+        if (i < 0 || j < 0) {
+            return true;
+        }
+
+        return this.cells[i][j].canFitDie(neighbourCandidate, ignoreShade, ignoreColor);
+    }
+
+    /*
     private boolean[][] getInitialPositions(Die die, boolean ignoreColor, boolean ignoreShade) {
         boolean[][] admitted = new boolean[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                if ((i == rows-1 || j == columns-1) &&
-                                (cellMatches(die, i, j) ||
+                if ((i == rows - 1 || j == columns - 1) &&
+                        (cellMatches(die, i, j) ||
                                 (ignoreColor && !ignoreShade) ||
                                 (!ignoreColor && ignoreShade) ||
                                 cellIsBlank(i, j)
@@ -186,6 +219,44 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
             }
         }
         return admitted;
+    }
+    */
+    private List<Integer> getEdgesPositions(Die die, boolean ignoreColor, boolean ignoreShade, Boolean ignoreAdjacency) {
+        List<Integer> edges = new ArrayList<>((this.rows + this.columns) * 2);
+
+        if (ignoreAdjacency) {
+            return new IterableRange<>(
+                    0,
+                    (this.rows + this.columns) * 2,
+                    IterableRange.INTEGER_INCREMENT_FUNCTION
+            ).stream().collect(Collectors.toList());
+        }
+
+        for (int i = 0; i < this.rows; i++) {
+            // first column
+            if (this.getCells()[i][0].canFitDie(die, ignoreColor, ignoreShade)) {
+                edges.add(i * this.columns);
+            }
+
+            // last column
+            if (this.getCells()[i][this.columns - 1].canFitDie(die, ignoreColor, ignoreShade)) {
+                edges.add(i * this.columns + this.columns - 1);
+            }
+        }
+
+        for (int j = 0; j < this.columns; j++) {
+            // first row
+            if (this.getCells()[0][j].canFitDie(die, ignoreColor, ignoreShade)) {
+                edges.add(j);
+            }
+
+            // last row
+            if (this.getCells()[this.rows - 1][j].canFitDie(die, ignoreColor, ignoreShade)) {
+                edges.add((this.rows - 1) * this.columns + j);
+            }
+        }
+
+        return edges;
     }
 }
 

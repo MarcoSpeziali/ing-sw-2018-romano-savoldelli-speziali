@@ -43,6 +43,16 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
         return this.die != null;
     }
 
+    public boolean isBlank() {
+        return this.color == null && this.shade == 0;
+    }
+
+    public boolean canFitDie(Die die, boolean ignoreColor, boolean ignoreShade) {
+        return  this.isBlank() ||
+                (this.color == null || ignoreColor || this.color.equals(die.getColor())) &&
+                (this.shade == 0 || ignoreShade || this.shade.equals(die.getShade()));
+    }
+
     @Override
     public void putDie(Die die) {
         if (this.die == null) this.die = die;
