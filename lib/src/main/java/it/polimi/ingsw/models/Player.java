@@ -10,6 +10,22 @@ public class Player {
         this.profile = profile;
         this.privateObjectiveCard = privateObjectiveCard;
         this.favourTokenCount = favourTokenCount;
-        //this.pickedDie = pikedDie;
+        this.pickedDie = pikedDie;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public ObjectiveCard[] getPrivateObjectiveCard() {
+        return privateObjectiveCard;
+    }
+
+    public byte getFavourTokenCount() {
+        return favourTokenCount;
+    }
+
+    public Die getPickedDie() {
+        return pickedDie;
     }
 }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.core.Objective;
 import it.polimi.ingsw.utils.text.LocalizedString;
 
-public class ObjectiveCard extends Card{
+public class ObjectiveCard extends Card {
     private String cardId;
     private CardVisibility visibility;
     private int pointsPerCompletion;
@@ -15,5 +15,21 @@ public class ObjectiveCard extends Card{
         this.cardId = cardId;
         this.visibility = visibility;
         this.pointsPerCompletion = pointsPerCompletion;
+    }
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public CardVisibility getVisibility() {
+        return visibility;
+    }
+
+    public int getPointsPerCompletion() {
+        return pointsPerCompletion;
+    }
+
+    public Objective getObjective() {
+        return objective;
     }
 }

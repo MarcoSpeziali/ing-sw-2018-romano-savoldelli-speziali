@@ -23,11 +23,9 @@ class BagTest {
     void getDieTest() {
         Assertions.assertNotNull(bag.getDice());
         Assertions.assertEquals(90, bag.getNumberOfDice());
-        Assertions.assertEquals(18, bag.getNumberPerColor(GlassColor.BLUE));
-        Assertions.assertEquals(18, bag.getNumberPerColor(GlassColor.GREEN));
-        Assertions.assertEquals(18, bag.getNumberPerColor(GlassColor.PURPLE));
-        Assertions.assertEquals(18, bag.getNumberPerColor(GlassColor.RED));
-        Assertions.assertEquals(18, bag.getNumberPerColor(GlassColor.YELLOW));
+        for(GlassColor color: GlassColor.values()) {
+            Assertions.assertEquals(18, bag.getNumberPerColor(color));
+        }
     }
 
     @Test
