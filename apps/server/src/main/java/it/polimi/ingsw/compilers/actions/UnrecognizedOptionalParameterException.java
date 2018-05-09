@@ -1,4 +1,4 @@
-package it.polimi.ingsw.compilers;
+package it.polimi.ingsw.compilers.actions;
 
 // TODO: docs
 public class UnrecognizedOptionalParameterException extends RuntimeException {

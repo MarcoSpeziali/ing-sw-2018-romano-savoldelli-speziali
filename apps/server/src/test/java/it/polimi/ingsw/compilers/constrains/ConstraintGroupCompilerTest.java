@@ -1,5 +1,6 @@
-package it.polimi.ingsw.compilers;
+package it.polimi.ingsw.compilers.constrains;
 
+import it.polimi.ingsw.compilers.constraints.ConstraintGroupCompiler;
 import it.polimi.ingsw.core.constraints.Constraint;
 import it.polimi.ingsw.core.constraints.ConstraintGroup;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
@@ -134,5 +135,18 @@ class ConstraintGroupCompilerTest {
         Assertions.assertNull(innerInnerInnerConstraints.get(0).getId());
 
         Assertions.assertTrue(constraintGroup.evaluate(null));
+    }
+
+    @Test
+    @SuppressWarnings("Duplicates")
+    void testIllegalArgumentException() throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputSource is = new InputSource(new StringReader("<cxd id=\"test\"></cxd>"));
+        Document doc = builder.parse(is);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            ConstraintGroupCompiler.compile(doc.getDocumentElement());
+        });
     }
 }

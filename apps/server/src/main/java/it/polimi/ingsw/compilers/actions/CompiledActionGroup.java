@@ -1,4 +1,4 @@
-package it.polimi.ingsw.compilers;
+package it.polimi.ingsw.compilers.actions;
 
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.actions.ActionGroup;

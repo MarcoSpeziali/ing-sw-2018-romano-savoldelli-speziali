@@ -16,7 +16,7 @@ public class WindowCompiler {
     public static Window compile(Node node) {
 
         if (!node.getNodeName().equals(WINDOW_NODE_NAME)) {
-            throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action, instead of a " + node.getNodeName());
+            throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to a window, instead of a " + node.getNodeName());
         }
 
         Map<String, Object> windowInfo = XmlUtils.xmlToMap(node);

@@ -1,7 +1,11 @@
-package it.polimi.ingsw.compilers;
+package it.polimi.ingsw.compilers.constrains;
 
+import it.polimi.ingsw.compilers.constraints.ConstraintCompiler;
+import it.polimi.ingsw.compilers.constraints.MalformedConstraintException;
+import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.constraints.Constraint;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;
@@ -60,5 +64,36 @@ class ConstraintCompilerTest {
         Assertions.assertNotNull(constraint);
         Assertions.assertEquals("test", constraint.getId());
         Assertions.assertFalse(constraint.evaluate(null));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "<constraint id=\"test\">1</constraint>",
+            "<constraint id=\"test\"></constraint>",
+            "<constraint id=\"test\"><![CDATA[13.12 >< 13.12]]></constraint>",
+            "<constraint id=\"test\">.014 != </constraint>",
+            "<constraint id=\"test\">\"val1\" \"val2\"</constraint>"
+    })
+    void testMalformedConstraintException(String constraintString) throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputSource is = new InputSource(new StringReader(constraintString));
+        Document doc = builder.parse(is);
+
+        Assertions.assertThrows(MalformedConstraintException.class, () -> {
+            ConstraintCompiler.compile(doc.getDocumentElement()).evaluate(Context.getSharedInstance());
+        });
+    }
+
+    @Test
+    void testIllegalArgumentException() throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputSource is = new InputSource(new StringReader("<cxd id=\"test\"></cxd>"));
+        Document doc = builder.parse(is);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            ConstraintCompiler.compile(doc.getDocumentElement());
+        });
     }
 }

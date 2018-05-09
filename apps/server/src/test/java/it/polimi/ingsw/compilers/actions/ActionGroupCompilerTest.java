@@ -1,6 +1,10 @@
-package it.polimi.ingsw.compilers;
+package it.polimi.ingsw.compilers.actions;
 
-import it.polimi.ingsw.compilers.utils.ActionParameter;
+import it.polimi.ingsw.compilers.actions.ActionGroupCompiler;
+import it.polimi.ingsw.compilers.actions.CompiledAction;
+import it.polimi.ingsw.compilers.actions.CompiledActionGroup;
+import it.polimi.ingsw.compilers.actions.CompiledExecutableAction;
+import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
 import it.polimi.ingsw.core.actions.*;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.IterableRange;

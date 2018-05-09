@@ -1,4 +1,4 @@
-package it.polimi.ingsw.compilers.utils;
+package it.polimi.ingsw.compilers.variables;
 
 import it.polimi.ingsw.core.GlassColor;
 
@@ -6,13 +6,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // TODO: doc
-public class VariableSupplierCasting {
+public class VariableSupplierCaster {
 
     private static final Pattern INTEGER_PATTERN = Pattern.compile("[+-]?[0-9]+");
     private static final Pattern FLOAT_PATTERN = Pattern.compile("[+-]?[0-9]*[.][0-9]+");
     private static final Pattern STRING_PATTERN = Pattern.compile("\".*\"");
     private static final Pattern NULL_PATTERN = Pattern.compile("null", Pattern.CASE_INSENSITIVE);
     private static final Pattern COLOR_PATTER = Pattern.compile("(red|yellow|blue|green|purple)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern BOOLEAN_PATTER = Pattern.compile("(true|false)", Pattern.CASE_INSENSITIVE);
 
     public static Object cast(String textObject) {
         Matcher matcher = INTEGER_PATTERN.matcher(textObject);
@@ -30,7 +31,7 @@ public class VariableSupplierCasting {
         matcher = STRING_PATTERN.matcher(textObject);
 
         if (matcher.matches()) {
-            return textObject.replace("\"", "");
+            return textObject.replace("\"", "").replace("\\$", "$");
         }
 
         matcher = NULL_PATTERN.matcher(textObject);
@@ -43,6 +44,12 @@ public class VariableSupplierCasting {
 
         if (matcher.matches()) {
             return GlassColor.fromString(textObject);
+        }
+
+        matcher = BOOLEAN_PATTER.matcher(textObject);
+
+        if (matcher.matches()) {
+            return Boolean.parseBoolean(textObject);
         }
 
         throw new IllegalArgumentException();

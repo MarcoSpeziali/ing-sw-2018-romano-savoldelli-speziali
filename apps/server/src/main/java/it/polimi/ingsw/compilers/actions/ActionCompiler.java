@@ -1,7 +1,7 @@
-package it.polimi.ingsw.compilers;
+package it.polimi.ingsw.compilers.actions;
 
-import it.polimi.ingsw.compilers.utils.ActionParameter;
-import it.polimi.ingsw.compilers.utils.ActionParameterValue;
+import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
+import it.polimi.ingsw.compilers.actions.utils.ActionParameterValue;
 import it.polimi.ingsw.core.actions.Action;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
@@ -37,6 +37,13 @@ public class ActionCompiler {
         this.actionsMapping = getActionsMappingDocument();
     }
 
+    /**
+     * Compiles a {@link Node} into a {@link CompiledAction}.
+     * @param node The node that holds the action.
+     * @param constraints The list of compiled constraints.
+     * @return An instance of {@link CompiledAction}
+     * @throws ClassNotFoundException If the class for the action was not found
+     */
     public CompiledAction compile(Node node, List<EvaluableConstraint> constraints) throws ClassNotFoundException {
         // This method only compiles a single <action ../>
         if (!node.getNodeName().equals(ACTION_NODE_NAME)) {
@@ -75,6 +82,12 @@ public class ActionCompiler {
         return compiledAction;
     }
 
+    /**
+     * Gets the constraint associated with the action.
+     * @param constraints The list of compiled constraints.
+     * @param rawAction The raw action
+     * @return The constraint associated with the action.
+     */
     private EvaluableConstraint getActionConstraint(List<EvaluableConstraint> constraints, RawAction rawAction) {
         Optional<EvaluableConstraint> targetConstraint = Optional.empty();
 
@@ -91,6 +104,11 @@ public class ActionCompiler {
         return targetConstraint.orElse(null);
     }
 
+    /**
+     * Returns the information about the current action.
+     * @param fnCall The call to the action
+     * @return The information about the current action
+     */
     private Map<String, Object> getTargetAction(FunctionCall fnCall) {
         Map<String, Object>[] mapping = XmlUtils.getMapArray(
                 XmlUtils.getMap(actionsMapping, "actions"),
@@ -153,7 +171,6 @@ public class ActionCompiler {
                             temp.value.startsWith("$") && temp.value.endsWith("$")
                     );
                 } else {
-                    // throw new UnrecognizedOptionalParameterException(rawAction.id, template.name);
                     paramValue = new ActionParameterValue(
                             template.defaultValue.replace("$", ""),
                             template.defaultValue.startsWith("$") && template.defaultValue.endsWith("$")

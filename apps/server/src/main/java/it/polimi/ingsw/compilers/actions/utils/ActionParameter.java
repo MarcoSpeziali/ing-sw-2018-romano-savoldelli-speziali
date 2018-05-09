@@ -1,4 +1,4 @@
-package it.polimi.ingsw.compilers.utils;
+package it.polimi.ingsw.compilers.actions.utils;
 
 // TODO: docs
 public class ActionParameter {

@@ -1,6 +1,8 @@
-package it.polimi.ingsw.compilers;
+package it.polimi.ingsw.compilers.actions;
 
-import it.polimi.ingsw.compilers.utils.ActionParameter;
+import it.polimi.ingsw.compilers.actions.ActionCompiler;
+import it.polimi.ingsw.compilers.actions.CompiledAction;
+import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.actions.ChooseDieAction;
