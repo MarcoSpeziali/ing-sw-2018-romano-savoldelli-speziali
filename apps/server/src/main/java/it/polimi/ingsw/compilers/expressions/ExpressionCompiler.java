@@ -1,4 +1,4 @@
-package it.polimi.ingsw.compilers.variables;
+package it.polimi.ingsw.compilers.expressions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.actions.VariableSupplier;
@@ -17,19 +17,23 @@ import java.util.regex.Pattern;
  * - a static value (e.g. 12, "string", red, ...);
  * - a chained function call (with parameters) to a global variable (e.g. $DIE::getShade()::compareTo($OTHER_DIE::getShade()$)$
  */
-public class VariableSupplierCompiler {
+public class ExpressionCompiler {
 
     /**
      * Declared so this class is not instantiable
      */
-    private VariableSupplierCompiler() {}
+    private ExpressionCompiler() {}
 
     /**
      * Compiles the expression into a {@link VariableSupplier}.
      * @param variableString The expression to compile.
      * @return The compiled expression.
      */
-    public static VariableSupplier<Object> compile(String variableString) {
+    public static VariableSupplier compile(String variableString) {
+        if (variableString == null) {
+            return context -> null;
+        }
+
         // if the expression starts and ends with $ ($ symbols in strings must be escaped with \$)
         if (variableString.startsWith("$") && variableString.endsWith("$")) {
             // useless characters (whitespaces and the starting and ending $) gets removed
@@ -43,7 +47,7 @@ public class VariableSupplierCompiler {
         else {
             // the expression does not need to be processed, it is immediately converted to the
             // corresponding object and returned
-            return context -> VariableSupplierCaster.cast(variableString);
+            return context -> ConstantExpressionCaster.cast(variableString);
         }
     }
 
@@ -52,7 +56,7 @@ public class VariableSupplierCompiler {
      * @param predicate The predicate to compile
      * @return The compiled {@link VariableSupplier}
      */
-    private static VariableSupplier<Object> getVariableSupplierFromPredicate(String predicate) {
+    private static VariableSupplier getVariableSupplierFromPredicate(String predicate) {
         // splits the outer function/field call
         String[] calls = splitPredicate(predicate);
 
@@ -78,7 +82,7 @@ public class VariableSupplierCompiler {
                     }
                     else {
                         // otherwise an exception is thrown
-                        throw new MalformedVariableException(predicate, calls[i]);
+                        throw new MalformedExpressionException(predicate, calls[i]);
                     }
                 }
 
@@ -180,7 +184,7 @@ public class VariableSupplierCompiler {
             }
         }
         catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new MalformedVariableException(predicate, target.getClass(), methodName);
+            throw new MalformedExpressionException(predicate, target.getClass(), methodName);
         }
 
         // finally returns the result
@@ -200,7 +204,7 @@ public class VariableSupplierCompiler {
             target = target.getClass().getField(fieldName).get(target);
         }
         catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new MalformedVariableException(predicate);
+            throw new MalformedExpressionException(predicate);
         }
 
         return target;
@@ -249,10 +253,10 @@ public class VariableSupplierCompiler {
 
             // for each parameters checks if it needs to be compiled or if it is constant
             if (currentParam.startsWith("$") && currentParam.endsWith("$")) {
-                result[i] = VariableSupplierCompiler.compile(currentParam.trim());
+                result[i] = ExpressionCompiler.compile(currentParam.trim());
             }
             else {
-                result[i] = VariableSupplierCaster.cast(params[i]);
+                result[i] = ConstantExpressionCaster.cast(params[i]);
             }
         }
 

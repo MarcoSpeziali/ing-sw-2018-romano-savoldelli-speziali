@@ -1,46 +1,54 @@
 package it.polimi.ingsw.compilers.actions;
 
-import it.polimi.ingsw.compilers.actions.ActionGroupCompiler;
-import it.polimi.ingsw.compilers.actions.CompiledAction;
-import it.polimi.ingsw.compilers.actions.CompiledActionGroup;
-import it.polimi.ingsw.compilers.actions.CompiledExecutableAction;
+import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
+import it.polimi.ingsw.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
+import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.actions.*;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.IterableRange;
+import it.polimi.ingsw.utils.io.XmlUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 class ActionGroupCompilerTest {
 
-    @Test
-    void testEmptyGroup() throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException {
-        ActionGroupCompiler compiler = new ActionGroupCompiler();
+    private List<ActionDirective> directiveList;
+    private Die die = mock(Die.class);
 
+    @BeforeEach
+    void setUp() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
+        this.directiveList = ActionDirectivesCompiler.compile(
+                "directives/actions-directives-full.xml",
+                true
+        );
+
+        Context.getSharedInstance().put("DIE", this.die);
+    }
+
+    @Test
+    void testEmptyGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group id=\"empty\" root=\"none\">" +
                 "</action-group>";
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlActionGroup));
-        Document doc = builder.parse(is);
-
-        CompiledActionGroup compiledActionGroup = compiler.compile(doc.getDocumentElement(), null);
+        CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
+                XmlUtils.parseXmlString(xmlActionGroup),
+                this.directiveList,
+                null
+        );
 
         Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
-        Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getChooseBetween());
+        Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
 
         ActionData actionData = compiledActionGroup.getActionData();
@@ -55,23 +63,20 @@ class ActionGroupCompilerTest {
     }
 
     @Test
-    void testGroupWithFixedRepetitions() throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException {
-        ActionGroupCompiler compiler = new ActionGroupCompiler();
-
+    void testGroupWithFixedRepetitions() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group id=\"empty\" root=\"none\" repetitions=\"4\">" +
                 "</action-group>";
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlActionGroup));
-        Document doc = builder.parse(is);
-
-        CompiledActionGroup compiledActionGroup = compiler.compile(doc.getDocumentElement(), null);
+        CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
+                XmlUtils.parseXmlString(xmlActionGroup),
+                this.directiveList,
+                null
+        );
 
         Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
-        Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getChooseBetween());
+        Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(4, compiledActionGroup.getRepetitions().getStart().intValue());
         Assertions.assertEquals(4, compiledActionGroup.getRepetitions().getEnd().intValue());
 
@@ -87,23 +92,20 @@ class ActionGroupCompilerTest {
     }
 
     @Test
-    void testGroupWithRangedRepetitions() throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException {
-        ActionGroupCompiler compiler = new ActionGroupCompiler();
-
+    void testGroupWithRangedRepetitions() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group id=\"empty\" root=\"none\" repetitions=\"2..6\">" +
                 "</action-group>";
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlActionGroup));
-        Document doc = builder.parse(is);
-
-        CompiledActionGroup compiledActionGroup = compiler.compile(doc.getDocumentElement(), null);
+        CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
+                XmlUtils.parseXmlString(xmlActionGroup),
+                this.directiveList,
+                null
+        );
 
         Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
-        Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getChooseBetween());
+        Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(2, compiledActionGroup.getRepetitions().getStart().intValue());
         Assertions.assertEquals(6, compiledActionGroup.getRepetitions().getEnd().intValue());
 
@@ -119,19 +121,16 @@ class ActionGroupCompilerTest {
     }
 
     @Test
-    void testGroupWithFixedChooseBetween() throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException {
-        ActionGroupCompiler compiler = new ActionGroupCompiler();
-
+    void testGroupWithFixedChooseBetween() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group id=\"empty\" root=\"none\" chooseBetween=\"4\">" +
                 "</action-group>";
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlActionGroup));
-        Document doc = builder.parse(is);
-
-        CompiledActionGroup compiledActionGroup = compiler.compile(doc.getDocumentElement(), null);
+        CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
+                XmlUtils.parseXmlString(xmlActionGroup),
+                this.directiveList,
+                null
+        );
 
         Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
@@ -151,19 +150,16 @@ class ActionGroupCompilerTest {
     }
 
     @Test
-    void testGroupWithRangedChooseBetween() throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException {
-        ActionGroupCompiler compiler = new ActionGroupCompiler();
-
+    void testGroupWithRangedChooseBetween() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group id=\"empty\" root=\"none\" chooseBetween=\"2..6\">" +
                 "</action-group>";
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlActionGroup));
-        Document doc = builder.parse(is);
-
-        CompiledActionGroup compiledActionGroup = compiler.compile(doc.getDocumentElement(), null);
+        CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
+                XmlUtils.parseXmlString(xmlActionGroup),
+                this.directiveList,
+                null
+        );
 
         Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
@@ -183,25 +179,22 @@ class ActionGroupCompilerTest {
     }
 
     @Test
-    void testSimpleGroup() throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException {
-        ActionGroupCompiler compiler = new ActionGroupCompiler();
-
+    void testSimpleGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group id=\"inc_dec\" root=\"inc\">" +
                         "   <action id=\"inc\" effect=\"increment $DIE$ 1\" />" +
                         "   <action id=\"dec\" effect=\"decrement $DIE$ 1\" />" +
                         "</action-group>";
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlActionGroup));
-        Document doc = builder.parse(is);
-
-        CompiledActionGroup compiledActionGroup = compiler.compile(doc.getDocumentElement(), null);
+        CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
+                XmlUtils.parseXmlString(xmlActionGroup),
+                this.directiveList,
+                null
+        );
 
         Assertions.assertEquals("inc", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
-        Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getChooseBetween());
+        Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
 
         ActionData actionData = compiledActionGroup.getActionData();
@@ -220,7 +213,7 @@ class ActionGroupCompilerTest {
 
         Assertions.assertEquals("increment", firstAction.getActionId());
         Assertions.assertEquals(IncrementAction.class, firstAction.getClassToInstantiate());
-        Assertions.assertEquals(false, firstAction.getRequiresUserInteraction());
+        Assertions.assertEquals(false, firstAction.requiresUserInteraction());
 
         ActionData firstActionData = firstAction.getActionData();
 
@@ -230,24 +223,34 @@ class ActionGroupCompilerTest {
         Assertions.assertNull(firstActionData.getResultIdentifier());
         Assertions.assertNull(firstActionData.getConstraint());
 
-        ActionParameter[] firstActionParameters = firstAction.getParameters();
-        Assertions.assertEquals(2, firstActionParameters.length);
+        List<ActionParameter> firstActionParameters = firstAction.getParameters();
+        Assertions.assertEquals(2, firstActionParameters.size());
 
-        Assertions.assertSame(0, firstActionParameters[0].getPosition());
-        Assertions.assertEquals(Die.class, firstActionParameters[0].getType());
-        Assertions.assertEquals("DIE", firstActionParameters[0].getValue().getRawValue());
-        Assertions.assertTrue(firstActionParameters[0].getValue().needsToBeComputed());
+        Assertions.assertSame(0, firstActionParameters.get(0).getPosition());
+        Assertions.assertEquals(Die.class, firstActionParameters.get(0).getType());
+        Assertions.assertSame(
+                this.die,
+                firstActionParameters.get(0).getParameterValue().get(Context.getSharedInstance())
+        );
+        Assertions.assertFalse(firstActionParameters.get(0).isOptional());
+        Assertions.assertNull(firstActionParameters.get(0).getDefaultValue());
+        Assertions.assertNull(firstActionParameters.get(0).getOptionalName());
 
-        Assertions.assertSame(1, firstActionParameters[1].getPosition());
-        Assertions.assertEquals(Integer.class, firstActionParameters[1].getType());
-        Assertions.assertEquals("1", firstActionParameters[1].getValue().getRawValue());
-        Assertions.assertFalse(firstActionParameters[1].getValue().needsToBeComputed());
+        Assertions.assertSame(1, firstActionParameters.get(1).getPosition());
+        Assertions.assertEquals(Integer.class, firstActionParameters.get(1).getType());
+        Assertions.assertEquals(
+                1,
+                firstActionParameters.get(1).getParameterValue().get(Context.getSharedInstance())
+        );
+        Assertions.assertFalse(firstActionParameters.get(1).isOptional());
+        Assertions.assertNull(firstActionParameters.get(1).getDefaultValue());
+        Assertions.assertNull(firstActionParameters.get(1).getOptionalName());
 
         CompiledAction secondAction = (CompiledAction) innerActions.get(1);
 
         Assertions.assertEquals("decrement", secondAction.getActionId());
         Assertions.assertEquals(DecrementAction.class, secondAction.getClassToInstantiate());
-        Assertions.assertEquals(false, secondAction.getRequiresUserInteraction());
+        Assertions.assertEquals(false, secondAction.requiresUserInteraction());
 
         ActionData secondActionData = secondAction.getActionData();
 
@@ -257,24 +260,32 @@ class ActionGroupCompilerTest {
         Assertions.assertNull(secondActionData.getResultIdentifier());
         Assertions.assertNull(secondActionData.getConstraint());
 
-        ActionParameter[] secondActionParameters = firstAction.getParameters();
-        Assertions.assertEquals(2, secondActionParameters.length);
+        List<ActionParameter> secondActionParameters = firstAction.getParameters();
+        Assertions.assertEquals(2, secondActionParameters.size());
 
-        Assertions.assertSame(0, secondActionParameters[0].getPosition());
-        Assertions.assertEquals(Die.class, secondActionParameters[0].getType());
-        Assertions.assertEquals("DIE", secondActionParameters[0].getValue().getRawValue());
-        Assertions.assertTrue(secondActionParameters[0].getValue().needsToBeComputed());
+        Assertions.assertSame(0, secondActionParameters.get(0).getPosition());
+        Assertions.assertEquals(Die.class, secondActionParameters.get(0).getType());
+        Assertions.assertEquals(
+                this.die,
+                secondActionParameters.get(0).getParameterValue().get(Context.getSharedInstance())
+        );
+        Assertions.assertFalse(secondActionParameters.get(0).isOptional());
+        Assertions.assertNull(secondActionParameters.get(0).getDefaultValue());
+        Assertions.assertNull(secondActionParameters.get(0).getOptionalName());
 
-        Assertions.assertSame(1, secondActionParameters[1].getPosition());
-        Assertions.assertEquals(Integer.class, secondActionParameters[1].getType());
-        Assertions.assertEquals("1", secondActionParameters[1].getValue().getRawValue());
-        Assertions.assertFalse(secondActionParameters[1].getValue().needsToBeComputed());
+        Assertions.assertSame(1, secondActionParameters.get(1).getPosition());
+        Assertions.assertEquals(Integer.class, secondActionParameters.get(1).getType());
+        Assertions.assertEquals(
+                1,
+                secondActionParameters.get(1).getParameterValue().get(Context.getSharedInstance())
+        );
+        Assertions.assertFalse(secondActionParameters.get(1).isOptional());
+        Assertions.assertNull(secondActionParameters.get(1).getDefaultValue());
+        Assertions.assertNull(secondActionParameters.get(1).getOptionalName());
     }
 
     @Test
-    void testComplexGroup() throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException {
-        ActionGroupCompiler compiler = new ActionGroupCompiler();
-
+    void testComplexGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group id=\"inc_dec\" root=\"start\">\n" +
                 "    <action id=\"start\" effect=\"increment $DIE$ 1\" next=\"dec\" />\n" +
@@ -297,16 +308,15 @@ class ActionGroupCompilerTest {
                 "    <action id=\"place\" effect=\"place $DIE$ $window$ $POS$\"/>\n" +
                 "</action-group>";
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlActionGroup));
-        Document doc = builder.parse(is);
-
-        CompiledActionGroup compiledActionGroup = compiler.compile(doc.getDocumentElement(), null);
+        CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
+                XmlUtils.parseXmlString(xmlActionGroup),
+                this.directiveList,
+                null
+        );
 
         Assertions.assertEquals("start", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
-        Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getChooseBetween());
+        Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
 
         ActionData actionData = compiledActionGroup.getActionData();

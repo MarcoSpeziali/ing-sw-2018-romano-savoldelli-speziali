@@ -5,58 +5,93 @@ import it.polimi.ingsw.core.actions.ActionGroup;
 import it.polimi.ingsw.core.actions.ExecutableAction;
 import it.polimi.ingsw.utils.IterableRange;
 
+import java.io.Serializable;
 import java.util.List;
 
-// TODO: docs
-public class CompiledActionGroup implements CompiledExecutableAction {
+/**
+ * Holds the needed values to instantiate an action group.
+ */
+public class CompiledActionGroup implements CompiledExecutableAction, Serializable {
+
+    private static final long serialVersionUID = 2637851216785706962L;
+
+    /**
+     * The data of the action.
+     */
+    @SuppressWarnings("squid:S1948")
     private ActionData actionData;
+
+
+    /**
+     * The id of the first action in the list of sub-actions.
+     */
     private String rootActionId;
+
+    /**
+     * The sub-actions.
+     */
+    @SuppressWarnings("squid:S1948")
     private List<CompiledExecutableAction> actions;
+
+    /**
+     * The range of repetitions.
+     */
     private IterableRange<Integer> repetitions;
+
+    /**
+     * The range of choose between.
+     */
     private IterableRange<Integer> chooseBetween;
 
+    /**
+     * @return the data of the action
+     */
+    @Override
     public ActionData getActionData() {
         return actionData;
     }
 
-    public void setActionData(ActionData actionData) {
-        this.actionData = actionData;
+    /**
+     * @return the class of the action
+     */
+    @Override
+    public Class<? extends ExecutableAction> getClassToInstantiate() {
+        return ActionGroup.class;
     }
 
-    public List<CompiledExecutableAction> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<CompiledExecutableAction> actions) {
-        this.actions = actions;
-    }
-
-    public IterableRange<Integer> getRepetitions() {
-        return repetitions;
-    }
-
-    public void setRepetitions(IterableRange<Integer> repetitions) {
-        this.repetitions = repetitions;
-    }
-
-    public IterableRange<Integer> getChooseBetween() {
-        return chooseBetween;
-    }
-
-    public void setChooseBetween(IterableRange<Integer> chooseBetween) {
-        this.chooseBetween = chooseBetween;
-    }
-
+    /**
+     * @return the id of the first action in the list of sub-actions
+     */
     public String getRootActionId() {
         return rootActionId;
     }
 
-    public void setRootActionId(String rootActionId) {
-        this.rootActionId = rootActionId;
+    /**
+     * @return the sub-actions
+     */
+    public List<CompiledExecutableAction> getActions() {
+        return actions;
     }
 
-    @Override
-    public Class<? extends ExecutableAction> getClassToInstantiate() {
-        return ActionGroup.class;
+    /**
+     * @return the range of repetitions
+     */
+    public IterableRange<Integer> getRepetitions() {
+        return repetitions;
+    }
+
+    /**
+     * @return the range of choose between
+     */
+    public IterableRange<Integer> getChooseBetween() {
+        return chooseBetween;
+    }
+
+    public CompiledActionGroup(ActionData actionData, String rootActionId, List<CompiledExecutableAction> actions, IterableRange<Integer> repetitions, IterableRange<Integer> chooseBetween) {
+        this.actionData = actionData;
+        this.rootActionId = rootActionId;
+        this.actions = actions;
+        this.repetitions = repetitions;
+        this.chooseBetween = chooseBetween;
     }
 }

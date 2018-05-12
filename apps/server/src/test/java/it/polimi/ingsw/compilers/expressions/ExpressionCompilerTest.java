@@ -1,7 +1,5 @@
-package it.polimi.ingsw.compilers.variables;
+package it.polimi.ingsw.compilers.expressions;
 
-import it.polimi.ingsw.compilers.variables.MalformedVariableException;
-import it.polimi.ingsw.compilers.variables.VariableSupplierCompiler;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Die;
@@ -9,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class VariableSupplierCompilerTest {
+class ExpressionCompilerTest {
 
     private Die die;
 
@@ -24,7 +22,7 @@ class VariableSupplierCompilerTest {
     @Test
     void testSimple() {
         String predicate = "$DIE$";
-        Die die = (Die) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        Die die = (Die) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
 
         Assertions.assertSame(this.die, die);
     }
@@ -32,7 +30,7 @@ class VariableSupplierCompilerTest {
     @Test
     void testSimpleFunction() {
         String predicate = "$DIE::getShade()$";
-        Integer shade = (Integer) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        Integer shade = (Integer) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
 
         Assertions.assertEquals(3, shade.intValue());
     }
@@ -40,7 +38,7 @@ class VariableSupplierCompilerTest {
     @Test
     void testSimpleFunction2() {
         String predicate = "$DIE::getShade()::intValue()$";
-        int shade = (int) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        int shade = (int) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
 
         Assertions.assertEquals(3, shade);
     }
@@ -48,7 +46,7 @@ class VariableSupplierCompilerTest {
     @Test
     void testSimpleFunctionWithParameters() {
         String predicate = "$DIE::getShade()::compareTo(4)$";
-        int res = (int) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        int res = (int) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
 
         Assertions.assertEquals(-1, res);
     }
@@ -57,7 +55,7 @@ class VariableSupplierCompilerTest {
     void testFieldAccess() {
         String predicate = "$test_class::a$";
 
-        int res = (int) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        int res = (int) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         Assertions.assertEquals(19, res);
     }
 
@@ -65,7 +63,7 @@ class VariableSupplierCompilerTest {
     void testSemiComplexFunction() {
         String predicate = "$test_class::useDie($DIE$, 4, \"test\")$";
 
-        boolean res = (boolean) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        boolean res = (boolean) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         Assertions.assertFalse(res);
     }
 
@@ -73,7 +71,7 @@ class VariableSupplierCompilerTest {
     void testComplexFunction() {
         String predicate = "$test_class::useDie($DIE$, $test_class::getA()$, \"test\")$";
 
-        boolean res = (boolean) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        boolean res = (boolean) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         Assertions.assertFalse(res);
     }
 
@@ -81,7 +79,7 @@ class VariableSupplierCompilerTest {
     void testStringWithDollarSignFunction() {
         String predicate = "$test_class::useDie($DIE$, 12, \"15\\$\")$";
 
-        boolean res = (boolean) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        boolean res = (boolean) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         Assertions.assertFalse(res);
     }
 
@@ -89,8 +87,8 @@ class VariableSupplierCompilerTest {
     void testNoSuchFieldException() {
         String predicate = "$test_class::non_existing$";
 
-        Assertions.assertThrows(MalformedVariableException.class, () -> {
-            VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        Assertions.assertThrows(MalformedExpressionException.class, () -> {
+            ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         });
     }
 
@@ -98,8 +96,8 @@ class VariableSupplierCompilerTest {
     void testMalformedException() {
         String predicate = "$test_class::non_existing(;$";
 
-        Assertions.assertThrows(MalformedVariableException.class, () -> {
-            VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        Assertions.assertThrows(MalformedExpressionException.class, () -> {
+            ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         });
     }
 
@@ -107,8 +105,8 @@ class VariableSupplierCompilerTest {
     void testIllegalAccessExceptionForField() {
         String predicate = "$test_class::b$";
 
-        Assertions.assertThrows(MalformedVariableException.class, () -> {
-            VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        Assertions.assertThrows(MalformedExpressionException.class, () -> {
+            ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         });
     }
 
@@ -116,8 +114,8 @@ class VariableSupplierCompilerTest {
     void testIllegalAccessExceptionForMethod() {
         String predicate = "$test_class::x()$";
 
-        Assertions.assertThrows(MalformedVariableException.class, () -> {
-            VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        Assertions.assertThrows(MalformedExpressionException.class, () -> {
+            ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         });
     }
 
@@ -125,8 +123,8 @@ class VariableSupplierCompilerTest {
     void testNoSuchMethodException() {
         String predicate = "$test_class::b()$";
 
-        Assertions.assertThrows(MalformedVariableException.class, () -> {
-            VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        Assertions.assertThrows(MalformedExpressionException.class, () -> {
+            ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         });
     }
 
@@ -134,7 +132,7 @@ class VariableSupplierCompilerTest {
     void testConstant() {
         String predicate = "true";
 
-        boolean res = (boolean) VariableSupplierCompiler.compile(predicate).get(Context.getSharedInstance());
+        boolean res = (boolean) ExpressionCompiler.compile(predicate).get(Context.getSharedInstance());
         Assertions.assertTrue(res);
     }
 

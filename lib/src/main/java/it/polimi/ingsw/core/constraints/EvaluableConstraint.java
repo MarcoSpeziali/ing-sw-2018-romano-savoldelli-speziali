@@ -2,8 +2,10 @@ package it.polimi.ingsw.core.constraints;
 
 import it.polimi.ingsw.core.Context;
 
+import java.io.Serializable;
+
 //@FunctionalInterface
-public interface EvaluableConstraint {
+public interface EvaluableConstraint extends Serializable {
     /**
      * @param context The context on which the constraints will be ran.
      * @return {@code True} if the constraint is satisfied, {@code false} otherwise.

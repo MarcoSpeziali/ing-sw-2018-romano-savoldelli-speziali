@@ -10,4 +10,4 @@
             <parameter name="dice" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
         </parameters>
     </predicate>
-</predicate>
+</predicates>

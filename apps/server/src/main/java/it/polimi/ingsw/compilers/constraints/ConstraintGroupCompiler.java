@@ -10,6 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is responsable for compiling a constraint-group.
+ */
 public class ConstraintGroupCompiler {
 
     private static final String CONSTRAINT_NODE_NAME = "constraint";

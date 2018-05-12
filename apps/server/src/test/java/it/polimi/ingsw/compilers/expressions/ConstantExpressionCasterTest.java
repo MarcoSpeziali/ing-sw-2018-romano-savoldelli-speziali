@@ -1,6 +1,5 @@
-package it.polimi.ingsw.compilers.variables;
+package it.polimi.ingsw.compilers.expressions;
 
-import it.polimi.ingsw.compilers.variables.VariableSupplierCaster;
 import it.polimi.ingsw.core.GlassColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,16 +9,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-class VariableSupplierCasterTest {
+class ConstantExpressionCasterTest {
 
     @Test
     void testNullVariable() {
-        Assertions.assertNull(VariableSupplierCaster.cast("null"));
+        Assertions.assertNull(ConstantExpressionCaster.cast("null"));
     }
 
     @Test
     void testIntegerVariable() {
-        Object casted = VariableSupplierCaster.cast("12");
+        Object casted = ConstantExpressionCaster.cast("12");
 
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(Integer.class, casted.getClass());
@@ -28,7 +27,7 @@ class VariableSupplierCasterTest {
 
     @Test
     void testFloatVariable1() {
-        Object casted = VariableSupplierCaster.cast("12.0");
+        Object casted = ConstantExpressionCaster.cast("12.0");
 
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(Double.class, casted.getClass());
@@ -37,7 +36,7 @@ class VariableSupplierCasterTest {
 
     @Test
     void testFloatVariable2() {
-        Object casted = VariableSupplierCaster.cast(".04");
+        Object casted = ConstantExpressionCaster.cast(".04");
 
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(Double.class, casted.getClass());
@@ -46,7 +45,7 @@ class VariableSupplierCasterTest {
 
     @Test
     void testFloatVariable3() {
-        Object casted = VariableSupplierCaster.cast("0.04");
+        Object casted = ConstantExpressionCaster.cast("0.04");
 
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(Double.class, casted.getClass());
@@ -55,7 +54,7 @@ class VariableSupplierCasterTest {
 
     @Test
     void testString() {
-        Object casted = VariableSupplierCaster.cast("\"test\"");
+        Object casted = ConstantExpressionCaster.cast("\"test\"");
 
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(String.class, casted.getClass());
@@ -65,7 +64,7 @@ class VariableSupplierCasterTest {
     @ParameterizedTest
     @MethodSource("testBooleanArguments")
     void testBoolean(String booleanString, Boolean expectedResult) {
-        Object casted = VariableSupplierCaster.cast(booleanString);
+        Object casted = ConstantExpressionCaster.cast(booleanString);
 
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(Boolean.class, casted.getClass());
@@ -75,7 +74,7 @@ class VariableSupplierCasterTest {
     @ParameterizedTest
     @MethodSource("testStringVariableArguments")
     void testStringVariable(String colorString, GlassColor expectedColor) {
-        Object casted = VariableSupplierCaster.cast(colorString);
+        Object casted = ConstantExpressionCaster.cast(colorString);
 
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(GlassColor.class, casted.getClass());
@@ -85,7 +84,7 @@ class VariableSupplierCasterTest {
     @Test
     void testIllegalArgumentException() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            VariableSupplierCaster.cast("test");
+            ConstantExpressionCaster.cast("test");
         });
     }
 

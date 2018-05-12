@@ -7,7 +7,6 @@ import it.polimi.ingsw.core.locations.ChooseLocation;
 
 public class ChooseDieAction extends Action {
 
-    @SuppressWarnings("WeakerAccess")
     protected final UserInteractionProvider userInteractionProvider;
     protected final ChooseLocation from;
     protected final VariableSupplier<GlassColor> color;

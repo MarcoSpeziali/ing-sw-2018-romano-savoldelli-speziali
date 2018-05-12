@@ -2,9 +2,13 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Die {
+public class Die implements Serializable {
+
+    private static final long serialVersionUID = -311416275888290395L;
+
     private GlassColor color;
 
     private Integer shade;

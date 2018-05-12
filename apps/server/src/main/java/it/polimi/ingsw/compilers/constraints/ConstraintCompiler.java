@@ -1,6 +1,6 @@
 package it.polimi.ingsw.compilers.constraints;
 
-import it.polimi.ingsw.compilers.variables.VariableSupplierCompiler;
+import it.polimi.ingsw.compilers.expressions.ExpressionCompiler;
 import it.polimi.ingsw.core.actions.VariableSupplier;
 import it.polimi.ingsw.core.constraints.Constraint;
 import it.polimi.ingsw.core.constraints.Operator;
@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is responsable for compiling a single constraint.
+ */
 public class ConstraintCompiler {
 
     private ConstraintCompiler() {}
@@ -53,8 +56,8 @@ public class ConstraintCompiler {
             VariableSupplier<Object> leftOperandSupplier;
             VariableSupplier<Object> rightOperandSupplier;
 
-            leftOperandSupplier = VariableSupplierCompiler.compile(leftOperand);
-            rightOperandSupplier = VariableSupplierCompiler.compile(rightOperand);
+            leftOperandSupplier = ExpressionCompiler.compile(leftOperand);
+            rightOperandSupplier = ExpressionCompiler.compile(rightOperand);
 
             return new Constraint(constraintId, leftOperandSupplier, Operator.fromString(operator), rightOperandSupplier);
         }

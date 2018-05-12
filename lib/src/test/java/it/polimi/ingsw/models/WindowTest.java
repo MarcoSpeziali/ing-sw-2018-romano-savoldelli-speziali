@@ -2,14 +2,12 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.locations.AlreadyPutException;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class WindowTest {
@@ -22,24 +20,15 @@ class WindowTest {
     void setUp() {
         this.die = new Die(GlassColor.YELLOW,5);
 
-        this.cells = new Cell[][]{
+        this.cells = new Cell[][] { // 0, 1, 4, 5(edge), 11
                 {
-                        new Cell(0, null),
-                        new Cell(5, null),
-                        new Cell(4, null),
-                        new Cell(0, GlassColor.GREEN)
+                        new Cell(0, null),      new Cell(5, null), new Cell(4, null),       new Cell(0, GlassColor.GREEN)
                 },
                 {
-                        new Cell(0, null),
-                        new Cell(0, null),
-                        new Cell(2, null),
-                        new Cell(0, GlassColor.PURPLE)
+                        new Cell(0, null),      new Cell(0, null), new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
                 },
                 {
-                        new Cell(0, GlassColor.BLUE),
-                        new Cell(2, null),
-                        new Cell(0, GlassColor.RED),
-                        new Cell(0, GlassColor.YELLOW)
+                        new Cell(0, GlassColor.BLUE), new Cell(2, null), new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
                 }
         };
 
@@ -122,7 +111,7 @@ class WindowTest {
     // TODO controllare lancio NullPointerException per motivo non ben chiaro
     void pickDie1Test() {
         window.putDie(die, 1);
-        Assertions.assertSame(die, window.pickDie(die));
+        Assertions.assertTrue(window.getDice().contains(die));
         int num = window.getNumberOfDice();
         window.pickDie(die);
         Assertions.assertEquals(window.getNumberOfDice(), num - 1);
