@@ -11,8 +11,6 @@ class ActionDataTest {
     @BeforeEach
     void setUp() {
         this.actionData = new ActionData(
-                "id",
-                "next_action_id",
                 "description_key",
                 null,
                 "res"
@@ -21,8 +19,6 @@ class ActionDataTest {
 
     @Test
     void testGetters() {
-        Assertions.assertEquals("id", this.actionData.getId());
-        Assertions.assertEquals("next_action_id", this.actionData.getNextActionId());
         Assertions.assertEquals("description_key", this.actionData.getDescriptionKey());
 
         Assertions.assertNull(this.actionData.getConstraint());

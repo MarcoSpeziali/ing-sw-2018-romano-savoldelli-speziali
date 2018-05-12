@@ -60,7 +60,7 @@ class WindowTest {
     void getPossiblePositionsForDie() {
         List<Integer> admitted = List.of(0,1,4,11);
         Assertions.assertTrue(window.getPossiblePositionsForDie(die, false, false, false).containsAll(admitted));
-        Assertions.assertEquals(6, window.getPossiblePositionsForDie(die, false, false, false).size());
+        Assertions.assertEquals(4, window.getPossiblePositionsForDie(die, false, false, false).size());
     }
 
     @Test

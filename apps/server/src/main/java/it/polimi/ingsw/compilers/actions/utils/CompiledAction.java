@@ -1,6 +1,5 @@
-package it.polimi.ingsw.compilers.actions;
+package it.polimi.ingsw.compilers.actions.utils;
 
-import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.actions.ExecutableAction;
 

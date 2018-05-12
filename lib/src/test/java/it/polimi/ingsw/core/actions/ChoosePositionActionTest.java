@@ -14,7 +14,7 @@ class ChoosePositionActionTest {
 
     private ChoosePositionAction action;
     private Context context = Context.getSharedInstance();
-    private ActionData testData = new ActionData("test", null, null, null, null);
+    private ActionData testData = new NullActionData();
 
     @BeforeEach
     void setUp() {

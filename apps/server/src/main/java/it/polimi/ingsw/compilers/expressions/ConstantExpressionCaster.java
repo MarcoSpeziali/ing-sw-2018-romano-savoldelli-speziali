@@ -53,7 +53,7 @@ public class ConstantExpressionCaster {
      * Lazily return the pattern.
      */
     private static Supplier<Pattern> nullPattern = () -> {
-        Pattern pattern = Pattern.compile(NULL_PATTERN);
+        Pattern pattern = Pattern.compile(NULL_PATTERN, Pattern.CASE_INSENSITIVE);
         nullPattern = () -> pattern;
         return pattern;
     };
@@ -62,7 +62,7 @@ public class ConstantExpressionCaster {
      * Lazily return the pattern.
      */
     private static Supplier<Pattern> colorPattern = () -> {
-        Pattern pattern = Pattern.compile(COLOR_PATTERN);
+        Pattern pattern = Pattern.compile(COLOR_PATTERN, Pattern.CASE_INSENSITIVE);
         colorPattern = () -> pattern;
         return pattern;
     };
@@ -71,7 +71,7 @@ public class ConstantExpressionCaster {
      * Lazily return the pattern.
      */
     private static Supplier<Pattern> booleanPattern = () -> {
-        Pattern pattern = Pattern.compile(BOOLEAN_PATTER);
+        Pattern pattern = Pattern.compile(BOOLEAN_PATTER, Pattern.CASE_INSENSITIVE);
         booleanPattern = () -> pattern;
         return pattern;
     };

@@ -22,8 +22,6 @@ class ActionTest {
     @Test
     void testDefaultRunThrows() {
         this.action.data = new ActionData(
-                "id",
-                null,
                 null,
                 new Constraint(
                         null,
@@ -42,8 +40,6 @@ class ActionTest {
     @Test
     void testDefaultRun() {
         this.action.data = new ActionData(
-                "id",
-                null,
                 null,
                 null,
                 null

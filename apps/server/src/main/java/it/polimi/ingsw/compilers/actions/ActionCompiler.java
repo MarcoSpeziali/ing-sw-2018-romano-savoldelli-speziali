@@ -3,6 +3,7 @@ package it.polimi.ingsw.compilers.actions;
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.compilers.actions.directives.ActionParameterDirective;
 import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
+import it.polimi.ingsw.compilers.actions.utils.CompiledAction;
 import it.polimi.ingsw.compilers.expressions.ExpressionCompiler;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
@@ -44,12 +45,6 @@ public class ActionCompiler {
      * @return An instance of {@link CompiledAction}
      */
     public static CompiledAction compile(Map<String, Object> actionInfo, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
-        // the id of the action
-        String id = (String) actionInfo.get(ActionNodes.ACTION_ID);
-
-        // the next action's id
-        String next = (String) actionInfo.get(ActionNodes.ACTION_NEXT_ID);
-
         // the description key
         String description = (String) actionInfo.get(ActionNodes.ACTION_DESCRIPTION);
 
@@ -83,15 +78,13 @@ public class ActionCompiler {
                         .filter(evaluableConstraint -> evaluableConstraint.getId().equals(constraintId))
                         .findFirst()
                         // if none found an exception must be thrown
-                        .orElseThrow(() -> new ConstraintNotFoundException(constraintId, id));
+                        .orElseThrow(() -> new ConstraintNotFoundException(constraintId));
 
         // finally creating the compiled action
         return new CompiledAction(
                 effectId,
                 targetDirective.getTargetClass(),
                 new ActionData(
-                        id,
-                        next,
                         description,
                         constraint,
                         result
@@ -248,8 +241,6 @@ public class ActionCompiler {
      */
     private final class ActionNodes {
         static final String ROOT = "action";
-        static final String ACTION_ID = "@id";
-        static final String ACTION_NEXT_ID = "@next";
         static final String ACTION_EFFECT = "@effect";
         static final String ACTION_DESCRIPTION = "@description";
         static final String ACTION_CONSTRAINT = "@constraint";

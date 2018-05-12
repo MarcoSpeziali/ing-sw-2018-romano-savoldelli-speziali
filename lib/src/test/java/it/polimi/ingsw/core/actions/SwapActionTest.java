@@ -11,7 +11,7 @@ class SwapActionTest {
 
     private SwapAction action;
     private Context context = Context.getSharedInstance();
-    private ActionData testData = new ActionData("test", null, null, null, null);
+    private ActionData testData = new NullActionData();
     private Die die1;
     private Die die2;
 

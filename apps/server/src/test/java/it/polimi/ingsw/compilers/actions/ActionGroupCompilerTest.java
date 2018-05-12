@@ -3,6 +3,9 @@ package it.polimi.ingsw.compilers.actions;
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
+import it.polimi.ingsw.compilers.actions.utils.CompiledAction;
+import it.polimi.ingsw.compilers.actions.utils.CompiledActionGroup;
+import it.polimi.ingsw.compilers.actions.utils.CompiledExecutableAction;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.actions.*;
 import it.polimi.ingsw.models.Die;
@@ -37,7 +40,7 @@ class ActionGroupCompilerTest {
     @Test
     void testEmptyGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
-                "<action-group id=\"empty\" root=\"none\">" +
+                "<action-group>" +
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -46,15 +49,12 @@ class ActionGroupCompilerTest {
                 null
         );
 
-        Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
         Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
 
         ActionData actionData = compiledActionGroup.getActionData();
 
-        Assertions.assertEquals("empty", actionData.getId());
-        Assertions.assertNull(actionData.getNextActionId());
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -65,7 +65,7 @@ class ActionGroupCompilerTest {
     @Test
     void testGroupWithFixedRepetitions() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
-                "<action-group id=\"empty\" root=\"none\" repetitions=\"4\">" +
+                "<action-group repetitions=\"4\">" +
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -74,7 +74,6 @@ class ActionGroupCompilerTest {
                 null
         );
 
-        Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
         Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(4, compiledActionGroup.getRepetitions().getStart().intValue());
@@ -82,8 +81,6 @@ class ActionGroupCompilerTest {
 
         ActionData actionData = compiledActionGroup.getActionData();
 
-        Assertions.assertEquals("empty", actionData.getId());
-        Assertions.assertNull(actionData.getNextActionId());
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -94,7 +91,7 @@ class ActionGroupCompilerTest {
     @Test
     void testGroupWithRangedRepetitions() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
-                "<action-group id=\"empty\" root=\"none\" repetitions=\"2..6\">" +
+                "<action-group repetitions=\"2..6\">" +
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -103,7 +100,6 @@ class ActionGroupCompilerTest {
                 null
         );
 
-        Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
         Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(2, compiledActionGroup.getRepetitions().getStart().intValue());
@@ -111,8 +107,6 @@ class ActionGroupCompilerTest {
 
         ActionData actionData = compiledActionGroup.getActionData();
 
-        Assertions.assertEquals("empty", actionData.getId());
-        Assertions.assertNull(actionData.getNextActionId());
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -123,7 +117,7 @@ class ActionGroupCompilerTest {
     @Test
     void testGroupWithFixedChooseBetween() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
-                "<action-group id=\"empty\" root=\"none\" chooseBetween=\"4\">" +
+                "<action-group chooseBetween=\"4\">" +
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -132,7 +126,6 @@ class ActionGroupCompilerTest {
                 null
         );
 
-        Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
         Assertions.assertEquals(4, compiledActionGroup.getChooseBetween().getStart().intValue());
@@ -140,8 +133,6 @@ class ActionGroupCompilerTest {
 
         ActionData actionData = compiledActionGroup.getActionData();
 
-        Assertions.assertEquals("empty", actionData.getId());
-        Assertions.assertNull(actionData.getNextActionId());
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -152,7 +143,7 @@ class ActionGroupCompilerTest {
     @Test
     void testGroupWithRangedChooseBetween() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
-                "<action-group id=\"empty\" root=\"none\" chooseBetween=\"2..6\">" +
+                "<action-group chooseBetween=\"2..6\">" +
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -161,16 +152,13 @@ class ActionGroupCompilerTest {
                 null
         );
 
-        Assertions.assertEquals("none", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
         Assertions.assertEquals(2, compiledActionGroup.getChooseBetween().getStart().intValue());
         Assertions.assertEquals(6, compiledActionGroup.getChooseBetween().getEnd().intValue());
 
         ActionData actionData = compiledActionGroup.getActionData();
-
-        Assertions.assertEquals("empty", actionData.getId());
-        Assertions.assertNull(actionData.getNextActionId());
+        
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -181,9 +169,9 @@ class ActionGroupCompilerTest {
     @Test
     void testSimpleGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
-                "<action-group id=\"inc_dec\" root=\"inc\">" +
-                        "   <action id=\"inc\" effect=\"increment $DIE$ 1\" />" +
-                        "   <action id=\"dec\" effect=\"decrement $DIE$ 1\" />" +
+                "<action-group>" +
+                        "   <action effect=\"increment $DIE$ 1\" />" +
+                        "   <action effect=\"decrement $DIE$ 1\" />" +
                         "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -192,15 +180,12 @@ class ActionGroupCompilerTest {
                 null
         );
 
-        Assertions.assertEquals("inc", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
         Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
 
         ActionData actionData = compiledActionGroup.getActionData();
 
-        Assertions.assertEquals("inc_dec", actionData.getId());
-        Assertions.assertNull(actionData.getNextActionId());
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -216,9 +201,7 @@ class ActionGroupCompilerTest {
         Assertions.assertEquals(false, firstAction.requiresUserInteraction());
 
         ActionData firstActionData = firstAction.getActionData();
-
-        Assertions.assertEquals("inc", firstActionData.getId());
-        Assertions.assertNull(firstActionData.getNextActionId());
+        
         Assertions.assertNull(firstActionData.getDescriptionKey());
         Assertions.assertNull(firstActionData.getResultIdentifier());
         Assertions.assertNull(firstActionData.getConstraint());
@@ -254,8 +237,6 @@ class ActionGroupCompilerTest {
 
         ActionData secondActionData = secondAction.getActionData();
 
-        Assertions.assertEquals("dec", secondActionData.getId());
-        Assertions.assertNull(secondActionData.getNextActionId());
         Assertions.assertNull(secondActionData.getDescriptionKey());
         Assertions.assertNull(secondActionData.getResultIdentifier());
         Assertions.assertNull(secondActionData.getConstraint());
@@ -287,25 +268,25 @@ class ActionGroupCompilerTest {
     @Test
     void testComplexGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
-                "<action-group id=\"inc_dec\" root=\"start\">\n" +
-                "    <action id=\"start\" effect=\"increment $DIE$ 1\" next=\"dec\" />\n" +
-                "    <action id=\"dec\" effect=\"decrement $DIE$ 1\" next=\"ch_2\" />\n" +
-                "    <action-group id=\"ch_2\" chooseBetween=\"2\" next=\"rep_ch\" root=\"start\" >\n" +
-                "        <action id=\"start\" effect=\"choose_position $window$\" result=\"POS\" next=\"pick\"/>\n" +
-                "        <action id=\"pick\" effect=\"pick_at $window$ $POS$\" result=\"DIE\" next=\"loop\"/>\n" +
-                "        <action-group id=\"loop\" repetitions=\"1..2\" root=\"choose\">\n" +
-                "            <action id=\"choose\" effect=\"choose_die $window$ [color=$DIE_COLOR$]\" result=\"DIE\" next=\"pick\"/>\n" +
-                "            <action id=\"pick\" effect=\"pick_die $window$ $DIE$\" result=\"DIE\" next=\"choose_position\"/>\n" +
-                "            <action id=\"choose_position\" effect=\"choose_position_for_die $window$ $DIE$\" result=\"POS\" next=\"place\" />\n" +
-                "            <action id=\"place\" effect=\"place $DIE$ $window$ $POS$\"/>\n" +
+                "<action-group>\n" +
+                "    <action effect=\"increment $DIE$ 1\"/>\n" +
+                "    <action effect=\"decrement $DIE$ 1\"/>\n" +
+                "    <action-group chooseBetween=\"2\">\n" +
+                "        <action effect=\"choose_position $window$\" result=\"POS\"/>\n" +
+                "        <action effect=\"pick_at $window$ $POS$\" result=\"DIE\"/>\n" +
+                "        <action-group repetitions=\"1..2\">\n" +
+                "            <action effect=\"choose_die $window$ [color=$DIE_COLOR$]\" result=\"DIE\"/>\n" +
+                "            <action effect=\"pick_die $window$ $DIE$\" result=\"DIE\"/>\n" +
+                "            <action effect=\"choose_position_for_die $window$ $DIE$\" result=\"POS\"/>\n" +
+                "            <action effect=\"place $DIE$ $window$ $POS$\"/>\n" +
                 "        </action-group>\n" +
                 "    </action-group>\n" +
-                "    <action-group id=\"rep_ch\" repetitions=\"0..4\" chooseBetween=\"1..7\" next=\"choose_position\">\n" +
-                "        <action id=\"start\" effect=\"choose_die $draft_pool$\" result=\"DIE\" />\n" +
-                "        <action id=\"flip\" effect=\"flip $DIE$\" />\n" +
+                "    <action-group repetitions=\"0..4\" chooseBetween=\"1..7\">\n" +
+                "        <action effect=\"choose_die $draft_pool$\" result=\"DIE\" />\n" +
+                "        <action effect=\"flip $DIE$\" />\n" +
                 "    </action-group>\n" +
-                "    <action id=\"choose_position\" effect=\"choose_position_for_die $window$ $DIE$ [ignore_color=true]\" result=\"POS\" next=\"place\" />\n" +
-                "    <action id=\"place\" effect=\"place $DIE$ $window$ $POS$\"/>\n" +
+                "    <action effect=\"choose_position_for_die $window$ $DIE$ [ignore_color=true]\" result=\"POS\"/>\n" +
+                "    <action effect=\"place $DIE$ $window$ $POS$\"/>\n" +
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -314,15 +295,12 @@ class ActionGroupCompilerTest {
                 null
         );
 
-        Assertions.assertEquals("start", compiledActionGroup.getRootActionId());
         Assertions.assertEquals(ActionGroup.class, compiledActionGroup.getClassToInstantiate());
         Assertions.assertNull(compiledActionGroup.getChooseBetween());
         Assertions.assertEquals(IterableRange.unitaryInteger(), compiledActionGroup.getRepetitions());
 
         ActionData actionData = compiledActionGroup.getActionData();
 
-        Assertions.assertEquals("inc_dec", actionData.getId());
-        Assertions.assertNull(actionData.getNextActionId());
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -359,7 +337,7 @@ class ActionGroupCompilerTest {
 
         CompiledActionGroup firstInnerInnerInnerActionGroup = (CompiledActionGroup) firstInnerInnerActions.get(2);
 
-        Assertions.assertEquals(IterableRange.unitaryInteger(), firstInnerInnerInnerActionGroup.getChooseBetween());
+        Assertions.assertNull(firstInnerInnerInnerActionGroup.getChooseBetween());
         Assertions.assertEquals(1, firstInnerInnerInnerActionGroup.getRepetitions().getStart().intValue());
         Assertions.assertEquals(2, firstInnerInnerInnerActionGroup.getRepetitions().getEnd().intValue());
 
