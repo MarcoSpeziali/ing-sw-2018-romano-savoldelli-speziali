@@ -99,7 +99,7 @@ public class ActionGroup implements ExecutableAction {
             throw new ConstraintEvaluationException(this.data.getConstraint().getId());
         }
 
-        context.snapshot("ActionGroup{" + this.data.getId() + "}", snapshot -> {
+        context.snapshot(getSnapshotId(), snapshot -> {
             // Executes the mandatory repetitions
             this.executeMandatoryRepetitions(snapshot);
 
@@ -108,6 +108,10 @@ public class ActionGroup implements ExecutableAction {
         });
 
         return null;
+    }
+
+    private String getSnapshotId() {
+        return "ActionGroup{" + (this.chooseBetween == null ? "" : this.chooseBetween.toString()) + ";" + this.repetitionNumber.toString() + "}";
     }
 
     /**

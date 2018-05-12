@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 class ActionGroupTest {
 
     private ActionGroup actionGroup;
-    private ActionData actionData = new ActionData("test", null, null, null, null);
+    private ActionData actionData = new NullActionData();
     private Context context = Context.getSharedInstance();
     private UserInteractionProvider interactionProvider;
     private ActionGroupCallbacks actionGroupCallbacks;
@@ -84,8 +84,6 @@ class ActionGroupTest {
     void testRunThrows() {
         this.actionGroup = new ActionGroup(
                 new ActionData(
-                        "id",
-                        null,
                         null,
                         new Constraint(
                                 null,
@@ -133,8 +131,6 @@ class ActionGroupTest {
                 List.of(
                         new ChooseColorAction(
                                 new ActionData(
-                                        "choose_color",
-                                        "choose_die",
                                         null,
                                         null,
                                         "COLOR"
@@ -145,8 +141,6 @@ class ActionGroupTest {
                         ),
                         new ChooseDieAction(
                                 new ActionData(
-                                        "choose_die",
-                                        "pick_die",
                                         null,
                                         null,
                                         "DIE"
@@ -158,8 +152,6 @@ class ActionGroupTest {
                         ),
                         new PickDieAction(
                                 new ActionData(
-                                        "pick_die",
-                                        "flip_die",
                                         null,
                                         null,
                                         "DIE"
@@ -169,8 +161,6 @@ class ActionGroupTest {
                         ),
                         new FlipAction(
                                 new ActionData(
-                                        "flip_die",
-                                        "put_die",
                                         null,
                                         null,
                                         null
@@ -179,8 +169,6 @@ class ActionGroupTest {
                         ),
                         new PutAction(
                                 new ActionData(
-                                        "put_die",
-                                        null,
                                         null,
                                         null,
                                         null
@@ -206,8 +194,6 @@ class ActionGroupTest {
                 List.of(
                         new PlaceAction(
                                 new ActionData(
-                                        "choose_color",
-                                        "choose_die",
                                         null,
                                         null,
                                         null
@@ -237,8 +223,6 @@ class ActionGroupTest {
                 List.of(
                         new PlaceAction(
                                 new ActionData(
-                                        "choose_color",
-                                        "choose_die",
                                         null,
                                         null,
                                         null
@@ -273,8 +257,6 @@ class ActionGroupTest {
                 List.of(
                         new PlaceAction(
                                 new ActionData(
-                                        "choose_color",
-                                        "choose_die",
                                         null,
                                         null,
                                         null
@@ -308,8 +290,6 @@ class ActionGroupTest {
                 List.of(
                         new PlaceAction(
                                 new ActionData(
-                                        "choose_color",
-                                        "choose_die",
                                         null,
                                         null,
                                         null
@@ -344,8 +324,6 @@ class ActionGroupTest {
                 List.of(
                         new IncrementAction(
                                 new ActionData(
-                                        "inc",
-                                        null,
                                         null,
                                         null,
                                         null
@@ -355,8 +333,6 @@ class ActionGroupTest {
                         ),
                         new DecrementAction(
                                 new ActionData(
-                                        "dec",
-                                        null,
                                         null,
                                         null,
                                         null

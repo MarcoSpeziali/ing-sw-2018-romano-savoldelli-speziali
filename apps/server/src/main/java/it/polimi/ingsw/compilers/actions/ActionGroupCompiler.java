@@ -1,17 +1,19 @@
 package it.polimi.ingsw.compilers.actions;
 
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
+import it.polimi.ingsw.compilers.actions.utils.CompiledAction;
+import it.polimi.ingsw.compilers.actions.utils.CompiledActionGroup;
+import it.polimi.ingsw.compilers.actions.utils.CompiledExecutableAction;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.io.XmlUtils;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ActionGroupCompiler {
 
@@ -30,31 +32,13 @@ public class ActionGroupCompiler {
             throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action-group, instead of a " + node.getNodeName());
         }
 
-        return compile(XmlUtils.xmlToMap(node), directives, constraints);
-    }
-
-    /**
-     * Compiles a single action-group into its compiles representation: {@link CompiledActionGroup}.
-     * @param actionGroupInfo the {@link Map} representing the action to compile
-     * @param directives the {@link List} containing the directives to compile the actions
-     * @param constraints the {@link List} of precompiled constraints
-     * @return an instance of {@link CompiledActionGroup}
-     */
-    public static CompiledActionGroup compile(Map<String, Object> actionGroupInfo, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
-        // gets the id of the constraint
-        String id = (String) actionGroupInfo.get(ActionGroupNodes.ACTION_GROUP_ID);
-
-        // gets the next actions
-        String next = (String) actionGroupInfo.get(ActionGroupNodes.ACTION_GROUP_NEXT_ID);
+        Map<String, Object> actionGroupInfo = XmlUtils.xmlToMap(node);
 
         // gets the description key
         String description = (String) actionGroupInfo.get(ActionGroupNodes.ACTION_GROUP_DESCRIPTION);
 
         // gets the constraint id
         String constraintId = (String) actionGroupInfo.get(ActionGroupNodes.ACTION_GROUP_CONSTRAINT);
-
-        // gets the root action id for the
-        String root = (String) actionGroupInfo.get(ActionGroupNodes.ACTION_GROUP_ROOT);
 
         // gets the repetitions literal
         String repetitionsString = (String) actionGroupInfo.get(ActionGroupNodes.ACTION_GROUP_REPETITIONS);
@@ -69,18 +53,7 @@ public class ActionGroupCompiler {
         IterableRange<Integer> chooseBetween = parseChooseBetween(chooseBetweenString);
 
         // gets the compiles sub-actions
-        List<CompiledExecutableAction> subActions = new LinkedList<>();
-
-        subActions.addAll(
-                compileSubActions(XmlUtils.getMapArrayAnyway(
-                        actionGroupInfo, ActionGroupNodes.ACTION_GROUP_SUB_ACTION
-                ), directives, constraints)
-        );
-
-        // gets the compiles sub-action-groups
-        subActions.addAll(compileSubActionGroups(XmlUtils.getMapArrayAnyway(
-                actionGroupInfo, ActionGroupNodes.ROOT
-        ), directives, constraints));
+        List<CompiledExecutableAction> subActions = compileChildren(node.getChildNodes(), directives, constraints);
 
         // finds the declared constraint between the provided (already compiled) constraints
         EvaluableConstraint constraint = constraintId == null ?
@@ -89,17 +62,14 @@ public class ActionGroupCompiler {
                         .filter(evaluableConstraint -> evaluableConstraint.getId().equals(constraintId))
                         .findFirst()
                         // if none found an exception must be thrown
-                        .orElseThrow(() -> new ConstraintNotFoundException(constraintId, id));
+                        .orElseThrow(() -> new ConstraintNotFoundException(constraintId));
 
         return new CompiledActionGroup(
                 new ActionData(
-                        id,
-                        next,
                         description,
                         constraint,
                         null
                 ),
-                root,
                 subActions,
                 repetitions,
                 chooseBetween
@@ -144,38 +114,51 @@ public class ActionGroupCompiler {
         );
     }
 
-    /**
-     * Compiles the sub-actions of the group.
-     * @param subActions the sub actions
-     * @param directives the action directives
-     * @param constraints the constraints
-     * @return a {@link List} of {@link CompiledExecutableAction}
-     */
-    private static List<CompiledExecutableAction> compileSubActions(Map<String, Object>[] subActions, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
-        if (subActions == null) {
-            return List.of();
+    private static List<CompiledExecutableAction> compileChildren(NodeList nodeList, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
+        List<CompiledExecutableAction> subActions = new LinkedList<>();
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+
+            if (node.getNodeName().equals(ActionGroupNodes.ACTION_GROUP_SUB_ACTION)) {
+                subActions.add(compileSubAction(node, directives, constraints));
+            }
+            else if (node.getNodeName().equals(ActionGroupNodes.ACTION_GROUP_SUB_ACTION_GROUP)) {
+                subActions.add(compileSubActionGroup(node, directives, constraints));
+            }
         }
 
-        return Arrays.stream(subActions)
-                .map(stringObjectMap -> ActionCompiler.compile(stringObjectMap, directives, constraints))
-                .collect(Collectors.toList());
+        return subActions;
+    }
+
+    /**
+     * Compiles a sub-action of the group.
+     * @param subAction the sub action
+     * @param directives the action directives
+     * @param constraints the constraints
+     * @return a {@link CompiledAction}
+     */
+    private static CompiledAction compileSubAction(Node subAction, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
+        if (subAction == null) {
+            return null;
+        }
+
+        return ActionCompiler.compile(subAction, directives, constraints);
     }
 
     /**
      * Compiles the sub-actions-groups of the group.
-     * @param subActionGroups the sub action-groups
+     * @param subActionGroup the sub action-groups
      * @param directives the action directives
      * @param constraints the constraints
-     * @return a {@link List} of {@link CompiledExecutableAction}
+     * @return a {@link CompiledActionGroup}
      */
-    private static List<CompiledExecutableAction> compileSubActionGroups(Map<String, Object>[] subActionGroups, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
-        if (subActionGroups == null) {
-            return List.of();
+    private static CompiledActionGroup compileSubActionGroup(Node subActionGroup, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
+        if (subActionGroup == null) {
+            return null;
         }
 
-        return Arrays.stream(subActionGroups)
-                .map(stringObjectMap -> ActionGroupCompiler.compile(stringObjectMap, directives, constraints))
-                .collect(Collectors.toList());
+        return ActionGroupCompiler.compile(subActionGroup, directives, constraints);
     }
 
     /**
@@ -183,14 +166,12 @@ public class ActionGroupCompiler {
      */
     private final class ActionGroupNodes {
         static final String ROOT = "action-group";
-        static final String ACTION_GROUP_ID = "@id";
         static final String ACTION_GROUP_CHOOSE_BETWEEN = "@chooseBetween";
         static final String ACTION_GROUP_REPETITIONS = "@repetitions";
-        static final String ACTION_GROUP_NEXT_ID = "@next";
-        static final String ACTION_GROUP_ROOT = "@root";
         static final String ACTION_GROUP_DESCRIPTION = "@description";
         static final String ACTION_GROUP_CONSTRAINT = "@constraint";
         static final String ACTION_GROUP_SUB_ACTION = "action";
+        static final String ACTION_GROUP_SUB_ACTION_GROUP = "action-group";
 
         private ActionGroupNodes() {}
     }

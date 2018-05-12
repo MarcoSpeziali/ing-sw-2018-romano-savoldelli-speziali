@@ -1,4 +1,4 @@
-package it.polimi.ingsw.compilers.actions;
+package it.polimi.ingsw.compilers.actions.utils;
 
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.actions.ActionGroup;
@@ -20,12 +20,6 @@ public class CompiledActionGroup implements CompiledExecutableAction, Serializab
      */
     @SuppressWarnings("squid:S1948")
     private ActionData actionData;
-
-
-    /**
-     * The id of the first action in the list of sub-actions.
-     */
-    private String rootActionId;
 
     /**
      * The sub-actions.
@@ -60,13 +54,6 @@ public class CompiledActionGroup implements CompiledExecutableAction, Serializab
     }
 
     /**
-     * @return the id of the first action in the list of sub-actions
-     */
-    public String getRootActionId() {
-        return rootActionId;
-    }
-
-    /**
      * @return the sub-actions
      */
     public List<CompiledExecutableAction> getActions() {
@@ -87,9 +74,8 @@ public class CompiledActionGroup implements CompiledExecutableAction, Serializab
         return chooseBetween;
     }
 
-    public CompiledActionGroup(ActionData actionData, String rootActionId, List<CompiledExecutableAction> actions, IterableRange<Integer> repetitions, IterableRange<Integer> chooseBetween) {
+    public CompiledActionGroup(ActionData actionData, List<CompiledExecutableAction> actions, IterableRange<Integer> repetitions, IterableRange<Integer> chooseBetween) {
         this.actionData = actionData;
-        this.rootActionId = rootActionId;
         this.actions = actions;
         this.repetitions = repetitions;
         this.chooseBetween = chooseBetween;

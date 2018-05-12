@@ -12,16 +12,6 @@ public class ActionData implements Serializable {
     private static final long serialVersionUID = 6312073718156081520L;
 
     /**
-     * The id of the action.
-     */
-    private final String id;
-
-    /**
-     * The id of the next action.
-     */
-    private final String nextActionId;
-
-    /**
      * The key of the string that describes the action.
      */
     private final String descriptionKey;
@@ -36,20 +26,6 @@ public class ActionData implements Serializable {
      * The name of the result, used by the next actions.
      */
     private final String resultIdentifier;
-
-    /**
-     * @return The id of the action.
-     */
-    public String getId() {
-        return this.id;
-    }
-
-    /**
-     * @return The id of the next action.
-     */
-    public String getNextActionId() {
-        return this.nextActionId;
-    }
 
     /**
      * @return The key of the string that describes the action.
@@ -74,14 +50,10 @@ public class ActionData implements Serializable {
 
     /**
      * Creates a new instance of {@code ActionData}.
-     * @param id The id of the action.
-     * @param nextActionId The id of the next action.
      * @param constraint The constraint of the action.
      * @param resultIdentifier The name of the result, used by the next actions.
      */
-    public ActionData(String id, String nextActionId, String descriptionKey, EvaluableConstraint constraint, String resultIdentifier) {
-        this.id = id;
-        this.nextActionId = nextActionId;
+    public ActionData(String descriptionKey, EvaluableConstraint constraint, String resultIdentifier) {
         this.descriptionKey = descriptionKey;
         this.constraint = constraint;
         this.resultIdentifier = resultIdentifier;

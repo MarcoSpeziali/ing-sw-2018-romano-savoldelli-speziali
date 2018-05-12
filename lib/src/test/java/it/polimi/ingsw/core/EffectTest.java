@@ -43,8 +43,6 @@ class EffectTest {
         List<ExecutableAction> actions = List.of(
                 new DecrementAction(
                         new ActionData(
-                                "dec",
-                                "inc",
                                 null,
                                 null,
                                 null
@@ -54,8 +52,6 @@ class EffectTest {
                 ),
                 new IncrementAction(
                         new ActionData(
-                                "inc",
-                                "flip",
                                 null,
                                 null,
                                 null
@@ -65,8 +61,6 @@ class EffectTest {
                 ),
                 new FlipAction(
                         new ActionData(
-                                "flip",
-                                "repeat_inc",
                                 null,
                                 null,
                                 null
@@ -75,8 +69,6 @@ class EffectTest {
                 ),
                 new ActionGroup(
                         new ActionData(
-                                "repeat_inc",
-                                "inc_f",
                                 null,
                                 null,
                                 null
@@ -86,8 +78,6 @@ class EffectTest {
                         List.of(
                                 new DecrementAction(
                                         new ActionData(
-                                                "dec",
-                                                "inc",
                                                 null,
                                                 null,
                                                 null
@@ -97,8 +87,6 @@ class EffectTest {
                                 ),
                                 new IncrementAction(
                                         new ActionData(
-                                                "inc",
-                                                "flip",
                                                 null,
                                                 null,
                                                 null
@@ -108,8 +96,6 @@ class EffectTest {
                                 ),
                                 new FlipAction(
                                         new ActionData(
-                                                "flip",
-                                                null,
                                                 null,
                                                 null,
                                                 null
@@ -121,8 +107,6 @@ class EffectTest {
                 ),
                 new IncrementAction(
                         new ActionData(
-                                "inc_f",
-                                null,
                                 null,
                                 null,
                                 null
