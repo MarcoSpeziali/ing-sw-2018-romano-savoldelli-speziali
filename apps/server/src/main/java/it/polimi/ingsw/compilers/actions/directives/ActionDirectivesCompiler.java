@@ -1,5 +1,6 @@
 package it.polimi.ingsw.compilers.actions.directives;
 
+import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.core.actions.Action;
 import it.polimi.ingsw.utils.io.XmlUtils;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public final class ActionDirectivesCompiler {
 
     /**
-     * The default path for the action directives.
+     * The default path for the actions directives.
      */
     private static final String ACTION_DIRECTIVES_PATH = "directives/actions-directives.xml";
 
@@ -95,7 +96,7 @@ public final class ActionDirectivesCompiler {
         );
 
         // processes the raw parameters directives and maps them to the actual class
-        List<ActionParameterDirective> parametersDirectives;
+        List<ParameterDirective> parametersDirectives;
         try {
             parametersDirectives =
                     Arrays.stream(getRawParametersDirectives(rawDirective))
@@ -130,10 +131,10 @@ public final class ActionDirectivesCompiler {
     /**
      * Processes the raw parameter directive.
      * @param rawDirective The raw parameter directive in form of a {@link Map}
-     * @return The actual parameter directive as {@link ActionParameterDirective}
+     * @return The actual parameter directive as {@link ParameterDirective}
      * @throws ClassNotFoundException if the class of the parameter does not exists
      */
-    private static ActionParameterDirective processActionParameterDirective(Map<String, Object> rawDirective) throws ClassNotFoundException {
+    private static ParameterDirective processActionParameterDirective(Map<String, Object> rawDirective) throws ClassNotFoundException {
         // retrieves the class of the parameter
         String classType = (String) rawDirective.get(ActionDirectivesNodes.ACTION_DIRECTIVES_PARAMETER_CLASS);
 
@@ -147,13 +148,18 @@ public final class ActionDirectivesCompiler {
         // retrieves the default value of the parameter
         String defaultValue = (String) rawDirective.get(ActionDirectivesNodes.ACTION_DIRECTIVES_PARAMETER_DEFAULT_VALUE);
 
+        // retrieves the multiplicity of the parameter
+        boolean isMultiple = Boolean.parseBoolean(
+                (String) rawDirective.get(ActionDirectivesNodes.ACTION_DIRECTIVES_PARAMETER_IS_MULTIPLE)
+        );
+
         // creates the parameter directive
-        //noinspection unchecked
-        return new ActionParameterDirective(
-                (Class<? extends Serializable>) Class.forName(classType),
+        return new ParameterDirective(
+                getClassFromName(classType, isMultiple),
                 position,
                 name,
-                defaultValue == null ? null : (Serializable) ConstantExpressionCaster.cast(defaultValue)
+                defaultValue == null ? null : (Serializable) ConstantExpressionCaster.cast(defaultValue),
+                isMultiple
         );
     }
 
@@ -205,6 +211,20 @@ public final class ActionDirectivesCompiler {
     }
 
     /**
+     * @param className the original class name
+     * @param isMultiple if the class represents an array
+     * @return the array version of the provided class
+     */
+    @SuppressWarnings("unchecked")
+    private static Class<? extends Serializable> getClassFromName(String className, boolean isMultiple) throws ClassNotFoundException {
+        if (isMultiple) {
+            return (Class<? extends Serializable>) Class.forName("[L" + className + ";");
+        }
+
+        return (Class<? extends Serializable>) Class.forName(className);
+    }
+
+    /**
      * Holds the constants used while accessing the xml nodes and attributes.
      */
     private final class ActionDirectivesNodes {
@@ -218,6 +238,7 @@ public final class ActionDirectivesCompiler {
         static final String ACTION_DIRECTIVES_PARAMETER_POSITION = "@position";
         static final String ACTION_DIRECTIVES_PARAMETER_NAME = "@name";
         static final String ACTION_DIRECTIVES_PARAMETER_DEFAULT_VALUE = "@default";
+        static final String ACTION_DIRECTIVES_PARAMETER_IS_MULTIPLE = "@isMultiple";
 
         private ActionDirectivesNodes() { }
     }

@@ -1,9 +1,8 @@
 package it.polimi.ingsw.compilers.actions;
 
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
-import it.polimi.ingsw.compilers.actions.directives.ActionParameterDirective;
-import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
-import it.polimi.ingsw.compilers.actions.utils.CompiledAction;
+import it.polimi.ingsw.compilers.commons.CompiledParameter;
+import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ExpressionCompiler;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
@@ -113,9 +112,9 @@ public class ActionCompiler {
      * Parses the effect parameters.
      * @param directive the action directive
      * @param rawEffect the raw effect as string
-     * @return a {@link List} of {@link ActionParameter}
+     * @return a {@link List} of {@link CompiledParameter}
      */
-    private static List<ActionParameter> parseParameters(ActionDirective directive, String rawEffect) {
+    private static List<CompiledParameter> parseParameters(ActionDirective directive, String rawEffect) {
         Pattern pattern = Pattern.compile(EFFECT_CALL_REGEX);
         Matcher matcher = pattern.matcher(rawEffect);
 
@@ -138,7 +137,7 @@ public class ActionCompiler {
                 .toArray(String[]::new);
 
         // the parameters gets parsed and returned
-        List<ActionParameter> actionParameters = parseMandatoryParameters(directive, parameters);
+        List<CompiledParameter> actionParameters = parseMandatoryParameters(directive, parameters);
         actionParameters.addAll(parseOptionalParameters(directive, optionalParameters));
 
         return actionParameters;
@@ -148,16 +147,16 @@ public class ActionCompiler {
      * Parses the mandatory parameters.
      * @param directive the action directive
      * @param rawParameters the array of raw mandatory parameters
-     * @return a {@link List} of {@link ActionParameter}
+     * @return a {@link List} of {@link CompiledParameter}
      */
-    private static List<ActionParameter> parseMandatoryParameters(ActionDirective directive, String[] rawParameters) {
-        List<ActionParameter> parameters = new LinkedList<>();
+    private static List<CompiledParameter> parseMandatoryParameters(ActionDirective directive, String[] rawParameters) {
+        List<CompiledParameter> parameters = new LinkedList<>();
 
         for (int i = 0; i < rawParameters.length; i++) {
             int finalI = i;
 
             // gets the current parameter and throws an exception if it was not found
-            ActionParameterDirective currentParameterDirective = directive.getParametersDirectives()
+            ParameterDirective currentParameterDirective = directive.getParametersDirectives()
                     .stream()
                     .filter(actionParameterDirective -> actionParameterDirective.getPosition().equals(finalI))
                     .findFirst()
@@ -174,15 +173,15 @@ public class ActionCompiler {
      * Parses the mandatory parameters.
      * @param directive the action directive
      * @param rawParameters the array of raw optional parameters
-     * @return a {@link List} of {@link ActionParameter}
+     * @return a {@link List} of {@link CompiledParameter}
      */
-    private static List<ActionParameter> parseOptionalParameters(ActionDirective directive, String[] rawParameters) {
-        List<ActionParameter> actionParameters = new LinkedList<>();
+    private static List<CompiledParameter> parseOptionalParameters(ActionDirective directive, String[] rawParameters) {
+        List<CompiledParameter> actionParameters = new LinkedList<>();
 
         // filters the directives to get only the optional ones and sorts them by position
-        List<ActionParameterDirective> optionalDirectives = directive.getParametersDirectives().stream()
-                .filter(ActionParameterDirective::isOptional)
-                .sorted(Comparator.comparing(ActionParameterDirective::getPosition))
+        List<ParameterDirective> optionalDirectives = directive.getParametersDirectives().stream()
+                .filter(ParameterDirective::isOptional)
+                .sorted(Comparator.comparing(ParameterDirective::getPosition))
                 .collect(Collectors.toList());
 
         // if no optional were provided then the list gets created immediately with null as value
@@ -206,7 +205,7 @@ public class ActionCompiler {
                 .forEach(strings -> parameters.put(strings[0], strings[1]));
 
         // for each directive a parameters gets parsed
-        for (ActionParameterDirective currentParameterDirective : optionalDirectives) {
+        for (ParameterDirective currentParameterDirective : optionalDirectives) {
             actionParameters.add(parseParameter(
                     currentParameterDirective,
                     parameters.get(currentParameterDirective.getName()),
@@ -222,11 +221,11 @@ public class ActionCompiler {
      * @param parameterDirective the directive of the parameter
      * @param rawParameter the raw value of the parameter
      * @param position the position of the parameter in the constructor
-     * @return an instance of {@link ActionParameter} from the raw value
+     * @return an instance of {@link CompiledParameter} from the raw value
      */
-    private static ActionParameter parseParameter(ActionParameterDirective parameterDirective, String rawParameter, int position) {
+    private static CompiledParameter parseParameter(ParameterDirective parameterDirective, String rawParameter, int position) {
         //noinspection unchecked
-        return new ActionParameter(
+        return new CompiledParameter(
                 parameterDirective.getParameterType(),
                 position,
                 // the raw value gets compiled since it could be an expression

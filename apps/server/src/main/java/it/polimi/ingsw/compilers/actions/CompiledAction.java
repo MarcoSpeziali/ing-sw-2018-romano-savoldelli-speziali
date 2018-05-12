@@ -1,5 +1,6 @@
-package it.polimi.ingsw.compilers.actions.utils;
+package it.polimi.ingsw.compilers.actions;
 
+import it.polimi.ingsw.compilers.commons.CompiledParameter;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.actions.ExecutableAction;
 
@@ -34,7 +35,7 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
     /**
      * The list of parameters needed to initialize the action.
      */
-    private List<ActionParameter> parameters;
+    private List<CompiledParameter> parameters;
 
     /**
      * Represent the need of the action for an user interaction.
@@ -67,7 +68,7 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
     /**
      * @return the parameters needed to initialize the action
      */
-    public List<ActionParameter> getParameters() {
+    public List<CompiledParameter> getParameters() {
         return parameters;
     }
 
@@ -85,7 +86,7 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
      * @param parameters the parameters needed to initialize the action
      * @param requiresUserInteraction the need of the action for an user interaction
      */
-    public CompiledAction(String actionId, Class<? extends ExecutableAction> actionClass, ActionData actionData, List<ActionParameter> parameters, Boolean requiresUserInteraction) {
+    public CompiledAction(String actionId, Class<? extends ExecutableAction> actionClass, ActionData actionData, List<CompiledParameter> parameters, Boolean requiresUserInteraction) {
         this.actionId = actionId;
         this.actionClass = actionClass;
         this.actionData = actionData;
