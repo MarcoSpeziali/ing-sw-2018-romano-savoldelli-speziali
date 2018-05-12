@@ -1,34 +1,38 @@
-package it.polimi.ingsw.compilers.actions.directives;
+package it.polimi.ingsw.compilers.commons.directives;
 
 import java.io.Serializable;
 
 /**
- * Defines the directives for instantiating a parameter of an action.
+ * Defines the directives for instantiating a parameter.
  */
-public class ActionParameterDirective implements Serializable {
+public class ParameterDirective implements Serializable {
 
     private static final long serialVersionUID = 774183294375277756L;
 
     /**
      * The class of the parameter.
      */
-    private Class<? extends Serializable> parameterType;
+    protected Class<? extends Serializable> parameterType;
 
     /**
      * The position of the parameter in the constructor.
      */
-    private Integer position;
+    protected Integer position;
 
     /**
      * The name of the parameter (present only if the parameter is optional).
      */
-    private String name;
+    protected String name;
 
     /**
      * The default value of the parameter.
      */
-    private Serializable defaultValue;
+    protected Serializable defaultValue;
 
+    /**
+     * {@code true} if the parameter class is an array, {@code false} otherwise.
+     */
+    protected Boolean isMultiple;
 
     /**
      * @return the class of the parameter
@@ -59,6 +63,13 @@ public class ActionParameterDirective implements Serializable {
     }
 
     /**
+     * @return {@code true} if the parameter class is an array, {@code false} otherwise
+     */
+    public Boolean isMultiple() {
+        return isMultiple;
+    }
+
+    /**
      * @return {@code true} if the parameter is optional, {@code false} otherwise
      */
     public boolean isOptional() {
@@ -69,9 +80,10 @@ public class ActionParameterDirective implements Serializable {
      * Instantiate a non-optional parameter with its directives.
      * @param parameterType the class of the parameter
      * @param position the position of the parameter in the constructor
+     * @param isMultiple {@code true} if the parameter class is an array, {@code false} otherwise
      */
-    public ActionParameterDirective(Class<? extends Serializable> parameterType, Integer position) {
-        this(parameterType, position, null, null);
+    public ParameterDirective(Class<? extends Serializable> parameterType, Integer position, Boolean isMultiple) {
+        this(parameterType, position, null, null, isMultiple);
     }
 
     /**
@@ -80,11 +92,13 @@ public class ActionParameterDirective implements Serializable {
      * @param position the position of the parameter in the constructor
      * @param name the name of the parameter
      * @param defaultValue the default value of the parameter
+     * @param isMultiple {@code true} if the parameter class is an array, {@code false} otherwise
      */
-    public ActionParameterDirective(Class<? extends Serializable> parameterType, Integer position, String name, Serializable defaultValue) {
+    public ParameterDirective(Class<? extends Serializable> parameterType, Integer position, String name, Serializable defaultValue, Boolean isMultiple) {
         this.parameterType = parameterType;
         this.position = position;
         this.name = name;
         this.defaultValue = defaultValue;
+        this.isMultiple = isMultiple;
     }
 }

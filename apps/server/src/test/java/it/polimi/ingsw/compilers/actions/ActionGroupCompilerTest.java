@@ -2,10 +2,7 @@ package it.polimi.ingsw.compilers.actions;
 
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.compilers.actions.directives.ActionDirectivesCompiler;
-import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
-import it.polimi.ingsw.compilers.actions.utils.CompiledAction;
-import it.polimi.ingsw.compilers.actions.utils.CompiledActionGroup;
-import it.polimi.ingsw.compilers.actions.utils.CompiledExecutableAction;
+import it.polimi.ingsw.compilers.commons.CompiledParameter;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.actions.*;
 import it.polimi.ingsw.models.Die;
@@ -206,28 +203,28 @@ class ActionGroupCompilerTest {
         Assertions.assertNull(firstActionData.getResultIdentifier());
         Assertions.assertNull(firstActionData.getConstraint());
 
-        List<ActionParameter> firstActionParameters = firstAction.getParameters();
-        Assertions.assertEquals(2, firstActionParameters.size());
+        List<CompiledParameter> firstCompiledParameters = firstAction.getParameters();
+        Assertions.assertEquals(2, firstCompiledParameters.size());
 
-        Assertions.assertSame(0, firstActionParameters.get(0).getPosition());
-        Assertions.assertEquals(Die.class, firstActionParameters.get(0).getType());
+        Assertions.assertSame(0, firstCompiledParameters.get(0).getPosition());
+        Assertions.assertEquals(Die.class, firstCompiledParameters.get(0).getType());
         Assertions.assertSame(
                 this.die,
-                firstActionParameters.get(0).getParameterValue().get(Context.getSharedInstance())
+                firstCompiledParameters.get(0).getParameterValue().get(Context.getSharedInstance())
         );
-        Assertions.assertFalse(firstActionParameters.get(0).isOptional());
-        Assertions.assertNull(firstActionParameters.get(0).getDefaultValue());
-        Assertions.assertNull(firstActionParameters.get(0).getOptionalName());
+        Assertions.assertFalse(firstCompiledParameters.get(0).isOptional());
+        Assertions.assertNull(firstCompiledParameters.get(0).getDefaultValue());
+        Assertions.assertNull(firstCompiledParameters.get(0).getOptionalName());
 
-        Assertions.assertSame(1, firstActionParameters.get(1).getPosition());
-        Assertions.assertEquals(Integer.class, firstActionParameters.get(1).getType());
+        Assertions.assertSame(1, firstCompiledParameters.get(1).getPosition());
+        Assertions.assertEquals(Integer.class, firstCompiledParameters.get(1).getType());
         Assertions.assertEquals(
                 1,
-                firstActionParameters.get(1).getParameterValue().get(Context.getSharedInstance())
+                firstCompiledParameters.get(1).getParameterValue().get(Context.getSharedInstance())
         );
-        Assertions.assertFalse(firstActionParameters.get(1).isOptional());
-        Assertions.assertNull(firstActionParameters.get(1).getDefaultValue());
-        Assertions.assertNull(firstActionParameters.get(1).getOptionalName());
+        Assertions.assertFalse(firstCompiledParameters.get(1).isOptional());
+        Assertions.assertNull(firstCompiledParameters.get(1).getDefaultValue());
+        Assertions.assertNull(firstCompiledParameters.get(1).getOptionalName());
 
         CompiledAction secondAction = (CompiledAction) innerActions.get(1);
 
@@ -241,28 +238,28 @@ class ActionGroupCompilerTest {
         Assertions.assertNull(secondActionData.getResultIdentifier());
         Assertions.assertNull(secondActionData.getConstraint());
 
-        List<ActionParameter> secondActionParameters = firstAction.getParameters();
-        Assertions.assertEquals(2, secondActionParameters.size());
+        List<CompiledParameter> secondCompiledParameters = firstAction.getParameters();
+        Assertions.assertEquals(2, secondCompiledParameters.size());
 
-        Assertions.assertSame(0, secondActionParameters.get(0).getPosition());
-        Assertions.assertEquals(Die.class, secondActionParameters.get(0).getType());
+        Assertions.assertSame(0, secondCompiledParameters.get(0).getPosition());
+        Assertions.assertEquals(Die.class, secondCompiledParameters.get(0).getType());
         Assertions.assertEquals(
                 this.die,
-                secondActionParameters.get(0).getParameterValue().get(Context.getSharedInstance())
+                secondCompiledParameters.get(0).getParameterValue().get(Context.getSharedInstance())
         );
-        Assertions.assertFalse(secondActionParameters.get(0).isOptional());
-        Assertions.assertNull(secondActionParameters.get(0).getDefaultValue());
-        Assertions.assertNull(secondActionParameters.get(0).getOptionalName());
+        Assertions.assertFalse(secondCompiledParameters.get(0).isOptional());
+        Assertions.assertNull(secondCompiledParameters.get(0).getDefaultValue());
+        Assertions.assertNull(secondCompiledParameters.get(0).getOptionalName());
 
-        Assertions.assertSame(1, secondActionParameters.get(1).getPosition());
-        Assertions.assertEquals(Integer.class, secondActionParameters.get(1).getType());
+        Assertions.assertSame(1, secondCompiledParameters.get(1).getPosition());
+        Assertions.assertEquals(Integer.class, secondCompiledParameters.get(1).getType());
         Assertions.assertEquals(
                 1,
-                secondActionParameters.get(1).getParameterValue().get(Context.getSharedInstance())
+                secondCompiledParameters.get(1).getParameterValue().get(Context.getSharedInstance())
         );
-        Assertions.assertFalse(secondActionParameters.get(1).isOptional());
-        Assertions.assertNull(secondActionParameters.get(1).getDefaultValue());
-        Assertions.assertNull(secondActionParameters.get(1).getOptionalName());
+        Assertions.assertFalse(secondCompiledParameters.get(1).isOptional());
+        Assertions.assertNull(secondCompiledParameters.get(1).getDefaultValue());
+        Assertions.assertNull(secondCompiledParameters.get(1).getOptionalName());
     }
 
     @Test

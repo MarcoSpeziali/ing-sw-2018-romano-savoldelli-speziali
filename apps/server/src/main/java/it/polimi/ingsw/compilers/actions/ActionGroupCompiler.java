@@ -1,9 +1,6 @@
 package it.polimi.ingsw.compilers.actions;
 
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
-import it.polimi.ingsw.compilers.actions.utils.CompiledAction;
-import it.polimi.ingsw.compilers.actions.utils.CompiledActionGroup;
-import it.polimi.ingsw.compilers.actions.utils.CompiledExecutableAction;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.IterableRange;

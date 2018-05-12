@@ -1,5 +1,6 @@
 package it.polimi.ingsw.compilers.actions.directives;
 
+import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.core.actions.Action;
 import it.polimi.ingsw.core.actions.ExecutableAction;
 
@@ -31,7 +32,7 @@ public class ActionDirective implements Serializable {
     /**
      * The directives to instantiate the constructor parameters.
      */
-    private List<ActionParameterDirective> parametersDirectives;
+    private List<ParameterDirective> parametersDirectives;
 
     /**
      * @return the id of the action
@@ -55,9 +56,9 @@ public class ActionDirective implements Serializable {
     }
 
     /**
-     * @return the directives to instantiate the constructor parameters
+     * @return the directives to instantiate the parameters
      */
-    public List<ActionParameterDirective> getParametersDirectives() {
+    public List<ParameterDirective> getParametersDirectives() {
         return parametersDirectives;
     }
 
@@ -65,9 +66,9 @@ public class ActionDirective implements Serializable {
      * @param id the id of the action
      * @param targetClass the class to instantiate to execute the action
      * @param requiresUserInteraction {@code true} if the action requires the user interaction, {@code false} otherwise
-     * @param parametersDirectives the directives to instantiate the constructor parameters
+     * @param parametersDirectives the directives to instantiate the parameters
      */
-    public ActionDirective(String id, Class<Action> targetClass, boolean requiresUserInteraction, List<ActionParameterDirective> parametersDirectives) {
+    public ActionDirective(String id, Class<Action> targetClass, boolean requiresUserInteraction, List<ParameterDirective> parametersDirectives) {
         this.id = id;
         this.targetClass = targetClass;
         this.requiresUserInteraction = requiresUserInteraction;

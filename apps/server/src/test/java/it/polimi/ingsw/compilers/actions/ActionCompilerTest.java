@@ -2,8 +2,7 @@ package it.polimi.ingsw.compilers.actions;
 
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.compilers.actions.directives.ActionDirectivesCompiler;
-import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
-import it.polimi.ingsw.compilers.actions.utils.CompiledAction;
+import it.polimi.ingsw.compilers.commons.CompiledParameter;
 import it.polimi.ingsw.compilers.constraints.ConstraintCompiler;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
@@ -52,7 +51,7 @@ class ActionCompilerTest {
         Assertions.assertEquals("DIE", actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
 
-        List<ActionParameter> parameters = compiledAction.getParameters();
+        List<CompiledParameter> parameters = compiledAction.getParameters();
         Assertions.assertEquals(3, parameters.size());
 
         Assertions.assertEquals(0, parameters.get(0).getPosition().intValue());
@@ -96,7 +95,7 @@ class ActionCompilerTest {
         Assertions.assertEquals("DIE", actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
 
-        List<ActionParameter> parameters = compiledAction.getParameters();
+        List<CompiledParameter> parameters = compiledAction.getParameters();
         Assertions.assertEquals(3, parameters.size());
 
         Assertions.assertEquals(0, parameters.get(0).getPosition().intValue());
@@ -140,7 +139,7 @@ class ActionCompilerTest {
         Assertions.assertEquals("DIE", actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
 
-        List<ActionParameter> parameters = compiledAction.getParameters();
+        List<CompiledParameter> parameters = compiledAction.getParameters();
         Assertions.assertEquals(3, parameters.size());
 
         Assertions.assertEquals(0, parameters.get(0).getPosition().intValue());

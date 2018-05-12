@@ -1,49 +1,45 @@
-package it.polimi.ingsw.compilers.actions.utils;
+package it.polimi.ingsw.compilers.commons;
 
-import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.actions.Action;
 import it.polimi.ingsw.core.actions.VariableSupplier;
 
 import java.io.Serializable;
 
-/**
- * Represents a parameter for the function call {@link Action#run(Context)}.
- */
-public class ActionParameter implements Serializable {
-    private static final long serialVersionUID = -6487671097074774515L;
+public class CompiledParameter implements Serializable {
 
-	/**
+    private static final long serialVersionUID = -7548383616951562022L;
+
+    /**
      * Represents the class of the parameter.
      */
-    private Class<? extends Serializable> type;
+    protected Class<? extends Serializable> type;
 
     /**
      * Represents the position of the parameter in the function call.
      */
-    private Integer position;
+    protected Integer position;
 
     /**
      * Represents a wrapper for the parameter value.
-     * 
+     *
      * This because the parameter could need a computation before being usable.
      */
     @SuppressWarnings("squid:S1948")
-    private VariableSupplier<? extends Serializable> parameterValue;
+    protected VariableSupplier<? extends Serializable> parameterValue;
 
     /**
      * The name of the optional parameter that this parameter overrides (if any).
      */
-    private String optionalName;
+    protected String optionalName;
 
     /**
      * {@code true} if the parameter is optional.
      */
-    private Boolean isOptional;
+    protected Boolean isOptional;
 
     /**
      * The default value of the parameter.
      */
-    private Serializable defaultValue;
+    protected Serializable defaultValue;
 
     /**
      * @return the class of the parameter
@@ -96,7 +92,7 @@ public class ActionParameter implements Serializable {
      * @param optionalName the name of the optional parameter that this parameter overrides (if any)
      * @param defaultValue the default value of the parameter
      */
-    public ActionParameter(Class<? extends Serializable> type, Integer position, VariableSupplier<? extends Serializable> parameterValue, String optionalName, Serializable defaultValue) {
+    public CompiledParameter(Class<? extends Serializable> type, Integer position, VariableSupplier<? extends Serializable> parameterValue, String optionalName, Serializable defaultValue) {
         this.type = type;
         this.position = position;
         this.parameterValue = parameterValue;
