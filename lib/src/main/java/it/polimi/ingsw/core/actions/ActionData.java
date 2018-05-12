@@ -2,10 +2,14 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 
+import java.io.Serializable;
+
 /**
  * Holds the common data for an {@code ExecutableAction}.
  */
-public class ActionData {
+public class ActionData implements Serializable {
+
+    private static final long serialVersionUID = 6312073718156081520L;
 
     /**
      * The id of the action.
@@ -25,6 +29,7 @@ public class ActionData {
     /**
      * The constraint of the action.
      */
+    @SuppressWarnings("squid:S1948")
     private final EvaluableConstraint constraint;
 
     /**

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.core;
 
-public enum GlassColor {
+import java.io.Serializable;
+
+public enum GlassColor implements Serializable {
     RED(0xff0000),
     YELLOW(0xffff00),
     GREEN(0x00ff00),

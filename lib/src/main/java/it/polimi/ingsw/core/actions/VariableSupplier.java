@@ -2,8 +2,10 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
 
+import java.io.Serializable;
+
 @FunctionalInterface
-public interface VariableSupplier<T> {
+public interface VariableSupplier<T> extends Serializable {
     /**
      * Gets a result.
      *

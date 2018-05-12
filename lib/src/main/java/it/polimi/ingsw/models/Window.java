@@ -69,11 +69,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }*/
 
     @Override
-    /* FIXME problema di consistenza: putDie non controlla se la posizione è illegale, lo fa getPossiblePositionForDie,
-    * però è possiile che per mettere un dado venga chiamata putDie, bypassando il controllo... si potrebbe inserire un
-    * if in putDie, ma occorre passare come parametri anche ignoreColor ecc ecc, ma cosi si modificherebbe l'interface
-    * mettendoli a false di default il controllo però risulta imperfetto.
-    * */
     public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
         if (die.getShade() == 0) {
             throw new IllegalArgumentException("Die's shade must be set!");
@@ -91,7 +86,8 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
-                if (this.cells[i][j].canFitDie(die, ignoreColor, ignoreShade) &&
+                if (!availablePositions.contains(i * this.columns + j) &&
+                        this.cells[i][j].canFitDie(die, ignoreColor, ignoreShade) &&
                         (ignoreAdjacency || checkAdjacency(die, i, j, ignoreColor, ignoreShade))) {
                     availablePositions.add(i * this.columns + j);
                 }
@@ -137,7 +133,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     public Die pickDie(Die die) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                if (cells[i][j].getDie().equals(die)) {
+                if (die.equals(cells[i][j].getDie())) {
                     return cells[i][j].pickDie();
                 }
             }
@@ -195,9 +191,10 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
 
     private boolean canHaveNeighbour(Die neighbourCandidate, int i, int j, boolean ignoreColor, boolean ignoreShade) {
-        if ((i < 0 || j < 0) || i > rows - 1 || j > columns - 1) {
+        if (i < 0 || j < 0 || i > rows - 1 || j > columns - 1) {
             return true;
         }
+
         return this.cells[i][j].canFitDie(neighbourCandidate, ignoreShade, ignoreColor);
     }
 
@@ -243,7 +240,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
             }
         }
 
-        for (int j = 0; j < this.columns; j++) {
+        for (int j = 1; j < this.columns - 1; j++) {
             // first row
             if (this.getCells()[0][j].canFitDie(die, ignoreColor, ignoreShade)) {
                 edges.add(j);

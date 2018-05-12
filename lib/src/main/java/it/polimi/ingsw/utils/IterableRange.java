@@ -67,7 +67,6 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
      * @param <K> The desired object type.
      * @return An instance of {@link Range}
      */
-    @SuppressWarnings("WeakerAccess")
     public static <K extends Comparable<? super K> & Serializable> IterableRange<K> fromString(String range, String separator, Function<String, K> conversionProvider, UnaryOperator<K> incrementFunction) {
         return new IterableRange<>(Objects.requireNonNull(
                 Range.fromString(range, separator, conversionProvider)),

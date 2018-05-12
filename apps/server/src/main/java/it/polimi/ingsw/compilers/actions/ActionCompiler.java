@@ -1,300 +1,260 @@
 package it.polimi.ingsw.compilers.actions;
 
+import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
+import it.polimi.ingsw.compilers.actions.directives.ActionParameterDirective;
 import it.polimi.ingsw.compilers.actions.utils.ActionParameter;
-import it.polimi.ingsw.compilers.actions.utils.ActionParameterValue;
-import it.polimi.ingsw.core.actions.Action;
+import it.polimi.ingsw.compilers.expressions.ExpressionCompiler;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.io.XmlUtils;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.utils.io.XmlUtils.xmlToMap;
-
-// TODO: docs
 public class ActionCompiler {
 
-    private static final String ACTION_MAPPING_FILE = "factories/actions-factory.xml";
+    private static final String EFFECT_CALL_REGEX = "^(?<id>[a-zA-Z_][a-zA-Z0-9_]+)(?<params>[^\\[]+)*(\\[(?<opts>.+)])?$";
 
-    private static final String ACTION_NODE_NAME = "action";
-
-    private Map<String, Object> actionsMapping;
-
-    public ActionCompiler() throws ParserConfigurationException, SAXException, IOException {
-        this.actionsMapping = getActionsMappingDocument();
-    }
+    private ActionCompiler() {}
 
     /**
-     * Compiles a {@link Node} into a {@link CompiledAction}.
-     * @param node The node that holds the action.
-     * @param constraints The list of compiled constraints.
+     * Compiles a single action into its compiles representation: {@link CompiledAction}.
+     * @param actionNode The {@link Node} representing the action to compile
+     * @param directives The {@link List} containing the directives to compile the actions
+     * @param constraints The {@link List} of precompiled constraints
      * @return An instance of {@link CompiledAction}
-     * @throws ClassNotFoundException If the class for the action was not found
      */
-    public CompiledAction compile(Node node, List<EvaluableConstraint> constraints) throws ClassNotFoundException {
-        // This method only compiles a single <action ../>
-        if (!node.getNodeName().equals(ACTION_NODE_NAME)) {
-            throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action, instead of a " + node.getNodeName());
+    public static CompiledAction compile(Node actionNode, List<ActionDirective> directives,  List<EvaluableConstraint> constraints) {
+        // this method only compiles a single <action ../>
+        if (!actionNode.getNodeName().equals(ActionNodes.ROOT)) {
+            throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action, instead of a " + actionNode.getNodeName());
         }
 
-        // Gets a map representation of the provided action
-        Map<String, Object> actionInfo = XmlUtils.xmlToMap(node);
-
-        // Creates a RawAction objects that stores the info for the action
-        RawAction rawAction = new RawAction(actionInfo);
-
-        // Gets the action declaration from actions-factory.xml
-        Map<String, Object> target = this.getTargetAction(rawAction.functionCall);
-
-        // Gets the complete list of parameters matching the function call and the optional values
-        List<ActionParameter> params = this.getActionParameters(rawAction.functionCall, target);
-
-        // Creates the compiled action
-        CompiledAction compiledAction = new CompiledAction();
-        compiledAction.setActionId(rawAction.functionCall.functionId);
-        //noinspection unchecked
-        compiledAction.setActionClass((Class<? extends Action>) Class.forName((String) target.get("@class")));
-        compiledAction.setActionData(new ActionData(
-                rawAction.id,
-                rawAction.nextId,
-                rawAction.descriptionKey,
-                this.getActionConstraint(constraints, rawAction),
-                rawAction.resultIdentifier
-        ));
-        compiledAction.setRequiresUserInteraction(
-                Boolean.parseBoolean((String) target.get("@requiresUserInteraction"))
-        );
-        compiledAction.setParameters(params.toArray(new ActionParameter[0]));
-
-        return compiledAction;
+        return compile(XmlUtils.xmlToMap(actionNode), directives, constraints);
     }
 
     /**
-     * Gets the constraint associated with the action.
-     * @param constraints The list of compiled constraints.
-     * @param rawAction The raw action
-     * @return The constraint associated with the action.
+     * Compiles a single action into its compiles representation: {@link CompiledAction}.
+     * @param actionInfo The {@link Map} representing the action to compile
+     * @param directives The {@link List} containing the directives to compile the actions
+     * @param constraints The {@link List} of precompiled constraints
+     * @return An instance of {@link CompiledAction}
      */
-    private EvaluableConstraint getActionConstraint(List<EvaluableConstraint> constraints, RawAction rawAction) {
-        Optional<EvaluableConstraint> targetConstraint = Optional.empty();
+    public static CompiledAction compile(Map<String, Object> actionInfo, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
+        // the id of the action
+        String id = (String) actionInfo.get(ActionNodes.ACTION_ID);
 
-        if (constraints != null) {
-            targetConstraint = constraints.stream()
-                    .filter(constraint -> constraint.getId().equals(rawAction.constraintId))
-                    .findFirst();
+        // the next action's id
+        String next = (String) actionInfo.get(ActionNodes.ACTION_NEXT_ID);
 
-            if (!targetConstraint.isPresent()) {
-                throw new ConstraintNotFoundException(rawAction.constraintId, rawAction.id);
-            }
+        // the description key
+        String description = (String) actionInfo.get(ActionNodes.ACTION_DESCRIPTION);
+
+        // the constraint id
+        String constraintId = (String) actionInfo.get(ActionNodes.ACTION_CONSTRAINT);
+
+        // the effect as string
+        String rawEffect = (String) actionInfo.get(ActionNodes.ACTION_EFFECT);
+
+        // the identifier of the result
+        String result = (String) actionInfo.get(ActionNodes.ACTION_RESULT);
+
+        // gets the id of the effect
+        String effectId = getEffectId(rawEffect);
+
+        // find the corresponding directive for the current effect id
+        ActionDirective targetDirective = directives.stream()
+                .filter(actionDirective -> actionDirective.getId().equals(effectId))
+                .findFirst()
+                .orElse(null);
+
+        // if no directive was found then an exception must be thrown
+        if (targetDirective == null) {
+            throw new UnrecognizedActionException(effectId);
         }
 
-        return targetConstraint.orElse(null);
+        // finds the declared constraint between the provided (already compiled) constraints
+        EvaluableConstraint constraint = constraintId == null ?
+                null :
+                constraints.stream()
+                        .filter(evaluableConstraint -> evaluableConstraint.getId().equals(constraintId))
+                        .findFirst()
+                        // if none found an exception must be thrown
+                        .orElseThrow(() -> new ConstraintNotFoundException(constraintId, id));
+
+        // finally creating the compiled action
+        return new CompiledAction(
+                effectId,
+                targetDirective.getTargetClass(),
+                new ActionData(
+                        id,
+                        next,
+                        description,
+                        constraint,
+                        result
+                ),
+                parseParameters(targetDirective, rawEffect),
+                targetDirective.requiresUserInteraction()
+        );
     }
 
     /**
-     * Returns the information about the current action.
-     * @param fnCall The call to the action
-     * @return The information about the current action
+     * @param rawEffect the effect as string
+     * @return the id of the effect
      */
-    private Map<String, Object> getTargetAction(FunctionCall fnCall) {
-        Map<String, Object>[] mapping = XmlUtils.getMapArray(
-                XmlUtils.getMap(actionsMapping, "actions"),
-                ACTION_NODE_NAME
-        );
+    private static String getEffectId(String rawEffect) {
+        Pattern pattern = Pattern.compile(EFFECT_CALL_REGEX);
+        Matcher matcher = pattern.matcher(rawEffect);
 
-        Optional<Map<String, Object>> optionalMap = Arrays.stream(mapping)
-                .filter(stringObjectMap -> stringObjectMap.get("@id").equals(fnCall.functionId))
-                .findFirst();
-
-        if (!optionalMap.isPresent()) {
-            throw new UnrecognizedActionException(fnCall.functionId);
+        if (matcher.find()) {
+            return matcher.group("id");
         }
 
-        return optionalMap.get();
+        throw new IllegalArgumentException();
     }
 
-    private List<ActionParameter> getActionParameters(FunctionCall fnCall, Map<String, Object> target) throws ClassNotFoundException {
-        Map<String, Object>[] targetParameters = XmlUtils.getMapArrayAnyway(
-                XmlUtils.getMap(target, "parameters"),
-                "parameter"
-        );
+    /**
+     * Parses the effect parameters.
+     * @param directive the action directive
+     * @param rawEffect the raw effect as string
+     * @return a {@link List} of {@link ActionParameter}
+     */
+    private static List<ActionParameter> parseParameters(ActionDirective directive, String rawEffect) {
+        Pattern pattern = Pattern.compile(EFFECT_CALL_REGEX);
+        Matcher matcher = pattern.matcher(rawEffect);
 
-        List<ParamTemplate> declaredParams = Arrays.stream(targetParameters)
-                .map(stringObjectMap -> {
-                    String positionStr = (String) stringObjectMap.get("@position");
-                    Integer position = positionStr == null ? 0 : Integer.parseInt(positionStr);
+        // if the raw effect does not match the regex
+        // (actually impossible because this regex has been tested earlier)
+        // an exception is thrown
+        if (!matcher.find()) {
+            throw new IllegalArgumentException();
+        }
 
-                    return new ParamTemplate(
-                            (String) stringObjectMap.get("@class"),
-                            position,
-                            (String) stringObjectMap.get("@default"),
-                            (String) stringObjectMap.get("@name")
-                    );
-                }).sorted(Comparator.comparing(p -> p.position))
+        String[] parameters = matcher.group("params").trim().split("\\s+");
+        String optionalMatch = matcher.group("opts");
+
+        // each optional parameter gets split by = and trimmed
+        String[] optionalParameters = optionalMatch == null ?
+                null :
+                Arrays.stream(optionalMatch.trim()
+                        .split(",")
+                ).map(String::trim)
+                .toArray(String[]::new);
+
+        // the parameters gets parsed and returned
+        List<ActionParameter> actionParameters = parseMandatoryParameters(directive, parameters);
+        actionParameters.addAll(parseOptionalParameters(directive, optionalParameters));
+
+        return actionParameters;
+    }
+
+    /**
+     * Parses the mandatory parameters.
+     * @param directive the action directive
+     * @param rawParameters the array of raw mandatory parameters
+     * @return a {@link List} of {@link ActionParameter}
+     */
+    private static List<ActionParameter> parseMandatoryParameters(ActionDirective directive, String[] rawParameters) {
+        List<ActionParameter> parameters = new LinkedList<>();
+
+        for (int i = 0; i < rawParameters.length; i++) {
+            int finalI = i;
+
+            // gets the current parameter and throws an exception if it was not found
+            ActionParameterDirective currentParameterDirective = directive.getParametersDirectives()
+                    .stream()
+                    .filter(actionParameterDirective -> actionParameterDirective.getPosition().equals(finalI))
+                    .findFirst()
+                    .orElseThrow(() -> new MissingParameterException(directive.getId()));
+
+            // parses the current parameter
+            parameters.add(parseParameter(currentParameterDirective, rawParameters[i], i));
+        }
+
+        return parameters;
+    }
+
+    /**
+     * Parses the mandatory parameters.
+     * @param directive the action directive
+     * @param rawParameters the array of raw optional parameters
+     * @return a {@link List} of {@link ActionParameter}
+     */
+    private static List<ActionParameter> parseOptionalParameters(ActionDirective directive, String[] rawParameters) {
+        List<ActionParameter> actionParameters = new LinkedList<>();
+
+        // filters the directives to get only the optional ones and sorts them by position
+        List<ActionParameterDirective> optionalDirectives = directive.getParametersDirectives().stream()
+                .filter(ActionParameterDirective::isOptional)
+                .sorted(Comparator.comparing(ActionParameterDirective::getPosition))
                 .collect(Collectors.toList());
 
-        List<ActionParameter> params = new ArrayList<>(declaredParams.size());
-
-        for (int i = 0; i < declaredParams.size(); i++) {
-            ParamTemplate template = declaredParams.get(i);
-            ActionParameterValue paramValue;
-
-            if (template.defaultValue == null) {
-                ParameterCall temp = fnCall.parameters.get(i);
-                paramValue = new ActionParameterValue(
-                        temp.value.replace("$", ""),
-                        temp.value.startsWith("$") && temp.value.endsWith("$")
-                );
-            }
-            else {
-                Optional<ParameterCall> optCall = fnCall.parameters.stream()
-                        .filter(parameterCall -> template.name.equals(parameterCall.optionalName))
-                        .findFirst();
-
-                if (optCall.isPresent()) {
-                    ParameterCall temp = optCall.get();
-                    paramValue = new ActionParameterValue(
-                            temp.value.replace("$", ""),
-                            temp.value.startsWith("$") && temp.value.endsWith("$")
-                    );
-                } else {
-                    paramValue = new ActionParameterValue(
-                            template.defaultValue.replace("$", ""),
-                            template.defaultValue.startsWith("$") && template.defaultValue.endsWith("$")
-                    );
-                }
-            }
-
-            params.add(
-                    new ActionParameter(
-                            Class.forName(template.type),
-                            template.position,
-                            paramValue,
-                            template.defaultValue != null ? template.name : null,
-                            template.defaultValue
-                    )
-            );
+        // if no optional were provided then the list gets created immediately with null as value
+        if (rawParameters == null) {
+            return optionalDirectives.stream()
+                    .map(actionParameterDirective -> parseParameter(
+                            actionParameterDirective,
+                            null,
+                            actionParameterDirective.getPosition()
+                    ))
+                    .collect(Collectors.toList());
         }
 
-        return params;
+        // holds the param_name: param_value pairs
+        Map<String, String> parameters = new HashMap<>();
+
+        // every raw parameters gets split by = (limit 2: means that only the first occurrence will cause a split
+        Arrays.stream(rawParameters)
+                .map(s -> s.split("=", 2))
+                // the result is param_name: param_value, which gets added into the map
+                .forEach(strings -> parameters.put(strings[0], strings[1]));
+
+        // for each directive a parameters gets parsed
+        for (ActionParameterDirective currentParameterDirective : optionalDirectives) {
+            actionParameters.add(parseParameter(
+                    currentParameterDirective,
+                    parameters.get(currentParameterDirective.getName()),
+                    currentParameterDirective.getPosition()
+            ));
+        }
+
+        return actionParameters;
     }
 
-    private static Map<String, Object> getActionsMappingDocument() throws IOException, ParserConfigurationException, SAXException {
-        ClassLoader classLoader = ActionCompiler.class.getClassLoader();
-        URL fileURL = classLoader.getResource(ACTION_MAPPING_FILE);
-
-        if (fileURL == null) {
-            throw new FileNotFoundException("The file containing the actions mapping does not exists.");
-        }
-
-        File file = new File(fileURL.getFile());
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(file);
-        doc.getDocumentElement().normalize();
-
-        return xmlToMap(doc);
+    /**
+     * Parses a single parameter.
+     * @param parameterDirective the directive of the parameter
+     * @param rawParameter the raw value of the parameter
+     * @param position the position of the parameter in the constructor
+     * @return an instance of {@link ActionParameter} from the raw value
+     */
+    private static ActionParameter parseParameter(ActionParameterDirective parameterDirective, String rawParameter, int position) {
+        //noinspection unchecked
+        return new ActionParameter(
+                parameterDirective.getParameterType(),
+                position,
+                // the raw value gets compiled since it could be an expression
+                rawParameter == null ? null : ExpressionCompiler.compile(rawParameter),
+                parameterDirective.getName(),
+                parameterDirective.getDefaultValue()
+        );
     }
 
-    private class FunctionCall {
-        String functionId;
-        List<ParameterCall> parameters;
-    }
+    /**
+     * Holds the constants used while accessing the xml nodes and attributes.
+     */
+    private final class ActionNodes {
+        static final String ROOT = "action";
+        static final String ACTION_ID = "@id";
+        static final String ACTION_NEXT_ID = "@next";
+        static final String ACTION_EFFECT = "@effect";
+        static final String ACTION_DESCRIPTION = "@description";
+        static final String ACTION_CONSTRAINT = "@constraint";
+        static final String ACTION_RESULT = "@result";
 
-    private class ParameterCall {
-        String optionalName;
-        Boolean isOptional;
-        String value;
-
-        ParameterCall(String value, String optionalName) {
-            this.isOptional = optionalName != null;
-            this.value = value;
-            this.optionalName = optionalName;
-        }
-    }
-
-    private class ParamTemplate {
-        String type;
-        Integer position;
-        String defaultValue;
-        String name;
-
-        ParamTemplate(String type, Integer position, String defaultValue, String name) {
-            this.type = type;
-            this.position = position;
-            this.defaultValue = defaultValue;
-            this.name = name;
-        }
-    }
-
-    private class RawAction {
-        String id;
-        String effect;
-        String resultIdentifier;
-        String nextId;
-        String constraintId;
-        String descriptionKey;
-        FunctionCall functionCall;
-
-        RawAction(Map<String, Object> nodeDict) {
-            id = (String) nodeDict.get("@id");
-            effect = (String) nodeDict.get("@effect");
-            resultIdentifier = (String) nodeDict.get("@result");
-            nextId = (String) nodeDict.get("@next");
-            constraintId = (String) nodeDict.get("@constraint");
-            descriptionKey = (String) nodeDict.get("@description");
-
-            this.createFunctionCall(this.effect);
-        }
-
-        private void createFunctionCall(String fnCall) {
-            this.functionCall = new FunctionCall();
-
-            Pattern pattern = Pattern.compile("^(?<id>\\w+)(?<params>[^\\[]+)*(\\[(?<opts>.+)])?$");
-            Matcher matcher = pattern.matcher(fnCall);
-
-            if (matcher.find()) {
-                functionCall.functionId = matcher.group("id");
-
-                String[] parameters = matcher.group("params").trim().split("\\s+");
-                String optionalMatch = matcher.group("opts");
-
-                String[] optionalParameters = optionalMatch == null ?
-                        new String[0] :
-                        optionalMatch.trim()
-                                .replaceAll("\\s+", "")
-                                .split(",");
-
-                functionCall.parameters = new ArrayList<>(parameters.length + optionalParameters.length);
-
-                for (String param : parameters) {
-                    ParameterCall p = new ParameterCall(param, null);
-                    functionCall.parameters.add(p);
-                }
-
-                for (String param : optionalParameters) {
-                    String[] tokens = param.split("\\s*=\\s*");
-
-                    String name = tokens[0];
-                    String value = tokens[1];
-
-                    ParameterCall p = new ParameterCall(value, name);
-                    functionCall.parameters.add(p);
-                }
-            }
-        }
+        private ActionNodes() {}
     }
 }

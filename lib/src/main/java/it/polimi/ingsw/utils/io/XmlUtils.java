@@ -1,9 +1,20 @@
 package it.polimi.ingsw.utils.io;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.URL;
 import java.util.*;
 
 
@@ -64,6 +75,10 @@ public final class XmlUtils {
     public static Map<String, Object>[] getMapArrayAnyway(Map<String, Object> objectMap, String key) {
         Object obj = objectMap.get(key);
 
+        if (obj == null) {
+            return null;
+        }
+
         if (obj instanceof Object[]) {
             return getMapArray(objectMap, key);
         }
@@ -71,5 +86,59 @@ public final class XmlUtils {
             //noinspection unchecked
             return new Map[] {(Map<String, Object>) obj};
         }
+    }
+
+    /**
+     * Parses the xml content of the provided file at path.
+     * @param path The path to the xml file.
+     * @return The parsed xml document {@link Node}
+     * @throws IOException If any IO errors occur
+     * @throws SAXException If any parse errors occur
+     * @throws ParserConfigurationException if a DocumentBuilder
+     *      cannot be created which satisfies the configuration requested.
+     */
+    public static Node parseXml(String path) throws IOException, SAXException, ParserConfigurationException {
+        File file = new File(path);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(file);
+        return doc.getDocumentElement();
+    }
+
+    /**
+     * Parses the xml content of the provided resource.
+     * @param resourceName The name of the resource
+     * @param classLoader The {@link ClassLoader} used to get
+     * @return The parsed xml document {@link Node}
+     * @throws IOException If any IO errors occur
+     * @throws SAXException If any parse errors occur
+     * @throws ParserConfigurationException if a DocumentBuilder
+     *      cannot be created which satisfies the configuration requested.
+     */
+    public static Node parseXmlFromResource(String resourceName, ClassLoader classLoader) throws ParserConfigurationException, SAXException, IOException {
+        URL fileURL = classLoader.getResource(resourceName);
+
+        if (fileURL == null) {
+            throw new FileNotFoundException("The file containing the actions mapping does not exists.");
+        }
+
+        return parseXml(fileURL.getPath());
+    }
+
+    /**
+     * Parses the xml content of the {@link String}.
+     * @param xml The xml as string
+     * @return The parsed xml document {@link Node}
+     * @throws IOException If any IO errors occur
+     * @throws SAXException If any parse errors occur
+     * @throws ParserConfigurationException if a DocumentBuilder
+     *      cannot be created which satisfies the configuration requested.
+     */
+    public static Node parseXmlString(String xml) throws IOException, SAXException, ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputSource is = new InputSource(new StringReader(xml));
+        Document doc = builder.parse(is);
+        return doc.getDocumentElement();
     }
 }
