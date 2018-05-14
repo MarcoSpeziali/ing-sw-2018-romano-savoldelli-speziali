@@ -2,10 +2,12 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.core.Context;
 
+import java.io.Serializable;
+
 /**
  * Represents an executable action which could be a single or a grouped action.
  */
-public interface ExecutableAction {
+public interface ExecutableAction extends Serializable {
 
     /**
      * @return The data of the action.

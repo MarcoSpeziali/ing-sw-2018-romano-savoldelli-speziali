@@ -1,6 +1,8 @@
 package it.polimi.ingsw.core.instructions;
 
-public enum DieFilter {
+import java.io.Serializable;
+
+public enum DieFilter implements Serializable {
     SHADE,
     COLOR;
 

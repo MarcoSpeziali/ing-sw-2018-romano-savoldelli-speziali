@@ -24,13 +24,11 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
      */
     private Class<? extends ExecutableAction> actionClass;
 
-
     /**
      * The data of the action.
      */
     @SuppressWarnings("squid:S1948")
     private ActionData actionData;
-
 
     /**
      * The list of parameters needed to initialize the action.
@@ -60,6 +58,7 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
     /**
      * @return the class of the action
      */
+
     @Override
     public Class<? extends ExecutableAction> getClassToInstantiate() {
         return actionClass;
