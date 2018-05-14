@@ -216,8 +216,8 @@ public class InstructionDirectiveCompiler {
      * @param path The path to the file, or the resource name
      * @param isResource {@code true} if the path points to a resource, {@code false} otherwise
      * @return The parsed xml as {@link Map}
-     * @throws IOException If any IO errors occur
-     * @throws SAXException If any parse errors occur
+     * @throws IOException if any IO errors occur
+     * @throws SAXException if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
      *      cannot be created which satisfies the configuration requested.
      */
@@ -236,7 +236,7 @@ public class InstructionDirectiveCompiler {
         Map<String, Object> document = XmlUtils.xmlToMap(node);
 
         if (document.containsKey(InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES)) {
-            // the children of actions-directives (action-directives)
+            // the children of instructions-directives (instruction-directives)
             return XmlUtils.getMapArrayAnyway(document, InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES);
         }
 

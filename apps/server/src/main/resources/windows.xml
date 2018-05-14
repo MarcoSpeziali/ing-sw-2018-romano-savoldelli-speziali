@@ -53,7 +53,7 @@
     <window rows="4" columns="5" id="aurorae_magnificus" sibling="aurora_sagradis" name="windows.aurorae_magnificus" difficulty="5">
         <cell shade="5"/>
         <cell color="green"/>
-        <cell color="blude"/>
+        <cell color="blue"/>
         <cell color="purple"/>
         <cell shade="2"/>
 

@@ -54,7 +54,7 @@ public enum GlassColor implements Serializable {
             case "purple":
                 return GlassColor.PURPLE;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unrecognized color: " + rep);
         }
     }
 
