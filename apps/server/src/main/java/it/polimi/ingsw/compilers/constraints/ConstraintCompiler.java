@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class is responsable for compiling a single constraint.
+ * This class is responsible for compiling a single constraint.
  */
 public class ConstraintCompiler {
 
@@ -56,7 +56,9 @@ public class ConstraintCompiler {
             VariableSupplier<Object> leftOperandSupplier;
             VariableSupplier<Object> rightOperandSupplier;
 
+            //noinspection unchecked
             leftOperandSupplier = ExpressionCompiler.compile(leftOperand);
+            //noinspection unchecked
             rightOperandSupplier = ExpressionCompiler.compile(rightOperand);
 
             return new Constraint(constraintId, leftOperandSupplier, Operator.fromString(operator), rightOperandSupplier);
