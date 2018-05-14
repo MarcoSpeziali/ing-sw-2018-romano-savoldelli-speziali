@@ -22,13 +22,13 @@ class WindowTest {
 
         this.cells = new Cell[][] { // 0, 1, 4, 5(edge), 11
                 {
-                        new Cell(0, null),      new Cell(5, null), new Cell(4, null),       new Cell(0, GlassColor.GREEN)
+                    new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
                 },
                 {
-                        new Cell(0, null),      new Cell(0, null), new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
+                    new Cell(0, null),      new Cell(0, null),      new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
                 },
                 {
-                        new Cell(0, GlassColor.BLUE), new Cell(2, null), new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
+                    new Cell(0, GlassColor.BLUE), new Cell(2, null),      new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
                 }
         };
 
@@ -56,11 +56,18 @@ class WindowTest {
     }
 
     @Test
-    // TODO
     void getPossiblePositionsForDie() {
-        List<Integer> admitted = List.of(0,1,4,11);
-        Assertions.assertTrue(window.getPossiblePositionsForDie(die, false, false, false).containsAll(admitted));
-        Assertions.assertEquals(4, window.getPossiblePositionsForDie(die, false, false, false).size());
+        List<Integer> a = List.of(0,1,4,11);
+        List<Integer> b = List.of(0,5);
+        Assertions.assertTrue(window.getPossiblePositionsForDie(die,
+                false, false, false).containsAll(a));
+        Assertions.assertEquals(4, window.getPossiblePositionsForDie(die,
+                false, false, false).size());
+        window.putDie(die, 1);
+        Assertions.assertFalse(window.getPossiblePositionsForDie(new Die(GlassColor.RED, 5),
+                false, false, false).contains(1));
+        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.GREEN, 5),
+                false, false, false).containsAll(b));
     }
 
     @Test
@@ -68,10 +75,11 @@ class WindowTest {
         window.putDie(die, 7);
         Assertions.assertTrue(window.getDice().contains(die));
         Assertions.assertThrows(AlreadyPutException.class, ()-> window.putDie(die, 7));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, ()-> window.putDie(die, 20));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, ()-> window.putDie(die, -1));
     }
 
     @Test
-    // TODO
     void getLocations() {
         Assertions.assertTrue(window.getLocations().isEmpty());
         window.putDie(die, 1);
@@ -82,12 +90,14 @@ class WindowTest {
 
     @Test
     void getDiceTest() {
-        //pick die con param die ha un errore suppongo in equals; inoltre getDice senza aver messo alcun dado
-        // restituisce una lista di null di dimensione rows*columns... ma ha zenzo? per le perzone falze!!11uno!
         window.putDie(die, 7);
+        window.putDie(new Die(GlassColor.RED, 4), 0);
         Assertions.assertTrue(window.getDice().contains(this.die));
         window.pickDie(die);
         Assertions.assertFalse(window.getDice().contains(die));
+        window.pickDie(new Die(GlassColor.RED, 4));
+        Assertions.assertFalse(window.getDice().contains(new Die(GlassColor.RED,4)));
+        Assertions.assertEquals(12,window.getDice().size()); //Ha senso che venga restituita una lista di null?
     }
 
     @Test
@@ -108,7 +118,6 @@ class WindowTest {
     }
 
     @Test
-    // TODO controllare lancio NullPointerException per motivo non ben chiaro
     void pickDie1Test() {
         window.putDie(die, 1);
         Assertions.assertTrue(window.getDice().contains(die));
