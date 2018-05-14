@@ -20,7 +20,7 @@ class WindowTest {
     void setUp() {
         this.die = new Die(GlassColor.YELLOW,5);
 
-        this.cells = new Cell[][] { // 0, 1, 4, 5(edge), 11
+        this.cells = new Cell[][] { // 0, 1, 4, 5(edge), 11 // 0, 4, 9, 10  no 5,6
                 {
                     new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
                 },
@@ -57,17 +57,27 @@ class WindowTest {
 
     @Test
     void getPossiblePositionsForDie() {
-        List<Integer> a = List.of(0,1,4,11);
-        List<Integer> b = List.of(0,5);
-        Assertions.assertTrue(window.getPossiblePositionsForDie(die,
-                false, false, false).containsAll(a));
-        Assertions.assertEquals(4, window.getPossiblePositionsForDie(die,
+        Die d = new Die(GlassColor.RED, 2);
+        List<Integer> expected = List.of(0,4,9,10);
+
+        // Checking initial available positions:
+        
+        Assertions.assertTrue(window.getPossiblePositionsForDie(d,
+                false, false, false).containsAll(expected));
+        Assertions.assertEquals(4, window.getPossiblePositionsForDie(d,
                 false, false, false).size());
-        window.putDie(die, 1);
-        Assertions.assertFalse(window.getPossiblePositionsForDie(new Die(GlassColor.RED, 5),
-                false, false, false).contains(1));
-        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.GREEN, 5),
-                false, false, false).containsAll(b));
+        Assertions.assertFalse(
+                window.getPossiblePositionsForDie(d,
+                                false,false,false).contains(5) &&
+                         window.getPossiblePositionsForDie(d,
+                                false,false,false).contains(6));
+
+        // Checking available positions when after has been put:
+
+        //window.putDie(die, 1);
+        //Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.RED, 4),
+          //      false, false, false).containsAll(nonAdmitted));
+
     }
 
     @Test
@@ -124,6 +134,7 @@ class WindowTest {
         int num = window.getNumberOfDice();
         window.pickDie(die);
         Assertions.assertEquals(window.getNumberOfDice(), num - 1);
+        Assertions.assertNull(window.pickDie(die));
     }
 
     @Test

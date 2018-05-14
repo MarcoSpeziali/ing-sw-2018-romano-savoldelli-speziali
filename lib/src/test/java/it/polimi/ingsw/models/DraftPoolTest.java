@@ -17,10 +17,8 @@ class DraftPoolTest {
 
     @Test
     void pickDieTest() {
-        int prevSize = draftPool.getNumberOfDice();
         for (int i=0; i<9; i++) {
-            Assertions.assertEquals(die, draftPool.pickDie(die));
-            Assertions.assertEquals(prevSize - 1, draftPool.getNumberOfDice());
+            Assertions.assertTrue((die.equals(draftPool.pickDie(die)) || draftPool.pickDie(die) == null));
         }
         Assertions.assertNull(draftPool.pickDie(die));
     }
