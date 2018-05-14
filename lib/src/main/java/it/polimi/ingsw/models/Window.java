@@ -64,7 +64,17 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
         List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
 
-        for (int i = 0; i < this.rows; i++) {
+
+
+
+
+
+
+
+
+
+
+        /*for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
                 if (!availablePositions.contains(i * this.columns + j) &&
                         this.cells[i][j].canFitDie(die, ignoreColor, ignoreShade) &&
@@ -72,8 +82,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                     availablePositions.add(i * this.columns + j);
                 }
             }
-        }
 
+        }
+        */
         return availablePositions;
     }
 
@@ -136,14 +147,17 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return  canHaveNeighbour(die, i, j + 1, ignoreColor, ignoreShade) &&
                 canHaveNeighbour(die, i, j - 1, ignoreColor, ignoreShade) &&
                 canHaveNeighbour(die, i - 1, j, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i + 1, j, ignoreColor, ignoreShade);
+                canHaveNeighbour(die, i + 1, j, ignoreColor, ignoreShade) &&
+                canHaveNeighbour(die, i-1, j-1, ignoreColor, ignoreShade) &&
+                canHaveNeighbour(die, i-1, j+1, ignoreColor, ignoreShade) &&
+                canHaveNeighbour(die, i+1, j-1, ignoreColor, ignoreShade) &&
+                canHaveNeighbour(die, i+1, j+1, ignoreColor, ignoreShade);
     }
 
     private boolean canHaveNeighbour(Die neighbourCandidate, int i, int j, boolean ignoreColor, boolean ignoreShade) {
         if (i < 0 || j < 0 || i > rows - 1 || j > columns - 1) {
             return true;
         }
-
         return this.cells[i][j].canFitDie(neighbourCandidate, ignoreShade, ignoreColor);
     }
 
