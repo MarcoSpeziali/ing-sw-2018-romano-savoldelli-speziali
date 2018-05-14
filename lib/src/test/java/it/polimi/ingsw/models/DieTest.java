@@ -51,6 +51,10 @@ class DieTest {
         Assertions.assertNotEquals(d1, d4);
         Assertions.assertEquals(d1, d2);
         Assertions.assertNotEquals(d1, new Object());
+    }
 
+    @Test
+    void toStringTest() {
+        Assertions.assertEquals("Die(4, blue)", die.toString());
     }
 }

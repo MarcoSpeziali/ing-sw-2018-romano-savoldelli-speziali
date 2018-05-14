@@ -14,11 +14,13 @@ import static org.mockito.Mockito.mockingDetails;
 class ObjectiveCardTest {
 
     private ObjectiveCard objectiveCard;
+    private Objective obj;
 
     @BeforeEach
     void setUp() {
+        this.obj = new Objective();
         this.objectiveCard = new ObjectiveCard("test", CardVisibility.PUBLIC, 3,
-                mock(Image.class),mock(Image.class), mock(LocalizedString.class), mock(LocalizedString.class));
+                mock(Image.class),mock(Image.class), mock(LocalizedString.class), mock(LocalizedString.class), obj);
     }
     @Test
     void getCardId() {
@@ -37,6 +39,6 @@ class ObjectiveCardTest {
 
     @Test
     void getObjectiveTest() {
-        Assertions.assertEquals(mock(Objective.class), objectiveCard.getObjective());
+        Assertions.assertEquals(obj, objectiveCard.getObjective());
     }
 }

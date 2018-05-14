@@ -10,11 +10,13 @@ public class ObjectiveCard extends Card {
     private int pointsPerCompletion;
     private Objective objective;
 
-    public ObjectiveCard(String cardId, CardVisibility visibility, int pointsPerCompletion, Image backImage, Image frontImage, LocalizedString title, LocalizedString description ) {
+    public ObjectiveCard(String cardId, CardVisibility visibility, int pointsPerCompletion, Image backImage,
+                         Image frontImage, LocalizedString title, LocalizedString description, Objective objective) {
         super(backImage, frontImage, title, description);
         this.cardId = cardId;
         this.visibility = visibility;
         this.pointsPerCompletion = pointsPerCompletion;
+        this.objective = objective;
     }
 
     public String getCardId() {
