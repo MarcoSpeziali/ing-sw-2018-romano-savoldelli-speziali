@@ -1,6 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.CardVisibility;
+import it.polimi.ingsw.core.Objective;
 import it.polimi.ingsw.utils.text.LocalizedString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,5 +33,10 @@ class ObjectiveCardTest {
     @Test
     void getPointsPerCompletion() {
         Assertions.assertEquals(3, objectiveCard.getPointsPerCompletion());
+    }
+
+    @Test
+    void getObjectiveTest() {
+        Assertions.assertEquals(mock(Objective.class), objectiveCard.getObjective());
     }
 }

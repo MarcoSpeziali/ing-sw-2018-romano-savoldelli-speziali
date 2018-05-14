@@ -53,9 +53,4 @@ public class Die implements Serializable {
 
         return this.color.equals(die.color) && this.shade.equals(die.shade);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.color, this.shade);
-    }
 }

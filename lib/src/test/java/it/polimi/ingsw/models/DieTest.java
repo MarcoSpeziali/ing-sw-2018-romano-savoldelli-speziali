@@ -39,4 +39,18 @@ class DieTest {
         die.setColor(GlassColor.GREEN);
         Assertions.assertEquals(GlassColor.GREEN, die.getColor());
     }
+
+    @Test
+    void equalsTest() {
+        Die d1 = new Die(GlassColor.RED, 5);
+        Die d2 = new Die(GlassColor.RED, 5);
+        Die d3 = new Die(GlassColor.YELLOW, 5);
+        Die d4 = new Die(GlassColor.RED, 4);
+        Assertions.assertEquals(d1, d2);
+        Assertions.assertNotEquals(d1, d3);
+        Assertions.assertNotEquals(d1, d4);
+        Assertions.assertEquals(d1, d2);
+        Assertions.assertNotEquals(d1, new Object());
+
+    }
 }
