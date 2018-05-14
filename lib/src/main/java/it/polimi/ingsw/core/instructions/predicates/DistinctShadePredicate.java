@@ -15,6 +15,7 @@ public class DistinctShadePredicate extends Predicate {
     private final VariableSupplier<Die[]> dice;
 
     public DistinctShadePredicate(VariableSupplier<Die[]> dice) {
+        this.id = "distinct_shade";
         this.dice = dice;
     }
 

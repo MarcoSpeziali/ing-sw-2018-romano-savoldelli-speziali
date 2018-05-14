@@ -1,18 +1,16 @@
 package it.polimi.ingsw.compilers.actions;
 
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
-import it.polimi.ingsw.compilers.commons.CompiledParameter;
-import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
-import it.polimi.ingsw.compilers.expressions.ExpressionCompiler;
+import it.polimi.ingsw.compilers.commons.ParametersCompiler;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.io.XmlUtils;
 import org.w3c.dom.Node;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class ActionCompiler {
 
@@ -63,12 +61,8 @@ public class ActionCompiler {
         ActionDirective targetDirective = directives.stream()
                 .filter(actionDirective -> actionDirective.getId().equals(effectId))
                 .findFirst()
-                .orElse(null);
-
-        // if no directive was found then an exception must be thrown
-        if (targetDirective == null) {
-            throw new UnrecognizedActionException(effectId);
-        }
+                // if no directive was found then an exception must be thrown
+                .orElseThrow(() -> new UnrecognizedActionException(effectId));
 
         // finds the declared constraint between the provided (already compiled) constraints
         EvaluableConstraint constraint = constraintId == null ?
@@ -88,7 +82,7 @@ public class ActionCompiler {
                         constraint,
                         result
                 ),
-                parseParameters(targetDirective, rawEffect),
+                ParametersCompiler.parseParameters(rawEffect, targetDirective, EFFECT_CALL_REGEX),
                 targetDirective.requiresUserInteraction()
         );
     }
@@ -106,133 +100,6 @@ public class ActionCompiler {
         }
 
         throw new IllegalArgumentException();
-    }
-
-    /**
-     * Parses the effect parameters.
-     * @param directive the action directive
-     * @param rawEffect the raw effect as string
-     * @return a {@link List} of {@link CompiledParameter}
-     */
-    private static List<CompiledParameter> parseParameters(ActionDirective directive, String rawEffect) {
-        Pattern pattern = Pattern.compile(EFFECT_CALL_REGEX);
-        Matcher matcher = pattern.matcher(rawEffect);
-
-        // if the raw effect does not match the regex
-        // (actually impossible because this regex has been tested earlier)
-        // an exception is thrown
-        if (!matcher.find()) {
-            throw new IllegalArgumentException();
-        }
-
-        String[] parameters = matcher.group("params").trim().split("\\s+");
-        String optionalMatch = matcher.group("opts");
-
-        // each optional parameter gets split by = and trimmed
-        String[] optionalParameters = optionalMatch == null ?
-                null :
-                Arrays.stream(optionalMatch.trim()
-                        .split(",")
-                ).map(String::trim)
-                .toArray(String[]::new);
-
-        // the parameters gets parsed and returned
-        List<CompiledParameter> actionParameters = parseMandatoryParameters(directive, parameters);
-        actionParameters.addAll(parseOptionalParameters(directive, optionalParameters));
-
-        return actionParameters;
-    }
-
-    /**
-     * Parses the mandatory parameters.
-     * @param directive the action directive
-     * @param rawParameters the array of raw mandatory parameters
-     * @return a {@link List} of {@link CompiledParameter}
-     */
-    private static List<CompiledParameter> parseMandatoryParameters(ActionDirective directive, String[] rawParameters) {
-        List<CompiledParameter> parameters = new LinkedList<>();
-
-        for (int i = 0; i < rawParameters.length; i++) {
-            int finalI = i;
-
-            // gets the current parameter and throws an exception if it was not found
-            ParameterDirective currentParameterDirective = directive.getParametersDirectives()
-                    .stream()
-                    .filter(actionParameterDirective -> actionParameterDirective.getPosition().equals(finalI))
-                    .findFirst()
-                    .orElseThrow(() -> new MissingParameterException(directive.getId()));
-
-            // parses the current parameter
-            parameters.add(parseParameter(currentParameterDirective, rawParameters[i], i));
-        }
-
-        return parameters;
-    }
-
-    /**
-     * Parses the mandatory parameters.
-     * @param directive the action directive
-     * @param rawParameters the array of raw optional parameters
-     * @return a {@link List} of {@link CompiledParameter}
-     */
-    private static List<CompiledParameter> parseOptionalParameters(ActionDirective directive, String[] rawParameters) {
-        List<CompiledParameter> actionParameters = new LinkedList<>();
-
-        // filters the directives to get only the optional ones and sorts them by position
-        List<ParameterDirective> optionalDirectives = directive.getParametersDirectives().stream()
-                .filter(ParameterDirective::isOptional)
-                .sorted(Comparator.comparing(ParameterDirective::getPosition))
-                .collect(Collectors.toList());
-
-        // if no optional were provided then the list gets created immediately with null as value
-        if (rawParameters == null) {
-            return optionalDirectives.stream()
-                    .map(actionParameterDirective -> parseParameter(
-                            actionParameterDirective,
-                            null,
-                            actionParameterDirective.getPosition()
-                    ))
-                    .collect(Collectors.toList());
-        }
-
-        // holds the param_name: param_value pairs
-        Map<String, String> parameters = new HashMap<>();
-
-        // every raw parameters gets split by = (limit 2: means that only the first occurrence will cause a split
-        Arrays.stream(rawParameters)
-                .map(s -> s.split("=", 2))
-                // the result is param_name: param_value, which gets added into the map
-                .forEach(strings -> parameters.put(strings[0], strings[1]));
-
-        // for each directive a parameters gets parsed
-        for (ParameterDirective currentParameterDirective : optionalDirectives) {
-            actionParameters.add(parseParameter(
-                    currentParameterDirective,
-                    parameters.get(currentParameterDirective.getName()),
-                    currentParameterDirective.getPosition()
-            ));
-        }
-
-        return actionParameters;
-    }
-
-    /**
-     * Parses a single parameter.
-     * @param parameterDirective the directive of the parameter
-     * @param rawParameter the raw value of the parameter
-     * @param position the position of the parameter in the constructor
-     * @return an instance of {@link CompiledParameter} from the raw value
-     */
-    private static CompiledParameter parseParameter(ParameterDirective parameterDirective, String rawParameter, int position) {
-        //noinspection unchecked
-        return new CompiledParameter(
-                parameterDirective.getParameterType(),
-                position,
-                // the raw value gets compiled since it could be an expression
-                rawParameter == null ? null : ExpressionCompiler.compile(rawParameter),
-                parameterDirective.getName(),
-                parameterDirective.getDefaultValue()
-        );
     }
 
     /**

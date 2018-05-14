@@ -19,8 +19,18 @@ public class InstructionParameterDirective extends ParameterDirective {
     /**
      * @return {@code true} if the parameter class is a predicate, {@code false} otherwise
      */
-    public Boolean getPredicate() {
+    public Boolean isPredicate() {
         return isPredicate;
+    }
+
+    /**
+     * If the parameter is optional.
+     */
+    private Boolean isOptional;
+
+    @Override
+    public boolean isOptional() {
+        return this.isOptional;
     }
 
     /**
@@ -30,8 +40,8 @@ public class InstructionParameterDirective extends ParameterDirective {
      * @param position      the position of the parameter in the constructor
      * @param isMultiple    {@code true} if the parameter class is an array, {@code false} otherwise
      */
-    public InstructionParameterDirective(Class<? extends Serializable> parameterType, Integer position, Boolean isMultiple, Boolean isPredicate) {
-        this(parameterType, position, null, null, isMultiple, isPredicate);
+    public InstructionParameterDirective(Class<? extends Serializable> parameterType, Integer position, Boolean isMultiple, Boolean isPredicate, Boolean isOptional) {
+        this(parameterType, position, null, null, isMultiple, isPredicate, isOptional);
     }
 
     /**
@@ -43,8 +53,9 @@ public class InstructionParameterDirective extends ParameterDirective {
      * @param defaultValue  the default value of the parameter
      * @param isMultiple    {@code true} if the parameter class is an array, {@code false} otherwise
      */
-    public InstructionParameterDirective(Class<? extends Serializable> parameterType, Integer position, String name, Serializable defaultValue, Boolean isMultiple, Boolean isPredicate) {
+    public InstructionParameterDirective(Class<? extends Serializable> parameterType, Integer position, String name, Serializable defaultValue, Boolean isMultiple, Boolean isPredicate, Boolean isOptional) {
         super(parameterType, position, name, defaultValue, isMultiple);
         this.isPredicate = isPredicate;
+        this.isOptional = isOptional;
     }
 }

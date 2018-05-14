@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public class ConstraintGroup implements EvaluableConstraint {
 
+    private static final long serialVersionUID = 4720858320474772369L;
+
     /**
      * The constraint id.
      */

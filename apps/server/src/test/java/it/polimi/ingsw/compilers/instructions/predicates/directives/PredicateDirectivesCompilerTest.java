@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 class PredicateDirectivesCompilerTest {
+
     @Test
     void testSuccessfulCompilation() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         List<PredicateDirective> directives = PredicateDirectivesCompiler.compile();

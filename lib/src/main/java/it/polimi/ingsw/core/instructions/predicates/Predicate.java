@@ -2,10 +2,14 @@ package it.polimi.ingsw.core.instructions.predicates;
 
 import it.polimi.ingsw.core.Context;
 
+import java.io.Serializable;
+
 /**
  * Represents a boolean check.
  */
-public abstract class Predicate {
+public abstract class Predicate implements Serializable {
+
+    private static final long serialVersionUID = -8125598992789477226L;
 
     /**
      * The id of the predicate.

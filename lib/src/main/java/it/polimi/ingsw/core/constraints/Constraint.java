@@ -8,6 +8,8 @@ import it.polimi.ingsw.core.actions.VariableSupplier;
  */
 public class Constraint implements EvaluableConstraint {
 
+    private static final long serialVersionUID = -221185497710867020L;
+
     /**
      * The id of the constraint.
      */

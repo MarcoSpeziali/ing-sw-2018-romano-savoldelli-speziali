@@ -66,9 +66,7 @@
     </card>
     <card id="color_diagonals" nameKey="cards.public_cards.color_diagonals.name">
         <objective pointsPerCompletion="1" descriptionKey="cards.public_cards.color_diagonals.description">
-            <!--<take-sum>-->
             <count-diagonal filter="color" />
-            <!--</take-sum>-->
         </objective>
     </card>
     <card id="color_variety" nameKey="cards.public_cards.color_variety.name">

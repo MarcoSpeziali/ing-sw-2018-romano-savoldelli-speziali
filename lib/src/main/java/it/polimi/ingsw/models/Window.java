@@ -93,6 +93,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 }
             }
         }
+
         return availablePositions;
     }
 
