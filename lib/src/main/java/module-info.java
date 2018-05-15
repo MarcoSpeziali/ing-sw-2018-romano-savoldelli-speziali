@@ -10,4 +10,5 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.utils.text;
     exports it.polimi.ingsw.utils.io;
     requires java.xml;
+    requires javafx.graphics;
 }

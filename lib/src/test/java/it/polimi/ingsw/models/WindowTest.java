@@ -66,8 +66,13 @@ class WindowTest {
     @Test
     void getPossiblePositionsForDie() {
         Die d = new Die(GlassColor.RED, 2);
+        Die d1 = new Die(GlassColor.GREEN, 3);
+        Die d2 = new Die(GlassColor.PURPLE, 2);
+
         List<Integer> expectedAtStart = List.of(0,4,9,10);
         List<Integer> expectedAfterPutDie = List.of(0,5,8);
+        List<Integer> expectedIfAdjacencyIsIgnored = List.of(0,1,5,11);
+
 
         // Checking Exceptions
 
@@ -93,6 +98,7 @@ class WindowTest {
         // Checking available positions after a die has been put:
 
         window.putDie(d, 4);
+
         Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
                 false, false, false).containsAll(expectedAfterPutDie));
         Assertions.assertEquals(3, window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
@@ -101,6 +107,13 @@ class WindowTest {
                 false, false, false).contains(9));
         Assertions.assertEquals(1, window.getPossiblePositionsForDie(new Die(GlassColor.RED, 2),
                 false, false, false).size());
+        window.putDie(d1,3);
+        window.putDie(d2, 9);
+        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
+                false,false, true).containsAll(expectedIfAdjacencyIsIgnored));
+        Assertions.assertEquals(3, window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
+                false, false, true).size());
+
     }
 
     @Test
