@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
  * @param <T> The values type that must implement Comparable.
  */
 public class Range<T extends Comparable<? super T> & Serializable> implements Serializable {
+    private static final long serialVersionUID = 3306661517507071620L;
     /**
      * The stating value of the range.
      */

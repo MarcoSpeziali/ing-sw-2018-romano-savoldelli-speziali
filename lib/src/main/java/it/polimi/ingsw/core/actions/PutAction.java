@@ -6,6 +6,7 @@ import it.polimi.ingsw.core.locations.RandomPutLocation;
 
 public class PutAction extends Action {
 
+    private static final long serialVersionUID = 6807507670869610757L;
     private final VariableSupplier<Die> die;
     private final RandomPutLocation location;
 

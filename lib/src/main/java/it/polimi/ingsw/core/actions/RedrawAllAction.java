@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class RedrawAllAction extends Action {
 
+    private static final long serialVersionUID = 7305416979511806520L;
     private final ChooseLocation location;
 
     public RedrawAllAction(ActionData data, ChooseLocation location) {

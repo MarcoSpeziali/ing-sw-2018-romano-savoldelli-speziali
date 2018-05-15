@@ -5,6 +5,7 @@ import it.polimi.ingsw.models.Die;
 
 public class FlipAction extends Action {
 
+    private static final long serialVersionUID = 3304536240465898877L;
     private final VariableSupplier<Die> die;
 
     public FlipAction(ActionData data, VariableSupplier<Die> die) {

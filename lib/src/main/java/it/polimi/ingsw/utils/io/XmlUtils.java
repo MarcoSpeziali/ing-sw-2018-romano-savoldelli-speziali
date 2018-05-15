@@ -68,6 +68,11 @@ public final class XmlUtils {
 
     public static Map<String, Object>[] getMapArray(Map<String, Object> objectMap, String key) {
         Object[] objects = (Object[]) objectMap.get(key);
+
+        if (objects == null) {
+            return null;
+        }
+
         //noinspection unchecked
         return Arrays.stream(objects).toArray(Map[]::new);
     }

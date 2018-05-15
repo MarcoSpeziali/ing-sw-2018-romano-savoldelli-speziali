@@ -31,9 +31,16 @@ public class ConstraintCompiler {
             throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to a constraint, instead of a " + node.getNodeName());
         }
 
-        // Gets a map representation of the provided constraint
-        Map<String, Object> constraintInfo = XmlUtils.xmlToMap(node);
+        // compiles the constraint from the map
+        return compile(XmlUtils.xmlToMap(node));
+    }
 
+    /**
+     * Compiles a constraint from a {@link Map}.
+     * @param constraintInfo the constraint info
+     * @return the compiled constraint
+     */
+    public static Constraint compile(Map<String, Object> constraintInfo) {
         String constraintId = (String) constraintInfo.get("@id");
         String constraintText = (String) constraintInfo.get("#text");
         constraintText = constraintText.trim();

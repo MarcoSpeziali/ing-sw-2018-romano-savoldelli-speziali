@@ -28,6 +28,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
     public static final UnaryOperator<Double>   DOUBLE_DECREMENT_FUNCTION   = val -> --val;
     public static final UnaryOperator<Long>     LONG_DECREMENT_FUNCTION     = val -> --val;
     public static final UnaryOperator<Byte>     BYTE_DECREMENT_FUNCTION     = val -> --val;
+    private static final long serialVersionUID = -4891369410626728370L;
 
     /**
      * The functional function used to increment the value of type {@code T}.

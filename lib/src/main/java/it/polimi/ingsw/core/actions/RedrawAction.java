@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class RedrawAction extends Action {
 
+    private static final long serialVersionUID = -5834416569411220558L;
     private final VariableSupplier<Die> die;
 
     public RedrawAction(ActionData data, VariableSupplier<Die> die) {

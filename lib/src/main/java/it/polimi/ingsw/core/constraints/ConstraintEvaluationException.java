@@ -1,6 +1,8 @@
 package it.polimi.ingsw.core.constraints;
 
 public class ConstraintEvaluationException extends RuntimeException {
+    private static final long serialVersionUID = -4117274887354599334L;
+
     public ConstraintEvaluationException() {
         super();
     }

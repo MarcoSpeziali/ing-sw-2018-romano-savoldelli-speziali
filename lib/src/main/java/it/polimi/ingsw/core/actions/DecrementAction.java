@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.MathUtils;
 
 public class DecrementAction extends Action {
 
+    private static final long serialVersionUID = -1530680862668890L;
     protected final VariableSupplier<Die> die;
     protected final VariableSupplier<Integer> by;
 

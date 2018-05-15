@@ -6,6 +6,7 @@ import it.polimi.ingsw.core.locations.ChoosablePutLocation;
 
 public class PlaceAction extends Action {
 
+    private static final long serialVersionUID = 8233234081672927366L;
     private final VariableSupplier<Die> die;
     private final ChoosablePutLocation location;
     private final VariableSupplier<Integer> position;

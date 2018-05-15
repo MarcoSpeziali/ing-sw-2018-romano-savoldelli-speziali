@@ -7,6 +7,7 @@ import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
 
 public class ChoosePositionForDieAction extends Action {
 
+    private static final long serialVersionUID = -2003152924850538064L;
     private final UserInteractionProvider userInteractionProvider;
     private final RestrictedChoosablePutLocation from;
     private final VariableSupplier<Die> die;

@@ -5,6 +5,7 @@ import it.polimi.ingsw.core.locations.RandomPickLocation;
 
 public class PickAction extends Action {
 
+    private static final long serialVersionUID = -9131822743611513860L;
     protected final RandomPickLocation from;
 
     public PickAction(ActionData data, RandomPickLocation from) {

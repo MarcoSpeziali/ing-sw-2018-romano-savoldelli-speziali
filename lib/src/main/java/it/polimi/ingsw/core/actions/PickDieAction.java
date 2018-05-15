@@ -6,6 +6,7 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 
 public class PickDieAction extends Action {
 
+    private static final long serialVersionUID = 8262178826626003006L;
     private final ChoosablePickLocation from;
     private final VariableSupplier<Die> die;
 

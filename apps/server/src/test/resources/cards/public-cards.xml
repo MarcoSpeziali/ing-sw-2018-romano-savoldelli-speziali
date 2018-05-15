@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cards>
+    <card id="column_shade_variety" name="cards.public_cards.column_shade_variety.name">
+        <objective pointsPerCompletion="4" description="cards.public_cards.column_shade_variety.description">
+            <for-column column="COLUMN">
+                <take-if predicate="distinct_shade $COLUMN$" />
+            </for-column>
+        </objective>
+    </card>
+    <card id="deep_shades" name="cards.public_cards.deep_shades.name">
+        <objective pointsPerCompletion="2" description="cards.public_cards.deep_shades.description">
+            <take-min>
+                <count-dice filterShade="5"/>
+                <count-dice filterShade="6"/>
+            </take-min>
+        </objective>
+    </card>
+    <card id="color_diagonals" name="cards.public_cards.color_diagonals.name">
+        <objective pointsPerCompletion="1" description="cards.public_cards.color_diagonals.description">
+            <count-diagonal filter="color" />
+        </objective>
+    </card>
+    <card id="color_variety" name="cards.public_cards.color_variety.name">
+        <objective pointsPerCompletion="4" description="cards.public_cards.color_variety.description">
+            <take-min>
+                <count-dice filterColor="red"/>
+                <count-dice filterColor="yellow"/>
+                <count-dice filterColor="green"/>
+                <count-dice filterColor="blue"/>
+                <count-dice filterColor="purple"/>
+            </take-min>
+        </objective>
+    </card>
+</cards>
