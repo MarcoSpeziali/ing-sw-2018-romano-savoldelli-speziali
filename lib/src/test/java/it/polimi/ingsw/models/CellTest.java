@@ -92,9 +92,9 @@ class CellTest {
     void canFitDieTest() {
         when(die.getShade()).thenReturn(5);
         when(die.getColor()).thenReturn(GlassColor.BLUE);
-        Assertions.assertTrue(coloredCell.canFitDie(die, false, false));
-        Assertions.assertFalse(shadedCell.canFitDie(die, false, false));
-        Assertions.assertTrue(blankCell.canFitDie(die, false, false));
+        Assertions.assertTrue(coloredCell.matchesOrBlank(die, false, false));
+        Assertions.assertFalse(shadedCell.matchesOrBlank(die, false, false));
+        Assertions.assertTrue(blankCell.matchesOrBlank(die, false, false));
 
     }
 }

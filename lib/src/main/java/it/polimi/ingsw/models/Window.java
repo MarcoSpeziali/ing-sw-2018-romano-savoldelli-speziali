@@ -4,10 +4,7 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
 import it.polimi.ingsw.utils.IterableRange;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation {
@@ -46,46 +43,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     public Cell[][] getCells() {
         return cells;
-    }
-
-    @Override
-    public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
-        if (die.getShade() == 0) {
-            throw new IllegalArgumentException("Die's shade must be set!");
-        }
-
-        if (die.getColor() == null) {
-            throw new IllegalArgumentException("Die's color must be set!");
-        }
-
-        if (this.getNumberOfDice() == 0) {
-            return this.getEdgesPositions(die, ignoreColor, ignoreShade, ignoreAdjacency);
-        }
-
-        List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
-
-
-
-
-
-
-
-
-
-
-
-        /*for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.columns; j++) {
-                if (!availablePositions.contains(i * this.columns + j) &&
-                        this.cells[i][j].canFitDie(die, ignoreColor, ignoreShade) &&
-                        (ignoreAdjacency || checkAdjacency(die, i, j, ignoreColor, ignoreShade))) {
-                    availablePositions.add(i * this.columns + j);
-                }
-            }
-
-        }
-        */
-        return availablePositions;
     }
 
     @Override
@@ -143,24 +100,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return rows*columns - getFreeSpace();
     }
 
-    private boolean checkAdjacency(Die die, int i, int j, boolean ignoreColor, boolean ignoreShade) {
-        return  canHaveNeighbour(die, i, j + 1, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i, j - 1, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i - 1, j, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i + 1, j, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i-1, j-1, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i-1, j+1, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i+1, j-1, ignoreColor, ignoreShade) &&
-                canHaveNeighbour(die, i+1, j+1, ignoreColor, ignoreShade);
-    }
-
-    private boolean canHaveNeighbour(Die neighbourCandidate, int i, int j, boolean ignoreColor, boolean ignoreShade) {
-        if (i < 0 || j < 0 || i > rows - 1 || j > columns - 1) {
-            return true;
-        }
-        return this.cells[i][j].canFitDie(neighbourCandidate, ignoreShade, ignoreColor);
-    }
-
     private List<Integer> getEdgesPositions(Die die, boolean ignoreColor, boolean ignoreShade, Boolean ignoreAdjacency) {
         List<Integer> edges = new ArrayList<>((this.rows + this.columns) * 2);
 
@@ -174,29 +113,92 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
         for (int i = 0; i < this.rows; i++) {
             // first column
-            if (this.getCells()[i][0].canFitDie(die, ignoreColor, ignoreShade)) {
+            if (this.getCells()[i][0].matchesOrBlank(die, ignoreColor, ignoreShade)) {
                 edges.add(i * this.columns);
             }
 
             // last column
-            if (this.getCells()[i][this.columns - 1].canFitDie(die, ignoreColor, ignoreShade)) {
+            if (this.getCells()[i][this.columns - 1].matchesOrBlank(die, ignoreColor, ignoreShade)) {
                 edges.add(i * this.columns + this.columns - 1);
             }
         }
 
         for (int j = 1; j < this.columns - 1; j++) {
             // first row
-            if (this.getCells()[0][j].canFitDie(die, ignoreColor, ignoreShade)) {
+            if (this.getCells()[0][j].matchesOrBlank(die, ignoreColor, ignoreShade)) {
                 edges.add(j);
             }
 
             // last row
-            if (this.getCells()[this.rows - 1][j].canFitDie(die, ignoreColor, ignoreShade)) {
+            if (this.getCells()[this.rows - 1][j].matchesOrBlank(die, ignoreColor, ignoreShade)) {
                 edges.add((this.rows - 1) * this.columns + j);
             }
         }
         return edges;
     }
+
+    private Integer orthogonalMatchingNeighbour(Die die, int location, int i, int j, boolean ignoreColor, boolean ignoreShade, boolean ignoreAjacency) {
+        if ((!die.getColor().equals(this.cells[location / columns][location % columns].getColor()) &&
+                !(die.getShade().equals(this.cells[location / columns][location % columns].getShade())))
+                || ignoreAjacency) {
+            return this.matchingNeighbour(die, i, j, ignoreColor, ignoreShade);
+        }
+        return null;
+    }
+
+    private Integer matchingNeighbour(Die die, int i, int j, boolean ignoreColor, boolean ignoreShade) {
+        if (i < 0 || j < 0 || i > rows - 1 || j > columns - 1) {
+            return null;
+        }
+        if(this.cells[i][j].matchesOrBlank(die, ignoreShade, ignoreColor)) {
+            return i * columns + j;
+        }
+        return null;
+    }
+
+    private List<Integer> cellsAround(Die die, int location, boolean ignoreColor, boolean ignoreShade, boolean ignoreAdjacency) {
+
+        int i = location / this.columns;
+        int j = location % this.columns;
+
+        List<Integer> around = new ArrayList<>(8);
+
+        around.add(orthogonalMatchingNeighbour(die, location, i+1, j, ignoreColor, ignoreShade, ignoreAdjacency));
+        around.add(orthogonalMatchingNeighbour(die, location, i-1, j, ignoreColor, ignoreShade, ignoreAdjacency));
+        around.add(orthogonalMatchingNeighbour(die, location, i, j+1, ignoreColor, ignoreShade, ignoreAdjacency));
+        around.add(orthogonalMatchingNeighbour(die, location, i, j-1, ignoreColor, ignoreShade, ignoreAdjacency));
+
+        around.add(matchingNeighbour(die, i+1, j+1, ignoreColor, ignoreShade));
+        around.add(matchingNeighbour(die, i-1, j+1, ignoreColor, ignoreShade));
+        around.add(matchingNeighbour(die, i+1, j-1, ignoreColor, ignoreShade));
+        around.add(matchingNeighbour(die, i-1, j-1, ignoreColor, ignoreShade));
+
+        return around;
+    }
+
+    @Override
+    public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
+        if (die.getShade() == 0) {
+            throw new IllegalArgumentException("Die's shade must be set!");
+        }
+
+        if (die.getColor() == null) {
+            throw new IllegalArgumentException("Die's color must be set!");
+        }
+
+        if (this.getNumberOfDice() == 0) {
+            return this.getEdgesPositions(die, ignoreColor, ignoreShade, ignoreAdjacency);
+        }
+
+        List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
+
+        for (int location : this.getLocations()) {
+            availablePositions.addAll(cellsAround(die, location, ignoreColor, ignoreShade, ignoreAdjacency));
+        }
+        availablePositions.removeAll(Collections.singleton(null));
+        return availablePositions.stream().distinct().collect(Collectors.toList());
+    }
+
 }
 
 

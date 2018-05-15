@@ -98,16 +98,16 @@ public class ExpressionCompiler {
      * @return {@code true} is the predicate represents a function call else {@code false}.
      */
     private static boolean isFunctionCall(String call) {
-        // the predicate represents a function call if matches the regex
+        // the predicate represents a function call if matchesOrBlank the regex
         /*
          * ^: beginning of a line
          * [a-zA-Z_]: a single character from a to z or A to Z or the character _
          * [a-zA-Z0-9_]: a single character from a to z or A to Z or 0 to 9 or the character _
-         *      *: matches 0 or an infinite number of times the expression [a-zA-Z0-9_]
-         * \(: matches the character (
-         * .: matches any character
-         *      *: matches 0 or an infinite number of times the expression .
-         * \): matches the character )
+         *      *: matchesOrBlank 0 or an infinite number of times the expression [a-zA-Z0-9_]
+         * \(: matchesOrBlank the character (
+         * .: matchesOrBlank any character
+         *      *: matchesOrBlank 0 or an infinite number of times the expression .
+         * \): matchesOrBlank the character )
          * $: ending of a line
          */
         return call.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\(.*\\)$");
@@ -119,12 +119,12 @@ public class ExpressionCompiler {
      * @return {@code true} is the predicate represents a function call else {@code false}.
      */
     private static boolean isFieldAccess(String call) {
-        // the predicate represents a function call if matches the regex
+        // the predicate represents a function call if matchesOrBlank the regex
         /*
          * ^: beginning of a line
          * [a-zA-Z_]: a single character from a to z or A to Z or the character _
          * [a-zA-Z0-9_]: a single character from a to z or A to Z or 0 to 9 or the character _
-         *      *: matches 0 or an infinite number of times the expression [a-zA-Z0-9_]
+         *      *: matchesOrBlank 0 or an infinite number of times the expression [a-zA-Z0-9_]
          * $: ending of a line
          */
         return call.matches("^[a-zA-Z_][a-zA-Z0-9_]*$");
@@ -142,11 +142,11 @@ public class ExpressionCompiler {
         /*
          * ^: beginning of a line
          * (?<name>[a-zA-Z_][a-zA-Z0-9_]*): captures the name of the function (named group)
-         * \(: matches the character (
-         * \s*: matches 0 or more whitespaces
+         * \(: matchesOrBlank the character (
+         * \s*: matchesOrBlank 0 or more whitespaces
          * (?<params>.+)?: captures the parameters of the function (named group, optional)
-         * \s*: matches 0 or more whitespaces
-         * \): matches the character )
+         * \s*: matchesOrBlank 0 or more whitespaces
+         * \): matchesOrBlank the character )
          * $: ending of a line
          */
         Pattern functionCallPattern = Pattern.compile("^(?<name>[a-zA-Z_][a-zA-Z0-9_]*)\\(\\s*(?<params>.+)?\\s*\\)$");
@@ -282,10 +282,10 @@ public class ExpressionCompiler {
 
         /*
          * (?<=[^\\]): ensures that before the next regex there is not a \
-         * \$: matches the character $
-         * (.*?): matches (and groups) any character but as few as possible
+         * \$: matchesOrBlank the character $
+         * (.*?): matchesOrBlank (and groups) any character but as few as possible
          * (?<=[^\\]): ensures that before the next regex there is not a \
-         * \$: matches the character $
+         * \$: matchesOrBlank the character $
          */
         Pattern pattern = Pattern.compile("(?<=[^\\\\])\\$(.*?)(?<=[^\\\\])\\$");
         Matcher matcher = pattern.matcher(predicate);

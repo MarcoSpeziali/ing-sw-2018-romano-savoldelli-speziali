@@ -40,9 +40,9 @@ public class ConstraintCompiler {
 
         /*
          * (?<lop>[^=!<> ]+): captures 1 or more character but not =, !, <, >, space
-         * \s*: matches any whitespaces
+         * \s*: matchesOrBlank any whitespaces
          * (?<operator>(==|!=|<=|<|>|>=)): captures == or != or <= or < or > or >=
-         * \s*: matches any whitespaces
+         * \s*: matchesOrBlank any whitespaces
          * (?<rop>[^=!<> ]+): captures 1 or more character but not =, !, <, >, space
          */
         Pattern pattern = Pattern.compile("(?<lop>[^=!<> ]+)\\s*(?<operator>(==|!=|<=|<|>|>=))\\s*(?<rop>[^=!<> ]+)");

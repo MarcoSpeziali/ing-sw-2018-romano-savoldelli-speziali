@@ -58,12 +58,13 @@ class WindowTest {
     @Test
     void getPossiblePositionsForDie() {
         Die d = new Die(GlassColor.RED, 2);
-        List<Integer> expected = List.of(0,4,9,10);
+        List<Integer> expectedAtStart = List.of(0,4,9,10);
+        List<Integer> expectedAfterPutDie = List.of(0,5,8);
 
         // Checking initial available positions:
         
         Assertions.assertTrue(window.getPossiblePositionsForDie(d,
-                false, false, false).containsAll(expected));
+                false, false, false).containsAll(expectedAtStart));
         Assertions.assertEquals(4, window.getPossiblePositionsForDie(d,
                 false, false, false).size());
         Assertions.assertFalse(
@@ -72,12 +73,13 @@ class WindowTest {
                          window.getPossiblePositionsForDie(d,
                                 false,false,false).contains(6));
 
-        // Checking available positions when after has been put:
+        // Checking available positions after a die has been put:
 
-        //window.putDie(die, 1);
-        //Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.RED, 4),
-          //      false, false, false).containsAll(nonAdmitted));
-
+        window.putDie(d, 4);
+        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
+                false, false, false).containsAll(expectedAfterPutDie));
+        Assertions.assertEquals(3, window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
+                false, false, false).size());
     }
 
     @Test

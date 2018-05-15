@@ -40,10 +40,6 @@ class BagTest {
         List<Enum> list = Arrays.asList(GlassColor.values());
         Assertions.assertNotNull(bag.pickDie());
         Assertions.assertTrue(list.contains(bag.pickDie().getColor()));
-        System.out.println(bag.pickDie().getColor());
-        System.out.println(bag.pickDie().getColor());
-        System.out.println(bag.pickDie().getColor());
-
     }
 
     @Test
