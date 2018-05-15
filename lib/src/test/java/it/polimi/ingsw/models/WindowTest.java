@@ -15,10 +15,12 @@ class WindowTest {
     private Window window;
     private Cell[][] cells;
     private Die die;
+    private Window mockWindow;
 
     @BeforeEach
     void setUp() {
         this.die = new Die(GlassColor.YELLOW,5);
+        this.mockWindow = mock(Window.class);
 
         this.cells = new Cell[][] { // 0, 1, 4, 5(edge), 11 // 0, 4, 9, 10  no 5,6
                 {
@@ -56,10 +58,25 @@ class WindowTest {
     }
 
     @Test
+    void setSiblingTest() {
+        window.setSibling(mockWindow);
+        Assertions.assertSame(mockWindow, window.getSibling());
+    }
+
+    @Test
     void getPossiblePositionsForDie() {
         Die d = new Die(GlassColor.RED, 2);
         List<Integer> expectedAtStart = List.of(0,4,9,10);
         List<Integer> expectedAfterPutDie = List.of(0,5,8);
+
+        // Checking Exceptions
+
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> window.getPossiblePositionsForDie(
+                new Die(null, 4), false, false, false)
+        );
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> window.getPossiblePositionsForDie(
+                new Die(GlassColor.YELLOW, 0), false, false, false)
+        );
 
         // Checking initial available positions:
         
@@ -79,6 +96,10 @@ class WindowTest {
         Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
                 false, false, false).containsAll(expectedAfterPutDie));
         Assertions.assertEquals(3, window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
+                false, false, false).size());
+        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.RED, 2),
+                false, false, false).contains(9));
+        Assertions.assertEquals(1, window.getPossiblePositionsForDie(new Die(GlassColor.RED, 2),
                 false, false, false).size());
     }
 

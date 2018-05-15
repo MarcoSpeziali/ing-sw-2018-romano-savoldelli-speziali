@@ -137,9 +137,19 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return edges;
     }
 
+    /**
+     * @param die
+     * @param location
+     * @param i
+     * @param j
+     * @param ignoreColor
+     * @param ignoreShade
+     * @param ignoreAjacency
+     * @return
+     */
     private Integer orthogonalMatchingNeighbour(Die die, int location, int i, int j, boolean ignoreColor, boolean ignoreShade, boolean ignoreAjacency) {
-        if ((!die.getColor().equals(this.cells[location / columns][location % columns].getColor()) &&
-                !(die.getShade().equals(this.cells[location / columns][location % columns].getShade())))
+        if ((!die.getColor().equals(this.cells[location / columns][location % columns].getDie().getColor()) &&
+                !(die.getShade().equals(this.cells[location / columns][location % columns].getDie().getShade())))
                 || ignoreAjacency) {
             return this.matchingNeighbour(die, i, j, ignoreColor, ignoreShade);
         }

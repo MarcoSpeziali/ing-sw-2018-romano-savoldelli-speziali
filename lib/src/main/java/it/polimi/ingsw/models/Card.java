@@ -25,7 +25,7 @@ public abstract class Card {
         this.backImagePath = backImagePath;
         this.frontImagePath = frontImagePath;
         this.title = title;
-        this. description = description;
+        this.description = description;
 
     }
 
