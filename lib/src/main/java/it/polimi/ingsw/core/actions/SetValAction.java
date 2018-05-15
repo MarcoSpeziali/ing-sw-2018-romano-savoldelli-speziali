@@ -6,6 +6,7 @@ import it.polimi.ingsw.core.UserInteractionProvider;
 
 public class SetValAction extends Action {
 
+    private static final long serialVersionUID = -2314218736549779947L;
     private final UserInteractionProvider userInteractionProvider;
     private final VariableSupplier<Die> die;
 

@@ -6,6 +6,7 @@ import it.polimi.ingsw.core.locations.ChooseLocation;
 
 public class ChoosePositionAction extends Action {
 
+    private static final long serialVersionUID = 2291839640072604945L;
     private final UserInteractionProvider userInteractionProvider;
     private final ChooseLocation from;
 

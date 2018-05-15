@@ -6,6 +6,7 @@ import it.polimi.ingsw.core.GlassColor;
 
 public class SwapAction extends Action {
 
+    private static final long serialVersionUID = 6960916269848753511L;
     protected final VariableSupplier<Die> die1;
     protected final VariableSupplier<Die> die2;
 

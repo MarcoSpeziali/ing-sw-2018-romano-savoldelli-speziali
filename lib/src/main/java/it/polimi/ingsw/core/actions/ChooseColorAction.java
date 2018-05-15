@@ -7,6 +7,8 @@ import it.polimi.ingsw.core.locations.ChooseLocation;
 
 public class ChooseColorAction extends ChooseDieAction {
 
+    private static final long serialVersionUID = -1654067241403388125L;
+
     public ChooseColorAction(ActionData data, UserInteractionProvider userInteractionProvider, ChooseLocation from, VariableSupplier<Integer> shade) {
         super(data, userInteractionProvider, from, context -> null, shade);
     }

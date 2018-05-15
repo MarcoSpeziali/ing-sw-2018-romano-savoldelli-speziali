@@ -13,6 +13,7 @@ import java.util.function.Consumer;
  */
 public class ActionGroup implements ExecutableAction {
 
+    private static final long serialVersionUID = 5904841769138831731L;
     /**
      * The data of the action group.
      */

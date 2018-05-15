@@ -36,6 +36,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
         if (colors.isEmpty()) {
             throw new EmptyBagException("The bag has no dice left!");
         }
+
         Random rand = new Random();
         GlassColor randColor = colors.get(rand.nextInt(colors.size()));
         dice.merge(randColor, -1, Integer::sum);

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.core;
 
-public enum CardVisibility {
+import java.io.Serializable;
+
+public enum CardVisibility implements Serializable {
     PUBLIC,
     PRIVATE
 }

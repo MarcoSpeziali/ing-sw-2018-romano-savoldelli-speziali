@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 public class DistinctShadePredicate extends Predicate {
 
+    private static final long serialVersionUID = -3020074770083880056L;
     /**
      * The dice that has to have a distinct shade.
      */

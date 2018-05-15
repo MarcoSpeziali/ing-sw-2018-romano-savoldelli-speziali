@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instructions-directives>
+    <instruction-directives id="for-die" class="it.polimi.ingsw.core.instructions.ForDieInstruction">
+        <exposes-directives>
+            <variable-directives name="die" class="it.polimi.ingsw.models.Die"/>
+        </exposes-directives>
+        <parameters-directives>
+            <parameter-directives class="java.lang.Integer" name="filterShade" default="0" position="0"/>
+            <parameter-directives class="it.polimi.ingsw.core.GlassColor" default="null" name="filterColor" position="1"/>
+        </parameters-directives>
+    </instruction-directives>
+    <instruction-directives id="for-row" class="it.polimi.ingsw.core.instructions.ForRowInstruction">
+        <exposes-directives>
+            <variable-directives name="row" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
+        </exposes-directives>
+    </instruction-directives>
+    <instruction-directives id="for-column" class="it.polimi.ingsw.core.instructions.ForColumnInstruction">
+        <exposes-directives>
+            <variable-directives name="column" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
+        </exposes-directives>
+    </instruction-directives>
+    <instruction-directives id="take" class="it.polimi.ingsw.core.instructions.TakeInstruction"/>
+    <instruction-directives id="take-shade" class="it.polimi.ingsw.core.instructions.TakeShadeInstruction">
+        <parameters-directives>
+            <parameter-directives name="die" class="it.polimi.ingsw.models.Die"/>
+        </parameters-directives>
+    </instruction-directives>
+    <instruction-directives id="take-if" class="it.polimi.ingsw.core.instructions.TakeIfInstruction">
+        <parameters-directives>
+            <parameter-directives name="predicate" isPredicate="true"/>
+        </parameters-directives>
+    </instruction-directives>
+    <instruction-directives id="take-min" class="it.polimi.ingsw.core.instructions.TakeMinInstruction"/>
+    <instruction-directives id="take-max" class="it.polimi.ingsw.core.instructions.TakeMaxInstruction"/>
+    <instruction-directives id="take-sum" class="it.polimi.ingsw.core.instructions.TakeSumInstruction"/>
+    <instruction-directives id="take-rand" class="it.polimi.ingsw.core.instructions.TakeRandomInstruction"/>
+    <instruction-directives id="take-product" class="it.polimi.ingsw.core.instructions.TakeProductInstruction" />
+    <instruction-directives id="count-dice" class="it.polimi.ingsw.core.instructions.CountDiceInstruction">
+        <parameters-directives>
+            <parameter-directives name="filterShade" class="java.lang.Integer" default="0" position="0"/>
+            <parameter-directives name="filterColor" class="it.polimi.ingsw.core.GlassColor" default="null" position="1"/>
+        </parameters-directives>
+    </instruction-directives>
+    <instruction-directives id="count-diagonal" class="it.polimi.ingsw.core.instructions.CountDiagonalInstruction">
+        <parameters-directives>
+            <parameter-directives name="filter" class="it.polimi.ingsw.core.instructions.DieFilter" position="0"/>
+            <parameter-directives name="strictShade" class="java.lang.Integer" default="0" position="1"/>
+            <parameter-directives name="strictColor" class="it.polimi.ingsw.core.GlassColor" default="null" position="2"/>
+        </parameters-directives>
+    </instruction-directives>
+</instructions-directives>

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class DistinctColorPredicate extends Predicate {
+    private static final long serialVersionUID = 2423828840048012309L;
     /**
      * The dice that has to have a distinct color.
      */

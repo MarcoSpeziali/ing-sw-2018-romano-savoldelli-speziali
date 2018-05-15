@@ -8,6 +8,8 @@ import it.polimi.ingsw.core.constraints.ConstraintEvaluationException;
  */
 public abstract class Action implements ExecutableAction {
 
+    private static final long serialVersionUID = -4013759218081695459L;
+
     /**
      * The data of the action.
      */
