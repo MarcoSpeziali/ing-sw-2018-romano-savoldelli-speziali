@@ -137,10 +137,20 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return edges;
     }
 
-    private Integer orthogonalMatchingNeighbour(Die die, int location, int i, int j, boolean ignoreColor, boolean ignoreShade, boolean ignoreAjacency) {
-        if ((!die.getColor().equals(this.cells[location / columns][location % columns].getColor()) &&
-                !(die.getShade().equals(this.cells[location / columns][location % columns].getShade())))
-                || ignoreAjacency) {
+    /**
+     * @param die
+     * @param location
+     * @param i
+     * @param j
+     * @param ignoreColor
+     * @param ignoreShade
+     * @param ignoreAjacency
+     * @return
+     */
+    private Integer orthogonalMatchingNeighbour(Die die, int location, int i, int j, boolean ignoreColor, boolean ignoreShade) {
+        if ((!die.getColor().equals(this.cells[location / columns][location % columns].getDie().getColor()) &&
+                !(die.getShade().equals(this.cells[location / columns][location % columns].getDie().getShade()))))
+                {
             return this.matchingNeighbour(die, i, j, ignoreColor, ignoreShade);
         }
         return null;
@@ -156,17 +166,17 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return null;
     }
 
-    private List<Integer> cellsAround(Die die, int location, boolean ignoreColor, boolean ignoreShade, boolean ignoreAdjacency) {
+    private List<Integer> cellsAround(Die die, int location, boolean ignoreColor, boolean ignoreShade) {
 
         int i = location / this.columns;
         int j = location % this.columns;
 
         List<Integer> around = new ArrayList<>(8);
 
-        around.add(orthogonalMatchingNeighbour(die, location, i+1, j, ignoreColor, ignoreShade, ignoreAdjacency));
-        around.add(orthogonalMatchingNeighbour(die, location, i-1, j, ignoreColor, ignoreShade, ignoreAdjacency));
-        around.add(orthogonalMatchingNeighbour(die, location, i, j+1, ignoreColor, ignoreShade, ignoreAdjacency));
-        around.add(orthogonalMatchingNeighbour(die, location, i, j-1, ignoreColor, ignoreShade, ignoreAdjacency));
+        around.add(orthogonalMatchingNeighbour(die, location, i+1, j, ignoreColor, ignoreShade));
+        around.add(orthogonalMatchingNeighbour(die, location, i-1, j, ignoreColor, ignoreShade));
+        around.add(orthogonalMatchingNeighbour(die, location, i, j+1, ignoreColor, ignoreShade));
+        around.add(orthogonalMatchingNeighbour(die, location, i, j-1, ignoreColor, ignoreShade));
 
         around.add(matchingNeighbour(die, i+1, j+1, ignoreColor, ignoreShade));
         around.add(matchingNeighbour(die, i-1, j+1, ignoreColor, ignoreShade));
@@ -191,14 +201,23 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
 
         List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
-
+        
         for (int location : this.getLocations()) {
-            availablePositions.addAll(cellsAround(die, location, ignoreColor, ignoreShade, ignoreAdjacency));
+            availablePositions.addAll(cellsAround(die, location, ignoreColor, ignoreShade));
         }
         availablePositions.removeAll(Collections.singleton(null));
+
+        if (ignoreAdjacency) {
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                        if(cells[i][j].matchesOrBlank(die, ignoreColor, ignoreShade)) {
+                            availablePositions.add(i*columns+j);
+                        }
+                }
+            }
+        }
         return availablePositions.stream().distinct().collect(Collectors.toList());
     }
-
 }
 
 

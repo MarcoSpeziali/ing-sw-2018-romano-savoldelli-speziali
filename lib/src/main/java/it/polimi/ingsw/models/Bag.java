@@ -12,7 +12,6 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
 
     private Map<GlassColor, Integer> dice = new HashMap<>();
 
-
     public Bag() {
         for (GlassColor color : GlassColor.values()) {
             dice.put(color, 18);
