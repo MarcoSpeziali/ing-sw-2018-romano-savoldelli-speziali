@@ -2,6 +2,7 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.Effect;
 import it.polimi.ingsw.utils.text.LocalizedString;
+import javafx.scene.image.Image;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,5 +47,30 @@ class CardTest {
     @Test
     void getDescriptionTest() {
         Assertions.assertEquals(description_test, toolCard.getDescription());
+    }
+
+    @Test
+    void cardConstructorTest()
+    {
+        String backImagePath = "testBackPath";
+        String frontImagePath = "testFrontPath";
+        this.title_test = mock(LocalizedString.class);
+        this.description_test = mock(LocalizedString.class);
+
+        CardImpl cardimp = new CardImpl(backImagePath, frontImagePath, title_test, description_test);
+        Assertions.assertEquals(title_test, cardimp.title);
+        Assertions.assertEquals(description_test, cardimp.description);
+    }
+
+    private class CardImpl extends Card {
+
+        public CardImpl(Image backImage, Image frontImage, LocalizedString title, LocalizedString description) {
+            super(backImage, frontImage, title, description);
+        }
+
+        public CardImpl(String backImagePath, String frontImagePath, LocalizedString title, LocalizedString description) {
+            super(backImagePath, frontImagePath, title, description);
+
+        }
     }
 }
