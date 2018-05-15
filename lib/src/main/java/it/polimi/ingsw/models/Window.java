@@ -188,6 +188,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     @Override
     public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
+
+        List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
+
         if (die.getShade() == 0) {
             throw new IllegalArgumentException("Die's shade must be set!");
         }
@@ -200,24 +203,25 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
             return this.getEdgesPositions(die, ignoreColor, ignoreShade, ignoreAdjacency);
         }
 
-        List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
-        
-        for (int location : this.getLocations()) {
-            availablePositions.addAll(cellsAround(die, location, ignoreColor, ignoreShade));
-        }
-        availablePositions.removeAll(Collections.singleton(null));
-
         if (ignoreAdjacency) {
             for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < columns; j++) {
-                        if(cells[i][j].matchesOrBlank(die, ignoreColor, ignoreShade)) {
-                            availablePositions.add(i*columns+j);
-                        }
+                for (int j = 0; j < columns ; j++) {
+                    if(!cells[i][j].isOccupied()) {
+                        availablePositions.addAll(cellsAround(die, i*columns+j, ignoreColor, ignoreShade));
+                    }
                 }
             }
         }
+
+        else {
+            for (int location : this.getLocations()) {
+                availablePositions.addAll(cellsAround(die, location, ignoreColor, ignoreShade));
+            }
+        }
+        availablePositions.removeAll(Collections.singleton(null));
         return availablePositions.stream().distinct().collect(Collectors.toList());
     }
+
 }
 
 

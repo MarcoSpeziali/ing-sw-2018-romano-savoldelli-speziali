@@ -1,6 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.locations.EmptyBagException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,9 +38,16 @@ class BagTest {
 
     @Test
     void pickDieTest() {
-        List<Enum> list = Arrays.asList(GlassColor.values());
-        Assertions.assertNotNull(bag.pickDie());
-        Assertions.assertTrue(list.contains(bag.pickDie().getColor()));
+
+        List<Enum> colorList = Arrays.asList(GlassColor.values());
+        int initialCount = this.bag.getNumberOfDice();
+        for (int i = 0; i < initialCount; i++) {
+            Die picked = this.bag.pickDie();
+            Assertions.assertNotNull(picked);
+            Assertions.assertTrue(colorList.contains(picked.getColor()));
+            Assertions.assertEquals(0, picked.getShade().intValue());
+        }
+        Assertions.assertThrows(EmptyBagException.class, () -> this.bag.pickDie());
     }
 
     @Test

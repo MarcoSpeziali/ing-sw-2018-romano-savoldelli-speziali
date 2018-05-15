@@ -10,9 +10,13 @@ import java.util.*;
 
 public class Bag implements RandomPutLocation, RandomPickLocation {
 
-    private Map<GlassColor, Integer> dice = new HashMap<>();
+    private Map<GlassColor, Integer> dice = new EnumMap<>(GlassColor.class);
+    private List<GlassColor> colors;
 
     public Bag() {
+
+        this.colors = new ArrayList<>(Arrays.asList(GlassColor.values()));
+
         for (GlassColor color : GlassColor.values()) {
             dice.put(color, 18);
         }
@@ -28,12 +32,18 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
 
     @Override
     public Die pickDie() {
-        if (dice.isEmpty()) {
+
+        if (colors.isEmpty()) {
             throw new EmptyBagException("The bag has no dice left!");
         }
         Random rand = new Random();
-        GlassColor randColor = GlassColor.values()[rand.nextInt((4) + 1)];
+        GlassColor randColor = colors.get(rand.nextInt(colors.size()));
         dice.merge(randColor, -1, Integer::sum);
+
+        if (dice.get(randColor) == 0) {
+            this.colors.remove(randColor);
+        }
+
         return new Die(randColor, 0);
     }
     @Override
