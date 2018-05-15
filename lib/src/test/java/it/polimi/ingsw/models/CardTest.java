@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class CardTest {
+    /*
     private ToolCard toolCard;
     private Effect effect;
     private Image image;
@@ -73,4 +74,5 @@ class CardTest {
 
         }
     }
+    */
 }

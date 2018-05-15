@@ -89,11 +89,10 @@ class WindowTest {
                 false, false, false).containsAll(expectedAtStart));
         Assertions.assertEquals(4, window.getPossiblePositionsForDie(d,
                 false, false, false).size());
-        Assertions.assertFalse(
-                window.getPossiblePositionsForDie(d,
-                                false,false,false).contains(5) &&
-                         window.getPossiblePositionsForDie(d,
-                                false,false,false).contains(6));
+        Assertions.assertFalse(window.getPossiblePositionsForDie(d,
+                                        false,false,false).contains(5) &&
+                                        window.getPossiblePositionsForDie(d,
+                                        false,false,false).contains(6));
 
         // Checking available positions after a die has been put:
 
@@ -107,11 +106,15 @@ class WindowTest {
                 false, false, false).contains(9));
         Assertions.assertEquals(1, window.getPossiblePositionsForDie(new Die(GlassColor.RED, 2),
                 false, false, false).size());
+
+        // Checking available positions with ignoreAdjacency set to true:
+
         window.putDie(d1,3);
         window.putDie(d2, 9);
+
         Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
                 false,false, true).containsAll(expectedIfAdjacencyIsIgnored));
-        Assertions.assertEquals(3, window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
+        Assertions.assertEquals(4, window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
                 false, false, true).size());
 
     }
