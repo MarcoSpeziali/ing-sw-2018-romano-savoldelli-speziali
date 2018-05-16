@@ -144,8 +144,6 @@ class WindowTest {
         Assertions.assertTrue(window.getDice().contains(this.die));
         window.pickDie(die);
         Assertions.assertFalse(window.getDice().contains(die));
-        window.pickDie(new Die(GlassColor.RED, 4));
-        Assertions.assertFalse(window.getDice().contains(new Die(GlassColor.RED,4)));
         Assertions.assertEquals(12,window.getDice().size()); //Ha senso che venga restituita una lista di null?
     }
 
@@ -159,8 +157,10 @@ class WindowTest {
     @Test
     void pickDieTest() {
         window.putDie(die, 0);
-        Assertions.assertEquals(die, window.pickDie(0));
-        Assertions.assertNull(window.getCells()[0][0].getDie());
+        Assertions.assertSame(die, window.pickDie(0));
+        window.putDie(die, 0);
+        Assertions.assertNull(window.pickDie(new Die(GlassColor.YELLOW, 5)));
+        Assertions.assertNotNull(window.getCells()[0][0].getDie());
         Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> window.pickDie(30));
         Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> window.pickDie(-2));
 

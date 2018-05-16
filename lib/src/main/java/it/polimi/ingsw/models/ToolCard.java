@@ -41,10 +41,6 @@ public class ToolCard extends Card {
     }
 
     public void activate() {
-        // ho dato un occhio bene finalmente alle classi tue (Marco) e noto che effect fa tutto:
-        // insomma si occupa delle action (che ovviamente sono dentro effect nell'xml) e mi pare che valuti anche
-        // le constraints, solo che non ne sono sicuro e pensavo di dover fare qualche riferimento a constraints
-        // anche qui... la situazione si è complicata perchè hai generalizzato molto e si perde un po' la visione complessiva
         this.effect.run(cardId);
         this.usedOnce = true;
     }

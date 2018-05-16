@@ -11,15 +11,26 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
     private Integer shade;
     private Die die;
 
+    /**
+     * Sets up a new {@link Cell}.
+     * @param shade the shade of that cell.
+     * @param color the {@link GlassColor} of that cell.
+     */
     public Cell(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
     }
 
+    /**
+     * @return an instance of {@link Die} of the cell, if present.
+     */
     public Die getDie() {
         return this.die;
     }
 
+    /**
+     * @return the color of the cell, null otherwise.
+     */
     public GlassColor getColor() {
         if (this.color != null) {
             return this.color;
@@ -27,24 +38,44 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
         else return null;
     }
 
+    /**
+     * @return the shade of the cell.
+     */
     public Integer getShade() {
         return this.shade;
     }
 
+    /**
+     * @return true if a {@link Die} is present in the cell, false otherwise.
+     */
     public boolean isOccupied() {
         return this.die != null;
     }
 
+    /**
+     * @return true if the cell has not shade nor color, false otherwise.
+     */
     public boolean isBlank() {
         return this.color == null && this.shade == 0;
     }
 
+    /**
+     * Compares a specified {@link Die} with the cell.
+     * @param die an instance of the {@link Die} to compare.
+     * @param ignoreColor the boolean flag which avoids color control.
+     * @param ignoreShade the boolean flag which avoids shade control.
+     * @return true if cell matches with color, shade or is blank, false otherwise.
+     */
     public boolean matchesOrBlank(Die die, boolean ignoreColor, boolean ignoreShade) {
         return  this.isBlank() ||
                 (this.color == null || ignoreColor || this.color.equals(die.getColor())) &&
                 (this.shade == 0 || ignoreShade || this.shade.equals(die.getShade()));
     }
 
+    /**
+     * Puts the die in the specified cell.
+     * @param die the {@link Die} that must be put into.
+     */
     @Override
     public void putDie(Die die) {
         if (this.die == null) this.die = die;
@@ -53,11 +84,18 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
         }
     }
 
+    /**
+     * @return 1 if cell is free, 0 otherwise.
+     */
     @Override
     public int getFreeSpace() {
         return this.die == null ? 1 : 0;
     }
 
+    /**
+     * Picks up and removes a {@link Die} from the cell
+     * @return the picked {@link Die}
+     */
     @Override
     public Die pickDie() {
         if (this.die != null) {
@@ -68,8 +106,11 @@ public class Cell implements RandomPutLocation, RandomPickLocation {
         else return null;
     }
 
+    /**
+     * @return 1 if cell is occupied, 0 otherwise.
+     */
     @Override
     public int getNumberOfDice() {
-        return this.die != null ? 1 : 0;
+        return 1-this.getFreeSpace();
     }
 }

@@ -17,7 +17,7 @@ class BagTest {
 
     @BeforeEach
     void setBag() {
-        this.bag = new Bag();
+        this.bag = new Bag(18);
     }
 
     @Test
