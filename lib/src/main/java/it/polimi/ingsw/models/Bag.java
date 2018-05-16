@@ -12,24 +12,41 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
 
     private Map<GlassColor, Integer> dice = new EnumMap<>(GlassColor.class);
     private List<GlassColor> colors;
+    private int number;
 
-    public Bag() {
+    /**
+     * Sets up a new {@link Bag} assigning a specified number of dice per color.
+     * @param number the number of dice per color.
+     */
+    public Bag(int number) {
 
+        this.number = number;
         this.colors = new ArrayList<>(Arrays.asList(GlassColor.values()));
 
         for (GlassColor color : GlassColor.values()) {
-            dice.put(color, 18);
+            dice.put(color, number);
         }
     }
 
+    /**
+     * @return a {@link Map} representing the amount of dice left.
+     */
     public Map<GlassColor, Integer> getDice() {
         return dice;
     }
 
+    /**
+     * @param color a {@link GlassColor} of which the amount is requested.
+     * @return the amount of dice left of that color.
+     */
     public int getNumberPerColor(GlassColor color) {
         return dice.get(color);
     }
 
+    /**
+     * Picks a random instance of die and decrements the initial amount of dice.
+     * @return a random incance of {@link Die}.
+     */
     @Override
     public Die pickDie() {
 
@@ -47,19 +64,29 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
 
         return new Die(randColor, 0);
     }
+
+    /**
+     * @return the total amount of dice left.
+     */
     @Override
     public int getNumberOfDice() {
         return dice.values().stream().reduce((sum, x) -> (sum+x)).orElse(0);
     }
 
+    /**
+     * @param die the {@link Die} that must be put into.
+     */
     @Override
     public void putDie(Die die) {
         dice.merge(die.getColor(), 1, Integer::sum);
     }
 
+    /**
+     * @return the amount of dice already removed.
+     */
     @Override
     public int getFreeSpace() {
-        return 90 - this.getNumberOfDice();
+        return 5*this.number - this.getNumberOfDice();
     }
 }
 

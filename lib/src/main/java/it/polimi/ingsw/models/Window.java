@@ -16,6 +16,15 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     private Window sibling;
     private Cell[][] cells;
 
+    /**
+     * Sets up a new {@link Window} with specified parameters.
+     * @param difficulty an integer representing the difficulty of the Windows.
+     * @param rows the number of rows.
+     * @param columns the number of columns.
+     * @param id a unique {@link String} representing the name of the Window.
+     * @param sibling an instance of a sibling {@link Window}.
+     * @param cells a matrix representing the disposition of dice.
+     */
     public Window(int difficulty, int rows, int columns, String id, Window sibling, Cell[][] cells) {
         this.difficulty = difficulty;
         this.rows = rows;
@@ -108,15 +117,15 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
 
     /**
-     * Removes from cells and returns a die equal to the parameter, if present.
-     * @param die the die than must be compared to the target.
+     * Removes from cells and returns the same instance of the parameter, if present.
+     * @param die the instance of {@link Die} than must be compared to the target.
      * @return an instance of {@link Die}
      */
     @Override
     public Die pickDie(Die die) {
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
-                if (die.equals(this.cells[i][j].getDie())) {
+                if (die == this.cells[i][j].getDie()) {
                     return this.cells[i][j].pickDie();
                 }
             }
@@ -189,13 +198,13 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Checks if color and shade similarity rules of adjacent orthogonal dice are respected, then inspects a specified cell.
-     * @param die the {@link Die} with which cell's color and shade must be compared.
+     * @param die the {@link Die} which cell's color and shade must be compared with.
      * @param location the previous one-dimensional index of the die in cells.
      * @param i the current row index of the {@link Die} in cells.
      * @param j the current column index of the {@link Die} in cells.
      * @param ignoreColor the boolean flag which avoids color control.
      * @param ignoreShade the boolean flag which avoids shade control.
-     * @return a call of neighbour method if control passes, null if it fails or cell is not occupied.
+     * @return a call of {@link #neighbour} method if control passes, null if it fails or cell is not occupied.
      */
     private Integer orthogonalNeighbour(Die die, int location, int i, int j, boolean ignoreColor, boolean ignoreShade) {
 
@@ -212,7 +221,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Inspects a specified cell, verifying its correct matching of color and shade with a target {@link Die}.
-     * @param die the {@link Die} with which cell's color and shade must be compared.
+     * @param die the {@link Die} which cell's color and shade must be compared with.
      * @param i the row index of the {@link Die} in cells.
      * @param j the column index of the {@link Die} in cells.
      * @param ignoreColor the boolean flag which avoids color control.

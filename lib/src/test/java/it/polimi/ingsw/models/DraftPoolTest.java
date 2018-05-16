@@ -11,14 +11,14 @@ class DraftPoolTest {
 
     @BeforeEach
     void setUp() {
-        draftPool = new DraftPool(4, new Bag());
+        draftPool = new DraftPool(4, new Bag(18));
         die = new Die(GlassColor.BLUE, 0);
     }
 
     @Test
     void pickDieTest() {
         for (int i=0; i<9; i++) {
-            Assertions.assertTrue((die.equals(draftPool.pickDie(die)) || draftPool.pickDie(die) == null));
+            Assertions.assertTrue((die == (draftPool.pickDie(die)) || draftPool.pickDie(die) == null));
         }
         Assertions.assertNull(draftPool.pickDie(die));
     }
