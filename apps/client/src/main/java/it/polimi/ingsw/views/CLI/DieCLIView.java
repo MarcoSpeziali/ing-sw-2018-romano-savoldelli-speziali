@@ -9,13 +9,9 @@ public class DieCLIView extends DieView {
     private int shade;
     private int size;
 
-    public DieCLIView(GlassColor glassColor, int shade, int size) {
+    public DieCLIView(GlassColor glassColor, int shade) {
         this.glassColor = glassColor;
         this.shade = shade;
-        if (size % 2 != 0){
-            this.size = size+1;
-        }
-        else this.size = size;
     }
 
     public void render() {
