@@ -12,7 +12,7 @@ class RoundTrackTest {
 
     @BeforeEach
     void setUp() {
-        this.roundTrack = new RoundTrack();
+        this.roundTrack = new RoundTrack(10);
     }
 
     @Test
