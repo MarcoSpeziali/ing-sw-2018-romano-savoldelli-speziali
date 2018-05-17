@@ -34,7 +34,7 @@ class ForDieInstructionTest {
                 new Die(GlassColor.GREEN, 4),
                 new Die(GlassColor.RED, 1),
                 new Die(GlassColor.YELLOW, 2),
-                new Die(GlassColor.PURPLE, 4),
+                new Die(GlassColor.MAGENTA, 4),
 
                 new Die(GlassColor.GREEN, 5),
                 new Die(GlassColor.RED, 1),
@@ -159,12 +159,12 @@ class ForDieInstructionTest {
                 Arguments.of(5, GlassColor.YELLOW),
                 Arguments.of(6, GlassColor.YELLOW),
 
-                Arguments.of(1, GlassColor.PURPLE),
-                Arguments.of(2, GlassColor.PURPLE),
-                Arguments.of(3, GlassColor.PURPLE),
-                Arguments.of(4, GlassColor.PURPLE),
-                Arguments.of(5, GlassColor.PURPLE),
-                Arguments.of(6, GlassColor.PURPLE)
+                Arguments.of(1, GlassColor.MAGENTA),
+                Arguments.of(2, GlassColor.MAGENTA),
+                Arguments.of(3, GlassColor.MAGENTA),
+                Arguments.of(4, GlassColor.MAGENTA),
+                Arguments.of(5, GlassColor.MAGENTA),
+                Arguments.of(6, GlassColor.MAGENTA)
         );
     }
 }

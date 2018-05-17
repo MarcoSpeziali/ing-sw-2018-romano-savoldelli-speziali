@@ -126,7 +126,7 @@ class WindowCompilerTest {
         Arrays.stream(cells)
                 .forEach(row -> Assertions.assertEquals(5, row.length));
 
-        Assertions.assertEquals(GlassColor.PURPLE, cells[0][0].getColor());
+        Assertions.assertEquals(GlassColor.MAGENTA, cells[0][0].getColor());
         Assertions.assertEquals(0, cells[0][0].getShade().intValue());
         Assertions.assertNull(cells[0][1].getColor());
         Assertions.assertEquals(6, cells[0][1].getShade().intValue());
@@ -139,7 +139,7 @@ class WindowCompilerTest {
 
         Assertions.assertNull(cells[1][0].getColor());
         Assertions.assertEquals(5, cells[1][0].getShade().intValue());
-        Assertions.assertEquals(GlassColor.PURPLE, cells[1][1].getColor());
+        Assertions.assertEquals(GlassColor.MAGENTA, cells[1][1].getColor());
         Assertions.assertEquals(0, cells[1][1].getShade().intValue());
         Assertions.assertNull(cells[1][2].getColor());
         Assertions.assertEquals(3, cells[1][2].getShade().intValue());
@@ -152,7 +152,7 @@ class WindowCompilerTest {
         Assertions.assertEquals(0, cells[2][0].getShade().intValue());
         Assertions.assertNull(cells[2][1].getColor());
         Assertions.assertEquals(2, cells[2][1].getShade().intValue());
-        Assertions.assertEquals(GlassColor.PURPLE, cells[2][2].getColor());
+        Assertions.assertEquals(GlassColor.MAGENTA, cells[2][2].getColor());
         Assertions.assertEquals(0, cells[2][2].getShade().intValue());
         Assertions.assertNull(cells[2][3].getColor());
         Assertions.assertEquals(1, cells[2][3].getShade().intValue());
@@ -165,7 +165,7 @@ class WindowCompilerTest {
         Assertions.assertEquals(1, cells[3][1].getShade().intValue());
         Assertions.assertNull(cells[3][2].getColor());
         Assertions.assertEquals(5, cells[3][2].getShade().intValue());
-        Assertions.assertEquals(GlassColor.PURPLE, cells[3][3].getColor());
+        Assertions.assertEquals(GlassColor.MAGENTA, cells[3][3].getColor());
         Assertions.assertEquals(0, cells[3][3].getShade().intValue());
         Assertions.assertNull(cells[3][4].getColor());
         Assertions.assertEquals(4, cells[3][4].getShade().intValue());

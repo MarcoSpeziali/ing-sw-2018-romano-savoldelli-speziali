@@ -109,7 +109,7 @@ class ActionGroupTest {
         when(this.chooseLocation.getDice()).thenReturn(List.of(
                 new Die(GlassColor.BLUE, 3),
                 new Die(GlassColor.GREEN, 5),
-                new Die(GlassColor.PURPLE, 6)
+                new Die(GlassColor.MAGENTA, 6)
         ));
 
         when(this.choosablePickLocation.pickDie(any(Die.class)))

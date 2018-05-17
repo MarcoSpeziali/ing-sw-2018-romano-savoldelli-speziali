@@ -38,7 +38,7 @@ class EffectTest {
 
     @Test
     void run() {
-        Die die = new Die(GlassColor.PURPLE, 3);
+        Die die = new Die(GlassColor.MAGENTA, 3);
 
         List<ExecutableAction> actions = List.of(
                 new DecrementAction(

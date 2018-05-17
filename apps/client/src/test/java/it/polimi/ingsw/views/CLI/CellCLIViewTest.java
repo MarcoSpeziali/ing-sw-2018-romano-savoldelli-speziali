@@ -7,14 +7,20 @@ import org.junit.jupiter.api.Test;
 
 class CellCLIViewTest {
 
-    private CellCLIView CellCLIView;
+    private CellCLIView c1;
+    private CellCLIView c2;
+    private CellCLIView c3;
 
     @BeforeEach
     void setUp() {
-        this.CellCLIView = new CellCLIView(GlassColor.GREEN, 5, 7);
+        this.c1 = new CellCLIView(GlassColor.YELLOW, 5);
+        this.c2 = new CellCLIView(1,5);
+        this.c3 = new CellCLIView(5);
     }
     @Test
     void renderTest() {
-        CellCLIView.render();
+        c1.render();
+        c2.render();
+        c3.render();
     }
 }

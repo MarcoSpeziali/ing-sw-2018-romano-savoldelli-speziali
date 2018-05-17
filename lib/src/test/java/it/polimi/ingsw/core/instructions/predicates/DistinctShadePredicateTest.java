@@ -15,7 +15,7 @@ class DistinctShadePredicateTest {
                 new Die(GlassColor.BLUE, 2),
                 new Die(GlassColor.RED, 3),
                 new Die(GlassColor.YELLOW, 4),
-                new Die(GlassColor.PURPLE, 5)
+                new Die(GlassColor.MAGENTA, 5)
         };
 
         DistinctShadePredicate predicate = new DistinctShadePredicate(context -> dice);
@@ -31,7 +31,7 @@ class DistinctShadePredicateTest {
                 new Die(GlassColor.GREEN, 1),
                 new Die(GlassColor.RED, 2),
                 new Die(GlassColor.YELLOW, 3),
-                new Die(GlassColor.PURPLE, 5)
+                new Die(GlassColor.MAGENTA, 5)
         };
 
         DistinctShadePredicate predicate = new DistinctShadePredicate(context -> dice);

@@ -7,7 +7,7 @@ public enum GlassColor implements Serializable {
     YELLOW(0xffff00),
     GREEN(0x00ff00),
     BLUE(0x0000ff),
-    PURPLE(0x800080);
+    MAGENTA(0x800080);
 
     private final int red;
     private final int green;
@@ -52,7 +52,7 @@ public enum GlassColor implements Serializable {
             case "blue":
                 return GlassColor.BLUE;
             case "purple":
-                return GlassColor.PURPLE;
+                return GlassColor.MAGENTA;
             default:
                 throw new IllegalArgumentException("Unrecognized color: " + rep);
         }

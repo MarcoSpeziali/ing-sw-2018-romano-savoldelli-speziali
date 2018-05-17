@@ -25,7 +25,7 @@ class CountDiceInstructionTest {
                 new Die(GlassColor.GREEN, 4),
                 new Die(GlassColor.RED, 1),
                 new Die(GlassColor.YELLOW, 2),
-                new Die(GlassColor.PURPLE, 4),
+                new Die(GlassColor.MAGENTA, 4),
 
                 new Die(GlassColor.GREEN, 5),
                 new Die(GlassColor.RED, 1),
@@ -73,7 +73,7 @@ class CountDiceInstructionTest {
                 Arguments.of(GlassColor.GREEN, 5),
                 Arguments.of(GlassColor.BLUE, 0),
                 Arguments.of(GlassColor.YELLOW, 5),
-                Arguments.of(GlassColor.PURPLE, 1)
+                Arguments.of(GlassColor.MAGENTA, 1)
         );
     }
 
