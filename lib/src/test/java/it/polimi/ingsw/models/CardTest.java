@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class CardTest {
-    /*
+/*class CardTest {
+
     private ToolCard toolCard;
     private Effect effect;
     private Image image;
@@ -26,8 +26,8 @@ class CardTest {
         this.description_test = mock(LocalizedString.class);
         this.title_test = mock(LocalizedString.class);
 
-        this.toolCard = new ToolCard("testId", "test_card", 3, effect , image,
-               image,  title_test, description_test);
+        //this.toolCard = new ToolCard("testId", "test_card", 3, effect , image,
+               //image,  title_test, description_test);
     }
 
     @Test
@@ -58,21 +58,21 @@ class CardTest {
         this.title_test = mock(LocalizedString.class);
         this.description_test = mock(LocalizedString.class);
 
-        CardImpl cardimp = new CardImpl(backImagePath, frontImagePath, title_test, description_test);
+        //CardImpl cardimp = new CardImpl(backImagePath, frontImagePath, title_test, description_test);
         Assertions.assertEquals(title_test, cardimp.title);
         Assertions.assertEquals(description_test, cardimp.description);
     }
 
     private class CardImpl extends Card {
 
-        public CardImpl(Image backImage, Image frontImage, LocalizedString title, LocalizedString description) {
-            super(backImage, frontImage, title, description);
+       // public CardImpl(Image backImage, Image frontImage, LocalizedString title, LocalizedString description) {
+       //     super(backImage, frontImage, title, description);
         }
 
-        public CardImpl(String backImagePath, String frontImagePath, LocalizedString title, LocalizedString description) {
-            super(backImagePath, frontImagePath, title, description);
+      //  public CardImpl(String backImagePath, String frontImagePath, LocalizedString title, LocalizedString description) {
+      //      super(backImagePath, frontImagePath, title, description);
 
         }
     }
-    */
-}
+
+}*/

@@ -12,7 +12,7 @@ class DieCLIViewTest {
 
     @BeforeEach
     void setUp() {
-        this.dieCLIView = new DieCLIView(GlassColor.GREEN, 5, 7);
+        this.dieCLIView = new DieCLIView(GlassColor.GREEN, 5);
     }
     @Test
     void renderTest() {
