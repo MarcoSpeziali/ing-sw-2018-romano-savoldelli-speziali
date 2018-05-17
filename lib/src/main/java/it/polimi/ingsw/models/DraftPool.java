@@ -79,4 +79,32 @@ public class DraftPool implements ChoosablePickLocation {
         return this.dice.size();
     }
 
+    /**
+     * @param players is the number of players
+     */
+    public void setPlayers(int players) {
+        this.players = players;
+    }
+
+    /**
+     * @param bag set the bag {@link Bag} to take the count of dice
+     */
+    public void setBag(Bag bag) {
+        this.bag = bag;
+    }
+
+    /**
+     * @return the number of players
+     */
+    public int getPlayers() {
+
+        return this.players;
+    }
+
+    /**
+     * @return the {@link Bag} used to take the count of dice.
+     */
+    public Bag getBag() {
+        return this.bag;
+    }
 }
