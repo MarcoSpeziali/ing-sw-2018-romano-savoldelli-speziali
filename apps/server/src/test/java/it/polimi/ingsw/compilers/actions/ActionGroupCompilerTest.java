@@ -7,7 +7,7 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.actions.*;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.IterableRange;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class ActionGroupCompilerTest {
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
-                XmlUtils.parseXmlString(xmlActionGroup),
+                XMLUtils.parseXmlString(xmlActionGroup),
                 this.directiveList,
                 null
         );
@@ -66,7 +66,7 @@ class ActionGroupCompilerTest {
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
-                XmlUtils.parseXmlString(xmlActionGroup),
+                XMLUtils.parseXmlString(xmlActionGroup),
                 this.directiveList,
                 null
         );
@@ -92,7 +92,7 @@ class ActionGroupCompilerTest {
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
-                XmlUtils.parseXmlString(xmlActionGroup),
+                XMLUtils.parseXmlString(xmlActionGroup),
                 this.directiveList,
                 null
         );
@@ -118,7 +118,7 @@ class ActionGroupCompilerTest {
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
-                XmlUtils.parseXmlString(xmlActionGroup),
+                XMLUtils.parseXmlString(xmlActionGroup),
                 this.directiveList,
                 null
         );
@@ -144,7 +144,7 @@ class ActionGroupCompilerTest {
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
-                XmlUtils.parseXmlString(xmlActionGroup),
+                XMLUtils.parseXmlString(xmlActionGroup),
                 this.directiveList,
                 null
         );
@@ -172,7 +172,7 @@ class ActionGroupCompilerTest {
                         "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
-                XmlUtils.parseXmlString(xmlActionGroup),
+                XMLUtils.parseXmlString(xmlActionGroup),
                 this.directiveList,
                 null
         );
@@ -287,7 +287,7 @@ class ActionGroupCompilerTest {
                 "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
-                XmlUtils.parseXmlString(xmlActionGroup),
+                XMLUtils.parseXmlString(xmlActionGroup),
                 this.directiveList,
                 null
         );

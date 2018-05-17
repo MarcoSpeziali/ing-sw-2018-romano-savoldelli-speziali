@@ -7,12 +7,12 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * Represents a {@code String} localized in a particular {@code Locale} or the default one.
+ * Represents a {@link String} localized in a particular {@link Locale} or the default one.
  */
 public class LocalizedString {
 
     /**
-     * The key of the {@code String} to localize.
+     * The key of the {@link String} to localize.
      */
     private String localizationKey;
 
@@ -32,21 +32,21 @@ public class LocalizedString {
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizedString.STRINGS_BUNDLE);
 
     /**
-     * @return The key of the {@code String} to localize.
+     * @return The key of the {@link String} to localize.
      */
     public String getLocalizationKey() {
         return this.localizationKey;
     }
 
     /**
-     * @param localizationKey The key of the {@code String} to localize.
+     * @param localizationKey The key of the {@link String} to localize.
      */
     public LocalizedString(String localizationKey) {
         this.localizationKey = localizationKey;
     }
 
     /**
-     * @return The localized {@code String} for the current locale.
+     * @return The localized {@link String} for the current locale.
      */
     @Override
     public synchronized String toString() {
@@ -67,7 +67,7 @@ public class LocalizedString {
 
     /**
      * @param forLocale The locale used for the translation.
-     * @return The localized {@code String} for the provided locale.
+     * @return The localized {@link String} for the provided locale.
      */
     public synchronized String toString(Locale forLocale) {
         return ResourceBundle.getBundle(LocalizedString.STRINGS_BUNDLE, forLocale).getString(this.localizationKey);

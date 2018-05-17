@@ -12,7 +12,7 @@ import it.polimi.ingsw.compilers.objectives.ObjectiveCompiler;
 import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.models.ToolCard;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -56,9 +56,9 @@ public class CardCompiler {
         }
 
         // gets the card info
-        Map<String, Object> cardInfo = XmlUtils.xmlToMap(node);
+        Map<String, Object> cardInfo = XMLUtils.xmlToMap(node);
 
-        Map<String, Object> constraintsNodeInfo = XmlUtils.getMap(cardInfo, CardNodes.CARD_CONSTRAINTS);
+        Map<String, Object> constraintsNodeInfo = XMLUtils.getMap(cardInfo, CardNodes.CARD_CONSTRAINTS);
         List<EvaluableConstraint> constraints;
 
         if (constraintsNodeInfo == null) {
@@ -67,7 +67,7 @@ public class CardCompiler {
         else {
             // gets the compiled constraints
             constraints = compileConstraints(
-                    XmlUtils.getMapArray(
+                    XMLUtils.getMapArray(
                             constraintsNodeInfo,
                             CardNodes.CARD_CONSTRAINT
                     )
@@ -97,7 +97,7 @@ public class CardCompiler {
         }
 
         // gets the card info
-        Map<String, Object> cardInfo = XmlUtils.xmlToMap(node);
+        Map<String, Object> cardInfo = XMLUtils.xmlToMap(node);
 
         // returns the compiled objective card
         return new CompiledObjectiveCard(
@@ -311,10 +311,10 @@ public class CardCompiler {
 
         // if the path is relative to the resources folder then the class loader must be provided
         if (isResource) {
-            node = XmlUtils.parseXmlFromResource(path, InstructionDirectiveCompiler.class.getClassLoader());
+            node = XMLUtils.parseXmlFromResource(path, InstructionDirectiveCompiler.class.getClassLoader());
         }
         else {
-            node = XmlUtils.parseXml(path);
+            node = XMLUtils.parseXml(path);
         }
 
         return node;

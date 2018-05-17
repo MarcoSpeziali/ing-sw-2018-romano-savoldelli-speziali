@@ -5,7 +5,7 @@ import it.polimi.ingsw.compilers.actions.ActionGroupCompiler;
 import it.polimi.ingsw.compilers.actions.CompiledExecutableAction;
 import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -30,7 +30,7 @@ public class EffectCompiler {
         }
 
         // gets the effect info
-        Map<String, Object> effectInfo = XmlUtils.xmlToMap(node);
+        Map<String, Object> effectInfo = XMLUtils.xmlToMap(node);
 
         // gets the description
         String description = (String) effectInfo.get(EffectNodes.EFFECT_DESCRIPTION);

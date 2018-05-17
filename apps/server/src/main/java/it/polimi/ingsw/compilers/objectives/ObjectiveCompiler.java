@@ -4,7 +4,7 @@ import it.polimi.ingsw.compilers.instructions.CompiledInstruction;
 import it.polimi.ingsw.compilers.instructions.InstructionCompiler;
 import it.polimi.ingsw.compilers.instructions.directives.InstructionDirective;
 import it.polimi.ingsw.compilers.instructions.predicates.directives.PredicateDirective;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -29,7 +29,7 @@ public class ObjectiveCompiler {
         }
 
         // gets the effect info
-        Map<String, Object> effectInfo = XmlUtils.xmlToMap(node);
+        Map<String, Object> effectInfo = XMLUtils.xmlToMap(node);
 
         // gets the description
         String description = (String) effectInfo.get(ObjectiveNodes.OBJECTIVE_DESCRIPTION);

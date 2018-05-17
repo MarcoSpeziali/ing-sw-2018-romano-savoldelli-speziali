@@ -10,7 +10,7 @@ import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.actions.ChooseDieAction;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.core.locations.ChooseLocation;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class ActionCompilerTest {
     void testSimpleAction() throws IOException, ParserConfigurationException, SAXException {
         String xmlAction = "<action effect=\"choose_die $draft_pool$\" result=\"DIE\"/>";
 
-        CompiledAction compiledAction = ActionCompiler.compile(XmlUtils.parseXmlString(xmlAction), this.directiveList, null);
+        CompiledAction compiledAction = ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, null);
 
         Assertions.assertEquals("choose_die", compiledAction.getActionId());
         Assertions.assertEquals(ChooseDieAction.class, compiledAction.getClassToInstantiate());
@@ -83,7 +83,7 @@ class ActionCompilerTest {
     void testActionWithSingleOptionalParameter() throws IOException, SAXException, ParserConfigurationException {
         String xmlAction = "<action effect=\"choose_die $draft_pool$ [color=red]\" result=\"DIE\"/>";
 
-        CompiledAction compiledAction = ActionCompiler.compile(XmlUtils.parseXmlString(xmlAction), this.directiveList, null);
+        CompiledAction compiledAction = ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, null);
 
         Assertions.assertEquals("choose_die", compiledAction.getActionId());
         Assertions.assertEquals(ChooseDieAction.class, compiledAction.getClassToInstantiate());
@@ -127,7 +127,7 @@ class ActionCompilerTest {
     void testActionWithMultipleOptionalParameters() throws IOException, SAXException, ParserConfigurationException {
         String xmlAction = "<action effect=\"choose_die $draft_pool$ [color=red, shade=5]\" result=\"DIE\"/>";
 
-        CompiledAction compiledAction = ActionCompiler.compile(XmlUtils.parseXmlString(xmlAction), this.directiveList, null);
+        CompiledAction compiledAction = ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, null);
 
         Assertions.assertEquals("choose_die", compiledAction.getActionId());
         Assertions.assertEquals(ChooseDieAction.class, compiledAction.getClassToInstantiate());
@@ -171,33 +171,33 @@ class ActionCompilerTest {
     void testWrongNode() {
         String xmlAction = "<cs id=\"start\"/>";
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> ActionCompiler.compile(XmlUtils.parseXmlString(xmlAction), this.directiveList, null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, null));
     }
 
     @Test
     void testUnrecognizedAction() {
         String xmlAction = "<action effect=\"choose_die_nn $draft_pool$ [color=red, shade=5]\" result=\"DIE\"/>";
 
-        Assertions.assertThrows(UnrecognizedActionException.class, () -> ActionCompiler.compile(XmlUtils.parseXmlString(xmlAction), this.directiveList, null));
+        Assertions.assertThrows(UnrecognizedActionException.class, () -> ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, null));
     }
 
     @Test
     void testMalformedEffect() {
         String xmlAction = "<action effect=\"213 choose_die co]\" result=\"DIE\"/>";
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> ActionCompiler.compile(XmlUtils.parseXmlString(xmlAction), this.directiveList, null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, null));
     }
 
     @Test
     void testWithConstraints() throws ParserConfigurationException, SAXException, IOException {
         List<EvaluableConstraint> constraints = List.of(
-                ConstraintCompiler.compile(XmlUtils.parseXmlString("<constraint id=\"c1\">1 == 1</constraint>")),
-                ConstraintCompiler.compile(XmlUtils.parseXmlString("<constraint id=\"c2\">1 != 1</constraint>"))
+                ConstraintCompiler.compile(XMLUtils.parseXmlString("<constraint id=\"c1\">1 == 1</constraint>")),
+                ConstraintCompiler.compile(XMLUtils.parseXmlString("<constraint id=\"c2\">1 != 1</constraint>"))
         );
 
         String xmlAction = "<action effect=\"choose_die $draft_pool$\" result=\"DIE\" constraint=\"c1\"/>";
 
-        CompiledAction compiledAction = ActionCompiler.compile(XmlUtils.parseXmlString(xmlAction), this.directiveList, constraints);
+        CompiledAction compiledAction = ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, constraints);
         Assertions.assertNotNull(compiledAction.getActionData().getConstraint());
         Assertions.assertTrue(compiledAction.getActionData().getConstraint().evaluate(Context.getSharedInstance()));
     }

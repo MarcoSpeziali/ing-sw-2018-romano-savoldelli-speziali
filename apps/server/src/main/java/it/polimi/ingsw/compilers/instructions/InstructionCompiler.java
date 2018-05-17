@@ -8,7 +8,7 @@ import it.polimi.ingsw.compilers.instructions.directives.InstructionExposedVaria
 import it.polimi.ingsw.compilers.instructions.predicates.CompiledPredicate;
 import it.polimi.ingsw.compilers.instructions.predicates.PredicateCompiler;
 import it.polimi.ingsw.compilers.instructions.predicates.directives.PredicateDirective;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -38,7 +38,7 @@ public class InstructionCompiler {
                 .orElseThrow(() -> new UnrecognizedInstructionException(instructionId));
 
         // gets the instruction info
-        Map<String, Object> instructionInfo = XmlUtils.xmlToMap(node);
+        Map<String, Object> instructionInfo = XMLUtils.xmlToMap(node);
 
         // gets the parameters
         List<CompiledParameter> parameters = parseParameters(instructionInfo, directive);

@@ -3,7 +3,7 @@ package it.polimi.ingsw.compilers.instructions.directives;
 import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.core.instructions.Instruction;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -226,18 +226,18 @@ public class InstructionDirectiveCompiler {
 
         // if the path is relative to the resources folder then the class loader must be provided
         if (isResource) {
-            node = XmlUtils.parseXmlFromResource(path, InstructionDirectiveCompiler.class.getClassLoader());
+            node = XMLUtils.parseXmlFromResource(path, InstructionDirectiveCompiler.class.getClassLoader());
         }
         else {
-            node = XmlUtils.parseXml(path);
+            node = XMLUtils.parseXml(path);
         }
 
         // the document
-        Map<String, Object> document = XmlUtils.xmlToMap(node);
+        Map<String, Object> document = XMLUtils.xmlToMap(node);
 
         if (document.containsKey(InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES)) {
             // the children of instructions-directives (instruction-directives)
-            return XmlUtils.getMapArrayAnyway(document, InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES);
+            return XMLUtils.getMapArrayAnyway(document, InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES);
         }
 
         //noinspection unchecked
@@ -250,7 +250,7 @@ public class InstructionDirectiveCompiler {
      * @return the parameters directives from the provided instruction directives
      */
     private static Map<String, Object>[] getRawParametersDirectives(Map<String, Object> instructionDirectives) {
-        Map<String, Object> parameters = XmlUtils.getMap(
+        Map<String, Object> parameters = XMLUtils.getMap(
                 instructionDirectives,
                 InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES_PARAMETERS
         );
@@ -260,7 +260,7 @@ public class InstructionDirectiveCompiler {
             return new Map[0];
         }
 
-        return XmlUtils.getMapArrayAnyway(parameters, InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES_PARAMETER);
+        return XMLUtils.getMapArrayAnyway(parameters, InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES_PARAMETER);
     }
 
     /**
@@ -269,7 +269,7 @@ public class InstructionDirectiveCompiler {
      * @return the parameters directives from the provided instruction directives
      */
     private static Map<String, Object>[] getRawExposedVariableDirectives(Map<String, Object> instructionDirectives) {
-        Map<String, Object> parameters = XmlUtils.getMap(
+        Map<String, Object> parameters = XMLUtils.getMap(
                 instructionDirectives,
                 InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES_EXPOSES
         );
@@ -279,7 +279,7 @@ public class InstructionDirectiveCompiler {
             return new Map[0];
         }
 
-        return XmlUtils.getMapArrayAnyway(parameters, InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES_EXPOSED_VARIABLE);
+        return XMLUtils.getMapArrayAnyway(parameters, InstructionDirectivesNodes.INSTRUCTION_DIRECTIVES_EXPOSED_VARIABLE);
     }
 
     /**

@@ -4,7 +4,7 @@ import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.compilers.commons.ParametersCompiler;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class ActionCompiler {
             throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action, instead of a " + actionNode.getNodeName());
         }
 
-        return compile(XmlUtils.xmlToMap(actionNode), directives, constraints);
+        return compile(XMLUtils.xmlToMap(actionNode), directives, constraints);
     }
 
     /**

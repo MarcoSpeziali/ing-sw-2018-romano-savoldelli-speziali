@@ -21,26 +21,32 @@ public class InMemoryCache<K, V> implements Cache<K, V> {
         this.hashMap = new HashMap<>();
     }
 
+    @Override
     public boolean contains(K key) {
         return this.hashMap.containsKey(key);
     }
 
+    @Override
     public void remove(K key) {
         this.hashMap.remove(key);
     }
 
+    @Override
     public void add(K key, V value) {
         this.hashMap.put(key, value);
     }
 
+    @Override
     public V get(K key) {
         return this.getOrDefault(key, null);
     }
 
+    @Override
     public V getOrDefault(K key, V defaultValue) {
         return this.hashMap.getOrDefault(key, defaultValue);
     }
 
+    @Override
     public void invalidate() {
         this.hashMap.clear();
     }

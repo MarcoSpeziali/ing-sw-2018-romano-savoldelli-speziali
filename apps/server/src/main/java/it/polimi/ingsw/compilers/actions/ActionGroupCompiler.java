@@ -4,7 +4,7 @@ import it.polimi.ingsw.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.core.actions.ActionData;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.IterableRange;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -29,7 +29,7 @@ public class ActionGroupCompiler {
             throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action-group, instead of a " + node.getNodeName());
         }
 
-        Map<String, Object> actionGroupInfo = XmlUtils.xmlToMap(node);
+        Map<String, Object> actionGroupInfo = XMLUtils.xmlToMap(node);
 
         // gets the description key
         String description = (String) actionGroupInfo.get(ActionGroupNodes.ACTION_GROUP_DESCRIPTION);

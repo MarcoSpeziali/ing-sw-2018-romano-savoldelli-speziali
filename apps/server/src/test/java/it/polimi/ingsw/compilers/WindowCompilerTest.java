@@ -3,7 +3,7 @@ package it.polimi.ingsw.compilers;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Window;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -44,7 +44,7 @@ class WindowCompilerTest {
                 "    <cell color=\"yellow\"/>" +
                 "</window>";
 
-        Window window = WindowCompiler.compile(XmlUtils.parseXmlString(windowXmlString));
+        Window window = WindowCompiler.compile(XMLUtils.parseXmlString(windowXmlString));
         Assertions.assertEquals("kaleidoscopic_dream", window.getId());
         Assertions.assertNull(window.getSibling());
 

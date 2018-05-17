@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class LocalizedStringTest {
 
     @Test
@@ -22,6 +20,8 @@ class LocalizedStringTest {
     void testToString() {
         LocalizedString localizedString =
                 new LocalizedString("localized_string.test.test_to_string");
+
+        LocalizedString.invalidateCacheForNewLocale(Locale.ENGLISH);
 
         Assertions.assertEquals("Example", localizedString.toString());
     }
@@ -56,6 +56,8 @@ class LocalizedStringTest {
         LocalizedString localizedString =
                 new LocalizedString("localized_string.test.test_invalidate_for_locale");
 
+        LocalizedString.invalidateCacheForNewLocale(Locale.ENGLISH);
+
         Assertions.assertEquals("Invalidate", localizedString.toString());
 
         LocalizedString.invalidateCacheForNewLocale(Locale.GERMAN);
@@ -76,6 +78,8 @@ class LocalizedStringTest {
         LocalizedString localizedString =
                 new LocalizedString("localized_string.test.test_not_translated");
 
+        LocalizedString.invalidateCacheForNewLocale(Locale.ENGLISH);
+
         Assertions.assertEquals("Untranslated text", localizedString.toString());
         Assertions.assertEquals("Untranslated text", localizedString.toString(Locale.GERMAN));
     }
@@ -92,6 +96,8 @@ class LocalizedStringTest {
     void testReturnDefaultTranslationIfUnsupportedLanguage() {
         LocalizedString localizedString =
                 new LocalizedString("localized_string.test.test_not_translated");
+
+        LocalizedString.invalidateCacheForNewLocale(Locale.ENGLISH);
 
         Assertions.assertEquals("Untranslated text", localizedString.toString());
         Assertions.assertEquals("Untranslated text", localizedString.toString(Locale.SIMPLIFIED_CHINESE));

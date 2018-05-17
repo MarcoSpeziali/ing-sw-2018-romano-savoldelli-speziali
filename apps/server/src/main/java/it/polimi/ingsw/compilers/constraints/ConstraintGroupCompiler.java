@@ -2,7 +2,7 @@ package it.polimi.ingsw.compilers.constraints;
 
 import it.polimi.ingsw.core.constraints.ConstraintGroup;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -32,7 +32,7 @@ public class ConstraintGroupCompiler {
         }
 
         // gets a map representation of the provided constraint
-        Map<String, Object> constraintInfo = XmlUtils.xmlToMap(node);
+        Map<String, Object> constraintInfo = XMLUtils.xmlToMap(node);
 
         String id = (String) constraintInfo.get("@id");
         List<EvaluableConstraint> constraints = new LinkedList<>();

@@ -3,7 +3,7 @@ package it.polimi.ingsw.compilers.instructions.predicates.directives;
 import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.core.instructions.predicates.Predicate;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -163,18 +163,18 @@ public class PredicateDirectivesCompiler {
 
         // if the path is relative to the resources folder then the class loader must be provided
         if (isResource) {
-            node = XmlUtils.parseXmlFromResource(path, PredicateDirectivesCompiler.class.getClassLoader());
+            node = XMLUtils.parseXmlFromResource(path, PredicateDirectivesCompiler.class.getClassLoader());
         }
         else {
-            node = XmlUtils.parseXml(path);
+            node = XMLUtils.parseXml(path);
         }
 
         // the document
-        Map<String, Object> document = XmlUtils.xmlToMap(node);
+        Map<String, Object> document = XMLUtils.xmlToMap(node);
 
         if (document.containsKey(PredicateDirectivesNodes.PREDICATE_DIRECTIVES)) {
             // the children of predicates-directives (predicate-directives)
-            return XmlUtils.getMapArrayAnyway(document, PredicateDirectivesNodes.PREDICATE_DIRECTIVES);
+            return XMLUtils.getMapArrayAnyway(document, PredicateDirectivesNodes.PREDICATE_DIRECTIVES);
         }
 
         //noinspection unchecked
@@ -187,12 +187,12 @@ public class PredicateDirectivesCompiler {
      * @return the parameters directives from the provided predicate directives
      */
     private static Map<String, Object>[] getRawParametersDirectives(Map<String, Object> predicateDirectives) {
-        Map<String, Object> parameters = XmlUtils.getMap(
+        Map<String, Object> parameters = XMLUtils.getMap(
                 predicateDirectives,
                 PredicateDirectivesNodes.PREDICATE_DIRECTIVES_PARAMETERS
         );
 
-        return XmlUtils.getMapArrayAnyway(parameters, PredicateDirectivesNodes.PREDICATE_DIRECTIVES_PARAMETER);
+        return XMLUtils.getMapArrayAnyway(parameters, PredicateDirectivesNodes.PREDICATE_DIRECTIVES_PARAMETER);
     }
 
     /**

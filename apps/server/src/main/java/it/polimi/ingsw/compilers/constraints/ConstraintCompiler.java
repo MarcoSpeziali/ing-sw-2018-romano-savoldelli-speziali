@@ -4,7 +4,7 @@ import it.polimi.ingsw.compilers.expressions.ExpressionCompiler;
 import it.polimi.ingsw.core.actions.VariableSupplier;
 import it.polimi.ingsw.core.constraints.Constraint;
 import it.polimi.ingsw.core.constraints.Operator;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ public class ConstraintCompiler {
         }
 
         // compiles the constraint from the map
-        return compile(XmlUtils.xmlToMap(node));
+        return compile(XMLUtils.xmlToMap(node));
     }
 
     /**

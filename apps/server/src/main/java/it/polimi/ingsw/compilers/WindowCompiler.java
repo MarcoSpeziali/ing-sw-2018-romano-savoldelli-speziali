@@ -3,7 +3,7 @@ package it.polimi.ingsw.compilers;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Window;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -85,7 +85,7 @@ public class WindowCompiler {
         }
 
         // gets the window information by converting the node into a dictionary
-        return compile(XmlUtils.xmlToMap(node));
+        return compile(XMLUtils.xmlToMap(node));
     }
 
     /**
@@ -107,7 +107,7 @@ public class WindowCompiler {
         int difficulty = Integer.parseInt((String) windowInfo.get(WindowNodes.WINDOW_DIFFICULTY));
 
         // gets the cells
-        Map<String, Object>[] cellsMap = XmlUtils.getMapArray(windowInfo, WindowNodes.WINDOW_CELL);
+        Map<String, Object>[] cellsMap = XMLUtils.getMapArray(windowInfo, WindowNodes.WINDOW_CELL);
 
         Cell[] cellsArray = Arrays.stream(cellsMap)
                 .map(WindowCompiler::parseCell)
@@ -167,18 +167,18 @@ public class WindowCompiler {
 
         // if the path is relative to the resources folder then the class loader must be provided
         if (isResource) {
-            node = XmlUtils.parseXmlFromResource(path, WindowCompiler.class.getClassLoader());
+            node = XMLUtils.parseXmlFromResource(path, WindowCompiler.class.getClassLoader());
         }
         else {
-            node = XmlUtils.parseXml(path);
+            node = XMLUtils.parseXml(path);
         }
 
         // the document
-        Map<String, Object> document = XmlUtils.xmlToMap(node);
+        Map<String, Object> document = XMLUtils.xmlToMap(node);
 
         if (document.containsKey(WindowNodes.WINDOW_NODE_NAME)) {
             // the children of windows (window)
-            return XmlUtils.getMapArrayAnyway(document, WindowNodes.WINDOW_NODE_NAME);
+            return XMLUtils.getMapArrayAnyway(document, WindowNodes.WINDOW_NODE_NAME);
         }
 
         //noinspection unchecked

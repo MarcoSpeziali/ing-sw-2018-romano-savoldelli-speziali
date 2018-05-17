@@ -3,7 +3,7 @@ package it.polimi.ingsw.compilers.actions.directives;
 import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.core.actions.ExecutableAction;
-import it.polimi.ingsw.utils.io.XmlUtils;
+import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -179,18 +179,18 @@ public final class ActionDirectivesCompiler {
 
         // if the path is relative to the resources folder then the class loader must be provided
         if (isResource) {
-            node = XmlUtils.parseXmlFromResource(path, ActionDirectivesCompiler.class.getClassLoader());
+            node = XMLUtils.parseXmlFromResource(path, ActionDirectivesCompiler.class.getClassLoader());
         }
         else {
-            node = XmlUtils.parseXml(path);
+            node = XMLUtils.parseXml(path);
         }
 
         // the document
-        Map<String, Object> document = XmlUtils.xmlToMap(node);
+        Map<String, Object> document = XMLUtils.xmlToMap(node);
 
         if (document.containsKey(ActionDirectivesNodes.ACTION_DIRECTIVES)) {
             // the children of actions-directives (action-directives)
-            return XmlUtils.getMapArrayAnyway(document, ActionDirectivesNodes.ACTION_DIRECTIVES);
+            return XMLUtils.getMapArrayAnyway(document, ActionDirectivesNodes.ACTION_DIRECTIVES);
         }
 
         //noinspection unchecked
@@ -203,12 +203,12 @@ public final class ActionDirectivesCompiler {
      * @return the parameters directives from the provided action directives
      */
     private static Map<String, Object>[] getRawParametersDirectives(Map<String, Object> actionDirectives) {
-        Map<String, Object> parameters = XmlUtils.getMap(
+        Map<String, Object> parameters = XMLUtils.getMap(
                 actionDirectives,
                 ActionDirectivesNodes.ACTION_DIRECTIVES_PARAMETERS
         );
 
-        return XmlUtils.getMapArrayAnyway(parameters, ActionDirectivesNodes.ACTION_DIRECTIVES_PARAMETER);
+        return XMLUtils.getMapArrayAnyway(parameters, ActionDirectivesNodes.ACTION_DIRECTIVES_PARAMETER);
     }
 
     /**
