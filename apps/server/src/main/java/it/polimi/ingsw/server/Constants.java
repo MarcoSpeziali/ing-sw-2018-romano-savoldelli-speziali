@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -24,6 +25,11 @@ public class Constants {
         COMPILATION_FOLDER(java.nio.file.Paths.get(
                 Paths.CACHE_FOLDER.absolutePath,
                 "compilations"
+        ).toAbsolutePath().toString()),
+
+        LOG_FOLDER(java.nio.file.Paths.get(
+                Paths.PROJECT_FOLDER.absolutePath,
+                "logs"
         ).toAbsolutePath().toString());
 
         private final String absolutePath;
@@ -82,6 +88,21 @@ public class Constants {
             }
         }
 
-        public static final Set<Resources> ALL = EnumSet.allOf(Resources.class);
+        public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
+    }
+
+    public enum ServerArgument {
+        FORCE_COMPILATION("--force-compilation");
+
+        private final String optionName;
+
+        ServerArgument(String optionName) {
+            this.optionName = optionName;
+        }
+
+        @Override
+        public String toString() {
+            return this.optionName;
+        }
     }
 }

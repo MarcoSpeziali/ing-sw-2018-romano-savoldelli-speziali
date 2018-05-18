@@ -22316,7 +22316,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "it.polimi.ingsw.compilers",
+											"text": "it.polimi.ingsw.server.compilers",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -22522,7 +22522,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.compilers)",
+											"text": "(from it.polimi.ingsw.server.compilers)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -22904,7 +22904,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.compilers)",
+											"text": "(from it.polimi.ingsw.server.compilers)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -23223,7 +23223,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.compilers)",
+											"text": "(from it.polimi.ingsw.server.compilers)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -37782,7 +37782,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFFxnI9/BN2hrc="
 					},
-					"name": "it.polimi.ingsw.compilers",
+					"name": "it.polimi.ingsw.server.compilers",
 					"ownedElements": [
 						{
 							"_type": "UMLClass",

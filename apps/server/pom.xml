@@ -23,5 +23,10 @@
             <artifactId>sagrada-lib</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>it.polimi.ing-sw-2018-romano-savoldelli-speziali</groupId>
+            <artifactId>apps</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 </project>
