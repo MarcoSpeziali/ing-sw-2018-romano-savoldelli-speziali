@@ -9,19 +9,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class WindowCLIViewTest {
 
     private WindowCLIView windowCLIView;
-    private CellCLIView[][] cells ;
+    protected CellCLIView[][] cells ;
 
     @BeforeEach
     void setup () {
-        cells = new CellCLIView[][]{{new CellCLIView(GlassColor.BLUE),new CellCLIView(3), new CellCLIView(4),
-                new CellCLIView(GlassColor.RED)}, {new CellCLIView(6),  new CellCLIView(),
-                new CellCLIView(), new CellCLIView(GlassColor.RED)}, {new CellCLIView(1),
-                new CellCLIView(GlassColor.YELLOW), new CellCLIView(1), new CellCLIView(2)}};
+
+        cells = new CellCLIView[][]
+                {
+                        {new CellCLIView(GlassColor.BLUE), new CellCLIView(3), new CellCLIView(5), new CellCLIView()},
+                        {new CellCLIView(GlassColor.GREEN), new CellCLIView(), new CellCLIView(), new CellCLIView(GlassColor.RED)},
+                        {new CellCLIView(1), new CellCLIView(GlassColor.YELLOW), new CellCLIView(1), new CellCLIView(2)}
+                };
+
         windowCLIView = new WindowCLIView(3, 4, 3, "test", cells );
     }
 
     @Test
     void renderTest() {
+
         windowCLIView.render();
 
     }

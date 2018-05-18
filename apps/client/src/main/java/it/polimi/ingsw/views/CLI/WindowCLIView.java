@@ -40,7 +40,6 @@ public class WindowCLIView extends WindowsView {
     public CellCLIView[][] getCells() {
         return cells;
     }
-
     public void setRows(int rows) {
         this.rows = rows;
     }
@@ -64,10 +63,23 @@ public class WindowCLIView extends WindowsView {
     @Override
     public void render() {
 
-        System.out.println("Name: " + this.id + " Difficulty: " + this.difficulty + "\n");
-        for (int i = 0; i < rows ; i++) {
-            for (int j = 0; j < columns; j++) {
-                cells[i][j].render();
+        char c='A';
+        System.out.println("Window name:\t" + this.id);
+        System.out.println("Difficulty:\t\t" + this.difficulty+"\n");
+
+        for (int i = -1; i < rows ; i++) {
+            for (int j = -1; j < columns; j++) {
+                if (i == -1 && j == -1) {
+                    System.out.print("  ");
+                }
+                else if (j == -1) {
+                    System.out.print(c+" ");
+                    c++;
+                }
+                else if (i == -1) {
+                    System.out.print(" "+(j+1)+" ");
+                }
+                else cells[i][j].render();
             }
             System.out.println();
         }
