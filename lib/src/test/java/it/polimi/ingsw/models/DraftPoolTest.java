@@ -1,17 +1,21 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.views.DraftPoolView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.Mockito.mock;
+
 class DraftPoolTest {
     private DraftPool draftPool;
     private Die die;
-
+    private Bag bag;
     @BeforeEach
     void setUp() {
-        draftPool = new DraftPool(4, new Bag(18));
+        bag = new Bag(18);
+        draftPool = new DraftPool(4, mock(DraftPoolView.class), bag);
         die = new Die(GlassColor.BLUE, 0);
     }
 
@@ -45,5 +49,28 @@ class DraftPoolTest {
     @Test
     void getNumberOfDiceTest() {
         Assertions.assertEquals(draftPool.getNumberOfDice(), draftPool.getDice().size());
+    }
+
+    @Test
+    void setPlayers() {
+        this.draftPool.setPlayers(5);
+        Assertions.assertSame(5, this.draftPool.getPlayers());
+    }
+
+    @Test
+    void setBag() {
+        this.draftPool.setBag(bag);
+        Assertions.assertSame(bag, this.draftPool.getBag());
+
+    }
+
+    @Test
+    void getPlayers() {
+        Assertions.assertEquals(4, this.draftPool.getPlayers());
+    }
+
+    @Test
+    void getBag() {
+        Assertions.assertSame(bag , this.draftPool.getBag());
     }
 }

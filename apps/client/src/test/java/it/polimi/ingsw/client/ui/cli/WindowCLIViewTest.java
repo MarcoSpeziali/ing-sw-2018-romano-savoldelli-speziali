@@ -1,4 +1,4 @@
-package it.polimi.ingsw.views.CLI;
+package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Cell;
@@ -6,8 +6,6 @@ import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class WindowCLIViewTest {
 

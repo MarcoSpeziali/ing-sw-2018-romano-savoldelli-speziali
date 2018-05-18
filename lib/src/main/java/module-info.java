@@ -9,7 +9,8 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.utils;
     exports it.polimi.ingsw.utils.text;
     exports it.polimi.ingsw.utils.io;
-    requires it.polimi.ingsw.client;
+    exports it.polimi.ingsw.views;
+
     requires java.xml;
     requires javafx.graphics;
 }

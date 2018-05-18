@@ -1,4 +1,4 @@
-package it.polimi.ingsw.views.CLI;
+package it.polimi.ingsw.client.ui.cli;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

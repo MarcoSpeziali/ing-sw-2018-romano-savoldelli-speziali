@@ -1,9 +1,8 @@
-package it.polimi.ingsw.views.GUI;
+package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.views.RoundTrackView;
 
-public class RoundTrackGUIView extends RoundTrackView {
-
+public class RoundTrackCLIView extends RoundTrackView {
     @Override
     public void render() {
 

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.beans.Visibility;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockingDetails;
@@ -19,8 +21,8 @@ class ObjectiveCardTest {
     @BeforeEach
     void setUp() {
         this.obj = new Objective();
-        this.objectiveCard = new ObjectiveCard("test", CardVisibility.PUBLIC, 3,
-                mock(Image.class),mock(Image.class), mock(LocalizedString.class), mock(LocalizedString.class), obj);
+        this.objectiveCard = new ObjectiveCard("test", CardVisibility.PUBLIC, "titleTest",
+                "descriptionTest", obj);
     }
     @Test
     void getCardId() {
@@ -33,12 +35,27 @@ class ObjectiveCardTest {
     }
 
     @Test
-    void getPointsPerCompletion() {
-        Assertions.assertEquals(3, objectiveCard.getPointsPerCompletion());
+    void getObjectiveTest() {
+        Assertions.assertEquals(obj, objectiveCard.getObjective());
     }
 
     @Test
-    void getObjectiveTest() {
-        Assertions.assertEquals(obj, objectiveCard.getObjective());
+    void setCardId() {
+        this.objectiveCard.setCardId("testName");
+        Assertions.assertSame("testName", this.objectiveCard.getCardId());
+    }
+
+    @Test
+    void setVisibility() {
+        this.objectiveCard.setVisibility(CardVisibility.PRIVATE);
+        Assertions.assertEquals(CardVisibility.PRIVATE, this.objectiveCard.getVisibility());
+
+    }
+
+    @Test
+    void setObjective() {
+        Objective obj = mock(Objective.class);
+        this.objectiveCard.setObjective(obj);
+        Assertions.assertSame(obj, this.objectiveCard.getObjective());
     }
 }

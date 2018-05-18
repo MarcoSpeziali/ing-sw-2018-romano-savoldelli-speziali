@@ -2,6 +2,7 @@ package it.polimi.ingsw.models;
 import it.polimi.ingsw.core.Effect;
 import it.polimi.ingsw.core.actions.Action;
 import it.polimi.ingsw.utils.text.LocalizedString;
+import javafx.scene.image.Image;
 
 public class ToolCard extends Card {
 
@@ -17,13 +18,11 @@ public class ToolCard extends Card {
      * @param nameKey is the card's name
      * @param initialCost is the card's initial cost
      * @param effect is the card's effect
-     * @param backImage is the card's back image
-     * @param frontImage is the card's front image
      * @param title is the card's title
      * @param description is the card's description
      */
-    public ToolCard(String cardId, String nameKey, int initialCost, Effect effect, Image backImage, Image frontImage, LocalizedString title, LocalizedString description) {
-        super(backImage, frontImage, title, description);
+    public ToolCard(String cardId, String nameKey, int initialCost, Effect effect,String title, String description) {
+        super(title, description);
         this.cardId = cardId;
         this.nameKey = nameKey;
         this.initialCost = initialCost;

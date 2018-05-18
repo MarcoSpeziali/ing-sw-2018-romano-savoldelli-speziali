@@ -1,8 +1,8 @@
-package it.polimi.ingsw.views.GUI;
+package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.views.DraftPoolView;
 
-public class DraftPoolGUIView extends DraftPoolView {
+public class DraftPoolCLIView extends DraftPoolView {
 
     @Override
     public void render() {

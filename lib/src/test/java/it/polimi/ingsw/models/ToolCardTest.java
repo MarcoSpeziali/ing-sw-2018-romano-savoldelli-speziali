@@ -21,8 +21,8 @@ class ToolCardTest {
 
         this.effect = mock(Effect.class);
 
-        this.toolCard = new ToolCard("testId", "test_card", 3, effect , mock(Image.class),
-                mock(Image.class), mock(LocalizedString.class), mock(LocalizedString.class));
+        this.toolCard = new ToolCard("testId", "test_card", 3, effect ,
+                "titleTest", "descriptionTest");
     }
 
     @Test

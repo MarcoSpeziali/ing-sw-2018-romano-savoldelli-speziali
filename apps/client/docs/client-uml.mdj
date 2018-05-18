@@ -20400,7 +20400,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "it.polimi.ingsw.ui",
+											"text": "it.polimi.ingsw.client.ui",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -20991,7 +20991,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.ui)",
+											"text": "(from it.polimi.ingsw.client.ui)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -21602,7 +21602,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "it.polimi.ingsw.scenes",
+											"text": "it.polimi.ingsw.client.scenes",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -22860,7 +22860,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.scenes)",
+											"text": "(from it.polimi.ingsw.client.scenes)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -23151,7 +23151,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.scenes)",
+											"text": "(from it.polimi.ingsw.client.scenes)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -23442,7 +23442,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.scenes)",
+											"text": "(from it.polimi.ingsw.client.scenes)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -23734,7 +23734,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.ui)",
+											"text": "(from it.polimi.ingsw.client.ui)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -24142,7 +24142,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.scenes)",
+											"text": "(from it.polimi.ingsw.client.scenes)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -24550,7 +24550,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "it.polimi.ingsw.views",
+											"text": "it.polimi.ingsw.client.views",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -24768,7 +24768,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.views)",
+											"text": "(from it.polimi.ingsw.client.views)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -25090,7 +25090,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.views)",
+											"text": "(from it.polimi.ingsw.client.views)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -27261,7 +27261,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.views)",
+											"text": "(from it.polimi.ingsw.client.views)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -27583,7 +27583,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.views)",
+											"text": "(from it.polimi.ingsw.client.views)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -28224,7 +28224,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from it.polimi.ingsw.views)",
+											"text": "(from it.polimi.ingsw.client.views)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -32544,7 +32544,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFFxnI9/BN2hrc="
 					},
-					"name": "it.polimi.ingsw.ui",
+					"name": "it.polimi.ingsw.client.ui",
 					"ownedElements": [
 						{
 							"_type": "UMLClass",
@@ -32735,7 +32735,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFFxnI9/BN2hrc="
 					},
-					"name": "it.polimi.ingsw.scenes",
+					"name": "it.polimi.ingsw.client.scenes",
 					"ownedElements": [
 						{
 							"_type": "UMLClass",
@@ -32886,7 +32886,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFFxnI9/BN2hrc="
 					},
-					"name": "it.polimi.ingsw.views",
+					"name": "it.polimi.ingsw.client.views",
 					"ownedElements": [
 						{
 							"_type": "UMLClass",

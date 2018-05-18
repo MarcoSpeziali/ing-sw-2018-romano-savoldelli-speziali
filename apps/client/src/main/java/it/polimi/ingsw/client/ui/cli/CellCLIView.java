@@ -1,4 +1,4 @@
-package it.polimi.ingsw.views.CLI;
+package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.views.CellView;
@@ -7,7 +7,7 @@ import org.fusesource.jansi.Ansi;
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class CellCLIView extends CellView{
+public class CellCLIView extends CellView {
 
     private char shade;
     private Ansi.Color ansiColor;
