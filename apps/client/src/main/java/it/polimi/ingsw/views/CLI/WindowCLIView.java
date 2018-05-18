@@ -1,74 +1,31 @@
 package it.polimi.ingsw.views.CLI;
 
-import it.polimi.ingsw.views.WindowsView;
+import it.polimi.ingsw.models.Window;
+import it.polimi.ingsw.views.WindowView;
 
-public class WindowCLIView extends WindowsView {
+public class WindowCLIView extends WindowView {
 
-    private int rows;
-    private int columns;
-    private int difficulty;
-    private String id;
-    private CellCLIView[][] cells;
+    public WindowCLIView(Window window){
+        super(window);
 
+        this.cellViews = new CellCLIView[window.getRows()][window.getColumns()];
 
-    public WindowCLIView(int rows, int columns, int difficulty, String id, CellCLIView[][] cells) {
-        this.rows = rows;
-        this.columns = columns;
-        this.difficulty = difficulty;
-        this.id = id;
-
-        this.cells = cells;
-    }
-
-
-    public int getRows() {
-        return rows;
-    }
-
-    public int getColumns() {
-        return columns;
-    }
-
-    public int getDifficulty() {
-        return difficulty;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public CellCLIView[][] getCells() {
-        return cells;
-    }
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
-    public void setColumns(int columns) {
-        this.columns = columns;
-    }
-
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setCells(CellCLIView[][] cells) {
-        this.cells = cells;
+        for (int i = 0; i < window.getRows(); i++) {
+            for (int j = 0; j < window.getColumns(); j++) {
+                cellViews[i][j] = new CellCLIView(window.getCells()[i][j]);
+            }
+        }
     }
 
     @Override
     public void render() {
 
         char c='A';
-        System.out.println("Window name:\t" + this.id);
-        System.out.println("Difficulty:\t\t" + this.difficulty+"\n");
+        System.out.println("Window name:\t" + this.window.getId());
+        System.out.println("Difficulty:\t\t" + this.window.getDifficulty()+"\n");
 
-        for (int i = -1; i < rows ; i++) {
-            for (int j = -1; j < columns; j++) {
+        for (int i = -1; i < window.getRows() ; i++) {
+            for (int j = -1; j < window.getColumns(); j++) {
                 if (i == -1 && j == -1) {
                     System.out.print("  ");
                 }
@@ -79,10 +36,12 @@ public class WindowCLIView extends WindowsView {
                 else if (i == -1) {
                     System.out.print(" "+(j+1)+" ");
                 }
-                else cells[i][j].render();
+                else cellViews[i][j].render();
             }
             System.out.println();
         }
+        System.out.println();
+
 
     }
 }

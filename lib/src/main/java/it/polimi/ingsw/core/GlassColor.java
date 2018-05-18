@@ -62,4 +62,11 @@ public enum GlassColor implements Serializable {
     public String toString() {
         return String.format("%s", this.name().toLowerCase());
     }
+
+    public String toAnsiColor() {
+        if (this == GlassColor.PURPLE) {
+            return "MAGENTA";
+        }
+        else return name();
+    }
 }

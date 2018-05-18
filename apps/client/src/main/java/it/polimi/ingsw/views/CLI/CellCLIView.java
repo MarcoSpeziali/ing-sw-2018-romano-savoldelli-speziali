@@ -1,6 +1,6 @@
 package it.polimi.ingsw.views.CLI;
 
-import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.views.CellView;
 import org.fusesource.jansi.Ansi;
 
@@ -11,30 +11,29 @@ public class CellCLIView extends CellView{
 
     private char shade;
     private Ansi.Color ansiColor;
+    private Cell cell;
 
-    public CellCLIView() {
-        this.ansiColor = Ansi.Color.WHITE;
-        this.shade = ' ';
+    public CellCLIView(Cell cell) {
+        this.cell = cell;
 
-    }
+        if (cell.getColor() == null) {
+            this.ansiColor = Ansi.Color.WHITE;
+        }
+        else {
+           ansiColor = Ansi.Color.valueOf(cell.getColor().toAnsiColor());
+        }
 
-    public CellCLIView(GlassColor glassColor) {
-
-        this.ansiColor = Ansi.Color.valueOf(glassColor.name());
-        this.shade = ' ';
-    }
-
-    public CellCLIView(int shade) {
-
-        this.ansiColor = Ansi.Color.WHITE;
-        this.shade = (char) (shade + 48);
+        shade = cell.getShade() == 0 ? ' ' : cell.getShade().toString().charAt(0);
     }
 
     @Override
 
     public void render() {
+        if(cell.isOccupied()) {
+            ansiColor = Ansi.Color.valueOf(cell.getDie().getColor().toAnsiColor());
+            shade = (char) (cell.getDie().getShade()+48);
+        }
 
         System.out.print(ansi().eraseScreen().bg(ansiColor).a(" "+shade+" ").fg(BLACK).reset());
-
     }
 }
