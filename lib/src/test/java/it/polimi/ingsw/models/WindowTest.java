@@ -27,7 +27,7 @@ class WindowTest {
                     new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
                 },
                 {
-                    new Cell(0, null),      new Cell(0, null),      new Cell(2, null),       new Cell(0, GlassColor.MAGENTA)
+                    new Cell(0, null),      new Cell(0, null),      new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
                 },
                 {
                     new Cell(0, GlassColor.BLUE), new Cell(2, null),      new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
@@ -67,7 +67,7 @@ class WindowTest {
     void getPossiblePositionsForDie() {
         Die d = new Die(GlassColor.RED, 2);
         Die d1 = new Die(GlassColor.GREEN, 3);
-        Die d2 = new Die(GlassColor.MAGENTA, 2);
+        Die d2 = new Die(GlassColor.PURPLE, 2);
 
         List<Integer> expectedAtStart = List.of(0,4,9,10);
         List<Integer> expectedAfterPutDie = List.of(0,5,8);

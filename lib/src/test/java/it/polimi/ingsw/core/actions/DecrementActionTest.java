@@ -16,7 +16,7 @@ class DecrementActionTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.MAGENTA, 3);
+        this.die = new Die(GlassColor.PURPLE, 3);
     }
 
     @Test

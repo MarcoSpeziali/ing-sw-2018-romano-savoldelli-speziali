@@ -3,6 +3,7 @@ package it.polimi.ingsw.compilers.instructions.directives;
 import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.core.instructions.Instruction;
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -17,11 +18,6 @@ import java.util.stream.Collectors;
 
 public class InstructionDirectiveCompiler {
 
-    /**
-     * The default path for the instructions directives.
-     */
-    private static final String INSTRUCTIONS_DIRECTIVES_PATH = "directives/instructions-directives.xml";
-
     private InstructionDirectiveCompiler() {}
 
     /**
@@ -33,7 +29,7 @@ public class InstructionDirectiveCompiler {
      *      cannot be created which satisfies the configuration requested
      */
     public static List<InstructionDirective> compile() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
-        return compile(INSTRUCTIONS_DIRECTIVES_PATH, true);
+        return compile(Constants.resources.INSTRUCTIONS_DIRECTIVES_PATH, true);
     }
 
     /**

@@ -5,7 +5,11 @@ import it.polimi.ingsw.core.locations.AlreadyPutException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 
-public class Cell implements RandomPutLocation, RandomPickLocation {
+import java.io.Serializable;
+
+public class Cell implements RandomPutLocation, RandomPickLocation, Serializable {
+
+    private static final long serialVersionUID = 379193806872969294L;
 
     private GlassColor color;
     private Integer shade;

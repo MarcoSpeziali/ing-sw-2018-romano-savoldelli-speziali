@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>client</artifactId>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.fusesource.jansi/jansi -->
         <dependency>
@@ -25,5 +26,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-
 </project>

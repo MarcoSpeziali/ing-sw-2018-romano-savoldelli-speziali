@@ -16,7 +16,7 @@ class RedrawActionTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.MAGENTA, 3);
+        this.die = new Die(GlassColor.PURPLE, 3);
         this.action = new RedrawAction(this.testData, context -> this.die);
     }
 

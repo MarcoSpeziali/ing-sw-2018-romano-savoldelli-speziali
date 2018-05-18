@@ -3,6 +3,7 @@ package it.polimi.ingsw.compilers.actions.directives;
 import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.core.actions.ExecutableAction;
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -20,11 +21,6 @@ import java.util.stream.Collectors;
  */
 public final class ActionDirectivesCompiler {
 
-    /**
-     * The default path for the actions directives.
-     */
-    private static final String ACTIONS_DIRECTIVES_PATH = "directives/actions-directives.xml";
-
     private ActionDirectivesCompiler() {}
 
     /**
@@ -36,7 +32,7 @@ public final class ActionDirectivesCompiler {
      *      cannot be created which satisfies the configuration requested
      */
     public static List<ActionDirective> compile() throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
-        return compile(ACTIONS_DIRECTIVES_PATH, true);
+        return compile(Constants.resources.ACTIONS_DIRECTIVES_PATH, true);
     }
 
     /**

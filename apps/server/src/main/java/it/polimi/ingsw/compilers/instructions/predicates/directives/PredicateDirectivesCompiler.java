@@ -3,6 +3,7 @@ package it.polimi.ingsw.compilers.instructions.predicates.directives;
 import it.polimi.ingsw.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.core.instructions.predicates.Predicate;
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -17,11 +18,6 @@ import java.util.stream.Collectors;
 
 public class PredicateDirectivesCompiler {
 
-    /**
-     * The default path for the predicates directives.
-     */
-    private static final String PREDICATES_DIRECTIVES_PATH = "directives/predicates-directives.xml";
-
     private PredicateDirectivesCompiler() {}
 
     /**
@@ -33,7 +29,7 @@ public class PredicateDirectivesCompiler {
      *      cannot be created which satisfies the configuration requested.
      */
     public static List<PredicateDirective> compile() throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
-        return compile(PREDICATES_DIRECTIVES_PATH, true);
+        return compile(Constants.resources.PREDICATES_DIRECTIVES_PATH, true);
     }
 
     /**

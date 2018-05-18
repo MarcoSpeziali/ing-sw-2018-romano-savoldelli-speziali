@@ -28,7 +28,7 @@ class TakeShadeInstructionTest {
                 Arguments.of(new Die(GlassColor.YELLOW, 2)),
                 Arguments.of(new Die(GlassColor.RED, 3)),
                 Arguments.of(new Die(GlassColor.BLUE, 4)),
-                Arguments.of(new Die(GlassColor.MAGENTA, 5)),
+                Arguments.of(new Die(GlassColor.PURPLE, 5)),
                 Arguments.of(new Die(GlassColor.GREEN, 6))
         );
     }

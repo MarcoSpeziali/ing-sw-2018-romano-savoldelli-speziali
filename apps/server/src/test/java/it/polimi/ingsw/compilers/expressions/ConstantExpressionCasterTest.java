@@ -105,7 +105,7 @@ class ConstantExpressionCasterTest {
                 Arguments.of("yellow", GlassColor.YELLOW),
                 Arguments.of("green", GlassColor.GREEN),
                 Arguments.of("blue", GlassColor.BLUE),
-                Arguments.of("purple", GlassColor.MAGENTA)
+                Arguments.of("purple", GlassColor.PURPLE)
         );
     }
 }

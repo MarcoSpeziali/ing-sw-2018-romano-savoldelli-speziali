@@ -12,6 +12,7 @@ import it.polimi.ingsw.compilers.objectives.ObjectiveCompiler;
 import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.core.constraints.EvaluableConstraint;
 import it.polimi.ingsw.models.ToolCard;
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,21 +27,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CardCompiler {
-
-    /**
-     * The default path for the public cards.
-     */
-    private static final String PUBLIC_CARDS_PATH = "cards/public-cards.xml";
-
-    /**
-     * The default path for the private cards.
-     */
-    private static final String PRIVATE_CARDS_PATH = "cards/private-cards.xml";
-
-    /**
-     * The default path for the tool cards.
-     */
-    private static final String TOOL_CARDS_PATH = "cards/tool-cards.xml";
 
     private CardCompiler() {}
 
@@ -117,7 +103,7 @@ public class CardCompiler {
      * @return a {@link List} of {@link CompiledToolCard}
      */
     public static List<CompiledToolCard> compileToolCards(List<ActionDirective> actionDirectives) throws IOException, SAXException, ParserConfigurationException {
-        return compileToolCards(TOOL_CARDS_PATH, true, actionDirectives);
+        return compileToolCards(Constants.resources.TOOL_CARDS_PATH, true, actionDirectives);
     }
 
     /**
@@ -163,7 +149,7 @@ public class CardCompiler {
      *      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePrivateObjectiveCards(List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws IOException, SAXException, ParserConfigurationException {
-        return compilePrivateObjectiveCards(PRIVATE_CARDS_PATH, true, instructionDirectives, predicateDirectives);
+        return compilePrivateObjectiveCards(Constants.resources.PRIVATE_CARDS_PATH, true, instructionDirectives, predicateDirectives);
     }
 
     /**
@@ -193,7 +179,7 @@ public class CardCompiler {
      *      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePublicObjectiveCards(List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws IOException, SAXException, ParserConfigurationException {
-        return compilePublicObjectiveCards(PUBLIC_CARDS_PATH, true, instructionDirectives, predicateDirectives);
+        return compilePublicObjectiveCards(Constants.resources.PUBLIC_CARDS_PATH, true, instructionDirectives, predicateDirectives);
     }
 
     /**

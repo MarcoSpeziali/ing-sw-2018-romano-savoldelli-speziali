@@ -4,10 +4,13 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
 import it.polimi.ingsw.utils.IterableRange;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation {
+public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation, Serializable {
+
+    private static final long serialVersionUID = 733952479357429786L;
 
     private int difficulty;
     private int rows;

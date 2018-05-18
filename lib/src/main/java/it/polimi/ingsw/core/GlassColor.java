@@ -7,36 +7,27 @@ public enum GlassColor implements Serializable {
     YELLOW(0xffff00),
     GREEN(0x00ff00),
     BLUE(0x0000ff),
-    MAGENTA(0x800080);
+    PURPLE(0x800080);
 
-    private final int red;
-    private final int green;
-    private final int blue;
+    /**
+     * The hex color.
+     */
+    private final int hex;
 
     public int getRed() {
-        return this.red;
+        return (this.hex & 0xFF0000) >> 16;
     }
 
     public int getGreen() {
-        return this.green;
+        return (this.hex & 0xFF00) >> 8;
     }
 
     public int getBlue() {
-        return this.blue;
-    }
-
-    GlassColor(int red, int green, int blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
+        return (this.hex & 0xFF);
     }
 
     GlassColor(int hex) {
-        this(
-            (hex & 0xFF0000) >> 16,
-            (hex & 0xFF00) >> 8,
-            (hex & 0xFF)
-        );
+        this.hex = hex;
     }
 
     public static GlassColor fromString(String rep) {
@@ -52,7 +43,7 @@ public enum GlassColor implements Serializable {
             case "blue":
                 return GlassColor.BLUE;
             case "purple":
-                return GlassColor.MAGENTA;
+                return GlassColor.PURPLE;
             default:
                 throw new IllegalArgumentException("Unrecognized color: " + rep);
         }
