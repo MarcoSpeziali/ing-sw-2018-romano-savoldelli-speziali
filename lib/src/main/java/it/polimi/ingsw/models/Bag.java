@@ -8,6 +8,9 @@ import it.polimi.ingsw.core.locations.RandomPutLocation;
 import java.util.*;
 
 
+/**
+ *
+ */
 public class Bag implements RandomPutLocation, RandomPickLocation {
 
     private Map<GlassColor, Integer> dice = new EnumMap<>(GlassColor.class);

@@ -1,94 +1,40 @@
 package it.polimi.ingsw.views.CLI;
 
-import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.views.CellView;
 import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
+
+import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class CellCLIView extends CellView{
 
-    public Ansi.Color getColor() {
-        return ansiColor;
-    }
-
-    public void setColor(Ansi.Color color) {
-        this.ansiColor = color;
-    }
-
-    public char getShade() {
-        return shade;
-    }
-
-    public void setShade(char shade) {
-        this.shade = shade;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    private Ansi.Color ansiColor;
     private char shade;
-    private int size;
+    private Ansi.Color ansiColor;
+    private Cell cell;
 
-    public CellCLIView(int shade, int size) {
+    public CellCLIView(Cell cell) {
+        this.cell = cell;
 
-        this.shade = (char) (shade+48);
-        this.ansiColor = Ansi.Color.WHITE;
-        if (size % 2 == 0) {
-            this.size = size+1;
+        if (cell.getColor() == null) {
+            this.ansiColor = Ansi.Color.WHITE;
         }
-        else this.size = size;
-    }
-
-    public CellCLIView(GlassColor color, int size) {
-
-        this.shade = ' ';
-        this.ansiColor = Ansi.Color.valueOf(color.name());
-        if (size % 2 == 0) {
-            this.size = size+1;
+        else {
+           ansiColor = Ansi.Color.valueOf(cell.getColor().toAnsiColor());
         }
-        else this.size = size;
-    }
 
-    public CellCLIView(int size) {
-
-        this.shade = ' ';
-        this.ansiColor = Ansi.Color.BLACK;
-        if (size % 2 == 0) {
-            this.size = size+1;
-        }
-        else this.size = size;
+        shade = cell.getShade() == 0 ? ' ' : cell.getShade().toString().charAt(0);
     }
 
     @Override
+
     public void render() {
-
-        System.setProperty("jansi.passthrough", "true");
-        AnsiConsole.systemInstall();
-
-        for (int i = 1; i <= size; i++) {
-            for (int j = 1; j <= size; j++) {
-                if ((i == 1 || i == size) && j == size)
-                    System.out.print(ansi().eraseScreen().bg(ansiColor).a(" ").reset());
-                else if (i == 1 || i == size)
-                    System.out.print(ansi().eraseScreen().bg(ansiColor).a("  ").reset());
-                else if (j == 1 || j == size)
-                    System.out.print(ansi().eraseScreen().bg(ansiColor).a(" ").reset()+" ");
-                else if (i == size/2+1 && j == size/2+1)
-                    System.out.print(shade+" ");
-                else
-                    System.out.print("  ");
-            }
-            System.out.println();
+        if(cell.isOccupied()) {
+            ansiColor = Ansi.Color.valueOf(cell.getDie().getColor().toAnsiColor());
+            shade = (char) (cell.getDie().getShade()+48);
         }
 
-        AnsiConsole.systemUninstall();
+        System.out.print(ansi().eraseScreen().bg(ansiColor).a(" "+shade+" ").fg(BLACK).reset());
     }
 }
 

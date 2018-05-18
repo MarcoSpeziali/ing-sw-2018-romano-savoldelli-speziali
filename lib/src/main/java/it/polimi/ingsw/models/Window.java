@@ -155,6 +155,20 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
 
     /**
+     * @return the number of rows.
+     */
+    public int getRows() {
+        return rows;
+    }
+
+    /**
+     * @return the number of columns.
+     */
+    public int getColumns() {
+        return columns;
+    }
+
+    /**
      * Check which initial locations are allowed in the window for a spcified die.
      * @param die the target {@link Die} which must be put.
      * @param ignoreColor the boolean flag which avoids color control.
