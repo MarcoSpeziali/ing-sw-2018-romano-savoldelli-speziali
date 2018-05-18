@@ -1,7 +1,6 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
-import it.polimi.ingsw.core.locations.PutLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.views.DraftPoolView;
 

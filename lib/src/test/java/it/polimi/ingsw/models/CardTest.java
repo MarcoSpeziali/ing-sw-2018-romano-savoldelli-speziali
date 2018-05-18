@@ -10,69 +10,73 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-/*class CardTest {
+class CardTest {
 
     private ToolCard toolCard;
     private Effect effect;
-    private Image image;
-    private LocalizedString title_test;
-    private LocalizedString description_test;
+    private String title_test;
+    private String description_test;
 
     @BeforeEach
     void setUp() {
 
-        this.image = mock(Image.class);
         this.effect = mock(Effect.class);
-        this.description_test = mock(LocalizedString.class);
-        this.title_test = mock(LocalizedString.class);
+        this.description_test = "descriptionTest";
+        this.title_test = "titleTest";
 
-        //this.toolCard = new ToolCard("testId", "test_card", 3, effect , image,
-               //image,  title_test, description_test);
-    }
-
-    @Test
-    void getBackImageTest() {
-       Assertions.assertEquals(image, toolCard.getBackImage());
-    }
-
-    @Test
-    void getFrontImageTest() {
-        Assertions.assertEquals(image, toolCard.getFrontImage());
+        this.toolCard = new ToolCard("testId", "test_card", 3, effect, title_test, description_test);
     }
 
     @Test
     void getTitleTest() {
-        Assertions.assertEquals(title_test, toolCard.getTitle());
+        Assertions.assertEquals(title_test, toolCard.getTitle().toString());
     }
 
     @Test
     void getDescriptionTest() {
-        Assertions.assertEquals(description_test, toolCard.getDescription());
+        Assertions.assertEquals(description_test, toolCard.getDescription().toString());
     }
 
     @Test
     void cardConstructorTest()
     {
-        String backImagePath = "testBackPath";
-        String frontImagePath = "testFrontPath";
-        this.title_test = mock(LocalizedString.class);
-        this.description_test = mock(LocalizedString.class);
+        this.title_test = "testTitle";
+        this.description_test = "descriptionTest";
 
-        //CardImpl cardimp = new CardImpl(backImagePath, frontImagePath, title_test, description_test);
-        Assertions.assertEquals(title_test, cardimp.title);
-        Assertions.assertEquals(description_test, cardimp.description);
+        CardImpl cardImp = new CardImpl(title_test, description_test);
+        Assertions.assertEquals(title_test, cardImp.title.toString());
+        Assertions.assertEquals(description_test, cardImp.description.toString());
+
+    }
+
+    @Test
+    void getTitle() {
+        Assertions.assertEquals("titleTest", this.toolCard.getTitle().toString());
+    }
+
+    @Test
+    void getDescription() {
+        Assertions.assertEquals("descriptionTest", this.toolCard.getDescription().toString());
+
+    }
+
+    @Test
+    void setTitle() {
+        this.toolCard.setTitle("setTestTitle");
+        Assertions.assertSame("setTestTitle", this.toolCard.getTitle().getLocalizationKey());
+    }
+
+    @Test
+    void setDescription() {
+        this.toolCard.setDescription("setTestDescription");
+        Assertions.assertSame("setTestDescription", this.toolCard.getDescription().getLocalizationKey());
     }
 
     private class CardImpl extends Card {
 
-       // public CardImpl(Image backImage, Image frontImage, LocalizedString title, LocalizedString description) {
-       //     super(backImage, frontImage, title, description);
-        }
-
-      //  public CardImpl(String backImagePath, String frontImagePath, LocalizedString title, LocalizedString description) {
-      //      super(backImagePath, frontImagePath, title, description);
-
+        public CardImpl(String title, String description) {
+            super(title, description);
         }
     }
 
-}*/
+}
