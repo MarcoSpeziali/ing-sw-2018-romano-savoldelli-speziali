@@ -55,4 +55,35 @@ class ToolCardTest {
         toolCard.activate();
         Assertions.assertTrue(toolCard.isUsedOnce());
     }
+
+    @Test
+    void setCardIdTest() {
+        this.toolCard.setCardId("idTest");
+        Assertions.assertSame("idTest", this.toolCard.getCardId());
+    }
+
+    @Test
+    void setNameKeyTest() {
+        this.toolCard.setNameKey("nameTest");
+        Assertions.assertSame("nameTest", this.toolCard.getNameKey());
+    }
+
+    @Test
+    void setInitialCostTest() {
+        this.toolCard.setInitialCost(4);
+        Assertions.assertEquals(4, this.toolCard.getInitialCost());
+    }
+
+    @Test
+    void setUsedOnceTest() {
+        this.toolCard.setUsedOnce(Boolean.TRUE);
+        Assertions.assertTrue(this.toolCard.isUsedOnce());
+    }
+
+    @Test
+    void setEffectTest() {
+        Effect effect = mock(Effect.class);
+        this.toolCard.setEffect(effect);
+        Assertions.assertEquals(effect, this.toolCard.getEffect());
+    }
 }
