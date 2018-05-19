@@ -124,6 +124,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
 
     @Override
     public int getFreeSpace() {
-        return 0;
+
+        return ((2*players+1) - ((2*players + 1) - this.dice.size()));
     }
 }
