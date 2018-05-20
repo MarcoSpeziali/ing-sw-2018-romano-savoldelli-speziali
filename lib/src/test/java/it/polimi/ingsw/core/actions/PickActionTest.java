@@ -22,7 +22,7 @@ class PickActionTest {
         RandomPickLocation location = mock(RandomPickLocation.class);
         when(location.pickDie()).thenReturn(new Die(GlassColor.BLUE, 4));
 
-        action = new PickAction(this.testData, location);
+        action = new PickAction(this.testData, context -> location);
     }
 
     @Test

@@ -2,7 +2,7 @@
 <instructions-directives>
     <instruction-directives id="for-die" class="it.polimi.ingsw.core.instructions.ForDiagonalInstruction">
         <exposes-directives>
-            <variable-directives name="die" class="it.polimi.ingsw.models.Die"/>
+            <variable-directives name="die" class="it.polimi.ingsw.models.DiagonalDie"/>
         </exposes-directives>
         <parameters-directives>
             <parameter-directives class="java.lang.Integer" name="filterShade" default="0" position="0"/>
@@ -11,12 +11,12 @@
     </instruction-directives>
     <instruction-directives id="for-row" class="it.polimi.ingsw.core.instructions.ForRowInstruction">
         <exposes-directives>
-            <variable-directives name="row" class="it.polimi.ingsw.models.Die" isMultiple="true"/>
+            <variable-directives name="row" class="it.polimi.ingsw.models.Die" multiple="true"/>
         </exposes-directives>
     </instruction-directives>
     <instruction-directives id="take-if" class="it.polimi.ingsw.core.instructions.TakeIfInstruction">
         <parameters-directives>
-            <parameter-directives name="predicate" isPredicate="true"/>
+            <parameter-directives name="predicate" predicate="true"/>
         </parameters-directives>
     </instruction-directives>
     <instruction-directives id="take-min" class="it.polimi.ingsw.core.instructions.TakeMinInstruction"/>

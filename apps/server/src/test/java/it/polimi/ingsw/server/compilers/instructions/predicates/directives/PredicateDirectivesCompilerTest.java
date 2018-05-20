@@ -1,11 +1,11 @@
 package it.polimi.ingsw.server.compilers.instructions.predicates.directives;
 
+import it.polimi.ingsw.core.actions.VariableSupplier;
+import it.polimi.ingsw.core.instructions.predicates.DistinctColorPredicate;
+import it.polimi.ingsw.core.instructions.predicates.DistinctShadePredicate;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
-import it.polimi.ingsw.core.instructions.predicates.DistinctColorPredicate;
-import it.polimi.ingsw.core.instructions.predicates.DistinctShadePredicate;
-import it.polimi.ingsw.models.Die;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -44,7 +44,7 @@ class PredicateDirectivesCompilerTest {
         Assertions.assertThrows(
                 ClassNotFoundException.class,
                 () -> PredicateDirectivesCompiler.compile(
-                        "directives/predicates-directives-class-not-found.xml",
+                        "predicates-directives-class-not-found.xml",
                         true
                 )
         );
@@ -55,7 +55,7 @@ class PredicateDirectivesCompilerTest {
         Assertions.assertThrows(
                 ClassNotFoundException.class,
                 () -> PredicateDirectivesCompiler.compile(
-                        "directives/predicates-directives-class-not-found2.xml",
+                        "predicates-directives-class-not-found2.xml",
                         true
                 )
         );
@@ -63,7 +63,7 @@ class PredicateDirectivesCompilerTest {
 
     @Test
     void testEmptyFile() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
-        List<ActionDirective> directives = ActionDirectivesCompiler.compile("directives/predicates-directives-empty.xml", true);
+        List<ActionDirective> directives = ActionDirectivesCompiler.compile("predicates-directives-empty.xml", true);
 
         Assertions.assertTrue(directives.isEmpty());
     }
@@ -72,7 +72,7 @@ class PredicateDirectivesCompilerTest {
         Assertions.assertEquals(1, distinctParameters.size());
 
         ParameterDirective parameterDirective = distinctParameters.get(0);
-        Assertions.assertEquals(Die[].class, parameterDirective.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, parameterDirective.getParameterType());
         Assertions.assertEquals(0, parameterDirective.getPosition().intValue());
         Assertions.assertTrue(parameterDirective.isMultiple());
         Assertions.assertFalse(parameterDirective.isOptional());

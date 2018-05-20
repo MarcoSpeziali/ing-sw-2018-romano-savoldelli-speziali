@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.server.compilers.expressions.ExpressionCompiler;
 import it.polimi.ingsw.server.compilers.instructions.directives.InstructionDirective;
 import it.polimi.ingsw.server.compilers.instructions.directives.InstructionExposedVariableDirective;
+import it.polimi.ingsw.server.compilers.instructions.directives.InstructionParameterDirective;
 import it.polimi.ingsw.server.compilers.instructions.predicates.CompiledPredicate;
 import it.polimi.ingsw.server.compilers.instructions.predicates.PredicateCompiler;
 import it.polimi.ingsw.server.compilers.instructions.predicates.directives.PredicateDirective;
@@ -16,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.utils.streams.StreamUtils.not;
 
 public class InstructionCompiler {
 
@@ -64,33 +67,28 @@ public class InstructionCompiler {
      * @return the parsed parameters
      */
     private static List<CompiledParameter> parseParameters(Map<String, Object> instructionInfo, InstructionDirective directive) {
-        // gets a map of paramName: directive
-        Map<String, ParameterDirective> parameterDirectiveMap = directive.getParameterDirectives().stream()
-                .filter(instructionParameterDirective ->
-                        instructionInfo.containsKey("@" + instructionParameterDirective.getName()) &&
-                                // only plain parameters are allowed, not predicates
-                                !instructionParameterDirective.isPredicate()
-                ).collect(Collectors.toMap(ParameterDirective::getName, o -> o));
+        return directive.getParameterDirectives().stream()
+                // only parameters are allowed
+                .filter(not(InstructionParameterDirective::isPredicate))
+                .map(instructionParameterDirective -> {
+                    // gets the name of the parameter
+                    String parameterName = instructionParameterDirective.getName();
 
-        return instructionInfo.entrySet().stream()
-                // only the attributes can be parameters
-                .filter(stringObjectEntry -> stringObjectEntry.getKey().startsWith("@"))
-                // and only available parameters
-                .filter(stringObjectEntry ->
-                        parameterDirectiveMap.containsKey(stringObjectEntry.getKey()
-                                .replace("@", "")
-                        )
-                ).map(stringObjectEntry -> {
-                    // the name of the parameter
-                    String key = stringObjectEntry.getKey();
-                    // the value of the parameter
-                    String item = (String) stringObjectEntry.getValue();
+                    if (instructionInfo.containsKey("@" + parameterName)) {
+                        // the value of the parameter
+                        String item = (String) instructionInfo.get("@" + parameterName);
 
-                    // returns the parsed parameter
-                    return parseParameter(
-                            item,
-                            parameterDirectiveMap.get(key.replace("@", ""))
-                    );
+                        // returns the parsed parameter
+                        return parseParameter(
+                                item,
+                                instructionParameterDirective
+                        );
+                    }
+                    else {
+                        return parseOptionalParameter(
+                                instructionParameterDirective
+                        );
+                    }
                 }).collect(Collectors.toList());
     }
 
@@ -106,6 +104,21 @@ public class InstructionCompiler {
                 directive.getPosition(),
                 // the value gets compiled
                 ExpressionCompiler.compile(value),
+                directive.getName(),
+                directive.getDefaultValue()
+        );
+    }
+
+    /**
+     * @param directive the parameter directive
+     * @return the compiled parameter
+     */
+    private static CompiledParameter parseOptionalParameter(ParameterDirective directive) {
+        //noinspection unchecked
+        return new CompiledParameter(
+                directive.getParameterType(),
+                directive.getPosition(),
+                context -> directive.getDefaultValue(),
                 directive.getName(),
                 directive.getDefaultValue()
         );

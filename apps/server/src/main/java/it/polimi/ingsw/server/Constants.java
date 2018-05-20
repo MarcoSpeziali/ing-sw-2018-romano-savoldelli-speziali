@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -48,13 +47,13 @@ public class Constants {
     }
 
     public enum Resources {
-        PUBLIC_CARDS("cards/public-cards.xml"),
-        PRIVATE_CARDS("cards/private-cards.xml"),
-        TOOL_CARDS("cards/tool-cards.xml"),
-        WINDOWS("window.xml"),
-        ACTIONS_DIRECTIVES("directives/actions-directives.xml"),
-        INSTRUCTIONS_DIRECTIVES("directives/instructions-directives.xml"),
-        PREDICATES_DIRECTIVES("directives/predicates-directives.xml");
+        PUBLIC_CARDS("public-cards.xml"),
+        PRIVATE_CARDS("private-cards.xml"),
+        TOOL_CARDS("tool-cards.xml"),
+        WINDOWS("windows.xml"),
+        ACTIONS_DIRECTIVES("actions-directives.xml"),
+        INSTRUCTIONS_DIRECTIVES("instructions-directives.xml"),
+        PREDICATES_DIRECTIVES("predicates-directives.xml");
 
         private final String relativePath;
 
@@ -71,28 +70,19 @@ public class Constants {
         }
 
         /**
-         * @return the absolute path of the resource or {@code null} if the resource could not be located
+         * @return the {@link URL} that locates the resource or {@code null} if the resource could not be located
          */
-        public String getAbsolutePath() {
-            ClassLoader classLoader = Resources.class.getClassLoader();
-            URL url = classLoader.getResource(this.relativePath);
-
-            if (url == null) {
-                return null;
-            }
-
-            try {
-                return url.toURI().getPath();
-            } catch (URISyntaxException e) {
-                return null;
-            }
+        public URL getURL() {
+            ClassLoader classLoader = ServerApp.class.getClassLoader();
+            return classLoader.getResource(this.relativePath);
         }
 
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
     }
 
     public enum ServerArgument {
-        FORCE_COMPILATION("--force-compilation");
+        FORCE_COMPILATION("force-compilation"),
+        LOG_LEVEL("log-level");
 
         private final String optionName;
 

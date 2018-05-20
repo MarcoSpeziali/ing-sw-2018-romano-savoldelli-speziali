@@ -23,7 +23,7 @@ class ChoosePositionActionTest {
         UserInteractionProvider interactionProvider = mock(UserInteractionProvider.class);
         when(interactionProvider.choosePosition(location)).thenReturn(6);
 
-        action = new ChoosePositionAction(this.testData, interactionProvider, location);
+        action = new ChoosePositionAction(this.testData, interactionProvider, context -> location);
     }
 
     @Test

@@ -136,7 +136,7 @@ class ActionGroupTest {
                                         "COLOR"
                                 ),
                                 this.interactionProvider,
-                                this.chooseLocation,
+                                context -> this.chooseLocation,
                                 context -> 0
                         ),
                         new ChooseDieAction(
@@ -146,7 +146,7 @@ class ActionGroupTest {
                                         "DIE"
                                 ),
                                 this.interactionProvider,
-                                this.chooseLocation,
+                                context -> this.chooseLocation,
                                 context -> (GlassColor) context.get("COLOR"),
                                 context -> 0
                         ),
@@ -156,7 +156,7 @@ class ActionGroupTest {
                                         null,
                                         "DIE"
                                 ),
-                                this.choosablePickLocation,
+                                context -> this.choosablePickLocation,
                                 context -> (Die) context.get("DIE")
                         ),
                         new FlipAction(
@@ -174,7 +174,7 @@ class ActionGroupTest {
                                         null
                                 ),
                                 context -> (Die) context.get("DIE"),
-                                this.randomPutLocation
+                                context -> this.randomPutLocation
                         )
                 ),
                 this.actionGroupCallbacks
@@ -199,7 +199,7 @@ class ActionGroupTest {
                                         null
                                 ),
                                 context -> new Die(GlassColor.RED, 4),
-                                this.choosablePutLocation,
+                                context -> this.choosablePutLocation,
                                 context -> 15
                         )
                 ),
@@ -228,7 +228,7 @@ class ActionGroupTest {
                                         null
                                 ),
                                 context -> new Die(GlassColor.RED, 4),
-                                this.choosablePutLocation,
+                                context -> this.choosablePutLocation,
                                 context -> 15
                         )
                 ),
@@ -262,7 +262,7 @@ class ActionGroupTest {
                                         null
                                 ),
                                 context -> new Die(GlassColor.RED, 4),
-                                this.choosablePutLocation,
+                                context -> this.choosablePutLocation,
                                 context -> 15
                         )
                 ),
@@ -295,7 +295,7 @@ class ActionGroupTest {
                                         null
                                 ),
                                 context -> new Die(GlassColor.RED, 4),
-                                this.choosablePutLocation,
+                                context -> this.choosablePutLocation,
                                 context -> 15
                         )
                 ),

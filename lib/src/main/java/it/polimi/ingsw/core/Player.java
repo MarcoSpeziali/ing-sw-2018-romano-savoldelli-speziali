@@ -1,4 +1,7 @@
-package it.polimi.ingsw.models;
+package it.polimi.ingsw.core;
+
+import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.models.ObjectiveCard;
 
 public class Player {
     private String profile; //FIXME dopo update dell'app client

@@ -53,7 +53,7 @@ public class CardCompiler {
         else {
             // gets the compiled constraints
             constraints = compileConstraints(
-                    XMLUtils.getMapArray(
+                    XMLUtils.getMapArrayAnyway(
                             constraintsNodeInfo,
                             CardNodes.CARD_CONSTRAINT
                     )
@@ -103,7 +103,7 @@ public class CardCompiler {
      * @return a {@link List} of {@link CompiledToolCard}
      */
     public static List<CompiledToolCard> compileToolCards(List<ActionDirective> actionDirectives) throws IOException, SAXException, ParserConfigurationException {
-        return compileToolCards(Constants.resources.TOOL_CARDS_PATH, true, actionDirectives);
+        return compileToolCards(Constants.Resources.TOOL_CARDS.getRelativePath(), true, actionDirectives);
     }
 
     /**
@@ -149,7 +149,7 @@ public class CardCompiler {
      *      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePrivateObjectiveCards(List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws IOException, SAXException, ParserConfigurationException {
-        return compilePrivateObjectiveCards(Constants.resources.PRIVATE_CARDS_PATH, true, instructionDirectives, predicateDirectives);
+        return compilePrivateObjectiveCards(Constants.Resources.PRIVATE_CARDS.getRelativePath(), true, instructionDirectives, predicateDirectives);
     }
 
     /**
@@ -179,7 +179,7 @@ public class CardCompiler {
      *      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePublicObjectiveCards(List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws IOException, SAXException, ParserConfigurationException {
-        return compilePublicObjectiveCards(Constants.resources.PUBLIC_CARDS_PATH, true, instructionDirectives, predicateDirectives);
+        return compilePublicObjectiveCards(Constants.Resources.PUBLIC_CARDS.getRelativePath(), true, instructionDirectives, predicateDirectives);
     }
 
     /**

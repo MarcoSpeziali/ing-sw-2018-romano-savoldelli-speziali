@@ -320,15 +320,15 @@ public class CountDiagonalInstruction extends Instruction {
 
     /**
      * 8: no left, yes right & above & below
+     * [ ][ ][ ][ ][ ]
      * [ ][x][ ][ ][ ]
      * [O][ ][ ][ ][ ]
      * [ ][x][ ][ ][ ]
-     * [ ][ ][ ][ ][ ]
      * ---------------
-     * [ ][ ][ ][ ][ ]
      * [ ][x][ ][ ][ ]
      * [O][ ][ ][ ][ ]
      * [ ][x][ ][ ][ ]
+     * [ ][ ][ ][ ][ ]
      */
     private static boolean case8(int i, int j, int rowCount) {
         return i > 0 && i < rowCount - 1 && j == 0;

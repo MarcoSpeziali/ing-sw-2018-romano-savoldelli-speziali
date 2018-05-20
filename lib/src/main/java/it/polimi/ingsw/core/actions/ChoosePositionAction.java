@@ -4,13 +4,15 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.core.locations.ChooseLocation;
 
+// TODO: docs
 public class ChoosePositionAction extends Action {
 
     private static final long serialVersionUID = 2291839640072604945L;
-    private final UserInteractionProvider userInteractionProvider;
-    private final ChooseLocation from;
 
-    public ChoosePositionAction(ActionData data, UserInteractionProvider userInteractionProvider, ChooseLocation from) {
+    private final UserInteractionProvider userInteractionProvider;
+    private final VariableSupplier<ChooseLocation> from;
+
+    public ChoosePositionAction(ActionData data, UserInteractionProvider userInteractionProvider, VariableSupplier<ChooseLocation> from) {
         super(data);
 
         this.userInteractionProvider = userInteractionProvider;
@@ -21,6 +23,6 @@ public class ChoosePositionAction extends Action {
     public Object run(Context context) {
         super.run(context);
 
-        return this.userInteractionProvider.choosePosition(this.from);
+        return this.userInteractionProvider.choosePosition(this.from.get(context));
     }
 }

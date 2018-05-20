@@ -19,7 +19,7 @@ class CardCompilerTest {
     void compileToolCards() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         List<CompiledToolCard> toolCards = CardCompiler.compileToolCards(
                 ActionDirectivesCompiler.compile(
-                        "directives/actions-directives-full.xml",
+                        "actions-directives-full.xml",
                         true
                 )
         );
@@ -38,8 +38,8 @@ class CardCompilerTest {
     @Test
     void compilePrivateObjectiveCards() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         List<CompiledObjectiveCard> toolCards = CardCompiler.compilePrivateObjectiveCards(
-                InstructionDirectiveCompiler.compile("directives/instructions-directives-full.xml", true),
-                PredicateDirectivesCompiler.compile("directives/predicates-directives-full.xml", true)
+                InstructionDirectiveCompiler.compile("instructions-directives-full.xml", true),
+                PredicateDirectivesCompiler.compile()
         );
 
         Assertions.assertEquals(5, toolCards.size());
@@ -59,8 +59,8 @@ class CardCompilerTest {
     @Test
     void compilePublicObjectiveCards() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         List<CompiledObjectiveCard> toolCards = CardCompiler.compilePublicObjectiveCards(
-                InstructionDirectiveCompiler.compile("directives/instructions-directives-full.xml", true),
-                PredicateDirectivesCompiler.compile("directives/predicates-directives-full.xml", true)
+                InstructionDirectiveCompiler.compile("instructions-directives-full.xml", true),
+                PredicateDirectivesCompiler.compile()
         );
 
         Assertions.assertEquals(4, toolCards.size());

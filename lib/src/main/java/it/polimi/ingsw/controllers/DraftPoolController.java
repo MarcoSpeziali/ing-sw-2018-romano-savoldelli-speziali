@@ -2,7 +2,7 @@ package it.polimi.ingsw.controllers;
 
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.DraftPool;
-import it.polimi.ingsw.models.Player;
+import it.polimi.ingsw.core.Player;
 
 public class DraftPoolController {
 

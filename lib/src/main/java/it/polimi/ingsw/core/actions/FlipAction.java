@@ -3,6 +3,7 @@ package it.polimi.ingsw.core.actions;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.models.Die;
 
+// TODO: docs
 public class FlipAction extends Action {
 
     private static final long serialVersionUID = 3304536240465898877L;

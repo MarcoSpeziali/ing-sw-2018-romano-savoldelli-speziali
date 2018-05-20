@@ -4,10 +4,8 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Window;
 
-import java.util.Hashtable;
 import java.util.Map;
 
-// TODO: docs
 public class ForDieInstruction extends Instruction {
     /**
      * The name for the exposed variable mapping.
@@ -23,16 +21,15 @@ public class ForDieInstruction extends Instruction {
     protected Map<String, String> exposedVariableMapping;
 
     /**
-     * @param dieVariableName The user-defined name for the die.
-     * @param filterShade The shade to filter.
-     * @param filterColor The color to filter.
+     * @param exposedVariableMapping the user-defined names for the exposed variables
+     * @param filterShade the shade to filter
+     * @param filterColor the color to filter
      */
-    public ForDieInstruction(String dieVariableName, Integer filterShade, GlassColor filterColor) {
+    public ForDieInstruction(Map<String, String> exposedVariableMapping, Integer filterShade, GlassColor filterColor) {
         this.filterShade = filterShade;
         this.filterColor = filterColor;
 
-        this.exposedVariableMapping = new Hashtable<>();
-        this.exposedVariableMapping.put(DIE_VARIABLE_NAME, dieVariableName);
+        this.exposedVariableMapping = exposedVariableMapping;
     }
 
     @Override

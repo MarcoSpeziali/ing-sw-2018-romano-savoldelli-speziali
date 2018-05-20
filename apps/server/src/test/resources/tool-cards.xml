@@ -4,8 +4,8 @@
         <effect description="cards.tool_cards.grozing_pliers.description" initialCost="2">
 	        <action effect="choose_die $draft_pool$" result="DIE" />
 	        <action-group chooseBetween="1">
-                <action effect="increment $DIE$ 1" constraint="not-6" />
-                <action effect="decrement $DIE$ 1" constraint="not-1" />
+                <action effect="increment $DIE$" constraint="not-6" />
+                <action effect="decrement $DIE$" constraint="not-1" />
             </action-group>
         </effect>
         <constraints>

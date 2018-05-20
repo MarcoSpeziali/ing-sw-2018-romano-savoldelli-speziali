@@ -34,7 +34,7 @@ class RedrawAllActionTest {
         ChooseLocation location = mock(ChooseLocation.class);
         when(location.getDice()).thenReturn(Arrays.stream(dice).collect(Collectors.toList()));
 
-        this.action = new RedrawAllAction(this.testData, location);
+        this.action = new RedrawAllAction(this.testData, context -> location);
     }
 
     @Test

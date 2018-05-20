@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -16,25 +15,34 @@ import java.util.stream.StreamSupport;
 @SuppressWarnings("squid:S2055") // Range has a no-arg constructor
 public class IterableRange<T extends Comparable<? super T> & Serializable> extends Range<T> implements Iterable<T>, Serializable {
 
-    // TODO: docs
-    public static final UnaryOperator<Integer>  INTEGER_INCREMENT_FUNCTION  = val -> ++val;
-    public static final UnaryOperator<Float>    FLOAT_INCREMENT_FUNCTION    = val -> ++val;
-    public static final UnaryOperator<Double>   DOUBLE_INCREMENT_FUNCTION   = val -> ++val;
-    public static final UnaryOperator<Long>     LONG_INCREMENT_FUNCTION     = val -> ++val;
-    public static final UnaryOperator<Byte>     BYTE_INCREMENT_FUNCTION     = val -> ++val;
-
-    public static final UnaryOperator<Integer>  INTEGER_DECREMENT_FUNCTION  = val -> --val;
-    public static final UnaryOperator<Float>    FLOAT_DECREMENT_FUNCTION    = val -> --val;
-    public static final UnaryOperator<Double>   DOUBLE_DECREMENT_FUNCTION   = val -> --val;
-    public static final UnaryOperator<Long>     LONG_DECREMENT_FUNCTION     = val -> --val;
-    public static final UnaryOperator<Byte>     BYTE_DECREMENT_FUNCTION     = val -> --val;
     private static final long serialVersionUID = -4891369410626728370L;
+
+    @FunctionalInterface
+    public interface IncrementsProvider<R extends Comparable<? super R> & Serializable> extends Serializable {
+        /**
+         * Increments the parameter {@code previous}.
+         * @return the incrementation of {@code previous}
+         */
+        R increment(R previous);
+
+    }
+    // TODO: docs
+    public static final IncrementsProvider<Integer>  INTEGER_INCREMENT_FUNCTION  = val -> ++val;
+    public static final IncrementsProvider<Float>    FLOAT_INCREMENT_FUNCTION    = val -> ++val;
+    public static final IncrementsProvider<Double>   DOUBLE_INCREMENT_FUNCTION   = val -> ++val;
+    public static final IncrementsProvider<Long>     LONG_INCREMENT_FUNCTION     = val -> ++val;
+    public static final IncrementsProvider<Byte>     BYTE_INCREMENT_FUNCTION     = val -> ++val;
+
+    public static final IncrementsProvider<Integer>  INTEGER_DECREMENT_FUNCTION  = val -> --val;
+    public static final IncrementsProvider<Float>    FLOAT_DECREMENT_FUNCTION    = val -> --val;
+    public static final IncrementsProvider<Double>   DOUBLE_DECREMENT_FUNCTION   = val -> --val;
+    public static final IncrementsProvider<Long>     LONG_DECREMENT_FUNCTION     = val -> --val;
+    public static final IncrementsProvider<Byte>     BYTE_DECREMENT_FUNCTION     = val -> --val;
 
     /**
      * The functional function used to increment the value of type {@code T}.
      */
-    @SuppressWarnings("squid:S1948")
-    protected final UnaryOperator<T> incrementFunction;
+    protected final IncrementsProvider<T> incrementFunction;
 
     /**
      * Initializes {@code IterableRange<T>} with the starting and the ending value.
@@ -43,9 +51,9 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
      * @param end The ending value of the range.
      * @param incrementFunction The function used to increment the values.
      */
-    public IterableRange(T start, T end, UnaryOperator<T> incrementFunction) {
+    public IterableRange(T start, T end, IncrementsProvider<T> incrementFunction) {
         super(start, end);
-        assert incrementFunction != null;
+        Objects.requireNonNull(incrementFunction);
 
         this.incrementFunction = incrementFunction;
     }
@@ -55,7 +63,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
      * @param range The existing {@code Range<T>}.
      * @param incrementFunction The function used to increment the values.
      */
-    public IterableRange(Range<T> range, UnaryOperator<T> incrementFunction) {
+    public IterableRange(Range<T> range, IncrementsProvider<T> incrementFunction) {
         this(range == null ? null : range.start, range == null ? null : range.end, incrementFunction);
     }
 
@@ -68,7 +76,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
      * @param <K> The desired object type.
      * @return An instance of {@link Range}
      */
-    public static <K extends Comparable<? super K> & Serializable> IterableRange<K> fromString(String range, String separator, Function<String, K> conversionProvider, UnaryOperator<K> incrementFunction) {
+    public static <K extends Comparable<? super K> & Serializable> IterableRange<K> fromString(String range, String separator, Function<String, K> conversionProvider, IncrementsProvider<K> incrementFunction) {
         return new IterableRange<>(Objects.requireNonNull(
                 Range.fromString(range, separator, conversionProvider)),
                 incrementFunction
@@ -82,7 +90,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
      * @param <K> The desired object type.
      * @return An instance of {@link Range}
      */
-    public static <K extends Comparable<? super K> & Serializable> IterableRange<K> singleValued(K value, UnaryOperator<K> incrementFunction) {
+    public static <K extends Comparable<? super K> & Serializable> IterableRange<K> singleValued(K value, IncrementsProvider<K> incrementFunction) {
         return new IterableRange<>(Objects.requireNonNull(
                 Range.singleValued(value)
         ), incrementFunction);
@@ -184,7 +192,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
         /**
          * An unary operator that, given a value of type {@code T} returns the value incremented.
          */
-        private final UnaryOperator<T> incrementFunction;
+        private final IncrementsProvider<T> incrementFunction;
 
         /**
          * The current value of the iterator sequence.
@@ -201,7 +209,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
          * @param range The range to iterate through.
          * @param incrementFunction An unary operator that, given a value of type {@code T} returns the value incremented.
          */
-        RangeIterator(Range<T> range, UnaryOperator<T> incrementFunction) {
+        RangeIterator(Range<T> range, IncrementsProvider<T> incrementFunction) {
             this.range = range;
             this.incrementFunction = incrementFunction;
 
@@ -219,7 +227,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
                 T toReturn = this.current;
                 ranOnce = true;
 
-                this.current = incrementFunction.apply(this.current);
+                this.current = incrementFunction.increment(this.current);
                 return toReturn;
             }
 
@@ -238,7 +246,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
         /**
          * An unary operator that, given a value of type {@code T} returns the value incremented.
          */
-        private final UnaryOperator<T> incrementFunction;
+        private final IncrementsProvider<T> incrementFunction;
 
         /**
          * The current value of the iterator sequence.
@@ -255,7 +263,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
          * @param range The range to iterate through.
          * @param incrementFunction An unary operator that, given a value of type {@code T} returns the value incremented.
          */
-        RangeSpliterator(Range<T> range, UnaryOperator<T> incrementFunction) {
+        RangeSpliterator(Range<T> range, IncrementsProvider<T> incrementFunction) {
             this.range = range;
             this.incrementFunction = incrementFunction;
 
@@ -274,7 +282,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
             }
 
             if (hasNext) {
-                current = incrementFunction.apply(current);
+                current = incrementFunction.increment(current);
                 action.accept(current);
             }
 

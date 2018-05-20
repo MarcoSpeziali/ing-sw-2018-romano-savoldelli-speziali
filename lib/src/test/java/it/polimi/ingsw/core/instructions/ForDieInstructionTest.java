@@ -13,7 +13,9 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -65,7 +67,10 @@ class ForDieInstructionTest {
     void testNoFilterRun() {
         AtomicInteger currentIndex = new AtomicInteger();
 
-        ForDieInstruction instruction = new ForDieInstruction("die_test_var", 0, null);
+        Map<String, String> exposedVariableMap = new HashMap<>();
+        exposedVariableMap.put("die", "die_test_var");
+
+        ForDieInstruction instruction = new ForDieInstruction(exposedVariableMap, 0, null);
 
         TestingInstruction testingInstruction = new TestingInstruction();
         testingInstruction.setListener((target, context) -> {
@@ -83,7 +88,10 @@ class ForDieInstructionTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6})
     void testShadeFilter(Integer shadeFilter) {
-        ForDieInstruction instruction = new ForDieInstruction("die_test_var", shadeFilter, null);
+        Map<String, String> exposedVariableMap = new HashMap<>();
+        exposedVariableMap.put("die", "die_test_var");
+
+        ForDieInstruction instruction = new ForDieInstruction(exposedVariableMap, shadeFilter, null);
 
         TestingInstruction testingInstruction = new TestingInstruction();
         testingInstruction.setListener((target, context) -> {
@@ -99,7 +107,10 @@ class ForDieInstructionTest {
     @ParameterizedTest
     @EnumSource(GlassColor.class)
     void testColorFilter(GlassColor colorFilter) {
-        ForDieInstruction instruction = new ForDieInstruction("die_test_var", 0, colorFilter);
+        Map<String, String> exposedVariableMap = new HashMap<>();
+        exposedVariableMap.put("die", "die_test_var");
+
+        ForDieInstruction instruction = new ForDieInstruction(exposedVariableMap, 0, colorFilter);
 
         TestingInstruction testingInstruction = new TestingInstruction();
         testingInstruction.setListener((target, context) -> {
@@ -115,7 +126,10 @@ class ForDieInstructionTest {
     @ParameterizedTest
     @MethodSource("testColorAndShadeFilterArguments")
     void testColorAndShadeFilter(Integer shadeFilter, GlassColor colorFilter) {
-        ForDieInstruction instruction = new ForDieInstruction("die_test_var", shadeFilter, colorFilter);
+        Map<String, String> exposedVariableMap = new HashMap<>();
+        exposedVariableMap.put("die", "die_test_var");
+
+        ForDieInstruction instruction = new ForDieInstruction(exposedVariableMap, shadeFilter, colorFilter);
 
         TestingInstruction testingInstruction = new TestingInstruction();
         testingInstruction.setListener((target, context) -> {
