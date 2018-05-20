@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.initializers;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.actions.ActionGroup;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.actions.ActionGroup;
 import it.polimi.ingsw.server.compilers.actions.ActionGroupCompiler;
 import it.polimi.ingsw.server.compilers.actions.CompiledActionGroup;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
@@ -36,7 +36,7 @@ class ActionGroupInitializerTest {
                 List.of()
         );
 
-        ActionGroup actionGroup = ActionGroupInitializer.instantiate(compiledActionGroup, null, Context.getSharedInstance(), null);
+        ActionGroup actionGroup = ActionGroupInitializer.instantiate(compiledActionGroup, Context.getSharedInstance());
 
         Assertions.assertNotNull(actionGroup);
 

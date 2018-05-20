@@ -1,16 +1,16 @@
 package it.polimi.ingsw.server.compilers.actions;
 
-import it.polimi.ingsw.core.actions.VariableSupplier;
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.locations.ChooseLocation;
+import it.polimi.ingsw.server.actions.ActionData;
+import it.polimi.ingsw.server.actions.ChooseDieAction;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
 import it.polimi.ingsw.server.compilers.constraints.ConstraintCompiler;
-import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.actions.ActionData;
-import it.polimi.ingsw.core.actions.ChooseDieAction;
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
-import it.polimi.ingsw.core.locations.ChooseLocation;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +44,6 @@ class ActionCompilerTest {
 
         Assertions.assertEquals("choose_die", compiledAction.getActionId());
         Assertions.assertEquals(ChooseDieAction.class, compiledAction.getClassToInstantiate());
-        Assertions.assertEquals(true, compiledAction.requiresUserInteraction());
 
         ActionData actionData = compiledAction.getActionData();
 
@@ -88,7 +87,6 @@ class ActionCompilerTest {
 
         Assertions.assertEquals("choose_die", compiledAction.getActionId());
         Assertions.assertEquals(ChooseDieAction.class, compiledAction.getClassToInstantiate());
-        Assertions.assertEquals(true, compiledAction.requiresUserInteraction());
 
         ActionData actionData = compiledAction.getActionData();
 
@@ -132,7 +130,6 @@ class ActionCompilerTest {
 
         Assertions.assertEquals("choose_die", compiledAction.getActionId());
         Assertions.assertEquals(ChooseDieAction.class, compiledAction.getClassToInstantiate());
-        Assertions.assertEquals(true, compiledAction.requiresUserInteraction());
 
         ActionData actionData = compiledAction.getActionData();
 

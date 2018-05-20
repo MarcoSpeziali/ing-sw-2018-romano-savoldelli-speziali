@@ -1,7 +1,8 @@
 package it.polimi.ingsw.server.compilers.actions.directives;
 
-import it.polimi.ingsw.core.actions.*;
+import it.polimi.ingsw.server.actions.*;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -22,7 +23,6 @@ class ActionDirectivesCompilerTest {
         Assertions.assertNotNull(chooseDie);
         Assertions.assertEquals(ChooseDieAction.class, chooseDie.getTargetClass());
         Assertions.assertEquals("choose_die", chooseDie.getId());
-        Assertions.assertTrue(chooseDie.requiresUserInteraction());
 
         List<ParameterDirective> chooseDieParameters = chooseDie.getParametersDirectives();
         testChooseDieParameters(chooseDieParameters);
@@ -31,7 +31,6 @@ class ActionDirectivesCompilerTest {
         Assertions.assertNotNull(chooseColor);
         Assertions.assertEquals(ChooseColorAction.class, chooseColor.getTargetClass());
         Assertions.assertEquals("choose_color", chooseColor.getId());
-        Assertions.assertTrue(chooseColor.requiresUserInteraction());
 
         List<ParameterDirective> chooseColorParameters = chooseColor.getParametersDirectives();
         testChooseColorParameters(chooseColorParameters);
@@ -40,7 +39,6 @@ class ActionDirectivesCompilerTest {
         Assertions.assertNotNull(chooseShade);
         Assertions.assertEquals(ChooseShadeAction.class, chooseShade.getTargetClass());
         Assertions.assertEquals("choose_shade", chooseShade.getId());
-        Assertions.assertTrue(chooseShade.requiresUserInteraction());
 
         List<ParameterDirective> chooseShadeParameters = chooseShade.getParametersDirectives();
         testChooseShadeParameters(chooseShadeParameters);
@@ -49,7 +47,6 @@ class ActionDirectivesCompilerTest {
         Assertions.assertNotNull(choosePosition);
         Assertions.assertEquals(ChoosePositionAction.class, choosePosition.getTargetClass());
         Assertions.assertEquals("choose_position", choosePosition.getId());
-        Assertions.assertTrue(choosePosition.requiresUserInteraction());
 
         List<ParameterDirective> choosePositionParameters = choosePosition.getParametersDirectives();
         testChoosePositionParameters(choosePositionParameters);
@@ -58,7 +55,6 @@ class ActionDirectivesCompilerTest {
         Assertions.assertNotNull(choosePositionForDie);
         Assertions.assertEquals(ChoosePositionForDieAction.class, choosePositionForDie.getTargetClass());
         Assertions.assertEquals("choose_position_for_die", choosePositionForDie.getId());
-        Assertions.assertTrue(choosePositionForDie.requiresUserInteraction());
 
         List<ParameterDirective> choosePositionForDieParameters = choosePositionForDie.getParametersDirectives();
         testChoosePositionForDieParameters(choosePositionForDieParameters);

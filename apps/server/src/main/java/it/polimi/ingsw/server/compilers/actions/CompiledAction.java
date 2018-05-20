@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.compilers.actions;
 
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
-import it.polimi.ingsw.core.actions.ActionData;
-import it.polimi.ingsw.core.actions.ExecutableAction;
+import it.polimi.ingsw.server.actions.ActionData;
+import it.polimi.ingsw.server.actions.ExecutableAction;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,11 +36,6 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
     private List<CompiledParameter> parameters;
 
     /**
-     * Represent the need of the action for an user interaction.
-     */
-    private Boolean requiresUserInteraction;
-
-    /**
      * @return the action id
      */
     public String getActionId() {
@@ -72,24 +67,15 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
     }
 
     /**
-     * @return the need of the action for an user interaction
-     */
-    public Boolean requiresUserInteraction() {
-        return requiresUserInteraction;
-    }
-
-    /**
      * @param actionId the action id
      * @param actionClass the class of the action
      * @param actionData the data of the action
      * @param parameters the parameters needed to initialize the action
-     * @param requiresUserInteraction the need of the action for an user interaction
      */
-    public CompiledAction(String actionId, Class<? extends ExecutableAction> actionClass, ActionData actionData, List<CompiledParameter> parameters, Boolean requiresUserInteraction) {
+    public CompiledAction(String actionId, Class<? extends ExecutableAction> actionClass, ActionData actionData, List<CompiledParameter> parameters) {
         this.actionId = actionId;
         this.actionClass = actionClass;
         this.actionData = actionData;
         this.parameters = parameters;
-        this.requiresUserInteraction = requiresUserInteraction;
     }
 }

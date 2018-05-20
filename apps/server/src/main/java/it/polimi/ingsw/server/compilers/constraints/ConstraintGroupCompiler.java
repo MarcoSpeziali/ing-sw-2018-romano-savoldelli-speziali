@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.compilers.constraints;
 
-import it.polimi.ingsw.core.constraints.ConstraintGroup;
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
+import it.polimi.ingsw.server.constraints.ConstraintGroup;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

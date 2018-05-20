@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.compilers.actions;
 
-import it.polimi.ingsw.core.actions.ActionData;
-import it.polimi.ingsw.core.actions.ExecutableAction;
+import it.polimi.ingsw.server.actions.ActionData;
+import it.polimi.ingsw.server.actions.ExecutableAction;
 
 import java.io.Serializable;
 

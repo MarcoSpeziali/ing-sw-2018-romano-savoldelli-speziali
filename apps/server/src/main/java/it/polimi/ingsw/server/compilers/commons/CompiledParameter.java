@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.compilers.commons;
 
-import it.polimi.ingsw.core.actions.VariableSupplier;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 
 import java.io.Serializable;
 

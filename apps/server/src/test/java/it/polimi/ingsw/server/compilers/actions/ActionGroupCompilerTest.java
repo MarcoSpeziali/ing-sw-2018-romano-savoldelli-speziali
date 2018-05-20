@@ -1,11 +1,12 @@
 package it.polimi.ingsw.server.compilers.actions;
 
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.actions.*;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
-import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.actions.*;
-import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.junit.jupiter.api.Assertions;
@@ -195,7 +196,6 @@ class ActionGroupCompilerTest {
 
         Assertions.assertEquals("increment", firstAction.getActionId());
         Assertions.assertEquals(IncrementAction.class, firstAction.getClassToInstantiate());
-        Assertions.assertEquals(false, firstAction.requiresUserInteraction());
 
         ActionData firstActionData = firstAction.getActionData();
         
@@ -227,7 +227,6 @@ class ActionGroupCompilerTest {
 
         Assertions.assertEquals("decrement", secondAction.getActionId());
         Assertions.assertEquals(DecrementAction.class, secondAction.getClassToInstantiate());
-        Assertions.assertEquals(false, secondAction.requiresUserInteraction());
 
         ActionData secondActionData = secondAction.getActionData();
 

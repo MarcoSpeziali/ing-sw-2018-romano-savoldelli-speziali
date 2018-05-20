@@ -1,11 +1,11 @@
 package it.polimi.ingsw.server.compilers.instructions.predicates.directives;
 
-import it.polimi.ingsw.core.actions.VariableSupplier;
-import it.polimi.ingsw.core.instructions.predicates.DistinctColorPredicate;
-import it.polimi.ingsw.core.instructions.predicates.DistinctShadePredicate;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
+import it.polimi.ingsw.server.instructions.predicates.DistinctColorPredicate;
+import it.polimi.ingsw.server.instructions.predicates.DistinctShadePredicate;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;

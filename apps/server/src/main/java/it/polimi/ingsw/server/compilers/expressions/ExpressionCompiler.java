@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.compilers.expressions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.actions.VariableSupplier;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

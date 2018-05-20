@@ -2,14 +2,14 @@ package it.polimi.ingsw.server.initializers;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.instructions.predicates.DistinctColorPredicate;
-import it.polimi.ingsw.core.instructions.predicates.DistinctShadePredicate;
-import it.polimi.ingsw.core.instructions.predicates.Predicate;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.server.compilers.instructions.predicates.CompiledPredicate;
 import it.polimi.ingsw.server.compilers.instructions.predicates.PredicateCompiler;
 import it.polimi.ingsw.server.compilers.instructions.predicates.directives.PredicateDirective;
 import it.polimi.ingsw.server.compilers.instructions.predicates.directives.PredicateDirectivesCompiler;
+import it.polimi.ingsw.server.instructions.predicates.DistinctColorPredicate;
+import it.polimi.ingsw.server.instructions.predicates.DistinctShadePredicate;
+import it.polimi.ingsw.server.instructions.predicates.Predicate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
