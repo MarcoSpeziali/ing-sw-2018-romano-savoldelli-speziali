@@ -2,17 +2,9 @@ package it.polimi.ingsw.core.instructions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.actions.VariableSupplier;
-import it.polimi.ingsw.models.Die;
-
-import java.util.List;
+import it.polimi.ingsw.models.Window;
 
 public class CountDiceInstruction extends Instruction {
-
-    /**
-     * A {@link VariableSupplier} that provides the list of dice to count.
-     */
-    private final VariableSupplier<List<Die>> diceSupplier;
 
     /**
      * The filter for the dice shade.
@@ -24,20 +16,24 @@ public class CountDiceInstruction extends Instruction {
      */
     private final GlassColor filterColor;
 
-    public CountDiceInstruction(VariableSupplier<List<Die>> diceSupplier, Integer filterShade, GlassColor filterColor) {
-        this.diceSupplier = diceSupplier;
+    public CountDiceInstruction(Integer filterShade, GlassColor filterColor) {
         this.filterShade = filterShade;
         this.filterColor = filterColor;
     }
 
     @Override
     public Integer run(Context context) {
-        // Returns the count of the provided dice that satisfies the filters
+        // Retrieves the window from the context
+        Window window = (Window) context.get(Context.WINDOW);
+
+        // returns the count of dice in the window that satisfies the filters
         // Math.toIntExact because count returns a long
-        return Math.toIntExact(this.diceSupplier.get(context).stream()
-                .filter(die -> (
-                        this.filterShade == 0 || die.getShade().equals(this.filterShade)) &&
-                        (this.filterColor == null || die.getColor().equals(this.filterColor))
-                ).count());
+        return Math.toIntExact(
+                window.getDice().stream()
+                        .filter(die ->
+                                (this.filterShade == 0 || die.getShade().equals(this.filterShade)) &&
+                                (this.filterColor == null || die.getColor().equals(this.filterColor))
+                        ).count()
+        );
     }
 }

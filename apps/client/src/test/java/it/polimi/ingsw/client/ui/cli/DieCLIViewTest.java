@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.ui.cli;
 
+import it.polimi.ingsw.core.GlassColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

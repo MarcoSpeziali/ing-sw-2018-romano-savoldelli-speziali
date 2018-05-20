@@ -4,6 +4,7 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.core.GlassColor;
 
+// TODO: docs
 public class SwapAction extends Action {
 
     private static final long serialVersionUID = 6960916269848753511L;

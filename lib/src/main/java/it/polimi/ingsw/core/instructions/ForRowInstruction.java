@@ -5,14 +5,13 @@ import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.utils.IterableRange;
 
-import java.util.Hashtable;
 import java.util.Map;
 
 public class ForRowInstruction extends Instruction {
     /**
      * The name for the exposed variable mapping.
      */
-    protected static final String ROW_VARIABLE_NAME = "die";
+    protected static final String ROW_VARIABLE_NAME = "row";
 
     /**
      * Maps the user-defined variable to the variables this class exposes.
@@ -20,11 +19,10 @@ public class ForRowInstruction extends Instruction {
     protected Map<String, String> exposedVariableMapping;
 
     /**
-     * @param rowVariableName The user-defined name for the row.
+     * @param exposedVariableMapping the user-defined names for the exposed variables
      */
-    public ForRowInstruction(String rowVariableName) {
-        this.exposedVariableMapping = new Hashtable<>();
-        this.exposedVariableMapping.put(ROW_VARIABLE_NAME, rowVariableName);
+    public ForRowInstruction(Map<String, String> exposedVariableMapping) {
+        this.exposedVariableMapping = exposedVariableMapping;
     }
 
     @Override

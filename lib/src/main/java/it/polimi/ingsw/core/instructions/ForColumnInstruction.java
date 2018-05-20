@@ -5,7 +5,6 @@ import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.utils.IterableRange;
 
-import java.util.Hashtable;
 import java.util.Map;
 
 public class ForColumnInstruction extends Instruction {
@@ -20,11 +19,10 @@ public class ForColumnInstruction extends Instruction {
     protected Map<String, String> exposedVariableMapping;
 
     /**
-     * @param columnVariableName The user-defined name for the row.
+     * @param exposedVariableMapping the user-defined names for the exposed variables
      */
-    public ForColumnInstruction(String columnVariableName) {
-        this.exposedVariableMapping = new Hashtable<>();
-        this.exposedVariableMapping.put(COLUMN_VARIABLE_NAME, columnVariableName);
+    public ForColumnInstruction(Map<String, String> exposedVariableMapping) {
+        this.exposedVariableMapping = exposedVariableMapping;
     }
 
     @Override

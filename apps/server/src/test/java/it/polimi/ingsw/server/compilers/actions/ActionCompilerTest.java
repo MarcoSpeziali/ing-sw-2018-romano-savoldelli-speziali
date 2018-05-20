@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.compilers.actions;
 
+import it.polimi.ingsw.core.actions.VariableSupplier;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
@@ -55,7 +56,7 @@ class ActionCompilerTest {
         Assertions.assertEquals(3, parameters.size());
 
         Assertions.assertEquals(0, parameters.get(0).getPosition().intValue());
-        Assertions.assertEquals(ChooseLocation.class, parameters.get(0).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(0).getType());
         Assertions.assertSame(
                 this.chooseLocation,
                 parameters.get(0).getParameterValue().get(Context.getSharedInstance())
@@ -65,14 +66,14 @@ class ActionCompilerTest {
         Assertions.assertNull(parameters.get(0).getOptionalName());
 
         Assertions.assertEquals(1, parameters.get(1).getPosition().intValue());
-        Assertions.assertEquals(GlassColor.class, parameters.get(1).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(1).getType());
         Assertions.assertNull(parameters.get(1).getParameterValue());
         Assertions.assertTrue(parameters.get(1).isOptional());
         Assertions.assertNull(parameters.get(1).getDefaultValue());
         Assertions.assertEquals("color", parameters.get(1).getOptionalName());
 
         Assertions.assertEquals(2, parameters.get(2).getPosition().intValue());
-        Assertions.assertEquals(Integer.class, parameters.get(2).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(2).getType());
         Assertions.assertNull(parameters.get(2).getParameterValue());
         Assertions.assertTrue(parameters.get(2).isOptional());
         Assertions.assertEquals(0, parameters.get(2).getDefaultValue());
@@ -99,7 +100,7 @@ class ActionCompilerTest {
         Assertions.assertEquals(3, parameters.size());
 
         Assertions.assertEquals(0, parameters.get(0).getPosition().intValue());
-        Assertions.assertEquals(ChooseLocation.class, parameters.get(0).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(0).getType());
         Assertions.assertSame(
                 this.chooseLocation,
                 parameters.get(0).getParameterValue().get(Context.getSharedInstance())
@@ -109,14 +110,14 @@ class ActionCompilerTest {
         Assertions.assertNull(parameters.get(0).getOptionalName());
 
         Assertions.assertEquals(1, parameters.get(1).getPosition().intValue());
-        Assertions.assertEquals(GlassColor.class, parameters.get(1).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(1).getType());
         Assertions.assertEquals(GlassColor.RED, parameters.get(1).getParameterValue().get(Context.getSharedInstance()));
         Assertions.assertTrue(parameters.get(1).isOptional());
         Assertions.assertNull(parameters.get(1).getDefaultValue());
         Assertions.assertEquals("color", parameters.get(1).getOptionalName());
 
         Assertions.assertEquals(2, parameters.get(2).getPosition().intValue());
-        Assertions.assertEquals(Integer.class, parameters.get(2).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(2).getType());
         Assertions.assertNull(parameters.get(2).getParameterValue());
         Assertions.assertTrue(parameters.get(2).isOptional());
         Assertions.assertEquals(0, parameters.get(2).getDefaultValue());
@@ -143,7 +144,7 @@ class ActionCompilerTest {
         Assertions.assertEquals(3, parameters.size());
 
         Assertions.assertEquals(0, parameters.get(0).getPosition().intValue());
-        Assertions.assertEquals(ChooseLocation.class, parameters.get(0).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(0).getType());
         Assertions.assertSame(
                 this.chooseLocation,
                 parameters.get(0).getParameterValue().get(Context.getSharedInstance())
@@ -153,14 +154,14 @@ class ActionCompilerTest {
         Assertions.assertNull(parameters.get(0).getOptionalName());
 
         Assertions.assertEquals(1, parameters.get(1).getPosition().intValue());
-        Assertions.assertEquals(GlassColor.class, parameters.get(1).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(1).getType());
         Assertions.assertEquals(GlassColor.RED, parameters.get(1).getParameterValue().get(Context.getSharedInstance()));
         Assertions.assertTrue(parameters.get(1).isOptional());
         Assertions.assertNull(parameters.get(1).getDefaultValue());
         Assertions.assertEquals("color", parameters.get(1).getOptionalName());
 
         Assertions.assertEquals(2, parameters.get(2).getPosition().intValue());
-        Assertions.assertEquals(Integer.class, parameters.get(2).getType());
+        Assertions.assertEquals(VariableSupplier.class, parameters.get(2).getType());
         Assertions.assertEquals(5, parameters.get(2).getParameterValue().get(Context.getSharedInstance()));
         Assertions.assertTrue(parameters.get(2).isOptional());
         Assertions.assertEquals(0, parameters.get(2).getDefaultValue());

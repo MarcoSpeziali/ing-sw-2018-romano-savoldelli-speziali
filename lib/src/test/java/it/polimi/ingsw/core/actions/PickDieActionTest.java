@@ -24,7 +24,7 @@ class PickDieActionTest {
         ChoosablePickLocation location = mock(ChoosablePickLocation.class);
         when(location.pickDie(die)).thenReturn(die);
 
-        action = new PickDieAction(this.testData, location, context -> die);
+        action = new PickDieAction(this.testData, context -> location, context -> die);
     }
 
     @Test

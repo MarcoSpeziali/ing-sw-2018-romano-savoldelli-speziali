@@ -1,11 +1,7 @@
 package it.polimi.ingsw.server.compilers.actions.directives;
 
-import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
-import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.actions.*;
-import it.polimi.ingsw.core.locations.ChooseLocation;
-import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
-import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -53,7 +49,7 @@ class ActionDirectivesCompilerTest {
         Assertions.assertNotNull(choosePosition);
         Assertions.assertEquals(ChoosePositionAction.class, choosePosition.getTargetClass());
         Assertions.assertEquals("choose_position", choosePosition.getId());
-        Assertions.assertFalse(choosePosition.requiresUserInteraction());
+        Assertions.assertTrue(choosePosition.requiresUserInteraction());
 
         List<ParameterDirective> choosePositionParameters = choosePosition.getParametersDirectives();
         testChoosePositionParameters(choosePositionParameters);
@@ -62,7 +58,7 @@ class ActionDirectivesCompilerTest {
         Assertions.assertNotNull(choosePositionForDie);
         Assertions.assertEquals(ChoosePositionForDieAction.class, choosePositionForDie.getTargetClass());
         Assertions.assertEquals("choose_position_for_die", choosePositionForDie.getId());
-        Assertions.assertFalse(choosePositionForDie.requiresUserInteraction());
+        Assertions.assertTrue(choosePositionForDie.requiresUserInteraction());
 
         List<ParameterDirective> choosePositionForDieParameters = choosePositionForDie.getParametersDirectives();
         testChoosePositionForDieParameters(choosePositionForDieParameters);
@@ -70,17 +66,17 @@ class ActionDirectivesCompilerTest {
 
     @Test
     void testClassNotFoundExceptionOnAction() {
-        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("directives/actions-directives-class-not-found.xml", true));
+        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("actions-directives-class-not-found.xml", true));
     }
 
     @Test
     void testClassNotFoundExceptionOnParameter() {
-        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("directives/actions-directives-class-not-found2.xml", true));
+        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("actions-directives-class-not-found2.xml", true));
     }
 
     @Test
     void testEmptyFile() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
-        List<ActionDirective> directives = ActionDirectivesCompiler.compile("directives/actions-directives-empty.xml", true);
+        List<ActionDirective> directives = ActionDirectivesCompiler.compile("actions-directives-empty.xml", true);
 
         Assertions.assertTrue(directives.isEmpty());
     }
@@ -91,7 +87,7 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective chooseLocation = chooseDieParameters.get(0);
         Assertions.assertNotNull(chooseLocation);
-        Assertions.assertEquals(ChooseLocation.class, chooseLocation.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, chooseLocation.getParameterType());
         Assertions.assertEquals(0, chooseLocation.getPosition().intValue());
         Assertions.assertFalse(chooseLocation.isOptional());
         Assertions.assertNull(chooseLocation.getName());
@@ -99,7 +95,7 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective glassColor = chooseDieParameters.get(1);
         Assertions.assertNotNull(glassColor);
-        Assertions.assertEquals(GlassColor.class, glassColor.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, glassColor.getParameterType());
         Assertions.assertEquals(1, glassColor.getPosition().intValue());
         Assertions.assertTrue(glassColor.isOptional());
         Assertions.assertEquals("color", glassColor.getName());
@@ -107,7 +103,7 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective shade = chooseDieParameters.get(2);
         Assertions.assertNotNull(shade);
-        Assertions.assertEquals(Integer.class, shade.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, shade.getParameterType());
         Assertions.assertEquals(2, shade.getPosition().intValue());
         Assertions.assertTrue(shade.isOptional());
         Assertions.assertEquals("shade", shade.getName());
@@ -120,7 +116,7 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective chooseLocation = chooseColorParameters.get(0);
         Assertions.assertNotNull(chooseLocation);
-        Assertions.assertEquals(ChooseLocation.class, chooseLocation.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, chooseLocation.getParameterType());
         Assertions.assertEquals(0, chooseLocation.getPosition().intValue());
         Assertions.assertFalse(chooseLocation.isOptional());
         Assertions.assertNull(chooseLocation.getName());
@@ -129,11 +125,11 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective shade = chooseColorParameters.get(1);
         Assertions.assertNotNull(shade);
-        Assertions.assertEquals(Integer.class, shade.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, shade.getParameterType());
         Assertions.assertEquals(1, shade.getPosition().intValue());
         Assertions.assertTrue(shade.isOptional());
         Assertions.assertEquals("shade", shade.getName());
-        Assertions.assertEquals(4, shade.getDefaultValue());
+        Assertions.assertEquals(0, shade.getDefaultValue());
         Assertions.assertFalse(shade.isMultiple());
     }
 
@@ -143,7 +139,7 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective chooseLocation = chooseShadeParameters.get(0);
         Assertions.assertNotNull(chooseLocation);
-        Assertions.assertEquals(ChooseLocation.class, chooseLocation.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, chooseLocation.getParameterType());
         Assertions.assertEquals(0, chooseLocation.getPosition().intValue());
         Assertions.assertFalse(chooseLocation.isOptional());
         Assertions.assertNull(chooseLocation.getName());
@@ -152,11 +148,11 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective color = chooseShadeParameters.get(1);
         Assertions.assertNotNull(color);
-        Assertions.assertEquals(GlassColor.class, color.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, color.getParameterType());
         Assertions.assertEquals(1, color.getPosition().intValue());
         Assertions.assertTrue(color.isOptional());
         Assertions.assertEquals("color", color.getName());
-        Assertions.assertEquals(GlassColor.RED, color.getDefaultValue());
+        Assertions.assertNull(color.getDefaultValue());
         Assertions.assertFalse(color.isMultiple());
     }
 
@@ -166,7 +162,7 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective chooseLocation = choosePositionParameters.get(0);
         Assertions.assertNotNull(chooseLocation);
-        Assertions.assertEquals(ChooseLocation.class, chooseLocation.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, chooseLocation.getParameterType());
         Assertions.assertEquals(0, chooseLocation.getPosition().intValue());
         Assertions.assertFalse(chooseLocation.isOptional());
         Assertions.assertNull(chooseLocation.getName());
@@ -180,7 +176,7 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective chooseLocation = choosePositionForDieParameters.get(0);
         Assertions.assertNotNull(chooseLocation);
-        Assertions.assertEquals(RestrictedChoosablePutLocation.class, chooseLocation.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, chooseLocation.getParameterType());
         Assertions.assertEquals(0, chooseLocation.getPosition().intValue());
         Assertions.assertFalse(chooseLocation.isOptional());
         Assertions.assertNull(chooseLocation.getName());
@@ -189,12 +185,12 @@ class ActionDirectivesCompilerTest {
 
         ParameterDirective die = choosePositionForDieParameters.get(1);
         Assertions.assertNotNull(die);
-        Assertions.assertEquals(Die[].class, die.getParameterType());
+        Assertions.assertEquals(VariableSupplier.class, die.getParameterType());
         Assertions.assertEquals(1, die.getPosition().intValue());
         Assertions.assertFalse(die.isOptional());
         Assertions.assertNull(die.getName());
         Assertions.assertNull(die.getDefaultValue());
-        Assertions.assertTrue(die.isMultiple());
+        Assertions.assertFalse(die.isMultiple());
 
         ParameterDirective ignoreColor = choosePositionForDieParameters.get(2);
         Assertions.assertNotNull(ignoreColor);
@@ -211,7 +207,7 @@ class ActionDirectivesCompilerTest {
         Assertions.assertEquals(3, ignoreShade.getPosition().intValue());
         Assertions.assertTrue(ignoreShade.isOptional());
         Assertions.assertEquals("ignore_shade", ignoreShade.getName());
-        Assertions.assertTrue((Boolean) ignoreShade.getDefaultValue());
+        Assertions.assertFalse((Boolean) ignoreShade.getDefaultValue());
         Assertions.assertFalse(ignoreShade.isMultiple());
 
         ParameterDirective ignoreAdjacency = choosePositionForDieParameters.get(4);

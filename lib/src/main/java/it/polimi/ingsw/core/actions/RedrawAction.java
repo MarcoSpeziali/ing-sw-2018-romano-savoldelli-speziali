@@ -5,6 +5,7 @@ import it.polimi.ingsw.models.Die;
 
 import java.util.Random;
 
+// TODO: docs
 public class RedrawAction extends Action {
 
     private static final long serialVersionUID = -5834416569411220558L;

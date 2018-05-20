@@ -2,12 +2,13 @@ package it.polimi.ingsw.core.actions;
 
 import it.polimi.ingsw.utils.Range;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * A set of callbacks needed by {@code ActionGroup}.
  */
-public interface ActionGroupCallbacks {
+public interface ActionGroupCallbacks extends Serializable {
 
     /**
      * @param alreadyRepeatedFor The number of repetition already done.

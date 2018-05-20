@@ -27,7 +27,7 @@ class ActionGroupCompilerTest {
     @BeforeEach
     void setUp() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         this.directiveList = ActionDirectivesCompiler.compile(
-                "directives/actions-directives-full.xml",
+                "actions-directives-full.xml",
                 true
         );
 
@@ -167,8 +167,8 @@ class ActionGroupCompilerTest {
     void testSimpleGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group>" +
-                        "   <action effect=\"increment $DIE$ 1\" />" +
-                        "   <action effect=\"decrement $DIE$ 1\" />" +
+                        "   <action effect=\"increment $DIE$\" />" +
+                        "   <action effect=\"decrement $DIE$ [by=2]\" />" +
                         "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
@@ -207,7 +207,7 @@ class ActionGroupCompilerTest {
         Assertions.assertEquals(2, firstCompiledParameters.size());
 
         Assertions.assertSame(0, firstCompiledParameters.get(0).getPosition());
-        Assertions.assertEquals(Die.class, firstCompiledParameters.get(0).getType());
+        Assertions.assertEquals(VariableSupplier.class, firstCompiledParameters.get(0).getType());
         Assertions.assertSame(
                 this.die,
                 firstCompiledParameters.get(0).getParameterValue().get(Context.getSharedInstance())
@@ -217,14 +217,11 @@ class ActionGroupCompilerTest {
         Assertions.assertNull(firstCompiledParameters.get(0).getOptionalName());
 
         Assertions.assertSame(1, firstCompiledParameters.get(1).getPosition());
-        Assertions.assertEquals(Integer.class, firstCompiledParameters.get(1).getType());
-        Assertions.assertEquals(
-                1,
-                firstCompiledParameters.get(1).getParameterValue().get(Context.getSharedInstance())
-        );
-        Assertions.assertFalse(firstCompiledParameters.get(1).isOptional());
-        Assertions.assertNull(firstCompiledParameters.get(1).getDefaultValue());
-        Assertions.assertNull(firstCompiledParameters.get(1).getOptionalName());
+        Assertions.assertEquals(VariableSupplier.class, firstCompiledParameters.get(1).getType());
+        Assertions.assertNull(firstCompiledParameters.get(1).getParameterValue());
+        Assertions.assertTrue(firstCompiledParameters.get(1).isOptional());
+        Assertions.assertEquals(1, firstCompiledParameters.get(1).getDefaultValue());
+        Assertions.assertEquals("by", firstCompiledParameters.get(1).getOptionalName());
 
         CompiledAction secondAction = (CompiledAction) innerActions.get(1);
 
@@ -238,11 +235,11 @@ class ActionGroupCompilerTest {
         Assertions.assertNull(secondActionData.getResultIdentifier());
         Assertions.assertNull(secondActionData.getConstraint());
 
-        List<CompiledParameter> secondCompiledParameters = firstAction.getParameters();
+        List<CompiledParameter> secondCompiledParameters = secondAction.getParameters();
         Assertions.assertEquals(2, secondCompiledParameters.size());
 
         Assertions.assertSame(0, secondCompiledParameters.get(0).getPosition());
-        Assertions.assertEquals(Die.class, secondCompiledParameters.get(0).getType());
+        Assertions.assertEquals(VariableSupplier.class, secondCompiledParameters.get(0).getType());
         Assertions.assertEquals(
                 this.die,
                 secondCompiledParameters.get(0).getParameterValue().get(Context.getSharedInstance())
@@ -252,22 +249,22 @@ class ActionGroupCompilerTest {
         Assertions.assertNull(secondCompiledParameters.get(0).getOptionalName());
 
         Assertions.assertSame(1, secondCompiledParameters.get(1).getPosition());
-        Assertions.assertEquals(Integer.class, secondCompiledParameters.get(1).getType());
+        Assertions.assertEquals(VariableSupplier.class, secondCompiledParameters.get(1).getType());
         Assertions.assertEquals(
-                1,
+                2,
                 secondCompiledParameters.get(1).getParameterValue().get(Context.getSharedInstance())
         );
-        Assertions.assertFalse(secondCompiledParameters.get(1).isOptional());
-        Assertions.assertNull(secondCompiledParameters.get(1).getDefaultValue());
-        Assertions.assertNull(secondCompiledParameters.get(1).getOptionalName());
+        Assertions.assertTrue(secondCompiledParameters.get(1).isOptional());
+        Assertions.assertEquals(1, secondCompiledParameters.get(1).getDefaultValue());
+        Assertions.assertEquals("by", secondCompiledParameters.get(1).getOptionalName());
     }
 
     @Test
     void testComplexGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group>\n" +
-                "    <action effect=\"increment $DIE$ 1\"/>\n" +
-                "    <action effect=\"decrement $DIE$ 1\"/>\n" +
+                "    <action effect=\"increment $DIE$ [by=1]\"/>\n" +
+                "    <action effect=\"decrement $DIE$\"/>\n" +
                 "    <action-group chooseBetween=\"2\">\n" +
                 "        <action effect=\"choose_position $window$\" result=\"POS\"/>\n" +
                 "        <action effect=\"pick_at $window$ $POS$\" result=\"DIE\"/>\n" +

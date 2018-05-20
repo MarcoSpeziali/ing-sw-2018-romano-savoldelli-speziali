@@ -26,7 +26,7 @@ class ChooseColorActionTest {
         when(interactionProvider.chooseDie(location, null, 0))
                 .thenReturn(new Die(GlassColor.GREEN, 4));
 
-        action = new ChooseColorAction(this.testData, interactionProvider, location, context -> 0);
+        action = new ChooseColorAction(this.testData, interactionProvider, context -> location, context -> 0);
     }
 
     @Test

@@ -4,6 +4,7 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.core.UserInteractionProvider;
 
+// TODO: docs
 public class SetValAction extends Action {
 
     private static final long serialVersionUID = -2314218736549779947L;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils.io;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,5 +50,41 @@ public class FilesUtils {
      */
     public static long getLastModifiedOfFile(String filePath) {
         return new File(filePath).lastModified();
+    }
+
+    public static long getLastModifiedOfFile(URL url) {
+        try {
+            return url.openConnection().getLastModified();
+        } catch (IOException e) {
+            return 0L;
+        }
+    }
+
+    public static void deleteDirectoryRecursively(File file) {
+        if (!file.exists()) {
+            return;
+        }
+
+        if (file.isDirectory()) {
+            File[] children = file.listFiles();
+
+            if (children == null) {
+                return;
+            }
+
+            if (children.length == 0) {
+                file.delete();
+            }
+            else {
+                for (File child : children) {
+                    deleteDirectoryRecursively(child);
+                }
+            }
+
+            file.delete();
+        }
+        else {
+            file.delete();
+        }
     }
 }

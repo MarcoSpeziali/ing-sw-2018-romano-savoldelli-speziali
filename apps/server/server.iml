@@ -13,10 +13,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.w3c:dom:2.3.0-jaxb-1.0.6" level="project" />
     <orderEntry type="module" module-name="lib" />
-    <orderEntry type="module" module-name="client" />
-    <orderEntry type="library" name="Maven: org.fusesource.jansi:jansi:1.17.1" level="project" />
     <orderEntry type="module" module-name="apps" />
     <orderEntry type="library" name="Maven: net.sf.jopt-simple:jopt-simple:5.0.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.1.0" level="project" />

@@ -5,6 +5,9 @@ import it.polimi.ingsw.core.instructions.predicates.Predicate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -16,7 +19,10 @@ class TakeIfInstructionTest {
         Predicate predicate = mock(Predicate.class);
         when(predicate.evaluate(any(Context.class))).thenReturn(true);
 
-        TakeIfInstruction instruction = new TakeIfInstruction(predicate);
+        Map<String, Predicate> predicateMap = new HashMap<>();
+        predicateMap.put("predicate", predicate);
+
+        TakeIfInstruction instruction = new TakeIfInstruction(predicateMap);
         Integer result = instruction.run(Context.getSharedInstance());
 
         Assertions.assertEquals(1, result.intValue());
@@ -27,7 +33,10 @@ class TakeIfInstructionTest {
         Predicate predicate = mock(Predicate.class);
         when(predicate.evaluate(any(Context.class))).thenReturn(false);
 
-        TakeIfInstruction instruction = new TakeIfInstruction(predicate);
+        Map<String, Predicate> predicateMap = new HashMap<>();
+        predicateMap.put("predicate", predicate);
+
+        TakeIfInstruction instruction = new TakeIfInstruction(predicateMap);
         Integer result = instruction.run(Context.getSharedInstance());
 
         Assertions.assertEquals(0, result.intValue());

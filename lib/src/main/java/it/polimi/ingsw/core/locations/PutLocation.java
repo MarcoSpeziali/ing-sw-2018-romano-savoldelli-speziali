@@ -1,5 +1,7 @@
 package it.polimi.ingsw.core.locations;
 
-public interface PutLocation {
+import java.io.Serializable;
+
+public interface PutLocation extends Serializable {
     int getFreeSpace();
 }

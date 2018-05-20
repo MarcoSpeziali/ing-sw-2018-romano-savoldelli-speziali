@@ -2,12 +2,12 @@
 <predicates-directives>
     <predicate-directives id="distinct_shade" class="it.polimi.ingsw.core.instructions.predicates.DistinctShadePredicate">
         <parameters-directives>
-            <parameter-directives class="it.polimi.ingsw.models.NotExisting" isMultiple="true"/>
+            <parameter-directives class="it.polimi.ingsw.models.Die" multiple="true" supplied="true"/>
         </parameters-directives>
     </predicate-directives>
     <predicate-directives id="distinct_color" class="it.polimi.ingsw.core.instructions.predicates.DistinctColorPredicate">
         <parameters-directives>
-            <parameter-directives class="it.polimi.ingsw.models.Die" isMultiple="true"/>
+            <parameter-directives class="it.polimi.ingsw.models.Die" multiple="true" supplied="true"/>
         </parameters-directives>
     </predicate-directives>
 </predicates-directives>

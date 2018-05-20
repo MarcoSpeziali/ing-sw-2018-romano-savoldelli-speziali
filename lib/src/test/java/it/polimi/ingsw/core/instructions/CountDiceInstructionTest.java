@@ -2,8 +2,8 @@ package it.polimi.ingsw.core.instructions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.actions.VariableSupplier;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.models.Window;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,56 +14,61 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-class CountDiceInstructionTest {
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    private VariableSupplier<List<Die>> dieSupplier;
+class CountDiceInstructionTest {
 
     @BeforeEach
     void setUp() {
-        this.dieSupplier = context -> List.of(
-                new Die(GlassColor.RED, 1),
-                new Die(GlassColor.GREEN, 4),
-                new Die(GlassColor.RED, 1),
-                new Die(GlassColor.YELLOW, 2),
-                new Die(GlassColor.PURPLE, 4),
+        Window window = mock(Window.class);
+        when(window.getDice()).thenReturn(
+                List.of(
+                        new Die(GlassColor.RED, 1),
+                        new Die(GlassColor.GREEN, 4),
+                        new Die(GlassColor.RED, 1),
+                        new Die(GlassColor.YELLOW, 2),
+                        new Die(GlassColor.PURPLE, 4),
 
-                new Die(GlassColor.GREEN, 5),
-                new Die(GlassColor.RED, 1),
-                new Die(GlassColor.GREEN, 2),
-                new Die(GlassColor.RED, 2),
-                new Die(GlassColor.YELLOW, 1),
+                        new Die(GlassColor.GREEN, 5),
+                        new Die(GlassColor.RED, 1),
+                        new Die(GlassColor.GREEN, 2),
+                        new Die(GlassColor.RED, 2),
+                        new Die(GlassColor.YELLOW, 1),
 
-                new Die(GlassColor.RED, 5),
-                new Die(GlassColor.GREEN, 5),
-                new Die(GlassColor.RED, 2),
-                new Die(GlassColor.YELLOW, 3),
-                new Die(GlassColor.RED, 4),
+                        new Die(GlassColor.RED, 5),
+                        new Die(GlassColor.GREEN, 5),
+                        new Die(GlassColor.RED, 2),
+                        new Die(GlassColor.YELLOW, 3),
+                        new Die(GlassColor.RED, 4),
 
-                new Die(GlassColor.GREEN, 5),
-                new Die(GlassColor.RED, 5),
-                new Die(GlassColor.YELLOW, 3),
-                new Die(GlassColor.RED, 4),
-                new Die(GlassColor.YELLOW, 3)
+                        new Die(GlassColor.GREEN, 5),
+                        new Die(GlassColor.RED, 5),
+                        new Die(GlassColor.YELLOW, 3),
+                        new Die(GlassColor.RED, 4),
+                        new Die(GlassColor.YELLOW, 3)
+                )
         );
+        Context.getSharedInstance().put(Context.WINDOW, window);
     }
 
     @Test
     void testNotFilter() {
-        CountDiceInstruction instruction = new CountDiceInstruction(this.dieSupplier, 0, null);
+        CountDiceInstruction instruction = new CountDiceInstruction(0, null);
         Assertions.assertEquals(20, instruction.run(Context.getSharedInstance()).intValue());
     }
 
     @ParameterizedTest
     @MethodSource("testShadeFilterArguments")
     void testShadeFilter(Integer shadeFilter, Integer expectedValue) {
-        CountDiceInstruction instruction = new CountDiceInstruction(this.dieSupplier, shadeFilter, null);
+        CountDiceInstruction instruction = new CountDiceInstruction(shadeFilter, null);
         Assertions.assertEquals(expectedValue, instruction.run(Context.getSharedInstance()));
     }
 
     @ParameterizedTest
     @MethodSource("testColorFilterArguments")
     void testColorFilter(GlassColor colorFilter, Integer expectedValue) {
-        CountDiceInstruction instruction = new CountDiceInstruction(this.dieSupplier, 0, colorFilter);
+        CountDiceInstruction instruction = new CountDiceInstruction(0, colorFilter);
         Assertions.assertEquals(expectedValue, instruction.run(Context.getSharedInstance()));
     }
 

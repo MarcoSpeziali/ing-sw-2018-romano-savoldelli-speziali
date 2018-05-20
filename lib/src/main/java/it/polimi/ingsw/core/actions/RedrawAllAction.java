@@ -5,12 +5,13 @@ import it.polimi.ingsw.core.locations.ChooseLocation;
 
 import java.util.Random;
 
+// TODO: docs
 public class RedrawAllAction extends Action {
 
     private static final long serialVersionUID = 7305416979511806520L;
-    private final ChooseLocation location;
+    private final VariableSupplier<ChooseLocation> location;
 
-    public RedrawAllAction(ActionData data, ChooseLocation location) {
+    public RedrawAllAction(ActionData data, VariableSupplier<ChooseLocation> location) {
         super(data);
 
         this.location = location;
@@ -22,7 +23,7 @@ public class RedrawAllAction extends Action {
 
         Random random = new Random(System.currentTimeMillis());
 
-        this.location.getDice().forEach(die -> die.setShade(1 + random.nextInt(6)));
+        this.location.get(context).getDice().forEach(die -> die.setShade(1 + random.nextInt(6)));
         return null;
     }
 }

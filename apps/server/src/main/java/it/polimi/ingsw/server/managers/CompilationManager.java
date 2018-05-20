@@ -20,10 +20,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.LongSupplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,9 +50,9 @@ public class CompilationManager {
      *      cannot be created which satisfies the configuration requested
      */
     public static long compile(Set<Constants.Resources> resourcesToCompile) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
-        long compilationTime = System.currentTimeMillis() / 1000;
+        long compilationTime = System.currentTimeMillis();
 
-        logger.log(Level.INFO, "Starting compilation ({0})", compilationTime);
+        logger.log(Level.INFO, "Starting compilation ({0})", new Date(compilationTime));
 
         File compilationFolder = createCompilationDirectory(compilationTime);
 
@@ -159,10 +156,12 @@ public class CompilationManager {
             }
         }
         catch (Exception e) {
-            Files.delete(compilationFolder.toPath());
+            FilesUtils.deleteDirectoryRecursively(compilationFolder);
 
             throw e;
         }
+
+        logger.log(Level.INFO, "Done compiling resources, took: {0}ms", System.currentTimeMillis() - compilationTime);
 
         return compilationTime;
     }
@@ -284,10 +283,22 @@ public class CompilationManager {
      * @return whether the resource needs to be recompiled
      */
     private static boolean resourceNeedsRecompilation(Constants.Resources resource) {
+        // gets the last modified date of the resource at the provided url
         long lastModified = FilesUtils.getLastModifiedOfFile(
-                resource.getAbsolutePath()
+                resource.getURL()
         );
 
+        logger.log(
+                Level.FINER,
+                // SonarLint was complaining about this expression not being conditionally computed
+                () -> String.format("Resource %s has been compiled on %s, last compilation on: %s",
+                        resource.toString().toLowerCase(),
+                        String.valueOf(lastModified),
+                        String.valueOf(lastCompilation.getAsLong())
+                )
+        );
+
+        // the resource needs to be computed only if it has been modified after the last compilation
         return lastModified > lastCompilation.getAsLong();
     }
 
@@ -297,17 +308,23 @@ public class CompilationManager {
      *         or {@code 0L} no compilations occurred.
      */
     private static long getLastCompilation() {
+        // gets a list containing the name of the files in the provided directory
         List<String> compilations = FilesUtils.listFilesInDirectory(
                 Constants.Paths.COMPILATION_FOLDER.getAbsolutePath()
         );
 
+        // if none where found the minimum long value is returned
         if (compilations == null) {
             return Long.MIN_VALUE;
         }
 
         return compilations.stream()
-                .mapToLong(value -> Long.parseLong(value) / 1000)
+                // only the files named like a timestamp are considered
+                .filter(s -> s.matches("\\d+"))
+                .mapToLong(Long::parseLong)
+                // the max value identifies the last compilation
                 .max()
+                // if none where found the minimum long value is returned
                 .orElse(Long.MIN_VALUE);
     }
 
@@ -316,12 +333,15 @@ public class CompilationManager {
      * @param compilationTime the time of the new compilation
      * @return the created file
      */
-    private static File createCompilationDirectory(long compilationTime) {
-        File compilationFolder = new File(String.format(
-                "%s%d", Constants.Paths.COMPILATION_FOLDER.getAbsolutePath(), compilationTime
-        ));
+    private static File createCompilationDirectory(long compilationTime) throws IOException {
+        File compilationFolder = new File(Paths.get(
+                Constants.Paths.COMPILATION_FOLDER.getAbsolutePath(),
+                String.valueOf(compilationTime)
+        ).toString());
         //noinspection ResultOfMethodCallIgnored
-        compilationFolder.mkdir();
+        if (!compilationFolder.mkdir()) {
+            throw new IOException("Could not create compilation directory at path: " + compilationFolder.getAbsolutePath());
+        }
 
         return compilationFolder;
     }
@@ -376,12 +396,14 @@ public class CompilationManager {
      */
     private static void compileToolCards(File compilationFolder) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
         try {
+            // deserialize the actions directives
             List<ActionDirective> actionDirectives = List.of(
                     deserializeObjects(
                             Paths.get(
                                     compilationFolder.getAbsolutePath(),
                                     Constants.Resources.ACTIONS_DIRECTIVES.toString().toLowerCase()
-                            ).toString()
+                            ).toString(),
+                            ActionDirective[].class
                     )
             );
 
@@ -492,21 +514,25 @@ public class CompilationManager {
      */
     private static void compilePrivateObjectiveCards(File compilationFolder) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         try {
+            // deserialize the instructions directives
             List<InstructionDirective> instructionsDirectives = List.of(
                     deserializeObjects(
                             Paths.get(
                                     compilationFolder.getAbsolutePath(),
                                     Constants.Resources.INSTRUCTIONS_DIRECTIVES.toString().toLowerCase()
-                            ).toString()
+                            ).toString(),
+                            InstructionDirective[].class
                     )
             );
 
+            // deserialize the predicates directives
             List<PredicateDirective> predicatesDirectives = List.of(
                     deserializeObjects(
                             Paths.get(
                                     compilationFolder.getAbsolutePath(),
                                     Constants.Resources.PREDICATES_DIRECTIVES.toString().toLowerCase()
-                            ).toString()
+                            ).toString(),
+                            PredicateDirective[].class
                     )
             );
 
@@ -530,7 +556,7 @@ public class CompilationManager {
     }
 
     /**
-     * Compiles the public objective cards and saves them at {@code compilationFolder}/private_cards.
+     * Compiles the public objective cards and saves them at {@code compilationFolder}/public_cards.
      * @param compilationFolder the folder to save the compiled objects to
      * @throws ClassNotFoundException if the class of a public objective card could not be found
      * @throws IOException if any IO errors occur
@@ -540,21 +566,25 @@ public class CompilationManager {
      */
     private static void compilePublicObjectiveCards(File compilationFolder) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         try {
+            // deserialize the instructions directives
             List<InstructionDirective> instructionsDirectives = List.of(
                     deserializeObjects(
                             Paths.get(
                                     compilationFolder.getAbsolutePath(),
                                     Constants.Resources.INSTRUCTIONS_DIRECTIVES.toString().toLowerCase()
-                            ).toString()
+                            ).toString(),
+                            InstructionDirective[].class
                     )
             );
 
+            // deserialize the predicates directives
             List<PredicateDirective> predicatesDirectives = List.of(
                     deserializeObjects(
                             Paths.get(
                                     compilationFolder.getAbsolutePath(),
                                     Constants.Resources.PREDICATES_DIRECTIVES.toString().toLowerCase()
-                            ).toString()
+                            ).toString(),
+                            PredicateDirective[].class
                     )
             );
 
@@ -584,7 +614,7 @@ public class CompilationManager {
      * @param resourceName the name of the file to create
      * @throws IOException if any IO exception occurs
      */
-    private static void serializeObjects(Serializable[] objects, File compilationFolder, String resourceName) throws IOException {
+    private static <T extends Serializable> void serializeObjects(T[] objects, File compilationFolder, String resourceName) throws IOException {
         FileOutputStream fos = new FileOutputStream(new File(compilationFolder, resourceName));
 
         try (ObjectOutputStream out = new ObjectOutputStream(fos)) {
@@ -601,11 +631,13 @@ public class CompilationManager {
      * @throws IOException if any IO exception occurs
      * @throws ClassNotFoundException if a class could not be found
      */
-    private static <T extends Serializable> T[] deserializeObjects(String filePath) throws IOException, ClassNotFoundException {
+    private static <T> T[] deserializeObjects(String filePath, Class<T[]> destinationClass) throws IOException, ClassNotFoundException {
         try (FileInputStream fis = new FileInputStream(new File(filePath))) {
             try (ObjectInputStream in = new ObjectInputStream(fis)) {
-                //noinspection unchecked
-                return (T[]) in.readObject();
+
+                Serializable[] deserialized = (Serializable[]) in.readObject();
+
+                return Arrays.copyOf(deserialized, deserialized.length, destinationClass);
             }
         }
     }

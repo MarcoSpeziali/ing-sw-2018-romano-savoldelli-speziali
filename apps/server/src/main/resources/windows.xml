@@ -297,8 +297,8 @@
         <cell shade="1"/>
         <cell shade="4"/>
         <cell color="red"/>
-        <cell color="5"/>
-        <cell color="3"/>
+        <cell shade="5"/>
+        <cell shade="3"/>
     </window>
     <window rows="4" columns="5" id="gravitas" sibling="water_of_life" name="windows.gravitas" difficulty="5">
         <cell shade="1"/>

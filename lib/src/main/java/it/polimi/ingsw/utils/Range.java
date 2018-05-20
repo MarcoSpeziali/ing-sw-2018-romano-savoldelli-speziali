@@ -54,8 +54,8 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
      * @param end The ending value of the range.
      */
     public Range(T start, T end) {
-        assert start != null;
-        assert end != null;
+        Objects.requireNonNull(start);
+        Objects.requireNonNull(end);
 
         this.start = start;
         this.end = end;

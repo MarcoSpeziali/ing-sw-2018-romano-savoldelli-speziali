@@ -3,15 +3,19 @@ package it.polimi.ingsw.core.instructions;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.instructions.predicates.Predicate;
 
+import java.util.Map;
+
 public class TakeIfInstruction extends Instruction {
+
+    private static final String IF_PREDICATE_NAME = "predicate";
 
     /**
      * The predicate to evaluate.
      */
     private final Predicate predicate;
 
-    public TakeIfInstruction(Predicate predicate) {
-        this.predicate = predicate;
+    public TakeIfInstruction(Map<String, Predicate> predicateMap) {
+        this.predicate = predicateMap.get(IF_PREDICATE_NAME);
     }
 
     @Override

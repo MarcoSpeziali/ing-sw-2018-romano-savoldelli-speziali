@@ -26,7 +26,7 @@ class ChoosePositionForDieActionTest {
         UserInteractionProvider interactionProvider = mock(UserInteractionProvider.class);
         when(interactionProvider.choosePosition(location, die, false, false, false)).thenReturn(6);
 
-        action = new ChoosePositionForDieAction(this.testData, interactionProvider, location, context -> die, false, false, false);
+        action = new ChoosePositionForDieAction(this.testData, interactionProvider, context -> location, context -> die, false, false, false);
     }
 
     @Test

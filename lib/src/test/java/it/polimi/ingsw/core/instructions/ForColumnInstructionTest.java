@@ -10,7 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.mockito.Mockito.mock;
@@ -74,7 +76,10 @@ class ForColumnInstructionTest {
     void testRun() {
         AtomicInteger currentIndex = new AtomicInteger();
 
-        ForColumnInstruction instruction = new ForColumnInstruction("column_test_var");
+        Map<String, String> exposedVariableMap = new HashMap<>();
+        exposedVariableMap.put("column", "column_test_var");
+
+        ForColumnInstruction instruction = new ForColumnInstruction(exposedVariableMap);
 
         TestingInstruction testingInstruction = new TestingInstruction();
         testingInstruction.setListener((target, context) -> {
