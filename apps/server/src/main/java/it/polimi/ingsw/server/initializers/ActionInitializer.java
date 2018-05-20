@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.initializers;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.UserInteractionProvider;
-import it.polimi.ingsw.core.actions.Action;
-import it.polimi.ingsw.core.actions.ActionData;
-import it.polimi.ingsw.core.actions.ExecutableAction;
-import it.polimi.ingsw.core.actions.VariableSupplier;
+import it.polimi.ingsw.server.actions.Action;
+import it.polimi.ingsw.server.actions.ActionData;
+import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.compilers.actions.CompiledAction;
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -22,7 +21,6 @@ public class ActionInitializer {
     /**
      * Instantiate an {@link Action} from a {@link CompiledAction}.
      * @param compiledAction the compiled action
-     * @param userInteractionProvider the user interaction provider
      * @return an instance of {@link Action}  created from a {@link CompiledAction}
      * @throws NoSuchMethodException if the constructor could not be found
      * @throws IllegalAccessException if this {@code Constructor} object
@@ -33,7 +31,7 @@ public class ActionInitializer {
      * @throws InvocationTargetException if the underlying constructor
      *         throws an exception
      */
-    public static Action instantiate(CompiledAction compiledAction, UserInteractionProvider userInteractionProvider, Context context) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static Action instantiate(CompiledAction compiledAction, Context context) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // gets the class to instantiate
         Class<? extends ExecutableAction> targetClass = compiledAction.getClassToInstantiate();
 
@@ -43,12 +41,6 @@ public class ActionInitializer {
         // the ActionData parameter is always present
         parametersClasses.add(ActionData.class);
         parametersValues.add(compiledAction.getActionData());
-
-        // checks if the action requires user interaction
-        if (compiledAction.requiresUserInteraction()) {
-            parametersClasses.add(UserInteractionProvider.class);
-            parametersValues.add(userInteractionProvider);
-        }
 
         // gets the compiled parameters
         List<CompiledParameter> compiledParameters = compiledAction.getParameters();

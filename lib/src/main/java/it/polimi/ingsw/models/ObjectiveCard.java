@@ -1,13 +1,12 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.CardVisibility;
-import it.polimi.ingsw.core.Objective;
-import it.polimi.ingsw.utils.text.LocalizedString;
+import it.polimi.ingsw.core.IObjective;
 
 public class ObjectiveCard extends Card {
     private String cardId;
     private CardVisibility visibility;
-    private Objective objective;
+    private IObjective objective;
 
     /**
      * Sets up a new objective card
@@ -17,7 +16,7 @@ public class ObjectiveCard extends Card {
      * @param description is the card's description
      * @param objective is the card's objective
      */
-    public ObjectiveCard(String cardId, CardVisibility visibility, String title, String description, Objective objective) {
+    public ObjectiveCard(String cardId, CardVisibility visibility, String title, String description, IObjective objective) {
         super(title,description);
         this.cardId = cardId;
         this.visibility = visibility;
@@ -39,9 +38,8 @@ public class ObjectiveCard extends Card {
     }
 
     /**
-     * @return the amount of point of the card
+     * @param cardId the amount of point of the card
      */
-
     public void setCardId(String cardId) {
         this.cardId = cardId;
     }
@@ -56,14 +54,14 @@ public class ObjectiveCard extends Card {
     /**
      * @param objective is the card's objective
      */
-    public void setObjective(Objective objective) {
+    public void setObjective(IObjective objective) {
         this.objective = objective;
     }
 
     /**
      * @return the card's objective
      */
-    public Objective getObjective() {
+    public IObjective getObjective() {
         return this.objective;
     }
 }

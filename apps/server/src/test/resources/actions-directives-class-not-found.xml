@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions-directives>
-    <action-directives id="choose_die" class="it.polimi.ingsw.core.actions.ChooseDieActionNotExisting" requiresUserInteraction="true">
+    <action-directives id="choose_die" class="it.polimi.ingsw.server.actions.ChooseDieActionNotExisting">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" position="0" />
         </parameters-directives>

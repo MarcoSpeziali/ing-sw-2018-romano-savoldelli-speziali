@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.compilers.instructions.directives;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.instructions.*;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.instructions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;

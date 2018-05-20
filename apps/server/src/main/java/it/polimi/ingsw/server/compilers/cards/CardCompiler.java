@@ -10,7 +10,7 @@ import it.polimi.ingsw.server.compilers.instructions.predicates.directives.Predi
 import it.polimi.ingsw.server.compilers.objectives.CompiledObjective;
 import it.polimi.ingsw.server.compilers.objectives.ObjectiveCompiler;
 import it.polimi.ingsw.core.CardVisibility;
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;

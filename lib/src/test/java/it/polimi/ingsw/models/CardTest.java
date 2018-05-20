@@ -1,26 +1,23 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.Effect;
-import it.polimi.ingsw.utils.text.LocalizedString;
-import javafx.scene.image.Image;
+import it.polimi.ingsw.core.IEffect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class CardTest {
 
     private ToolCard toolCard;
-    private Effect effect;
+    private IEffect effect;
     private String title_test;
     private String description_test;
 
     @BeforeEach
     void setUp() {
 
-        this.effect = mock(Effect.class);
+        this.effect = mock(IEffect.class);
         this.description_test = "descriptionTest";
         this.title_test = "titleTest";
 

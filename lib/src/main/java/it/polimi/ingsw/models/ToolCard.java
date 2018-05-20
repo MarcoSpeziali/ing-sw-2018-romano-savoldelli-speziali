@@ -1,8 +1,6 @@
 package it.polimi.ingsw.models;
-import it.polimi.ingsw.core.Effect;
-import it.polimi.ingsw.core.actions.Action;
-import it.polimi.ingsw.utils.text.LocalizedString;
-import javafx.scene.image.Image;
+
+import it.polimi.ingsw.core.IEffect;
 
 public class ToolCard extends Card {
 
@@ -10,25 +8,7 @@ public class ToolCard extends Card {
     private String nameKey;
     private int initialCost;
     private boolean usedOnce;
-    private Effect effect;
-
-    /**
-     * Sets up a new {@link ToolCard}
-     * @param cardId is the card's Id
-     * @param nameKey is the card's name
-     * @param initialCost is the card's initial cost
-     * @param effect is the card's effect
-     * @param title is the card's title
-     * @param description is the card's description
-     */
-    public ToolCard(String cardId, String nameKey, int initialCost, Effect effect,String title, String description) {
-        super(title, description);
-        this.cardId = cardId;
-        this.nameKey = nameKey;
-        this.initialCost = initialCost;
-        this.effect = effect;
-        this.usedOnce = false;
-    }
+    private IEffect effect;
 
     /**
      * @return the tool card's id
@@ -61,16 +41,8 @@ public class ToolCard extends Card {
     /**
      * @return the tool card's effect
      */
-    public Effect getEffect() {
+    public IEffect getEffect() {
         return this.effect;
-    }
-
-    /**
-     * Activates the effect of the tool card and sets {@param usedOnce} to true
-     */
-    public void activate() {
-        this.effect.run(cardId);
-        this.usedOnce = true;
     }
 
     /**
@@ -104,7 +76,33 @@ public class ToolCard extends Card {
     /**
      * @param effect is the effect of the tool card
      */
-    public void setEffect(Effect effect) {
+    public void setEffect(IEffect effect) {
         this.effect = effect;
+    }
+
+    /**
+     * Sets up a new {@link ToolCard}
+     * @param cardId is the card's Id
+     * @param nameKey is the card's name
+     * @param initialCost is the card's initial cost
+     * @param effect is the card's effect
+     * @param title is the card's title
+     * @param description is the card's description
+     */
+    public ToolCard(String cardId, String nameKey, int initialCost, IEffect effect, String title, String description) {
+        super(title, description);
+        this.cardId = cardId;
+        this.nameKey = nameKey;
+        this.initialCost = initialCost;
+        this.effect = effect;
+        this.usedOnce = false;
+    }
+
+    /**
+     * Activates the effect of the tool card and sets {@param usedOnce} to true
+     */
+    public void activate() {
+        this.effect.run(cardId);
+        this.usedOnce = true;
     }
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.compilers.instructions.predicates;
 
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
-import it.polimi.ingsw.core.instructions.predicates.Predicate;
+import it.polimi.ingsw.server.instructions.predicates.Predicate;
 
 import java.io.Serializable;
 import java.util.List;

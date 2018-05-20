@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.compilers.instructions.directives;
 
-import it.polimi.ingsw.core.instructions.Instruction;
+import it.polimi.ingsw.server.instructions.Instruction;
 
 import java.io.Serializable;
 import java.util.List;

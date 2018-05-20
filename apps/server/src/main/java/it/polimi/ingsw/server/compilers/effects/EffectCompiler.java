@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.compilers.actions.ActionCompiler;
 import it.polimi.ingsw.server.compilers.actions.ActionGroupCompiler;
 import it.polimi.ingsw.server.compilers.actions.CompiledExecutableAction;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

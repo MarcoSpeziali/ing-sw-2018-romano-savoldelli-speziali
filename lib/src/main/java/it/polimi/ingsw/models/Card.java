@@ -1,18 +1,16 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.utils.text.LocalizedString;
-import javafx.scene.image.Image;
 
 public abstract class Card {
     protected LocalizedString title;
     protected LocalizedString description;
 
-
     /**
-     * @param title the card's title
+     * @param title       the card's title
      * @param description the card's description
      */
-    public Card (String title, String description){
+    public Card(String title, String description) {
         this.title = new LocalizedString(title);
         this.description = new LocalizedString(description);
     }
@@ -44,4 +42,4 @@ public abstract class Card {
     public void setDescription(String description) {
         this.description = new LocalizedString(description);
     }
-    }
+}

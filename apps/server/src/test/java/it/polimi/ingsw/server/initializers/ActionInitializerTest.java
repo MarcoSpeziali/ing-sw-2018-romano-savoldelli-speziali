@@ -2,9 +2,9 @@ package it.polimi.ingsw.server.initializers;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.actions.Action;
-import it.polimi.ingsw.core.actions.IncrementAction;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.actions.Action;
+import it.polimi.ingsw.server.actions.IncrementAction;
 import it.polimi.ingsw.server.compilers.actions.ActionCompiler;
 import it.polimi.ingsw.server.compilers.actions.CompiledAction;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
@@ -33,7 +33,7 @@ class ActionInitializerTest {
                 List.of()
         );
 
-        Action action = ActionInitializer.instantiate(compiledAction, null, Context.getSharedInstance());
+        Action action = ActionInitializer.instantiate(compiledAction, Context.getSharedInstance());
 
         Assertions.assertNotNull(action);
         Assertions.assertEquals(IncrementAction.class, action.getClass());

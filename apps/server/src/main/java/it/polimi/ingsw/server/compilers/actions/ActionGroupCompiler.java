@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.compilers.actions;
 
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
-import it.polimi.ingsw.core.actions.ActionData;
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
+import it.polimi.ingsw.server.actions.ActionData;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;

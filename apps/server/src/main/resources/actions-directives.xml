@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions-directives>
-    <action-directives id="choose_die" class="it.polimi.ingsw.core.actions.ChooseDieAction" requiresUserInteraction="true">
+    <action-directives id="choose_die" class="it.polimi.ingsw.server.actions.ChooseDieAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" position="0" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.core.GlassColor" position="1" name="color" default="null" supplied="true" />
             <parameter-directives class="java.lang.Integer" position="2" name="shade" default="0" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="choose_color" class="it.polimi.ingsw.core.actions.ChooseColorAction" requiresUserInteraction="true">
+    <action-directives id="choose_color" class="it.polimi.ingsw.server.actions.ChooseColorAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" position="0" supplied="true" />
             <parameter-directives class="java.lang.Integer" position="1" name="shade" default="0" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="choose_shade" class="it.polimi.ingsw.core.actions.ChooseShadeAction" requiresUserInteraction="true">
+    <action-directives id="choose_shade" class="it.polimi.ingsw.server.actions.ChooseShadeAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" position="0" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.core.GlassColor" position="1" name="color" default="null" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="choose_position" class="it.polimi.ingsw.core.actions.ChoosePositionAction" requiresUserInteraction="true">
+    <action-directives id="choose_position" class="it.polimi.ingsw.server.actions.ChoosePositionAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="choose_position_for_die" class="it.polimi.ingsw.core.actions.ChoosePositionForDieAction" requiresUserInteraction="true">
+    <action-directives id="choose_position_for_die" class="it.polimi.ingsw.server.actions.ChoosePositionForDieAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation" position="0" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.models.Die" position="1" supplied="true" />
@@ -33,77 +33,77 @@
             <parameter-directives class="java.lang.Boolean" default="false" name="ignore_adjacency" position="4" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="increment" class="it.polimi.ingsw.core.actions.IncrementAction">
+    <action-directives id="increment" class="it.polimi.ingsw.server.actions.IncrementAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" position="0" supplied="true" />
             <parameter-directives class="java.lang.Integer" position="1" name="by" default="1" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="decrement" class="it.polimi.ingsw.core.actions.DecrementAction">
+    <action-directives id="decrement" class="it.polimi.ingsw.server.actions.DecrementAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" position="0" supplied="true" />
             <parameter-directives class="java.lang.Integer" position="1" name="by" default="1" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="pick" class="it.polimi.ingsw.core.actions.PickAction">
+    <action-directives id="pick" class="it.polimi.ingsw.server.actions.PickAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.PickLocation" position="0" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="pick_die" class="it.polimi.ingsw.core.actions.PickDieAction">
+    <action-directives id="pick_die" class="it.polimi.ingsw.server.actions.PickDieAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.PickLocation" position="0" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.models.Die" position="1" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="pick_at" class="it.polimi.ingsw.core.actions.PickAtAction">
+    <action-directives id="pick_at" class="it.polimi.ingsw.server.actions.PickAtAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.PickLocation" position="0" supplied="true" />
             <parameter-directives class="java.lang.Integer" position="1" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="put" class="it.polimi.ingsw.core.actions.PutAction">
+    <action-directives id="put" class="it.polimi.ingsw.server.actions.PutAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" position="0" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.core.locations.PutLocation" position="1" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="place" class="it.polimi.ingsw.core.actions.PlaceAction">
+    <action-directives id="place" class="it.polimi.ingsw.server.actions.PlaceAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" position="0" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.core.locations.ChoosablePutLocation" position="1" supplied="true" />
             <parameter-directives class="java.lang.Integer" position="2" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="swap" class="it.polimi.ingsw.core.actions.SwapAction">
+    <action-directives id="swap" class="it.polimi.ingsw.server.actions.SwapAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" position="0" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.models.Die" position="1" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="redraw" class="it.polimi.ingsw.core.actions.RedrawAction">
+    <action-directives id="redraw" class="it.polimi.ingsw.server.actions.RedrawAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="redraw_all" class="it.polimi.ingsw.core.actions.RedrawAllAction">
+    <action-directives id="redraw_all" class="it.polimi.ingsw.server.actions.RedrawAllAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="skip_turn" class="it.polimi.ingsw.core.actions.SkipTurnAction">
+    <action-directives id="skip_turn" class="it.polimi.ingsw.server.actions.SkipTurnAction">
         <parameters-directives>
             <parameter-directives class="java.lang.Integer" position="0" />
             <parameter-directives class="java.lang.Integer" position="1" supplied="true" />
             <parameter-directives class="it.polimi.ingsw.core.Player" position="2" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="flip" class="it.polimi.ingsw.core.actions.FlipAction">
+    <action-directives id="flip" class="it.polimi.ingsw.server.actions.FlipAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" supplied="true" />
         </parameters-directives>
     </action-directives>
-    <action-directives id="set_val" class="it.polimi.ingsw.core.actions.SetValAction" requiresUserInteraction="true">
+    <action-directives id="set_val" class="it.polimi.ingsw.server.actions.SetValAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" supplied="true" />
         </parameters-directives>
