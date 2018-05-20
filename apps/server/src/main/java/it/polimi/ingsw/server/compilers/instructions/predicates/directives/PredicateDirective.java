@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.compilers.instructions.predicates.directives;
 
 import it.polimi.ingsw.server.compilers.commons.directives.ClassDirective;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
-import it.polimi.ingsw.core.instructions.predicates.Predicate;
+import it.polimi.ingsw.server.instructions.predicates.Predicate;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,10 +1,8 @@
 package it.polimi.ingsw.server.initializers;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.UserInteractionProvider;
-import it.polimi.ingsw.core.actions.ActionGroup;
-import it.polimi.ingsw.core.actions.ActionGroupCallbacks;
-import it.polimi.ingsw.core.actions.ExecutableAction;
+import it.polimi.ingsw.server.actions.ActionGroup;
+import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.compilers.actions.CompiledAction;
 import it.polimi.ingsw.server.compilers.actions.CompiledActionGroup;
 import it.polimi.ingsw.server.compilers.actions.CompiledExecutableAction;
@@ -20,9 +18,7 @@ public class ActionGroupInitializer {
     /**
      * Instantiate an {@link ActionGroup} from a {@link CompiledActionGroup}.
      * @param compiledActionGroup the compiled action group
-     * @param userInteractionProvider the user interaction provider
      * @param context the context
-     * @param callbacks the action group callbacks
      * @return an instance of {@link ActionGroup}  created from a {@link CompiledActionGroup}
      * @throws NoSuchMethodException if the constructor could not be found
      * @throws IllegalAccessException if this {@code Constructor} object
@@ -33,21 +29,18 @@ public class ActionGroupInitializer {
      * @throws InvocationTargetException if the underlying constructor
      *         throws an exception
      */
-    public static ActionGroup instantiate(CompiledActionGroup compiledActionGroup, UserInteractionProvider userInteractionProvider, Context context, ActionGroupCallbacks callbacks) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static ActionGroup instantiate(CompiledActionGroup compiledActionGroup, Context context) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return new ActionGroup(
                 compiledActionGroup.getActionData(),
                 compiledActionGroup.getRepetitions(),
                 compiledActionGroup.getChooseBetween(),
-                instantiateSubActions(compiledActionGroup.getActions(), userInteractionProvider, context, callbacks),
-                callbacks
+                instantiateSubActions(compiledActionGroup.getActions(), context)
         );
     }
 
     /**
      * @param compiledExecutableActions the list of sub-actions of a {@link CompiledActionGroup} to instantiate
-     * @param userInteractionProvider the user interaction provider
      * @param context the context
-     * @param callbacks the action group callbacks
      * @return a {@link List} of {@link ExecutableAction} created with the sub-actions of a {@link CompiledActionGroup}
      * @throws NoSuchMethodException if the constructor could not be found
      * @throws IllegalAccessException if this {@code Constructor} object
@@ -58,7 +51,7 @@ public class ActionGroupInitializer {
      * @throws InvocationTargetException if the underlying constructor
      *         throws an exception
      */
-    private static List<ExecutableAction> instantiateSubActions(List<CompiledExecutableAction> compiledExecutableActions, UserInteractionProvider userInteractionProvider, Context context, ActionGroupCallbacks callbacks) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    private static List<ExecutableAction> instantiateSubActions(List<CompiledExecutableAction> compiledExecutableActions, Context context) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         try {
             return compiledExecutableActions.stream()
                     .map(compiledExecutableAction -> {
@@ -69,15 +62,12 @@ public class ActionGroupInitializer {
                             if (compiledExecutableAction.getClassToInstantiate().equals(ActionGroup.class)) {
                                 return ActionGroupInitializer.instantiate(
                                         (CompiledActionGroup) compiledExecutableAction,
-                                        userInteractionProvider,
-                                        context,
-                                        callbacks
+                                        context
                                 );
                             }
                             else {
                                 return ActionInitializer.instantiate(
                                         (CompiledAction) compiledExecutableAction,
-                                        userInteractionProvider,
                                         context
                                 );
                             }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.compilers.constrains;
 
+import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.server.compilers.constraints.ConstraintCompiler;
 import it.polimi.ingsw.server.compilers.constraints.MalformedConstraintException;
-import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.constraints.Constraint;
+import it.polimi.ingsw.server.constraints.Constraint;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

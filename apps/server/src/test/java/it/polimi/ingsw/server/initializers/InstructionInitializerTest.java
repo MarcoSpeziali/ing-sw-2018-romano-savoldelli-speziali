@@ -2,15 +2,15 @@ package it.polimi.ingsw.server.initializers;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.instructions.ForDieInstruction;
-import it.polimi.ingsw.core.instructions.Instruction;
-import it.polimi.ingsw.core.instructions.TakeShadeInstruction;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.server.compilers.instructions.CompiledInstruction;
 import it.polimi.ingsw.server.compilers.instructions.InstructionCompiler;
 import it.polimi.ingsw.server.compilers.instructions.directives.InstructionDirectiveCompiler;
 import it.polimi.ingsw.server.compilers.instructions.predicates.directives.PredicateDirectivesCompiler;
+import it.polimi.ingsw.server.instructions.ForDieInstruction;
+import it.polimi.ingsw.server.instructions.Instruction;
+import it.polimi.ingsw.server.instructions.TakeShadeInstruction;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

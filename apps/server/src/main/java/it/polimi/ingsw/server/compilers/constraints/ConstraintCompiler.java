@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.compilers.constraints;
 
 import it.polimi.ingsw.server.compilers.expressions.ExpressionCompiler;
-import it.polimi.ingsw.core.actions.VariableSupplier;
-import it.polimi.ingsw.core.constraints.Constraint;
-import it.polimi.ingsw.core.constraints.Operator;
+import it.polimi.ingsw.server.utils.VariableSupplier;
+import it.polimi.ingsw.server.constraints.Constraint;
+import it.polimi.ingsw.server.constraints.Operator;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 

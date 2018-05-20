@@ -45,7 +45,6 @@ class BagTest {
             Die picked = this.bag.pickDie();
             Assertions.assertNotNull(picked);
             Assertions.assertTrue(colorList.contains(picked.getColor()));
-            Assertions.assertEquals(0, picked.getShade().intValue());
         }
         Assertions.assertThrows(EmptyBagException.class, () -> this.bag.pickDie());
     }

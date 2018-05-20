@@ -1,25 +1,21 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.Effect;
-import it.polimi.ingsw.utils.text.LocalizedString;
+import it.polimi.ingsw.core.IEffect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class ToolCardTest {
 
     private ToolCard toolCard;
-    private Effect effect;
+    private IEffect effect;
 
     @BeforeEach
     void setUp() {
 
-        this.effect = mock(Effect.class);
+        this.effect = mock(IEffect.class);
 
         this.toolCard = new ToolCard("testId", "test_card", 3, effect ,
                 "titleTest", "descriptionTest");
@@ -82,7 +78,7 @@ class ToolCardTest {
 
     @Test
     void setEffectTest() {
-        Effect effect = mock(Effect.class);
+        IEffect effect = mock(IEffect.class);
         this.toolCard.setEffect(effect);
         Assertions.assertEquals(effect, this.toolCard.getEffect());
     }

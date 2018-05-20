@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.compilers.actions.directives;
 
-import it.polimi.ingsw.core.actions.VariableSupplier;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.server.compilers.expressions.ConstantExpressionCaster;
-import it.polimi.ingsw.core.actions.ExecutableAction;
+import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
@@ -86,11 +86,6 @@ public final class ActionDirectivesCompiler {
         // retrieves the class of the action
         String actionClass = (String) rawDirective.get(ActionDirectivesNodes.ACTION_DIRECTIVES_CLASS);
 
-        // retrieves the need for an user interaction
-        boolean requiresUserInteraction = Boolean.parseBoolean(
-                (String) rawDirective.get(ActionDirectivesNodes.ACTION_DIRECTIVES_REQUIRES_USER_INTERACTION)
-        );
-
         // processes the raw parameters directives and maps them to the actual class
         List<ParameterDirective> parametersDirectives;
         try {
@@ -117,7 +112,6 @@ public final class ActionDirectivesCompiler {
         return new ActionDirective(
                 id,
                 (Class<ExecutableAction>) Class.forName(actionClass),
-                requiresUserInteraction,
                 parametersDirectives
         );
     }
@@ -230,7 +224,6 @@ public final class ActionDirectivesCompiler {
         static final String ACTION_DIRECTIVES = "action-directives";
         static final String ACTION_DIRECTIVES_ID = "@id";
         static final String ACTION_DIRECTIVES_CLASS = "@class";
-        static final String ACTION_DIRECTIVES_REQUIRES_USER_INTERACTION = "@requiresUserInteraction";
         static final String ACTION_DIRECTIVES_PARAMETERS = "parameters-directives";
         static final String ACTION_DIRECTIVES_PARAMETER = "parameter-directives";
         static final String ACTION_DIRECTIVES_PARAMETER_CLASS = "@class";

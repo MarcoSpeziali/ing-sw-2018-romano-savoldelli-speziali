@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.compilers.constrains;
 
 import it.polimi.ingsw.server.compilers.constraints.ConstraintGroupCompiler;
-import it.polimi.ingsw.core.constraints.Constraint;
-import it.polimi.ingsw.core.constraints.ConstraintGroup;
-import it.polimi.ingsw.core.constraints.EvaluableConstraint;
+import it.polimi.ingsw.server.constraints.Constraint;
+import it.polimi.ingsw.server.constraints.ConstraintGroup;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -145,8 +145,6 @@ class ConstraintGroupCompilerTest {
         InputSource is = new InputSource(new StringReader("<cxd id=\"test\"></cxd>"));
         Document doc = builder.parse(is);
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ConstraintGroupCompiler.compile(doc.getDocumentElement());
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ConstraintGroupCompiler.compile(doc.getDocumentElement()));
     }
 }

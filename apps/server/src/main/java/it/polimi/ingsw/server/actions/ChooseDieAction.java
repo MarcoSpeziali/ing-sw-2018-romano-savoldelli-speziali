@@ -1,0 +1,31 @@
+package it.polimi.ingsw.server.actions;
+
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.locations.ChooseLocation;
+import it.polimi.ingsw.server.utils.VariableSupplier;
+
+// TODO: docs
+public class ChooseDieAction extends Action {
+
+    private static final long serialVersionUID = 904381936728528141L;
+
+    protected final VariableSupplier<ChooseLocation> from;
+    protected final VariableSupplier<GlassColor> color;
+    protected final VariableSupplier<Integer> shade;
+
+    public ChooseDieAction(ActionData data, VariableSupplier<ChooseLocation> from, VariableSupplier<GlassColor> color, VariableSupplier<Integer> shade) {
+        super(data);
+
+        this.from = from;
+        this.color = color;
+        this.shade = shade;
+    }
+
+    @Override
+    public Object run(Context context) {
+        super.run(context);
+
+        return this.userInteractionProvider.chooseDie(this.from.get(context), this.color.get(context), this.shade.get(context));
+    }
+}

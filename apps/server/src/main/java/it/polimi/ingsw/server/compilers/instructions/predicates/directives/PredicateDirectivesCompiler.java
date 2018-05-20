@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.compilers.instructions.predicates.directives;
 
-import it.polimi.ingsw.core.actions.VariableSupplier;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.server.compilers.expressions.ConstantExpressionCaster;
-import it.polimi.ingsw.core.instructions.predicates.Predicate;
+import it.polimi.ingsw.server.instructions.predicates.Predicate;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;

@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.compilers.instructions;
 
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
 import it.polimi.ingsw.server.compilers.instructions.predicates.CompiledPredicate;
-import it.polimi.ingsw.core.instructions.Instruction;
+import it.polimi.ingsw.server.instructions.Instruction;
 
 import java.io.Serializable;
 import java.util.List;
