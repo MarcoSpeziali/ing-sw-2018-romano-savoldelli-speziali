@@ -18,6 +18,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
      * @param players the number of players.
      * @param bag the {@link Bag} used to take the count of dice.
      */
+
     public DraftPool(int players, DraftPoolView draftPoolView, Bag bag) {
         this.players = players;
         this.dice = new LinkedList<>();
@@ -78,7 +79,6 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
     public LinkedList<Die> getDice() {
         return this.dice;
     }
-
     /**
      * @return the amount of dice left.
      */
@@ -124,6 +124,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
 
     @Override
     public int getFreeSpace() {
-        return 0;
+
+        return ((2*players+1) - ((2*players + 1) - this.dice.size()));
     }
 }

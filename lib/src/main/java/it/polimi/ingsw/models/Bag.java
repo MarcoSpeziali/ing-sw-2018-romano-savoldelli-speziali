@@ -6,6 +6,7 @@ import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -16,6 +17,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
     private Map<GlassColor, Integer> dice = new EnumMap<>(GlassColor.class);
     private List<GlassColor> colors;
     private int number;
+    private int[] shade;
 
     /**
      * Sets up a new {@link Bag} assigning a specified number of dice per color.
@@ -56,7 +58,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
         if (colors.isEmpty()) {
             throw new EmptyBagException("The bag has no dice left!");
         }
-
+        int shade = ThreadLocalRandom.current().nextInt(1, 7);
         Random rand = new Random();
         GlassColor randColor = colors.get(rand.nextInt(colors.size()));
         dice.merge(randColor, -1, Integer::sum);
@@ -65,7 +67,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
             this.colors.remove(randColor);
         }
 
-        return new Die(randColor, 0);
+        return new Die(randColor, shade);
     }
 
     /**

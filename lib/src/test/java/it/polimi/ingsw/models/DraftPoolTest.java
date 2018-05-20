@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.channels.AsynchronousServerSocketChannel;
+
 import static org.mockito.Mockito.mock;
 
 class DraftPoolTest {
@@ -72,5 +74,21 @@ class DraftPoolTest {
     @Test
     void getBag() {
         Assertions.assertSame(bag , this.draftPool.getBag());
+    }
+
+    @Test
+    void getFreeSpace() {
+        this.draftPool.pickDie(4);
+        Assertions.assertEquals(8, this.draftPool.getFreeSpace());
+
+    }
+
+    @Test
+    void putDieTest() {
+        this.draftPool.pickDie(4);
+        this.draftPool.pickDie(6);
+        this.draftPool.putDie(die);
+        Assertions.assertEquals(8, this.draftPool.getFreeSpace());
+        Assertions.assertEquals(die, this.draftPool.pickDie(die));
     }
 }

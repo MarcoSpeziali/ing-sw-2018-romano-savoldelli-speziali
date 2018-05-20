@@ -35,6 +35,7 @@ public class CellCLIView extends CellView {
         }
 
         System.out.print(ansi().eraseScreen().bg(ansiColor).a(" "+shade+" ").fg(BLACK).reset());
+
     }
 }
 
