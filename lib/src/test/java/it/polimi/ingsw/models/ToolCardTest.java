@@ -17,7 +17,7 @@ class ToolCardTest {
 
         this.effect = mock(IEffect.class);
 
-        this.toolCard = new ToolCard("testId", "test_card", 3, effect ,
+        this.toolCard = new ToolCard("testId", "test_card", effect ,
                 "titleTest", "descriptionTest");
     }
 
@@ -29,11 +29,6 @@ class ToolCardTest {
     @Test
     void getNameKeyTest() {
         Assertions.assertEquals("test_card", toolCard.getNameKey());
-    }
-
-    @Test
-    void getInitialCost() {
-        Assertions.assertEquals(3, toolCard.getInitialCost());
     }
 
     @Test
@@ -62,12 +57,6 @@ class ToolCardTest {
     void setNameKeyTest() {
         this.toolCard.setNameKey("nameTest");
         Assertions.assertSame("nameTest", this.toolCard.getNameKey());
-    }
-
-    @Test
-    void setInitialCostTest() {
-        this.toolCard.setInitialCost(4);
-        Assertions.assertEquals(4, this.toolCard.getInitialCost());
     }
 
     @Test

@@ -73,7 +73,7 @@ public class FilesUtils {
             }
 
             if (children.length == 0) {
-                file.delete();
+                 file.delete();
             }
             else {
                 for (File child : children) {

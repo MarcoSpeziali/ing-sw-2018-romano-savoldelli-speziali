@@ -33,7 +33,7 @@ class ActionInitializerTest {
                 List.of()
         );
 
-        Action action = ActionInitializer.instantiate(compiledAction, Context.getSharedInstance());
+        Action action = ActionInitializer.instantiate(compiledAction);
 
         Assertions.assertNotNull(action);
         Assertions.assertEquals(IncrementAction.class, action.getClass());

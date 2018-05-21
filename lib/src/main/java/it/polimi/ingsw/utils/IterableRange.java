@@ -24,9 +24,8 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
          * @return the incrementation of {@code previous}
          */
         R increment(R previous);
-
     }
-    // TODO: docs
+
     public static final IncrementsProvider<Integer>  INTEGER_INCREMENT_FUNCTION  = val -> ++val;
     public static final IncrementsProvider<Float>    FLOAT_INCREMENT_FUNCTION    = val -> ++val;
     public static final IncrementsProvider<Double>   DOUBLE_INCREMENT_FUNCTION   = val -> ++val;

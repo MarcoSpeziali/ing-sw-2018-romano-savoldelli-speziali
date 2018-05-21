@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.core.IEffect;
 import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.core.IEffect;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
@@ -15,10 +15,17 @@ import java.util.List;
  */
 public class Effect implements IEffect {
 
+    private static final long serialVersionUID = 3141732749424677799L;
+
     /**
      * The localized description of the effect.
      */
     private LocalizedString description;
+
+    /**
+     * The initial cost of the effect.
+     */
+    private int initialCost;
 
     /**
      * The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
@@ -35,6 +42,20 @@ public class Effect implements IEffect {
      */
     public String getDescription() {
         return description.toString();
+    }
+
+    /**
+     * @return the initial cost of the effect
+     */
+    public int getInitialCost() {
+        return initialCost;
+    }
+
+    /**
+     * @param initialCost the initial cost of the effect
+     */
+    public void setInitialCost(int initialCost) {
+        this.initialCost = initialCost;
     }
 
     /**
@@ -56,11 +77,26 @@ public class Effect implements IEffect {
      * @param descriptionKey The localization key for the description of the effect.
      * @param effectConstraint The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
      * @param actions The actions to be run.
+     * @param initialCost the initial cost of the effect
+     */
+    public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions, int initialCost) {
+        this.description = new LocalizedString(descriptionKey);
+        this.effectConstraint = effectConstraint;
+        this.actions = actions;
+        this.initialCost = initialCost;
+    }
+
+    /**
+     * Creates a new instance of {@link Effect}.
+     * @param descriptionKey The localization key for the description of the effect.
+     * @param effectConstraint The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
+     * @param actions The actions to be run.
      */
     public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions) {
         this.description = new LocalizedString(descriptionKey);
         this.effectConstraint = effectConstraint;
         this.actions = actions;
+        this.initialCost = 1;
     }
 
     /**

@@ -8,8 +8,6 @@ public class StreamExceptionWrapper extends RuntimeException {
         super(exceptionToWrap);
     }
 
-
-
     /**
      * Wraps the generated exception.
      * @param exceptionToWrap the exception to wrap

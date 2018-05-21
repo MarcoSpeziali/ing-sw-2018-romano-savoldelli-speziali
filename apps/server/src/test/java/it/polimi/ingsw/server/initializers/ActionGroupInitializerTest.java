@@ -36,7 +36,7 @@ class ActionGroupInitializerTest {
                 List.of()
         );
 
-        ActionGroup actionGroup = ActionGroupInitializer.instantiate(compiledActionGroup, Context.getSharedInstance());
+        ActionGroup actionGroup = ActionGroupInitializer.instantiate(compiledActionGroup);
 
         Assertions.assertNotNull(actionGroup);
 

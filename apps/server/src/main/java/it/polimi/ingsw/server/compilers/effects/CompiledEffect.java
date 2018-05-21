@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.compilers.effects;
 
 import it.polimi.ingsw.server.compilers.actions.CompiledExecutableAction;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,6 +19,11 @@ public class CompiledEffect implements Serializable {
      * The initial cost of the effect.
      */
     private Integer initialCost;
+
+    /**
+     * The constraint to be evaluated before the effect can be run.
+     */
+    private EvaluableConstraint evaluableConstraint;
 
     /**
      * The compiled actions of the effect.
@@ -39,6 +45,13 @@ public class CompiledEffect implements Serializable {
     }
 
     /**
+     * @return the constraint to be evaluated before the effect can be run
+     */
+    public EvaluableConstraint getEvaluableConstraint() {
+        return evaluableConstraint;
+    }
+
+    /**
      * @return the compiled actions of the effect
      */
     public List<CompiledExecutableAction> getCompiledExecutableActions() {
@@ -48,11 +61,13 @@ public class CompiledEffect implements Serializable {
     /**
      * @param description the description key of the effect
      * @param initialCost the initial cost of the effect
+     * @param evaluableConstraint the constraint to be evaluated before the effect can be run
      * @param compiledExecutableActions the compiled actions of the effect
      */
-    public CompiledEffect(String description, Integer initialCost, List<CompiledExecutableAction> compiledExecutableActions) {
+    public CompiledEffect(String description, Integer initialCost, EvaluableConstraint evaluableConstraint, List<CompiledExecutableAction> compiledExecutableActions) {
         this.description = description;
         this.initialCost = initialCost;
+        this.evaluableConstraint = evaluableConstraint;
         this.compiledExecutableActions = compiledExecutableActions;
     }
 }

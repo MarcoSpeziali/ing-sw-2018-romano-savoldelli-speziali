@@ -10,7 +10,7 @@ public class CompiledObjective implements Serializable {
     private static final long serialVersionUID = 8057251807886255401L;
 
     /**
-     * The number of point gained for each completions.
+     * The number of points gained for each completions.
      */
     private Integer pointsPerCompletion;
 

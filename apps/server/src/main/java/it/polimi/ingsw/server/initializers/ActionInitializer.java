@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.initializers;
 
-import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.server.actions.Action;
 import it.polimi.ingsw.server.actions.ActionData;
 import it.polimi.ingsw.server.actions.ExecutableAction;
@@ -20,7 +19,6 @@ public class ActionInitializer {
 
     /**
      * Instantiate an {@link Action} from a {@link CompiledAction}.
-     * @param compiledAction the compiled action
      * @return an instance of {@link Action}  created from a {@link CompiledAction}
      * @throws NoSuchMethodException if the constructor could not be found
      * @throws IllegalAccessException if this {@code Constructor} object
@@ -31,7 +29,7 @@ public class ActionInitializer {
      * @throws InvocationTargetException if the underlying constructor
      *         throws an exception
      */
-    public static Action instantiate(CompiledAction compiledAction, Context context) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static Action instantiate(CompiledAction compiledAction) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // gets the class to instantiate
         Class<? extends ExecutableAction> targetClass = compiledAction.getClassToInstantiate();
 
@@ -58,7 +56,7 @@ public class ActionInitializer {
                             .sorted(Comparator.comparing(CompiledParameter::getPosition))
                             .map(compiledParameter -> compiledParameter.getType().equals(VariableSupplier.class) ?
                                     compiledParameter.getParameterValue() :
-                                    compiledParameter.getParameterValue().get(context)
+                                    compiledParameter.getParameterValue().get(null)
                             ).collect(Collectors.toList())
             );
         }

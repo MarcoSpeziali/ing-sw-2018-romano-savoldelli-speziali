@@ -6,7 +6,6 @@ public class ToolCard extends Card {
 
     private String cardId;
     private String nameKey;
-    private int initialCost;
     private boolean usedOnce;
     private IEffect effect;
 
@@ -22,13 +21,6 @@ public class ToolCard extends Card {
      */
     public String getNameKey() {
         return this.nameKey;
-    }
-
-    /**
-     * @return the tool card's initial cost
-     */
-    public int getInitialCost() {
-        return this.initialCost;
     }
 
     /**
@@ -60,13 +52,6 @@ public class ToolCard extends Card {
     }
 
     /**
-     * @param initialCost is the card's initial cost
-     */
-    public void setInitialCost(int initialCost) {
-        this.initialCost = initialCost;
-    }
-
-    /**
      * @param usedOnce is true if the tool card is has already been used false otherwise
      */
     public void setUsedOnce(boolean usedOnce) {
@@ -84,25 +69,23 @@ public class ToolCard extends Card {
      * Sets up a new {@link ToolCard}
      * @param cardId is the card's Id
      * @param nameKey is the card's name
-     * @param initialCost is the card's initial cost
      * @param effect is the card's effect
      * @param title is the card's title
      * @param description is the card's description
      */
-    public ToolCard(String cardId, String nameKey, int initialCost, IEffect effect, String title, String description) {
+    public ToolCard(String cardId, String nameKey, IEffect effect, String title, String description) {
         super(title, description);
         this.cardId = cardId;
         this.nameKey = nameKey;
-        this.initialCost = initialCost;
         this.effect = effect;
         this.usedOnce = false;
     }
 
     /**
-     * Activates the effect of the tool card and sets {@param usedOnce} to true
+     * Activates the effect of the tool card and sets {@code usedOnce} to {@code true}.
      */
     public void activate() {
-        this.effect.run(cardId);
         this.usedOnce = true;
+        this.effect.run(cardId);
     }
 }

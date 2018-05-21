@@ -21,7 +21,7 @@ class CardTest {
         this.description_test = "descriptionTest";
         this.title_test = "titleTest";
 
-        this.toolCard = new ToolCard("testId", "test_card", 3, effect, title_test, description_test);
+        this.toolCard = new ToolCard("testId", "test_card", effect, title_test, description_test);
     }
 
     @Test

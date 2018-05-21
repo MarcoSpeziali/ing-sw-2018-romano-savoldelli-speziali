@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.compilers.effects;
 import it.polimi.ingsw.server.compilers.actions.ActionCompiler;
 import it.polimi.ingsw.server.compilers.actions.ActionGroupCompiler;
 import it.polimi.ingsw.server.compilers.actions.CompiledExecutableAction;
+import it.polimi.ingsw.server.compilers.actions.ConstraintNotFoundException;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.io.XMLUtils;
@@ -38,12 +39,21 @@ public class EffectCompiler {
         // gets the initial cost
         String initialCostString = (String) effectInfo.get(EffectNodes.EFFECT_INITIAL_COST);
 
+        // gets the constraint id
+        String constraintId = (String) effectInfo.get(EffectNodes.EFFECT_CONSTRAINT);
+
         // returns the compiled effect
         return new CompiledEffect(
                 description,
                 // the default value is 1
                 initialCostString == null ? 1 : Integer.parseInt(initialCostString),
                 // compiles the actions
+                constraintId == null ?
+                        null :
+                        constraints.stream()
+                                .filter(evaluableConstraint -> evaluableConstraint.getId().equals(constraintId))
+                                .findAny()
+                                .orElseThrow(() -> new ConstraintNotFoundException(constraintId)),
                 compileActions(node.getChildNodes(), actionDirectives, constraints)
         );
     }
@@ -77,6 +87,7 @@ public class EffectCompiler {
         public static final String EFFECT_NODE_NAME = "effect";
         public static final String EFFECT_DESCRIPTION = "@description";
         public static final String EFFECT_INITIAL_COST = "@initialCost";
+        public static final String EFFECT_CONSTRAINT = "@constraint";
         public static final String EFFECT_ACTION_NODE_NAME = "action";
         public static final String EFFECT_ACTION_GROUP_NODE_NAME = "action-group";
     }

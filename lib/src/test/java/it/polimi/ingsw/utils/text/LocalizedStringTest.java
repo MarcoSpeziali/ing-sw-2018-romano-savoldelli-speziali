@@ -24,6 +24,7 @@ class LocalizedStringTest {
         LocalizedString.invalidateCacheForNewLocale(Locale.ENGLISH);
 
         Assertions.assertEquals("Example", localizedString.toString());
+        Assertions.assertEquals("Example", localizedString.toString());
     }
 
     @Test

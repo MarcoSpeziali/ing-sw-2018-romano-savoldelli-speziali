@@ -2,6 +2,7 @@ package it.polimi.ingsw.utils.text;
 
 import it.polimi.ingsw.utils.InMemoryCache;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -9,7 +10,9 @@ import java.util.ResourceBundle;
 /**
  * Represents a {@link String} localized in a particular {@link Locale} or the default one.
  */
-public class LocalizedString {
+public class LocalizedString implements Serializable {
+
+    private static final long serialVersionUID = -9055375854863507509L;
 
     /**
      * The key of the {@link String} to localize.
@@ -19,7 +22,7 @@ public class LocalizedString {
     /**
      * The cache used to store the localized strings.
      */
-    private static InMemoryCache<String, String> memoryCache = new InMemoryCache<>();
+    private static transient InMemoryCache<String, String> memoryCache = new InMemoryCache<>();
 
     /**
      * The bundle name.
@@ -29,7 +32,7 @@ public class LocalizedString {
     /**
      * The resource bundle.
      */
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizedString.STRINGS_BUNDLE);
+    private static transient ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizedString.STRINGS_BUNDLE);
 
     /**
      * @return The key of the {@link String} to localize.
