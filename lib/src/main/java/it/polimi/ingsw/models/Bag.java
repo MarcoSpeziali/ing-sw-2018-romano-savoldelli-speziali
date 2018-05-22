@@ -17,7 +17,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
     private Map<GlassColor, Integer> dice = new EnumMap<>(GlassColor.class);
     private List<GlassColor> colors;
     private int number;
-    private int[] shade;
+
 
     /**
      * Sets up a new {@link Bag} assigning a specified number of dice per color.
