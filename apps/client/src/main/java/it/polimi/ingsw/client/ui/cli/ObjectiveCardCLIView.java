@@ -6,6 +6,5 @@ public class ObjectiveCardCLIView extends ObjectiveCardView {
 
     @Override
     public void render() {
-
     }
 }
