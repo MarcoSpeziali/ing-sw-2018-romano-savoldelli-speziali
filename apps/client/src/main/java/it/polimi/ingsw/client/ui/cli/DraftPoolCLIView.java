@@ -23,12 +23,11 @@ public class DraftPoolCLIView extends DraftPoolView {
 
     @Override
     public void render() {
-        System.out.println("numero di dadi: " + this.draftPool.getNumberOfDice());
+        System.out.println("Numero di dadi: " + this.draftPool.getNumberOfDice()+"\n");
         for (int i = 0; i <this.draftPool.getNumberOfDice() ; i++) {
             Ansi.Color color = Ansi.Color.valueOf(this.draftPool.getDice().get(i).getColor().toAnsiColor());
             System.out.print(ansi().eraseScreen().bg(color).a(" " + this.draftPool.getDice().get(i).getShade() + " ").fg(BLACK).reset());
-            System.out.println();
-            System.out.println();
+            System.out.print(" ");
         }
 
     }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.views.DieView;
 import org.fusesource.jansi.Ansi;
