@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.IObjective;
 import it.polimi.ingsw.server.instructions.Instruction;
+import it.polimi.ingsw.utils.text.LocalizedString;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class Objective implements IObjective {
     /**
      * The description key of the objective.
      */
-    private String description;
+    private LocalizedString description;
 
     /**
      * The instructions to execute for calculating the number of completions.
@@ -33,7 +34,7 @@ public class Objective implements IObjective {
     /**
      * @return the description key of the objective
      */
-    public String getDescription() {
+    public LocalizedString getDescription() {
         return description;
     }
 
@@ -51,14 +52,21 @@ public class Objective implements IObjective {
      */
     public Objective(int pointsPerCompletion, String description, List<Instruction> instructions) {
         this.pointsPerCompletion = pointsPerCompletion;
-        this.description = description;
+        this.description = new LocalizedString(description);
         this.instructions = instructions;
     }
 
     @Override
-    public int calculatePoints(Context context) {
-        return this.instructions.stream()
-                .mapToInt(instruction -> instruction.run(context))
+    public synchronized int calculatePoints(Context context) {
+        Context.Snapshot snapshot = Context.getSharedInstance()
+                .snapshot("Objective{" + this.description.getLocalizationKey() + "}");
+
+        Integer result = this.instructions.stream()
+                .mapToInt(instruction -> instruction.run(snapshot))
                 .sum() * this.pointsPerCompletion;
+
+        snapshot.revert();
+
+        return result;
     }
 }

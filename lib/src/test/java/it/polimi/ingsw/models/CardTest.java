@@ -11,7 +11,6 @@ class CardTest {
 
     private ToolCard toolCard;
     private IEffect effect;
-    private String title_test;
     private String description_test;
 
     @BeforeEach
@@ -19,14 +18,8 @@ class CardTest {
 
         this.effect = mock(IEffect.class);
         this.description_test = "descriptionTest";
-        this.title_test = "titleTest";
 
-        this.toolCard = new ToolCard("testId", "test_card", effect, title_test, description_test);
-    }
-
-    @Test
-    void getTitleTest() {
-        Assertions.assertEquals(title_test, toolCard.getTitle().toString());
+        this.toolCard = new ToolCard("testId", "test_card", description_test, effect);
     }
 
     @Test
@@ -37,11 +30,10 @@ class CardTest {
     @Test
     void cardConstructorTest()
     {
-        this.title_test = "testTitle";
         this.description_test = "descriptionTest";
 
-        CardImpl cardImp = new CardImpl(title_test, description_test);
-        Assertions.assertEquals(title_test, cardImp.title.toString());
+        CardImpl cardImp = new CardImpl("test_card", description_test);
+        Assertions.assertEquals("test_card", cardImp.title.toString());
         Assertions.assertEquals(description_test, cardImp.description.toString());
 
     }

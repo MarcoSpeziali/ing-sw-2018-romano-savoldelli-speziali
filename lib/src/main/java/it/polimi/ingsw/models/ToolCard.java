@@ -5,7 +5,6 @@ import it.polimi.ingsw.core.IEffect;
 public class ToolCard extends Card {
 
     private String cardId;
-    private String nameKey;
     private boolean usedOnce;
     private IEffect effect;
 
@@ -14,13 +13,6 @@ public class ToolCard extends Card {
      */
     public String getCardId() {
         return this.cardId;
-    }
-
-    /**
-     * @return the tool card's name
-     */
-    public String getNameKey() {
-        return this.nameKey;
     }
 
     /**
@@ -45,13 +37,6 @@ public class ToolCard extends Card {
     }
 
     /**
-     * @param nameKey is the card's name
-     */
-    public void setNameKey(String nameKey) {
-        this.nameKey = nameKey;
-    }
-
-    /**
      * @param usedOnce is true if the tool card is has already been used false otherwise
      */
     public void setUsedOnce(boolean usedOnce) {
@@ -70,13 +55,11 @@ public class ToolCard extends Card {
      * @param cardId is the card's Id
      * @param nameKey is the card's name
      * @param effect is the card's effect
-     * @param title is the card's title
      * @param description is the card's description
      */
-    public ToolCard(String cardId, String nameKey, IEffect effect, String title, String description) {
-        super(title, description);
+    public ToolCard(String cardId, String nameKey, String description, IEffect effect) {
+        super(nameKey, description);
         this.cardId = cardId;
-        this.nameKey = nameKey;
         this.effect = effect;
         this.usedOnce = false;
     }

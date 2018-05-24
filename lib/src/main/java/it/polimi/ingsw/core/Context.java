@@ -1,16 +1,20 @@
 package it.polimi.ingsw.core;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class Context {
+public class Context implements Serializable {
+
+    private static final long serialVersionUID = -3619852381252122217L;
 
     public static final String WINDOW = "window";
     public static final String DRAFT_POOL = "draft_pool";
     public static final String BAG = "bag";
     public static final String ROUND_TRACK = "round_track";
+    public static final String CURRENT_PLAYER = "current_player";
 
     /**
      * The context's variables are stored into an {@link HashMap}.
@@ -302,6 +306,8 @@ public class Context {
     }
 
     public class Snapshot extends Context {
+
+        private static final long serialVersionUID = -24066494050937271L;
 
         /**
          * The id of the snapshot.
