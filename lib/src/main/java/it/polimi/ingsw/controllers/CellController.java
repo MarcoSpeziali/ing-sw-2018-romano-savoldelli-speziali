@@ -12,14 +12,6 @@ public class CellController {
     public CellController(CellView cellView, Cell cell) {
         this.cellView = cellView;
         this.cell = cell;
-
-        cellView.onDiePut(die -> {
-            this.cell.putDie(die);
-        });
-
-        cellView.onDiePicked(() -> {
-             return this.cell.pickDie();
-        });
     }
 
     public void onDiePut(Die die) {

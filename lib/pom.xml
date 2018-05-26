@@ -10,5 +10,5 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>menuCLIView-lib</artifactId>
+    <artifactId>lib</artifactId>
 </project>

@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>it.polimi.ing-sw-2018-romano-savoldelli-speziali</groupId>
-            <artifactId>menuCLIView-lib</artifactId>
+            <artifactId>lib</artifactId>
             <version>0.1</version>
             <scope>compile</scope>
         </dependency>
