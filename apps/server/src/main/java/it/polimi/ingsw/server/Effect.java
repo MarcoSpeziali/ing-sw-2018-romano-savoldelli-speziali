@@ -44,11 +44,22 @@ public class Effect implements IEffect {
         return description.toString();
     }
 
+    @Override
+    public String getDescriptionKey() {
+        return this.description.getLocalizationKey();
+    }
+
     /**
      * @return the initial cost of the effect
      */
+    @Override
     public int getInitialCost() {
         return initialCost;
+    }
+
+    @Override
+    public int getCurrentCost() {
+        return 0;
     }
 
     /**

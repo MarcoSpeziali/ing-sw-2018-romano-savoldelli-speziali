@@ -4,4 +4,10 @@ import java.io.Serializable;
 
 public interface IEffect extends Serializable {
     void run(String cardId);
+
+    int getInitialCost();
+
+    int getCurrentCost();
+
+    String getDescriptionKey();
 }
