@@ -40,7 +40,7 @@ class CardTest {
 
     @Test
     void getTitle() {
-        Assertions.assertEquals("titleTest", this.toolCard.getTitle().toString());
+        Assertions.assertEquals("test_card", this.toolCard.getTitle().toString());
     }
 
     @Test

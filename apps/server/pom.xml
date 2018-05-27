@@ -3,27 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>LM37</artifactId>
+        <artifactId>apps</artifactId>
         <groupId>it.polimi.ing-sw-2018-romano-savoldelli-speziali</groupId>
         <version>0.1</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
 
     <artifactId>server</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>it.polimi.ing-sw-2018-romano-savoldelli-speziali</groupId>
-            <artifactId>lib</artifactId>
-            <version>0.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>it.polimi.ing-sw-2018-romano-savoldelli-speziali</groupId>
-            <artifactId>apps</artifactId>
-            <version>0.1</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>

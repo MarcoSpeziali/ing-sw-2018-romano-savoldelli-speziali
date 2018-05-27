@@ -3,6 +3,8 @@ package it.polimi.ingsw.utils.io;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
@@ -47,17 +49,17 @@ class FilesUtilsTest {
 
         long lastModified = FilesUtils.getLastModifiedOfFile(filePath);
 
-        Assertions.assertEquals(1526902124000L, lastModified);
+        Assertions.assertEquals(new File(filePath).lastModified(), lastModified);
     }
 
     @Test
-    void testGetLastModifiedOfFile1() {
+    void testGetLastModifiedOfFile1() throws IOException {
         URL fileURL = Objects.requireNonNull(
                 getClass().getClassLoader().getResource("FilesUtilsResources/file_1")
         );
 
         long lastModified = FilesUtils.getLastModifiedOfFile(fileURL);
 
-        Assertions.assertEquals(1526902124000L, lastModified);
+        Assertions.assertEquals(fileURL.openConnection().getLastModified(), lastModified);
     }
 }

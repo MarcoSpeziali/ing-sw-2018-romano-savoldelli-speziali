@@ -1,6 +1,5 @@
 package it.polimi.ingsw.models;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,9 +20,9 @@ public class RoundTrack {
     /**
      * @param round the round of which return the {@link Die}.
      * @return the assigned {@link Die} of a specified round.
-     * @throws ArrayIndexOutOfBoundsException if {@link Die} is not present.
+     * @throws IndexOutOfBoundsException if {@link Die} is not present
      */
-    public Die getDieAtIndex(int round) throws ArrayIndexOutOfBoundsException {
+    public Die getDieAtIndex(int round) {
         return this.rounds.get(round);
     }
 
