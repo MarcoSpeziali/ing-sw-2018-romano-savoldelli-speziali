@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
-@SuppressWarnings({"squid:S00116", "squid:S1170", "squid:S00101"})
+
 public class Constants {
 
     private Constants() {}
@@ -57,7 +57,6 @@ public class Constants {
 
         private final String relativePath;
 
-        @SuppressWarnings("squid:UnusedPrivateMethod")
         Resources(String relativePath) {
             this.relativePath = relativePath;
         }

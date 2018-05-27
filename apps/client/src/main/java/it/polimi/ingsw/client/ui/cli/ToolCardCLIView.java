@@ -16,7 +16,6 @@ public class ToolCardCLIView extends ToolCardView {
         System.out.println("titolo: " + this.toolCard.getTitle().toString());
         System.out.println("descrizione: " + this.toolCard.getDescription().toString());
         System.out.println("effetto: " + this.toolCard.getEffect());
-        System.out.println("costo iniziale: " + this.toolCard.getEffect().getInitialCost());
-        System.out.println("è stata usata: " + this.toolCard.isUsedOnce());
+        System.out.println("costo " + this.toolCard.getEffect().getCost());
     }
 }

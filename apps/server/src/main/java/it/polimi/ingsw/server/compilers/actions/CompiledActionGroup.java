@@ -18,13 +18,11 @@ public class CompiledActionGroup implements CompiledExecutableAction, Serializab
     /**
      * The data of the action.
      */
-    @SuppressWarnings("squid:S1948")
     private ActionData actionData;
 
     /**
      * The sub-actions.
      */
-    @SuppressWarnings("squid:S1948")
     private List<CompiledExecutableAction> actions;
 
     /**

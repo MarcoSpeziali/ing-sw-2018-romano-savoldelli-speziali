@@ -68,7 +68,7 @@ public class Die implements Serializable {
     }
 
     /**
-     * @param obj is the die to be compared
+     * @param obj is the die to be compared with the current instance
      * @return true if the two dice have the same shade and color
      */
     @Override
@@ -84,6 +84,11 @@ public class Die implements Serializable {
         Die die = (Die) obj;
 
         return this.color.equals(die.color) && this.shade.equals(die.shade);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.color, this.shade);
     }
 
     public void addListener(DieInteractionListener dieInteractionListener) {

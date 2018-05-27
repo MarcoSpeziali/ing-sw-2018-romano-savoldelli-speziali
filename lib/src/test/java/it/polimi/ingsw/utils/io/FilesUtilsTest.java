@@ -6,8 +6,12 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FilesUtilsTest {
 
@@ -24,6 +28,10 @@ class FilesUtilsTest {
         );
 
         found.forEach(s -> Assertions.assertTrue(actualFiles.contains(s)));
+
+        Assertions.assertNull(FilesUtils.listFilesInDirectory(
+                Objects.requireNonNull(getClass().getClassLoader().getResource("FilesUtilsResources/file_1")).getPath()
+        ));
     }
 
     @Test
@@ -39,6 +47,10 @@ class FilesUtilsTest {
         );
 
         found.forEach(s -> Assertions.assertTrue(actualFiles.contains(s)));
+
+        Assertions.assertNull(FilesUtils.listFilesInDirectory(
+                Objects.requireNonNull(getClass().getClassLoader().getResource("FilesUtilsResources/file_1")).getFile()
+        ));
     }
 
     @Test
@@ -50,6 +62,13 @@ class FilesUtilsTest {
         long lastModified = FilesUtils.getLastModifiedOfFile(filePath);
 
         Assertions.assertEquals(new File(filePath).lastModified(), lastModified);
+
+        Assertions.assertEquals(
+                0L,
+                FilesUtils.getLastModifiedOfFile(
+                        Paths.get("file").toString()
+                )
+        );
     }
 
     @Test
@@ -61,5 +80,68 @@ class FilesUtilsTest {
         long lastModified = FilesUtils.getLastModifiedOfFile(fileURL);
 
         Assertions.assertEquals(fileURL.openConnection().getLastModified(), lastModified);
+
+        Assertions.assertEquals(
+                0L,
+                FilesUtils.getLastModifiedOfFile(
+                        new URL("file://74189_d a+è+*§à+òèòøœ∆™æ„∞π∆“÷")
+                )
+        );
+    }
+
+    @Test
+    void testDeleteDirectoryRecursivelyNotExisting() {
+        File directory = mock(File.class);
+        when(directory.exists()).thenReturn(false);
+
+        Assertions.assertTrue(FilesUtils.deleteDirectoryRecursively(directory));
+    }
+
+    @Test
+    void testDeleteDirectoryRecursivelyNotDirectory() {
+        File directory = mock(File.class);
+        when(directory.exists()).thenReturn(true);
+        when(directory.isDirectory()).thenReturn(false);
+        when(directory.delete()).thenReturn(true);
+
+        Assertions.assertTrue(FilesUtils.deleteDirectoryRecursively(directory));
+    }
+
+    @Test
+    void testDeleteDirectoryRecursivelyEmptyDirectory() {
+        File directory = mock(File.class);
+        when(directory.exists()).thenReturn(true);
+        when(directory.isDirectory()).thenReturn(true);
+        when(directory.listFiles()).thenReturn(new File[0]);
+        when(directory.delete()).thenReturn(true);
+
+        Assertions.assertTrue(FilesUtils.deleteDirectoryRecursively(directory));
+    }
+
+    @Test
+    void testDeleteDirectoryRecursivelyNullDirectory() {
+        File directory = mock(File.class);
+        when(directory.exists()).thenReturn(true);
+        when(directory.isDirectory()).thenReturn(true);
+        when(directory.listFiles()).thenReturn(null);
+        when(directory.delete()).thenReturn(true);
+
+        Assertions.assertTrue(FilesUtils.deleteDirectoryRecursively(directory));
+    }
+
+    @Test
+    void testDeleteDirectoryRecursivelyNotEmptyDirectory() {
+        File subFile = mock(File.class);
+        when(subFile.exists()).thenReturn(true);
+        when(subFile.isDirectory()).thenReturn(false);
+        when(subFile.delete()).thenReturn(true);
+
+        File directory = mock(File.class);
+        when(directory.exists()).thenReturn(true);
+        when(directory.isDirectory()).thenReturn(true);
+        when(directory.listFiles()).thenReturn(new File[] { subFile, subFile, subFile });
+        when(directory.delete()).thenReturn(true);
+
+        Assertions.assertTrue(FilesUtils.deleteDirectoryRecursively(directory));
     }
 }

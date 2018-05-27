@@ -32,7 +32,17 @@ public class LocalizedString implements Serializable {
     /**
      * The resource bundle.
      */
-    private static transient ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizedString.STRINGS_BUNDLE);
+    private static transient ResourceBundle resourceBundle;
+
+    static {
+        try {
+            resourceBundle = ResourceBundle.getBundle(STRINGS_BUNDLE);
+        }
+        catch (MissingResourceException ignored) {
+            resourceBundle = null;
+        }
+    }
+
 
     /**
      * @return The key of the {@link String} to localize.
@@ -58,10 +68,14 @@ public class LocalizedString implements Serializable {
         }
 
         try {
-            String translatedString = LocalizedString.resourceBundle.getString(this.localizationKey);
-            memoryCache.add(this.localizationKey, translatedString);
+            if (resourceBundle != null) {
+                String translatedString = resourceBundle.getString(this.localizationKey);
+                memoryCache.add(this.localizationKey, translatedString);
 
-            return translatedString;
+                return translatedString;
+            }
+
+            return this.localizationKey;
         }
         catch (MissingResourceException e) {
             return this.getLocalizationKey();
@@ -73,7 +87,7 @@ public class LocalizedString implements Serializable {
      * @return The localized {@link String} for the provided locale.
      */
     public synchronized String toString(Locale forLocale) {
-        return ResourceBundle.getBundle(LocalizedString.STRINGS_BUNDLE, forLocale).getString(this.localizationKey);
+        return ResourceBundle.getBundle(STRINGS_BUNDLE, forLocale).getString(this.localizationKey);
     }
 
     /**
@@ -89,6 +103,6 @@ public class LocalizedString implements Serializable {
      */
     public static void invalidateCacheForNewLocale(Locale newLocale) {
         LocalizedString.invalidateCache();
-        LocalizedString.resourceBundle = ResourceBundle.getBundle(LocalizedString.STRINGS_BUNDLE, newLocale);
+        LocalizedString.resourceBundle = ResourceBundle.getBundle(STRINGS_BUNDLE, newLocale);
     }
 }

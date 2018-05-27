@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class ToolCardTest {
 
@@ -26,31 +26,23 @@ class ToolCardTest {
     }
 
     @Test
-    void isUsedOnceTest() {
-        Assertions.assertFalse(toolCard.isUsedOnce());
-    }
-
-    @Test
     void getEffect() {
         Assertions.assertEquals(effect, toolCard.getEffect());
     }
 
     @Test
     void activate() {
+        doNothing().when(this.effect).run(this.toolCard.getCardId());
+
         toolCard.activate();
-        Assertions.assertTrue(toolCard.isUsedOnce());
+
+        verify(this.effect, times(1)).run(this.toolCard.getCardId());
     }
 
     @Test
     void setCardIdTest() {
         this.toolCard.setCardId("idTest");
         Assertions.assertSame("idTest", this.toolCard.getCardId());
-    }
-
-    @Test
-    void setUsedOnceTest() {
-        this.toolCard.setUsedOnce(Boolean.TRUE);
-        Assertions.assertTrue(this.toolCard.isUsedOnce());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.core;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public enum GlassColor implements Serializable {
     RED(0xff0000),
@@ -10,27 +11,54 @@ public enum GlassColor implements Serializable {
     PURPLE(0x800080);
 
     /**
-     * The hex color.
+     * The hex value of the color.
      */
     private final int hex;
 
+    /**
+     * @return the hex value of the color
+     */
+    public int getHex() {
+        return hex;
+    }
+
+    /**
+     * @return the red component of the color
+     */
     public int getRed() {
         return (this.hex & 0xFF0000) >> 16;
     }
 
+    /**
+     * @return the green component of the color
+     */
     public int getGreen() {
         return (this.hex & 0xFF00) >> 8;
     }
 
+    /**
+     * @return the blue component of the color
+     */
     public int getBlue() {
         return (this.hex & 0xFF);
     }
 
+    /**
+     * @param hex the hex value of the color
+     */
     GlassColor(int hex) {
         this.hex = hex;
     }
 
+    /**
+     * Converts the string representation of the a {@link GlassColor} to an
+     * instance of {@link GlassColor} that can be represented by {@code rep}.
+     * @param rep the string representation of the a {@link GlassColor}
+     * @return the instance of {@link GlassColor} that can be represented by {@code rep}
+     */
     public static GlassColor fromString(String rep) {
+        Objects.requireNonNull(rep);
+
         rep = rep.trim().toLowerCase();
 
         switch (rep) {
@@ -51,13 +79,11 @@ public enum GlassColor implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s", this.name().toLowerCase());
+        return this.name().toLowerCase();
     }
 
+    // TODO: create a class GlassToAnsiColor
     public String toAnsiColor() {
-        if (this == GlassColor.PURPLE) {
-            return "MAGENTA";
-        }
-        else return name();
+        return this == GlassColor.PURPLE ? "MAGENTA" : name();
     }
 }

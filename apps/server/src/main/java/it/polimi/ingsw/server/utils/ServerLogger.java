@@ -42,8 +42,12 @@ public class ServerLogger extends Logger {
         }
     }
 
+    /**
+     * Sets the logging level globally.
+     * @param level the logging level to globally use
+     */
     public static void setLoggingLevel(Level level) {
-        level = level;
+        ServerLogger.level = level;
     }
 
     /**

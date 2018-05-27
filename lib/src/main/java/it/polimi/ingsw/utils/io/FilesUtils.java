@@ -52,6 +52,10 @@ public class FilesUtils {
         return new File(filePath).lastModified();
     }
 
+    /**
+     * @param url the file url
+     * @return the last modified timestamp of the file
+     */
     public static long getLastModifiedOfFile(URL url) {
         try {
             return url.openConnection().getLastModified();
@@ -60,31 +64,47 @@ public class FilesUtils {
         }
     }
 
-    public static void deleteDirectoryRecursively(File file) {
+    /**
+     * @param file the file or the directory to delete
+     * @return {@code true} if the file has been deleted correctly, {@code false} otherwise
+     */
+    @SuppressWarnings("squid:S4042")
+    public static boolean deleteDirectoryRecursively(File file) {
+        // if the file does not exists true is returned
         if (!file.exists()) {
-            return;
+            return true;
         }
 
+        boolean result = true;
+
+        // if the file is a directory every file in it must be deleted first
         if (file.isDirectory()) {
             File[] children = file.listFiles();
 
+            // if children is null then the file does not exists
             if (children == null) {
-                return;
+                return true;
             }
 
+            // if the directory has no children: the directory is deleted and true is returned
             if (children.length == 0) {
-                 file.delete();
+                result = file.delete();
             }
             else {
+                // if the directory has some children they get deleted recursively
                 for (File child : children) {
-                    deleteDirectoryRecursively(child);
+                    result &= deleteDirectoryRecursively(child);
                 }
             }
 
-            file.delete();
+            // finally the directory can be deleted
+            result &= file.delete();
         }
         else {
-            file.delete();
+            // otherwise it can be deleted immediately
+            result = file.delete();
         }
+
+        return result;
     }
 }

@@ -39,7 +39,8 @@ public abstract class Instruction {
             if (this.instructions.isEmpty()) {
                 return 0;
             }
-        } else {
+        }
+        else {
             return 0;
         }
 

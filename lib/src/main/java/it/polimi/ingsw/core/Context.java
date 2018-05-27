@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+// TODO: add toString
 public class Context implements Serializable {
 
     private static final long serialVersionUID = -3619852381252122217L;
@@ -368,7 +369,6 @@ public class Context implements Serializable {
         /**
          * Reverts the state of context to the latest snapshot.
          */
-        @SuppressWarnings("WeakerAccess")
         public Context revert() {
             Set<String> keys = this.hashMap.keySet().stream()
                     .filter(key -> key.startsWith(this.snapshotId + "::"))
@@ -379,6 +379,13 @@ public class Context implements Serializable {
             }
 
             return this.parentContext;
+        }
+
+        @Override
+        public String toString() {
+            return this.parentContext == Context.getSharedInstance() ?
+                    this.snapshotId :
+                    this.parentContext + "::" + this.snapshotId;
         }
     }
 }

@@ -59,7 +59,7 @@ public class Objective implements IObjective {
     @Override
     public synchronized int calculatePoints(Context context) {
         Context.Snapshot snapshot = Context.getSharedInstance()
-                .snapshot("Objective{" + this.description.getLocalizationKey() + "}");
+                .snapshot("Objective(" + this.description.getLocalizationKey() + ")");
 
         Integer result = this.instructions.stream()
                 .mapToInt(instruction -> instruction.run(snapshot))

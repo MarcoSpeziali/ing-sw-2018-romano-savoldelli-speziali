@@ -27,6 +27,8 @@ public class Effect implements IEffect {
      */
     private int initialCost;
 
+    private boolean usedOnce;
+
     /**
      * The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
      */
@@ -52,14 +54,13 @@ public class Effect implements IEffect {
     /**
      * @return the initial cost of the effect
      */
-    @Override
     public int getInitialCost() {
         return initialCost;
     }
 
     @Override
-    public int getCurrentCost() {
-        return 0;
+    public int getCost() {
+        return this.initialCost + (this.usedOnce ? 1 : 0);
     }
 
     /**
@@ -116,12 +117,14 @@ public class Effect implements IEffect {
      */
     @Override
     public void run(String cardId) {
+        this.usedOnce = true;
+
         if (this.effectConstraint != null && this.effectConstraint.evaluate(Context.getSharedInstance())) {
             throw new ConstraintEvaluationException();
         }
 
         Context.getSharedInstance().snapshot(
-                "Effect{" + cardId + "}",
+                "Effect(" + cardId + ")",
                 snapshot -> this.actions.forEach(action -> {
                     if (action.getActionData().getResultIdentifier() == null) {
                         action.run(snapshot);

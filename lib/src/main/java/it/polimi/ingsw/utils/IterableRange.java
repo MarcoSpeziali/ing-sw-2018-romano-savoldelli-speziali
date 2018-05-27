@@ -305,7 +305,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
         @Override
         public Comparator<? super T> getComparator() {
-            return Comparator.naturalOrder();
+            return null;
         }
     }
 }
