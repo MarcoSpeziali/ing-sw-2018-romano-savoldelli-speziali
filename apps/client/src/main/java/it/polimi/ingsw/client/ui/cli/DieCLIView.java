@@ -4,17 +4,28 @@ import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.views.DieView;
 import org.fusesource.jansi.Ansi;
 
+import java.util.Scanner;
+
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class DieCLIView extends DieView {
 
-    private Die die;
+    private Scanner scanner = new Scanner(System.in);
 
 
-    public DieCLIView(Die die) {
+    public void setDieModel(Die die) {
+        super.setDie(die);
 
-        this.die= die;
+        this.die.addListener((oldShade, newShade) -> {
+            this.render();
+
+            newShade = scanner.nextInt();
+
+            if (newShade != -1) {
+                this.dieController.onDieInteraction(newShade);
+            }
+        });
     }
 
 

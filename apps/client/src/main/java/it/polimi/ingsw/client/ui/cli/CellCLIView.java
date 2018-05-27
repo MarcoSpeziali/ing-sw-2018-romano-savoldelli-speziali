@@ -1,8 +1,11 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.Cell;
+import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.views.CellView;
 import org.fusesource.jansi.Ansi;
+
+import java.util.Scanner;
 
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -12,6 +15,8 @@ public class CellCLIView extends CellView {
     private char shade;
     private Ansi.Color ansiColor;
     private Cell cell;
+    private Scanner scanner = new Scanner(System.in);
+
 
     public CellCLIView(Cell cell) {
         this.cell = cell;
@@ -36,6 +41,12 @@ public class CellCLIView extends CellView {
 
         System.out.print(ansi().eraseScreen().bg(ansiColor).a(" "+shade+" ").fg(BLACK).reset());
 
+    }
+
+    @Override
+    public void setCell(Cell cell) {
+        super.setCell(cell);
+        //TODO implement setCell
     }
 }
 

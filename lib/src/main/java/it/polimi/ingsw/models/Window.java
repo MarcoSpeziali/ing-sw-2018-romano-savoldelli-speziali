@@ -243,7 +243,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
      * @param j the column index of the {@link Die} in cells.
      * @param ignoreColor the boolean flag which avoids color control.
      * @param ignoreShade the boolean flag which avoids shade control.
-     * @return the index of neighbour, if control passes, null if it fails or index is out of bounds.
+     * @return the index of neighbour if control passes, null if it fails or index is out of bounds.
      */
     private Integer neighbour(Die die, int i, int j, boolean ignoreColor, boolean ignoreShade) {
         if (i < 0 || j < 0 || i > this.rows - 1 || j > this.columns - 1) {

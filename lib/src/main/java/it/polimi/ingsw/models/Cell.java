@@ -4,8 +4,12 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.locations.AlreadyPutException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
+import it.polimi.ingsw.listeners.CellInteractionListener;
+import it.polimi.ingsw.listeners.DieInteractionListener;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Cell implements RandomPutLocation, RandomPickLocation, Serializable {
 
@@ -14,6 +18,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
     private GlassColor color;
     private Integer shade;
     private Die die;
+    private List<CellInteractionListener> listeners = new LinkedList<>();
 
     /**
      * Sets up a new {@link Cell}.
@@ -77,6 +82,14 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
     }
 
     /**
+     * @return 1 if cell is free, 0 otherwise.
+     */
+    @Override
+    public int getFreeSpace() {
+        return this.die == null ? 1 : 0;
+    }
+
+    /**
      * Puts the die in the specified cell.
      * @param die the {@link Die} that must be put into.
      */
@@ -86,14 +99,8 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
         else {
             throw new AlreadyPutException("A die has already been put on this cell!");
         }
-    }
-
-    /**
-     * @return 1 if cell is free, 0 otherwise.
-     */
-    @Override
-    public int getFreeSpace() {
-        return this.die == null ? 1 : 0;
+        this.listeners.forEach(DieInteractionListener ->
+                DieInteractionListener.onDiePut(die));
     }
 
     /**
@@ -105,6 +112,8 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
         if (this.die != null) {
             Die picked = die;
             die = null;
+            this.listeners.forEach(DieInteractionListener ->
+                    DieInteractionListener.onDiePicked(picked));
             return picked;
         }
         else return null;
@@ -116,5 +125,9 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
     @Override
     public int getNumberOfDice() {
         return 1-this.getFreeSpace();
+    }
+
+    public void addListener(CellInteractionListener cellListener) {
+        this.listeners.add(cellListener);
     }
 }

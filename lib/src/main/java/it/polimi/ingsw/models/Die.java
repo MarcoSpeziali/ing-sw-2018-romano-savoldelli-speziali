@@ -1,8 +1,11 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.listeners.DieInteractionListener;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class Die implements Serializable {
@@ -12,6 +15,8 @@ public class Die implements Serializable {
     private GlassColor color;
 
     private Integer shade;
+
+    private List<DieInteractionListener> listeners = new LinkedList<>();
 
     /**
      * Sets up a new die
@@ -34,7 +39,10 @@ public class Die implements Serializable {
      * @param shade assign the shade to the die
      */
     public void setShade(Integer shade) {
+        int last = this.shade;
         this.shade = shade;
+
+        this.listeners.forEach(dieInteractionListener -> dieInteractionListener.onDieShadeChanged(last, shade));
     }
 
     /**
@@ -76,5 +84,9 @@ public class Die implements Serializable {
         Die die = (Die) obj;
 
         return this.color.equals(die.color) && this.shade.equals(die.shade);
+    }
+
+    public void addListener(DieInteractionListener dieInteractionListener) {
+        this.listeners.add(dieInteractionListener);
     }
 }

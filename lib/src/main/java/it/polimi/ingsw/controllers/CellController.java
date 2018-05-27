@@ -6,19 +6,21 @@ import it.polimi.ingsw.views.CellView;
 
 public class CellController {
 
-    private final CellView cellView;
-    private final Cell cell;
+    private Cell cell;
 
-    public CellController(CellView cellView, Cell cell) {
-        this.cellView = cellView;
+    public CellController(Cell cell) {
         this.cell = cell;
+    }
+    public void setCellModel(Cell cell) {
+        this.cell = cell;
+    }
+
+    public Die onDiePicked() {
+        return this.cell.pickDie();
     }
 
     public void onDiePut(Die die) {
         this.cell.putDie(die);
     }
 
-    public Die onDiePicked() {
-        return this.cell.pickDie();
-    }
 }
