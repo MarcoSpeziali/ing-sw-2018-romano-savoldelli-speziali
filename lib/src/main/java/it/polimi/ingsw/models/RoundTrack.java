@@ -1,8 +1,12 @@
 package it.polimi.ingsw.models;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class RoundTrack {
 
-    private Die[] rounds;
+    private List<Die> rounds;
     private int currentRound;
 
     /**
@@ -10,7 +14,7 @@ public class RoundTrack {
      * @param round the number of rounds.
      */
     public RoundTrack(int round) {
-        this.rounds = new Die[round];
+        this.rounds = new LinkedList<>();
         this.currentRound = 0;
     }
 
@@ -20,14 +24,14 @@ public class RoundTrack {
      * @throws ArrayIndexOutOfBoundsException if {@link Die} is not present.
      */
     public Die getDieAtIndex(int round) throws ArrayIndexOutOfBoundsException {
-        return this.rounds[round];
+        return this.rounds.get(round);
     }
 
     /**
      * @param die an instance of {@link Die} that must be set for current round.
      */
     public void setDieForCurrentRound(Die die) {
-        this.rounds[this.currentRound] = die;
+        this.rounds.set(this.currentRound, die);
         this.incrementRound();
     }
 
@@ -38,4 +42,3 @@ public class RoundTrack {
         this.currentRound++;
     }
  }
-

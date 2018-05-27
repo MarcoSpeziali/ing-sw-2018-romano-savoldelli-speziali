@@ -13,7 +13,6 @@ public class DraftPoolController {
     }
 
     public void onDieChosen(Die die, Player player) {
-
         player.setPickedDie(die);
         draftPool.pickDie(die);
     }
