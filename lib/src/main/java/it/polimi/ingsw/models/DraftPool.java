@@ -2,9 +2,12 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
+import it.polimi.ingsw.listeners.OnDiePickedListener;
+import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.views.DraftPoolView;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
 
@@ -12,6 +15,9 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
     private int players;
     private Bag bag;
     private DraftPoolView draftPoolView;
+    private List<OnDiePutListener> onDiePutListeners =  new LinkedList<>();
+    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+
 
     /**
      * Sets up a new {@link DraftPool} depending on the number of the players.
@@ -41,6 +47,8 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
                 return dice.remove(i);
             }
         }
+        this.onDiePutListeners.forEach(onDiePutListener
+                -> onDiePutListener.onDiePut(die));
         draftPoolView.render();
         return null;
     }
@@ -56,6 +64,9 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
             throw new IndexOutOfBoundsException();
         }
         Die d = this.dice.remove((int) location);
+        this.onDiePickedListeners.forEach(onDiePickedListener
+                -> onDiePickedListener.onDiePicked(d));
+
         draftPoolView.render();
         return d;
     }
@@ -120,11 +131,21 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
     public void putDie(Die die) {
         // TODO check free space
         dice.add(die);
+        this.onDiePutListeners.forEach(onDiePutListener
+                -> onDiePutListener.onDiePut(die));
     }
 
     @Override
     public int getFreeSpace() {
 
         return ((2*players+1) - ((2*players + 1) - this.dice.size()));
+    }
+
+    public void addPutListener(OnDiePutListener onDiePutListener) {
+        this.onDiePutListeners.add(onDiePutListener);
+    }
+
+    public void addPickListener(OnDiePickedListener onDiePickedListener) {
+        this.onDiePickedListeners.add(onDiePickedListener);
     }
 }

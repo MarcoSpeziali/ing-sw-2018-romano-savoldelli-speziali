@@ -12,7 +12,23 @@ public class DraftPoolController {
         this.draftPool = draftPool;
     }
 
-    public void onDieChosen(Die die, Player player) {
+    public void setDraftPoolModel(DraftPool draftPool){
+        this.draftPool = draftPool;
+    }
+
+    public Die onDiePicked(Die die) {
+        return this.draftPool.pickDie(die);
+    }
+
+    public Die onDiePicked(int location) {
+        return this.draftPool.pickDie(location);
+    }
+
+    public void onDiePut(Die die) {
+        this.draftPool.putDie(die);
+    }
+
+    /*public void onDieChosen(Die die, Player player) {
         player.setPickedDie(die);
         draftPool.pickDie(die);
     }
@@ -22,4 +38,5 @@ public class DraftPoolController {
         player.setPickedDie(null);
         draftPool.putDie(die);
     }
+    */ //TODO manca la classe player
 }
