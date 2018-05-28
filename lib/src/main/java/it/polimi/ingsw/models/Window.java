@@ -2,6 +2,8 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
+import it.polimi.ingsw.listeners.OnDiePickedListener;
+import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.utils.IterableRange;
 
 import java.io.Serializable;
@@ -18,6 +20,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     private String id;
     private Window sibling;
     private Cell[][] cells;
+    private List<OnDiePutListener> onDiePutListeners =  new LinkedList<>();
+    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+
 
     /**
      * Sets up a new {@link Window} with specified parameters.
@@ -80,6 +85,8 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     @Override
     public void putDie(Die die, Integer location) {
         this.cells[location / this.columns][location % this.columns].putDie(die);
+        this.onDiePutListeners.forEach(onDiePutListener
+                -> onDiePutListener.onDiePut(die, location));
     }
 
     /**
@@ -133,6 +140,8 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 }
             }
         }
+        this.onDiePickedListeners.forEach(onDiePickedListener
+                -> onDiePickedListener.onDiePicked(die));
         return null;
     }
 
@@ -143,7 +152,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
      */
     @Override
     public Die pickDie(Integer location) {
-        return this.cells[location / this.columns][location % this.columns].pickDie();
+        Die die = this.cells[location / this.columns][location % this.columns].pickDie();
+        this.onDiePickedListeners.forEach(onDiePickedListener -> onDiePickedListener.onDiePicked(die, location));
+        return die;
     }
 
     /**
@@ -324,6 +335,15 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 .distinct()
                 .filter(location -> !this.cells[location/this.columns][location%this.columns].isOccupied())
                 .collect(Collectors.toList());
+
+    }
+
+    public void addPutListener(OnDiePutListener onDiePutListener) {
+        this.onDiePutListeners.add(onDiePutListener);
+    }
+
+    public void addPickListener(OnDiePickedListener onDiePickedListener) {
+        this.onDiePickedListeners.add(onDiePickedListener);
     }
 }
 

@@ -2,7 +2,6 @@ package it.polimi.ingsw.controllers;
 
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Die;
-import it.polimi.ingsw.views.CellView;
 
 public class CellController {
 

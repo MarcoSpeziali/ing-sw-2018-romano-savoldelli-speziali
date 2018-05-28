@@ -1,9 +1,15 @@
 package it.polimi.ingsw.client.ui.cli;
 
+import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.views.WindowView;
 
+import java.util.Scanner;
+
 public class WindowCLIView extends WindowView {
+
+    private Scanner scanner = new Scanner(System.in);
 
     public WindowCLIView(Window window){
         super(window);
@@ -43,5 +49,35 @@ public class WindowCLIView extends WindowView {
         System.out.println();
 
 
+    }
+
+    public void setWindow(Window window) {
+        super.setWindow(window);
+        /*
+        this.window.addPickListener((die, location) -> { // come separo la logica di richiesta all'utente con il pick e put?
+            this.render();
+
+            String command = scanner.next();
+            if (command.equals("pick")) {
+                location = this.convertLocation();
+                this.windowController.onDiePicked(location); //e per onDiePicked senza location?
+            }                                                //non ha zenzo l'esistenza proprio
+        });
+        this.window.addPutListener((die, location)-> {
+            this.render();
+
+            String command = scanner.next();
+            if (command.equals("put")) {
+                location = this.convertLocation(); // ammesso che sia corretta
+                this.windowController.onDiePut(new Die(GlassColor.BLUE, 0), location); // il dado da dove arriva?
+            }
+        });*/
+
+    }
+
+    private int convertLocation() {
+        int columns = (scanner.nextInt()-65);
+        int rows = (scanner.nextInt());
+        return (rows-1)*window.getColumns()+(columns-1);
     }
 }
