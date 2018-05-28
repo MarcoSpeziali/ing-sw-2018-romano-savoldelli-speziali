@@ -179,7 +179,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
     }
 
     /**
-     * The iterator used to iterate through a {@code IterableRange<T>}.
+     * The iterator used to iterate through a {@link IterableRange}.
      */
     private class RangeIterator implements Iterator<T> {
 
@@ -199,7 +199,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
         private T current;
 
         /**
-         * `True` if the iterator has ran once.
+         * {@code True} if the iterator has ran once.
          */
         private boolean ranOnce = false;
 

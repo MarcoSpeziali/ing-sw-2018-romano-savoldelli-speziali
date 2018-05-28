@@ -2,7 +2,11 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.utils.text.LocalizedString;
 
-public abstract class Card {
+import java.io.Serializable;
+
+public abstract class Card implements Serializable {
+    private static final long serialVersionUID = -3678332528456922553L;
+
     protected LocalizedString title;
     protected LocalizedString description;
 

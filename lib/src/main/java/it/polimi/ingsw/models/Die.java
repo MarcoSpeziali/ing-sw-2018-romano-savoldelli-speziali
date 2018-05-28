@@ -39,10 +39,11 @@ public class Die implements Serializable {
      * @param shade assign the shade to the die
      */
     public void setShade(Integer shade) {
-        int last = this.shade;
         this.shade = shade;
 
-        this.listeners.forEach(dieInteractionListener -> dieInteractionListener.onDieShadeChanged(last, shade));
+        this.listeners.forEach(
+                dieInteractionListener -> dieInteractionListener.onDieShadeChanged(shade)
+        );
     }
 
     /**

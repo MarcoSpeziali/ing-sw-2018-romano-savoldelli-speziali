@@ -4,8 +4,8 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.locations.AlreadyPutException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
-import it.polimi.ingsw.listeners.CellInteractionListener;
-import it.polimi.ingsw.listeners.DieInteractionListener;
+import it.polimi.ingsw.listeners.OnDiePickedListener;
+import it.polimi.ingsw.listeners.OnDiePutListener;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -18,7 +18,8 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
     private GlassColor color;
     private Integer shade;
     private Die die;
-    private List<CellInteractionListener> listeners = new LinkedList<>();
+    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
+    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
     /**
      * Sets up a new {@link Cell}.
@@ -99,8 +100,9 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
         else {
             throw new AlreadyPutException("A die has already been put on this cell!");
         }
-        this.listeners.forEach(DieInteractionListener ->
-                DieInteractionListener.onDiePut(die));
+
+        this.onDiePutListeners.forEach(dieInteractionListener ->
+                dieInteractionListener.onDiePut(die));
     }
 
     /**
@@ -111,9 +113,12 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
     public Die pickDie() {
         if (this.die != null) {
             Die picked = die;
-            die = null;
-            this.listeners.forEach(DieInteractionListener ->
-                    DieInteractionListener.onDiePicked(picked));
+            this.die = null;
+
+            this.onDiePickedListeners.forEach(dieInteractionListener ->
+                    dieInteractionListener.onDiePicked(picked)
+            );
+
             return picked;
         }
         else return null;
@@ -124,10 +129,14 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
      */
     @Override
     public int getNumberOfDice() {
-        return 1-this.getFreeSpace();
+        return 1 - this.getFreeSpace();
     }
 
-    public void addListener(CellInteractionListener cellListener) {
-        this.listeners.add(cellListener);
+    public void addListener(OnDiePutListener cellListener) {
+        this.onDiePutListeners.add(cellListener);
+    }
+
+    public void addListener(OnDiePickedListener cellListener) {
+        this.onDiePickedListeners.add(cellListener);
     }
 }

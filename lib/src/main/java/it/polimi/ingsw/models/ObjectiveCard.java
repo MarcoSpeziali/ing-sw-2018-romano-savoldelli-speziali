@@ -4,6 +4,8 @@ import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.core.IObjective;
 
 public class ObjectiveCard extends Card {
+    private static final long serialVersionUID = -348932210289943581L;
+
     private String cardId;
     private CardVisibility visibility;
     private IObjective objective;

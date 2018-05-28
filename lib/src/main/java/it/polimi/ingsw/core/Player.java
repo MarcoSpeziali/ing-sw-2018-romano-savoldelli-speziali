@@ -1,32 +1,34 @@
 package it.polimi.ingsw.core;
 
+import it.polimi.ingsw.core.locations.RandomPickLocation;
+import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.ObjectiveCard;
 
-public class Player {
-    private String profile; //FIXME dopo update dell'app client
-    private ObjectiveCard[] privateObjectiveCard; //controllare lunghezza array
+public class Player implements RandomPickLocation, RandomPutLocation {
+    private static final long serialVersionUID = -2840357342425816145L;
+
+    private IPlayerProfile profile;
+    private ObjectiveCard[] privateObjectiveCard;
     private byte favourTokenCount;
     private Die pickedDie;
 
     /**
      * Sets up a new {@link Player}
-     * @param profile is the player's name
+     * @param profile is the player's profile
      * @param privateObjectiveCard is the player's private objective card
-     * @param favourTokenCount
-     * @param pikedDie
+     * @param favourTokenCount the count of initial tokens
      */
-    public Player(String profile, ObjectiveCard[] privateObjectiveCard, byte favourTokenCount, Die pikedDie ){
+    public Player(IPlayerProfile profile, ObjectiveCard[] privateObjectiveCard, byte favourTokenCount){
         this.profile = profile;
         this.privateObjectiveCard = privateObjectiveCard;
         this.favourTokenCount = favourTokenCount;
-        this.pickedDie = pikedDie;
     }
 
     /**
-     * @return the player's name
+     * @return the player's profile
      */
-    public String getProfile() {
+    public IPlayerProfile getProfile() {
         return profile;
     }
 
@@ -45,16 +47,9 @@ public class Player {
     }
 
     /**
-     * @return the die picked by the player
-     */
-    public Die getPickedDie() {
-        return pickedDie;
-    }
-
-    /**
      * @param profile is the player's name
      */
-    public void setProfile(String profile) {
+    public void setProfile(IPlayerProfile profile) {
         this.profile = profile;
     }
 
@@ -72,10 +67,26 @@ public class Player {
         this.favourTokenCount = favourTokenCount;
     }
 
-    /**
-     * @param pickedDie is the player's picked die
-     */
-    public void setPickedDie(Die pickedDie) {
-        this.pickedDie = pickedDie;
+    @Override
+    public Die pickDie() {
+        Die die = this.pickedDie;
+        this.pickedDie = null;
+
+        return die;
+    }
+
+    @Override
+    public int getNumberOfDice() {
+        return 1 - getFreeSpace();
+    }
+
+    @Override
+    public void putDie(Die die) {
+        this.pickedDie = die;
+    }
+
+    @Override
+    public int getFreeSpace() {
+        return this.pickedDie == null ? 1 : 0;
     }
 }

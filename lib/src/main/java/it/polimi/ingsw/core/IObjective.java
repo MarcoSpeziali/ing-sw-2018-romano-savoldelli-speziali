@@ -1,5 +1,7 @@
 package it.polimi.ingsw.core;
 
-public interface IObjective {
+import java.io.Serializable;
+
+public interface IObjective extends Serializable {
     int calculatePoints(Context context);
 }

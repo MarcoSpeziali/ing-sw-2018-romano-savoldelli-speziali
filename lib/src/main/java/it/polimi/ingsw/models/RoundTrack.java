@@ -1,43 +1,217 @@
 package it.polimi.ingsw.models;
 
+import it.polimi.ingsw.core.locations.ChoosablePickLocation;
+import it.polimi.ingsw.core.locations.ChoosablePutLocation;
+import it.polimi.ingsw.listeners.OnDiePickedListener;
+import it.polimi.ingsw.listeners.OnDiePutListener;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class RoundTrack {
+public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
 
-    private List<Die> rounds;
-    private int currentRound;
+    private static final long serialVersionUID = -972922678430566496L;
 
     /**
-     * Sets up a new {@link RoundTrack} of a specified number of rounds.
-     * @param round the number of rounds.
+     * The default number of rounds.
      */
-    public RoundTrack(int round) {
-        this.rounds = new LinkedList<>();
-        this.currentRound = 0;
+    public static final byte DEFAULT_ROUND_NUMBER = 10;
+
+    /**
+     * The maximum number of rounds.
+     */
+    public static final byte MAX_ROUND_NUMBER = Byte.MAX_VALUE;
+
+    /**
+     * The minimum number of rounds.
+     */
+    public static final byte MIN_ROUND_NUMBER = 1;
+
+    /**
+     * The maximum number of discarded dice per round.
+     */
+    public static final byte MAX_NUMBER_OF_DICE_PER_ROUND = Byte.MAX_VALUE;
+
+    /**
+     * The number of rounds.
+     */
+    private final byte numberOfRounds;
+
+    /**
+     *
+     */
+    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
+
+    /**
+     *
+     */
+    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+
+    /**
+     * Holds the dice discarded at the end of each round.
+     */
+    private List<List<Die>> rounds;
+
+    /**
+     * Initialized {@link RoundTrack} with the default value of rounds ({@link #DEFAULT_ROUND_NUMBER}).
+     */
+    public RoundTrack() {
+        this(DEFAULT_ROUND_NUMBER);
     }
 
     /**
-     * @param round the round of which return the {@link Die}.
-     * @return the assigned {@link Die} of a specified round.
-     * @throws IndexOutOfBoundsException if {@link Die} is not present
+     * Initialized {@link RoundTrack} with a customized number of rounds.
      */
-    public Die getDieAtIndex(int round) {
+    public RoundTrack(byte numberOfRounds) {
+        this.numberOfRounds = numberOfRounds;
+        if (numberOfRounds < MIN_ROUND_NUMBER) {
+            throw new IllegalArgumentException(
+                    "The number of rounds must be between " +
+                            MIN_ROUND_NUMBER + " and " + MAX_ROUND_NUMBER +
+                            ". Not " + numberOfRounds
+            );
+        }
+
+        this.rounds = new LinkedList<>();
+
+        // instantiates the round list
+        for (int i = 0; i < numberOfRounds; i++) {
+            this.rounds.add(new LinkedList<>());
+        }
+    }
+
+    /**
+     * @param round the round which contains the wanted dice
+     * @return the {@link List} of {@link Die} discarded in the specified round
+     */
+    public List<Die> getDiceForRound(int round) {
         return this.rounds.get(round);
     }
 
     /**
-     * @param die an instance of {@link Die} that must be set for current round.
+     * @param round the round which contains the wanted die
+     * @param index the index of the wanted die in the provided round
+     * @return the {@link Die} discarded in the specified round at the specified index
      */
-    public void setDieForCurrentRound(Die die) {
-        this.rounds.set(this.currentRound, die);
-        this.incrementRound();
+    public Die getDiceForRoundAtIndex(int round, int index) {
+        return this.rounds.get(round).get(index);
     }
 
     /**
-     * Increments the current round.
+     * @param die the die to discard
+     * @param round the round of the discarded die
+     * @param index the index of the discarded die of the provided round
      */
-    private void incrementRound() {
-        this.currentRound++;
+    public void setDieForRoundAtIndex(Die die, int round, int index) {
+        // if the index does not exists then the die is added
+        if (this.rounds.get(round).size() > index) {
+            this.rounds.get(round).set(index, die);
+        }
+        else {
+            this.addDieForRound(die, round);
+        }
+
+        this.onDiePutListeners.forEach(
+                onDiePutListener -> onDiePutListener.onDiePut(die, computeLocation(round, index))
+        );
     }
- }
+
+    /**
+     * @param die the die to add at the provided round
+     * @param round the round index
+     */
+    public void addDieForRound(Die die, int round) {
+        this.setDieForRoundAtIndex(die, round, MAX_NUMBER_OF_DICE_PER_ROUND);
+    }
+
+    @Override
+    public Die pickDie(Die die) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Die pickDie(Integer location) {
+        int roundIndex = location & 0x0000FF00 >> 8;
+        int dieIndex = location & 0x000000FF;
+
+        Die die = this.rounds.get(roundIndex).remove(dieIndex);
+
+        this.onDiePickedListeners.forEach(listener -> listener.onDiePicked(die, location));
+
+        return die;
+    }
+
+    @Override
+    public void putDie(Die die, Integer location) {
+        int roundIndex = location & 0x0000FF00 >> 8;
+        int dieIndex = location & 0x000000FF;
+
+        this.setDieForRoundAtIndex(die, roundIndex, dieIndex);
+    }
+
+    @Override
+    public List<Integer> getLocations() {
+        // an integer is a 4 byte number, the first two are set to 0
+        // the third byte identifies the round index
+        // the fourth one identifies the index of a die in a round
+
+        List<Integer> positions = new LinkedList<>();
+
+        for (int i = 0; i < this.rounds.size(); i++) {
+            for (int j = 0; j < this.rounds.get(i).size(); j++) {
+                positions.add(computeLocation(i, j));
+            }
+        }
+
+        return positions;
+    }
+
+    @Override
+    public List<Die> getDice() {
+        return this.rounds.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public int getNumberOfDice() {
+        return this.rounds.stream()
+                .mapToInt(List::size)
+                .sum();
+    }
+
+    @Override
+    public int getFreeSpace() {
+        return this.numberOfRounds * MAX_NUMBER_OF_DICE_PER_ROUND - this.getNumberOfDice();
+    }
+
+    /**
+     * @param listener
+     * @return
+     */
+    public RoundTrack addListener(OnDiePickedListener listener) {
+        this.onDiePickedListeners.add(listener);
+
+        return this;
+    }
+
+    /**
+     * @param listener
+     * @return
+     */
+    public RoundTrack addListener(OnDiePutListener listener) {
+        this.onDiePutListeners.add(listener);
+
+        return this;
+    }
+
+    /**
+     * @param roundIndex
+     * @param dieIndex
+     * @return
+     */
+    private int computeLocation(int roundIndex, int dieIndex) {
+        return (roundIndex << 8 & 0x0000FF00) | (dieIndex & 0x000000FF);
+    }
+}

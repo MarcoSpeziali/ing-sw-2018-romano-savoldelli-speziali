@@ -1,7 +1,8 @@
 package it.polimi.ingsw.listeners;
 
 
-public interface DieInteractionListener {
+import java.io.Serializable;
 
-    public void onDieShadeChanged(int oldShade, int newShade);
+public interface DieInteractionListener extends Serializable {
+    void onDieShadeChanged(int newShade);
 }
