@@ -6,7 +6,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-// TODO: add toString
 public class Context implements Serializable {
 
     private static final long serialVersionUID = -3619852381252122217L;
@@ -16,6 +15,7 @@ public class Context implements Serializable {
     public static final String BAG = "bag";
     public static final String ROUND_TRACK = "round_track";
     public static final String CURRENT_PLAYER = "current_player";
+    public static final String MATCH = "match";
 
     /**
      * The context's variables are stored into an {@link HashMap}.

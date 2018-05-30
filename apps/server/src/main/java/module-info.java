@@ -3,4 +3,5 @@ module it.polimi.ingsw.server {
     requires java.logging;
     requires jopt.simple;
     requires java.xml;
+    requires java.rmi;
 }
