@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client.net;
 
-import it.polimi.ingsw.net.AuthenticationError;
-import it.polimi.ingsw.net.AuthenticationResponse;
-import it.polimi.ingsw.net.authentication.AuthenticationInterface;
+import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.ResponseError;
+import it.polimi.ingsw.net.authentication.LoginInterface;
 
 import java.rmi.RemoteException;
 import java.util.function.Consumer;
@@ -16,7 +16,7 @@ public class LoginManager {
     }
 
     private String token;
-    private AuthenticationInterface loginInterface;
+    private LoginInterface loginInterface;
 
     private LoginManager() {
         // TODO: set login interface
@@ -26,15 +26,15 @@ public class LoginManager {
         return this.token != null;
     }
 
-    public void authenticate(String username, String password, Consumer<AuthenticationError> authError) throws RemoteException {
-        AuthenticationResponse challenge = loginInterface.requestLogin(username);
-        AuthenticationResponse token = loginInterface.fulfillChallenge(
+    public void authenticate(String username, String password, Consumer<ResponseError> loginError) throws RemoteException {
+        Response challenge = loginInterface.requestLogin(username);
+        Response token = loginInterface.fulfillChallenge(
                 "..", // response
                 fulfillChallenge("..") // response
         );
 
-        // se ok -> authError == null
-        // se ko -> authError ...
+        // se ok -> loginError == null
+        // se ko -> loginError ...
     }
 
     private static String fulfillChallenge(String challenge) {

@@ -1,9 +1,8 @@
 package it.polimi.ingsw.server.net.authentication;
 
-import it.polimi.ingsw.net.AuthenticationResponse;
-import it.polimi.ingsw.net.authentication.AuthenticationInterface;
+import it.polimi.ingsw.net.authentication.LoginInterface;
 
-public class LoginManager implements AuthenticationInterface {
+public class LoginManager implements LoginInterface {
 
     @Override
     public AuthenticationResponse requestLogin(String username) {
