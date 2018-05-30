@@ -187,29 +187,43 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
     }
 
     /**
-     * @param listener
-     * @return
+     * @param listener the listener to add
+     * @return the provided instance of {@link OnDiePickedListener} so it can be unregistered later
      */
-    public RoundTrack addListener(OnDiePickedListener listener) {
+    public OnDiePickedListener addListener(OnDiePickedListener listener) {
         this.onDiePickedListeners.add(listener);
 
-        return this;
+        return listener;
     }
 
     /**
-     * @param listener
-     * @return
+     * @param listener the listener to add
+     * @return the provided instance of {@link OnDiePutListener} so it can be unregistered later
      */
-    public RoundTrack addListener(OnDiePutListener listener) {
+    public OnDiePutListener addListener(OnDiePutListener listener) {
         this.onDiePutListeners.add(listener);
 
-        return this;
+        return listener;
     }
 
     /**
-     * @param roundIndex
-     * @param dieIndex
-     * @return
+     * @param listener the listener to remove
+     */
+    public void removeListener(OnDiePickedListener listener) {
+        this.onDiePickedListeners.remove(listener);
+    }
+
+    /**
+     * @param listener the listener to remove
+     */
+    public void removeListener(OnDiePutListener listener) {
+        this.onDiePutListeners.remove(listener);
+    }
+
+    /**
+     * @param roundIndex the index of the round
+     * @param dieIndex the index of the die in the round
+     * @return the location representation of the index: 0x0000{roundIndex}{dieIndex}
      */
     private int computeLocation(int roundIndex, int dieIndex) {
         return (roundIndex << 8 & 0x0000FF00) | (dieIndex & 0x000000FF);
