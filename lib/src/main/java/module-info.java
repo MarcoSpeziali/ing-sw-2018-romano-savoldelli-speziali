@@ -9,6 +9,7 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.utils.streams;
     exports it.polimi.ingsw.controllers;
     exports it.polimi.ingsw.listeners;
+    exports it.polimi.ingsw.net;
 
     requires java.xml;
     requires javafx.graphics;

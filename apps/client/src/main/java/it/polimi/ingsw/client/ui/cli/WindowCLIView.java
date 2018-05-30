@@ -53,26 +53,6 @@ public class WindowCLIView extends WindowView {
 
     public void setWindow(Window window) {
         super.setWindow(window);
-        /*
-        this.window.addPickListener((die, location) -> { // come separo la logica di richiesta all'utente con il pick e put?
-            this.render();
-
-            String command = scanner.next();
-            if (command.equals("pick")) {
-                location = this.convertLocation();
-                this.windowController.onDiePicked(location); //e per onDiePicked senza location?
-            }                                                //non ha zenzo l'esistenza proprio
-        });
-        this.window.addPutListener((die, location)-> {
-            this.render();
-
-            String command = scanner.next();
-            if (command.equals("put")) {
-                location = this.convertLocation(); // ammesso che sia corretta
-                this.windowController.onDiePut(new Die(GlassColor.BLUE, 0), location); // il dado da dove arriva?
-            }
-        });*/
-
     }
 
     private int convertLocation() {
