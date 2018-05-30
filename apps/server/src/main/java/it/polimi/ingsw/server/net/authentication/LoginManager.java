@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.net.authentication;
 
-import it.polimi.ingsw.net.authentication.LoginInterface;
+import it.polimi.ingsw.net.interfaces.LoginInterface;
 
 public class LoginManager implements LoginInterface {
 

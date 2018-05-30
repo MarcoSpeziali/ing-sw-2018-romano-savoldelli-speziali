@@ -1,4 +1,6 @@
-package it.polimi.ingsw.net;
+package it.polimi.ingsw.net.interfaces;
+
+import it.polimi.ingsw.net.Response;
 
 import java.rmi.RemoteException;
 

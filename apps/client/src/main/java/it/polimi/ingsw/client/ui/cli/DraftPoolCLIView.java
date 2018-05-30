@@ -16,7 +16,8 @@ public class DraftPoolCLIView extends DraftPoolView {
         this.dieView = new DieCLIView[draftPool.getNumberOfDice()];
 
         for (int i = 0; i < this.draftPool.getNumberOfDice(); i++) {
-            dieView[i] = new DieCLIView(this.draftPool.getDice().get(i));
+            dieView[i] = new DieCLIView();
+            dieView[i].setDie(this.draftPool.getDice().get(i));
 
         }
     }

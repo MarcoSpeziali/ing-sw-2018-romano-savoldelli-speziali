@@ -1,4 +1,4 @@
-package it.polimi.ingsw.net.authentication;
+package it.polimi.ingsw.net.interfaces;
 
 import it.polimi.ingsw.net.Response;
 

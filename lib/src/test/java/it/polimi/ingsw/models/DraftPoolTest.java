@@ -17,7 +17,7 @@ class DraftPoolTest {
     @BeforeEach
     void setUp() {
         bag = new Bag(18);
-        draftPool = new DraftPool(4, mock(DraftPoolView.class), bag);
+        draftPool = new DraftPool();
         die = new Die(GlassColor.BLUE, 0);
     }
 
@@ -51,29 +51,6 @@ class DraftPoolTest {
     @Test
     void getNumberOfDiceTest() {
         Assertions.assertEquals(draftPool.getNumberOfDice(), draftPool.getDice().size());
-    }
-
-    @Test
-    void setPlayers() {
-        this.draftPool.setPlayers(5);
-        Assertions.assertSame(5, this.draftPool.getPlayers());
-    }
-
-    @Test
-    void setBag() {
-        this.draftPool.setBag(bag);
-        Assertions.assertSame(bag, this.draftPool.getBag());
-
-    }
-
-    @Test
-    void getPlayers() {
-        Assertions.assertEquals(4, this.draftPool.getPlayers());
-    }
-
-    @Test
-    void getBag() {
-        Assertions.assertSame(bag , this.draftPool.getBag());
     }
 
     @Test

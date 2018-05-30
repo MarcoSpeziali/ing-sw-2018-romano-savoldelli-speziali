@@ -11,7 +11,7 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.listeners;
     exports it.polimi.ingsw.net;
     exports it.polimi.ingsw.net.utils;
-    exports it.polimi.ingsw.net.authentication;
+    exports it.polimi.ingsw.net.interfaces;
 
     requires java.xml;
     requires javafx.graphics;

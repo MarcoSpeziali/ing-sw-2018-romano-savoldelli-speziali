@@ -14,7 +14,7 @@ class DraftPoolCLIViewTest {
     @BeforeEach
     void setUp() {
         Bag bag = new Bag(18);
-        this.draftPool = new DraftPool(4, mock(DraftPoolView.class), bag);
+        this.draftPool = new DraftPool();
         draftPoolCLIView = new DraftPoolCLIView(draftPool);
     }
 

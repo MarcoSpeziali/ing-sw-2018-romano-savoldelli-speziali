@@ -2,7 +2,7 @@ package it.polimi.ingsw.client.net;
 
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
-import it.polimi.ingsw.net.SignUpInterface;
+import it.polimi.ingsw.net.interfaces.SignUpInterface;
 import it.polimi.ingsw.net.utils.EncryptUtil;
 import java.rmi.RemoteException;
 import java.util.function.Consumer;
