@@ -1,11 +1,10 @@
 package it.polimi.ingsw.client.ui.gui;
 
+import it.polimi.ingsw.client.ClientApp;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
@@ -16,7 +15,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+
+import static java.lang.Boolean.TRUE;
 
 public class Main extends Application {
 
@@ -26,13 +28,13 @@ public class Main extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws MalformedURLException {
         primaryStage.setTitle("Sagrada");
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 1280,720);
-        //primaryStage.setFullScreen(TRUE);
+        primaryStage.setFullScreen(TRUE);
 
-        URL url = getClass().getClassLoader().getResource("background.jpg");
+        URL url = new URL(ClientApp.class.getClassLoader().getResource("background.jpg"), "");
         Image background = new Image(url.toString(),true);
         BackgroundSize bsize= new BackgroundSize(1280, 720, false, false,
                 true, true);
@@ -85,8 +87,8 @@ public class Main extends Application {
             }
         });
 
-
-        Image cardBackground = new Image ("texture.jpg", true);
+        URL urlCards = new URL(ClientApp.class.getClassLoader().getResource("texture.jpg"), "images/");
+        Image cardBackground = new Image (urlCards.toString(), true);
         BackgroundSize cardBSize = new BackgroundSize(500, 500, false,false, true, true);
 
         leftMenu.setBackground(new Background(new BackgroundImage(cardBackground, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, cardBSize)));
