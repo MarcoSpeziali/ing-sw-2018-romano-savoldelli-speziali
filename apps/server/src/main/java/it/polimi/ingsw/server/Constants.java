@@ -29,6 +29,12 @@ public class Constants {
         LOG_FOLDER(java.nio.file.Paths.get(
                 Paths.PROJECT_FOLDER.absolutePath,
                 "logs"
+        ).toAbsolutePath().toString()),
+
+        SSH_KEY_PATH(java.nio.file.Paths.get(
+                System.getProperty("user.home"),
+                ".ssh",
+                "id_rsa"
         ).toAbsolutePath().toString());
 
         private final String absolutePath;
@@ -47,13 +53,13 @@ public class Constants {
     }
 
     public enum Resources {
-        PUBLIC_CARDS("public-cards.xml"),
-        PRIVATE_CARDS("private-cards.xml"),
-        TOOL_CARDS("tool-cards.xml"),
+        PUBLIC_CARDS("cards/public-cards.xml"),
+        PRIVATE_CARDS("cards/private-cards.xml"),
+        TOOL_CARDS("cards/tool-cards.xml"),
         WINDOWS("windows.xml"),
-        ACTIONS_DIRECTIVES("actions-directives.xml"),
-        INSTRUCTIONS_DIRECTIVES("instructions-directives.xml"),
-        PREDICATES_DIRECTIVES("predicates-directives.xml");
+        ACTIONS_DIRECTIVES("directives/actions-directives.xml"),
+        INSTRUCTIONS_DIRECTIVES("directives/instructions-directives.xml"),
+        PREDICATES_DIRECTIVES("directives/predicates-directives.xml");
 
         private final String relativePath;
 

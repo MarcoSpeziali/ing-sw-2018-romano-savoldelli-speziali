@@ -4,4 +4,6 @@ module it.polimi.ingsw.server {
     requires jopt.simple;
     requires java.xml;
     requires java.rmi;
+    requires postgresql;
+    requires java.sql;
 }

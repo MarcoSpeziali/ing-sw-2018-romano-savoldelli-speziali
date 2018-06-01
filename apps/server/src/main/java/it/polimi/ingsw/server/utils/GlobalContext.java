@@ -34,12 +34,14 @@ public class GlobalContext extends Context {
      * @return the {@link Context} for the provided {@code player}
      */
     public Context getContextForPlayer(Player player) {
-        if (this.containsKey(player.getProfile())) {
-            return (Context) this.get(player.getProfile());
+        if (this.containsKey(player.getProfile().getUserName())) {
+            return (Context) this.get(player.getProfile().getUserName());
         }
         else {
+            String username = player.getProfile().getUserName();
+
             // TODO: change getProfileCall
-            Context playerContext = (Context) this.put(player.getProfile(), this.snapshot(player.getProfile()));
+            Context playerContext = (Context) this.put(username, this.snapshot(username));
             playerContext.put(Context.CURRENT_PLAYER, player);
 
             return playerContext;

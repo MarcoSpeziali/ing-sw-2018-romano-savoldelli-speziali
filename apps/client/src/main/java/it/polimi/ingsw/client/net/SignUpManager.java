@@ -3,8 +3,10 @@ package it.polimi.ingsw.client.net;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.interfaces.SignUpInterface;
-import it.polimi.ingsw.net.utils.EncryptUtil;
+import it.polimi.ingsw.utils.CypherUtils;
+
 import java.rmi.RemoteException;
+import java.security.GeneralSecurityException;
 import java.util.function.Consumer;
 
 public class SignUpManager {
@@ -21,11 +23,15 @@ public class SignUpManager {
     }
 
     public void signUp(String username, String password, Consumer<ResponseError> signUpError) throws RemoteException {
-        Response response = signUpInterface.requestSignUp(username, EncryptUtil.encryptPassword(password));
+        try {
+            Response response = signUpInterface.requestSignUp(username, CypherUtils.encryptString(password, "", true));
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
         LoginManager.sharedInstance().authenticate(username, password, null);
 
         // se ok -> signupError == null
-        // se ko -> signuError ...
+        // se ko -> signupError ...
     }
 }
 

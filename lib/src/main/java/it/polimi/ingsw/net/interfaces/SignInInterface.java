@@ -5,7 +5,8 @@ import it.polimi.ingsw.net.Response;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface LoginInterface extends Remote {
+// TODO: docs
+public interface SignInInterface extends Remote {
     Response requestLogin(String username) throws RemoteException;
-    Response fulfillChallenge(String sessionId, String challengeResponse) throws RemoteException;
+    Response fulfillChallenge(int sessionId, String challengeResponse) throws RemoteException;
 }

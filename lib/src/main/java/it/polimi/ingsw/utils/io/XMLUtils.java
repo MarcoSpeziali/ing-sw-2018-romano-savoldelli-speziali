@@ -121,7 +121,7 @@ public final class XMLUtils {
      *      cannot be created which satisfies the configuration requested.
      */
     public static Node parseXmlFromResource(String resourceName, ClassLoader classLoader) throws ParserConfigurationException, SAXException, IOException {
-        URL fileURL = classLoader.getResource(resourceName);
+        URL fileURL = Resources.getResource(classLoader, resourceName);
 
         if (fileURL == null) {
             throw new FileNotFoundException("The file containing the actions mapping does not exists.");

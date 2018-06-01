@@ -2,7 +2,7 @@ package it.polimi.ingsw.client.net;
 
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
-import it.polimi.ingsw.net.interfaces.LoginInterface;
+import it.polimi.ingsw.net.interfaces.SignInInterface;
 
 import java.rmi.RemoteException;
 import java.util.function.Consumer;
@@ -16,7 +16,7 @@ public class LoginManager {
     }
 
     private String token;
-    private LoginInterface loginInterface;
+    private SignInInterface loginInterface;
 
     private LoginManager() {
         // TODO: set login interface
@@ -29,7 +29,7 @@ public class LoginManager {
     public void authenticate(String username, String password, Consumer<ResponseError> loginError) throws RemoteException {
         Response challenge = loginInterface.requestLogin(username);
         Response token = loginInterface.fulfillChallenge(
-                "..", // response
+                1, // response
                 fulfillChallenge("..") // response
         );
 

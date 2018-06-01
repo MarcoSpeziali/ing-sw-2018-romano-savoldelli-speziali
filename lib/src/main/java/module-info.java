@@ -16,4 +16,5 @@ module it.polimi.ingsw {
     requires java.xml;
     requires javafx.graphics;
     requires java.rmi;
+    requires json;
 }

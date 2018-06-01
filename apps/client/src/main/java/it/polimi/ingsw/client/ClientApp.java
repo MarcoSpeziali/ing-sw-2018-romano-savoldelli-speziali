@@ -5,8 +5,7 @@ import it.polimi.ingsw.controllers.MenuController;
 
 public class ClientApp {
 
-    public static void main(String args[]) {
-
+    public static void main(String[] args) {
         MenuCLIView menuCLIView = new MenuCLIView(new MenuController());
         menuCLIView.run();
     }

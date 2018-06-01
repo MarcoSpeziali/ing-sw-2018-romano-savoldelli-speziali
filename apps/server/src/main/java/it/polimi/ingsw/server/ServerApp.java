@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 public class ServerApp {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         OptionSet options = getOptionParser().parse(args);
 
         try {

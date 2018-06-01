@@ -3,6 +3,8 @@ package it.polimi.ingsw.utils.io;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -106,5 +108,9 @@ public class FilesUtils {
         }
 
         return result;
+    }
+
+    public static String getFileContent(String filePath) throws IOException {
+        return Files.readAllLines(Paths.get(filePath)).stream().reduce("", (s, s2) -> s + s2);
     }
 }
