@@ -71,7 +71,7 @@ class InstructionDirectiveCompilerTest {
         Assertions.assertThrows(
                 ClassNotFoundException.class,
                 () -> InstructionDirectiveCompiler.compile(
-                        "instructions-directives-class-not-found.xml",
+                        "directives/instructions-directives-class-not-found.xml",
                         true
                 )
         );
@@ -82,7 +82,7 @@ class InstructionDirectiveCompilerTest {
         Assertions.assertThrows(
                 ClassNotFoundException.class,
                 () -> InstructionDirectiveCompiler.compile(
-                        "instructions-directives-class-not-found2.xml",
+                        "directives/instructions-directives-class-not-found2.xml",
                         true
                 )
         );
@@ -90,7 +90,7 @@ class InstructionDirectiveCompilerTest {
 
     @Test
     void testEmptyFile() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
-        List<InstructionDirective> directives = InstructionDirectiveCompiler.compile("instructions-directives-empty.xml", true);
+        List<InstructionDirective> directives = InstructionDirectiveCompiler.compile("directives/instructions-directives-empty.xml", true);
 
         Assertions.assertTrue(directives.isEmpty());
     }

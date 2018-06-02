@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.net.authentication;
+package it.polimi.ingsw.server.net.endpoints;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
@@ -15,24 +15,36 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class SignIn implements SignInInterface {
+public class SignInEndPoint implements SignInInterface {
 
     /**
      * The client request.
      */
-    private final Request request;
+    private Request request;
 
     /**
      * The client ip.
      */
-    private final String ip;
+    private String ip;
 
     /**
      * The client port.
      */
-    private final int port;
+    private int port;
 
-    public SignIn(Request request, String ip, int port) {
+    public void setRequest(Request request) {
+        this.request = request;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public SignInEndPoint(Request request, String ip, int port) {
         this.request = request;
         this.ip = ip;
         this.port = port;
@@ -83,12 +95,12 @@ public class SignIn implements SignInInterface {
             );
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignIn.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
             // sends back an internal server error
             return ResponseFactory.createInternalServerError();
         } catch (NoSuchAlgorithmException e) {
-            ServerLogger.getLogger(SignIn.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
+            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
             return ResponseFactory.createInternalServerError();
         }
@@ -157,11 +169,11 @@ public class SignIn implements SignInInterface {
                 return ResponseFactory.createUnauthorisedError();
             }
         } catch (SQLException e) {
-            ServerLogger.getLogger(SignIn.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError();
         } catch (NoSuchAlgorithmException e) {
-            ServerLogger.getLogger(SignIn.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
+            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
             return ResponseFactory.createInternalServerError();
         }

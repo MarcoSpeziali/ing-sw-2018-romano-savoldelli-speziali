@@ -44,7 +44,7 @@ class PredicateDirectivesCompilerTest {
         Assertions.assertThrows(
                 ClassNotFoundException.class,
                 () -> PredicateDirectivesCompiler.compile(
-                        "predicates-directives-class-not-found.xml",
+                        "directives/predicates-directives-class-not-found.xml",
                         true
                 )
         );
@@ -55,7 +55,7 @@ class PredicateDirectivesCompilerTest {
         Assertions.assertThrows(
                 ClassNotFoundException.class,
                 () -> PredicateDirectivesCompiler.compile(
-                        "predicates-directives-class-not-found2.xml",
+                        "directives/predicates-directives-class-not-found2.xml",
                         true
                 )
         );
@@ -63,7 +63,7 @@ class PredicateDirectivesCompilerTest {
 
     @Test
     void testEmptyFile() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
-        List<ActionDirective> directives = ActionDirectivesCompiler.compile("predicates-directives-empty.xml", true);
+        List<ActionDirective> directives = ActionDirectivesCompiler.compile("directives/predicates-directives-empty.xml", true);
 
         Assertions.assertTrue(directives.isEmpty());
     }

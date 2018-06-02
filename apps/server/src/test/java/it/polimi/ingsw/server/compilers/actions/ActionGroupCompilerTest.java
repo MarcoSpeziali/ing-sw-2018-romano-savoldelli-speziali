@@ -28,7 +28,7 @@ class ActionGroupCompilerTest {
     @BeforeEach
     void setUp() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         this.directiveList = ActionDirectivesCompiler.compile(
-                "actions-directives-full.xml",
+                "directives/actions-directives-full.xml",
                 true
         );
 

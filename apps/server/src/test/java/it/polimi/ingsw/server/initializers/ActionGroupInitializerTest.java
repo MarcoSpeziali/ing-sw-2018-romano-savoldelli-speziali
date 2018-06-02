@@ -32,7 +32,7 @@ class ActionGroupInitializerTest {
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(actionGroupText),
-                ActionDirectivesCompiler.compile("actions-directives-full.xml", true),
+                ActionDirectivesCompiler.compile("directives/actions-directives-full.xml", true),
                 List.of()
         );
 

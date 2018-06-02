@@ -50,7 +50,7 @@ class InstructionInitializerTest {
 
         CompiledInstruction compiledInstruction = InstructionCompiler.compile(
                 XMLUtils.parseXmlString(instructionString),
-                InstructionDirectiveCompiler.compile("instructions-directives-full.xml", true),
+                InstructionDirectiveCompiler.compile("directives/instructions-directives-full.xml", true),
                 PredicateDirectivesCompiler.compile()
         );
 

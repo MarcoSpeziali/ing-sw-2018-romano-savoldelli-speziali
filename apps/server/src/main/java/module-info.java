@@ -6,4 +6,5 @@ module it.polimi.ingsw.server {
     requires java.rmi;
     requires postgresql;
     requires java.sql;
+    requires json;
 }

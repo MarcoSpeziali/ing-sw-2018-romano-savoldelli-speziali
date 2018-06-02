@@ -62,17 +62,17 @@ class ActionDirectivesCompilerTest {
 
     @Test
     void testClassNotFoundExceptionOnAction() {
-        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("actions-directives-class-not-found.xml", true));
+        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("directives/actions-directives-class-not-found.xml", true));
     }
 
     @Test
     void testClassNotFoundExceptionOnParameter() {
-        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("actions-directives-class-not-found2.xml", true));
+        Assertions.assertThrows(ClassNotFoundException.class, () -> ActionDirectivesCompiler.compile("directives/actions-directives-class-not-found2.xml", true));
     }
 
     @Test
     void testEmptyFile() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
-        List<ActionDirective> directives = ActionDirectivesCompiler.compile("actions-directives-empty.xml", true);
+        List<ActionDirective> directives = ActionDirectivesCompiler.compile("directives/actions-directives-empty.xml", true);
 
         Assertions.assertTrue(directives.isEmpty());
     }

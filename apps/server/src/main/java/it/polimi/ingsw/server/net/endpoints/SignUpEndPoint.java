@@ -1,9 +1,10 @@
-package it.polimi.ingsw.server.net.authentication;
+package it.polimi.ingsw.server.net.endpoints;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignUpInterface;
 import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.server.net.CommandHandler;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.utils.ServerLogger;
@@ -12,15 +13,20 @@ import it.polimi.ingsw.utils.HashUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-public class SignUp implements SignUpInterface {
+public class SignUpEndPoint implements SignUpInterface {
 
-    private final Request request;
+    private Request request;
 
-    public SignUp(Request request) {
+    public void setRequest(Request request) {
+        this.request = request;
+    }
+
+    public SignUpEndPoint(Request request) {
         this.request = request;
     }
 
@@ -35,7 +41,7 @@ public class SignUp implements SignUpInterface {
             }
 
         } catch (SQLException e) {
-            ServerLogger.getLogger(SignIn.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError();
         }
@@ -54,11 +60,11 @@ public class SignUp implements SignUpInterface {
             // finally the player is saved into the database
             DatabasePlayer.insertPlayer(username, password);
         } catch (IOException | GeneralSecurityException e) {
-            ServerLogger.getLogger(SignIn.class).log(Level.SEVERE, "Error while decrypting the password", e);
+            ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while decrypting the password", e);
 
             return ResponseFactory.createInternalServerError();
         } catch (SQLException e) {
-            ServerLogger.getLogger(SignIn.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError();
         }

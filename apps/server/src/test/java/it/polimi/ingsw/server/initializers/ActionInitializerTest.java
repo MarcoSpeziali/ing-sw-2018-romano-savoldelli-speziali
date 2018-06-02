@@ -29,7 +29,7 @@ class ActionInitializerTest {
 
         CompiledAction compiledAction = ActionCompiler.compile(
                 XMLUtils.parseXmlString(actionText),
-                ActionDirectivesCompiler.compile("actions-directives-full.xml", true),
+                ActionDirectivesCompiler.compile("directives/actions-directives-full.xml", true),
                 List.of()
         );
 
