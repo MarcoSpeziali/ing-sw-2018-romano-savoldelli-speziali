@@ -1,7 +1,9 @@
 package it.polimi.ingsw.utils.io;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -112,5 +114,11 @@ public class FilesUtils {
 
     public static String getFileContent(String filePath) throws IOException {
         return Files.readAllLines(Paths.get(filePath)).stream().reduce("", (s, s2) -> s + s2);
+    }
+
+    public static String getFileContent(URL url) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            return reader.lines().reduce("", (s, s2) -> s + '\n' + s2);
+        }
     }
 }

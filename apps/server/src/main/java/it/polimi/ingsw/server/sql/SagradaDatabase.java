@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.db;
+package it.polimi.ingsw.server.sql;
 
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.XMLUtils;

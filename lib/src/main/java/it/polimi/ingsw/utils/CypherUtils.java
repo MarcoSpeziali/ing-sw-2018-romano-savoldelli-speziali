@@ -78,8 +78,8 @@ public class CypherUtils {
         String publicKeyPEM = key;
 
         // Remove the first and last lines
-        publicKeyPEM = publicKeyPEM.replace("ssh-rsa", "");
-        publicKeyPEM = publicKeyPEM.replaceAll("\\s.*?@.*", "");
+        publicKeyPEM = publicKeyPEM.replace("ssh-rsa ", "");
+        publicKeyPEM = publicKeyPEM.replaceAll("\\s[^\\s]*?@.*$", "");
 
         // Base64 decode data
         byte[] encoded = Base64.getDecoder().decode(publicKeyPEM);

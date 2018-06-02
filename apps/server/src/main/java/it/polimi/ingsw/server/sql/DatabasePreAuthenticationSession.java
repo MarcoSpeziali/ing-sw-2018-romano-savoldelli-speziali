@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.db;
+package it.polimi.ingsw.server.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
