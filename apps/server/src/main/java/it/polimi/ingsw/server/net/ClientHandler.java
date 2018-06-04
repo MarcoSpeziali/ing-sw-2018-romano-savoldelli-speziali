@@ -53,6 +53,9 @@ public class ClientHandler implements Runnable, AutoCloseable {
                 ServerLogger.getLogger(ClientHandler.class)
                         .log(Level.WARNING, "Error while closing connection with client: " + socketAddress, e);
             }
+            finally {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -63,8 +66,10 @@ public class ClientHandler implements Runnable, AutoCloseable {
         this.client.close();
     }
 
-    private static Request getRequest(BufferedReader bufferedReader) {
-        String content = bufferedReader.lines().reduce("", (s, s2) -> s + s2);
+    private static Request getRequest(BufferedReader bufferedReader) throws IOException {
+        // String content = bufferedReader.lines().reduce("", (s, s2) -> s + s2);
+
+        String content = bufferedReader.readLine();
 
         Request request = new Request();
         request.deserialize(new JSONObject(content));

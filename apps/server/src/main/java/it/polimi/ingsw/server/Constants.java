@@ -31,6 +31,11 @@ public class Constants {
                 "logs"
         ).toAbsolutePath().toString()),
 
+        SETTINGS_PATH(java.nio.file.Paths.get(
+                Paths.PROJECT_FOLDER.absolutePath,
+                "settings.xml"
+        ).toAbsolutePath().toString()),
+
         SSH_KEY_PATH(java.nio.file.Paths.get(
                 System.getProperty("user.home"),
                 ".ssh",
@@ -79,25 +84,39 @@ public class Constants {
          */
         public URL getURL() {
             ClassLoader classLoader = ServerApp.class.getClassLoader();
-            return classLoader.getResource(this.relativePath);
+            return it.polimi.ingsw.utils.io.Resources.getResource(classLoader, this.relativePath);
         }
 
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
     }
 
-    public enum ServerArgument {
+    public enum ServerArguments {
         FORCE_COMPILATION("force-compilation"),
         LOG_LEVEL("log-level");
 
         private final String optionName;
 
-        ServerArgument(String optionName) {
+        ServerArguments(String optionName) {
             this.optionName = optionName;
         }
 
         @Override
         public String toString() {
             return this.optionName;
+        }
+    }
+
+    public enum Threads {
+        SOCKET_LISTENER("socket-listener");
+
+        private final String name;
+
+        public String getName() {
+            return name;
+        }
+
+        Threads(String name) {
+            this.name = name;
         }
     }
 }

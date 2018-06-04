@@ -6,11 +6,13 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 
-public class SagradaMultiplayerServer implements AutoCloseable {
+public class SagradaMultiplayerServer implements Runnable, AutoCloseable {
 
     private final ServerSocket serverSocket;
     private final ExecutorService executorService;
@@ -21,10 +23,11 @@ public class SagradaMultiplayerServer implements AutoCloseable {
         this.executorService = Executors.newCachedThreadPool();
 
         ServerLogger.getLogger(SagradaMultiplayerServer.class)
-                .info("Listening on port" + port);
+                .info("Listening on port " + port);
     }
 
-    public void run() throws IOException {
+    @Override
+    public void run() {
         while (!closed) {
             try {
                 Socket client = this.serverSocket.accept();
@@ -32,16 +35,32 @@ public class SagradaMultiplayerServer implements AutoCloseable {
                 ServerLogger.getLogger(SagradaMultiplayerServer.class)
                         .info("New client with address: " + client.getRemoteSocketAddress());
 
-                this.executorService.submit(new ClientHandler(client));
+                this.executorService.submit(new ClientHandler(client)).get();
             }
             catch (IOException e) {
                 if (!closed) {
                     ServerLogger.getLogger(SagradaMultiplayerServer.class)
                             .log(Level.SEVERE, "I/O error waiting for players", e);
 
-                    this.close();
+                    this.closed = true;
                 }
             }
+            catch (InterruptedException | ExecutionException e) {
+                ServerLogger.getLogger(SagradaMultiplayerServer.class)
+                        .log(Level.SEVERE, "Error while executing client handler", e);
+
+                this.closed = true;
+            }
+        }
+
+        try {
+            this.close();
+        }
+        catch (IOException e1) {
+            ServerLogger.getLogger(SagradaMultiplayerServer.class)
+                    .log(Level.SEVERE, "I/O error while closing the server socket and the executor service", e1);
+
+            throw new RuntimeException(e1);
         }
     }
 

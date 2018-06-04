@@ -40,10 +40,15 @@ public class CompilationManager {
         return last;
     };
 
+    public static long lastCompilation() {
+        return lastCompilation.getAsLong();
+    }
+
     /**
      * Compiles the resources even if they are up-to-date
      * @param resourcesToCompile an {@link EnumSet} of {@link Constants.Resources} to compile
      * @return a {@code long} value representing the time the last compilation occurred
+     * @throws ClassNotFoundException if any card class could not be found
      * @throws IOException if any IO errors occur
      * @throws SAXException if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
@@ -169,6 +174,11 @@ public class CompilationManager {
     /**
      * Compiles the resources if needed.
      * @return a {@code long} value representing the time the last compilation occurred
+     * @throws ClassNotFoundException if any card class could not be found
+     * @throws IOException if any IO errors occur
+     * @throws SAXException if any parse errors occur
+     * @throws ParserConfigurationException if a DocumentBuilder
+     *         cannot be created which satisfies the configuration requested
      */
     public static long compileIfNeeded() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
         Set<Constants.Resources> resourcesToCompile = needsRecompilation();
@@ -332,6 +342,7 @@ public class CompilationManager {
      * Creates the folder for the new compilation.
      * @param compilationTime the time of the new compilation
      * @return the created file
+     * @throws IOException if any IO exception occurs
      */
     private static File createCompilationDirectory(long compilationTime) throws IOException {
         File compilationFolder = new File(Paths.get(
@@ -346,6 +357,11 @@ public class CompilationManager {
         return compilationFolder;
     }
 
+    /**
+     * @param resource the resource to be copied
+     * @param compilationFolder the destination folder
+     * @throws IOException if any IO error occurs
+     */
     private static void copyResource(Constants.Resources resource, File compilationFolder) throws IOException {
         Files.copy(
                 Paths.get(
@@ -393,6 +409,7 @@ public class CompilationManager {
      * @throws SAXException if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
      *      cannot be created which satisfies the configuration requested
+     * @throws ClassNotFoundException if the class of a tool card objective card could not be found
      */
     private static void compileToolCards(File compilationFolder) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
         try {

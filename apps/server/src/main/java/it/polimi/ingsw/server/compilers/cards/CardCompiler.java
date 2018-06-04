@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.compilers.cards;
 
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.constraints.ConstraintCompiler;
+import it.polimi.ingsw.server.compilers.constraints.ConstraintGroupCompiler;
 import it.polimi.ingsw.server.compilers.effects.CompiledEffect;
 import it.polimi.ingsw.server.compilers.effects.EffectCompiler;
 import it.polimi.ingsw.server.compilers.instructions.directives.InstructionDirective;
@@ -45,19 +46,28 @@ public class CardCompiler {
         Map<String, Object> cardInfo = XMLUtils.xmlToMap(node);
 
         Map<String, Object> constraintsNodeInfo = XMLUtils.getMap(cardInfo, CardNodes.CARD_CONSTRAINTS);
-        List<EvaluableConstraint> constraints;
+        List<EvaluableConstraint> constraints = new LinkedList<>();
 
         if (constraintsNodeInfo == null) {
             constraints = List.of();
         }
         else {
             // gets the compiled constraints
-            constraints = compileConstraints(
+            constraints.addAll(compileConstraints(
                     XMLUtils.getMapArrayAnyway(
                             constraintsNodeInfo,
                             CardNodes.CARD_CONSTRAINT
                     )
-            );
+            ));
+
+            Node constraintsNode = getConstraintsNode(node.getChildNodes());
+
+            if (constraintsNode != null) {
+                // gets the compiled constraint-groups
+                constraints.addAll(compileConstraintGroups(
+                        getConstraintGroupNodes(constraintsNode.getChildNodes())
+                ));
+            }
         }
 
         // returns the compiled tool card
@@ -263,6 +273,57 @@ public class CardCompiler {
     }
 
     /**
+     * Compiles the constraint groups.
+     * @param constraintsInfo the constraint groups to compile
+     * @return a {@link List} of {@link EvaluableConstraint}
+     */
+    private static List<EvaluableConstraint> compileConstraintGroups(List<Node> constraintsInfo) {
+        if (constraintsInfo == null) {
+            return List.of();
+        }
+
+        return constraintsInfo.stream()
+                .map(ConstraintCompiler::compile)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Gets the nodes, in a card, which represents a constraint-group.
+     * @param nodeList the list of children of a constrains node
+     * @return a {@link List} of {@link Node} that represents a constraint-group
+     */
+    private static List<Node> getConstraintGroupNodes(NodeList nodeList) {
+        List<Node> nodes = new LinkedList<>();
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node child = nodeList.item(i);
+
+            if (child.getNodeName().equals(CardNodes.CARD_CONSTRAINT_GROUP)) {
+                nodes.add(child);
+            }
+        }
+
+        return nodes;
+    }
+
+    /**
+     * Gets the node, in a card, which represents the constraints collection.
+     * @param nodeList the list of children of a card node
+     * @return a {@link Node} that represents the constraints collection
+     */
+    private static Node getConstraintsNode(NodeList nodeList) {
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node child = nodeList.item(i);
+
+            if (child.getNodeName().equals(CardNodes.CARD_CONSTRAINTS)) {
+                return child;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param node the node containing the effect
      * @param actionDirectives the action directives
      * @param constraints the constraints
@@ -329,6 +390,7 @@ public class CardCompiler {
         public static final String CARD_NAME = "@name";
         public static final String CARD_CONSTRAINTS = "constraints";
         public static final String CARD_CONSTRAINT = "constraint";
+        public static final String CARD_CONSTRAINT_GROUP = "constraint-group";
         public static final String CARD_EFFECT = "effect";
         public static final String CARD_OBJECTIVE = "objective";
     }
