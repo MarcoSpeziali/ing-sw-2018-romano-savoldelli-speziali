@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.sql;
 
+import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.xml.sax.SAXException;
@@ -14,25 +15,16 @@ public class SagradaDatabase implements AutoCloseable {
 
     private Connection connection;
 
-    private static Map<String, Object> settings;
-    static {
-        try {
-            settings = XMLUtils.xmlToMap(XMLUtils.parseXmlFromResource("database/settings.xml", SagradaDatabase.class.getClassLoader()));
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            ServerLogger.getLogger(SagradaDatabase.class).log(Level.SEVERE, "Could not read database settings", e);
-        }
-    }
-
     public SagradaDatabase() throws SQLException {
         connection = DriverManager.getConnection(
                 String.format(
                         "jdbc:%s://%s/%s",
-                        settings.get("database-jbdc"),
-                        settings.get("url"),
-                        settings.get("database")
+                        Settings.getSettings().getDatabaseDriver(),
+                        Settings.getSettings().getDatabaseUrl(),
+                        Settings.getSettings().getDatabaseName()
                 ),
-                (String) settings.get("username"),
-                (String) settings.get("password")
+                Settings.getSettings().getDatabaseUsername(),
+                Settings.getSettings().getDatabasePassword()
         );
         connection.setAutoCommit(false);
     }

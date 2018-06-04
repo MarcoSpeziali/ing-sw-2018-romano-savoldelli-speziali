@@ -7,26 +7,40 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: docs
+/**
+ * Holds the endpoint function and the endpoint-specific arguments.
+ */
 public class Body extends HashMap<String, Object> implements JSONSerializable {
 
     private static final long serialVersionUID = 3489527493830667316L;
 
+    /**
+     * Creates an empty {@link Body}.
+     */
     public Body() {}
 
+    /**
+     * Creates a {@link Body} with an endpoint and no arguments.
+     * @param endPointFunction the endpoint
+     */
     public Body(EndPointFunction endPointFunction) {
         this.setEndPointFunction(endPointFunction);
     }
 
-    public Body(Map<String, Object> map) {
-        this.putAll(map);
-    }
-
+    /**
+     * Creates a {@link Body} with an endpoint and arguments.
+     * @param endPointFunction the endpoint
+     * @param map a {@link Map} containing the arguments
+     */
     public Body(EndPointFunction endPointFunction, Map<String, Object> map) {
         this.setEndPointFunction(endPointFunction);
         this.putAll(map);
     }
 
+    /**
+     * Returns the endpoint function.
+     * @return the endpoint function
+     */
     public EndPointFunction getEndPointFunction() {
         String endpoint = (String) this.getOrDefault("endpoint", null);
 
@@ -37,8 +51,17 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
         return EndPointFunction.fromEndPointFunctionName(endpoint);
     }
 
+    /**
+     * Sets the endpoint function.
+     * @param endPointFunction the endpoint function
+     */
     public void setEndPointFunction(EndPointFunction endPointFunction) {
-        this.put("endpoint", endPointFunction.getEndPointFunctionName());
+        if (endPointFunction == null) {
+            this.remove("endpoint");
+        }
+        else {
+            this.put("endpoint", endPointFunction.getEndPointFunctionName());
+        }
     }
 
     @Override

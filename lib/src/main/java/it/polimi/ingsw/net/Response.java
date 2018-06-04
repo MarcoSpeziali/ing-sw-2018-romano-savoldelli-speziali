@@ -3,18 +3,33 @@ package it.polimi.ingsw.net;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
-// TODO: docs
+/**
+ * Represents a response to a socket request.
+ */
 public class Response implements JSONSerializable {
 
     private static final long serialVersionUID = -3163357263339164222L;
 
+    /**
+     * The body of the response.
+     */
     private Body body;
+
+    /**
+     * The error (if any) of the response.
+     */
     private ResponseError responseError;
 
+    /**
+     * @return the body of the response
+     */
     public Body getBody() {
         return body;
     }
 
+    /**
+     * @return the error (if any) of the response
+     */
     public ResponseError getResponseError() {
         return responseError;
     }

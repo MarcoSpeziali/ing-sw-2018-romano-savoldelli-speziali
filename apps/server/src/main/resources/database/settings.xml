@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<settings>
-    <url>localhost:5432</url>
-    <database>sagrada</database>
-    <username>sagrada</username>
-    <password><![CDATA[jjn6sjI2F34~cicv=aHB]vjqLVw3-CgSbEgFSq}@QMhuuL)DF)zzE$Y5X&FFHGYs]]></password>
-    <database-jbdc>postgresql</database-jbdc>
-</settings>

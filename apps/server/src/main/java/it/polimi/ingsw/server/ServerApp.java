@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.server.constraints.Constraint;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
 import it.polimi.ingsw.server.net.SagradaMultiplayerServer;
+import it.polimi.ingsw.server.sql.SagradaDatabase;
 import it.polimi.ingsw.server.utils.LoggingLevelValueConverter;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import joptsimple.OptionParser;
@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 public class ServerApp {
@@ -39,20 +40,24 @@ public class ServerApp {
             createProjectsFolders();
 
             // compiles the resources (if needed)
-            long compilationDirectory = compileResources(options.has(
+            compileResources(options.has(
                     Constants.ServerArguments.FORCE_COMPILATION.toString()
             ));
 
+            // checks if the database can be reached
+            checkDatabaseConnection();
+
             // starts the multiplayer server (sockets)
             startMultiplayerServer();
-
-            // ThreadManager.getThread(Constants.Threads.SOCKET_LISTENER).join();
         }
         catch (Exception e) {
             ServerLogger.getLogger(ServerApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
         }
         finally {
-            socketServer.close();
+            if (socketServer != null) {
+                socketServer.close();
+            }
+
             ServerLogger.close();
         }
     }
@@ -98,19 +103,19 @@ public class ServerApp {
     /**
      * Compiles the resources if needed.
      * @param forceCompilation whether the compilation needs to be forces even if the compilations are up-to-date
-     * @return a {@link Long} representing the last compilation timestamp (which is also the compilation id)
      * @throws ClassNotFoundException if the class of a card could not be found
      * @throws IOException if any IO errors occur
      * @throws SAXException if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
      *         cannot be created which satisfies the configuration requested
      */
-    private static long compileResources(boolean forceCompilation) throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
+    private static void compileResources(boolean forceCompilation) throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
+        // @return a {@link Long} representing the last compilation timestamp (which is also the compilation id)
         if (forceCompilation) {
-            return CompilationManager.compile(Constants.Resources.ALL);
+            CompilationManager.compile(Constants.Resources.ALL);
         }
         else {
-            return CompilationManager.compileIfNeeded();
+            CompilationManager.compileIfNeeded();
         }
     }
 
@@ -125,5 +130,13 @@ public class ServerApp {
         thread.setDaemon(false);
         thread.start();
         thread.run();
+    }
+
+    /**
+     * Checks if the connection to the database can be made, if not the method throws a {@link SQLException}.
+     * @throws SQLException if the connection to the database could not be made
+     */
+    private static void checkDatabaseConnection() throws SQLException {
+        new SagradaDatabase().close();
     }
 }

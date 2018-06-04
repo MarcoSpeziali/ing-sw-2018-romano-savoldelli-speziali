@@ -3,29 +3,48 @@ package it.polimi.ingsw.net;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
-// TODO: docs
+/**
+ * Represents the header of the request.
+ */
 public class RequestHeader implements JSONSerializable {
     private static final long serialVersionUID = -5858895441251305795L;
 
+    /**
+     * The user's machine info.
+     */
     private ClientMachineInfo clientMachine;
+
+    /**
+     * The user's token.
+     */
     private String clientToken;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
+    /**
+     * @return the user's machine info
+     */
     public ClientMachineInfo getClientMachine() {
         return clientMachine;
     }
 
+    /**
+     * Test the user's machine info.
+     * @param clientMachine the user's machine info
+     */
     public void setClientMachine(ClientMachineInfo clientMachine) {
         this.clientMachine = clientMachine;
     }
 
+    /**
+     * @return the user's token
+     */
     public String getClientToken() {
         return clientToken;
     }
 
+    /**
+     * Sets the user's token.
+     * @param clientToken the user's token
+     */
     public void setClientToken(String clientToken) {
         this.clientToken = clientToken;
     }

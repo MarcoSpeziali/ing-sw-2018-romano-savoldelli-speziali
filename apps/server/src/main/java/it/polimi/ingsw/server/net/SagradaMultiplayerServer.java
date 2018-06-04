@@ -35,7 +35,7 @@ public class SagradaMultiplayerServer implements Runnable, AutoCloseable {
                 ServerLogger.getLogger(SagradaMultiplayerServer.class)
                         .info("New client with address: " + client.getRemoteSocketAddress());
 
-                this.executorService.submit(new ClientHandler(client)).get();
+                this.executorService.submit(new ClientHandler(client)); // .get();
             }
             catch (IOException e) {
                 if (!closed) {
@@ -45,12 +45,12 @@ public class SagradaMultiplayerServer implements Runnable, AutoCloseable {
                     this.closed = true;
                 }
             }
-            catch (InterruptedException | ExecutionException e) {
+            /*catch (InterruptedException | ExecutionException e) {
                 ServerLogger.getLogger(SagradaMultiplayerServer.class)
                         .log(Level.SEVERE, "Error while executing client handler", e);
 
                 this.closed = true;
-            }
+            }*/
         }
 
         try {

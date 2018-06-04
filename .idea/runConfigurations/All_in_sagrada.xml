@@ -2,7 +2,7 @@
   <configuration default="false" name="All in sagrada" type="JUnit" factoryName="JUnit" singleton="true">
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" />
-    <option name="PACKAGE_NAME" />
+    <option name="PACKAGE_NAME" value="it.polimi.ingsw" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="pattern" />

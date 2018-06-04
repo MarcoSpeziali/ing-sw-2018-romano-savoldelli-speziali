@@ -19,9 +19,43 @@ public final class Settings {
     }
 
     private final int socketPort;
+    private final String databaseUrl;
+    private final String databaseName;
+    private final String databaseUsername;
+    private final String databasePassword;
+    private final String databaseDriver;
 
     public int getSocketPort() {
         return socketPort;
+    }
+
+    public String getDatabaseUrl() {
+        return databaseUrl;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public String getDatabaseUsername() {
+        return databaseUsername;
+    }
+
+    public String getDatabasePassword() {
+        return databasePassword;
+    }
+
+    public String getDatabaseDriver() {
+        return databaseDriver;
+    }
+
+    private Settings(Map<String, String> settings) {
+        this.socketPort = Integer.parseInt(settings.get("socket-port"));
+        this.databaseUrl = settings.get("database-url");
+        this.databaseName = settings.get("database-name");
+        this.databaseUsername = settings.get("database-username");
+        this.databasePassword = settings.get("database-password");
+        this.databaseDriver = settings.get("database-driver");
     }
 
     public static void build() throws IOException, SAXException, ParserConfigurationException {
@@ -40,10 +74,6 @@ public final class Settings {
         } catch (ParserConfigurationException | IOException | SAXException e) {
             customSettings = defaultSettings;
         }
-    }
-
-    private Settings(Map<String, String> settings) {
-        this.socketPort = Integer.parseInt(settings.get("socket-port"));
     }
 
     private static Map<String, String> parseSettingsNode(Node node) {

@@ -46,28 +46,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Returns the number of key-value mappings in this map.  If the
-     * map contains more than {@code Integer.MAX_VALUE} elements, returns
-     * {@code Integer.MAX_VALUE}.
-     *
-     * @return the number of key-value mappings in this map
-     */
-    @SuppressWarnings("unused")
-    public int size() {
-        return this.hashMap.size();
-    }
-
-    /**
-     * Returns {@code true} if this map contains no key-value mappings.
-     *
-     * @return {@code true} if this map contains no key-value mappings
-     */
-    @SuppressWarnings("unused")
-    public boolean isEmpty() {
-        return this.hashMap.isEmpty();
-    }
-
-    /**
      * Returns {@code true} if this map contains a mapping for the specified
      * key.  More formally, returns {@code true} if and only if
      * this map contains a mapping for a key {@code k} such that
@@ -86,28 +64,6 @@ public class Context implements Serializable {
      */
     public boolean containsKey(String key) {
         return this.hashMap.containsKey(key.toLowerCase());
-    }
-
-    /**
-     * Returns {@code true} if this map maps one or more keys to the
-     * specified value.  More formally, returns {@code true} if and only if
-     * this map contains at least one mapping to a value {@code v} such that
-     * {@code Objects.equals(value, v)}.  This operation
-     * will probably require time linear in the map size for most
-     * implementations of the {@code Map} interface.
-     *
-     * @param value value whose presence in this map is to be tested
-     * @return {@code true} if this map maps one or more keys to the
-     * specified value
-     * @throws ClassCastException   if the value is of an inappropriate type for
-     *                              this map
-     *                              (<a href="{@docRoot}/java/util/Collection.html#optional-restrictions">optional</a>)
-     * @throws NullPointerException if the specified value is null and this
-     *                              map does not permit null values
-     *                              (<a href="{@docRoot}/java/util/Collection.html#optional-restrictions">optional</a>)
-     */
-    public boolean containsValue(Object value) {
-        return this.hashMap.containsValue(value);
     }
 
     /**
@@ -183,7 +139,6 @@ public class Context implements Serializable {
      *
      * @return a set view of the keys contained in this map
      */
-    @SuppressWarnings("unused")
     public Set<String> keySet() {
         return this.hashMap.keySet();
     }
@@ -203,7 +158,6 @@ public class Context implements Serializable {
      *
      * @return a collection view of the values contained in this map
      */
-    @SuppressWarnings("unused")
     public Collection<Object> values() {
         return this.hashMap.values();
     }
@@ -224,7 +178,6 @@ public class Context implements Serializable {
      *
      * @return a set view of the mappings contained in this map
      */
-    @SuppressWarnings("unused")
     public Set<Map.Entry<String, Object>> entrySet() {
         return this.hashMap.entrySet();
     }
@@ -276,7 +229,6 @@ public class Context implements Serializable {
      * concurrency properties.
      * @since 1.8
      */
-    @SuppressWarnings("unused")
     public void forEach(BiConsumer<? super String, ? super Object> action) {
         this.hashMap.forEach(action);
     }

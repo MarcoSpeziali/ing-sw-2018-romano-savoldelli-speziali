@@ -3,28 +3,50 @@ package it.polimi.ingsw.net;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
-// TODO: docs
+/**
+ * Represents a socket request.
+ */
 public class Request implements JSONSerializable {
     private static final long serialVersionUID = 5889311626900785609L;
 
+    /**
+     * The request header.
+     */
     private RequestHeader requestHeader;
 
+    /**
+     * The request body.
+     */
     private Body requestBody;
 
-    public Body getRequestBody() {
-        return requestBody;
-    }
-
-    public void setRequestBody(Body requestBody) {
-        this.requestBody = requestBody;
-    }
-
+    /**
+     * @return the request header
+     */
     public RequestHeader getRequestHeader() {
         return requestHeader;
     }
 
+    /**
+     * Sets the request header.
+     * @param requestHeader the request header
+     */
     public void setRequestHeader(RequestHeader requestHeader) {
         this.requestHeader = requestHeader;
+    }
+
+    /**
+     * @return the request body
+     */
+    public Body getRequestBody() {
+        return requestBody;
+    }
+
+    /**
+     * Sets the request body.
+     * @param requestBody the request body
+     */
+    public void setRequestBody(Body requestBody) {
+        this.requestBody = requestBody;
     }
 
     public Request() { }

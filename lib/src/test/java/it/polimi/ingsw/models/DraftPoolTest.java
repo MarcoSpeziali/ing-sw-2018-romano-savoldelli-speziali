@@ -14,6 +14,7 @@ class DraftPoolTest {
     private DraftPool draftPool;
     private Die die;
     private Bag bag;
+
     @BeforeEach
     void setUp() {
         bag = new Bag(18);
