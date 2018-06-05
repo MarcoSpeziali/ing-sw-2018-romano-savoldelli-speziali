@@ -12,10 +12,22 @@ import java.util.logging.Level;
 
 public class ClientHandler implements Runnable, AutoCloseable {
 
+    /**
+     * The {@link Socket} of the connected client.
+     */
     private final Socket client;
-    private final BufferedReader in;
-    private final BufferedWriter out;
 
+
+    /**
+     * The {@link BufferedReader} of the client's connection.
+     */
+    private final BufferedReader in;
+
+
+    /**
+     * The {@link BufferedWriter} of the client's connection.
+     */
+    private final BufferedWriter out;
 
     public ClientHandler(Socket client) throws IOException {
         this.client = client;
@@ -31,44 +43,50 @@ public class ClientHandler implements Runnable, AutoCloseable {
 
         try {
             do {
-                Request request = getRequest(this.in);
+                // waits for a request
+                Request request = waitForRequest(this.in);
+
+                ServerLogger.getLogger(ClientHandler.class)
+                        .fine(() -> String.format(
+                                "Got request \"%s\", from client: %s",
+                                request.toString(),
+                                socketAddress.toString()
+                        ));
+
+                // selects the handler for the request
                 handler = SocketRouter.getHandlerForRequest(request);
 
+                // if the handler is null it means that the endpoint does not exists
                 if (handler == null) {
                     return;
                 }
 
+                // asks for a response
                 Response response = handler.handle(request, this.client);
+
+                ServerLogger.getLogger(ClientHandler.class)
+                        .fine(() -> String.format(
+                                "Sending response \"%s\", to client: %s", response.toString(), socketAddress.toString()
+                        ));
+
+                // and sends it
                 sendResponse(response, this.out);
+
+                // if the handler needs the connection to be kept alive it wont be closed
             } while (handler.shouldBeKeptAlive());
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             ServerLogger.getLogger(ClientHandler.class)
                     .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
-        }
-        finally {
-            try {
-                this.close();
-            }
-            catch (IOException e) {
-                ServerLogger.getLogger(ClientHandler.class)
-                        .log(Level.WARNING, "Error while closing connection with client: " + socketAddress, e);
-            }
-            finally {
-                Thread.currentThread().interrupt();
-            }
         }
     }
 
     @Override
     public void close() throws IOException {
-        this.in.close();
-        this.out.close();
         this.client.close();
     }
 
-    private static Request getRequest(BufferedReader bufferedReader) throws IOException {
-        // String content = bufferedReader.lines().reduce("", (s, s2) -> s + s2);
-
+    private static Request waitForRequest(BufferedReader bufferedReader) throws IOException {
         String content = bufferedReader.readLine();
 
         Request request = new Request();
@@ -82,6 +100,7 @@ public class ClientHandler implements Runnable, AutoCloseable {
         String jsonString = jsonObject.toString();
 
         bufferedWriter.write(jsonString);
+        bufferedWriter.newLine();
         bufferedWriter.flush();
     }
 }

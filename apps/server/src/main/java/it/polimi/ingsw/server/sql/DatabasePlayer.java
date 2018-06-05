@@ -51,7 +51,7 @@ public class DatabasePlayer {
 
     public static DatabasePlayer playerWithId(int id) throws SQLException {
         String query = String.format(
-                "SELECT * FROM player WHERE id = %d",
+                "SELECT * FROM player WHERE id = '%d'",
                 id
         );
 
@@ -62,7 +62,7 @@ public class DatabasePlayer {
 
     public static DatabasePlayer playerWithUsername(String username) throws SQLException {
         String query = String.format(
-                "SELECT * FROM player WHERE username = %s",
+                "SELECT * FROM player WHERE username = '%s'",
                 username
         );
 
@@ -73,7 +73,7 @@ public class DatabasePlayer {
 
     public static DatabasePlayer insertPlayer(String username, String password) throws SQLException {
         String query = String.format(
-                "INSERT INTO player (username, password) VALUES (%s, %s) RETURNING *",
+                "INSERT INTO player (username, password) VALUES ('%s', '%s') RETURNING *",
                 username,
                 password
         );
@@ -86,13 +86,13 @@ public class DatabasePlayer {
     public static DatabasePlayer updatePlayer(int id, Map<String, String> updateMap) throws SQLException {
         String update = updateMap.entrySet().stream()
                 .map(stringStringEntry -> String.format(
-                        "%s = %s",
+                        "%s = '%s'",
                         stringStringEntry.getKey(),
                         stringStringEntry.getValue())
                 ).reduce("", (s, s2) -> s + ", " + s2);
 
         String query = String.format(
-                "UPDATE player SET (%s) WHERE id = %d RETURNING *",
+                "UPDATE player SET (%s) WHERE id = '%d' RETURNING *",
                 update,
                 id
         );
@@ -105,12 +105,13 @@ public class DatabasePlayer {
     }
 
     private static DatabasePlayer executeQuery(SagradaDatabase database, String query) throws SQLException {
-        ResultSet resultSet = database.executeQuery(query);
+        try (ResultSet resultSet = database.executeQuery(query)) {
 
-        if (resultSet.next()) {
-            return new DatabasePlayer(resultSet);
+            if (resultSet.next()) {
+                return new DatabasePlayer(resultSet);
+            }
+
+            return null;
         }
-
-        return null;
     }
 }

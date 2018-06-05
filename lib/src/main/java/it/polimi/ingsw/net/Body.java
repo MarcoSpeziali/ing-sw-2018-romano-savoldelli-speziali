@@ -81,4 +81,9 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
 
         return jsonObject;
     }
+
+    @Override
+    public String toString() {
+        return this.serialize().toString();
+    }
 }

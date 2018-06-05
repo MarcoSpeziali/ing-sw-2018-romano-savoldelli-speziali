@@ -76,4 +76,9 @@ public class Response implements JSONSerializable {
 
         return jsonObject;
     }
+
+    @Override
+    public String toString() {
+        return this.serialize().toString();
+    }
 }

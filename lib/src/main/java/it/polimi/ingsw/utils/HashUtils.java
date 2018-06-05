@@ -3,7 +3,6 @@ package it.polimi.ingsw.utils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public final class HashUtils {
     private HashUtils() {}
@@ -12,7 +11,7 @@ public final class HashUtils {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
 
-            return Arrays.toString(digest.digest(
+            return new String(digest.digest(
                     original.getBytes(StandardCharsets.UTF_8))
             );
         } catch (NoSuchAlgorithmException e) {

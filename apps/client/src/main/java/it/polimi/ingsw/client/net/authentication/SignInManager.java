@@ -8,7 +8,6 @@ import it.polimi.ingsw.utils.HashUtils;
 import java.rmi.RemoteException;
 import java.util.concurrent.TimeoutException;
 
-// TODO: docs
 public class SignInManager {
 
     private static SignInManager instance = new SignInManager();

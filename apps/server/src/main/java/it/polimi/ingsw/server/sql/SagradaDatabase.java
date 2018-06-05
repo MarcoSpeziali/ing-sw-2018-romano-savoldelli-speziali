@@ -1,15 +1,8 @@
 package it.polimi.ingsw.server.sql;
 
 import it.polimi.ingsw.server.Settings;
-import it.polimi.ingsw.server.utils.ServerLogger;
-import it.polimi.ingsw.utils.io.XMLUtils;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.sql.*;
-import java.util.Map;
-import java.util.logging.Level;
 
 public class SagradaDatabase implements AutoCloseable {
 
@@ -26,13 +19,15 @@ public class SagradaDatabase implements AutoCloseable {
                 Settings.getSettings().getDatabaseUsername(),
                 Settings.getSettings().getDatabasePassword()
         );
-        connection.setAutoCommit(false);
+        connection.setAutoCommit(true);
     }
 
     public ResultSet executeQuery(String query) throws SQLException {
-        try (Statement statement = this.connection.createStatement()) {
+        /*try (Statement statement = this.connection.createStatement()) {
             return statement.executeQuery(query);
-        }
+        }*/
+
+        return this.connection.createStatement().executeQuery(query);
     }
 
     @Override

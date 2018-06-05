@@ -3,59 +3,66 @@ package it.polimi.ingsw.server.net.endpoints;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignInInterface;
+import it.polimi.ingsw.net.utils.RequestFields;
+import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.sql.DatabasePreAuthenticationSession;
-import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.HashUtils;
 import it.polimi.ingsw.utils.text.RandomString;
 
+import java.net.Socket;
+import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
+import java.rmi.server.UnicastRemoteObject;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class SignInEndPoint implements SignInInterface {
+public class SignInEndPoint extends UnicastRemoteObject implements SignInInterface {
+
+    private static final long serialVersionUID = 360546960239532589L;
 
     /**
-     * The client request.
+     * The client socket.
      */
-    private Request request;
+    private transient Socket client;
 
-    /**
-     * The client ip.
-     */
-    private String ip;
-
-    /**
-     * The client port.
-     */
-    private int port;
-
-    public void setRequest(Request request) {
-        this.request = request;
+    public SignInEndPoint() throws RemoteException {
+        // das
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setSocket(Socket client) {
+        this.client = client;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    private String getIp() throws ServerNotActiveException {
+        if (this.client == null) {
+            return getClientHost();
+        }
+        else {
+            return this.client.getRemoteSocketAddress().toString().split(":")[0].replace("/", "");
+        }
     }
 
-    public SignInEndPoint(Request request, String ip, int port) {
-        this.request = request;
-        this.ip = ip;
-        this.port = port;
+    private int getPort() throws ServerNotActiveException {
+        if (this.client == null) { // rmi
+            return -1;
+        }
+        else { // socket
+            return this.client.getPort();
+        }
     }
 
     @Override
-    public Response requestLogin(String username) {
+    public Response requestLogin(Request request) {
         // creates a random string which represents the challenge for the client to fulfill
         String randomString = RandomString.create();
 
         try {
+            String username = (String) request.getRequestBody().get(RequestFields.Authentication.USERNAME.getFieldName());
+
             // retrieves the player from the database with the provided username
             DatabasePlayer player = DatabasePlayer.playerWithUsername(username);
 
@@ -83,13 +90,13 @@ public class SignInEndPoint implements SignInInterface {
             DatabasePreAuthenticationSession preAuthenticationSession = DatabasePreAuthenticationSession.insertAuthenticationSession(
                     playerId,
                     expectedResult,
-                    this.ip,
-                    this.port
+                    this.getIp(),
+                    this.getPort()
             );
 
             // sends back the response
             return ResponseFactory.createAuthenticationChallengeResponse(
-                    this.request,
+                    request,
                     randomString,
                     preAuthenticationSession.getId()
             );
@@ -103,12 +110,19 @@ public class SignInEndPoint implements SignInInterface {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
             return ResponseFactory.createInternalServerError();
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+
+            return null;
         }
     }
 
     @Override
-    public Response fulfillChallenge(int sessionId, String challengeResponse) {
+    public Response fulfillChallenge(Request request) {
         try {
+            String challengeResponse = (String) request.getRequestBody().get(RequestFields.Authentication.CHALLENGE_RESPONSE.getFieldName());
+            int sessionId = (int) request.getRequestBody().get(RequestFields.Authentication.SESSION_ID.getFieldName());
+
             // retrieves the authentication session from the provided id
             DatabasePreAuthenticationSession preAuthenticationSession = DatabasePreAuthenticationSession.authenticationSessionWithId(sessionId);
 
@@ -163,7 +177,7 @@ public class SignInEndPoint implements SignInInterface {
                 }
 
                 // the response is finally sent
-                return ResponseFactory.createAuthenticationTokenResponse(this.request, hashedToken);
+                return ResponseFactory.createAuthenticationTokenResponse(request, hashedToken);
             }
             else {
                 return ResponseFactory.createUnauthorisedError();

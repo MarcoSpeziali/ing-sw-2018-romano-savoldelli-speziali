@@ -58,19 +58,28 @@ public class RequestHeader implements JSONSerializable {
 
     @Override
     public void deserialize(JSONObject jsonObject) {
-        ClientMachineInfo clientMachineInfo = new ClientMachineInfo();
-        clientMachineInfo.deserialize(jsonObject.getJSONObject("client-machine"));
+        if (jsonObject.has("client-machine")) {
+            ClientMachineInfo clientMachineInfo = new ClientMachineInfo();
+            clientMachineInfo.deserialize(jsonObject.getJSONObject("client-machine"));
+        }
 
-        this.clientToken = jsonObject.getString("client-token");
+        if (jsonObject.has("client-token")) {
+            this.clientToken = jsonObject.getString("client-token");
+        }
     }
 
     @Override
     public JSONObject serialize() {
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("client-machine", this.clientMachine.serialize());
+        jsonObject.put("client-machine", this.clientMachine == null ? new JSONObject() : this.clientMachine.serialize());
         jsonObject.put("client-token", this.clientToken);
 
         return jsonObject;
+    }
+
+    @Override
+    public String toString() {
+        return this.serialize().toString();
     }
 }

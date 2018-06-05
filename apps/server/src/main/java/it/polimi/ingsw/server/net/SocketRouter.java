@@ -1,10 +1,7 @@
 package it.polimi.ingsw.server.net;
 
 import it.polimi.ingsw.net.Request;
-import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.net.handlers.SignInHandlers;
-
-import java.net.Socket;
 
 public final class SocketRouter {
     private SocketRouter() {}

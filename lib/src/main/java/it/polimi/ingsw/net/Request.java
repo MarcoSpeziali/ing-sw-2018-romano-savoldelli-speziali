@@ -58,20 +58,29 @@ public class Request implements JSONSerializable {
 
     @Override
     public void deserialize(JSONObject jsonObject) {
-        this.requestHeader = new RequestHeader();
-        this.requestHeader.deserialize(jsonObject.getJSONObject("header"));
+        if (jsonObject.has("header")) {
+            this.requestHeader = new RequestHeader();
+            this.requestHeader.deserialize(jsonObject.getJSONObject("header"));
+        }
 
-        this.requestBody = new Body();
-        this.requestBody.deserialize(jsonObject.getJSONObject("body"));
+        if (jsonObject.has("body")) {
+            this.requestBody = new Body();
+            this.requestBody.deserialize(jsonObject.getJSONObject("body"));
+        }
     }
 
     @Override
     public JSONObject serialize() {
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("header", this.requestHeader.serialize());
-        jsonObject.put("body", this.requestBody.serialize());
+        jsonObject.put("header", this.requestHeader == null ? new JSONObject() : this.requestHeader.serialize());
+        jsonObject.put("body", this.requestBody == null ? new JSONObject() : this.requestBody.serialize());
 
         return jsonObject;
+    }
+
+    @Override
+    public String toString() {
+        return this.serialize().toString();
     }
 }

@@ -59,15 +59,15 @@ public class DatabasePreAuthenticationSession {
         this.id = resultSet.getInt("id");
         this.playerId = resultSet.getInt("player");
         this.expectedChallengeResponse = resultSet.getString("expected_challenge_response");
-        this.creationTimeStamp = resultSet.getLong("creation_time");
-        this.invalidationTimeStamp = resultSet.getLong("invalidation_time");
+        this.creationTimeStamp = resultSet.getDate("creation_time").getTime();
+        this.invalidationTimeStamp = resultSet.getDate("invalidation_time").getTime();
         this.validForIp = resultSet.getString("valid_for_ip");
         this.validForPort = resultSet.getInt("valid_for_port");
     }
 
     public static DatabasePreAuthenticationSession authenticationSessionWithId(int id) throws SQLException {
         String query = String.format(
-                "SELECT * FROM pre_authentication_session WHERE id = %d",
+                "SELECT * FROM pre_authentication_session WHERE id = '%d'",
                 id
         );
 
@@ -78,7 +78,7 @@ public class DatabasePreAuthenticationSession {
 
     public static DatabasePreAuthenticationSession insertAuthenticationSession(int playerId, String expectedChallengeResponse, String validForIp, int validForPort) throws SQLException {
         String query = String.format(
-                "INSERT INTO pre_authentication_session (player, expected_challenge_response, valid_for_ip, valid_for_port) VALUES (%d, %s, %s, %d) RETURNING *",
+                "INSERT INTO pre_authentication_session (player, expected_challenge_response, valid_for_ip, valid_for_port) VALUES ('%d', '%s', '%s', '%d') RETURNING *",
                 playerId,
                 expectedChallengeResponse,
                 validForIp,
@@ -93,13 +93,13 @@ public class DatabasePreAuthenticationSession {
     public static DatabasePreAuthenticationSession updateAuthenticationSession(int id, Map<String, String> updateMap) throws SQLException {
         String update = updateMap.entrySet().stream()
                 .map(stringStringEntry -> String.format(
-                        "%s = %s",
+                        "%s = '%s'",
                         stringStringEntry.getKey(),
                         stringStringEntry.getValue())
                 ).reduce("", (s, s2) -> s + ", " + s2);
 
         String query = String.format(
-                "UPDATE pre_authentication_session SET (%s) WHERE id = %d RETURNING *",
+                "UPDATE pre_authentication_session SET (%s) WHERE id = '%d' RETURNING *",
                 update,
                 id
         );
@@ -110,12 +110,13 @@ public class DatabasePreAuthenticationSession {
     }
 
     private static DatabasePreAuthenticationSession executeQuery(SagradaDatabase database, String query) throws SQLException {
-        ResultSet resultSet = database.executeQuery(query);
+        try (ResultSet resultSet = database.executeQuery(query)) {
 
-        if (resultSet.next()) {
-            return new DatabasePreAuthenticationSession(resultSet);
+            if (resultSet.next()) {
+                return new DatabasePreAuthenticationSession(resultSet);
+            }
+
+            return null;
         }
-
-        return null;
     }
 }

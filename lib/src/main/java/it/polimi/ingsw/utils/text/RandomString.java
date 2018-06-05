@@ -11,15 +11,15 @@ public final class RandomString {
     private static final String ALL_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456";
 
     public static String create() {
-        int bound1 = random.nextInt();
-        int bound2 = random.nextInt();
+        int bound1 = random.nextInt(128);
+        int bound2 = random.nextInt(128);
 
         return create(Math.min(bound1, bound2), Math.max(bound1, bound2), ALL_CHARACTERS);
     }
 
     public static String create(String allowedCharacter) {
-        int bound1 = random.nextInt();
-        int bound2 = random.nextInt();
+        int bound1 = random.nextInt(128);
+        int bound2 = random.nextInt(128);
 
         return create(Math.min(bound1, bound2), Math.max(bound1, bound2), allowedCharacter);
     }

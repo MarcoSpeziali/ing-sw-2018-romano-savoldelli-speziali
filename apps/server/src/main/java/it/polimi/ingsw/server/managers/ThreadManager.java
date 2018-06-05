@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: docs
 public final class ThreadManager {
 
     private ThreadManager() {}

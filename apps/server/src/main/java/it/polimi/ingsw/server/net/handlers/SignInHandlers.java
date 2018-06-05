@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.net.handlers;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.server.net.CommandHandler;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 
@@ -15,17 +14,10 @@ public class SignInHandlers {
 
         @Override
         public Response handle(Request request, Socket client) throws Exception {
-            String clientAddress = client.getRemoteSocketAddress().toString();
+            SignInEndPoint signInEndPoint = new SignInEndPoint();
+            signInEndPoint.setSocket(client);
 
-            String[] tokens = clientAddress.split(":");
-
-            return new SignInEndPoint(
-                    request,
-                    tokens[0],
-                    Integer.parseInt(tokens[1])
-            ).requestLogin(
-                    (String) request.getRequestBody().get(RequestFields.Authentication.USERNAME.getFieldName())
-            );
+            return signInEndPoint.requestLogin(request);
         }
 
         @Override
@@ -38,18 +30,10 @@ public class SignInHandlers {
 
         @Override
         public Response handle(Request request, Socket client) throws Exception {
-            String clientAddress = client.getRemoteSocketAddress().toString();
+            SignInEndPoint signInEndPoint = new SignInEndPoint();
+            signInEndPoint.setSocket(client);
 
-            String[] tokens = clientAddress.split(":");
-
-            return new SignInEndPoint(
-                    request,
-                    tokens[0],
-                    Integer.parseInt(tokens[1])
-            ).fulfillChallenge(
-                    (int) request.getRequestBody().get(RequestFields.Authentication.SESSION_ID.getFieldName()),
-                    (String) request.getRequestBody().get(RequestFields.Authentication.CHALLENGE_RESPONSE.getFieldName())
-            );
+            return signInEndPoint.fulfillChallenge(request);
         }
 
         @Override

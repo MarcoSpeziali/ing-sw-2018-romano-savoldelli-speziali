@@ -34,7 +34,7 @@ public class DatabaseSession {
 
     public DatabasePreAuthenticationSession getPreAuthenticationSession() throws SQLException {
         String query = String.format(
-                "SELECT pas.* FROM session s WHERE s.id = %d JOIN pre_authentication_session pas ON s.pre_auth_session = pas.id",
+                "SELECT pas.* FROM session s WHERE s.id = '%d' JOIN pre_authentication_session pas ON s.pre_auth_session = pas.id",
                 this.id
         );
 
@@ -55,7 +55,7 @@ public class DatabaseSession {
 
     public static DatabaseSession sessionWithId(int id) throws SQLException {
         String query = String.format(
-                "SELECT * FROM session WHERE id = %d",
+                "SELECT * FROM session WHERE id = '%d'",
                 id
         );
 
@@ -66,7 +66,7 @@ public class DatabaseSession {
 
     public static DatabaseSession insertSession(String token, int preAuthenticationSessionId) throws SQLException {
         String query = String.format(
-                "INSERT INTO session (token, pre_auth_session) VALUES (%s, %d) RETURNING *",
+                "INSERT INTO session (token, pre_auth_session) VALUES ('%s', '%d') RETURNING *",
                 token,
                 preAuthenticationSessionId
         );
@@ -79,13 +79,13 @@ public class DatabaseSession {
     public static DatabaseSession updateSession(int id, Map<String, String> updateMap) throws SQLException {
         String update = updateMap.entrySet().stream()
                 .map(stringStringEntry -> String.format(
-                        "%s = %s",
+                        "%s = '%s'",
                         stringStringEntry.getKey(),
                         stringStringEntry.getValue())
                 ).reduce("", (s, s2) -> s + ", " + s2);
 
         String query = String.format(
-                "UPDATE session SET (%s) WHERE id = %d RETURNING *",
+                "UPDATE session SET (%s) WHERE id = '%d' RETURNING *",
                 update,
                 id
         );
