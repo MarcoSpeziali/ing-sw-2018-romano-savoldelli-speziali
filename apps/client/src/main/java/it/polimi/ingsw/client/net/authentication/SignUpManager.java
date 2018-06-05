@@ -1,15 +1,23 @@
 package it.polimi.ingsw.client.net.authentication;
 
-import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.client.Settings;
+import it.polimi.ingsw.client.net.providers.OneTimeNetworkResponseProvider;
+import it.polimi.ingsw.client.net.providers.OneTimeRMIResponseProvider;
+import it.polimi.ingsw.client.net.providers.OneTimeSocketResponseProvider;
+import it.polimi.ingsw.net.*;
 import it.polimi.ingsw.net.interfaces.SignUpInterface;
+import it.polimi.ingsw.net.utils.EndPointFunction;
+import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.CypherUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
 import it.polimi.ingsw.utils.io.Resources;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.GeneralSecurityException;
+import java.util.Map;
 
 public class SignUpManager {
     private static SignUpManager instance = new SignUpManager();
@@ -18,10 +26,15 @@ public class SignUpManager {
         return instance;
     }
 
-    private SignUpInterface signUpInterface;
+    private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
 
     private SignUpManager() {
-        // TODO: set up signUpInterface
+        if (Settings.getSettings().isUsingSockets()) {
+            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider();
+        }
+        else {
+            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(SignUpInterface.class);
+        }
     }
 
     /**
@@ -32,7 +45,7 @@ public class SignUpManager {
      * @throws RemoteException if the operation could not be completed due to a connection or a server problem
      * @throws GeneralSecurityException if the password could not be encrypted with the server's public key
      */
-    public boolean signUp(String username, String password) throws IOException, GeneralSecurityException {
+    public boolean signUp(String username, String password) throws IOException, GeneralSecurityException, NotBoundException, ReflectiveOperationException {
         // encrypts the password with the server's public key
         String encryptedString = CypherUtils.encryptString(
                 password,
@@ -41,8 +54,20 @@ public class SignUpManager {
                 false
         );
 
+        // builds the sign-up request
+        Request signUpRequest = new Request(
+                new RequestHeader(ClientMachineInfo.generate(), null),
+                new Body(
+                        EndPointFunction.SIGN_UP,
+                        Map.of(
+                                RequestFields.Authentication.USERNAME.getFieldName(), username,
+                                RequestFields.Authentication.PASSWORD.getFieldName(), encryptedString
+                        )
+                )
+        );
+
         // requests the sign-up
-        Response response = this.signUpInterface.requestSignUp(username, encryptedString);
+        Response response = this.oneTimeNetworkResponseProvider.getSyncResponseFor(signUpRequest);
 
         // the possible errors are:
         //  - 409 Already Exists

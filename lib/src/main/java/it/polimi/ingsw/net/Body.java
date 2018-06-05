@@ -60,7 +60,7 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
             this.remove("endpoint");
         }
         else {
-            this.put("endpoint", endPointFunction.getEndPointFunctionName());
+            this.put("endpoint", endPointFunction.toString());
         }
     }
 

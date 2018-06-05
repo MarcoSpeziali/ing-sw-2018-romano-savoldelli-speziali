@@ -153,9 +153,9 @@ public class ServerApp {
 
     private static void rmiRegistryPublishment() throws RemoteException, AlreadyBoundException {
         Registry registry = LocateRegistry.getRegistry();
-        registry.bind(EndPointFunction.SIGN_IN.getEndPointFunctionName(), SignInEndPoint.getInstance());
-        registry.bind(EndPointFunction.SIGN_UP.getEndPointFunctionName(), SignUpEndPoint.getInstance());
-        registry.bind(EndPointFunction.LOOK_UP.getEndPointFunctionName(), LobbyLookupEndPoint.getInstance());
+        registry.bind(EndPointFunction.SIGN_IN.toString(), SignInEndPoint.getInstance());
+        registry.bind(EndPointFunction.SIGN_UP.toString(), SignUpEndPoint.getInstance());
+        registry.bind(EndPointFunction.LOOK_UP.toString(), LobbyLookupEndPoint.getInstance());
 
     }
 }

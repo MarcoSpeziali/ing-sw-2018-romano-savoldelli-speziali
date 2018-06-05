@@ -20,6 +20,8 @@ public final class Settings extends SettingsBase {
     private final String serverRMIAddress;
     private final int serverRMIPort;
 
+    private final boolean usingSockets;
+
     public String getServerSocketAddress() {
         return serverSocketAddress;
     }
@@ -36,12 +38,17 @@ public final class Settings extends SettingsBase {
         return serverRMIPort;
     }
 
+    public boolean isUsingSockets() {
+        return usingSockets;
+    }
+
     @SuppressWarnings("squid:UnusedPrivateMethod")
     private Settings(Map<String, String> settings) {
         this.serverSocketPort = Integer.parseInt(settings.get("server-socket-port"));
         this.serverSocketAddress = settings.get("server-socket-address");
         this.serverRMIPort = Integer.parseInt(settings.get("server-rmi-port"));
         this.serverRMIAddress = settings.get("server-rmi-address");
+        this.usingSockets = settings.get("connection-protocol").equals("sockets");
     }
 
     public static void build() throws IOException, SAXException, ParserConfigurationException {

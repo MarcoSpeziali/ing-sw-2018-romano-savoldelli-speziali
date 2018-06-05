@@ -2,9 +2,14 @@ package it.polimi.ingsw.net.interfaces;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.utils.EndPointFunction;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface SignUpInterface {
+// TODO: docs
+public interface SignUpInterface extends Remote {
+
+    @RespondsTo(EndPointFunction.SIGN_UP)
     Response requestSignUp(Request request) throws RemoteException;
 }

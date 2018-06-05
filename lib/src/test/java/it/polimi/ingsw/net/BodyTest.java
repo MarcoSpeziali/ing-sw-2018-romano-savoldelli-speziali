@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BodyTest {
 
     private Body body;
@@ -64,7 +62,7 @@ class BodyTest {
 
         Assertions.assertNotNull(jsonObject);
 
-        Assertions.assertEquals(EndPointFunction.SIGN_UP.getEndPointFunctionName(), jsonObject.getString("endpoint"));
+        Assertions.assertEquals(EndPointFunction.SIGN_UP.toString(), jsonObject.getString("endpoint"));
         Assertions.assertEquals("username-test", jsonObject.getString("username"));
         Assertions.assertEquals("password-test", jsonObject.getString("password"));
     }

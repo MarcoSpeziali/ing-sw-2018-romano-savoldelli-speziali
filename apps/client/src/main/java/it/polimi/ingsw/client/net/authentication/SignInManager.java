@@ -1,13 +1,20 @@
 package it.polimi.ingsw.client.net.authentication;
 
 import it.polimi.ingsw.client.Settings;
-import it.polimi.ingsw.client.net.endpoints.RMISignIn;
-import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.client.net.providers.OneTimeNetworkResponseProvider;
+import it.polimi.ingsw.client.net.providers.OneTimeRMIResponseProvider;
+import it.polimi.ingsw.client.net.providers.OneTimeSocketResponseProvider;
+import it.polimi.ingsw.net.*;
 import it.polimi.ingsw.net.interfaces.SignInInterface;
+import it.polimi.ingsw.net.utils.EndPointFunction;
+import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.HashUtils;
 
+import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 public class SignInManager {
@@ -19,14 +26,14 @@ public class SignInManager {
     }
 
     private String token;
-    private SignInInterface signInInterface;
+    private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
 
     private SignInManager() {
-        if (Settings.get().isUseSockets()) {
-            signInInterface = new SocketSingInInterface;
+        if (Settings.getSettings().isUsingSockets()) {
+            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider();
         }
         else {
-            signInInterface = new RMISignIn();
+            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(SignInInterface.class);
         }
     }
 
@@ -45,25 +52,44 @@ public class SignInManager {
      * @throws RemoteException if a server error or a connection error occurred
      * @throws TimeoutException if the challenge haven't been completed in time
      */
-    public boolean signIn(String username, String password) throws RemoteException, TimeoutException {
+    public boolean signIn(String username, String password) throws IOException, TimeoutException, NotBoundException, ReflectiveOperationException {
+        // builds the sign-in request
+        Request authenticationRequest = new Request(
+                new RequestHeader(ClientMachineInfo.generate(), null),
+                new Body(
+                        EndPointFunction.REQUEST_AUTHENTICATION,
+                        Map.of(RequestFields.Authentication.USERNAME.getFieldName(), username)
+                )
+        );
+
         // first a login request is made
-        Response requestResponse = this.signInInterface.requestLogin(username);
+        Response requestResponse = this.oneTimeNetworkResponseProvider.getSyncResponseFor(authenticationRequest);
 
         // the only possible error that can occur is a 500 Internal Server Error
         if (requestResponse.getResponseError() != null) {
             throw new RemoteException();
         }
 
-        // then the received challenge is fulfilled
-        Response fulfillResponse = this.signInInterface.fulfillChallenge(
-                // gets the session id
-                (int) requestResponse.getBody().get(ResponseFields.Authentication.SESSION_ID.getFieldName()),
-                fulfillChallenge(
-                        // gets the challenge
-                        (String) requestResponse.getBody().get(ResponseFields.Authentication.CHALLENGE.getFieldName()),
-                        password
+        int sessionId = (int) requestResponse.getBody().get(ResponseFields.Authentication.SESSION_ID.getFieldName());
+        String challenge = (String) requestResponse.getBody().get(ResponseFields.Authentication.CHALLENGE.getFieldName());
+
+        // builds the challenge-fulfill request
+        Request fulfillRequest = new Request(
+                new RequestHeader(ClientMachineInfo.generate(), null),
+                new Body(
+                        EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE,
+                        Map.of(
+                                RequestFields.Authentication.SESSION_ID.getFieldName(), sessionId,
+                                RequestFields.Authentication.CHALLENGE_RESPONSE.getFieldName(), fulfillChallenge(
+                                        challenge,
+                                        password
+                                )
+                        )
                 )
         );
+
+        // then the received challenge is fulfilled
+        Response fulfillResponse = this.oneTimeNetworkResponseProvider.getSyncResponseFor(fulfillRequest);
 
         // the only exceptions that can occur are:
         //  - 500 Internal Server Error
