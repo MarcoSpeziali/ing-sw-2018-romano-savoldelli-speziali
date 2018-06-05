@@ -10,46 +10,34 @@ import java.util.Map;
 // TODO: docs
 public final class Settings extends SettingsBase {
 
-    private final int socketPort;
+    private final String serverSocketAddress;
+    private final int serverSocketPort;
 
-    private final String databaseUrl;
-    private final String databaseName;
-    private final String databaseUsername;
-    private final String databasePassword;
-    private final String databaseDriver;
+    private final String serverRMIAddress;
+    private final int serverRMIPort;
 
-    public int getSocketPort() {
-        return socketPort;
+    public String getServerSocketAddress() {
+        return serverSocketAddress;
     }
 
-    public String getDatabaseUrl() {
-        return databaseUrl;
+    public int getServerSocketPort() {
+        return serverSocketPort;
     }
 
-    public String getDatabaseName() {
-        return databaseName;
+    public String getServerRMIAddress() {
+        return serverRMIAddress;
     }
 
-    public String getDatabaseUsername() {
-        return databaseUsername;
-    }
-
-    public String getDatabasePassword() {
-        return databasePassword;
-    }
-
-    public String getDatabaseDriver() {
-        return databaseDriver;
+    public int getServerRMIPort() {
+        return serverRMIPort;
     }
 
     @SuppressWarnings("squid:UnusedPrivateMethod")
     private Settings(Map<String, String> settings) {
-        this.socketPort = Integer.parseInt(settings.get("socket-port"));
-        this.databaseUrl = settings.get("database-url");
-        this.databaseName = settings.get("database-name");
-        this.databaseUsername = settings.get("database-username");
-        this.databasePassword = settings.get("database-password");
-        this.databaseDriver = settings.get("database-driver");
+        this.serverSocketPort = Integer.parseInt(settings.get("server-socket-port"));
+        this.serverSocketAddress = settings.get("server-socket-address");
+        this.serverRMIPort = Integer.parseInt(settings.get("server-rmi-port"));
+        this.serverRMIAddress = settings.get("server-rmi-address");
     }
 
     @Override
