@@ -29,8 +29,21 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
      */
     private transient Socket client;
 
-    public SignInEndPoint() throws RemoteException {
-        // das
+    protected static SignInEndPoint instance;
+
+    static {
+        try {
+            instance = new SignInEndPoint();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected SignInEndPoint() throws RemoteException {
+    }
+
+    public static SignInEndPoint getInstance() {
+        return instance;
     }
 
     public void setSocket(Socket client) {

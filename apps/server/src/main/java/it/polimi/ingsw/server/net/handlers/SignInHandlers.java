@@ -14,7 +14,7 @@ public class SignInHandlers {
 
         @Override
         public Response handle(Request request, Socket client) throws Exception {
-            SignInEndPoint signInEndPoint = new SignInEndPoint();
+            SignInEndPoint signInEndPoint = SignInEndPoint.getInstance();
             signInEndPoint.setSocket(client);
 
             return signInEndPoint.requestLogin(request);
@@ -30,7 +30,7 @@ public class SignInHandlers {
 
         @Override
         public Response handle(Request request, Socket client) throws Exception {
-            SignInEndPoint signInEndPoint = new SignInEndPoint();
+            SignInEndPoint signInEndPoint = SignInEndPoint.getInstance();
             signInEndPoint.setSocket(client);
 
             return signInEndPoint.fulfillChallenge(request);

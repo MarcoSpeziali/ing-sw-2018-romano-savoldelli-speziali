@@ -23,8 +23,21 @@ public class SignUpEndPoint extends UnicastRemoteObject implements SignUpInterfa
 
     private static final long serialVersionUID = -1919251653537403377L;
 
+    private static SignUpEndPoint instance;
+
+    static {
+        try {
+            instance = new SignUpEndPoint();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     public SignUpEndPoint() throws RemoteException {
-        //
+    }
+
+    public static SignUpEndPoint getInstance() {
+        return instance;
     }
 
     @Override

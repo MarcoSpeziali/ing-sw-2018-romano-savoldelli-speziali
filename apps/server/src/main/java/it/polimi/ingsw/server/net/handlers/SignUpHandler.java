@@ -10,7 +10,7 @@ import java.net.Socket;
 public class SignUpHandler implements CommandHandler {
     @Override
     public Response handle(Request request, Socket client) throws Exception {
-        return new SignUpEndPoint().requestSignUp(request);
+        return SignUpEndPoint.getInstance().requestSignUp(request);
     }
 
     @Override

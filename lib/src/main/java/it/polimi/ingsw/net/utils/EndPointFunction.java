@@ -3,7 +3,10 @@ package it.polimi.ingsw.net.utils;
 public enum EndPointFunction {
     REQUEST_AUTHENTICATION("sign-in/request_authentication"),
     FULFILL_AUTHENTICATION_CHALLENGE("sign-in/fulfill_challenge"),
-    SIGN_UP("sign-up");
+    SIGN_UP("sign-up"),
+    SIGN_IN("sign-in"),
+    LOOK_UP("look-up");
+
 
     private final String endPointFunctionName;
 

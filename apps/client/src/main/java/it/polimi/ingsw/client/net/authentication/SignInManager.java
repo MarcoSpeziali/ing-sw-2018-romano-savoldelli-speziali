@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.net.authentication;
 
+import it.polimi.ingsw.client.Settings;
+import it.polimi.ingsw.client.net.endpoints.RMISignIn;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignInInterface;
 import it.polimi.ingsw.net.utils.ResponseFields;
@@ -20,7 +22,12 @@ public class SignInManager {
     private SignInInterface signInInterface;
 
     private SignInManager() {
-        // TODO: set up signInInterface
+        if (Settings.get().isUseSockets()) {
+            signInInterface = new SocketSingInInterface;
+        }
+        else {
+            signInInterface = new RMISignIn();
+        }
     }
 
     /**

@@ -1,8 +1,12 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
 import it.polimi.ingsw.server.net.SagradaMultiplayerServer;
+import it.polimi.ingsw.server.net.endpoints.LobbyLookupEndPoint;
+import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
+import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
 import it.polimi.ingsw.server.sql.SagradaDatabase;
 import it.polimi.ingsw.server.utils.LoggingLevelValueConverter;
 import it.polimi.ingsw.server.utils.ServerLogger;
@@ -13,6 +17,10 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
@@ -49,6 +57,9 @@ public class ServerApp {
 
             // starts the multiplayer server (sockets)
             startMultiplayerServer();
+
+            // publishes requested classes on RMI registry
+            rmiRegistryPublishment();
         }
         catch (Exception e) {
             ServerLogger.getLogger(ServerApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
@@ -138,5 +149,13 @@ public class ServerApp {
      */
     private static void checkDatabaseConnection() throws SQLException {
         new SagradaDatabase().close();
+    }
+
+    private static void rmiRegistryPublishment() throws RemoteException, AlreadyBoundException {
+        Registry registry = LocateRegistry.getRegistry();
+        registry.bind(EndPointFunction.SIGN_IN.getEndPointFunctionName(), SignInEndPoint.getInstance());
+        registry.bind(EndPointFunction.SIGN_UP.getEndPointFunctionName(), SignUpEndPoint.getInstance());
+        registry.bind(EndPointFunction.LOOK_UP.getEndPointFunctionName(), LobbyLookupEndPoint.getInstance());
+
     }
 }
