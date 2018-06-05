@@ -1,44 +1,64 @@
 package it.polimi.ingsw.client;
 
-public final class Settings {
+import it.polimi.ingsw.utils.SettingsBase;
+import org.xml.sax.SAXException;
 
-    private static final Settings settings = new Settings();
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.Map;
 
-    public static Settings get() {
-        return settings;
+// TODO: docs
+public final class Settings extends SettingsBase {
+
+    private final int socketPort;
+
+    private final String databaseUrl;
+    private final String databaseName;
+    private final String databaseUsername;
+    private final String databasePassword;
+    private final String databaseDriver;
+
+    public int getSocketPort() {
+        return socketPort;
     }
 
-    private String serverUrl;
-    private int serverPort;
-    private boolean useSockets;
-
-    public String getServerUrl() {
-        return serverUrl;
+    public String getDatabaseUrl() {
+        return databaseUrl;
     }
 
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl;
+    public String getDatabaseName() {
+        return databaseName;
     }
 
-    public int getServerPort() {
-        return serverPort;
+    public String getDatabaseUsername() {
+        return databaseUsername;
     }
 
-    public void setServerPort(int serverPort) {
-        this.serverPort = serverPort;
+    public String getDatabasePassword() {
+        return databasePassword;
     }
 
-    public boolean isUseSockets() {
-        return useSockets;
+    public String getDatabaseDriver() {
+        return databaseDriver;
     }
 
-    public void setUseSockets(boolean useSockets) {
-        this.useSockets = useSockets;
+    @SuppressWarnings("squid:UnusedPrivateMethod")
+    private Settings(Map<String, String> settings) {
+        this.socketPort = Integer.parseInt(settings.get("socket-port"));
+        this.databaseUrl = settings.get("database-url");
+        this.databaseName = settings.get("database-name");
+        this.databaseUsername = settings.get("database-username");
+        this.databasePassword = settings.get("database-password");
+        this.databaseDriver = settings.get("database-driver");
     }
 
-    private Settings() {
-        this.serverPort = 9000;
-        this.serverUrl = "localhost";
-        this.useSockets = true;
+    @Override
+    public void build() throws IOException, SAXException, ParserConfigurationException {
+        super.build(
+                Settings::new,
+                Constants.Resources.DEFAULT_SETTINGS.getRelativePath(),
+                Constants.Paths.SETTINGS_PATH.getAbsolutePath(),
+                Settings.class
+        );
     }
 }
