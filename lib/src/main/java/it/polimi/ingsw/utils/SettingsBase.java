@@ -13,15 +13,11 @@ import java.util.function.Function;
 
 public abstract class SettingsBase {
 
-    private static SettingsBase customSettings;
+    protected static SettingsBase customSettings;
 
-    public static SettingsBase getSettings() {
-        return customSettings;
-    }
+    protected SettingsBase() {}
 
-    public abstract void build() throws IOException, SAXException, ParserConfigurationException;
-
-    protected void build(Function<Map<String, String>, SettingsBase> instantiationFunction, String resourceName, String customSettingsPath, Class<? extends SettingsBase> superClass) throws IOException, SAXException, ParserConfigurationException {
+    protected static void build(Function<Map<String, String>, SettingsBase> instantiationFunction, String resourceName, String customSettingsPath, Class<? extends SettingsBase> superClass) throws IOException, SAXException, ParserConfigurationException {
         Node defaultSettingsNode = XMLUtils.parseXmlFromResource(resourceName, superClass.getClassLoader());
         Map<String, String> defaultSettingsMap = parseSettingsNode(defaultSettingsNode);
 

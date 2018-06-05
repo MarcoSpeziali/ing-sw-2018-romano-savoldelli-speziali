@@ -10,6 +10,10 @@ import java.util.Map;
 // TODO: docs
 public final class Settings extends SettingsBase {
 
+    public static Settings getSettings() {
+        return (Settings) customSettings;
+    }
+
     private final String serverSocketAddress;
     private final int serverSocketPort;
 
@@ -40,9 +44,8 @@ public final class Settings extends SettingsBase {
         this.serverRMIAddress = settings.get("server-rmi-address");
     }
 
-    @Override
-    public void build() throws IOException, SAXException, ParserConfigurationException {
-        super.build(
+    public static void build() throws IOException, SAXException, ParserConfigurationException {
+        SettingsBase.build(
                 Settings::new,
                 Constants.Resources.DEFAULT_SETTINGS.getRelativePath(),
                 Constants.Paths.SETTINGS_PATH.getAbsolutePath(),

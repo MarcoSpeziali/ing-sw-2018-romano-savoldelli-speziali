@@ -10,6 +10,10 @@ import java.util.Map;
 // TODO: docs
 public final class Settings extends SettingsBase {
 
+    public static Settings getSettings() {
+        return (Settings) customSettings;
+    }
+
     private final int socketPort;
     private final String databaseUrl;
     private final String databaseName;
@@ -51,9 +55,8 @@ public final class Settings extends SettingsBase {
         this.databaseDriver = settings.get("database-driver");
     }
 
-    @Override
-    public void build() throws IOException, SAXException, ParserConfigurationException {
-        super.build(
+    public static void build() throws IOException, SAXException, ParserConfigurationException {
+        SettingsBase.build(
                 Settings::new,
                 Constants.Resources.DEFAULT_SETTINGS.getRelativePath(),
                 Constants.Paths.SETTINGS_PATH.getAbsolutePath(),
