@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -62,8 +63,11 @@ public class ServerApp {
             // starts the multiplayer server (sockets)
             startMultiplayerServer();
 
+            // sets up the security manager
+            // setUpSecurityManager();
+
             // publishes requested classes on RMI registry
-            // rmiRegistryPublishment();
+            registerRMIRemoteInterfaces();
 
             for (;;) {}
         }
@@ -92,7 +96,6 @@ public class ServerApp {
 
         return parser;
     }
-
 
     /**
      * Creates the folders needed by the server.
@@ -156,11 +159,40 @@ public class ServerApp {
         new SagradaDatabase().close();
     }
 
-    private static void rmiRegistryPublishment() throws RemoteException, AlreadyBoundException {
-        Registry registry = LocateRegistry.getRegistry();
-        registry.bind(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE.toString(), new SignInEndPoint());
-        registry.bind(EndPointFunction.REQUEST_AUTHENTICATION.toString(), new SignInEndPoint());
-        registry.bind(EndPointFunction.SIGN_UP.toString(), new SignUpEndPoint());
-        registry.bind(EndPointFunction.LOOK_UP.toString(), LobbyLookupEndPoint.getInstance());
+    /**
+     * Sets up the security manager.
+     */
+    private static void setUpSecurityManager() {
+        // TODO: check if needed
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+    }
+
+    /**
+     * Creates the {@link Registry} and the binding between the endpoints and the created {@link Registry}.
+     * @throws RemoteException if the reference to the {@link Registry} could not be created
+     */
+    private static void registerRMIRemoteInterfaces() throws RemoteException {
+        Registry registry = LocateRegistry.createRegistry(Settings.getSettings().getRmiPort());
+
+        registry.rebind(getRMIEndPointName(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE), new SignInEndPoint());
+        registry.rebind(getRMIEndPointName(EndPointFunction.REQUEST_AUTHENTICATION), new SignInEndPoint());
+        registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_UP), new SignUpEndPoint());
+        registry.rebind(getRMIEndPointName(EndPointFunction.LOOK_UP), new LobbyLookupEndPoint());
+    }
+
+    /**
+     * Returns the name for the specified {@link EndPointFunction}. (//<host>:<port>/<endpoint>)
+     * @param endPointFunction the {@link EndPointFunction}
+     * @return the name for the specified {@link EndPointFunction}. (//<host>:<port>/<endpoint>)
+     */
+    private static String getRMIEndPointName(EndPointFunction endPointFunction) {
+        return String.format(
+                "//%s:%d/%s",
+                Settings.getSettings().getRmiHost(),
+                Settings.getSettings().getRmiPort(),
+                endPointFunction.toString()
+        );
     }
 }

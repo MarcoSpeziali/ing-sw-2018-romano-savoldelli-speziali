@@ -2,6 +2,9 @@
 <settings>
     <socket-port>9000</socket-port>
 
+    <rmi-port>1099</rmi-port>
+    <rmi-host>idra.weblink.it/</rmi-host>
+
     <database-url>localhost:5432</database-url>
     <database-name>sagrada</database-name>
     <database-username>sagrada</database-username>

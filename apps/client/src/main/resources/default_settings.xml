@@ -2,7 +2,7 @@
 <settings>
     <server-socket-port>9000</server-socket-port>
     <server-socket-address>idra.weblink.it</server-socket-address>
-    <server-rmi-port>1099</server-rmi-port>
-    <server-rmi-address>idra.weblink.it</server-rmi-address>
+    <server-rmi-port></server-rmi-port>
+    <server-rmi-address>idra.weblink.it/</server-rmi-address>
     <connection-protocol>sockets</connection-protocol>
 </settings>

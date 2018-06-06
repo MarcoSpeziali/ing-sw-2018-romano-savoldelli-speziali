@@ -15,6 +15,8 @@ public final class Settings extends SettingsBase {
     }
 
     private final int socketPort;
+    private final int rmiPort;
+    private final String rmiHost;
     private final String databaseUrl;
     private final String databaseName;
     private final String databaseUsername;
@@ -23,6 +25,14 @@ public final class Settings extends SettingsBase {
 
     public int getSocketPort() {
         return socketPort;
+    }
+
+    public int getRmiPort() {
+        return rmiPort;
+    }
+
+    public String getRmiHost() {
+        return rmiHost;
     }
 
     public String getDatabaseUrl() {
@@ -48,6 +58,8 @@ public final class Settings extends SettingsBase {
     @SuppressWarnings("squid:UnusedPrivateMethod")
     private Settings(Map<String, String> settings) {
         this.socketPort = Integer.parseInt(settings.get("socket-port"));
+        this.rmiPort = Integer.parseInt(settings.get("rmi-port"));
+        this.rmiHost = settings.get("rmi-host");
         this.databaseUrl = settings.get("database-url");
         this.databaseName = settings.get("database-name");
         this.databaseUsername = settings.get("database-username");

@@ -84,7 +84,7 @@ class FilesUtilsTest {
         Assertions.assertEquals(
                 0L,
                 FilesUtils.getLastModifiedOfFile(
-                        new URL("file://74189_d a+è+*§à+òèòøœ∆™æ„∞π∆“÷")
+                        new URL("file://74189")
                 )
         );
     }
