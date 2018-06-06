@@ -33,6 +33,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
      * @param die the instance of {@link Die} to be removed.
      * @return the same instance of picked {@link Die}
      */
+
     @Override
     public Die pickDie(Die die) {
         for (int i = 0; i < dice.size() ; i++) {

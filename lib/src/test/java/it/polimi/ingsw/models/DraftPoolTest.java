@@ -24,18 +24,16 @@ class DraftPoolTest {
 
     @Test
     void pickDieTest() {
-        for (int i=0; i<9; i++) {
-            Assertions.assertTrue((die == (draftPool.pickDie(die)) || draftPool.pickDie(die) == null));
-        }
-        Assertions.assertNull(draftPool.pickDie(die));
+        draftPool.putDie(die);
+        Assertions.assertEquals(die, draftPool.pickDie(die));
+        Assertions.assertNull(draftPool.pickDie(new Die(GlassColor.GREEN, 9)));
     }
 
     @Test
     void pickDie1Test() {
-        int prevSize = draftPool.getNumberOfDice();
-        draftPool.pickDie(1);
-        Assertions.assertEquals(prevSize - 1, draftPool.getNumberOfDice());
-        Assertions.assertThrows(IndexOutOfBoundsException.class, ()->draftPool.pickDie(-1));
+        draftPool.putDie(die);
+        Assertions.assertEquals(die, draftPool.pickDie(0));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, ()->draftPool.pickDie(0));
         Assertions.assertThrows(IndexOutOfBoundsException.class, ()->draftPool.pickDie(100));
     }
 
@@ -55,18 +53,15 @@ class DraftPoolTest {
     }
 
     @Test
-    void getFreeSpace() {
-        this.draftPool.pickDie(4);
-        Assertions.assertEquals(8, this.draftPool.getFreeSpace());
-
+    void getFreeSpaceTest() {
+        // TODO implement Context with MATCH
+        Assertions.assertThrows(NullPointerException.class, ()->draftPool.getFreeSpace());
     }
 
     @Test
     void putDieTest() {
-        this.draftPool.pickDie(4);
-        this.draftPool.pickDie(6);
         this.draftPool.putDie(die);
-        Assertions.assertEquals(8, this.draftPool.getFreeSpace());
         Assertions.assertEquals(die, this.draftPool.pickDie(die));
     }
+
 }

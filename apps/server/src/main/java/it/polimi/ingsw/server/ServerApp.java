@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.net.interfaces.SignUpInterface;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
@@ -153,7 +154,8 @@ public class ServerApp {
 
     private static void rmiRegistryPublishment() throws RemoteException, AlreadyBoundException {
         Registry registry = LocateRegistry.getRegistry();
-        registry.bind(EndPointFunction.SIGN_IN.toString(), SignInEndPoint.getInstance());
+        registry.bind(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE.toString(), SignInEndPoint.getInstance());
+        registry.bind(EndPointFunction.REQUEST_AUTHENTICATION.toString(), SignInEndPoint.getInstance());
         registry.bind(EndPointFunction.SIGN_UP.toString(), SignUpEndPoint.getInstance());
         registry.bind(EndPointFunction.LOOK_UP.toString(), LobbyLookupEndPoint.getInstance());
 
