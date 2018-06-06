@@ -1,15 +1,18 @@
 package it.polimi.ingsw.models;
 
+import it.polimi.ingsw.RandomParametersExtension;
+import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.views.DraftPoolView;
+import it.polimi.ingsw.core.Match;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.nio.channels.AsynchronousServerSocketChannel;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(RandomParametersExtension.class)
 class DraftPoolTest {
     private DraftPool draftPool;
     private Die die;
@@ -53,9 +56,13 @@ class DraftPoolTest {
     }
 
     @Test
-    void getFreeSpaceTest() {
-        // TODO implement Context with MATCH
-        Assertions.assertThrows(NullPointerException.class, ()->draftPool.getFreeSpace());
+    void getFreeSpaceTest(@RandomParametersExtension.Random int numberOfPlayers) {
+        Match match = mock(Match.class);
+        when(match.getNumberOfPlayer()).thenReturn(numberOfPlayers);
+
+        Context.getSharedInstance().put(Context.MATCH, match);
+
+        Assertions.assertEquals(numberOfPlayers * 2 + 1, draftPool.getFreeSpace());
     }
 
     @Test
