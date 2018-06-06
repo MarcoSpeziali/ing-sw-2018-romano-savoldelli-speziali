@@ -98,20 +98,11 @@ public class DatabasePlayer {
         );
 
         try (SagradaDatabase database = new SagradaDatabase()) {
-            ResultSet resultSet = database.executeQuery(query);
-
-            return new DatabasePlayer(resultSet);
+            return database.executeQuery(query, DatabasePlayer::new);
         }
     }
 
     private static DatabasePlayer executeQuery(SagradaDatabase database, String query) throws SQLException {
-        try (ResultSet resultSet = database.executeQuery(query)) {
-
-            if (resultSet.next()) {
-                return new DatabasePlayer(resultSet);
-            }
-
-            return null;
-        }
+        return database.executeQuery(query, DatabasePlayer::new);
     }
 }

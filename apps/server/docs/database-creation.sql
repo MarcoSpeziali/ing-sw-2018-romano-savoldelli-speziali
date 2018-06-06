@@ -1,5 +1,4 @@
--- -- PERFORM dblink_exec('dbname=' || current_database(), 'CREATE DATABASE sagrada');
--- CREATE DATABASE sagrada;
+-- PERFORM dblink_exec('dbname=' || current_database(), 'CREATE DATABASE sagrada');
 -- CREATE USER sagrada WITH ENCRYPTED PASSWORD 'jjn6sjI2F34~cicv=aHB]vjqLVw3-CgSbEgFSq}@QMhuuL)DF)zzE$Y5X&FFHGYs';
 -- GRANT ALL PRIVILEGES ON DATABASE sagrada TO sagrada;
 

@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.util.function.Consumer;
 
+/**
+ * Represents a non-persistent network {@link Response} provider, which, after receiving the
+ * {@link Response}, closes the connection.
+ */
 public interface OneTimeNetworkResponseProvider {
 
     /**

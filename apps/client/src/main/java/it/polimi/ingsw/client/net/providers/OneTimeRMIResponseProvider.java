@@ -39,7 +39,7 @@ public class OneTimeRMIResponseProvider<T extends Remote> implements OneTimeNetw
         Method targetMethod = ReflectionUtils.findAnnotatedMethod(
                 remoteInterfaceType,
                 RespondsTo.class,
-                respondsTo -> respondsTo.value().equals(request.getRequestBody().getEndPointFunction())
+                respondsTo -> respondsTo.value().equals(request.getBody().getEndPointFunction())
         );
 
         if (targetMethod == null) {
@@ -47,7 +47,7 @@ public class OneTimeRMIResponseProvider<T extends Remote> implements OneTimeNetw
         }
 
         Registry registry = LocateRegistry.getRegistry(hostAddress, hostPort);
-        Remote remoteInterface = registry.lookup(request.getRequestBody().getEndPointFunction().toString());
+        Remote remoteInterface = registry.lookup(request.getBody().getEndPointFunction().toString());
 
         return (Response) targetMethod.invoke(remoteInterface, request);
     }

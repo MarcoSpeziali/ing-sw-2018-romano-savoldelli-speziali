@@ -1,6 +1,7 @@
 package it.polimi.ingsw.net;
 
 import it.polimi.ingsw.net.utils.EndPointFunction;
+import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
@@ -42,7 +43,10 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
      * @return the endpoint function
      */
     public EndPointFunction getEndPointFunction() {
-        String endpoint = (String) this.getOrDefault("endpoint", null);
+        String endpoint = (String) this.getOrDefault(
+                RequestFields.Body.ENDPOINT.toString(),
+                null
+        );
 
         if (endpoint == null) {
             return null;
@@ -57,10 +61,10 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
      */
     public void setEndPointFunction(EndPointFunction endPointFunction) {
         if (endPointFunction == null) {
-            this.remove("endpoint");
+            this.remove(RequestFields.Body.ENDPOINT.toString());
         }
         else {
-            this.put("endpoint", endPointFunction.toString());
+            this.put(RequestFields.Body.ENDPOINT.toString(), endPointFunction.toString());
         }
     }
 

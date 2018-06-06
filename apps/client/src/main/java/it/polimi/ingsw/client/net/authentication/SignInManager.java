@@ -55,10 +55,10 @@ public class SignInManager {
     public boolean signIn(String username, String password) throws IOException, TimeoutException, NotBoundException, ReflectiveOperationException {
         // builds the sign-in request
         Request authenticationRequest = new Request(
-                new RequestHeader(ClientMachineInfo.generate(), null),
+                new RequestHeader(null),
                 new Body(
                         EndPointFunction.REQUEST_AUTHENTICATION,
-                        Map.of(RequestFields.Authentication.USERNAME.getFieldName(), username)
+                        Map.of(RequestFields.Body.Authentication.USERNAME.toString(), username)
                 )
         );
 
@@ -70,17 +70,21 @@ public class SignInManager {
             throw new RemoteException();
         }
 
-        int sessionId = (int) requestResponse.getBody().get(ResponseFields.Authentication.SESSION_ID.getFieldName());
-        String challenge = (String) requestResponse.getBody().get(ResponseFields.Authentication.CHALLENGE.getFieldName());
+        int sessionId = (int) requestResponse.getBody().get(
+                ResponseFields.Body.Authentication.SESSION_ID.toString()
+        );
+        String challenge = (String) requestResponse.getBody().get(
+                ResponseFields.Body.Authentication.CHALLENGE.toString()
+        );
 
         // builds the challenge-fulfill request
         Request fulfillRequest = new Request(
-                new RequestHeader(ClientMachineInfo.generate(), null),
+                new RequestHeader(null),
                 new Body(
                         EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE,
                         Map.of(
-                                RequestFields.Authentication.SESSION_ID.getFieldName(), sessionId,
-                                RequestFields.Authentication.CHALLENGE_RESPONSE.getFieldName(), fulfillChallenge(
+                                RequestFields.Body.Authentication.SESSION_ID.toString(), sessionId,
+                                RequestFields.Body.Authentication.CHALLENGE_RESPONSE.toString(), fulfillChallenge(
                                         challenge,
                                         password
                                 )
@@ -109,7 +113,7 @@ public class SignInManager {
         }
 
         // the token is saved and true is returned
-        this.token = (String) fulfillResponse.getBody().get(ResponseFields.Authentication.TOKEN.getFieldName());
+        this.token = (String) fulfillResponse.getBody().get(ResponseFields.Body.Authentication.TOKEN.toString());
         return true;
     }
 

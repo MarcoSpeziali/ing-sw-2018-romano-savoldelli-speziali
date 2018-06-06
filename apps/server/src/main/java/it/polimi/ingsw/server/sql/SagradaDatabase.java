@@ -22,16 +22,25 @@ public class SagradaDatabase implements AutoCloseable {
         connection.setAutoCommit(true);
     }
 
-    public ResultSet executeQuery(String query) throws SQLException {
-        /*try (Statement statement = this.connection.createStatement()) {
-            return statement.executeQuery(query);
-        }*/
+    public <T> T executeQuery(String query, ResultSetMappingFunction<T> mapper) throws SQLException {
+        try (Statement statement = this.connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(query)) {
+                if (mapper != null && resultSet.next()) {
+                    return mapper.map(resultSet);
+                }
 
-        return this.connection.createStatement().executeQuery(query);
+                return null;
+            }
+        }
     }
 
     @Override
     public void close() throws SQLException {
         this.connection.close();
+    }
+
+    @FunctionalInterface
+    public interface ResultSetMappingFunction<T> {
+        T map(ResultSet resultSet) throws SQLException;
     }
 }

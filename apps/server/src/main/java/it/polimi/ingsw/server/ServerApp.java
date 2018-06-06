@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.net.interfaces.SignUpInterface;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
 import it.polimi.ingsw.server.net.SagradaMultiplayerServer;
+import it.polimi.ingsw.server.net.SocketRouter;
 import it.polimi.ingsw.server.net.endpoints.LobbyLookupEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
@@ -45,6 +45,9 @@ public class ServerApp {
             // builds the custom settings (if any)
             Settings.build();
 
+            // build the routing table for the socket router
+            SocketRouter.buildRoutingTable();
+
             // create the folders needed by the server
             createProjectsFolders();
 
@@ -60,7 +63,9 @@ public class ServerApp {
             startMultiplayerServer();
 
             // publishes requested classes on RMI registry
-            rmiRegistryPublishment();
+            // rmiRegistryPublishment();
+
+            for (;;) {}
         }
         catch (Exception e) {
             ServerLogger.getLogger(ServerApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
@@ -141,7 +146,6 @@ public class ServerApp {
         Thread thread = ThreadManager.addThread(Constants.Threads.SOCKET_LISTENER, socketServer);
         thread.setDaemon(false);
         thread.start();
-        thread.run();
     }
 
     /**
@@ -154,10 +158,9 @@ public class ServerApp {
 
     private static void rmiRegistryPublishment() throws RemoteException, AlreadyBoundException {
         Registry registry = LocateRegistry.getRegistry();
-        registry.bind(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE.toString(), SignInEndPoint.getInstance());
-        registry.bind(EndPointFunction.REQUEST_AUTHENTICATION.toString(), SignInEndPoint.getInstance());
-        registry.bind(EndPointFunction.SIGN_UP.toString(), SignUpEndPoint.getInstance());
+        registry.bind(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE.toString(), new SignInEndPoint());
+        registry.bind(EndPointFunction.REQUEST_AUTHENTICATION.toString(), new SignInEndPoint());
+        registry.bind(EndPointFunction.SIGN_UP.toString(), new SignUpEndPoint());
         registry.bind(EndPointFunction.LOOK_UP.toString(), LobbyLookupEndPoint.getInstance());
-
     }
 }

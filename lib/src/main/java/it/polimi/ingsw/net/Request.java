@@ -1,5 +1,6 @@
 package it.polimi.ingsw.net;
 
+import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
@@ -22,7 +23,7 @@ public class Request implements JSONSerializable {
     /**
      * @return the request header
      */
-    public RequestHeader getRequestHeader() {
+    public RequestHeader getHeader() {
         return requestHeader;
     }
 
@@ -30,14 +31,14 @@ public class Request implements JSONSerializable {
      * Sets the request header.
      * @param requestHeader the request header
      */
-    public void setRequestHeader(RequestHeader requestHeader) {
+    public void setHeader(RequestHeader requestHeader) {
         this.requestHeader = requestHeader;
     }
 
     /**
      * @return the request body
      */
-    public Body getRequestBody() {
+    public Body getBody() {
         return requestBody;
     }
 
@@ -45,7 +46,7 @@ public class Request implements JSONSerializable {
      * Sets the request body.
      * @param requestBody the request body
      */
-    public void setRequestBody(Body requestBody) {
+    public void setBody(Body requestBody) {
         this.requestBody = requestBody;
     }
 
@@ -58,25 +59,36 @@ public class Request implements JSONSerializable {
 
     @Override
     public void deserialize(JSONObject jsonObject) {
-        if (jsonObject.has("header")) {
+        jsonObject = jsonObject.getJSONObject(RequestFields.REQUEST.toString());
+
+        if (jsonObject.has(RequestFields.Header.HEADER.toString())) {
             this.requestHeader = new RequestHeader();
-            this.requestHeader.deserialize(jsonObject.getJSONObject("header"));
+            this.requestHeader.deserialize(jsonObject.getJSONObject(RequestFields.Header.HEADER.toString()));
         }
 
-        if (jsonObject.has("body")) {
+        if (jsonObject.has(RequestFields.Body.BODY.toString())) {
             this.requestBody = new Body();
-            this.requestBody.deserialize(jsonObject.getJSONObject("body"));
+            this.requestBody.deserialize(jsonObject.getJSONObject(RequestFields.Body.BODY.toString()));
         }
     }
 
     @Override
     public JSONObject serialize() {
+        JSONObject mainJsonObject = new JSONObject();
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("header", this.requestHeader == null ? new JSONObject() : this.requestHeader.serialize());
-        jsonObject.put("body", this.requestBody == null ? new JSONObject() : this.requestBody.serialize());
+        jsonObject.put(
+                RequestFields.Header.HEADER.toString(),
+                this.requestHeader == null ? new JSONObject() : this.requestHeader.serialize()
+        );
+        jsonObject.put(
+                RequestFields.Body.BODY.toString(),
+                this.requestBody == null ? new JSONObject() : this.requestBody.serialize()
+        );
 
-        return jsonObject;
+        mainJsonObject.put(RequestFields.REQUEST.toString(), jsonObject);
+
+        return mainJsonObject;
     }
 
     @Override

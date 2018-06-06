@@ -23,27 +23,16 @@ public class SignUpEndPoint extends UnicastRemoteObject implements SignUpInterfa
 
     private static final long serialVersionUID = -1919251653537403377L;
 
-    private static SignUpEndPoint instance;
-
-    static {
-        try {
-            instance = new SignUpEndPoint();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public SignUpEndPoint() throws RemoteException {
-    }
-
-    public static SignUpEndPoint getInstance() {
-        return instance;
-    }
+    public SignUpEndPoint() throws RemoteException { }
 
     @Override
     public Response requestSignUp(Request request) {
-        String username = (String) request.getRequestBody().get(RequestFields.Authentication.USERNAME.getFieldName());
-        String encryptedPassword = (String) request.getRequestBody().get(RequestFields.Authentication.PASSWORD.getFieldName());
+        String username = (String) request.getBody().get(
+                RequestFields.Body.Authentication.USERNAME.toString()
+        );
+        String encryptedPassword = (String) request.getBody().get(
+                RequestFields.Body.Authentication.PASSWORD.toString()
+        );
 
         try {
             // gets the player with the provided username

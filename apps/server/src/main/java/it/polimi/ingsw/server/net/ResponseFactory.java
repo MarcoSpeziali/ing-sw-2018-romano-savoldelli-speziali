@@ -15,10 +15,10 @@ public final class ResponseFactory {
     public static Response createAuthenticationChallengeResponse(Request originalRequest, String challenge, int sessionId) {
         return new Response(
                 new Body(
-                        originalRequest.getRequestBody().getEndPointFunction(),
+                        originalRequest.getBody().getEndPointFunction(),
                         Map.of(
-                                ResponseFields.Authentication.CHALLENGE.getFieldName(), challenge,
-                                ResponseFields.Authentication.SESSION_ID.getFieldName(), sessionId
+                                ResponseFields.Body.Authentication.CHALLENGE.toString(), challenge,
+                                ResponseFields.Body.Authentication.SESSION_ID.toString(), sessionId
                         )
                 )
         );
@@ -27,9 +27,9 @@ public final class ResponseFactory {
     public static Response createAuthenticationTokenResponse(Request originalRequest, String token) {
         return new Response(
                 new Body(
-                        originalRequest.getRequestBody().getEndPointFunction(),
+                        originalRequest.getBody().getEndPointFunction(),
                         Map.of(
-                                ResponseFields.Authentication.TOKEN.getFieldName(), token
+                                ResponseFields.Body.Authentication.TOKEN.toString(), token
                         )
                 )
         );
@@ -38,9 +38,9 @@ public final class ResponseFactory {
     public static Response createUserCreatedResponse(Request originalRequest) {
         return new Response(
                 new Body(
-                        originalRequest.getRequestBody().getEndPointFunction(),
+                        originalRequest.getBody().getEndPointFunction(),
                         Map.of(
-                                ResponseFields.Authentication.CREATED.getFieldName(), ""
+                                ResponseFields.Body.Authentication.CREATED.toString(), ""
                         )
                 )
         );

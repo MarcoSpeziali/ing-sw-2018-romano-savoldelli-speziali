@@ -20,6 +20,7 @@ import java.security.GeneralSecurityException;
 import java.util.Map;
 
 public class SignUpManager {
+
     private static SignUpManager instance = new SignUpManager();
 
     public static SignUpManager getManager() {
@@ -49,19 +50,19 @@ public class SignUpManager {
         // encrypts the password with the server's public key
         String encryptedString = CypherUtils.encryptString(
                 password,
-                // gets the public key
+                // gets the public key TODO: change
                 FilesUtils.getFileContent(Resources.getResource(getClass().getClassLoader(), "idra_rsa.pub")),
                 false
         );
 
         // builds the sign-up request
         Request signUpRequest = new Request(
-                new RequestHeader(ClientMachineInfo.generate(), null),
+                new RequestHeader(null),
                 new Body(
                         EndPointFunction.SIGN_UP,
                         Map.of(
-                                RequestFields.Authentication.USERNAME.getFieldName(), username,
-                                RequestFields.Authentication.PASSWORD.getFieldName(), encryptedString
+                                RequestFields.Body.Authentication.USERNAME.toString(), username,
+                                RequestFields.Body.Authentication.PASSWORD.toString(), encryptedString
                         )
                 )
         );

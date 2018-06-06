@@ -70,5 +70,4 @@ class DraftPoolTest {
         this.draftPool.putDie(die);
         Assertions.assertEquals(die, this.draftPool.pickDie(die));
     }
-
 }

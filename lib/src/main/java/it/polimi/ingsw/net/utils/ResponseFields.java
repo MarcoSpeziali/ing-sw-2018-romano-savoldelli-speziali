@@ -1,26 +1,55 @@
 package it.polimi.ingsw.net.utils;
 
-public final class ResponseFields {
-    private ResponseFields() {}
+public enum ResponseFields {
+    RESPONSE("response");
 
-    public enum Authentication {
-        CHALLENGE("challenge"),
-        SESSION_ID("session-id"),
-        TOKEN("token"),
-        CREATED("created");
+    private final String fieldName;
+
+    ResponseFields(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    @Override
+    public String toString() {
+        return this.fieldName;
+    }
+
+    public enum Body {
+        BODY("body"),
+        ENDPOINT("endpoint");
 
         private final String fieldName;
 
-        Authentication(String fieldName) {
+        Body(String fieldName) {
             this.fieldName = fieldName;
         }
 
-        public String getFieldName() {
-            return fieldName;
+        @Override
+        public String toString() {
+            return this.fieldName;
+        }
+
+        public enum Authentication {
+            CHALLENGE("challenge"),
+            SESSION_ID("session-id"),
+            TOKEN("token"),
+            CREATED("created");
+
+            private final String fieldName;
+
+            Authentication(String fieldName) {
+                this.fieldName = fieldName;
+            }
+
+            @Override
+            public String toString() {
+                return fieldName;
+            }
         }
     }
 
     public enum Error {
+        ERROR(-1, "error"),
         UNAUTHORIZED(401, "unauthorized"),
         INTERNAL_SERVER_ERROR(500, "internal-server-error"),
         TIMEOUT(408, "request-timeout"),

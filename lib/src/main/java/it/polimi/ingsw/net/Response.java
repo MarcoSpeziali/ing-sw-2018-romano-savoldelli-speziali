@@ -1,5 +1,6 @@
 package it.polimi.ingsw.net;
 
+import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
@@ -51,30 +52,38 @@ public class Response implements JSONSerializable {
 
     @Override
     public void deserialize(JSONObject jsonObject) {
-        if (jsonObject.has("body")) {
+        if (jsonObject.has(ResponseFields.Body.BODY.toString())) {
             this.body = new Body();
-            this.body.deserialize(jsonObject.getJSONObject("body"));
+            this.body.deserialize(jsonObject.getJSONObject(ResponseFields.Body.BODY.toString()));
         }
 
-        if (jsonObject.has("error")) {
+        if (jsonObject.has(ResponseFields.Error.ERROR.toString())) {
             this.responseError = new ResponseError();
-            this.responseError.deserialize(jsonObject.getJSONObject("error"));
+            this.responseError.deserialize(jsonObject.getJSONObject(ResponseFields.Error.ERROR.toString()));
         }
     }
 
     @Override
     public JSONObject serialize() {
+        JSONObject mainJsonObject = new JSONObject();
         JSONObject jsonObject = new JSONObject();
 
-        if (this.body != null) {
-            jsonObject.put("body", this.body.serialize());
-        }
-
         if (this.responseError != null) {
-            jsonObject.put("error", this.responseError.serialize());
+            jsonObject.put(
+                    ResponseFields.Error.ERROR.toString(),
+                    this.responseError.serialize()
+            );
         }
 
-        return jsonObject;
+        if (this.body != null) {
+            jsonObject.put(
+                    ResponseFields.Body.BODY.toString(),
+                    this.body.serialize()
+            );
+        }
+
+        mainJsonObject.put(ResponseFields.RESPONSE.toString(), jsonObject);
+        return mainJsonObject;
     }
 
     @Override

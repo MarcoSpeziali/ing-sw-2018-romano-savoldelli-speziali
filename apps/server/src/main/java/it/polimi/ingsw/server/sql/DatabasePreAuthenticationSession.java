@@ -29,9 +29,7 @@ public class DatabasePreAuthenticationSession {
         );
 
         try (SagradaDatabase database = new SagradaDatabase()) {
-            ResultSet resultSet = database.executeQuery(query);
-
-            return new DatabasePlayer(resultSet);
+            return database.executeQuery(query, DatabasePlayer::new);
         }
     }
 
@@ -110,13 +108,6 @@ public class DatabasePreAuthenticationSession {
     }
 
     private static DatabasePreAuthenticationSession executeQuery(SagradaDatabase database, String query) throws SQLException {
-        try (ResultSet resultSet = database.executeQuery(query)) {
-
-            if (resultSet.next()) {
-                return new DatabasePreAuthenticationSession(resultSet);
-            }
-
-            return null;
-        }
+        return database.executeQuery(query, DatabasePreAuthenticationSession::new);
     }
 }

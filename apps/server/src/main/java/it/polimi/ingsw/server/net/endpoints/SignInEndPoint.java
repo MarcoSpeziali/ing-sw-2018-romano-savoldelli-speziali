@@ -29,22 +29,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
      */
     private transient Socket client;
 
-    protected static SignInEndPoint instance;
-
-    static {
-        try {
-            instance = new SignInEndPoint();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected SignInEndPoint() throws RemoteException {
-    }
-
-    public static SignInEndPoint getInstance() {
-        return instance;
-    }
+    public SignInEndPoint() throws RemoteException { }
 
     public void setSocket(Socket client) {
         this.client = client;
@@ -59,7 +44,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
         }
     }
 
-    private int getPort() throws ServerNotActiveException {
+    private int getPort() {
         if (this.client == null) { // rmi
             return -1;
         }
@@ -74,7 +59,9 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
         String randomString = RandomString.create();
 
         try {
-            String username = (String) request.getRequestBody().get(RequestFields.Authentication.USERNAME.getFieldName());
+            String username = (String) request.getBody().get(
+                    RequestFields.Body.Authentication.USERNAME.toString()
+            );
 
             // retrieves the player from the database with the provided username
             DatabasePlayer player = DatabasePlayer.playerWithUsername(username);
@@ -102,7 +89,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
             // creates a pre_authentication_session in the database
             DatabasePreAuthenticationSession preAuthenticationSession = DatabasePreAuthenticationSession.insertAuthenticationSession(
                     playerId,
-                    expectedResult,
+                    expectedResult.replace("'", "\'"),
                     this.getIp(),
                     this.getPort()
             );
@@ -133,8 +120,12 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
     @Override
     public Response fulfillChallenge(Request request) {
         try {
-            String challengeResponse = (String) request.getRequestBody().get(RequestFields.Authentication.CHALLENGE_RESPONSE.getFieldName());
-            int sessionId = (int) request.getRequestBody().get(RequestFields.Authentication.SESSION_ID.getFieldName());
+            String challengeResponse = (String) request.getBody().get(
+                    RequestFields.Body.Authentication.CHALLENGE_RESPONSE.toString()
+            );
+            int sessionId = (int) request.getBody().get(
+                    RequestFields.Body.Authentication.SESSION_ID.toString()
+            );
 
             // retrieves the authentication session from the provided id
             DatabasePreAuthenticationSession preAuthenticationSession = DatabasePreAuthenticationSession.authenticationSessionWithId(sessionId);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.net;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.server.net.handlers.CommandHandler;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import org.json.JSONObject;
 
@@ -17,12 +18,10 @@ public class ClientHandler implements Runnable, AutoCloseable {
      */
     private final Socket client;
 
-
     /**
      * The {@link BufferedReader} of the client's connection.
      */
     private final BufferedReader in;
-
 
     /**
      * The {@link BufferedWriter} of the client's connection.
@@ -86,6 +85,12 @@ public class ClientHandler implements Runnable, AutoCloseable {
         this.client.close();
     }
 
+    /**
+     * Waits for the client to send a {@link Request}.
+     * @param bufferedReader the {@link BufferedReader} which reads from the client
+     * @return the {@link Request} created by the client
+     * @throws IOException if any IO error occurs
+     */
     private static Request waitForRequest(BufferedReader bufferedReader) throws IOException {
         String content = bufferedReader.readLine();
 
