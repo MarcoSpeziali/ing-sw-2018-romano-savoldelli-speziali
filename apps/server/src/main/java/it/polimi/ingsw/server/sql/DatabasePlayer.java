@@ -1,11 +1,14 @@
 package it.polimi.ingsw.server.sql;
 
+import it.polimi.ingsw.net.mocks.IPlayer;
+import org.json.JSONObject;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
 // TODO: document
-public class DatabasePlayer {
+public class DatabasePlayer implements IPlayer {
 
     /**
      * The user's unique id.
@@ -25,6 +28,7 @@ public class DatabasePlayer {
     /**
      * @return the user's unique id
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -32,6 +36,7 @@ public class DatabasePlayer {
     /**
      * @return the user's unique username
      */
+    @Override
     public String getUsername() {
         return username;
     }
@@ -104,5 +109,30 @@ public class DatabasePlayer {
 
     private static DatabasePlayer executeQuery(SagradaDatabase database, String query) throws SQLException {
         return database.executeQuery(query, DatabasePlayer::new);
+    }
+
+    /**
+     * Deserialized a {@link JSONObject} into the implementing class.
+     *
+     * @param jsonObject the {@link JSONObject} to deserialize
+     */
+    @Override
+    public void deserialize(JSONObject jsonObject) {
+        throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
+    }
+
+    /**
+     * Serialized the implementing class into a {@link JSONObject}.
+     *
+     * @return a {@link JSONObject} which represents the serialized object
+     */
+    @Override
+    public JSONObject serialize() {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("id", this.id);
+        jsonObject.put("username", this.username);
+        
+        return jsonObject;
     }
 }

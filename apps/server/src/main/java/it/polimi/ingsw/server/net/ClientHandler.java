@@ -100,6 +100,12 @@ public class ClientHandler implements Runnable, AutoCloseable {
         return request;
     }
 
+    /**
+     * Sends to the client a {@link Response}.
+     * @param response sends a {@link Response} to the connected client
+     * @param bufferedWriter the {@link BufferedWriter} which writes to the client
+     * @throws IOException if any IO error occurs
+     */
     private static void sendResponse(Response response, BufferedWriter bufferedWriter) throws IOException {
         JSONObject jsonObject = response.serialize();
         String jsonString = jsonObject.toString();

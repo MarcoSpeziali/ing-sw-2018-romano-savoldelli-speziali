@@ -62,6 +62,17 @@ public class DatabaseSession {
         }
     }
 
+    public static DatabaseSession sessionWithToken(String token) throws SQLException {
+        String query = String.format(
+                "SELECT * FROM session WHERE token = '%s'",
+                token
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return executeQuery(database, query);
+        }
+    }
+
     public static DatabaseSession insertSession(String token, int preAuthenticationSessionId) throws SQLException {
         String query = String.format(
                 "INSERT INTO session (token, pre_auth_session) VALUES ('%s', '%d') RETURNING *",

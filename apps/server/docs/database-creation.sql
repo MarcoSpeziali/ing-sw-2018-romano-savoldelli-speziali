@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS session (
 CREATE TABLE IF NOT EXISTS lobby (
   id SERIAL PRIMARY KEY,
   opening_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  closign_time TIMESTAMP DEFAULT NULL
+  closing_time TIMESTAMP DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS lobby_player (

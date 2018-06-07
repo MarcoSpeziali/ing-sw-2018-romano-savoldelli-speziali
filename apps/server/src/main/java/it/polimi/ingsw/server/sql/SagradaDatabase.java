@@ -34,6 +34,8 @@ public class SagradaDatabase implements AutoCloseable {
         }
     }
 
+    // public <T> T executeQuery(String query, Result)
+
     @Override
     public void close() throws SQLException {
         this.connection.close();
@@ -42,5 +44,9 @@ public class SagradaDatabase implements AutoCloseable {
     @FunctionalInterface
     public interface ResultSetMappingFunction<T> {
         T map(ResultSet resultSet) throws SQLException;
+    }
+
+    public static String quote(String original) {
+        return String.format("'%s'", original);
     }
 }
