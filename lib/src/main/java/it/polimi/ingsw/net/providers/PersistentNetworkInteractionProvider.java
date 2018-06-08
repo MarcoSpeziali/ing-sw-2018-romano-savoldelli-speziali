@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.net.providers;
+package it.polimi.ingsw.net.providers;
 
 import it.polimi.ingsw.net.Body;
 import it.polimi.ingsw.net.Request;
@@ -18,6 +18,8 @@ import java.util.function.Function;
  * {@link Response}, keeps the connection open.
  */
 public abstract class PersistentNetworkInteractionProvider implements AutoCloseable {
+
+    private static final long serialVersionUID = 1680783992994102775L;
 
     /**
      * The remote host address.

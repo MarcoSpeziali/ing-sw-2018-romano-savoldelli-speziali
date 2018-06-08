@@ -1,7 +1,10 @@
 package it.polimi.ingsw.net.utils;
 
 public enum ResponseFields {
-    RESPONSE("response");
+    RESPONSE("response"),
+    HEADER("header"),
+    BODY("body"),
+    ERROR("error");
 
     private final String fieldName;
 

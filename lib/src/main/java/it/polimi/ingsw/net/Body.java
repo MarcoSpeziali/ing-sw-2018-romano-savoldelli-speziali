@@ -44,7 +44,7 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
      */
     public EndPointFunction getEndPointFunction() {
         String endpoint = (String) this.getOrDefault(
-                RequestFields.Body.ENDPOINT.toString(),
+                RequestFields.Header.ENDPOINT.toString(),
                 null
         );
 
@@ -61,10 +61,10 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
      */
     public void setEndPointFunction(EndPointFunction endPointFunction) {
         if (endPointFunction == null) {
-            this.remove(RequestFields.Body.ENDPOINT.toString());
+            this.remove(RequestFields.Header.ENDPOINT.toString());
         }
         else {
-            this.put(RequestFields.Body.ENDPOINT.toString(), endPointFunction.toString());
+            this.put(RequestFields.Header.ENDPOINT.toString(), endPointFunction.toString());
         }
     }
 

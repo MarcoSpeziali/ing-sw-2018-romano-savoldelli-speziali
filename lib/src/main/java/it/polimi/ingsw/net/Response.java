@@ -1,65 +1,95 @@
 package it.polimi.ingsw.net;
 
+import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
+import it.polimi.ingsw.utils.ReflectionUtils;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
- * Represents a response to a socket request.
+ * Represents a response to a request.
  */
-public class Response implements JSONSerializable {
+public class Response<T extends JSONSerializable> implements JSONSerializable {
 
     private static final long serialVersionUID = -3163357263339164222L;
+
+
+    /**
+     * The header of the response.
+     */
+    private Header header;
 
     /**
      * The body of the response.
      */
-    private Body body;
+    private T body;
 
     /**
      * The error (if any) of the response.
      */
-    private ResponseError responseError;
+    private ResponseError error;
+
+    /**
+     * @return the header of the response
+     */
+    public Header getHeader() {
+        return header;
+    }
 
     /**
      * @return the body of the response
      */
-    public Body getBody() {
+    public T getBody() {
         return body;
     }
 
     /**
      * @return the error (if any) of the response
      */
-    public ResponseError getResponseError() {
-        return responseError;
+    public ResponseError getError() {
+        return error;
     }
 
     public Response() { }
 
-    public Response(Body body, ResponseError error) {
+    public Response(Header header, T body, ResponseError error) {
+        this.header = header;
         this.body = body;
-        this.responseError = error;
+        this.error = error;
     }
 
-    public Response(Body body) {
-        this(body, null);
+    public Response(Header header, T body) {
+        this(header, body, null);
     }
 
-    public Response(ResponseError error) {
-        this(null, error);
+    public Response(Header header, ResponseError error) {
+        this(header, null, error);
     }
 
     @Override
     public void deserialize(JSONObject jsonObject) {
-        if (jsonObject.has(ResponseFields.Body.BODY.toString())) {
-            this.body = new Body();
-            this.body.deserialize(jsonObject.getJSONObject(ResponseFields.Body.BODY.toString()));
+        this.header = new Header();
+        this.header.deserialize(jsonObject.getJSONObject(RequestFields.HEADER.toString()));
+
+        if (jsonObject.has(ResponseFields.BODY.toString())) {
+            try {
+                this.body = ReflectionUtils.instantiateGenericParameter(this.getClass());
+            }
+            catch ( NoSuchMethodException       |
+                    InstantiationException      |
+                    InvocationTargetException   |
+                    IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+            this.body.deserialize(jsonObject.getJSONObject(ResponseFields.BODY.toString()));
         }
 
-        if (jsonObject.has(ResponseFields.Error.ERROR.toString())) {
-            this.responseError = new ResponseError();
-            this.responseError.deserialize(jsonObject.getJSONObject(ResponseFields.Error.ERROR.toString()));
+        if (jsonObject.has(ResponseFields.ERROR.toString())) {
+            this.error = new ResponseError();
+            this.error.deserialize(jsonObject.getJSONObject(ResponseFields.ERROR.toString()));
         }
     }
 
@@ -68,16 +98,18 @@ public class Response implements JSONSerializable {
         JSONObject mainJsonObject = new JSONObject();
         JSONObject jsonObject = new JSONObject();
 
-        if (this.responseError != null) {
+        jsonObject.put(ResponseFields.HEADER.toString(), this.header.serialize());
+
+        if (this.error != null) {
             jsonObject.put(
-                    ResponseFields.Error.ERROR.toString(),
-                    this.responseError.serialize()
+                    ResponseFields.ERROR.toString(),
+                    this.error.serialize()
             );
         }
 
         if (this.body != null) {
             jsonObject.put(
-                    ResponseFields.Body.BODY.toString(),
+                    ResponseFields.BODY.toString(),
                     this.body.serialize()
             );
         }

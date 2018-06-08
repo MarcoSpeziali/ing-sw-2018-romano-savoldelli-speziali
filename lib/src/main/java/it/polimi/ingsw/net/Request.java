@@ -1,75 +1,83 @@
 package it.polimi.ingsw.net;
 
 import it.polimi.ingsw.net.utils.RequestFields;
+import it.polimi.ingsw.utils.ReflectionUtils;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Represents a socket request.
  */
-public class Request implements JSONSerializable {
+public class Request<T extends JSONSerializable> implements JSONSerializable {
     private static final long serialVersionUID = 5889311626900785609L;
 
     /**
      * The request header.
      */
-    private RequestHeader requestHeader;
+    private Header header;
 
     /**
      * The request body.
      */
-    private Body requestBody;
+    private T body;
 
     /**
      * @return the request header
      */
-    public RequestHeader getHeader() {
-        return requestHeader;
+    public Header getHeader() {
+        return header;
     }
 
     /**
      * Sets the request header.
      * @param requestHeader the request header
      */
-    public void setHeader(RequestHeader requestHeader) {
-        this.requestHeader = requestHeader;
+    public void setHeader(Header requestHeader) {
+        this.header = requestHeader;
     }
 
     /**
      * @return the request body
      */
-    public Body getBody() {
-        return requestBody;
+    public T getBody() {
+        return body;
     }
 
     /**
      * Sets the request body.
      * @param requestBody the request body
      */
-    public void setBody(Body requestBody) {
-        this.requestBody = requestBody;
+    public void setBody(T requestBody) {
+        this.body = requestBody;
     }
 
     public Request() { }
 
-    public Request(RequestHeader requestHeader, Body requestBody) {
-        this.requestHeader = requestHeader;
-        this.requestBody = requestBody;
+    public Request(Header requestHeader, T requestBody) {
+        this.header = requestHeader;
+        this.body = requestBody;
     }
 
     @Override
     public void deserialize(JSONObject jsonObject) {
         jsonObject = jsonObject.getJSONObject(RequestFields.REQUEST.toString());
 
-        if (jsonObject.has(RequestFields.Header.HEADER.toString())) {
-            this.requestHeader = new RequestHeader();
-            this.requestHeader.deserialize(jsonObject.getJSONObject(RequestFields.Header.HEADER.toString()));
+        this.header = new Header();
+        this.header.deserialize(jsonObject.getJSONObject(RequestFields.HEADER.toString()));
+
+        try {
+            this.body = ReflectionUtils.instantiateGenericParameter(this.getClass());
+        }
+        catch ( NoSuchMethodException       |
+                InstantiationException      |
+                InvocationTargetException   |
+                IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
 
-        if (jsonObject.has(RequestFields.Body.BODY.toString())) {
-            this.requestBody = new Body();
-            this.requestBody.deserialize(jsonObject.getJSONObject(RequestFields.Body.BODY.toString()));
-        }
+        this.body.deserialize(jsonObject.getJSONObject(RequestFields.BODY.toString()));
     }
 
     @Override
@@ -78,12 +86,12 @@ public class Request implements JSONSerializable {
         JSONObject jsonObject = new JSONObject();
 
         jsonObject.put(
-                RequestFields.Header.HEADER.toString(),
-                this.requestHeader == null ? new JSONObject() : this.requestHeader.serialize()
+                RequestFields.HEADER.toString(),
+                this.header.serialize()
         );
         jsonObject.put(
-                RequestFields.Body.BODY.toString(),
-                this.requestBody == null ? new JSONObject() : this.requestBody.serialize()
+                RequestFields.BODY.toString(),
+                this.body.serialize()
         );
 
         mainJsonObject.put(RequestFields.REQUEST.toString(), jsonObject);

@@ -3,7 +3,8 @@ package it.polimi.ingsw.server.net.endpoints;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignUpInterface;
-import it.polimi.ingsw.net.utils.RequestFields;
+import it.polimi.ingsw.net.requests.SignUpRequest;
+import it.polimi.ingsw.net.responses.SignUpResponse;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
@@ -26,26 +27,22 @@ public class SignUpEndPoint extends UnicastRemoteObject implements SignUpInterfa
     public SignUpEndPoint() throws RemoteException { }
 
     @Override
-    public Response requestSignUp(Request request) {
-        String username = (String) request.getBody().get(
-                RequestFields.Body.Authentication.USERNAME.toString()
-        );
-        String encryptedPassword = (String) request.getBody().get(
-                RequestFields.Body.Authentication.PASSWORD.toString()
-        );
+    public Response<SignUpResponse> requestSignUp(Request<SignUpRequest> request) {
+        String username = request.getBody().getUsername();
+        String encryptedPassword = request.getBody().getPassword();
 
         try {
             // gets the player with the provided username
             DatabasePlayer player = DatabasePlayer.playerWithUsername(username);
 
             if (player != null) {
-                return ResponseFactory.createAlreadyExistsError();
+                return ResponseFactory.createAlreadyExistsError(request);
             }
 
         } catch (SQLException e) {
             ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
-            return ResponseFactory.createInternalServerError();
+            return ResponseFactory.createInternalServerError(request);
         }
 
         try {
@@ -64,11 +61,11 @@ public class SignUpEndPoint extends UnicastRemoteObject implements SignUpInterfa
         } catch (IOException | GeneralSecurityException e) {
             ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while decrypting the password", e);
 
-            return ResponseFactory.createInternalServerError();
+            return ResponseFactory.createInternalServerError(request);
         } catch (SQLException e) {
             ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
-            return ResponseFactory.createInternalServerError();
+            return ResponseFactory.createInternalServerError(request);
         }
 
         // finally sends back the result

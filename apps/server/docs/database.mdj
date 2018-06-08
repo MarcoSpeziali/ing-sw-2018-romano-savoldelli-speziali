@@ -2726,7 +2726,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFixfR7qxHRubI="
 							},
-							"name": "username",
+							"name": "token",
 							"type": "VARCHAR",
 							"length": 0,
 							"primaryKey": false,

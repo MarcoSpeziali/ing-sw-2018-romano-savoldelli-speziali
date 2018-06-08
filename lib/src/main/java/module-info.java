@@ -13,6 +13,9 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.net.utils;
     exports it.polimi.ingsw.net.interfaces;
     exports it.polimi.ingsw.net.mocks;
+    exports it.polimi.ingsw.net.requests;
+    exports it.polimi.ingsw.net.responses;
+    exports it.polimi.ingsw.net.providers;
 
     requires java.xml;
     requires javafx.graphics;

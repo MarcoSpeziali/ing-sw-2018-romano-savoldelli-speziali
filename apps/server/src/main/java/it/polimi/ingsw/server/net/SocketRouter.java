@@ -45,8 +45,8 @@ public final class SocketRouter {
             throw new IllegalStateException("The routing table has not been initialized, call SocketRouter#buildRoutingTable()");
         }
 
-        if (routingTable.containsKey(request.getBody().getEndPointFunction())) {
-            Class<? extends CommandHandler> targetClass = routingTable.get(request.getBody().getEndPointFunction());
+        if (routingTable.containsKey(request.getHeader().getEndPointFunction())) {
+            Class<? extends CommandHandler> targetClass = routingTable.get(request.getHeader().getEndPointFunction());
 
             try {
                 return targetClass.getDeclaredConstructor().newInstance();
@@ -55,7 +55,7 @@ public final class SocketRouter {
                         .log(
                                 Level.SEVERE,
                                 "Could not instantiate command handler for endpoint: " +
-                                        request.getBody().getEndPointFunction().toString(),
+                                        request.getHeader().getEndPointFunction().toString(),
                                 e
                         );
 
