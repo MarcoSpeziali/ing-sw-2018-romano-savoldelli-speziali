@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.net.providers;
+package it.polimi.ingsw.net.providers;
 
 import it.polimi.ingsw.net.Body;
 import it.polimi.ingsw.net.Request;
@@ -52,7 +52,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         AtomicReference<Response> receivedResponse = new AtomicReference<>();
 
         Consumer<Response> oldListener = this.responseListeners.put(
-                request.getBody().getEndPointFunction(),
+                request.getHeader().getEndPointFunction(),
                 receivedResponse::set
         );
 
@@ -66,11 +66,11 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         }
 
         if (oldListener == null) {
-            this.responseListeners.remove(request.getBody().getEndPointFunction());
+            this.responseListeners.remove(request.getHeader().getEndPointFunction());
         }
         else {
             this.responseListeners.put(
-                    request.getBody().getEndPointFunction(), oldListener
+                    request.getHeader().getEndPointFunction(), oldListener
             );
         }
 
@@ -85,21 +85,21 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
 
         try {
             Consumer<Response> oldListener = this.responseListeners.getOrDefault(
-                    request.getBody().getEndPointFunction(),
+                    request.getHeader().getEndPointFunction(),
                     null
             );
 
             this.responseListeners.put(
-                    request.getBody().getEndPointFunction(),
+                    request.getHeader().getEndPointFunction(),
                     response -> {
                         responseConsumer.accept(response);
 
                         if (oldListener == null) {
-                            this.responseListeners.remove(request.getBody().getEndPointFunction());
+                            this.responseListeners.remove(request.getHeader().getEndPointFunction());
                         }
                         else {
                             this.responseListeners.put(
-                                    request.getBody().getEndPointFunction(), oldListener
+                                    request.getHeader().getEndPointFunction(), oldListener
                             );
                         }
                     }
@@ -158,19 +158,19 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     };
 
     private void handleResponse(Response response) {
-        if (response.getResponseError() != null && this.errorListeners.containsKey(response.getBody().getEndPointFunction())) {
-            this.errorListeners.get(response.getBody().getEndPointFunction()).accept(response.getResponseError());
+        if (response.getError() != null && this.errorListeners.containsKey(response.getHeader().getEndPointFunction())) {
+            this.errorListeners.get(response.getHeader().getEndPointFunction()).accept(response.getError());
             return;
         }
 
-        if (this.responseListeners.containsKey(response.getBody().getEndPointFunction())) {
-            this.responseListeners.get(response.getBody().getEndPointFunction()).accept(response);
+        if (this.responseListeners.containsKey(response.getHeader().getEndPointFunction())) {
+            this.responseListeners.get(response.getHeader().getEndPointFunction()).accept(response);
         }
     }
 
     private Response handleRequest(Request request) {
-        if (this.requestListeners.containsKey(request.getBody().getEndPointFunction())) {
-            return this.requestListeners.get(request.getBody().getEndPointFunction()).apply(request);
+        if (this.requestListeners.containsKey(request.getHeader().getEndPointFunction())) {
+            return this.requestListeners.get(request.getHeader().getEndPointFunction()).apply(request);
         }
 
         return null;

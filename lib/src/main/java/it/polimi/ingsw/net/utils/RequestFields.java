@@ -1,7 +1,9 @@
 package it.polimi.ingsw.net.utils;
 
 public enum RequestFields {
-    REQUEST("request");
+    REQUEST("request"),
+    HEADER("header"),
+    BODY("body");
 
     private final String fieldName;
 
@@ -16,7 +18,8 @@ public enum RequestFields {
 
     public enum Header {
         HEADER("header"),
-        CLIENT_TOKEN("client-token");
+        CLIENT_TOKEN("client-token"),
+        ENDPOINT("endpoint");
 
         private final String fieldName;
 
@@ -31,8 +34,7 @@ public enum RequestFields {
     }
 
     public enum Body {
-        BODY("body"),
-        ENDPOINT("endpoint");
+        BODY("body");
 
         private final String fieldName;
 
@@ -45,7 +47,7 @@ public enum RequestFields {
             return this.fieldName;
         }
 
-        public enum Authentication {
+        /*public enum Authentication {
             CHALLENGE_RESPONSE("challenge-response"),
             SESSION_ID("session-id"),
             USERNAME("username"),
@@ -61,6 +63,6 @@ public enum RequestFields {
             public String toString() {
                 return fieldName;
             }
-        }
+        }*/
     }
 }

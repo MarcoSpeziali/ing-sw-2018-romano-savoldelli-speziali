@@ -1,13 +1,16 @@
 package it.polimi.ingsw.client.net.authentication;
 
 import it.polimi.ingsw.client.Settings;
-import it.polimi.ingsw.client.net.providers.OneTimeNetworkResponseProvider;
-import it.polimi.ingsw.client.net.providers.OneTimeRMIResponseProvider;
-import it.polimi.ingsw.client.net.providers.OneTimeSocketResponseProvider;
-import it.polimi.ingsw.net.*;
+import it.polimi.ingsw.net.providers.OneTimeNetworkResponseProvider;
+import it.polimi.ingsw.net.providers.OneTimeRMIResponseProvider;
+import it.polimi.ingsw.net.providers.OneTimeSocketResponseProvider;
+import it.polimi.ingsw.net.Header;
+import it.polimi.ingsw.net.Request;
+import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignUpInterface;
+import it.polimi.ingsw.net.requests.SignUpRequest;
+import it.polimi.ingsw.net.responses.SignUpResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.CypherUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
@@ -17,7 +20,6 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.GeneralSecurityException;
-import java.util.Map;
 
 public class SignUpManager {
 
@@ -56,25 +58,22 @@ public class SignUpManager {
         );
 
         // builds the sign-up request
-        Request signUpRequest = new Request(
-                new RequestHeader(null),
-                new Body(
-                        EndPointFunction.SIGN_UP,
-                        Map.of(
-                                RequestFields.Body.Authentication.USERNAME.toString(), username,
-                                RequestFields.Body.Authentication.PASSWORD.toString(), encryptedString
-                        )
+        Request<SignUpRequest> signUpRequest = new Request<>(
+                new Header(EndPointFunction.SIGN_UP),
+                new SignUpRequest(
+                        username,
+                        encryptedString
                 )
         );
 
         // requests the sign-up
-        Response response = this.oneTimeNetworkResponseProvider.getSyncResponseFor(signUpRequest);
+        Response<SignUpResponse> response = this.oneTimeNetworkResponseProvider.getSyncResponseFor(signUpRequest);
 
         // the possible errors are:
         //  - 409 Already Exists
         //  - 500 Internal Server Error
-        if (response.getResponseError() != null) {
-            int errorCode = response.getResponseError().getErrorCode();
+        if (response.getError() != null) {
+            int errorCode = response.getError().getErrorCode();
 
             if (errorCode == ResponseFields.Error.ALREADY_EXISTS.getCode()) {
                 return false;

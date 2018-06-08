@@ -3,7 +3,10 @@ package it.polimi.ingsw.server.net.endpoints;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignInInterface;
-import it.polimi.ingsw.net.utils.RequestFields;
+import it.polimi.ingsw.net.requests.ChallengeRequest;
+import it.polimi.ingsw.net.requests.SignInRequest;
+import it.polimi.ingsw.net.responses.ChallengeResponse;
+import it.polimi.ingsw.net.responses.SignInResponse;
 import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.sql.DatabasePreAuthenticationSession;
@@ -54,14 +57,12 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
     }
 
     @Override
-    public Response requestLogin(Request request) {
+    public Response<ChallengeRequest> requestLogin(Request<SignInRequest> request) {
         // creates a random string which represents the challenge for the client to fulfill
         String randomString = RandomString.create();
 
         try {
-            String username = (String) request.getBody().get(
-                    RequestFields.Body.Authentication.USERNAME.toString()
-            );
+            String username = request.getBody().getUsername();
 
             // retrieves the player from the database with the provided username
             DatabasePlayer player = DatabasePlayer.playerWithUsername(username);
@@ -105,11 +106,11 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
             // sends back an internal server error
-            return ResponseFactory.createInternalServerError();
+            return ResponseFactory.createInternalServerError(request);
         } catch (NoSuchAlgorithmException e) {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
-            return ResponseFactory.createInternalServerError();
+            return ResponseFactory.createInternalServerError(request);
         } catch (ServerNotActiveException e) {
             e.printStackTrace();
 
@@ -118,31 +119,28 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
     }
 
     @Override
-    public Response fulfillChallenge(Request request) {
+    public Response<SignInResponse> fulfillChallenge(Request<ChallengeResponse> request) {
         try {
-            String challengeResponse = (String) request.getBody().get(
-                    RequestFields.Body.Authentication.CHALLENGE_RESPONSE.toString()
-            );
-            int sessionId = (int) request.getBody().get(
-                    RequestFields.Body.Authentication.SESSION_ID.toString()
-            );
+            String challengeResponse = request.getBody().getChallenge();
+
+            int sessionId = request.getBody().getSessionId();
 
             // retrieves the authentication session from the provided id
             DatabasePreAuthenticationSession preAuthenticationSession = DatabasePreAuthenticationSession.authenticationSessionWithId(sessionId);
 
             // if the authentication session does not exists then the user is unauthorised
             if (preAuthenticationSession == null) {
-                return ResponseFactory.createUnauthorisedError();
+                return ResponseFactory.createUnauthorisedError(request);
             }
 
             // if the player id is -1 then the session was fake (the player did not exist)
             if (preAuthenticationSession.getPlayerId() == -1) {
-                return ResponseFactory.createUnauthorisedError();
+                return ResponseFactory.createUnauthorisedError(request);
             }
 
             // if the authentication session is expired then the user is unauthorised
             if (preAuthenticationSession.getInvalidationTimeStamp() < System.currentTimeMillis()) {
-                return ResponseFactory.createAuthenticationTimeoutError();
+                return ResponseFactory.createAuthenticationTimeoutError(request);
             }
 
             // retrieves the player
@@ -150,7 +148,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
 
             // if, for some reasons, the player does not exists then the user is unauthorised
             if (player == null) {
-                return ResponseFactory.createUnauthorisedError();
+                return ResponseFactory.createUnauthorisedError(request);
             }
 
             // gets the expected response
@@ -184,16 +182,16 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
                 return ResponseFactory.createAuthenticationTokenResponse(request, hashedToken);
             }
             else {
-                return ResponseFactory.createUnauthorisedError();
+                return ResponseFactory.createUnauthorisedError(request);
             }
         } catch (SQLException e) {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
-            return ResponseFactory.createInternalServerError();
+            return ResponseFactory.createInternalServerError(request);
         } catch (NoSuchAlgorithmException e) {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
-            return ResponseFactory.createInternalServerError();
+            return ResponseFactory.createInternalServerError(request);
         }
     }
 
