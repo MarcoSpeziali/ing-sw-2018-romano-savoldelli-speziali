@@ -3,8 +3,8 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
-import it.polimi.ingsw.server.net.SagradaMultiplayerServer;
-import it.polimi.ingsw.server.net.SocketRouter;
+import it.polimi.ingsw.server.net.sockets.ClientAcceptor;
+import it.polimi.ingsw.server.net.sockets.SocketRouter;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
 import it.polimi.ingsw.server.sql.SagradaDatabase;
@@ -25,7 +25,7 @@ import java.util.logging.Level;
 
 public class ServerApp {
 
-    private static SagradaMultiplayerServer socketServer;
+    private static ClientAcceptor socketServer;
 
     public static void main(String[] args) throws IOException {
         // parses the arguments
@@ -141,7 +141,7 @@ public class ServerApp {
      * @throws IOException if any IO errors occurs
      */
     private static void startMultiplayerServer() throws IOException {
-        socketServer = new SagradaMultiplayerServer(Settings.getSettings().getSocketPort());
+        socketServer = new ClientAcceptor(Settings.getSettings().getSocketPort());
 
         Thread thread = ThreadManager.addThread(Constants.Threads.SOCKET_LISTENER, socketServer);
         thread.setDaemon(false);

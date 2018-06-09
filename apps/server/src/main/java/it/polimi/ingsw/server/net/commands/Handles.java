@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.net.handlers;
+package it.polimi.ingsw.server.net.commands;
 
 import it.polimi.ingsw.net.utils.EndPointFunction;
 

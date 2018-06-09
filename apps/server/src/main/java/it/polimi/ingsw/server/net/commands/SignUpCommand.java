@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.net.handlers;
+package it.polimi.ingsw.server.net.commands;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
@@ -8,7 +8,7 @@ import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
 import java.net.Socket;
 
 @Handles(EndPointFunction.SIGN_UP)
-public class SignUpHandler implements CommandHandler {
+public class SignUpCommand implements Command {
 
     @Override
     public Response handle(Request request, Socket client) throws Exception {

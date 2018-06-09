@@ -3,22 +3,19 @@ package it.polimi.ingsw.server.managers;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.sql.DatabaseSession;
+import it.polimi.ingsw.utils.io.JSONSerializable;
 
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
 public final class AuthenticationManager {
 
-    private static AuthenticationManager instance = new AuthenticationManager();
-
-    public static AuthenticationManager getInstance() {
-        return instance;
-    }
+    private AuthenticationManager() {}
 
     // TODO: complete
-    public static synchronized DatabasePlayer getAuthenticatedPlayer(Request<?> request) throws SQLException, TimeoutException {
+    public static synchronized DatabasePlayer getAuthenticatedPlayer(Request<? extends JSONSerializable> request) throws SQLException, TimeoutException {
         if (request.getHeader().getClientToken() == null) {
-            return null; // TODO: throw malformed request exception
+            return null;
         }
 
         String token = request.getHeader().getClientToken();
@@ -26,10 +23,10 @@ public final class AuthenticationManager {
         DatabaseSession session = DatabaseSession.sessionWithToken(token);
 
         if (session == null) {
-            return null; // TODO: throw exception
+            return null;
         }
         else if (session.getInvalidationTimeStamp() < System.currentTimeMillis()) {
-            throw new TimeoutException(); // TODO: create custom exception
+            throw new TimeoutException();
         }
 
         return session.getPreAuthenticationSession().getPlayer();
