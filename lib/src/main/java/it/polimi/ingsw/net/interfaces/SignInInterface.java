@@ -15,9 +15,9 @@ import java.rmi.RemoteException;
 // TODO: docs
 public interface SignInInterface extends Remote {
 
-    @RespondsTo(EndPointFunction.REQUEST_AUTHENTICATION)
+    @RespondsTo(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION)
     Response<ChallengeRequest> requestLogin(Request<SignInRequest> request) throws IOException;
 
-    @RespondsTo(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE)
+    @RespondsTo(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE)
     Response<SignInResponse> fulfillChallenge(Request<ChallengeResponse> request) throws RemoteException;
 }

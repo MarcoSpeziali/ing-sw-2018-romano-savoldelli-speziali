@@ -15,7 +15,6 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
 
     private static final long serialVersionUID = -3163357263339164222L;
 
-
     /**
      * The header of the response.
      */

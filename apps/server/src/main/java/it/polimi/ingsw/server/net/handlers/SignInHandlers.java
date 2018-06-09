@@ -10,7 +10,7 @@ import java.net.Socket;
 public class SignInHandlers {
     private SignInHandlers() {}
 
-    @Handles(EndPointFunction.REQUEST_AUTHENTICATION)
+    @Handles(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION)
     public static class RequestLoginHandler implements CommandHandler {
 
         @Override
@@ -27,7 +27,7 @@ public class SignInHandlers {
         }
     }
 
-    @Handles(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE)
+    @Handles(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE)
     public static class FulfillChallengeHandler implements CommandHandler {
 
         @Override

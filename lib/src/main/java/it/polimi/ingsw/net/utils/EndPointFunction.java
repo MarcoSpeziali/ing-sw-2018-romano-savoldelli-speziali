@@ -2,10 +2,11 @@ package it.polimi.ingsw.net.utils;
 
 // TODO: docs
 public enum EndPointFunction {
-    REQUEST_AUTHENTICATION("sign-in/request_authentication"),
-    FULFILL_AUTHENTICATION_CHALLENGE("sign-in/fulfill_challenge"),
+    SIGN_IN_REQUEST_AUTHENTICATION("sign-in/request_authentication"),
+    SIGN_IN_FULFILL_CHALLENGE("sign-in/fulfill_challenge"),
     SIGN_UP("sign-up"),
-    LOOK_UP("look-up");
+    LOBBY_JOIN_REQUEST("lobby/join_request"),
+    LOBBY_REGISTER_FOR_UPDATES("lobby/register_for_updates");
 
     private final String endPointFunctionName;
 

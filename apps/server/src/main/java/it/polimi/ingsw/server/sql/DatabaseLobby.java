@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+// TODO: docs
 public class DatabaseLobby implements ILobby {
 
     private static final long serialVersionUID = -6877327242164411945L;
@@ -118,6 +119,30 @@ public class DatabaseLobby implements ILobby {
 
     public static DatabaseLobby closeLobby(int id) throws SQLException {
         return updateLobby(id, Map.of("closing_time", "current_timestamp"));
+    }
+
+    public static void insertPlayer(int lobbyId, int playerId) throws SQLException {
+        String query = String.format(
+                "INSERT INTO lobby_player (lobby, player) VALUES ('%d', '%d')",
+                lobbyId,
+                playerId
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            database.executeQuery(query, null);
+        }
+    }
+
+    public static void removePlayer(int lobbyId, int playerId) throws SQLException {
+        String query = String.format(
+                "DELETE FROM lobby_player WHERE lobby = '%d' AND player = '%d'",
+                lobbyId,
+                playerId
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            database.executeQuery(query, null);
+        }
     }
 
     public static DatabaseLobby updateLobby(int id, Map<String, String> updateMap) throws SQLException {

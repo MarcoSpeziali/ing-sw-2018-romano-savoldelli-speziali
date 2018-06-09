@@ -5,7 +5,6 @@ import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
 import it.polimi.ingsw.server.net.SagradaMultiplayerServer;
 import it.polimi.ingsw.server.net.SocketRouter;
-import it.polimi.ingsw.server.net.endpoints.LobbyLookupEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
 import it.polimi.ingsw.server.sql.SagradaDatabase;
@@ -18,8 +17,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.AlreadyBoundException;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -176,8 +173,8 @@ public class ServerApp {
     private static void registerRMIRemoteInterfaces() throws RemoteException {
         Registry registry = LocateRegistry.createRegistry(Settings.getSettings().getRmiPort());
 
-        registry.rebind(getRMIEndPointName(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE), new SignInEndPoint());
-        registry.rebind(getRMIEndPointName(EndPointFunction.REQUEST_AUTHENTICATION), new SignInEndPoint());
+        registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE), new SignInEndPoint());
+        registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_UP), new SignUpEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.LOOK_UP), new LobbyLookupEndPoint());
     }

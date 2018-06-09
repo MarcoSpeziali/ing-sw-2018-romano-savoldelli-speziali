@@ -16,7 +16,7 @@ public final class AuthenticationManager {
     }
 
     // TODO: complete
-    public static synchronized DatabasePlayer getAuthenticatedPlayer(Request request) throws SQLException, TimeoutException {
+    public static synchronized DatabasePlayer getAuthenticatedPlayer(Request<?> request) throws SQLException, TimeoutException {
         if (request.getHeader().getClientToken() == null) {
             return null; // TODO: throw malformed request exception
         }

@@ -59,7 +59,7 @@ public class SignInManager {
     public boolean signIn(String username, String password) throws IOException, TimeoutException, NotBoundException, ReflectiveOperationException {
         // builds the sign-in request
         Request<SignInRequest> authenticationRequest = new Request<>(
-                new Header(EndPointFunction.REQUEST_AUTHENTICATION),
+                new Header(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION),
                 new SignInRequest(username)
         );
 
@@ -76,7 +76,7 @@ public class SignInManager {
 
         // builds the challenge-fulfill request
         Request<ChallengeResponse> fulfillRequest = new Request<>(
-                new Header(EndPointFunction.FULFILL_AUTHENTICATION_CHALLENGE),
+                new Header(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE),
                 new ChallengeResponse(
                         fulfillChallenge(
                                 challenge,

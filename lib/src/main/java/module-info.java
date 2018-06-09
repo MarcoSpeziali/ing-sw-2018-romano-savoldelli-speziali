@@ -16,6 +16,7 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.net.requests;
     exports it.polimi.ingsw.net.responses;
     exports it.polimi.ingsw.net.providers;
+    exports it.polimi.ingsw.net.interfaces.updates;
 
     requires java.xml;
     requires javafx.graphics;

@@ -4,7 +4,9 @@ import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
+import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.requests.ChallengeRequest;
+import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.net.requests.SignInRequest;
 import it.polimi.ingsw.net.requests.SignUpRequest;
 import it.polimi.ingsw.net.responses.ChallengeResponse;
@@ -41,6 +43,15 @@ public final class ResponseFactory {
                         originalRequest.getHeader().getEndPointFunction()
                 ),
                 new SignUpResponse()
+        );
+    }
+
+    public static Response<ILobby> createLobbyResponse(Request<LobbyJoinRequest> originalRequest, ILobby lobbyData) {
+        return new Response<>(
+                new Header(
+                        originalRequest.getHeader().getEndPointFunction()
+                ),
+                lobbyData
         );
     }
 
