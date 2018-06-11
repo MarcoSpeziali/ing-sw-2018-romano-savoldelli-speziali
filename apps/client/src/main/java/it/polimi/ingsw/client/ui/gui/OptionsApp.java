@@ -30,9 +30,8 @@ public class OptionsApp extends Application {
 
         options = new Scene(optionsParent, 1280, 720);
         settings = new Scene(settingsParent, 1280, 720);
-        lobby = new Scene(new LobbyGUIView().getView(), 1280, 720 );
-        //loadOptions();
-        loadLobby();
+
+        loadOptions();
         //primaryStage.setFullScreen(TRUE);
         primaryStage.show();
 
@@ -47,7 +46,8 @@ public class OptionsApp extends Application {
     public static void quit(){
         OptionsApp.stage.close();
     }
-    public static void loadLobby(){
+    public static void loadLobby() throws MalformedURLException {
+        lobby = new Scene(new LobbyGUIView().getView(), 1280, 720 );
         OptionsApp.stage.setScene(lobby);
-    }
+        }
 }

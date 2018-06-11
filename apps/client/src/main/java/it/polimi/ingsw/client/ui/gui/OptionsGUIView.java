@@ -117,6 +117,16 @@ public class OptionsGUIView {
                 OptionsApp.quit();
             }
         });
+        play.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    OptionsApp.loadLobby();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
     public Parent getView(){
