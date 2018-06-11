@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 
 // TODO: document
 public class DatabasePlayer implements IPlayer {
@@ -134,5 +135,24 @@ public class DatabasePlayer implements IPlayer {
         jsonObject.put("username", this.username);
         
         return jsonObject;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        
+        DatabasePlayer player = (DatabasePlayer) o;
+        return id == player.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

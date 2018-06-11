@@ -108,16 +108,24 @@ public class Constants {
     }
 
     public enum Threads {
-        SOCKET_LISTENER("socket-listener");
+        ROOT("root"),
+        SOCKET_LISTENER("socket-listener"),
+        CLIENT_HANDLER("client-handler"),
+        CLIENT_INPUT_HANDLER("client-input-listener");
 
         private final String name;
 
-        public String getName() {
+        @Override
+        public String toString() {
             return name;
         }
 
         Threads(String name) {
             this.name = name;
         }
+    }
+    
+    public enum LockTargets {
+        LOBBY
     }
 }

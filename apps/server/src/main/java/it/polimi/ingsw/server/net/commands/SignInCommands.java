@@ -10,6 +10,7 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 
 import java.net.Socket;
+import java.rmi.RemoteException;
 
 public class SignInCommands {
     private SignInCommands() {}
@@ -18,7 +19,7 @@ public class SignInCommands {
     public static class SignInRequestCommand implements Command<ChallengeRequest, SignInRequest> {
 
         @Override
-        public Response<ChallengeRequest> handle(Request<SignInRequest> request, Socket client) throws Exception {
+        public Response<ChallengeRequest> handle(Request<SignInRequest> request, Socket client) throws RemoteException {
             SignInEndPoint signInEndPoint = new SignInEndPoint();
             signInEndPoint.setSocket(client);
 
@@ -35,7 +36,7 @@ public class SignInCommands {
     public static class FulfillChallengeCommand implements Command<SignInResponse, ChallengeResponse> {
 
         @Override
-        public Response<SignInResponse> handle(Request<ChallengeResponse> request, Socket client) throws Exception {
+        public Response<SignInResponse> handle(Request<ChallengeResponse> request, Socket client) throws RemoteException {
             SignInEndPoint signInEndPoint = new SignInEndPoint();
             signInEndPoint.setSocket(client);
 

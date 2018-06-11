@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.managers;
 
-import it.polimi.ingsw.server.concurrency.LockTarget;
+import it.polimi.ingsw.server.Constants;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -9,9 +9,9 @@ public class LockManager {
 
     private LockManager() {}
 
-    private static Map<LockTarget, Object> lockObjects = new EnumMap<>(LockTarget.class);
+    private static Map<Constants.LockTargets, Object> lockObjects = new EnumMap<>(Constants.LockTargets.class);
 
-    public static Object getLockObject(LockTarget target) {
+    public static Object getLockObject(Constants.LockTargets target) {
         if (lockObjects.containsKey(target)) {
             Object o = new Object();
             lockObjects.put(target, o);

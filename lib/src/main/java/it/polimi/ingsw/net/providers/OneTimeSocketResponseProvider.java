@@ -9,7 +9,15 @@ import java.io.*;
 import java.net.Socket;
 
 public class OneTimeSocketResponseProvider implements OneTimeNetworkResponseProvider {
-
+    
+    private final String socketAddress;
+    private final int socketPort;
+    
+    public OneTimeSocketResponseProvider(String socketAddress, int socketPort) {
+        this.socketAddress = socketAddress;
+        this.socketPort = socketPort;
+    }
+    
     /**
      * Sends a {@link Request} to the server and waits for a {@link Response} (blocking call).
      * Then the connection is terminated.
@@ -37,5 +45,15 @@ public class OneTimeSocketResponseProvider implements OneTimeNetworkResponseProv
 
             return response;
         }
+    }
+    
+    @Override
+    public String getServerAddress() {
+        return this.socketAddress;
+    }
+    
+    @Override
+    public int getServerPort() {
+        return this.socketPort;
     }
 }

@@ -17,11 +17,25 @@ import java.rmi.registry.Registry;
 public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetworkResponseProvider {
 
     private final Class<R> remoteInterfaceType;
-
-    public OneTimeRMIResponseProvider(Class<R> remoteInterfaceType) {
+    private final String rmiAddress;
+    private final int rmiPort;
+    
+    public OneTimeRMIResponseProvider(Class<R> remoteInterfaceType, String rmiAddress, int rmiPort) {
         this.remoteInterfaceType = remoteInterfaceType;
+        this.rmiAddress = rmiAddress;
+        this.rmiPort = rmiPort;
     }
-
+    
+    @Override
+    public String getServerAddress() {
+        return this.rmiAddress;
+    }
+    
+    @Override
+    public int getServerPort() {
+        return this.rmiPort;
+    }
+    
     /**
      * Sends a {@link Request} to the server and waits for a {@link Response} (blocking call).
      * Then the connection is terminated.

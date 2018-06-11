@@ -31,4 +31,16 @@ public final class AuthenticationManager {
 
         return session.getPreAuthenticationSession().getPlayer();
     }
+
+    public static synchronized boolean isAuthenticated(Request<? extends JSONSerializable> request) throws SQLException {
+        if (request.getHeader().getClientToken() == null) {
+            return false;
+        }
+
+        String token = request.getHeader().getClientToken();
+
+        DatabaseSession session = DatabaseSession.sessionWithToken(token);
+
+        return session != null && session.getInvalidationTimeStamp() >= System.currentTimeMillis();
+    }
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
+import it.polimi.ingsw.server.net.endpoints.LobbyEndPoint;
 import it.polimi.ingsw.server.net.sockets.ClientAcceptor;
 import it.polimi.ingsw.server.net.sockets.SocketRouter;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
@@ -44,7 +45,7 @@ public class ServerApp {
             Settings.build();
 
             // build the routing table for the socket router
-            SocketRouter.buildRoutingTable();
+            SocketRouter.buildRoutingTables();
 
             // create the folders needed by the server
             createProjectsFolders();
@@ -59,9 +60,6 @@ public class ServerApp {
 
             // starts the multiplayer server (sockets)
             startMultiplayerServer();
-
-            // sets up the security manager
-            // setUpSecurityManager();
 
             // publishes requested classes on RMI registry
             registerRMIRemoteInterfaces();
@@ -157,16 +155,6 @@ public class ServerApp {
     }
 
     /**
-     * Sets up the security manager.
-     */
-    private static void setUpSecurityManager() {
-        // TODO: check if needed
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
-    }
-
-    /**
      * Creates the {@link Registry} and the binding between the endpoints and the created {@link Registry}.
      * @throws RemoteException if the reference to the {@link Registry} could not be created
      */
@@ -176,7 +164,8 @@ public class ServerApp {
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_UP), new SignUpEndPoint());
-        registry.rebind(getRMIEndPointName(EndPointFunction.LOOK_UP), new LobbyLookupEndPoint());
+        registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_JOIN_REQUEST), LobbyEndPoint.getInstance());
+        registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_REGISTER_FOR_UPDATES), LobbyEndPoint.getInstance());
     }
 
     /**

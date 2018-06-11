@@ -1,13 +1,13 @@
 package it.polimi.ingsw.client.net.authentication;
 
 import it.polimi.ingsw.client.Settings;
-import it.polimi.ingsw.net.providers.OneTimeNetworkResponseProvider;
-import it.polimi.ingsw.net.providers.OneTimeRMIResponseProvider;
-import it.polimi.ingsw.net.providers.OneTimeSocketResponseProvider;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignInInterface;
+import it.polimi.ingsw.net.providers.OneTimeNetworkResponseProvider;
+import it.polimi.ingsw.net.providers.OneTimeRMIResponseProvider;
+import it.polimi.ingsw.net.providers.OneTimeSocketResponseProvider;
 import it.polimi.ingsw.net.requests.ChallengeRequest;
 import it.polimi.ingsw.net.requests.SignInRequest;
 import it.polimi.ingsw.net.responses.ChallengeResponse;
@@ -34,10 +34,17 @@ public class SignInManager {
 
     private SignInManager() {
         if (Settings.getSettings().isUsingSockets()) {
-            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider();
+            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
+                    Settings.getSettings().getServerSocketAddress(),
+                    Settings.getSettings().getServerSocketPort()
+            );
         }
         else {
-            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(SignInInterface.class);
+            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
+                    SignInInterface.class,
+                    Settings.getSettings().getServerRMIAddress(),
+                    Settings.getSettings().getServerRMIPort()
+            );
         }
     }
 

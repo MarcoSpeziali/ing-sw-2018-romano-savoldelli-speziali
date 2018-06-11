@@ -14,7 +14,13 @@ import java.util.function.Consumer;
  * {@link Response}, closes the connection.
  */
 public interface OneTimeNetworkResponseProvider {
-
+    
+    // TODO: docs
+    String getServerAddress();
+    
+    // TODO: docs
+    int getServerPort();
+    
     /**
      * Sends a {@link Request} to the server and waits for a {@link Response} (blocking call).
      * Then the connection is terminated.
@@ -28,7 +34,7 @@ public interface OneTimeNetworkResponseProvider {
      * @throws ReflectiveOperationException if a reflection error occurs
      */
     <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException, ReflectiveOperationException;
-
+    
     /**
      * Sends a {@link Request} to the server.
      * Then the connection is terminated.
@@ -52,5 +58,28 @@ public interface OneTimeNetworkResponseProvider {
                 }
             }
         }).start();
+    }
+    
+    default <T extends JSONSerializable, K extends JSONSerializable> void getAsyncResponseFor(Request<K> request, Consumer<Response<T>> responseConsumer, Consumer<Exception> onError) {
+        new Thread(() -> {
+            try {
+                responseConsumer.accept(
+                        getSyncResponseFor(request, getServerAddress(), getServerPort())
+                );
+            }
+            catch (IOException | ReflectiveOperationException | NotBoundException e) {
+                if (onError != null) {
+                    onError.accept(e);
+                }
+            }
+        }).start();
+    }
+    
+    default <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException, NotBoundException, ReflectiveOperationException {
+        return getSyncResponseFor(
+                request,
+                getServerAddress(),
+                getServerPort()
+        );
     }
 }

@@ -12,7 +12,7 @@ public class Player implements RandomPickLocation, RandomPutLocation {
     private ObjectiveCard[] privateObjectiveCard;
     private byte favourTokenCount;
     private Die pickedDie;
-
+    
     /**
      * Sets up a new {@link Player}
      * @param profile is the player's profile
