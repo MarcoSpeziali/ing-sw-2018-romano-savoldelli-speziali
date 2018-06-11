@@ -46,7 +46,13 @@ public class Constants {
 
     public enum Resources {
         DEFAULT_SETTINGS("default_settings.xml"),
-        RESOURCE_NAME("relative_path_to_resource");
+        CELL_ONE("cells/cell_one.png"),
+        CELL_TWO("cells/cell_two.png"),
+        CELL_THREE("cells/cell_three.png"),
+        CELL_FOUR("cells/cell_four.png"),
+        CELL_FIVE("cells/cell_five.png"),
+        CELL_SIX("cells/cell_six.png");
+
 
         private final String relativePath;
 

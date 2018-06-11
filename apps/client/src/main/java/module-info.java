@@ -7,6 +7,5 @@ module it.polimi.ingsw.client {
     requires javafx.controls;
     requires java.xml;
     requires json;
-
     exports it.polimi.ingsw.client.ui.gui to javafx.graphics;
 }

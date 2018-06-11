@@ -14,22 +14,6 @@ public class CellCLIView extends CellView {
 
     private char shade;
     private Ansi.Color ansiColor;
-    private Cell cell;
-    private Scanner scanner = new Scanner(System.in);
-
-
-    public CellCLIView(Cell cell) {
-        this.cell = cell;
-
-        if (cell.getColor() == null) {
-            this.ansiColor = Ansi.Color.WHITE;
-        }
-        else {
-           ansiColor = Ansi.Color.valueOf(cell.getColor().toAnsiColor());
-        }
-
-        shade = cell.getShade() == 0 ? ' ' : cell.getShade().toString().charAt(0);
-    }
 
     @Override
 
@@ -46,7 +30,15 @@ public class CellCLIView extends CellView {
     @Override
     public void setCell(Cell cell) {
         super.setCell(cell);
-        //TODO implement setCell
+
+        if (cell.getColor() == null) {
+            this.ansiColor = Ansi.Color.WHITE;
+        }
+        else {
+            ansiColor = Ansi.Color.valueOf(cell.getColor().toAnsiColor());
+        }
+
+        shade = cell.getShade() == 0 ? ' ' : cell.getShade().toString().charAt(0);
     }
 }
 

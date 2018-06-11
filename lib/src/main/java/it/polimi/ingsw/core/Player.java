@@ -12,7 +12,13 @@ public class Player implements RandomPickLocation, RandomPutLocation {
     private ObjectiveCard[] privateObjectiveCard;
     private byte favourTokenCount;
     private Die pickedDie;
-    
+
+    private static Player currentPlayer;
+
+    public static Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     /**
      * Sets up a new {@link Player}
      * @param profile is the player's profile
@@ -23,6 +29,8 @@ public class Player implements RandomPickLocation, RandomPutLocation {
         this.profile = profile;
         this.privateObjectiveCard = privateObjectiveCard;
         this.favourTokenCount = favourTokenCount;
+
+        currentPlayer = this;
     }
 
     /**

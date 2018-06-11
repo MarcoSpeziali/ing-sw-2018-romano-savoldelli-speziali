@@ -12,7 +12,7 @@ class CellCLIViewTest {
     private CellCLIView c2;
     private CellCLIView c3;
 
-    @BeforeEach
+    /*@BeforeEach
     void setUp() {
         this.c1 = new CellCLIView(new Cell(5, GlassColor.YELLOW));
         this.c2 = new CellCLIView(new Cell(1, null));
@@ -23,5 +23,5 @@ class CellCLIViewTest {
         c1.render();
         c2.render();
         c3.render();
-    }
+    }*/
 }

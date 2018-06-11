@@ -29,7 +29,7 @@ public class MenuCLIView implements Renderable {
         System.out.println("Welcome to ClientApp Game:\n");
         System.out.println("[1] Play game");
         System.out.println("[2] Scoreboard");
-        System.out.println("[3] Settings");
+        System.out.println("[3] SettingsGUIView");
     }
 }
 
