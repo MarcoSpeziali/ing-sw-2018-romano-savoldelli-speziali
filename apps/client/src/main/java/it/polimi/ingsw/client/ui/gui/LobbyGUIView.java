@@ -145,7 +145,13 @@ public class LobbyGUIView {
         timeline.getKeyFrames().add(
                 new KeyFrame(Duration.seconds(1), e -> {
                     timeSeconds--;
-                    seconds.setText(timeSeconds.toString());
+                    if(timeSeconds<10) {
+                        seconds.setText("0" + timeSeconds.toString());
+
+                    }
+                    else {
+                        seconds.setText(timeSeconds.toString());
+                    }
                     if(timeSeconds<=0){
                         timeline.stop();
                         }
@@ -153,7 +159,7 @@ public class LobbyGUIView {
         timeline.playFromStart();
 
         glass.getChildren().add(countDown);
-        countDown.setLayoutX(162);
+        countDown.setLayoutX(161);
         countDown.setLayoutY(375);
         countDown.setStyle(
                 "-fx-font-weight: bold;" +
