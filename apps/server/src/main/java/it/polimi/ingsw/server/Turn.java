@@ -1,72 +1,61 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.core.Player;
-import it.polimi.ingsw.listeners.OnDiePickedListener;
-import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.ToolCard;
+import it.polimi.ingsw.server.managers.WorkflowManager;
+
+import java.util.List;
+
+import static it.polimi.ingsw.server.Turn.PerformedAction.END;
+import static it.polimi.ingsw.server.Turn.PerformedAction.START;
+import static it.polimi.ingsw.server.Turn.PerformedAction.TOOLCARD;
+
 
 public class Turn {
 
+    private final List<Turn> turns;
     private Player player;
-    private static State state;
+    private PerformedAction state;
+    private ToolCard toolCard;
 
 
-    public Turn(Player currentPlayer) {
-        state = State.START;
+    public Turn(Player currentPlayer, List<Turn> turns) {
+        state = START;
         this.player = currentPlayer;
+        this.turns = turns;
     }
 
     public void run() {
-        player.addListener((OnDiePickedListener) (d, l) -> {
-            state.end();
-        });
 
-        player.addListener((OnDiePutListener) (d, l) -> {
-            state.end();
-        });
+        while (true) {
+            this.setState();
+            if (state == END) break;
 
-        player.addListener((toolCard) -> {
-            state.toolCard();
-            state.execute(toolCard);
-        });
-
-    }
-
-    private interface StateInterface {
-        default StateInterface toolCard(){
-            return this;
-        }
-        default StateInterface end() {
-            return this;
-        }
-        default StateInterface execute(ToolCard toolCard) {
-            return this;
+            else {
+                if (toolCard.getEffect().getDescriptionKey().equals("non ricordo quale sia")) {
+                    state = START;
+                    WorkflowManager.getInstance().setCurrentTurn(WorkflowManager.getInstance().getCurrentTurn()-1);
+                } else state = END;
+            toolCard.activate();
+            }
         }
     }
 
-    private enum State implements StateInterface{
-        START("start") {
-            public State toolCard() {
-                return TOOLCARD;
-            }
-            public State end() {
-                return END;
-            }
-        },
 
-        TOOLCARD("toolcard") {
-            public State execute(ToolCard toolCard) {
-                toolCard.activate();
-                // TODO handle different toolcard
-                return END;
-            }
-        },
+    public void setState() {
 
-        END("end");
-
-        State(String string) {
-        }
+        player.addListener(toolCard -> {
+            this.toolCard = toolCard;
+            state = TOOLCARD;
+            });
+        player.addListener(() -> state = END);
     }
+
+    public enum PerformedAction {
+        START, TOOLCARD, END
+    }
+
+
 
 
 }

@@ -2,8 +2,7 @@ package it.polimi.ingsw.core;
 
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
-import it.polimi.ingsw.listeners.OnDiePickedListener;
-import it.polimi.ingsw.listeners.OnDiePutListener;
+import it.polimi.ingsw.listeners.OnDieUsedListener;
 import it.polimi.ingsw.listeners.OnToolCardUsedListener;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.ObjectiveCard;
@@ -22,8 +21,7 @@ public class Player implements RandomPickLocation, RandomPutLocation {
 
     private static Player currentPlayer;
 
-    List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
-    List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
+    List<OnDieUsedListener> onDieUsedListeners = new LinkedList<>();
     List<OnToolCardUsedListener> onToolCardUsedListeners = new LinkedList<>();
 
     public static Player getCurrentPlayer() {
@@ -96,7 +94,7 @@ public class Player implements RandomPickLocation, RandomPutLocation {
     public Die pickDie() {
         Die die = this.pickedDie;
         this.pickedDie = null;
-        this.onDiePickedListeners.forEach(listener -> listener.onDiePicked(die));
+        this.onDieUsedListeners.forEach(OnDieUsedListener::onDieUsed);
 
         return die;
     }
@@ -109,7 +107,7 @@ public class Player implements RandomPickLocation, RandomPutLocation {
     @Override
     public void putDie(Die die) {
         this.pickedDie = die;
-        this.onDiePutListeners.forEach(listener -> listener.onDiePut(die));
+        this.onDieUsedListeners.forEach(OnDieUsedListener::onDieUsed);
     }
 
     @Override
@@ -118,12 +116,8 @@ public class Player implements RandomPickLocation, RandomPutLocation {
     }
 
 
-    public void addListener(OnDiePickedListener onDiePickedListener) {
-        this.onDiePickedListeners.add(onDiePickedListener);
-    }
-
-    public void addListener(OnDiePutListener onDiePutListener) {
-        this.onDiePutListeners.add(onDiePutListener);
+    public void addListener(OnDieUsedListener onDieUsedListener) {
+        this.onDieUsedListeners.add(onDieUsedListener);
     }
 
     public void addListener(OnToolCardUsedListener onToolCardUsedListener) {
