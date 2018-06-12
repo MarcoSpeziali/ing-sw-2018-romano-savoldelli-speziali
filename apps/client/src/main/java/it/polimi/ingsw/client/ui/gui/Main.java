@@ -125,7 +125,6 @@ public class Main extends Application {
                         "-fx-font-size: 1.1em;"
         );
 
-
         openObjectiveCard.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

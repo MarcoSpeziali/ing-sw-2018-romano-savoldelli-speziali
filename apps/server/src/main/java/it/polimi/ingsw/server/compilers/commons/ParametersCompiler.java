@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.compilers.commons;
 
-import it.polimi.ingsw.server.compilers.actions.MissingParameterException;
 import it.polimi.ingsw.server.compilers.commons.directives.ClassDirective;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.server.compilers.expressions.ExpressionCompiler;

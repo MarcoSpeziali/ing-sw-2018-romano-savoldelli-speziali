@@ -161,16 +161,21 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof IterableRange<?>)) {
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        @SuppressWarnings("unchecked")
-        IterableRange<T> other = (IterableRange<T>) obj;
+        if (!super.equals(o)) {
+            return false;
+        }
 
-        //noinspection ConstantConditions
-        return super.equals(other) && this.incrementFunction.equals(other.incrementFunction);
+        IterableRange<?> that = (IterableRange<?>) o;
+        return Objects.equals(incrementFunction, that.incrementFunction);
     }
 
     @Override

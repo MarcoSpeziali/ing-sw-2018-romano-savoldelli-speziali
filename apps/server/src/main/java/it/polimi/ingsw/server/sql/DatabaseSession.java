@@ -34,7 +34,7 @@ public class DatabaseSession {
 
     public DatabasePreAuthenticationSession getPreAuthenticationSession() throws SQLException {
         String query = String.format(
-                "SELECT pas.* FROM session s WHERE s.id = '%d' JOIN pre_authentication_session pas ON s.pre_auth_session = pas.id",
+                "SELECT pas.* FROM session s JOIN pre_authentication_session pas ON s.pre_auth_session = pas.id WHERE s.id = '%d'",
                 this.id
         );
 
@@ -45,8 +45,8 @@ public class DatabaseSession {
 
     DatabaseSession(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
-        this.creationTimeStamp = resultSet.getLong("creation_time");
-        this.invalidationTimeStamp = resultSet.getLong("invalidation_time");
+        this.creationTimeStamp = resultSet.getTimestamp("creation_time").getTime();
+        this.invalidationTimeStamp = resultSet.getTimestamp("invalidation_time").getTime();
         this.token = resultSet.getString("token");
         this.preAuthenticationSessionId = resultSet.getInt("pre_auth_session");
     }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.compilers.actions;
+package it.polimi.ingsw.server.compilers.commons;
 
 public class MissingParameterException extends RuntimeException {
 

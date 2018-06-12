@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.compilers.cards;
 
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.constraints.ConstraintCompiler;
-import it.polimi.ingsw.server.compilers.constraints.ConstraintGroupCompiler;
 import it.polimi.ingsw.server.compilers.effects.CompiledEffect;
 import it.polimi.ingsw.server.compilers.effects.EffectCompiler;
 import it.polimi.ingsw.server.compilers.instructions.directives.InstructionDirective;
@@ -142,6 +141,7 @@ public class CardCompiler {
                 compiledToolCards.add(compileToolCard(card, actionDirectives));
             }
             catch (IllegalArgumentException ignored) {
+                // if a node cannot be compiled it gets ignored
             }
         }
 
@@ -235,7 +235,9 @@ public class CardCompiler {
             try {
                 compiledObjectiveCards.add(compileObjectiveCard(card, cardVisibility, instructionDirectives, predicateDirectives));
             }
-            catch (IllegalArgumentException ignored) { }
+            catch (IllegalArgumentException ignored) {
+                // if a node cannot be compiled it gets ignored
+            }
         }
 
         return compiledObjectiveCards;

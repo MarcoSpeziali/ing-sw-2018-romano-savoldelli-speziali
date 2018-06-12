@@ -6,6 +6,7 @@ import java.sql.*;
 
 public class SagradaDatabase implements AutoCloseable {
 
+    private static boolean autoCommit = true;
     private Connection connection;
 
     public SagradaDatabase() throws SQLException {
@@ -19,7 +20,7 @@ public class SagradaDatabase implements AutoCloseable {
                 Settings.getSettings().getDatabaseUsername(),
                 Settings.getSettings().getDatabasePassword()
         );
-        connection.setAutoCommit(true);
+        connection.setAutoCommit(autoCommit);
     }
 
     public <T> T executeQuery(String query, ResultSetMappingFunction<T> mapper) throws SQLException {
@@ -48,5 +49,11 @@ public class SagradaDatabase implements AutoCloseable {
 
     public static String quote(String original) {
         return String.format("'%s'", original);
+    }
+
+    public static void disableAutoCommit(Runnable runnable) {
+        autoCommit = false;
+        runnable.run();
+        autoCommit = true;
     }
 }
