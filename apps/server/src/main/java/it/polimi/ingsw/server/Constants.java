@@ -111,7 +111,8 @@ public class Constants {
         ROOT("root"),
         SOCKET_LISTENER("socket-listener"),
         CLIENT_HANDLER("client-handler"),
-        CLIENT_INPUT_HANDLER("client-input-listener");
+        PLAYER_INPUT_HANDLER("client-input-listener"),
+        PLAYER_HANDLER("player-handler");
 
         private final String name;
 

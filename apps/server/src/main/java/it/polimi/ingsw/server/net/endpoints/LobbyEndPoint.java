@@ -1,11 +1,13 @@
 package it.polimi.ingsw.server.net.endpoints;
 
+import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.interfaces.updates.LobbyUpdatesInterface;
 import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
+import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.EventType;
@@ -14,10 +16,12 @@ import it.polimi.ingsw.server.events.PlayerEventsListener;
 import it.polimi.ingsw.server.managers.AuthenticationManager;
 import it.polimi.ingsw.server.managers.LockManager;
 import it.polimi.ingsw.server.net.ResponseFactory;
+import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.sql.DatabaseLobby;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
@@ -83,9 +87,30 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     
                 // sends the updates to all rmi players
                 lobbyUpdates.forEach(
-                        (databasePlayer, lobbyUpdatesInterface) -> lobbyUpdatesInterface.onUpdateReceived(finalLobby)
+                        (databasePlayer, lobbyUpdatesInterface) -> {
+                            try {
+                                lobbyUpdatesInterface.onUpdateReceived(finalLobby);
+                            }
+                            catch (RemoteException e) {
+                                ServerLogger.getLogger(SignInEndPoint.class)
+                                        .log(Level.SEVERE, "Error while sending the update to rmi client", e);
+                            }
+                        }
                 );
-                // TODO: send updates to socket players
+                AuthenticatedClientHandler.getHandlerForPlayersExcept(player)
+                        .forEach(client -> {
+                            try {
+                                client.sendResponse(new Response<>(
+                                        new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
+                                        (ILobby) finalLobby
+                                ));
+                            }
+                            catch (IOException e) {
+                                ServerLogger.getLogger(SignInEndPoint.class)
+                                        .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
+                            }
+                        }
+                );
 
                 // finally returns the response
                 return ResponseFactory.createLobbyResponse(request, lobby);
@@ -103,7 +128,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     }
 
     @Override
-    public Response<ILobby> registerForRMIUpdate(Request<ILobby> request, LobbyUpdatesInterface lobbyUpdateInterface) throws RemoteException {
+    public Response<ILobby> registerForRMIUpdate(Request<ILobby> request, LobbyUpdatesInterface lobbyUpdateInterface) {
         try {
             // gets the player from the token
             DatabasePlayer player = AuthenticationManager.getAuthenticatedPlayer(request);
@@ -164,9 +189,30 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
 
                 // sends the updates to all rmi players
                 lobbyUpdates.forEach(
-                        (databasePlayer, lobbyUpdatesInterface) -> lobbyUpdatesInterface.onUpdateReceived(lobby)
+                        (databasePlayer, lobbyUpdatesInterface) -> {
+                            try {
+                                lobbyUpdatesInterface.onUpdateReceived(lobby);
+                            }
+                            catch (RemoteException e) {
+                                ServerLogger.getLogger(SignInEndPoint.class)
+                                        .log(Level.SEVERE, "Error while sending the update to rmi client", e);
+                            }
+                        }
                 );
-                // TODO: send updates to socket players
+                AuthenticatedClientHandler.getHandlerForPlayersExcept(player)
+                        .forEach(client -> {
+                                    try {
+                                        client.sendResponse(new Response<>(
+                                                new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
+                                                (ILobby) lobby
+                                        ));
+                                    }
+                                    catch (IOException e) {
+                                        ServerLogger.getLogger(SignInEndPoint.class)
+                                                .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
+                                    }
+                                }
+                        );
             }
         }
         catch (SQLException e) {

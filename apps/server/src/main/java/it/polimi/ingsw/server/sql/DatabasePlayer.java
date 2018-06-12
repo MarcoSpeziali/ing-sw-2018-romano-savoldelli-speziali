@@ -155,4 +155,9 @@ public class DatabasePlayer implements IPlayer {
     public int hashCode() {
         return Objects.hash(id);
     }
+    
+    @Override
+    public String toString() {
+        return this.username;
+    }
 }

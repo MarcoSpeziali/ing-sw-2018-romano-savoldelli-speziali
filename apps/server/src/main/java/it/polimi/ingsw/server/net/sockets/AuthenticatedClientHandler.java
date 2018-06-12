@@ -6,38 +6,60 @@ import it.polimi.ingsw.server.managers.AuthenticationManager;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
+import it.polimi.ingsw.utils.io.JSONSerializable;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
+// TODO: docs
 public class AuthenticatedClientHandler extends ClientHandler {
 
     private static Map<DatabasePlayer, AuthenticatedClientHandler> clientHandlers = new HashMap<>();
 
     private Thread inputThread;
     private boolean shouldStop = false;
+    private Request<? extends JSONSerializable> migrationRequest;
+    private DatabasePlayer player;
+    
+    public DatabasePlayer getPlayer() {
+        return player;
+    }
     
     public static AuthenticatedClientHandler getHandlerForPlayer(DatabasePlayer databasePlayer) {
         return clientHandlers.getOrDefault(databasePlayer, null);
     }
     
-    public static AuthenticatedClientHandler migrate(AnonymousClientHandler clientHandler, DatabasePlayer databasePlayer, Request request) {
-        return null;
+    public static List<AuthenticatedClientHandler> getHandlerForPlayersExcept(DatabasePlayer databasePlayer) {
+        return clientHandlers.entrySet().stream()
+                .filter(entry -> !entry.getKey().equals(databasePlayer))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
     }
-
+    
+    public static AuthenticatedClientHandler migrate(AnonymousClientHandler clientHandler, DatabasePlayer databasePlayer, Request<? extends JSONSerializable> request) throws IOException {
+        AuthenticatedClientHandler authenticatedClientHandler = new AuthenticatedClientHandler(clientHandler, databasePlayer);
+        authenticatedClientHandler.migrationRequest = request;
+        return authenticatedClientHandler;
+    }
+    
     public AuthenticatedClientHandler(ClientHandler clientHandler, DatabasePlayer player) throws IOException {
         this(clientHandler.client, player);
     }
-
+    
     public AuthenticatedClientHandler(Socket client, DatabasePlayer player) throws IOException {
         super(client);
+        
+        this.player = player;
+        
         clientHandlers.put(player, this);
     }
-
+    
     @Override
     public void run() {
         try {
@@ -48,17 +70,23 @@ public class AuthenticatedClientHandler extends ClientHandler {
     
                 try {
                     do {
-                        handler = handleIncomingRequest(AuthenticationManager::isAuthenticated, null);
+                        if (this.migrationRequest != null) {
+                            handler = handleMigrationRequest(this.migrationRequest, AuthenticationManager::isAuthenticated);
+                            this.migrationRequest = null;
+                        }
+                        else {
+                            handler = handleIncomingRequest(AuthenticationManager::isAuthenticated);
+                        }
             
                         // if the handler needs the connection to be kept alive it wont be closed
                     } while (handler != null && handler.shouldBeKeptAlive() && !shouldStop);
                 }
                 catch (Exception e) {
-                    ServerLogger.getLogger(AnonymousClientHandler.class)
+                    ServerLogger.getLogger(AuthenticatedClientHandler.class)
                             .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
                 }
             });
-            this.inputThread.setName(Constants.Threads.CLIENT_INPUT_HANDLER.toString());
+            this.inputThread.setName(Constants.Threads.PLAYER_INPUT_HANDLER.toString() + "-" + this.player.toString());
             this.inputThread.start();
     
             this.inputThread.join();

@@ -6,6 +6,7 @@ public enum EndPointFunction {
     SIGN_IN_FULFILL_CHALLENGE("sign-in/fulfill_challenge"),
     SIGN_UP("sign-up"),
     LOBBY_JOIN_REQUEST("lobby/join_request"),
+    LOBBY_UPDATE_RESPONSE("lobby/update_response"),
     LOBBY_REGISTER_FOR_UPDATES("lobby/register_for_updates");
 
     private final String endPointFunctionName;

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.net.sockets;
 
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.utils.ServerLogger;
 
 import java.io.IOException;
@@ -14,10 +15,17 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
     private final ServerSocket serverSocket;
     private final ExecutorService executorService;
     private boolean closed = false;
+    
+    private String clientAddress;
 
     public ClientAcceptor(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
-        this.executorService = Executors.newCachedThreadPool();
+        this.executorService = Executors.newCachedThreadPool(runnable -> {
+            Thread thread = new Thread(runnable);
+            thread.setName(Constants.Threads.CLIENT_HANDLER.toString() + this.clientAddress);
+            
+            return thread;
+        });
 
         ServerLogger.getLogger(ClientAcceptor.class)
                 .log(Level.INFO, "Listening on port {0}", String.valueOf(port));
@@ -28,6 +36,7 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
         while (!closed) {
             try {
                 Socket client = this.serverSocket.accept();
+                this.clientAddress = client.getRemoteSocketAddress().toString();
 
                 ServerLogger.getLogger(ClientAcceptor.class)
                         .info("New client with address: " + client.getRemoteSocketAddress());
