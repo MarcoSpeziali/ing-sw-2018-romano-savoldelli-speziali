@@ -199,23 +199,19 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-
-        if (this == obj) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
 
-        if (!(obj instanceof Range<?>)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        @SuppressWarnings("unchecked")
-        Range<T> o = (Range<T>) obj;
+        Range<?> range = (Range<?>) o;
 
-        return o.start == this.start && o.end == this.end;
+        return Objects.equals(start, range.start) &&
+                Objects.equals(end, range.end);
     }
 
     @Override

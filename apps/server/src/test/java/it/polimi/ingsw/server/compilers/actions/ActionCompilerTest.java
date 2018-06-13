@@ -199,4 +199,14 @@ class ActionCompilerTest {
         Assertions.assertNotNull(compiledAction.getActionData().getConstraint());
         Assertions.assertTrue(compiledAction.getActionData().getConstraint().evaluate(Context.getSharedInstance()));
     }
+
+    @Test
+    void testExceptionWithUnknownConstraint() {
+        List<EvaluableConstraint> constraints = List.of();
+
+        String xmlAction = "<action effect=\"choose_die $draft_pool$\" result=\"DIE\" constraint=\"c1\"/>";
+
+        Assertions.assertThrows(ConstraintNotFoundException.class, () -> ActionCompiler.compile(XMLUtils.parseXmlString(xmlAction), this.directiveList, constraints));
+
+    }
 }

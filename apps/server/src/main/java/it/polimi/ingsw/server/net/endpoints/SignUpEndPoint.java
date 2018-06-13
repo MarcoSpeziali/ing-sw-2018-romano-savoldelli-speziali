@@ -49,7 +49,7 @@ public class SignUpEndPoint extends UnicastRemoteObject implements SignUpInterfa
             // decrypts the password sent by the user whit the server private key
             String password = CypherUtils.decryptString(
                     encryptedPassword,
-                    FilesUtils.getFileContent(Constants.Paths.SSH_KEY_PATH.getAbsolutePath()),
+                    FilesUtils.getFileContentAsBytes(Constants.Resources.PRIVATE_KEY.getURL()),
                     true
             );
 

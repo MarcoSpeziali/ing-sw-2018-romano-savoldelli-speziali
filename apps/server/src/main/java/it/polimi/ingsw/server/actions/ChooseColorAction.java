@@ -5,7 +5,6 @@ import it.polimi.ingsw.core.locations.ChooseLocation;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.server.utils.VariableSupplier;
 
-// TODO: docs
 public class ChooseColorAction extends ChooseDieAction {
 
     private static final long serialVersionUID = -1654067241403388125L;

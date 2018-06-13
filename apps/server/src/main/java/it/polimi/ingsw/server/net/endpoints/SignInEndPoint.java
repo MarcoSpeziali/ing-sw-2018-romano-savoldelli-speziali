@@ -57,7 +57,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
     }
 
     @Override
-    public Response<ChallengeRequest> requestLogin(Request<SignInRequest> request) {
+    public Response<ChallengeRequest> requestSignIn(Request<SignInRequest> request) {
         // creates a random string which represents the challenge for the client to fulfill
         String randomString = RandomString.create();
 
@@ -90,7 +90,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
             // creates a pre_authentication_session in the database
             DatabasePreAuthenticationSession preAuthenticationSession = DatabasePreAuthenticationSession.insertAuthenticationSession(
                     playerId,
-                    expectedResult.replace("'", "\'"),
+                    expectedResult,
                     this.getIp(),
                     this.getPort()
             );

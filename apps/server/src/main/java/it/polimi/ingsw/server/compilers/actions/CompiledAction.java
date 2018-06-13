@@ -27,7 +27,6 @@ public class CompiledAction implements CompiledExecutableAction, Serializable {
     /**
      * The data of the action.
      */
-    @SuppressWarnings("squid:S1948")
     private ActionData actionData;
 
     /**

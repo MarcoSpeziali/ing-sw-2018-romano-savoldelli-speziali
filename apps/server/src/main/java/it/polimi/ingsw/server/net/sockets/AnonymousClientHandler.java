@@ -4,7 +4,6 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.managers.AuthenticationManager;
-import it.polimi.ingsw.server.managers.ThreadManager;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
@@ -34,7 +33,7 @@ public class AnonymousClientHandler extends ClientHandler {
                 // waits for a request
                 Request<? extends JSONSerializable> request = waitForRequest(this.in);
     
-                if (hasMigrated(request)) {
+                if (tryMigration(request)) {
                     return;
                 }
     
@@ -74,17 +73,20 @@ public class AnonymousClientHandler extends ClientHandler {
         }
     }
     
-    private boolean hasMigrated(Request<?> request) throws SQLException, TimeoutException {
+    // TODO: docs
+    private boolean tryMigration(Request<?> request) throws SQLException, TimeoutException, IOException {
         DatabasePlayer databasePlayer = AuthenticationManager.getAuthenticatedPlayer(request);
     
         if (databasePlayer != null) {
-            ThreadManager.addThread(
-                    Constants.Threads.CLIENT_HANDLER,
-                    AuthenticatedClientHandler.migrate(
-                            this,
-                            databasePlayer,
-                            request
-                    )
+            AuthenticatedClientHandler clientHandler = AuthenticatedClientHandler.migrate(
+                    this,
+                    databasePlayer,
+                    request
+            );
+            
+            new Thread(
+                    clientHandler,
+                    Constants.Threads.PLAYER_HANDLER + "-" + clientHandler.getPlayer().toString()
             ).start();
             
             return true;

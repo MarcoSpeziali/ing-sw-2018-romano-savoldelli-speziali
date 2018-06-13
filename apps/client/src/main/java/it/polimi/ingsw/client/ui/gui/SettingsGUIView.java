@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.ClientApp;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
@@ -23,7 +24,7 @@ public class SettingsGUIView {
         view = new BorderPane();
         Button rmi = new Button("RMI");
         Button socket = new Button("Socket");
-        Button back = new Button("Back");
+        Button back = new Button("< Back");
         Label text = new Label("Change network config");
         Separator separator = new Separator();
         Pane settingsContainer = new Pane();
@@ -86,7 +87,6 @@ public class SettingsGUIView {
 
 
 
-
         separator.setOrientation(Orientation.VERTICAL);
         separator.setMinHeight(300);
         separator.setLayoutX(450);
@@ -106,7 +106,7 @@ public class SettingsGUIView {
         settingsContainer.getChildren().add(text);
         settingsContainer.getChildren().add(separator);
 
-        back.setOnMousePressed(new EventHandler<MouseEvent>() {
+        back.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 OptionsApp.loadOptions();

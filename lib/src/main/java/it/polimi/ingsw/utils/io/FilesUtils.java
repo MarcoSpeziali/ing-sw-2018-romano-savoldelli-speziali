@@ -121,4 +121,12 @@ public class FilesUtils {
             return reader.lines().reduce("", (s, s2) -> s + '\n' + s2);
         }
     }
+    
+    public static byte[] getFileContentAsBytes(String filePath) throws IOException {
+        return Files.readAllBytes(Paths.get(filePath));
+    }
+    
+    public static byte[] getFileContentAsBytes(URL url) throws IOException {
+        return url.openStream().readAllBytes();
+    }
 }

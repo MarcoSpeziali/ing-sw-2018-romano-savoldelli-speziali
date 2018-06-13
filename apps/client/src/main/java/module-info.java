@@ -5,7 +5,10 @@ module it.polimi.ingsw.client {
     requires javafx.graphics;
     requires java.base;
     requires javafx.controls;
+    requires javafx.fxml;
     requires java.xml;
     requires json;
+    requires com.jfoenix;
+    
     exports it.polimi.ingsw.client.ui.gui to javafx.graphics;
 }

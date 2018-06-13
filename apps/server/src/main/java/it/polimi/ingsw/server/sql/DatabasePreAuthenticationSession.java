@@ -24,7 +24,7 @@ public class DatabasePreAuthenticationSession {
 
     public DatabasePlayer getPlayer() throws SQLException {
         String query = String.format(
-                "SELECT p.* FROM pre_authentication_session pas WHERE pas.id = %d JOIN player p ON pas.player = p.id",
+                "SELECT p.* FROM pre_authentication_session pas JOIN player p ON pas.player = p.id WHERE pas.id = %d",
                 this.id
         );
 
@@ -57,8 +57,8 @@ public class DatabasePreAuthenticationSession {
         this.id = resultSet.getInt("id");
         this.playerId = resultSet.getInt("player");
         this.expectedChallengeResponse = resultSet.getString("expected_challenge_response");
-        this.creationTimeStamp = resultSet.getDate("creation_time").getTime();
-        this.invalidationTimeStamp = resultSet.getDate("invalidation_time").getTime();
+        this.creationTimeStamp = resultSet.getTimestamp("creation_time").getTime();
+        this.invalidationTimeStamp = resultSet.getTimestamp("invalidation_time").getTime();
         this.validForIp = resultSet.getString("valid_for_ip");
         this.validForPort = resultSet.getInt("valid_for_port");
     }

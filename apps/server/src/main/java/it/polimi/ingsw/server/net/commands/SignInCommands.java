@@ -23,7 +23,7 @@ public class SignInCommands {
             SignInEndPoint signInEndPoint = new SignInEndPoint();
             signInEndPoint.setSocket(client);
 
-            return signInEndPoint.requestLogin(request);
+            return signInEndPoint.requestSignIn(request);
         }
 
         @Override

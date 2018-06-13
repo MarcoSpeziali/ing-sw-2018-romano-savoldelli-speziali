@@ -65,7 +65,8 @@ public class Constants {
         ACTIONS_DIRECTIVES("directives/actions-directives.xml"),
         INSTRUCTIONS_DIRECTIVES("directives/instructions-directives.xml"),
         PREDICATES_DIRECTIVES("directives/predicates-directives.xml"),
-        DEFAULT_SETTINGS("default_settings.xml");
+        DEFAULT_SETTINGS("default_settings.xml"),
+        PRIVATE_KEY("private.der");
 
         private final String relativePath;
 
@@ -111,7 +112,8 @@ public class Constants {
         ROOT("root"),
         SOCKET_LISTENER("socket-listener"),
         CLIENT_HANDLER("client-handler"),
-        CLIENT_INPUT_HANDLER("client-input-listener");
+        PLAYER_INPUT_HANDLER("client-input-listener"),
+        PLAYER_HANDLER("player-handler");
 
         private final String name;
 

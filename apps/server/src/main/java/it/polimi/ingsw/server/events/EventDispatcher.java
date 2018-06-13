@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+// TODO: docs
 public class EventDispatcher {
 
     private EventDispatcher() {}
@@ -46,9 +47,12 @@ public class EventDispatcher {
     }
 
     private static EnumSet<EventType> getEventTypesFromEvent(IEvent event) {
-        Emits[] emitsAnnotations = event.getClass().getAnnotationsByType(Emits.class);
+        Emits[] emitsAnnotations = Arrays.stream(event.getClass().getInterfaces())
+                .map(aClass -> aClass.getAnnotation(Emits.class))
+                .filter(Objects::nonNull)
+                .toArray(Emits[]::new);
 
-        if (emitsAnnotations == null) {
+        if (emitsAnnotations == null || emitsAnnotations.length == 0) {
             throw new IllegalArgumentException("The event must be annotated with " + Emits.class.toString());
         }
 

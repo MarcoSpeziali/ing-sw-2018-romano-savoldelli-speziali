@@ -42,7 +42,7 @@ public class LobbyGUIView {
     public  LobbyGUIView() throws MalformedURLException {
         view = new BorderPane();
         Label lobby = new Label("Lobby");
-        Button back = new Button("Back");
+        Button back = new Button("< Back");
         Pane glass = new Pane();
         Label wait = new Label("Wait for other players");
         Label countDown = new Label("seconds left");
@@ -106,7 +106,7 @@ public class LobbyGUIView {
         );
         back.setLayoutX(850);
         back.setLayoutY(500);
-        back.setOnMousePressed(new EventHandler<MouseEvent>() {
+        back.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 OptionsApp.loadOptions();

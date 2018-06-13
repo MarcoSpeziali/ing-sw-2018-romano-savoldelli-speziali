@@ -1,7 +1,6 @@
-package it.polimi.ingsw.client.ui.gui;
+package it.polimi.ingsw.client.ui.gui.guimodels;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
