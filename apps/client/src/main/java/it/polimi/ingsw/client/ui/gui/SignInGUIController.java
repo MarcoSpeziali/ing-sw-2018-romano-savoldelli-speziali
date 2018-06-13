@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import it.polimi.ingsw.client.SagradaGUI;
@@ -8,22 +10,39 @@ import it.polimi.ingsw.client.net.authentication.SignInManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
+import java.util.concurrent.TimeoutException;
 
 public class SignInGUIController {
     private FXMLLoader loader = new FXMLLoader();
-    private SignInManager model;
     @FXML public JFXTextField user;
     @FXML public JFXPasswordField pass;
 
     public SignInGUIController() {}
 
     public void onSignInClicked() {
-        // TODO implement signin
-        String username = this.user.getText();
-        String password = this.pass.getText();
-        System.out.println("user: "+username+"\npassword: "+password);
+        try {
+            if (SignInManager.getManager().signIn(user.getText(), pass.getText())) {
+                System.out.println("Logged as\nuser: " + user.getText() + "\npassword: " + pass.getText());
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Access denied");
+                alert.setHeaderText("Wrong Username/Password combination.");
+                alert.setContentText("Please retry with different combination or sign up as a new user");
+                alert.showAndWait();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (NotBoundException e) {
+            e.printStackTrace();
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onNotYetRegisteredClicked() throws IOException {
