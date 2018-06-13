@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import it.polimi.ingsw.client.ClientApp;
+import it.polimi.ingsw.client.SagradaGUI;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -34,7 +34,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 1280,720);
         primaryStage.setFullScreen(TRUE);
 
-        URL url = new URL(ClientApp.class.getClassLoader().getResource("images"), "background.jpg");
+        URL url = new URL(SagradaGUI.class.getClassLoader().getResource("images"), "background.jpg");
         Image background = new Image(url.toString(),true);
         BackgroundSize bsize= new BackgroundSize(1280, 720, false, false,
                 true, true);
@@ -87,7 +87,7 @@ public class Main extends Application {
             }
         });
 
-        URL urlCards = new URL(ClientApp.class.getClassLoader().getResource("images"),"texture.jpg");
+        URL urlCards = new URL(SagradaGUI.class.getClassLoader().getResource("images"),"texture.jpg");
         Image cardBackground = new Image (urlCards.toString(), true);
         BackgroundSize cardBSize = new BackgroundSize(500, 500, false,false, true, true);
 

@@ -1,13 +1,9 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import it.polimi.ingsw.client.ClientApp;
-import it.polimi.ingsw.core.Player;
+import it.polimi.ingsw.client.SagradaGUI;
 import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -16,15 +12,10 @@ import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Timer;
-
-import static javafx.scene.text.Font.*;
 
 public class LobbyGUIView {
     private BorderPane view;
@@ -53,7 +44,7 @@ public class LobbyGUIView {
         Label player_4 = new Label("Player 4");
         Separator separator = new Separator();
 
-        URL url = new URL(ClientApp.class.getClassLoader().getResource("images"), "background.jpg");
+        URL url = new URL(SagradaGUI.class.getClassLoader().getResource("images"), "background.jpg");
         Image background = new Image(url.toString(),true);
         BackgroundSize bsize= new BackgroundSize(1280, 720, false, false,
                 true, true);
@@ -109,7 +100,7 @@ public class LobbyGUIView {
         back.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                OptionsApp.loadOptions();
+                //OptionsApp.loadOptions();
                 timeline.stop();
             }
         });

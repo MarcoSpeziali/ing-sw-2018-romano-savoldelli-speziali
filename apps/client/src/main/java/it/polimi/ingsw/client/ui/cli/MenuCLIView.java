@@ -26,10 +26,10 @@ public class MenuCLIView implements Renderable {
 
     public void render() {
 
-        System.out.println("Welcome to ClientApp Game:\n");
+        System.out.println("Welcome to SagradaGUI Game:\n");
         System.out.println("[1] Play game");
         System.out.println("[2] Scoreboard");
-        System.out.println("[3] SettingsGUIView");
+        System.out.println("[3] SettingsGUIController");
     }
 }
 

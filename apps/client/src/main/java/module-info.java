@@ -9,6 +9,8 @@ module it.polimi.ingsw.client {
     requires java.xml;
     requires json;
     requires com.jfoenix;
-    
-    exports it.polimi.ingsw.client.ui.gui to javafx.graphics;
+
+    exports it.polimi.ingsw.client.ui.gui;
+    exports it.polimi.ingsw.client to javafx.graphics;
+
 }

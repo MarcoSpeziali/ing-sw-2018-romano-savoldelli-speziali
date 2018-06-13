@@ -66,7 +66,7 @@
    <center>
       <ImageView fitHeight="220.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../../../../../../../../Downloads/holy-family.png" />
+            <Image url="@../../images/sagrada-icon.png"/>
          </image>
       </ImageView>
    </center>
