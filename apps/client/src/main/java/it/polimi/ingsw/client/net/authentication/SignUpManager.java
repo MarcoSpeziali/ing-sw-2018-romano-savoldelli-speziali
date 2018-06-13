@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.net.authentication;
 
+import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.Settings;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
@@ -14,7 +15,6 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.CypherUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
-import it.polimi.ingsw.utils.io.Resources;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -59,8 +59,7 @@ public class SignUpManager {
         // encrypts the password with the server's public key
         String encryptedString = CypherUtils.encryptString(
                 password,
-                // gets the public key TODO: change
-                FilesUtils.getFileContent(Resources.getResource(getClass().getClassLoader(), "idra_rsa.pub")),
+                FilesUtils.getFileContentAsBytes(Constants.Resources.IDRA_PUBLIC_KEY.getURL()),
                 false
         );
 

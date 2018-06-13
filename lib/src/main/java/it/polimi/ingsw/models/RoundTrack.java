@@ -105,11 +105,11 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
      */
     public void setDieForRoundAtIndex(Die die, int round, int index) {
         // if the index does not exists then the die is added
-        if (this.rounds.get(round).size() > index) {
-            this.rounds.get(round).set(index, die);
+        if (this.rounds.get(round).size() <= index) {
+            this.rounds.get(round).add(die);
         }
         else {
-            this.addDieForRound(die, round);
+            this.rounds.get(round).set(index, die);
         }
 
         this.onDiePutListeners.forEach(
@@ -132,7 +132,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
 
     @Override
     public Die pickDie(Integer location) {
-        int roundIndex = location & 0x0000FF00 >> 8;
+        int roundIndex = (location & 0x0000FF00) >> 8;
         int dieIndex = location & 0x000000FF;
 
         Die die = this.rounds.get(roundIndex).remove(dieIndex);

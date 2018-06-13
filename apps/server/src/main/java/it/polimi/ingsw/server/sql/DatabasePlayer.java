@@ -107,6 +107,17 @@ public class DatabasePlayer implements IPlayer {
             return database.executeQuery(query, DatabasePlayer::new);
         }
     }
+    
+    public static void deletePlayer(int id) throws SQLException {
+        String query = String.format(
+                "DELETE FROM player WHERE id = '%d'",
+                id
+        );
+    
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            database.executeVoidQuery(query);
+        }
+    }
 
     private static DatabasePlayer executeQuery(SagradaDatabase database, String query) throws SQLException {
         return database.executeQuery(query, DatabasePlayer::new);

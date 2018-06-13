@@ -65,7 +65,8 @@ public class Constants {
         ACTIONS_DIRECTIVES("directives/actions-directives.xml"),
         INSTRUCTIONS_DIRECTIVES("directives/instructions-directives.xml"),
         PREDICATES_DIRECTIVES("directives/predicates-directives.xml"),
-        DEFAULT_SETTINGS("default_settings.xml");
+        DEFAULT_SETTINGS("default_settings.xml"),
+        PRIVATE_KEY("private.der");
 
         private final String relativePath;
 

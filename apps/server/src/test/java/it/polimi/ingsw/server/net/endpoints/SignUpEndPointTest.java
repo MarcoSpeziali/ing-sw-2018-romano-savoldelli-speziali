@@ -9,10 +9,10 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
-import it.polimi.ingsw.server.sql.SagradaDatabase;
 import it.polimi.ingsw.utils.CypherUtils;
 import it.polimi.ingsw.utils.HashUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
+import it.polimi.ingsw.utils.io.Resources;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -21,11 +21,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.rmi.RemoteException;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -68,11 +66,10 @@ class SignUpEndPointTest {
                         "test",
                         CypherUtils.encryptString(
                                 "test_password",
-                                FilesUtils.getFileContent(java.nio.file.Paths.get(
-                                        System.getProperty("user.home"),
-                                        ".ssh",
-                                        "id_rsa.pub"
-                                ).toString()),
+                                FilesUtils.getFileContentAsBytes(Resources.getResource(
+                                        SignUpEndPointTest.class.getClassLoader(),
+                                        "public.der")
+                                ),
                                 false
                         )
                 )
@@ -85,5 +82,7 @@ class SignUpEndPointTest {
         Assertions.assertNotNull(databasePlayer);
         Assertions.assertEquals("test", databasePlayer.getUsername());
         Assertions.assertEquals(HashUtils.sha1("test_password"), databasePlayer.getPassword());
+    
+        DatabasePlayer.deletePlayer(databasePlayer.getId());
     }
 }

@@ -34,8 +34,12 @@ public class SagradaDatabase implements AutoCloseable {
             }
         }
     }
-
-    // public <T> T executeQuery(String query, Result)
+    
+    public void executeVoidQuery(String query) throws SQLException {
+        try (Statement statement = this.connection.createStatement()) {
+            statement.executeUpdate(query);
+        }
+    }
 
     @Override
     public void close() throws SQLException {

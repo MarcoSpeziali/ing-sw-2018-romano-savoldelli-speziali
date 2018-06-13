@@ -46,13 +46,16 @@ public class Constants {
 
     public enum Resources {
         DEFAULT_SETTINGS("default_settings.xml"),
+        IDRA_PUBLIC_KEY("idra_rsa.der"),
         CELL_ONE("cells/cell_one.png"),
         CELL_TWO("cells/cell_two.png"),
         CELL_THREE("cells/cell_three.png"),
         CELL_FOUR("cells/cell_four.png"),
         CELL_FIVE("cells/cell_five.png"),
-        CELL_SIX("cells/cell_six.png");
-
+        CELL_SIX("cells/cell_six.png"),
+        SIGN_UP_FXML("FXML/SignUp.fxml"),
+        SIGN_IN_FXML("FXML/SignIn.fxml"),
+        START_SCREEN_FXML("FXML/StartScreen.fxml");
 
         private final String relativePath;
 
@@ -79,7 +82,7 @@ public class Constants {
     }
 
     public enum ClientArguments {
-        CLI_MODE("cli-mode");
+        CLI_MODE("cli");
 
         private final String optionName;
 
@@ -90,20 +93,6 @@ public class Constants {
         @Override
         public String toString() {
             return this.optionName;
-        }
-    }
-
-    public enum Threads {
-        SOCKET_LISTENER("socket-listener");
-
-        private final String name;
-
-        public String getName() {
-            return name;
-        }
-
-        Threads(String name) {
-            this.name = name;
         }
     }
 }
