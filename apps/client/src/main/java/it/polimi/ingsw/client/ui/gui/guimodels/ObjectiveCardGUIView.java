@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui;
+package it.polimi.ingsw.client.ui.gui.guimodels;
 
 import it.polimi.ingsw.views.ObjectiveCardView;
 

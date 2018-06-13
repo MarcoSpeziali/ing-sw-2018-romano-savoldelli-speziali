@@ -16,6 +16,7 @@ public class OptionsApp extends Application {
     private static Scene options;
     private static Scene settings;
     private static Scene lobby;
+    private static Scene login;
     private static Stage stage;
 
     public static void main(String[] args) {
@@ -27,9 +28,14 @@ public class OptionsApp extends Application {
         OptionsApp.stage = primaryStage;
         Parent optionsParent = new OptionsGUIView().getView();
         Parent settingsParent = new SettingsGUIView().getView();
+        Parent signInParent = new SignInGUIView().getView();
+        Parent lobbyParent = new LobbyGUIView().getView();
 
         options = new Scene(optionsParent, 1280, 720);
         settings = new Scene(settingsParent, 1280, 720);
+        login = new Scene(signInParent, 1280, 720);
+        lobby = new Scene(lobbyParent, 1280, 720 );
+
 
         loadOptions();
         //primaryStage.setFullScreen(TRUE);
@@ -47,7 +53,10 @@ public class OptionsApp extends Application {
         OptionsApp.stage.close();
     }
     public static void loadLobby() throws MalformedURLException {
-        lobby = new Scene(new LobbyGUIView().getView(), 1280, 720 );
         OptionsApp.stage.setScene(lobby);
-        }
+    }
+    public static void loadSignIn() throws MalformedURLException {
+        OptionsApp.stage.setScene(login);
+    }
+
 }
