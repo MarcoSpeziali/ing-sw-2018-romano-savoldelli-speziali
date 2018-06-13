@@ -15,8 +15,11 @@ public class CellCLIView extends CellView {
     private char shade;
     private Ansi.Color ansiColor;
 
-    @Override
+    public CellCLIView(Cell cell) {
+        this.setCell(cell);
+    }
 
+    @Override
     public void render() {
         if(cell.isOccupied()) {
             ansiColor = Ansi.Color.valueOf(cell.getDie().getColor().toAnsiColor());

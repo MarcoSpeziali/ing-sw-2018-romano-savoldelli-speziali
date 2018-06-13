@@ -13,8 +13,10 @@ import javafx.scene.Scene;
 import java.io.IOException;
 
 public class SignUpGUIController {
+
     private FXMLLoader loader = new FXMLLoader();
     private SignInManager model;
+
     @FXML public JFXTextField user;
     @FXML public JFXPasswordField pass;
     @FXML public JFXPasswordField repeatPass;

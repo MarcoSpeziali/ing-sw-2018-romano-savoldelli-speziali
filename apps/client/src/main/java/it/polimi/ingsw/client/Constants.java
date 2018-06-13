@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.utils.text.LocalizedString;
+
 import java.net.URL;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -96,6 +98,26 @@ public class Constants {
         @Override
         public String toString() {
             return this.optionName;
+        }
+    }
+
+    public static final class Strings {
+        public static final String WELCOME_LABEL_TEXT = "welcome_label.text";
+        public static final String SIGN_IN_ACCESS_DENIED_TITLE = "sign_in.access_denied.title";
+        public static final String SIGN_IN_ACCESS_DENIED_HEADER_TEXT = "sign_in.access_denied.header_text";
+        public static final String SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT = "sign_in.access_denied.content_text";
+        public static final String SIGN_IN_USERNAME_FIELD_PROMPT_TEXT = "sign_in.username_field.prompt_text";
+        @SuppressWarnings("squid:S2068") // SonarLint = <3
+        public static final String SIGN_IN_PASSWORD_FIELD_PROMPT_TEXT = "sign_in.password_field.prompt_text";
+        public static final String SIGN_IN_REGISTER_LINK_TEXT = "sign_in.register_link.text";
+        public static final String SIGN_IN_BACK_BUTTON_TEXT = "sign_in.back_button.text";
+        public static final String SIGN_IN_SING_IN_NOW_LABEL_TEXT = "sign_in.sign_in_now_label.text";
+        public static final String SIGN_IN_SIGN_IN_BUTTON_TEXT = "sign_in.sign_in_button.text";
+
+        private Strings() {}
+
+        public static String toLocalized(String string) {
+            return new LocalizedString(string).toString();
         }
     }
 

@@ -15,6 +15,6 @@ public interface LobbyInterface extends Remote {
     @RespondsTo(EndPointFunction.LOBBY_JOIN_REQUEST)
     Response<ILobby> joinLobby(Request<LobbyJoinRequest> request) throws RemoteException;
 
-    @RespondsTo(EndPointFunction.LOBBY_REGISTER_FOR_UPDATES)
-    Response<ILobby> registerForRMIUpdate(Request<ILobby> request, LobbyUpdatesInterface lobbyUpdateInterface) throws RemoteException;
+    @RespondsTo(EndPointFunction.LOBBY_JOIN_REQUEST_RMI)
+    Response<ILobby> joinLobby(Request<LobbyJoinRequest> request, LobbyUpdatesInterface lobbyUpdateInterface) throws RemoteException;
 }

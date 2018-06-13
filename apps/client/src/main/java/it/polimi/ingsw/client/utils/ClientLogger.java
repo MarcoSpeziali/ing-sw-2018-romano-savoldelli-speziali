@@ -1,14 +1,13 @@
-package it.polimi.ingsw.server.utils;
+package it.polimi.ingsw.client.utils;
 
-import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.utils.logging.LoggerBase;
 
 import java.nio.file.Paths;
 import java.util.function.Supplier;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
-public class ServerLogger extends LoggerBase {
+public class ClientLogger extends LoggerBase {
 
     /**
      * Represents the path where the logging file will be created.
@@ -35,7 +34,7 @@ public class ServerLogger extends LoggerBase {
      * @return an instance of {@link Logger}
      */
     public static Logger getLogger(Class<?> caller) {
-        return new ServerLogger(caller.getName());
+        return new ClientLogger(caller.getName());
     }
 
     /**
@@ -49,13 +48,7 @@ public class ServerLogger extends LoggerBase {
      *                           of the subsystem, such as java.net
      *                           or javax.swing.  It may be null for anonymous Loggers.
      */
-    protected ServerLogger(String name) {
+    protected ClientLogger(String name) {
         super(name);
-
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(level);
-        consoleHandler.setFormatter(new SingleLineFormatter());
-
-        this.addHandler(consoleHandler);
     }
 }

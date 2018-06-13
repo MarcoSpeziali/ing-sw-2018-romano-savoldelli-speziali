@@ -52,7 +52,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     }
 
     @Override
-    public Response<ILobby> joinLobby(Request<LobbyJoinRequest> request) throws RemoteException {
+    public Response<ILobby> joinLobby(Request<LobbyJoinRequest> request) {
         try {
             // gets the player from the token
             DatabasePlayer player = AuthenticationManager.getAuthenticatedPlayer(request);
@@ -128,7 +128,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     }
 
     @Override
-    public Response<ILobby> registerForRMIUpdate(Request<ILobby> request, LobbyUpdatesInterface lobbyUpdateInterface) {
+    public Response<ILobby> joinLobby(Request<LobbyJoinRequest> request, LobbyUpdatesInterface lobbyUpdateInterface) {
         try {
             // gets the player from the token
             DatabasePlayer player = AuthenticationManager.getAuthenticatedPlayer(request);
@@ -139,19 +139,13 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 return ResponseFactory.createUnauthorisedError(request);
             }
 
+            Response<ILobby> lobbyResponse = joinLobby(request);
+
             synchronized (LockManager.getLockObject(Constants.LockTargets.LOBBY)) {
-                DatabaseLobby lobby = DatabaseLobby.getOpenLobby();
-
-                // if no lobby are available then this request came too late or too early
-                // or the player already left or the request is "fake"
-                if (lobby == null || !lobby.getPlayers().contains(player)) {
-                    return ResponseFactory.createLobbyResponse(request, request.getBody());
-                }
-
                 // the update-interface gets added
                 lobbyUpdates.put(player, lobbyUpdateInterface);
 
-                return ResponseFactory.createLobbyResponse(request, lobby);
+                return lobbyResponse;
             }
         }
         catch (SQLException e) {

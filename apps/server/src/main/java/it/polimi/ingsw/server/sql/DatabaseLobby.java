@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.sql;
 
 import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.mocks.IPlayer;
-import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
 import java.sql.ResultSet;
@@ -11,7 +10,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 // TODO: docs
 public class DatabaseLobby implements ILobby {
@@ -172,22 +170,5 @@ public class DatabaseLobby implements ILobby {
     @Override
     public void deserialize(JSONObject jsonObject) {
         throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
-    }
-
-    /**
-     * Serialized the implementing class into a {@link JSONObject}.
-     *
-     * @return a {@link JSONObject} which represents the serialized object
-     */
-    @Override
-    public JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("id", this.id);
-        jsonObject.put("opening-time", this.openingTime);
-        jsonObject.put("closing-time", this.closingTime);
-        jsonObject.put("players", this.getPlayers().stream().map(JSONSerializable::serialize).collect(Collectors.toList()));
-
-        return jsonObject;
     }
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.utils;
+package it.polimi.ingsw.utils.text;
 
 import javax.crypto.Cipher;
 import java.security.GeneralSecurityException;

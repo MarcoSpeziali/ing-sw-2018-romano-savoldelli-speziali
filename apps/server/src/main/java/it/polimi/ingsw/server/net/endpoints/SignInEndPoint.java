@@ -11,7 +11,7 @@ import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.sql.DatabasePreAuthenticationSession;
 import it.polimi.ingsw.server.utils.ServerLogger;
-import it.polimi.ingsw.utils.HashUtils;
+import it.polimi.ingsw.utils.text.HashUtils;
 import it.polimi.ingsw.utils.text.RandomString;
 
 import java.net.Socket;

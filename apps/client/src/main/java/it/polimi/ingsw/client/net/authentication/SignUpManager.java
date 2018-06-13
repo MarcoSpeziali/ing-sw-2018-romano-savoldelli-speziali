@@ -13,7 +13,7 @@ import it.polimi.ingsw.net.requests.SignUpRequest;
 import it.polimi.ingsw.net.responses.SignUpResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.CypherUtils;
+import it.polimi.ingsw.utils.text.CypherUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
 
 import java.io.IOException;

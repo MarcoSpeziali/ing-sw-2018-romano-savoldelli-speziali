@@ -18,7 +18,7 @@ public class WindowCLIView extends WindowView {
 
         for (int i = 0; i < window.getRows(); i++) {
             for (int j = 0; j < window.getColumns(); j++) {
-               // cellViews[i][j] = new CellCLIView(window.getCells()[i][j]);
+               cellViews[i][j] = new CellCLIView(window.getCells()[i][j]);
             }
         }
     }

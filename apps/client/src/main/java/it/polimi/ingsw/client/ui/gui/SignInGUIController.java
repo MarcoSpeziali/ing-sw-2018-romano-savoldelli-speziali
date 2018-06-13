@@ -1,42 +1,77 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.net.authentication.SignInManager;
+import it.polimi.ingsw.client.utils.ClientLogger;
+import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
+import it.polimi.ingsw.client.utils.text.TextInputControlPlaceholderLocalizationUpdater;
+import it.polimi.ingsw.utils.text.LocalizedText;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.util.concurrent.TimeoutException;
 
 public class SignInGUIController {
-    private FXMLLoader loader = new FXMLLoader();
-    @FXML public JFXTextField user;
-    @FXML public JFXPasswordField pass;
 
-    public SignInGUIController() {}
+    private FXMLLoader loader = new FXMLLoader();
+
+    @LocalizedText(key = Constants.Strings.SIGN_IN_USERNAME_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
+    @FXML
+    public JFXTextField usernameField;
+
+    @LocalizedText(key = Constants.Strings.SIGN_IN_PASSWORD_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
+    @FXML
+    public JFXPasswordField passwordField;
+
+    @LocalizedText(key = Constants.Strings.SIGN_IN_REGISTER_LINK_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @FXML
+    public Hyperlink registerLink;
+
+    @LocalizedText(key = Constants.Strings.SIGN_IN_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @FXML
+    public JFXButton backButton;
+
+    @LocalizedText(key = Constants.Strings.SIGN_IN_SING_IN_NOW_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @FXML
+    public Label signInNowLabel;
+
+    @LocalizedText(key = Constants.Strings.WELCOME_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @FXML
+    public Label welcomeLabel;
+
+    @LocalizedText(key = Constants.Strings.SIGN_IN_SIGN_IN_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @FXML
+    public JFXButton singInButton;
+
+    public SignInGUIController() { }
+
+    @FXML
+    public void initialize() {
+        LocalizedText.Updater.update(this);
+    }
 
     public void onSignInClicked() {
         try {
-            if (SignInManager.getManager().signIn(user.getText(), pass.getText())) {
-                System.out.println("Logged as\nuser: " + user.getText() + "\npassword: " + pass.getText());
+            if (false) {
+                SignInManager.getManager().signIn(usernameField.getText(), passwordField.getText());
+                ClientLogger.getLogger(SignInGUIController.class).info(String.format("Logged as user: %s password: %s", usernameField.getText(), passwordField.getText()));
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Access denied");
-                alert.setHeaderText("Wrong Username/Password combination.");
-                alert.setContentText("Please retry with different combination or sign up as a new user");
+                alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_TITLE));
+                alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT));
+                alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT));
                 alert.showAndWait();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
             e.printStackTrace();
         } catch (NotBoundException e) {
             e.printStackTrace();

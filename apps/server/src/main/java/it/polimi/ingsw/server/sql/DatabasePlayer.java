@@ -11,6 +11,8 @@ import java.util.Objects;
 // TODO: document
 public class DatabasePlayer implements IPlayer {
 
+    private static final long serialVersionUID = 8654385885910336973L;
+
     /**
      * The user's unique id.
      */
@@ -131,21 +133,6 @@ public class DatabasePlayer implements IPlayer {
     @Override
     public void deserialize(JSONObject jsonObject) {
         throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
-    }
-
-    /**
-     * Serialized the implementing class into a {@link JSONObject}.
-     *
-     * @return a {@link JSONObject} which represents the serialized object
-     */
-    @Override
-    public JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("id", this.id);
-        jsonObject.put("username", this.username);
-        
-        return jsonObject;
     }
 
     @Override

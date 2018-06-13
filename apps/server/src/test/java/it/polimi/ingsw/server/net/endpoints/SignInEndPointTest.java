@@ -9,7 +9,7 @@ import it.polimi.ingsw.net.responses.ChallengeResponse;
 import it.polimi.ingsw.net.responses.SignInResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.Settings;
-import it.polimi.ingsw.utils.HashUtils;
+import it.polimi.ingsw.utils.text.HashUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -18,9 +18,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.rmi.RemoteException;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

@@ -11,10 +11,6 @@ class LobbyEndPointTest {
     
     @Test
     void testLobbyEndPoint() throws RemoteException {
-        LobbyEndPoint lobbyEndPoint = new LobbyEndPoint();
-        lobbyEndPoint.joinLobby(new Request<>(
-                new Header("token"),
-                new LobbyJoinRequest()
-        ));
+
     }
 }

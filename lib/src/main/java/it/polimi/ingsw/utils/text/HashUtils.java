@@ -1,4 +1,4 @@
-package it.polimi.ingsw.utils;
+package it.polimi.ingsw.utils.text;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

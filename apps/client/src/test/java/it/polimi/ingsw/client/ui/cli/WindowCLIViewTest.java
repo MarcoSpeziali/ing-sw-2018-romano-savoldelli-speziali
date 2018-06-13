@@ -25,7 +25,6 @@ class WindowCLIViewTest {
 
     @BeforeEach
     void setup () {
-
         this.window = new Window(4, 3,4, "Test", null, cells);
         windowCLIView = new WindowCLIView(window);
     }

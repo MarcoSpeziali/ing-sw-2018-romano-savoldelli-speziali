@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.utils;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.Player;
+import it.polimi.ingsw.server.sql.DatabasePlayer;
 
 /**
  * Represents the context globally shader between players.
@@ -33,12 +33,12 @@ public class GlobalContext extends Context {
      * @param player the player owning the context
      * @return the {@link Context} for the provided {@code player}
      */
-    public Context getContextForPlayer(Player player) {
-        if (this.containsKey(player.getProfile().getUserName())) {
-            return (Context) this.get(player.getProfile().getUserName());
+    public Context getContextForPlayer(DatabasePlayer player) {
+        if (this.containsKey(player.getUsername())) {
+            return (Context) this.get(player.getUsername());
         }
         else {
-            String username = player.getProfile().getUserName();
+            String username = player.getUsername();
 
             // TODO: change getProfileCall
             Context playerContext = (Context) this.put(username, this.snapshot(username));

@@ -165,7 +165,7 @@ public class ServerApp {
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_UP), new SignUpEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_JOIN_REQUEST), LobbyEndPoint.getInstance());
-        registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_REGISTER_FOR_UPDATES), LobbyEndPoint.getInstance());
+        registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_JOIN_REQUEST_RMI), LobbyEndPoint.getInstance());
     }
 
     /**

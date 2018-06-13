@@ -14,12 +14,11 @@ import it.polimi.ingsw.net.responses.ChallengeResponse;
 import it.polimi.ingsw.net.responses.SignInResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.HashUtils;
+import it.polimi.ingsw.utils.text.HashUtils;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.concurrent.TimeoutException;
 
 public class SignInManager {
 
@@ -61,9 +60,8 @@ public class SignInManager {
      * @param password the password of the player
      * @return {@code true} if the user has been successfully authenticated, {@code false} otherwise
      * @throws RemoteException if a server error or a connection error occurred
-     * @throws TimeoutException if the challenge haven't been completed in time
      */
-    public boolean signIn(String username, String password) throws IOException, TimeoutException, NotBoundException, ReflectiveOperationException {
+    public boolean signIn(String username, String password) throws IOException, NotBoundException, ReflectiveOperationException {
         // builds the sign-in request
         Request<SignInRequest> authenticationRequest = new Request<>(
                 new Header(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION),
@@ -107,7 +105,7 @@ public class SignInManager {
                 throw new RemoteException();
             }
             else if (errorCode == ResponseFields.Error.TIMEOUT.getCode()) {
-                throw new TimeoutException();
+                return signIn(username, password);
             }
 
             return false; // 401 Unauthorized

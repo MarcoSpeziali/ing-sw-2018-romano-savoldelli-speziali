@@ -9,8 +9,8 @@ import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
-import it.polimi.ingsw.utils.CypherUtils;
-import it.polimi.ingsw.utils.HashUtils;
+import it.polimi.ingsw.utils.text.CypherUtils;
+import it.polimi.ingsw.utils.text.HashUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
 
 import java.io.IOException;
