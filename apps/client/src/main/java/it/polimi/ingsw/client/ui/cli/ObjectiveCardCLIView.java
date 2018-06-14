@@ -3,7 +3,7 @@ package it.polimi.ingsw.client.ui.cli;
 import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.views.ObjectiveCardView;
 
-public class ObjectiveCardCLIView extends ObjectiveCardView {
+public class ObjectiveCardCLIView extends ObjectiveCardView implements CLIView {
 
     private ObjectiveCard objectiveCard;
 

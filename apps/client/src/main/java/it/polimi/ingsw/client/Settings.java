@@ -22,6 +22,8 @@ public final class Settings extends SettingsBase {
 
     private final boolean usingSockets;
 
+    private final boolean fullScreenMode;
+
     public String getServerSocketAddress() {
         return serverSocketAddress;
     }
@@ -42,6 +44,10 @@ public final class Settings extends SettingsBase {
         return usingSockets;
     }
 
+    public boolean isFullScreenMode() {
+        return fullScreenMode;
+    }
+
     @SuppressWarnings("squid:UnusedPrivateMethod")
     private Settings(Map<String, String> settings) {
         this.serverSocketPort = Integer.parseInt(settings.get("server-socket-port"));
@@ -49,6 +55,7 @@ public final class Settings extends SettingsBase {
         this.serverRMIPort = Integer.parseInt(settings.get("server-rmi-port"));
         this.serverRMIAddress = settings.get("server-rmi-address");
         this.usingSockets = settings.get("connection-protocol").equals("sockets");
+        this.fullScreenMode = settings.get("fullscreen").equals("true");
     }
 
     public static void build() throws IOException, SAXException, ParserConfigurationException {

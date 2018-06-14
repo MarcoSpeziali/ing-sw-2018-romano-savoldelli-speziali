@@ -1,4 +1,4 @@
 package it.polimi.ingsw.views;
 
-public abstract class PlayerView implements Renderable {
+public abstract class PlayerView {
 }

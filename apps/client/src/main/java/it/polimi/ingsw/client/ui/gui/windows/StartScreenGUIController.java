@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui;
+package it.polimi.ingsw.client.ui.gui.windows;
 
 import it.polimi.ingsw.client.Constants;
 import javafx.fxml.FXMLLoader;

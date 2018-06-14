@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.views.Renderable;
-
-public class InGameCLIView implements Renderable {
+public class InGameCLIView implements CLIView {
 
     @Override
     public void render() {

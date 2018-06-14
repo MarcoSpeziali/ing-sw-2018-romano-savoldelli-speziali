@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="480.0" maxWidth="720.0" minHeight="480.0" minWidth="720.0" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="480.0" maxWidth="720.0" minHeight="480.0" minWidth="720.0" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.windows.SettingsGUIController">
    <left>
       <Pane prefHeight="480.0" prefWidth="360.0" style="-fx-background-color: #c0392b;" BorderPane.alignment="CENTER">
          <children>
-            <JFXButton layoutX="54.0" layoutY="343.0" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #e74c3c;" text="SAVE" textFill="#ffa49c">
+            <JFXButton layoutX="54.0" layoutY="343.0" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #e74c3c;" text="SAVE" textFill="#ffa49c" onAction="#onSaveClicked">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -26,7 +26,7 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <JFXButton layoutX="54.0" layoutY="402.0" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #e74c3c;" text="BACK" textFill="#ffa49c">
+            <JFXButton layoutX="54.0" layoutY="402.0" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #e74c3c;" text="BACK" textFill="#ffa49c" onAction="#onBackClicked">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>

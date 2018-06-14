@@ -1,15 +1,14 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.models.Die;
+
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.views.WindowView;
-
 import java.util.Scanner;
 
-public class WindowCLIView extends WindowView {
+public class WindowCLIView extends WindowView implements CLIView {
 
-    private Scanner scanner = new Scanner(System.in);
+    private CellCLIView[][] cellViews;
+    private Scanner scanner = new Scanner(System.in); // FIXME usage?
 
     public WindowCLIView(Window window){
         super(window);
@@ -55,9 +54,4 @@ public class WindowCLIView extends WindowView {
         super.setWindow(window);
     }
 
-    private int convertLocation() {
-        int columns = (scanner.nextInt()-65);
-        int rows = (scanner.nextInt());
-        return (rows-1)*window.getColumns()+(columns-1);
-    }
 }

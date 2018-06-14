@@ -3,7 +3,7 @@ package it.polimi.ingsw.views;
 import it.polimi.ingsw.controllers.DieController;
 import it.polimi.ingsw.models.Die;
 
-public abstract class DieView implements Renderable {
+public abstract class DieView {
 
     protected Die die;
     protected DieController dieController;

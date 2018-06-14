@@ -12,6 +12,6 @@ module it.polimi.ingsw.client {
     requires java.logging;
 
     exports it.polimi.ingsw.client.utils.text;
-    exports it.polimi.ingsw.client.ui.gui;
+    exports it.polimi.ingsw.client.ui.gui.windows;
     exports it.polimi.ingsw.client to javafx.graphics;
 }

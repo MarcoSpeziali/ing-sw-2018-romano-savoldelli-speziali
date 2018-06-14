@@ -3,7 +3,7 @@ package it.polimi.ingsw.views;
 import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.models.Window;
 
-public abstract class WindowView implements Renderable {
+public abstract class WindowView {
     protected Window window;
     protected WindowController windowController;
 
@@ -15,10 +15,7 @@ public abstract class WindowView implements Renderable {
         this.windowController = windowController;
     }
 
-    protected CellView[][] cellViews; //??
-
     public WindowView(Window window) {
         this.window = window;
     }
-
 }

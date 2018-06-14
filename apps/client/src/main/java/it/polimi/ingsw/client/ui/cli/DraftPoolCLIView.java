@@ -1,15 +1,13 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.DraftPool;
-import it.polimi.ingsw.views.DieView;
 import it.polimi.ingsw.views.DraftPoolView;
 import org.fusesource.jansi.Ansi;
 
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class DraftPoolCLIView extends DraftPoolView {
+public class DraftPoolCLIView extends DraftPoolView implements CLIView{
 
     public DraftPoolCLIView(DraftPool draftPool) {
         super(draftPool);

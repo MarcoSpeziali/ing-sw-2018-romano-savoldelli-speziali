@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui;
+package it.polimi.ingsw.client.ui.gui.windows;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;

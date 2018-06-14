@@ -1,10 +1,10 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.controllers.MenuController;
-import it.polimi.ingsw.views.Renderable;
+
 import java.util.Scanner;
 
-public class MenuCLIView implements Renderable {
+public class MenuCLIView implements CLIView {
 
     private int command;
     private MenuController menuController;

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.ui.cli;
 
+import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Die;
@@ -11,6 +12,7 @@ class WindowCLIViewTest {
 
     private WindowCLIView windowCLIView;
     private Window window;
+    private WindowController windowController;
     private Cell[][] cells = new Cell[][] {
             {
                     new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)

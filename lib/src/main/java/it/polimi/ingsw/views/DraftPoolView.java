@@ -3,7 +3,7 @@ package it.polimi.ingsw.views;
 import it.polimi.ingsw.controllers.DraftPoolController;
 import it.polimi.ingsw.models.DraftPool;
 
-public abstract class DraftPoolView implements Renderable {
+public abstract class DraftPoolView {
     protected DraftPool draftPool;
     protected DieView[] dieView;
     protected DraftPoolController draftPoolController;

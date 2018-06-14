@@ -121,7 +121,4 @@ public class Constants {
         }
     }
 
-    public enum Scene {
-        START_SCREEN
-    }
 }
