@@ -10,6 +10,9 @@ import it.polimi.ingsw.models.Window;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -34,8 +37,10 @@ public class SettingsGUIController {
 
 
     public void onSaveClicked() throws IOException {
-
-        this.setScene(new Scene(windowGUIView.render().getParent(), 500, 500));
+        BorderPane pane = new BorderPane();
+        pane.setCenter(windowGUIView.render());
+        String ciao = pane.getStyle();
+        this.setScene(new Scene(pane, 500, 500));
     }
 
     public void onBackClicked() throws IOException {
@@ -45,7 +50,7 @@ public class SettingsGUIController {
 
     private void setScene(Scene scene) {
         SagradaGUI.primaryStage.setScene(scene);
-        //SagradaGUI.primaryStage.initStyle(StageStyle.UNDECORATED);
+        //SagradaGUI.primaryStage
         SagradaGUI.primaryStage.show();
     }
 }

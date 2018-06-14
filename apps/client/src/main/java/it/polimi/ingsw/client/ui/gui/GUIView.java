@@ -2,6 +2,8 @@ package it.polimi.ingsw.client.ui.gui;
 
 import javafx.scene.Node;
 
+import java.io.IOException;
+
 public interface GUIView {
-    Node render();
+    Node render() throws IOException;
 }
