@@ -60,7 +60,8 @@ public class SignInGUIController {
 
     public void onSignInClicked() throws IOException {
         try {
-            if (SignInManager.getManager().signIn(usernameField.getText(), passwordField.getText())) {
+            if (false) {
+                SignInManager.getManager().signIn(usernameField.getText(), passwordField.getText());
                 ClientLogger.getLogger(SignInGUIController.class).info(String.format("Logged as user: %s password: %s", usernameField.getText(), passwordField.getText()));
             }
             else {
