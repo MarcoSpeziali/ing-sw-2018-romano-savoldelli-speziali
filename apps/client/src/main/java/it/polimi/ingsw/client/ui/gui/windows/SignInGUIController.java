@@ -24,35 +24,33 @@ public class SignInGUIController {
 
     private FXMLLoader loader = new FXMLLoader();
 
-    @LocalizedText(key = Constants.Strings.SIGN_IN_USERNAME_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
     @FXML
+    @LocalizedText(key = Constants.Strings.SIGN_IN_USERNAME_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
     public JFXTextField usernameField;
 
-    @LocalizedText(key = Constants.Strings.SIGN_IN_PASSWORD_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
     @FXML
+    @LocalizedText(key = Constants.Strings.SIGN_IN_PASSWORD_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
     public JFXPasswordField passwordField;
 
-    @LocalizedText(key = Constants.Strings.SIGN_IN_REGISTER_LINK_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     @FXML
+    @LocalizedText(key = Constants.Strings.SIGN_IN_REGISTER_LINK_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Hyperlink registerLink;
 
-    @LocalizedText(key = Constants.Strings.SIGN_IN_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     @FXML
+    @LocalizedText(key = Constants.Strings.SIGN_IN_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton backButton;
 
-    @LocalizedText(key = Constants.Strings.SIGN_IN_SING_IN_NOW_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     @FXML
+    @LocalizedText(key = Constants.Strings.SIGN_IN_SING_IN_NOW_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label signInNowLabel;
 
-    @LocalizedText(key = Constants.Strings.WELCOME_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     @FXML
+    @LocalizedText(key = Constants.Strings.WELCOME_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label welcomeLabel;
 
-    @LocalizedText(key = Constants.Strings.SIGN_IN_SIGN_IN_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     @FXML
+    @LocalizedText(key = Constants.Strings.SIGN_IN_SIGN_IN_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton singInButton;
-
-    public SignInGUIController() { }
 
     @FXML
     public void initialize() {
@@ -61,10 +59,10 @@ public class SignInGUIController {
 
     public void onSignInClicked() {
         try {
-            if (false) {
-                SignInManager.getManager().signIn(usernameField.getText(), passwordField.getText());
+            if (SignInManager.getManager().signIn(usernameField.getText(), passwordField.getText())) {
                 ClientLogger.getLogger(SignInGUIController.class).info(String.format("Logged as user: %s password: %s", usernameField.getText(), passwordField.getText()));
-            } else {
+            }
+            else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_TITLE));
                 alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT));
