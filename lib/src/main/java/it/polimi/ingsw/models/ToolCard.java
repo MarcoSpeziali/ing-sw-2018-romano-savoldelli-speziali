@@ -1,7 +1,6 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.IEffect;
-
 public class ToolCard extends Card {
 
     private static final long serialVersionUID = 4573356302420625430L;

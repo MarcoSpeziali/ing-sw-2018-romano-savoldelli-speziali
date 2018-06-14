@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.windows.LobbyGUIController">
+   <center>
+      <Pane prefHeight="720.0" prefWidth="550.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER" layoutX="225.0" layoutY="229.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="player1" text="Player 1" textFill="#29ab5f">
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player2" text="Player 2" textFill="#28ad60">
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player3" text="Player 3" textFill="#28ad60">
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player4" text="Player 4" textFill="#28ad60">
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <JFXButton defaultButton="true" disable="true" layoutX="101.0" layoutY="642.0" onAction="#onStartMatchClicked" prefHeight="44.0" prefWidth="349.0" style="-fx-background-color: #27ae60;" text="START MATCH" textFill="#c8ffdf">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </Pane>
+   </center>
+   <left>
+      <Pane prefHeight="720.0" prefWidth="360.0" style="-fx-background-color: #2ecc71;" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="141.0" layoutY="86.0" text="LOBBY" textFill="#c7ffde">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label id="seconds" fx:id="seconds" layoutX="140.0" layoutY="306.0" textFill="#c7ffde">
+               <font>
+                  <Font size="75.0" />
+               </font>
+            </Label>
+            <Label layoutX="145.0" layoutY="391.0" text="second(s) left" textFill="#c7ffde" />
+            <Label layoutX="56.0" layoutY="129.0" text="Wait for other players to connect" textFill="#c7ffde">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <JFXButton cancelButton="true" layoutX="55.0" layoutY="642.0" onAction="#onBackClicked" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #27ae60;" text="BACK" textFill="#c8ffdf">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <ProgressIndicator layoutX="96.0" layoutY="274.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="173.0" prefWidth="167.0" />
+         </children>
+      </Pane>
+   </left>
+</BorderPane>

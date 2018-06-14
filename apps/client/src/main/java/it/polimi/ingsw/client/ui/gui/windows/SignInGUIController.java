@@ -12,6 +12,7 @@ import it.polimi.ingsw.client.utils.text.TextInputControlPlaceholderLocalization
 import it.polimi.ingsw.utils.text.LocalizedText;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
@@ -57,7 +58,7 @@ public class SignInGUIController {
         LocalizedText.Updater.update(this);
     }
 
-    public void onSignInClicked() {
+    public void onSignInClicked() throws IOException {
         try {
             if (SignInManager.getManager().signIn(usernameField.getText(), passwordField.getText())) {
                 ClientLogger.getLogger(SignInGUIController.class).info(String.format("Logged as user: %s password: %s", usernameField.getText(), passwordField.getText()));
@@ -76,6 +77,11 @@ public class SignInGUIController {
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
+        loader.setLocation(Constants.Resources.LOBBY.getURL());
+        Parent root = loader.load();
+        LobbyGUIController controller = loader.getController();
+        controller.startTimeline(); // FIXME timeline comes from server
+        this.setScene(new Scene(root, 910, 720));
     }
 
     public void onNotYetRegisteredClicked() throws IOException {
@@ -90,7 +96,6 @@ public class SignInGUIController {
 
     private void setScene(Scene scene) {
         SagradaGUI.primaryStage.setScene(scene);
-        //SagradaGUI.primaryStage.initStyle(StageStyle.UNDECORATED);
         SagradaGUI.primaryStage.show();
     }
 }

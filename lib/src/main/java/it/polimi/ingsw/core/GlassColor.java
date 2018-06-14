@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public enum GlassColor implements Serializable {
-    RED(0xff0000),
-    YELLOW(0xffff00),
-    GREEN(0x00ff00),
-    BLUE(0x0000ff),
-    PURPLE(0x800080);
+    RED(0xe74c3c),
+    YELLOW(0xf1c40f),
+    GREEN(0x2ecc71),
+    BLUE(0x3498db),
+    PURPLE(0x9b59b6);
 
     /**
      * The hex value of the color.

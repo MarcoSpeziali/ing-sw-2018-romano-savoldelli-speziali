@@ -10,6 +10,7 @@ import it.polimi.ingsw.models.Window;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
@@ -25,10 +26,10 @@ public class SettingsGUIController {
                     new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
             },
             {
-                    new Cell(0, null),      new Cell(0, null),      new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
+                    new Cell(1, null),      new Cell(3, null),      new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
             },
             {
-                    new Cell(0, GlassColor.BLUE), new Cell(2, null),      new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
+                    new Cell(0, GlassColor.BLUE), new Cell(6, null),      new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
             }
     };
     WindowGUIView windowGUIView =  new WindowGUIView(new Window(3,3,4,"ciao", null, cells));
@@ -36,11 +37,9 @@ public class SettingsGUIController {
     public SettingsGUIController() {}
 
 
-    public void onSaveClicked() throws IOException {
-        BorderPane pane = new BorderPane();
-        pane.setCenter(windowGUIView.render());
-        String ciao = pane.getStyle();
-        this.setScene(new Scene(pane, 500, 500));
+    public void onSaveClicked() {
+        Parent root = (Parent) windowGUIView.render();
+        this.setScene(new Scene(root, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE));
     }
 
     public void onBackClicked() throws IOException {
@@ -50,7 +49,6 @@ public class SettingsGUIController {
 
     private void setScene(Scene scene) {
         SagradaGUI.primaryStage.setScene(scene);
-        //SagradaGUI.primaryStage
         SagradaGUI.primaryStage.show();
     }
 }

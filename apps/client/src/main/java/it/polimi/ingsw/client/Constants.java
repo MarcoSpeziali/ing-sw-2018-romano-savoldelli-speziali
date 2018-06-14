@@ -50,17 +50,18 @@ public class Constants {
         DEFAULT_SETTINGS("default_settings.xml"),
         IDRA_PUBLIC_KEY("idra_rsa.der"),
 
-        CELL_ONE("cells/cell_one.png"),
-        CELL_TWO("cells/cell_two.png"),
-        CELL_THREE("cells/cell_three.png"),
-        CELL_FOUR("cells/cell_four.png"),
-        CELL_FIVE("cells/cell_five.png"),
-        CELL_SIX("cells/cell_six.png"),
+        CELL_ONE("images/cells/cell_one.png"),
+        CELL_TWO("images/cells/cell_two.png"),
+        CELL_THREE("images/cells/cell_three.png"),
+        CELL_FOUR("images/cells/cell_four.png"),
+        CELL_FIVE("images/cells/cell_five.png"),
+        CELL_SIX("images/cells/cell_six.png"),
 
         SIGN_UP_FXML("FXML/Window/SignUp.fxml"),
         SIGN_IN_FXML("FXML/Window/SignIn.fxml"),
         START_SCREEN_FXML("FXML/Window/StartScreen.fxml"),
-        SETTINGS_FXML("FXML/Window/Settings.fxml");
+        SETTINGS_FXML("FXML/Window/Settings.fxml"),
+        LOBBY("FXML/Window/Lobby.fxml");
 
         private final String relativePath;
 

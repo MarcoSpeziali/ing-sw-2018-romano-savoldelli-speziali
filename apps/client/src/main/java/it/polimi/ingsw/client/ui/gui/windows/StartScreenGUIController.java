@@ -9,7 +9,8 @@ import java.io.IOException;
 
 import static it.polimi.ingsw.client.SagradaGUI.primaryStage;
 
-public class StartScreenGUIController {
+public class
+StartScreenGUIController {
 
     private FXMLLoader loader = new FXMLLoader();
     public double xOffset = 0;
