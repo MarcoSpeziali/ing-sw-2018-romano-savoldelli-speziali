@@ -16,6 +16,8 @@ import java.io.IOException;
 public class SagradaGUI extends Application {
 
     public static Stage primaryStage;
+    public double xOffset = 0;
+    public double yOffset = 0;
 
     public static void main(String[] args)
     {
@@ -38,5 +40,15 @@ public class SagradaGUI extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
 
+    }
+
+    public void onMousePressed(MouseEvent event) { // FIXME not correct offsets
+        xOffset = primaryStage.getX() + event.getScreenX();
+        yOffset = primaryStage.getY() + event.getScreenY();
+    }
+
+    public void onMouseDragged(MouseEvent event) { // FIXME not correct offsets
+        primaryStage.setX(event.getScreenX() + xOffset);
+        primaryStage.setY(event.getScreenY() + yOffset);
     }
 }

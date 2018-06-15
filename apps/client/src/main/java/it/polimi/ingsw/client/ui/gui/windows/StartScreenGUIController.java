@@ -13,8 +13,7 @@ public class
 StartScreenGUIController {
 
     private FXMLLoader loader = new FXMLLoader();
-    public double xOffset = 0;
-    public double yOffset = 0;
+
 
     public StartScreenGUIController() {}
 
@@ -34,17 +33,7 @@ StartScreenGUIController {
 
     private void setScene(Scene scene) {
         primaryStage.setScene(scene);
-        //SagradaGUI.primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
     }
 
-    public void onMousePressed(MouseEvent event){ // FIXME not correct offsets
-            xOffset = primaryStage.getX() - event.getScreenX();
-            yOffset = primaryStage.getY() - event.getScreenY();
-    }
-
-    public void onMouseDragged(MouseEvent event){ // FIXME not correct offsets
-            primaryStage.setX(event.getScreenX() + xOffset);
-            primaryStage.setY(event.getScreenY() + yOffset);
-    }
 }

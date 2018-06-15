@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.gui.windows;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
+import it.polimi.ingsw.client.Settings;
 import it.polimi.ingsw.client.net.authentication.SignInManager;
 import it.polimi.ingsw.client.ui.gui.WindowGUIView;
 import it.polimi.ingsw.core.GlassColor;
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class SettingsGUIController {
 
     private FXMLLoader loader = new FXMLLoader();
-    private SignInManager model;
+    private Settings settings;
     private Cell[][] cells = new Cell[][] {
             {
                     new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
