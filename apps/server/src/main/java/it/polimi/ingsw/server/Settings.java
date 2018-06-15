@@ -1,27 +1,36 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.utils.Setting;
 import it.polimi.ingsw.utils.SettingsBase;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.util.Map;
 
 // TODO: docs
 public final class Settings extends SettingsBase {
 
     public static Settings getSettings() {
-        return (Settings) customSettings;
+        try {
+            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
+        }
+        catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private final int socketPort;
-    private final int rmiPort;
-    private final String rmiHost;
-    private final String databaseUrl;
-    private final String databaseName;
-    private final String databaseUsername;
-    private final String databasePassword;
-    private final String databaseDriver;
+    @Setting(id = "socket-port", defaultValue = "9000", type = Integer.class)
+    private int socketPort;
+    @Setting(id = "rmi-port", defaultValue = "1099", type = Integer.class)
+    private int rmiPort;
+    @Setting(id = "rmi-host", defaultValue = "idra.weblink.it")
+    private String rmiHost;
+    @Setting(id = "database-url", defaultValue = "localhost:5432")
+    private String databaseUrl;
+    @Setting(id = "database-name", defaultValue = "sagrada")
+    private String databaseName;
+    @Setting(id = "database-username", defaultValue = "sagrada")
+    private String databaseUsername;
+    @Setting(id = "database-password", defaultValue = "jjn6sjI2F34~cicv=aHB]vjqLVw3-CgSbEgFSq}@QMhuuL)DF)zzE$Y5X&FFHGYs")
+    private String databasePassword;
+    @Setting(id = "database-driver", defaultValue = "postgresql")
+    private String databaseDriver;
 
     public int getSocketPort() {
         return socketPort;
@@ -55,24 +64,7 @@ public final class Settings extends SettingsBase {
         return databaseDriver;
     }
 
-    @SuppressWarnings("squid:UnusedPrivateMethod")
-    private Settings(Map<String, String> settings) {
-        this.socketPort = Integer.parseInt(settings.get("socket-port"));
-        this.rmiPort = Integer.parseInt(settings.get("rmi-port"));
-        this.rmiHost = settings.get("rmi-host");
-        this.databaseUrl = settings.get("database-url");
-        this.databaseName = settings.get("database-name");
-        this.databaseUsername = settings.get("database-username");
-        this.databasePassword = settings.get("database-password");
-        this.databaseDriver = settings.get("database-driver");
-    }
-
-    public static void build() throws IOException, SAXException, ParserConfigurationException {
-        SettingsBase.build(
-                Settings::new,
-                Constants.Resources.DEFAULT_SETTINGS.getRelativePath(),
-                Constants.Paths.SETTINGS_PATH.getAbsolutePath(),
-                Settings.class
-        );
+    private Settings(String path) throws IllegalAccessException {
+        super(path);
     }
 }

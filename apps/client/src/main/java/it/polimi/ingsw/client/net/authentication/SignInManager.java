@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.net.authentication;
 
+import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.Settings;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
@@ -32,7 +33,7 @@ public class SignInManager {
     private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
 
     private SignInManager() {
-        if (Settings.getSettings().isUsingSockets()) {
+        if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
             oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
                     Settings.getSettings().getServerSocketAddress(),
                     Settings.getSettings().getServerSocketPort()

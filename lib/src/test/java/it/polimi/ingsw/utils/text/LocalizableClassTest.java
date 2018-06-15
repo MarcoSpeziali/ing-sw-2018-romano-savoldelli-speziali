@@ -27,21 +27,21 @@ class LocalizableClassTest {
 
         LocalizedString.invalidateCacheForNewLocale(Locale.ITALIAN);
 
-        LocalizedText.Updater.update(this);
+        // LocalizedText.Updater.update(this);
 
         Assertions.assertEquals("Io sono un uomo", this.text);
         Assertions.assertEquals("Io sono una donna", this.text2);
 
         LocalizedString.invalidateCacheForNewLocale(Locale.GERMAN);
 
-        LocalizedText.Updater.update(this);
+        // LocalizedText.Updater.update(this);
 
         Assertions.assertEquals("Ich bin ein Mann", this.text);
         Assertions.assertEquals("Ich bin eine Frau", this.text2);
 
         LocalizedString.invalidateCacheForNewLocale(Locale.FRENCH);
 
-        LocalizedText.Updater.update(this);
+        // LocalizedText.Updater.update(this);
 
         Assertions.assertEquals("Je suis un homme", this.text);
         Assertions.assertEquals("Je suis une femme", this.text2);

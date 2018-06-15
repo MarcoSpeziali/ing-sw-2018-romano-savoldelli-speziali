@@ -44,8 +44,8 @@ public class ServerApp {
             // create the folders needed by the server
             createProjectsFolders();
 
-            // builds the custom settings (if any)
-            Settings.build();
+            // builds the settings
+            Settings.getSettings();
 
             // build the routing table for the socket router
             SocketRouter.buildRoutingTables();

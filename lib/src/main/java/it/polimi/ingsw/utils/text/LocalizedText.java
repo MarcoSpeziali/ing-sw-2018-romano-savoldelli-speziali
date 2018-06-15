@@ -3,14 +3,11 @@ package it.polimi.ingsw.utils.text;
 import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.StackWalker.Option.RETAIN_CLASS_REFERENCE;
-
 // TODO: docs
-@Repeatable(LocalizedText.List.class)
+@Repeatable(LocalizedText.LocalizedFields.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LocalizedText {
@@ -19,25 +16,44 @@ public @interface LocalizedText {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    @interface List {
+    @interface LocalizedFields {
         LocalizedText[] value();
     }
 
-    class Updater {
-        private Updater() {}
+    class Updater implements LocalizedString.OnLocaleChanged {
+
+        private static List<Object> listeners = new LinkedList<>();
+
+        private static boolean alreadyRegistered = false;
+
+        private Updater(Object callerInstance) {
+            if (!listeners.contains(callerInstance)) {
+                listeners.add(callerInstance);
+            }
+
+            if (!alreadyRegistered) {
+                alreadyRegistered = true;
+
+                LocalizedString.addListener(this);
+            }
+
+            this.build(callerInstance);
+        }
 
         public static void update(Object classInstance) {
-            StackWalker walker = StackWalker.getInstance(RETAIN_CLASS_REFERENCE);
+            new Updater(classInstance);
+        }
 
-            Class<?> callerClass = walker.getCallerClass();
+        private void build(Object classInstance) {
+            Class<?> callerClass = classInstance.getClass();
 
             Map<Field, LocalizedText[]> fieldsToLocalize = Arrays.stream(callerClass.getDeclaredFields())
                     .filter(field -> field.getAnnotation(LocalizedText.class) != null)
                     .collect(Collectors.toMap(o -> o, o -> o.getAnnotationsByType(LocalizedText.class)));
 
             fieldsToLocalize.putAll(Arrays.stream(callerClass.getDeclaredFields())
-                    .filter(field -> field.getAnnotation(LocalizedText.List.class) != null)
-                    .collect(Collectors.toMap(o -> o, o -> o.getAnnotation(LocalizedText.List.class).value()))
+                    .filter(field -> field.getAnnotation(LocalizedText.LocalizedFields.class) != null)
+                    .collect(Collectors.toMap(o -> o, o -> o.getAnnotation(LocalizedText.LocalizedFields.class).value()))
             );
 
             fieldsToLocalize.forEach((field, annotations) -> {
@@ -61,6 +77,11 @@ public @interface LocalizedText {
                     throw new RuntimeException(e);
                 }
             });
+        }
+
+        @Override
+        public void onLocaleChanged(Locale oldLocale, Locale newLocale) {
+            listeners.forEach(Updater::update);
         }
     }
 }

@@ -32,7 +32,7 @@ public class SignUpManager {
     private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
 
     private SignUpManager() {
-        if (Settings.getSettings().isUsingSockets()) {
+        if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
             oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
                     Settings.getSettings().getServerSocketAddress(),
                     Settings.getSettings().getServerSocketPort()

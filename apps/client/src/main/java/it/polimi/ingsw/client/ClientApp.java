@@ -20,8 +20,8 @@ public class ClientApp {
             // create the folders needed by the server
             createProjectsFolders();
 
-            // builds the custom settings (if any)
-            Settings.build();
+            // builds the settings
+            Settings.getSettings();
 
             if (!options.has(Constants.ClientArguments.CLI_MODE.toString())) {
                 Application.launch(SagradaGUI.class, args);

@@ -8,4 +8,6 @@ module it.polimi.ingsw.server {
     requires postgresql;
     requires java.sql;
     requires json;
+
+    opens it.polimi.ingsw.server to it.polimi.ingsw;
 }

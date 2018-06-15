@@ -7,7 +7,6 @@
 
     <database-url>localhost:5432</database-url>
     <database-name>sagrada</database-name>
-    <database-token>sagrada</database-token>
     <database-username>sagrada</database-username>
     <database-password><![CDATA[jjn6sjI2F34~cicv=aHB]vjqLVw3-CgSbEgFSq}@QMhuuL)DF)zzE$Y5X&FFHGYs]]></database-password>
     <database-driver>postgresql</database-driver>

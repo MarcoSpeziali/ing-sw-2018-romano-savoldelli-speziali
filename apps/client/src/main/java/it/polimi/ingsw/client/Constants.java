@@ -5,6 +5,7 @@ import it.polimi.ingsw.utils.text.LocalizedString;
 import java.net.URL;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class Constants {
@@ -41,7 +42,6 @@ public class Constants {
     }
 
     public enum Resources {
-        DEFAULT_SETTINGS("default_settings.xml"),
         IDRA_PUBLIC_KEY("public.der"),
 
         CELL_ONE("images/cells/cell_one.png"),
@@ -94,6 +94,27 @@ public class Constants {
         public String toString() {
             return this.optionName;
         }
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
+    public enum Locales {
+        ENGLISH(Locale.ENGLISH),
+        ITALIANO(Locale.ITALIAN);
+
+        private final Locale locale;
+
+        Locales(Locale locale) {
+            this.locale = locale;
+        }
+
+        public Locale getLocale() {
+            return locale;
+        }
+    }
+
+    public enum Protocols {
+        SOCKETS,
+        RMI
     }
 
     public static final class Strings {

@@ -3,9 +3,7 @@ package it.polimi.ingsw.utils.text;
 import it.polimi.ingsw.utils.InMemoryCache;
 
 import java.io.Serializable;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Represents a {@link String} localized in a particular {@link Locale} or the default one.
@@ -34,15 +32,16 @@ public class LocalizedString implements Serializable {
      */
     private static transient ResourceBundle resourceBundle;
 
+    private static List<OnLocaleChanged> listeners = new LinkedList<>();
+
     static {
         try {
             resourceBundle = ResourceBundle.getBundle(STRINGS_BUNDLE);
         }
-        catch (MissingResourceException ignored) {
-            resourceBundle = null;
+        catch (MissingResourceException e) {
+            throw new RuntimeException(e);
         }
     }
-
 
     /**
      * @return The key of the {@link String} to localize.
@@ -102,7 +101,20 @@ public class LocalizedString implements Serializable {
      * @param newLocale The new locale used for every new translations.
      */
     public static void invalidateCacheForNewLocale(Locale newLocale) {
+        Locale oldLocale = resourceBundle.getLocale();
+
         LocalizedString.invalidateCache();
         LocalizedString.resourceBundle = ResourceBundle.getBundle(STRINGS_BUNDLE, newLocale);
+
+        listeners.forEach(onLocaleChanged -> onLocaleChanged.onLocaleChanged(oldLocale, newLocale));
+    }
+
+    public static void addListener(OnLocaleChanged onLocaleChanged) {
+        listeners.add(onLocaleChanged);
+    }
+
+    @FunctionalInterface
+    public interface OnLocaleChanged {
+        void onLocaleChanged(Locale oldLocale, Locale newLocale);
     }
 }

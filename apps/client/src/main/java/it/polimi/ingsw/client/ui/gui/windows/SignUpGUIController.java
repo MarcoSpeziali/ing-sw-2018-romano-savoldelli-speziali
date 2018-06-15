@@ -3,10 +3,9 @@ package it.polimi.ingsw.client.ui.gui.windows;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.controllers.SignUpController;
-import it.polimi.ingsw.client.net.authentication.SignInManager;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +21,6 @@ import java.io.IOException;
 public class SignUpGUIController extends SignUpController {
 
     private FXMLLoader loader = new FXMLLoader();
-    private SignInManager model;
 
     @FXML public JFXTextField user;
     @FXML public JFXPasswordField pass;
@@ -61,7 +59,7 @@ public class SignUpGUIController extends SignUpController {
 
     @FXML
     public void onBackClicked() throws IOException {
-        loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL()); // TODO check relative path for controller in all FXMLs
+        loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL());
         this.setScene(new Scene(loader.load(), 720,480));
     }
 

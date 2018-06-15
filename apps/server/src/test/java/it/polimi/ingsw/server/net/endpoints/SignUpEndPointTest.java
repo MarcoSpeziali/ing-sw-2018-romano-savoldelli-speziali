@@ -7,12 +7,11 @@ import it.polimi.ingsw.net.requests.SignUpRequest;
 import it.polimi.ingsw.net.responses.SignUpResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
-import it.polimi.ingsw.utils.text.CypherUtils;
-import it.polimi.ingsw.utils.text.HashUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
 import it.polimi.ingsw.utils.io.Resources;
+import it.polimi.ingsw.utils.text.CypherUtils;
+import it.polimi.ingsw.utils.text.HashUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -31,8 +30,6 @@ class SignUpEndPointTest {
 
     @Test
     void testRequestSignUpOnAlreadyExistingUser() throws IOException, ParserConfigurationException, SAXException {
-        Settings.build();
-
         Socket socket = mock(Socket.class);
         SocketAddress socketAddress = mock(SocketAddress.class);
         when(socketAddress.toString()).thenReturn("/1.2.3.4:1234");
@@ -52,8 +49,6 @@ class SignUpEndPointTest {
 
     @Test
     void testRequestSignUp() throws ParserConfigurationException, SAXException, IOException, GeneralSecurityException, SQLException {
-        Settings.build();
-
         Socket socket = mock(Socket.class);
         SocketAddress socketAddress = mock(SocketAddress.class);
         when(socketAddress.toString()).thenReturn("/1.2.3.4:1234");

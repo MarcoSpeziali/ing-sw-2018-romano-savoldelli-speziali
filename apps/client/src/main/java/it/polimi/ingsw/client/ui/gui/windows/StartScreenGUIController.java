@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.ui.gui.windows;
 import it.polimi.ingsw.client.Constants;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
@@ -35,5 +34,4 @@ StartScreenGUIController {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
 }

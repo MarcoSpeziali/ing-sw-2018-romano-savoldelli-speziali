@@ -2,7 +2,6 @@ package it.polimi.ingsw.client;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,11 +17,6 @@ public class SagradaGUI extends Application {
     public static Stage primaryStage;
     public double xOffset = 0;
     public double yOffset = 0;
-
-    public static void main(String[] args)
-    {
-        Application.launch(args);
-    }
 
     @Override
     public void start(Stage stage) throws IOException {

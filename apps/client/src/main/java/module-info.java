@@ -15,4 +15,5 @@ module it.polimi.ingsw.client {
     exports it.polimi.ingsw.client.utils.text;
     exports it.polimi.ingsw.client.ui.gui.windows;
     exports it.polimi.ingsw.client;
+    opens it.polimi.ingsw.client;
 }

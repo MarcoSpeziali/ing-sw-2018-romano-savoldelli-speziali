@@ -1,69 +1,102 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.utils.Setting;
 import it.polimi.ingsw.utils.SettingsBase;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.util.Map;
 
 // TODO: docs
 public final class Settings extends SettingsBase {
 
+    private static Settings sharedInstance;
+
     public static Settings getSettings() {
-        return (Settings) customSettings;
+        try {
+            if (sharedInstance == null) {
+                sharedInstance = new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
+            }
+
+            return sharedInstance;
+        }
+        catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private final String serverSocketAddress;
-    private final int serverSocketPort;
+    @Setting(id = "server-socket-address", defaultValue = "idra.weblink.it")
+    private String serverSocketAddress;
+    @Setting(id = "server-socket-port", defaultValue = "9000", type = Integer.class)
+    private int serverSocketPort;
 
-    private final String serverRMIAddress;
-    private final int serverRMIPort;
+    @Setting(id = "server-rmi-address", defaultValue = "idra.weblink.it")
+    private String serverRMIAddress;
+    @Setting(id = "server-rmi-port", defaultValue = "1009", type = Integer.class)
+    private int serverRMIPort;
 
-    private final boolean usingSockets;
+    @Setting(id = "connection-protocol", defaultValue = "SOCKETS", type = Constants.Protocols.class)
+    private Constants.Protocols protocol;
 
-    private final boolean fullScreenMode;
+    @Setting(id = "fullscreen", defaultValue = "true", type = Boolean.class)
+    private boolean fullScreenMode;
+
+    @Setting(id = "language", defaultValue = "ENGLISH", type = Constants.Locales.class)
+    private Constants.Locales language;
 
     public String getServerSocketAddress() {
         return serverSocketAddress;
+    }
+
+    public void setServerSocketAddress(String serverSocketAddress) {
+        this.serverSocketAddress = serverSocketAddress;
     }
 
     public int getServerSocketPort() {
         return serverSocketPort;
     }
 
+    public void setServerSocketPort(int serverSocketPort) {
+        this.serverSocketPort = serverSocketPort;
+    }
+
     public String getServerRMIAddress() {
         return serverRMIAddress;
+    }
+
+    public void setServerRMIAddress(String serverRMIAddress) {
+        this.serverRMIAddress = serverRMIAddress;
     }
 
     public int getServerRMIPort() {
         return serverRMIPort;
     }
 
-    public boolean isUsingSockets() {
-        return usingSockets;
+    public void setServerRMIPort(int serverRMIPort) {
+        this.serverRMIPort = serverRMIPort;
+    }
+
+    public Constants.Protocols getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(Constants.Protocols protocol) {
+        this.protocol = protocol;
     }
 
     public boolean isFullScreenMode() {
         return fullScreenMode;
     }
 
-    @SuppressWarnings("squid:UnusedPrivateMethod")
-    private Settings(Map<String, String> settings) {
-        this.serverSocketPort = Integer.parseInt(settings.get("server-socket-port"));
-        this.serverSocketAddress = settings.get("server-socket-address");
-        this.serverRMIPort = Integer.parseInt(settings.get("server-rmi-port"));
-        this.serverRMIAddress = settings.get("server-rmi-address");
-        this.usingSockets = settings.get("connection-protocol").equals("sockets");
-        this.fullScreenMode = settings.get("fullscreen").equals("true");
+    public void setFullScreenMode(boolean fullScreenMode) {
+        this.fullScreenMode = fullScreenMode;
     }
 
-    public static void build() throws IOException, SAXException, ParserConfigurationException {
-        SettingsBase.build(
-                Settings::new,
-                Constants.Resources.DEFAULT_SETTINGS.getRelativePath(),
-                Constants.Paths.SETTINGS_PATH.getAbsolutePath(),
-                Settings.class
-        );
+    public Constants.Locales getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = Constants.Locales.valueOf(language);
+    }
+
+    private Settings(String path) throws IllegalAccessException {
+        super(path);
     }
 }
