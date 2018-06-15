@@ -1,5 +1,6 @@
 package it.polimi.ingsw.net;
 
+import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
@@ -35,6 +36,10 @@ public class ResponseError implements JSONSerializable {
     }
 
     public ResponseError() {}
+
+    public ResponseError(ResponseFields.Error error) {
+        this(error.getCode(), error.getName());
+    }
 
     public ResponseError(int errorCode, String reason) {
         this.errorCode = errorCode;

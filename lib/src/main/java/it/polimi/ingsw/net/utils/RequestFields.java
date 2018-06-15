@@ -34,7 +34,8 @@ public enum RequestFields {
     }
 
     public enum Body {
-        BODY("body");
+        BODY("body"),
+        CLASS_TYPE("class-type");
 
         private final String fieldName;
 

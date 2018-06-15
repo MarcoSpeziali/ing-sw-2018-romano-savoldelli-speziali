@@ -5,10 +5,11 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
-import it.polimi.ingsw.client.net.authentication.SignInManager;
-import it.polimi.ingsw.client.utils.ClientLogger;
+import it.polimi.ingsw.client.controllers.SignInController;
 import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
 import it.polimi.ingsw.client.utils.text.TextInputControlPlaceholderLocalizationUpdater;
+import it.polimi.ingsw.net.utils.ResponseFields;
+import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import it.polimi.ingsw.utils.text.LocalizedText;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,9 +20,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
-import java.rmi.NotBoundException;
 
-public class SignInGUIController {
+public class SignInGUIController extends SignInController {
 
     private FXMLLoader loader = new FXMLLoader();
 
@@ -58,36 +58,49 @@ public class SignInGUIController {
         LocalizedText.Updater.update(this);
     }
 
+    @FXML
     public void onSignInClicked() throws IOException {
         try {
-            if (false) {
-                SignInManager.getManager().signIn(usernameField.getText(), passwordField.getText());
-                ClientLogger.getLogger(SignInGUIController.class).info(String.format("Logged as user: %s password: %s", usernameField.getText(), passwordField.getText()));
-            }
-            else {
+            super.onSignInRequested(this.usernameField.getText(), this.passwordField.getText(), () -> {
+                try {
+                    loader.setLocation(Constants.Resources.LOBBY.getURL());
+
+                    Parent root = loader.load();
+                    LobbyGUIController controller = loader.getController();
+                    this.setScene(new Scene(root, 910, 720));
+                }
+                catch (IOException e) {
+                    StreamExceptionWrapper.wrap(e);
+                }
+            }, responseError -> {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_TITLE));
-                alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT));
-                alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT));
+
+                if (responseError == ResponseFields.Error.UNAUTHORIZED) {
+                    alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_TITLE));
+                    alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT));
+                    alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT));
+                }
+                else {
+                    alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_TITLE));
+                    alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_HEADER_TEXT));
+                    alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_CONTENT_TEXT));
+                }
+
                 alert.showAndWait();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            });
         }
-        loader.setLocation(Constants.Resources.LOBBY.getURL());
-        Parent root = loader.load();
-        this.setScene(new Scene(root, 910, 720));
+        catch (StreamExceptionWrapper e) {
+            e.tryFinalUnwrap(IOException.class);
+        }
     }
 
+    @FXML
     public void onNotYetRegisteredClicked() throws IOException {
         loader.setLocation(Constants.Resources.SIGN_UP_FXML.getURL());
         this.setScene(new Scene(loader.load(), 720, 480));
     }
 
+    @FXML
     public void onBackClicked() throws IOException {
         loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
         this.setScene(new Scene(loader.load(), 550, 722));

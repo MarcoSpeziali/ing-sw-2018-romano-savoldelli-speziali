@@ -10,6 +10,7 @@ module it.polimi.ingsw.client {
     requires json;
     requires com.jfoenix;
     requires java.logging;
+    requires jopt.simple;
 
     exports it.polimi.ingsw.client.utils.text;
     exports it.polimi.ingsw.client.ui.gui.windows;

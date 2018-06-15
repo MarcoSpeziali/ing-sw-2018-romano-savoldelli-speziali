@@ -5,4 +5,5 @@
     <server-rmi-port>1009</server-rmi-port>
     <server-rmi-address>idra.weblink.it</server-rmi-address>
     <connection-protocol>sockets</connection-protocol>
+    <fullscreen>false</fullscreen>
 </settings>

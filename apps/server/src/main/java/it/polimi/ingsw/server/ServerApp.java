@@ -41,14 +41,14 @@ public class ServerApp {
                 ServerLogger.setLoggingLevel(Level.INFO);
             }
 
+            // create the folders needed by the server
+            createProjectsFolders();
+
             // builds the custom settings (if any)
             Settings.build();
 
             // build the routing table for the socket router
             SocketRouter.buildRoutingTables();
-
-            // create the folders needed by the server
-            createProjectsFolders();
 
             // compiles the resources (if needed)
             compileResources(options.has(
@@ -125,7 +125,6 @@ public class ServerApp {
      *         cannot be created which satisfies the configuration requested
      */
     private static void compileResources(boolean forceCompilation) throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
-        // @return a {@link Long} representing the last compilation timestamp (which is also the compilation id)
         if (forceCompilation) {
             CompilationManager.compile(Constants.Resources.ALL);
         }
@@ -169,9 +168,9 @@ public class ServerApp {
     }
 
     /**
-     * Returns the name for the specified {@link EndPointFunction}. (//<host>:<port>/<endpoint>)
+     * Returns the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
      * @param endPointFunction the {@link EndPointFunction}
-     * @return the name for the specified {@link EndPointFunction}. (//<host>:<port>/<endpoint>)
+     * @return the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
      */
     private static String getRMIEndPointName(EndPointFunction endPointFunction) {
         return String.format(

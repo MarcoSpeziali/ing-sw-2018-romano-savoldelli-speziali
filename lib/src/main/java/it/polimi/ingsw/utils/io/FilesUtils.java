@@ -1,9 +1,6 @@
 package it.polimi.ingsw.utils.io;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -127,6 +124,8 @@ public class FilesUtils {
     }
     
     public static byte[] getFileContentAsBytes(URL url) throws IOException {
-        return url.openStream().readAllBytes();
+        try (InputStream inputStream = url.openStream()) {
+            return inputStream.readAllBytes();
+        }
     }
 }

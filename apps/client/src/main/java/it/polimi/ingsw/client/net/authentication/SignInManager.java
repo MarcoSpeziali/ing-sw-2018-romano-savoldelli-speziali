@@ -54,14 +54,19 @@ public class SignInManager {
         return this.token != null;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     /**
      * Authenticates the user.
      * @param username the username of the player
      * @param password the password of the player
      * @return {@code true} if the user has been successfully authenticated, {@code false} otherwise
-     * @throws RemoteException if a server error or a connection error occurred
+     * @throws IOException if a server error or a connection error occurred
+     * @throws NotBoundException if the {@link EndPointFunction} is not bound
      */
-    public boolean signIn(String username, String password) throws IOException, NotBoundException, ReflectiveOperationException {
+    public boolean signIn(String username, String password) throws IOException, NotBoundException {
         // builds the sign-in request
         Request<SignInRequest> authenticationRequest = new Request<>(
                 new Header(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION),

@@ -55,7 +55,7 @@ public class SignUpManager {
      * @throws RemoteException if the operation could not be completed due to a connection or a server problem
      * @throws GeneralSecurityException if the password could not be encrypted with the server's public key
      */
-    public boolean signUp(String username, String password) throws IOException, GeneralSecurityException, NotBoundException, ReflectiveOperationException {
+    public boolean signUp(String username, String password) throws IOException, GeneralSecurityException, NotBoundException {
         // encrypts the password with the server's public key
         String encryptedString = CypherUtils.encryptString(
                 password,

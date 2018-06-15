@@ -34,7 +34,7 @@ public class ServerLogger extends LoggerBase {
      * @param caller the class that uses the logger
      * @return an instance of {@link Logger}
      */
-    public static Logger getLogger(Class<?> caller) {
+    public static LoggerBase getLogger(Class<?> caller) {
         return new ServerLogger(caller.getName());
     }
 

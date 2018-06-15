@@ -1,7 +1,6 @@
 package it.polimi.ingsw.net;
 
 import it.polimi.ingsw.net.utils.RequestFields;
-import it.polimi.ingsw.utils.ReflectionUtils;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
@@ -68,11 +67,14 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
         this.header.deserialize(jsonObject.getJSONObject(RequestFields.HEADER.toString()));
 
         try {
-            this.body = ReflectionUtils.instantiateGenericParameter(this.getClass());
+            JSONObject bodyObject = jsonObject.getJSONObject(RequestFields.BODY.toString());
+
+            this.body = this.instantiateBody(bodyObject.getString(RequestFields.Body.CLASS_TYPE.toString()));
         }
         catch ( NoSuchMethodException       |
                 InstantiationException      |
                 InvocationTargetException   |
+                ClassNotFoundException      |
                 IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -89,9 +91,13 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
                 RequestFields.HEADER.toString(),
                 this.header.serialize()
         );
+
+        JSONObject serializedBody = this.body.serialize();
+        serializedBody.put(RequestFields.Body.CLASS_TYPE.toString(), this.body.getClass().getName());
+
         jsonObject.put(
                 RequestFields.BODY.toString(),
-                this.body.serialize()
+                serializedBody
         );
 
         mainJsonObject.put(RequestFields.REQUEST.toString(), jsonObject);
@@ -102,5 +108,9 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
     @Override
     public String toString() {
         return this.serialize().toString();
+    }
+
+    private T instantiateBody(String className) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+        return (T) Class.forName(className).getConstructor().newInstance();
     }
 }

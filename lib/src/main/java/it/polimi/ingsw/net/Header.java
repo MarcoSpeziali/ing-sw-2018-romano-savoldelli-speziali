@@ -92,7 +92,7 @@ public class Header implements JSONSerializable {
         if (this.endPointFunction != null) {
             jsonObject.put(
                     RequestFields.Header.ENDPOINT.toString(),
-                    this.endPointFunction
+                    this.endPointFunction.toString()
             );
         }
 

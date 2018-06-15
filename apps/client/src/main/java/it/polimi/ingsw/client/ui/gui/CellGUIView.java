@@ -73,26 +73,24 @@ public class CellGUIView extends CellView implements GUIView {
             ((ImageView) view).setFitHeight(100);
             try {
                 ((ImageView) view).setImage(new Image(Resources.getResource(CellGUIView.class.getClassLoader(), path).openStream()));
-            } catch (IOException e) {
+            }
+            catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
-
-        } else {
+        }
+        else {
             view = new StackPane();
             ((StackPane) view).setMinSize(100, 100);
             if (super.cell.getShade() == 0 && super.cell.getColor() == null) {
                 view.setStyle("-fx-background-color: white");
-            } else {
-                view.setStyle(String.format("-fx-background-color: #%06X;",this.cell.getColor().getHex()));
+            }
+            else {
+                view.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
             }
 
         }
-        this.cell.addListener((OnDiePutListener) (die, location) -> {
-            this.cell.putDie(die);
-        });
-        this.cell.addListener((OnDiePickedListener) (die, location) -> {
-            this.cell.pickDie();
-        });
+        this.cell.addListener((OnDiePutListener) (die, location) -> this.cell.putDie(die));
+        this.cell.addListener((OnDiePickedListener) (die, location) -> this.cell.pickDie());
         return view;
     }
 }

@@ -13,7 +13,7 @@ public class Constants {
     public enum Paths {
         PROJECT_FOLDER(java.nio.file.Paths.get(
                 System.getProperty("user.home"),
-                ".sagrada"
+                ".sagrada-server"
         ).toAbsolutePath().toString()),
 
         CACHE_FOLDER(java.nio.file.Paths.get(

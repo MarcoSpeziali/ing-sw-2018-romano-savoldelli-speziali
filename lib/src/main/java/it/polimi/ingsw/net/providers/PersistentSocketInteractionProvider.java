@@ -11,6 +11,7 @@ import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.util.EnumMap;
@@ -71,7 +72,9 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     }
 
     public void open() throws IOException {
-        this.socket = new Socket(remoteAddress, remotePort);
+        this.socket = new Socket();
+        this.socket.connect(InetSocketAddress.createUnresolved(this.remoteAddress, this.remotePort), 1000);
+
         this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         this.out = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
 

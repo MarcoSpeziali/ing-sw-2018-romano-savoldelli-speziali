@@ -66,7 +66,7 @@ public abstract class LoggerBase extends Logger {
     /**
      * Closes the {@link FileHandler}.
      */
-    public synchronized void close() {
+    public static synchronized void close() {
         if (fileHandler != null) {
             fileHandler.close();
         }

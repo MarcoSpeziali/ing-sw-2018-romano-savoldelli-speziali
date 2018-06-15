@@ -19,7 +19,8 @@ public enum ResponseFields {
 
     public enum Body {
         BODY("body"),
-        ENDPOINT("endpoint");
+        ENDPOINT("endpoint"),
+        CLASS_TYPE("class-type");
 
         private final String fieldName;
 

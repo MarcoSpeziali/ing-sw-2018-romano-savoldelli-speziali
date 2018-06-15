@@ -31,9 +31,8 @@ public interface OneTimeNetworkResponseProvider {
      * @return a {@link Response} produced by the server
      * @throws IOException if any IO error occurs
      * @throws NotBoundException if {@link Body#getEndPointFunction()} is not currently bound
-     * @throws ReflectiveOperationException if a reflection error occurs
      */
-    <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException, ReflectiveOperationException;
+    <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException;
     
     /**
      * Sends a {@link Request} to the server.
@@ -52,7 +51,7 @@ public interface OneTimeNetworkResponseProvider {
                         getSyncResponseFor(request, hostAddress, hostPort)
                 );
             }
-            catch (IOException | ReflectiveOperationException | NotBoundException e) {
+            catch (IOException | NotBoundException e) {
                 if (onError != null) {
                     onError.accept(e);
                 }
@@ -67,7 +66,7 @@ public interface OneTimeNetworkResponseProvider {
                         getSyncResponseFor(request, getServerAddress(), getServerPort())
                 );
             }
-            catch (IOException | ReflectiveOperationException | NotBoundException e) {
+            catch (IOException | NotBoundException e) {
                 if (onError != null) {
                     onError.accept(e);
                 }
@@ -75,7 +74,7 @@ public interface OneTimeNetworkResponseProvider {
         }).start();
     }
     
-    default <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException, NotBoundException, ReflectiveOperationException {
+    default <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException, NotBoundException {
         return getSyncResponseFor(
                 request,
                 getServerAddress(),

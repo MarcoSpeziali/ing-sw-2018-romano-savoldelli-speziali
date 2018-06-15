@@ -1,9 +1,7 @@
 package it.polimi.ingsw.utils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -31,14 +29,5 @@ public final class ReflectionUtils {
                 .filter(method -> filter.test(method.getAnnotation(annotationClass)))
                 .findFirst()
                 .orElse(null);
-    }
-
-    public static <T> T instantiateGenericParameter(Class<?> baseClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        ParameterizedType superClass = (ParameterizedType) baseClass.getGenericSuperclass();
-        
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>) superClass.getActualTypeArguments()[0];
-
-        return type.getDeclaredConstructor().newInstance();
     }
 }

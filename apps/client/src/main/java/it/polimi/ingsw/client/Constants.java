@@ -24,12 +24,6 @@ public class Constants {
         SETTINGS_PATH(java.nio.file.Paths.get(
                 Paths.PROJECT_FOLDER.absolutePath,
                 "settings.xml"
-        ).toAbsolutePath().toString()),
-
-        SSH_KEY_PATH(java.nio.file.Paths.get(
-                System.getProperty("user.home"),
-                ".ssh",
-                "id_rsa"
         ).toAbsolutePath().toString());
 
         private final String absolutePath;
@@ -48,7 +42,7 @@ public class Constants {
 
     public enum Resources {
         DEFAULT_SETTINGS("default_settings.xml"),
-        IDRA_PUBLIC_KEY("idra_rsa.der"),
+        IDRA_PUBLIC_KEY("public.der"),
 
         CELL_ONE("images/cells/cell_one.png"),
         CELL_TWO("images/cells/cell_two.png"),
@@ -104,6 +98,11 @@ public class Constants {
 
     public static final class Strings {
         public static final String WELCOME_LABEL_TEXT = "welcome_label.text";
+
+        public static final String CONNECTION_ERROR_TITLE = "connection_error.title";
+        public static final String CONNECTION_ERROR_HEADER_TEXT = "connection_error.header_text";
+        public static final String CONNECTION_ERROR_CONTENT_TEXT = "connection_error.content_text";
+
         public static final String SIGN_IN_ACCESS_DENIED_TITLE = "sign_in.access_denied.title";
         public static final String SIGN_IN_ACCESS_DENIED_HEADER_TEXT = "sign_in.access_denied.header_text";
         public static final String SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT = "sign_in.access_denied.content_text";

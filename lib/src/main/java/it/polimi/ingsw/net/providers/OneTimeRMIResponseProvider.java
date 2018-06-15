@@ -3,6 +3,7 @@ package it.polimi.ingsw.net.providers;
 import it.polimi.ingsw.net.Body;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.interfaces.EndPointResponderNotFound;
 import it.polimi.ingsw.net.interfaces.RespondsTo;
 import it.polimi.ingsw.utils.ReflectionUtils;
 import it.polimi.ingsw.utils.io.JSONSerializable;
@@ -49,7 +50,7 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
      * @throws ReflectiveOperationException if a reflection error occurs
      */
     @Override
-    public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException, ReflectiveOperationException {
+    public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException {
         Method targetMethod = ReflectionUtils.findAnnotatedMethod(
                 remoteInterfaceType,
                 RespondsTo.class,
@@ -57,13 +58,18 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
         );
 
         if (targetMethod == null) {
-            throw new NotBoundException();
+            throw new EndPointResponderNotFound(request.getHeader().getEndPointFunction(), this.remoteInterfaceType);
         }
 
         Registry registry = LocateRegistry.getRegistry(hostAddress, hostPort);
         Remote remoteInterface = registry.lookup(request.getHeader().getEndPointFunction().toString());
 
-        //noinspection unchecked
-        return (Response<T>) targetMethod.invoke(remoteInterface, request);
+        try {
+            //noinspection unchecked
+            return (Response<T>) targetMethod.invoke(remoteInterface, request);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
