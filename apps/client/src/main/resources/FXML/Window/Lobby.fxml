@@ -1,59 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.windows.LobbyGUIController">
    <center>
       <Pane prefHeight="720.0" prefWidth="550.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" layoutX="225.0" layoutY="229.0" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label fx:id="player1" text="Player 1" textFill="#29ab5f">
-                     <VBox.margin>
-                        <Insets top="25.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="player2" text="Player 2" textFill="#28ad60">
-                     <VBox.margin>
-                        <Insets top="25.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="player3" text="Player 3" textFill="#28ad60">
-                     <VBox.margin>
-                        <Insets top="25.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="player4" text="Player 4" textFill="#28ad60">
-                     <VBox.margin>
-                        <Insets top="25.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-            <JFXButton defaultButton="true" disable="true" layoutX="101.0" layoutY="642.0" onAction="#onStartMatchClicked" prefHeight="44.0" prefWidth="349.0" style="-fx-background-color: #27ae60;" text="START MATCH" textFill="#c8ffdf">
+            <JFXButton fx:id="startMatchButton" defaultButton="true" disable="true" layoutX="101.0" layoutY="642.0" onAction="#onStartMatchClicked" prefHeight="44.0" prefWidth="349.0" style="-fx-background-color: #27ae60;" text="START MATCH" textFill="#c8ffdf">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
+            <JFXListView fx:id="listView" depth="4" fixedCellSize="150.0" prefHeight="600.0" prefWidth="550.0" />
          </children>
       </Pane>
    </center>
@@ -81,7 +45,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
-            <ProgressIndicator layoutX="96.0" layoutY="274.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="173.0" prefWidth="167.0" />
+            <JFXSpinner layoutX="85.0" layoutY="275.0" prefHeight="171.0" prefWidth="190.0" />
          </children>
       </Pane>
    </left>

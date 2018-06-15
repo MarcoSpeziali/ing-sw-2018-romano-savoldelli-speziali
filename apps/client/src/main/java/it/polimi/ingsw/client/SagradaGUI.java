@@ -35,7 +35,7 @@ public class SagradaGUI extends Application {
 
         primaryStage = stage;
         primaryStage.setScene(scene);
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
 
     }

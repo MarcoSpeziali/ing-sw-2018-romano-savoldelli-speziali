@@ -80,8 +80,6 @@ public class SignInGUIController {
         }
         loader.setLocation(Constants.Resources.LOBBY.getURL());
         Parent root = loader.load();
-        LobbyGUIController controller = loader.getController();
-        controller.startTimeline(); // FIXME timeline comes from server
         this.setScene(new Scene(root, 910, 720));
     }
 
