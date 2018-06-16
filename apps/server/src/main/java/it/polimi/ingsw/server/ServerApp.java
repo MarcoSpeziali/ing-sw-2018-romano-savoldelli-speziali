@@ -45,7 +45,7 @@ public class ServerApp {
             createProjectsFolders();
 
             // builds the settings
-            Settings.getSettings();
+            Settings.getSettings().save();
 
             // build the routing table for the socket router
             SocketRouter.buildRoutingTables();
@@ -100,20 +100,24 @@ public class ServerApp {
      */
     private static void createProjectsFolders() throws IOException {
         /*
-         * .sagrada/
+         * .sagrada-server/
          *     cache/
          *         compilations/
          */
-        if (new File(Constants.Paths.COMPILATION_FOLDER.getAbsolutePath()).mkdirs()) {
-            throw new IOException("Could directory structure: " + (Constants.Paths.COMPILATION_FOLDER.getAbsolutePath()));
+        File compilationFolder = new File(Constants.Paths.COMPILATION_FOLDER.getAbsolutePath());
+
+        if (!compilationFolder.isDirectory() && !compilationFolder.mkdirs()) {
+            throw new IOException("Could not directory structure: " + (Constants.Paths.COMPILATION_FOLDER.getAbsolutePath()));
         }
 
         /*
-         * .sagrada/
+         * .sagrada-server/
          *     logs/
          */
-        if (new File(Constants.Paths.LOG_FOLDER.getAbsolutePath()).mkdirs()) {
-            throw new IOException("Could directory structure: " + (Constants.Paths.LOG_FOLDER.getAbsolutePath()));
+        File logFolder = new File(Constants.Paths.LOG_FOLDER.getAbsolutePath());
+
+        if (!logFolder.isDirectory() && !logFolder.mkdirs()) {
+            throw new IOException("Could not directory structure: " + (Constants.Paths.LOG_FOLDER.getAbsolutePath()));
         }
     }
 

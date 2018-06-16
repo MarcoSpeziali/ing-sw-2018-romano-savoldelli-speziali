@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<settings>
-    <server-socket-port>9000</server-socket-port>
-    <server-socket-address>idra.weblink.it</server-socket-address>
-    <server-rmi-port>1009</server-rmi-port>
-    <server-rmi-address>idra.weblink.it</server-rmi-address>
-    <connection-protocol>sockets</connection-protocol>
-    <fullscreen>false</fullscreen>
-</settings>

@@ -5,6 +5,7 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.EndPointResponderNotFound;
 import it.polimi.ingsw.net.interfaces.RespondsTo;
+import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.utils.ReflectionUtils;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 
@@ -62,7 +63,7 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
         }
 
         Registry registry = LocateRegistry.getRegistry(hostAddress, hostPort);
-        Remote remoteInterface = registry.lookup(request.getHeader().getEndPointFunction().toString());
+        Remote remoteInterface = registry.lookup(getRMIEndPointName(request.getHeader().getEndPointFunction()));
 
         try {
             //noinspection unchecked
@@ -71,5 +72,20 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Returns the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
+     *
+     * @param endPointFunction the {@link EndPointFunction}
+     * @return the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
+     */
+    private String getRMIEndPointName(EndPointFunction endPointFunction) {
+        return String.format(
+                "//%s:%d/%s",
+                getServerAddress(),
+                getServerPort(),
+                endPointFunction.toString()
+        );
     }
 }

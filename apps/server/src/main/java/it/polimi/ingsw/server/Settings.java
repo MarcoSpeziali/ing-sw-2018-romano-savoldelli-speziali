@@ -22,18 +22,6 @@ public final class Settings extends SettingsBase {
     private String databasePassword;
     @Setting(id = "database-driver", defaultValue = "postgresql")
     private String databaseDriver;
-    private Settings(String path) throws IllegalAccessException {
-        super(path);
-    }
-
-    public static Settings getSettings() {
-        try {
-            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public int getSocketPort() {
         return socketPort;
@@ -65,5 +53,18 @@ public final class Settings extends SettingsBase {
 
     public String getDatabaseDriver() {
         return databaseDriver;
+    }
+
+    public static Settings getSettings() {
+        try {
+            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
+        }
+        catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private Settings(String path) throws IllegalAccessException {
+        super(path);
     }
 }

@@ -13,13 +13,13 @@ public final class Settings extends SettingsBase {
     private int serverSocketPort;
     @Setting(id = "server-rmi-address", defaultValue = "idra.weblink.it")
     private String serverRMIAddress;
-    @Setting(id = "server-rmi-port", defaultValue = "1009", type = Integer.class)
+    @Setting(id = "server-rmi-port", defaultValue = "1099", type = Integer.class)
     private int serverRMIPort;
     @Setting(id = "connection-protocol", defaultValue = "SOCKETS", type = Constants.Protocols.class)
     private Constants.Protocols protocol;
     @Setting(id = "fullscreen", defaultValue = "true", type = Boolean.class)
     private boolean fullScreenMode;
-    @Setting(id = "language", defaultValue = "ENGLISH", type = Constants.Locales.class)
+    @Setting(id = "language", defaultValue = "DEFAULT", type = Constants.Locales.class)
     private Constants.Locales language;
 
     private Settings(String path) throws IllegalAccessException {

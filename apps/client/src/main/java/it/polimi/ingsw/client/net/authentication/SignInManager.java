@@ -26,6 +26,7 @@ public class SignInManager {
     private static SignInManager instance = new SignInManager();
     private String token;
     private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
+
     private SignInManager() {
         if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
             oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(

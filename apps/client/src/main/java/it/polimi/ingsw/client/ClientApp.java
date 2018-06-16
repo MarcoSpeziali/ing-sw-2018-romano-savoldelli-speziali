@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.utils.ClientLogger;
+import it.polimi.ingsw.utils.text.LocalizedString;
 import javafx.application.Application;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -23,11 +24,15 @@ public class ClientApp {
             // builds the settings
             Settings.getSettings();
 
+            // sets the locale to the one found in the settings
+            LocalizedString.invalidateCacheForNewLocale(Settings.getSettings().getLanguage().getLocale());
+
             if (!options.has(Constants.ClientArguments.CLI_MODE.toString())) {
                 Application.launch(SagradaGUI.class, args);
             }
         }
         catch (Exception e) {
+            e.printStackTrace();
             ClientLogger.getLogger(ClientApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
         }
     }
@@ -52,8 +57,10 @@ public class ClientApp {
          * .sagrada/
          *     logs/
          */
-        if (new File(Constants.Paths.LOG_FOLDER.getAbsolutePath()).mkdirs()) {
-            throw new IOException("Could directory structure: " + (Constants.Paths.LOG_FOLDER.getAbsolutePath()));
+        File logFolder = new File(Constants.Paths.LOG_FOLDER.getAbsolutePath());
+
+        if (!logFolder.isDirectory() && !logFolder.mkdirs()) {
+            throw new IOException("Could not directory structure: " + (Constants.Paths.LOG_FOLDER.getAbsolutePath()));
         }
     }
 }

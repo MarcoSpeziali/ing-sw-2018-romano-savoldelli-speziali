@@ -15,12 +15,12 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -47,7 +47,17 @@ public class SettingsGUIController extends SettingsController implements Initial
     public JFXRadioButton socketToggle;
     @FXML
     public JFXComboBox<String> languageComboBox;
+    @FXML
+    @LocalizedText(key = Constants.Strings.SETTINGS_LANGUAGE_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    public Label languageTypeLabel;
+
     private FXMLLoader loader = new FXMLLoader();
+
+    private Locale previousLocale;
+
+    public SettingsGUIController() {
+        previousLocale = Settings.getSettings().getLanguage().getLocale();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -59,6 +69,7 @@ public class SettingsGUIController extends SettingsController implements Initial
         this.languageComboBox.setItems(
                 FXCollections.unmodifiableObservableList(FXCollections.observableList(
                         Arrays.stream(Constants.Locales.values())
+                                .filter(locales -> locales != Constants.Locales.DEFAULT)
                                 .map(Enum::toString)
                                 .collect(Collectors.toList())
                 ))
@@ -76,12 +87,16 @@ public class SettingsGUIController extends SettingsController implements Initial
         Settings.getSettings().setProtocol(this.rmiToggle.isSelected() ? Constants.Protocols.RMI : Constants.Protocols.SOCKETS);
         Settings.getSettings().setLanguage(this.languageComboBox.getSelectionModel().getSelectedItem());
 
+        previousLocale = Settings.getSettings().getLanguage().getLocale();
+
         super.onSaveRequested();
         this.onBackClicked();
     }
 
     @FXML
     public void onBackClicked() throws IOException {
+        LocalizedString.invalidateCacheForNewLocale(previousLocale);
+
         loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
         SagradaGUI.showStage(loader.load(), 550, 722);
     }
