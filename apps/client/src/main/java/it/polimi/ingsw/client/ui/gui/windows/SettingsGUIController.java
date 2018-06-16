@@ -83,11 +83,6 @@ public class SettingsGUIController extends SettingsController implements Initial
     @FXML
     public void onBackClicked() throws IOException {
         loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 550, 722));
-    }
-
-    private void setScene(Scene scene) {
-        SagradaGUI.primaryStage.setScene(scene);
-        SagradaGUI.primaryStage.show();
+        SagradaGUI.showStage(loader.load(), 550, 722);
     }
 }

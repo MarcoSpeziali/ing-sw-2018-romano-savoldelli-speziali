@@ -113,6 +113,23 @@ public final class XMLUtils {
     }
 
     /**
+     * Parses the xml content of the provided file at path.
+     *
+     * @param path The path to the xml file.
+     * @return The parsed xml document {@link Node}
+     * @throws IOException                  If any IO errors occur
+     * @throws SAXException                 If any parse errors occur
+     * @throws ParserConfigurationException if a DocumentBuilder
+     *                                      cannot be created which satisfies the configuration requested.
+     */
+    public static Node parseXml(URL path) throws IOException, SAXException, ParserConfigurationException {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(path.openStream());
+        return doc.getDocumentElement();
+    }
+
+    /**
      * Parses the xml content of the provided resource.
      *
      * @param resourceName The name of the resource
@@ -130,7 +147,7 @@ public final class XMLUtils {
             throw new FileNotFoundException("The file containing the actions mapping does not exists.");
         }
 
-        return parseXml(fileURL.getPath());
+        return parseXml(fileURL);
     }
 
     /**

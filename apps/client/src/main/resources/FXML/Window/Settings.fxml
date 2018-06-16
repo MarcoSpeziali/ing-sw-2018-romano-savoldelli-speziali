@@ -1,81 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="480.0" maxWidth="720.0" minHeight="480.0" minWidth="720.0"
-            prefHeight="480.0"
-            prefWidth="720.0" style="-fx-background-color: #ecf0f1;"
-            xmlns="http://javafx.com/javafx/10.0.1"
-            fx:controller="it.polimi.ingsw.client.ui.gui.windows.SettingsGUIController">
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="480.0" maxWidth="720.0" minHeight="480.0" minWidth="720.0" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.windows.SettingsGUIController">
     <left>
         <Pane prefHeight="480.0" prefWidth="360.0" style="-fx-background-color: #c0392b;" BorderPane.alignment="CENTER">
             <children>
-                <JFXButton fx:id="saveButton" layoutX="54.0" layoutY="343.0" prefHeight="44.0" prefWidth="250.0"
-                           style="-fx-background-color: #e74c3c;" textFill="#ffa49c"
-                           onAction="#onSaveClicked">
+                <JFXButton fx:id="saveButton" layoutX="54.0" layoutY="343.0" onAction="#onSaveClicked" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #e74c3c;" textFill="#ffa49c">
                     <font>
-                        <Font name="System Bold" size="15.0"/>
+                        <Font name="System Bold" size="15.0" />
                     </font>
                 </JFXButton>
-                <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="54.0" layoutY="57.0"
-                       prefHeight="45.0"
-                       prefWidth="250.0" textFill="#ffa49c">
+                <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="54.0" layoutY="57.0" prefHeight="45.0" prefWidth="250.0" textFill="#ffa49c">
                     <font>
-                        <Font name="System Bold" size="25.0"/>
+                        <Font name="System Bold" size="25.0" />
                     </font>
                 </Label>
-                <JFXButton fx:id="backButton" layoutX="54.0" layoutY="402.0" prefHeight="44.0" prefWidth="250.0"
-                           style="-fx-background-color: #e74c3c;" textFill="#ffa49c"
-                           onAction="#onBackClicked">
+                <JFXButton fx:id="backButton" layoutX="54.0" layoutY="402.0" onAction="#onBackClicked" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #e74c3c;" textFill="#ffa49c">
                     <font>
-                        <Font name="System Bold" size="15.0"/>
+                        <Font name="System Bold" size="15.0" />
                     </font>
                 </JFXButton>
-                <JFXToggleButton fx:id="fullScreenToggle" layoutX="77.0" layoutY="110.0"
-                                 textFill="#ffa49c">
+                <JFXToggleButton fx:id="fullScreenToggle" layoutX="77.0" layoutY="110.0" textFill="#ffa49c">
                     <font>
-                        <Font name="System Bold" size="14.0"/>
+                        <Font name="System Bold" size="14.0" />
                     </font>
                 </JFXToggleButton>
-                <JFXComboBox fx:id="languageComboBox" layoutX="77.0" layoutY="170.0"/>
-                <Separator layoutX="79.0" layoutY="239.0" prefWidth="200.0" style="-fx-color: FFA49C;"/>
-                <Label fx:id="connectionTypeLabel" layoutX="124.0" layoutY="253.0" textFill="#ffa49c">
+                <JFXComboBox fx:id="languageComboBox" focusColor="#ffa59e" layoutX="197.0" layoutY="190.0" prefHeight="29.0" prefWidth="107.0" unFocusColor="#ffa59e" />
+                <Label fx:id="connectionTypeLabel" layoutX="48.0" layoutY="282.0" prefHeight="20.0" prefWidth="1.0" textFill="#ffa49c">
                     <font>
-                        <Font name="System Bold" size="14.0"/>
+                        <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <JFXRadioButton fx:id="rmiToggle" layoutX="86.0" layoutY="299.0"
-                                style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="RMI"
-                                textFill="#ffa59e">
+                <JFXRadioButton fx:id="rmiToggle" layoutX="197.0" layoutY="257.0" style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="RMI" textFill="#ffa59e">
                     <font>
-                        <Font name="System Bold" size="12.0"/>
+                        <Font name="System Bold" size="12.0" />
                     </font>
                     <toggleGroup>
-                        <ToggleGroup fx:id="connectionToggleGroup"/>
+                        <ToggleGroup fx:id="connectionToggleGroup" />
                     </toggleGroup>
                 </JFXRadioButton>
-                <JFXRadioButton fx:id="socketToggle" layoutX="208.0" layoutY="299.0"
-                                style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="SOCKET"
-                                textFill="#ffa59e" toggleGroup="$connectionToggleGroup">
+                <JFXRadioButton fx:id="socketToggle" layoutX="197.0" layoutY="291.0" style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="SOCKET" textFill="#ffa59e" toggleGroup="$connectionToggleGroup">
                     <font>
-                        <Font name="System Bold" size="12.0"/>
+                        <Font name="System Bold" size="12.0" />
                     </font>
                 </JFXRadioButton>
+            <Label fx:id="languageTypeLabel" layoutX="54.0" layoutY="195.0" prefHeight="20.0" prefWidth="0.0" textFill="#ffa49c">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
             </children>
         </Pane>
     </left>
     <center>
-        <ImageView fitHeight="220.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true"
-                   BorderPane.alignment="CENTER">
+        <ImageView fitHeight="220.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
             <image>
-                <Image url="@../../images/sagrada-icon.png"/>
+                <Image url="@../../images/sagrada-icon.png" />
             </image>
         </ImageView>
     </center>

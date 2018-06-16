@@ -63,12 +63,7 @@ public class SignUpGUIController extends SignUpController {
     @FXML
     public void onBackClicked() throws IOException {
         loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 720, 480));
+        SagradaGUI.showStage(loader.load(), 720, 480);
     }
 
-    private void setScene(Scene scene) {
-        SagradaGUI.primaryStage.setScene(scene);
-        //SagradaGUI.primaryStage.initStyle(StageStyle.UNDECORATED);
-        SagradaGUI.primaryStage.show();
-    }
 }

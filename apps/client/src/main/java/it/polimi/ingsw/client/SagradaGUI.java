@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,8 +16,8 @@ import java.io.IOException;
 public class SagradaGUI extends Application {
 
     public static Stage primaryStage;
-    public double xOffset = 0;
-    public double yOffset = 0;
+    public static double xOffset = 0;
+    public static double yOffset = 0;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -27,22 +28,30 @@ public class SagradaGUI extends Application {
         ft.setFromValue(0.0);
         ft.setToValue(1.0);
         ft.play();
-        Scene scene = new Scene(root, 550, 722);
-
         primaryStage = stage;
-        primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.UNDECORATED);
+        showStage(root, 550, 722);
+    }
+
+    public static void showStage(Parent root, int width, int height) {
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = primaryStage.getX() - event.getScreenX();
+                yOffset = primaryStage.getY() - event.getScreenY();
+            }
+        });
+        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                primaryStage.setX(event.getScreenX() + xOffset);
+                primaryStage.setY(event.getScreenY() + yOffset);
+            }
+        });
+
+        Scene scene = new Scene(root, width, height);
+        primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
-    public void onMousePressed(MouseEvent event) { // FIXME not correct offsets
-        xOffset = primaryStage.getX() + event.getScreenX();
-        yOffset = primaryStage.getY() + event.getScreenY();
-    }
-
-    public void onMouseDragged(MouseEvent event) { // FIXME not correct offsets
-        primaryStage.setX(event.getScreenX() + xOffset);
-        primaryStage.setY(event.getScreenY() + yOffset);
-    }
 }

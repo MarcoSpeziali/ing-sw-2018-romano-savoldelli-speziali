@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.gui.windows;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.SagradaGUI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
@@ -22,16 +23,11 @@ StartScreenGUIController {
 
     public void onSettingClicked() throws IOException {
         loader.setLocation(Constants.Resources.SETTINGS_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 720, 480));
+        SagradaGUI.showStage(loader.load(), 720, 480);
     }
 
     public void onPlayGameClicked() throws IOException {
         loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 720, 480));
-    }
-
-    private void setScene(Scene scene) {
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        SagradaGUI.showStage(loader.load(), 720, 480);
     }
 }

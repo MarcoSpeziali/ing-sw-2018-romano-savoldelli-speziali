@@ -13,7 +13,7 @@ public class Constants {
 
     public enum Paths {
         PROJECT_FOLDER(java.nio.file.Paths.get(
-                System.getProperty("user.home"),
+                System.getProperty("user.home").replace("%20", " "),
                 ".sagrada-server"
         ).toAbsolutePath().toString()),
 
@@ -86,7 +86,7 @@ public class Constants {
         /**
          * @return the {@link URL} that locates the resource or {@code null} if the resource could not be located
          */
-        public URL getURL() {
+        public URL getURL() { // mi sa che fa un encoding dei caratteri aspetta
             ClassLoader classLoader = ServerApp.class.getClassLoader();
             return it.polimi.ingsw.utils.io.Resources.getResource(classLoader, this.relativePath);
         }

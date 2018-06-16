@@ -31,16 +31,12 @@ public class LobbyGUIController extends LobbyController implements Initializable
 
     public void onBackClicked() throws IOException {
         loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 720, 480));
+        SagradaGUI.showStage(loader.load(), 720, 480);
     }
 
-    private void setScene(Scene scene) {
-        SagradaGUI.primaryStage.setScene(scene);
-        SagradaGUI.primaryStage.show();
-    }
     
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) { // delete
         for (int i = 0; i < 4; i++) {
             try {
                 Label lbl = new Label("Item " + i);
