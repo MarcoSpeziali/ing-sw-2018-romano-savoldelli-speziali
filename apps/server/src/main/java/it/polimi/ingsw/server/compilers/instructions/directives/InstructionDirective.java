@@ -30,6 +30,19 @@ public class InstructionDirective implements Serializable {
     private List<InstructionExposedVariableDirective> exposedVariableDirectives;
 
     /**
+     * @param id                        the id of the instruction
+     * @param targetClass               the class to instantiate to execute the instruction
+     * @param parameterDirectives       the directives to instantiate the parameters
+     * @param exposedVariableDirectives the directives to instantiate the exposed variables
+     */
+    public InstructionDirective(String id, Class<? extends Instruction> targetClass, List<InstructionParameterDirective> parameterDirectives, List<InstructionExposedVariableDirective> exposedVariableDirectives) {
+        this.id = id;
+        this.targetClass = targetClass;
+        this.parameterDirectives = parameterDirectives;
+        this.exposedVariableDirectives = exposedVariableDirectives;
+    }
+
+    /**
      * @return the id of the instruction
      */
     public String getId() {
@@ -55,18 +68,5 @@ public class InstructionDirective implements Serializable {
      */
     public List<InstructionExposedVariableDirective> getExposedVariableDirectives() {
         return exposedVariableDirectives;
-    }
-
-    /**
-     * @param id the id of the instruction
-     * @param targetClass the class to instantiate to execute the instruction
-     * @param parameterDirectives the directives to instantiate the parameters
-     * @param exposedVariableDirectives the directives to instantiate the exposed variables
-     */
-    public InstructionDirective(String id, Class<? extends Instruction> targetClass, List<InstructionParameterDirective> parameterDirectives, List<InstructionExposedVariableDirective> exposedVariableDirectives) {
-        this.id = id;
-        this.targetClass = targetClass;
-        this.parameterDirectives = parameterDirectives;
-        this.exposedVariableDirectives = exposedVariableDirectives;
     }
 }

@@ -26,6 +26,17 @@ public class CompiledPredicate implements Serializable {
     private List<CompiledParameter> parameters;
 
     /**
+     * @param predicateName  the id of the predicate
+     * @param predicateClass the class of the predicate
+     * @param parameters     the parameters of the predicate
+     */
+    public CompiledPredicate(String predicateName, Class<? extends Predicate> predicateClass, List<CompiledParameter> parameters) {
+        this.predicateName = predicateName;
+        this.predicateClass = predicateClass;
+        this.parameters = parameters;
+    }
+
+    /**
      * @return the id of the predicate
      */
     public String getPredicateName() {
@@ -44,16 +55,5 @@ public class CompiledPredicate implements Serializable {
      */
     public List<CompiledParameter> getParameters() {
         return parameters;
-    }
-
-    /**
-     * @param predicateName the id of the predicate
-     * @param predicateClass the class of the predicate
-     * @param parameters the parameters of the predicate
-     */
-    public CompiledPredicate(String predicateName, Class<? extends Predicate> predicateClass, List<CompiledParameter> parameters) {
-        this.predicateName = predicateName;
-        this.predicateClass = predicateClass;
-        this.parameters = parameters;
     }
 }

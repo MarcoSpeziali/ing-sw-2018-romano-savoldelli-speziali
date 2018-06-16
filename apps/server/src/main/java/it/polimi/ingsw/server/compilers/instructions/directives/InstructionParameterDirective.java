@@ -15,23 +15,10 @@ public class InstructionParameterDirective extends ParameterDirective {
      * {@code true} if the parameter class is a predicate, {@code false} otherwise.
      */
     private Boolean isPredicate;
-
-    /**
-     * @return {@code true} if the parameter class is a predicate, {@code false} otherwise
-     */
-    public Boolean isPredicate() {
-        return isPredicate;
-    }
-
     /**
      * If the parameter is optional.
      */
     private Boolean isOptional;
-
-    @Override
-    public boolean isOptional() {
-        return this.isOptional;
-    }
 
     /**
      * Instantiate a non-optional parameter with its directives.
@@ -57,5 +44,17 @@ public class InstructionParameterDirective extends ParameterDirective {
         super(parameterType, position, name, defaultValue, isMultiple);
         this.isPredicate = isPredicate;
         this.isOptional = isOptional;
+    }
+
+    /**
+     * @return {@code true} if the parameter class is a predicate, {@code false} otherwise
+     */
+    public Boolean isPredicate() {
+        return isPredicate;
+    }
+
+    @Override
+    public boolean isOptional() {
+        return this.isOptional;
     }
 }

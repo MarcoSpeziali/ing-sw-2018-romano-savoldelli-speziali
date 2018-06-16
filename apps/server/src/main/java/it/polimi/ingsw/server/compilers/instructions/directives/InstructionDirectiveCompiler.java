@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server.compilers.instructions.directives;
 
-import it.polimi.ingsw.server.utils.VariableSupplier;
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.server.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.server.instructions.Instruction;
-import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import org.w3c.dom.Node;
@@ -20,15 +20,17 @@ import java.util.stream.Collectors;
 
 public class InstructionDirectiveCompiler {
 
-    private InstructionDirectiveCompiler() {}
+    private InstructionDirectiveCompiler() {
+    }
 
     /**
      * Compiles the directives to instantiate the instructions.
+     *
      * @return A {@link List} of {@link InstructionDirective}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     public static List<InstructionDirective> compile() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         return compile(Constants.Resources.INSTRUCTIONS_DIRECTIVES.getRelativePath(), true);
@@ -36,13 +38,14 @@ public class InstructionDirectiveCompiler {
 
     /**
      * Compiles the directives to instantiate the instructions.
+     *
      * @param directivesPath the path to the directives
-     * @param isResource if the path refers to a resource
+     * @param isResource     if the path refers to a resource
      * @return A list of {@link InstructionDirective}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     @SuppressWarnings("squid:S00112") // throw new RuntimeException(e)
     public static List<InstructionDirective> compile(String directivesPath, boolean isResource) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
@@ -59,7 +62,8 @@ public class InstructionDirectiveCompiler {
                         try {
                             // processes the instruction directive
                             return processInstructionDirective(rawDirective);
-                        } catch (ClassNotFoundException e) {
+                        }
+                        catch (ClassNotFoundException e) {
                             return StreamExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
@@ -71,6 +75,7 @@ public class InstructionDirectiveCompiler {
 
     /**
      * Processes the raw directive.
+     *
      * @param rawDirective The raw directive in form of a {@link Map}
      * @return The actual directive as {@link InstructionDirective}
      * @throws ClassNotFoundException if any of the class of the found parameters does not exists
@@ -94,7 +99,8 @@ public class InstructionDirectiveCompiler {
                                 // cannot be easily propagated
                                 try {
                                     return processInstructionParameterDirective(d);
-                                } catch (ClassNotFoundException e) {
+                                }
+                                catch (ClassNotFoundException e) {
                                     return StreamExceptionWrapper.wrap(e);
                                 }
                             }).collect(Collectors.toList());
@@ -114,7 +120,8 @@ public class InstructionDirectiveCompiler {
                                 // cannot be easily propagated
                                 try {
                                     return processInstructionExposedVariableDirective(d);
-                                } catch (ClassNotFoundException e) {
+                                }
+                                catch (ClassNotFoundException e) {
                                     return StreamExceptionWrapper.wrap(e);
                                 }
                             }).collect(Collectors.toList());
@@ -135,6 +142,7 @@ public class InstructionDirectiveCompiler {
 
     /**
      * Processes the raw parameter directive.
+     *
      * @param rawDirective the raw parameter directive in form of a {@link Map}
      * @return the actual parameter directive as {@link ParameterDirective}
      * @throws ClassNotFoundException if the class of the parameter does not exists
@@ -193,6 +201,7 @@ public class InstructionDirectiveCompiler {
 
     /**
      * Processes the raw exposed variable directive.
+     *
      * @param rawDirective the raw exposed variable directive in form of a {@link Map}
      * @return the actual exposed variable directive as {@link InstructionExposedVariableDirective}
      * @throws ClassNotFoundException if the class of the parameter does not exists
@@ -218,13 +227,14 @@ public class InstructionDirectiveCompiler {
 
     /**
      * Reads the file and parses the xml in it into a {@link Map}.
-     * @param path The path to the file, or the resource name
+     *
+     * @param path       The path to the file, or the resource name
      * @param isResource {@code true} if the path points to a resource, {@code false} otherwise
      * @return The parsed xml as {@link Map}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     private static Map<String, Object>[] getRawDirectives(String path, boolean isResource) throws IOException, SAXException, ParserConfigurationException {
         Node node;
@@ -251,6 +261,7 @@ public class InstructionDirectiveCompiler {
 
     /**
      * Retrieves the parameters directives from the provided instruction directives.
+     *
      * @param instructionDirectives The current instruction directives
      * @return the parameters directives from the provided instruction directives
      */
@@ -270,6 +281,7 @@ public class InstructionDirectiveCompiler {
 
     /**
      * Retrieves the parameters directives from the provided instruction directives.
+     *
      * @param instructionDirectives The current instruction directives
      * @return the parameters directives from the provided instruction directives
      */
@@ -288,7 +300,7 @@ public class InstructionDirectiveCompiler {
     }
 
     /**
-     * @param className the original class name
+     * @param className  the original class name
      * @param isMultiple if the class represents an array
      * @return the array version of the provided class
      */
@@ -323,6 +335,7 @@ public class InstructionDirectiveCompiler {
         static final String INSTRUCTION_DIRECTIVES_EXPOSED_VARIABLE_CLASS = "@class";
         static final String INSTRUCTION_DIRECTIVES_EXPOSED_VARIABLE_IS_MULTIPLE = "@multiple";
 
-        private InstructionDirectivesNodes() { }
+        private InstructionDirectivesNodes() {
+        }
     }
 }

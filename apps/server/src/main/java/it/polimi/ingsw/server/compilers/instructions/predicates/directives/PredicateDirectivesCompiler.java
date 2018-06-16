@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server.compilers.instructions.predicates.directives;
 
-import it.polimi.ingsw.server.utils.VariableSupplier;
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.server.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.server.instructions.predicates.Predicate;
-import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import org.w3c.dom.Node;
@@ -20,15 +20,17 @@ import java.util.stream.Collectors;
 
 public class PredicateDirectivesCompiler {
 
-    private PredicateDirectivesCompiler() {}
+    private PredicateDirectivesCompiler() {
+    }
 
     /**
      * Compiles the directives to instantiate the predicates
+     *
      * @return a list of {@link PredicateDirective}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<PredicateDirective> compile() throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
         return compile(Constants.Resources.PREDICATES_DIRECTIVES.getRelativePath(), true);
@@ -36,12 +38,13 @@ public class PredicateDirectivesCompiler {
 
     /**
      * Compiles the directives to instantiate the predicates
+     *
      * @param directivesPath the path to the directives
      * @return a list of {@link PredicateDirective}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     @SuppressWarnings("squid:S00112") // throw new RuntimeException(e)
     public static List<PredicateDirective> compile(String directivesPath, boolean isResource) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
@@ -58,7 +61,8 @@ public class PredicateDirectivesCompiler {
                         try {
                             // processes the predicate directive
                             return processPredicateDirective(rawDirective);
-                        } catch (ClassNotFoundException e) {
+                        }
+                        catch (ClassNotFoundException e) {
                             return StreamExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
@@ -69,7 +73,7 @@ public class PredicateDirectivesCompiler {
     }
 
     @SuppressWarnings("squid:S00112") // throw new RuntimeException(e)
-    private static PredicateDirective processPredicateDirective(Map<String,Object> rawDirective)  throws ClassNotFoundException {
+    private static PredicateDirective processPredicateDirective(Map<String, Object> rawDirective) throws ClassNotFoundException {
         // retrieves the id of the predicate
         String id = (String) rawDirective.get(PredicateDirectivesNodes.PREDICATE_DIRECTIVES_ID);
 
@@ -87,7 +91,8 @@ public class PredicateDirectivesCompiler {
                                 // cannot be easily propagated
                                 try {
                                     return processPredicateParameterDirective(d);
-                                } catch (ClassNotFoundException e) {
+                                }
+                                catch (ClassNotFoundException e) {
                                     return StreamExceptionWrapper.wrap(e);
                                 }
                             }).collect(Collectors.toList());
@@ -107,6 +112,7 @@ public class PredicateDirectivesCompiler {
 
     /**
      * Processes the raw parameter directive.
+     *
      * @param rawDirective The raw parameter directive in form of a {@link Map}
      * @return The actual parameter directive as {@link ParameterDirective}
      * @throws ClassNotFoundException if the class of the parameter does not exists
@@ -147,13 +153,14 @@ public class PredicateDirectivesCompiler {
 
     /**
      * Reads the file and parses the xml in it into a {@link Map}.
-     * @param path The path to the file, or the resource name
+     *
+     * @param path       The path to the file, or the resource name
      * @param isResource {@code true} if the path points to a resource, {@code false} otherwise
      * @return The parsed xml as {@link Map}
-     * @throws IOException If any IO errors occur
-     * @throws SAXException If any parse errors occur
+     * @throws IOException                  If any IO errors occur
+     * @throws SAXException                 If any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     private static Map<String, Object>[] getRawDirectives(String path, boolean isResource) throws IOException, SAXException, ParserConfigurationException {
         Node node;
@@ -180,6 +187,7 @@ public class PredicateDirectivesCompiler {
 
     /**
      * Retrieves the parameters directives from the provided predicate directives.
+     *
      * @param predicateDirectives the current predicate directives
      * @return the parameters directives from the provided predicate directives
      */
@@ -193,7 +201,7 @@ public class PredicateDirectivesCompiler {
     }
 
     /**
-     * @param className the original class name
+     * @param className  the original class name
      * @param isMultiple if the class represents an array
      * @return the array version of the provided class
      */
@@ -222,6 +230,7 @@ public class PredicateDirectivesCompiler {
         static final String PREDICATE_DIRECTIVES_PARAMETER_IS_MULTIPLE = "@multiple";
         static final String PREDICATE_DIRECTIVES_PARAMETER_IS_SUPPLIED = "@supplied";
 
-        private PredicateDirectivesNodes() { }
+        private PredicateDirectivesNodes() {
+        }
     }
 }

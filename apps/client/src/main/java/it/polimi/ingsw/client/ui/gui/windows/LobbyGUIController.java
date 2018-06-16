@@ -38,8 +38,7 @@ public class LobbyGUIController extends LobbyController implements Initializable
         SagradaGUI.primaryStage.setScene(scene);
         SagradaGUI.primaryStage.show();
     }
-
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (int i = 0; i < 4; i++) {

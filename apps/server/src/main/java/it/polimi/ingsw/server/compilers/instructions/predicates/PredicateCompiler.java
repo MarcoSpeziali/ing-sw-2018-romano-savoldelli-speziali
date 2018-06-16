@@ -11,12 +11,14 @@ public class PredicateCompiler {
 
     private static final String PREDICATE_CALL_REGEX = "^(?<id>[a-zA-Z_][a-zA-Z0-9_]+)(?<params>[^\\[]+)*(\\[(?<opts>.+)])?$";
 
-    private PredicateCompiler() {}
+    private PredicateCompiler() {
+    }
 
     /**
      * Compiles a predicate call into its corresponding {@link CompiledPredicate}.
+     *
      * @param predicateCall the predicate call
-     * @param directives the {@link List} of {@link PredicateCompiler}
+     * @param directives    the {@link List} of {@link PredicateCompiler}
      * @return the compiled predicate as {@link CompiledPredicate}
      */
     public static CompiledPredicate compile(String predicateCall, List<PredicateDirective> directives) {

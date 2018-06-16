@@ -20,6 +20,15 @@ public class InstructionExposedVariableDirective implements Serializable {
     private Class<? extends Serializable> variableType;
 
     /**
+     * @param name         the formal name of the exposed variable
+     * @param variableType the class of the exposed variable
+     */
+    public InstructionExposedVariableDirective(String name, Class<? extends Serializable> variableType) {
+        this.name = name;
+        this.variableType = variableType;
+    }
+
+    /**
      * @return the formal name of the exposed variable
      */
     public String getName() {
@@ -31,14 +40,5 @@ public class InstructionExposedVariableDirective implements Serializable {
      */
     public Class<? extends Serializable> getVariableType() {
         return variableType;
-    }
-
-    /**
-     * @param name the formal name of the exposed variable
-     * @param variableType the class of the exposed variable
-     */
-    public InstructionExposedVariableDirective(String name, Class<? extends Serializable> variableType) {
-        this.name = name;
-        this.variableType = variableType;
     }
 }
