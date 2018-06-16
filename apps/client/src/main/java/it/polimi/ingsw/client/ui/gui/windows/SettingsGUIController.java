@@ -27,19 +27,19 @@ import java.util.stream.Collectors;
 public class SettingsGUIController extends SettingsController implements Initializable {
 
     @FXML
-    @LocalizedText(key = "settings.save_button.text", fieldUpdater = LabeledLocalizationUpdater.class)
+    @LocalizedText(key = Constants.Strings.SETTINGS_SAVE_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton saveButton;
     @FXML
-    @LocalizedText(key = "settings.title", fieldUpdater = LabeledLocalizationUpdater.class)
+    @LocalizedText(key = Constants.Strings.SETTINGS_TITLE, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label titleLabel;
     @FXML
-    @LocalizedText(key = "settings.back_button.text", fieldUpdater = LabeledLocalizationUpdater.class)
+    @LocalizedText(key = Constants.Strings.SETTINGS_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton backButton;
     @FXML
-    @LocalizedText(key = "settings.connection_type_label.text", fieldUpdater = LabeledLocalizationUpdater.class)
+    @LocalizedText(key = Constants.Strings.SETTINGS_CONNECTION_TYPE_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label connectionTypeLabel;
     @FXML
-    @LocalizedText(key = "settings.full_screen_toggle_button.text", fieldUpdater = LabeledLocalizationUpdater.class)
+    @LocalizedText(key = Constants.Strings.SETTINGS_FULLSCREEN_TOGGLE_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXToggleButton fullScreenToggle;
     @FXML
     public JFXRadioButton rmiToggle;

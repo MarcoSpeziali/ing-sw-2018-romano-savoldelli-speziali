@@ -135,6 +135,12 @@ public class Constants {
         public static final String SIGN_IN_SING_IN_NOW_LABEL_TEXT = "sign_in.sign_in_now_label.text";
         public static final String SIGN_IN_SIGN_IN_BUTTON_TEXT = "sign_in.sign_in_button.text";
 
+        public static final String SETTINGS_TITLE = "settings.title";
+        public static final String SETTINGS_SAVE_BUTTON_TEXT = "settings.save_button.text";
+        public static final String SETTINGS_BACK_BUTTON_TEXT = "settings.back_button.text";
+        public static final String SETTINGS_CONNECTION_TYPE_LABEL_TEXT = "settings.connection_type_label.text";
+        public static final String SETTINGS_FULLSCREEN_TOGGLE_BUTTON_TEXT = "settings.full_screen_toggle_button.text";
+
         private Strings() {
         }
 
