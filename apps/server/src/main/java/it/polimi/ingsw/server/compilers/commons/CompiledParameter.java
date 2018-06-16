@@ -20,7 +20,7 @@ public class CompiledParameter implements Serializable {
 
     /**
      * Represents a wrapper for the parameter value.
-     *
+     * <p>
      * This because the parameter could need a computation before being usable.
      */
     @SuppressWarnings("squid:S1948")
@@ -40,6 +40,22 @@ public class CompiledParameter implements Serializable {
      * The default value of the parameter.
      */
     protected Serializable defaultValue;
+
+    /**
+     * @param type           the class of the parameter
+     * @param position       the position of the parameter in the function call
+     * @param parameterValue the wrapper for the parameter value
+     * @param optionalName   the name of the optional parameter that this parameter overrides (if any)
+     * @param defaultValue   the default value of the parameter
+     */
+    public CompiledParameter(Class<? extends Serializable> type, Integer position, VariableSupplier<? extends Serializable> parameterValue, String optionalName, Serializable defaultValue) {
+        this.type = type;
+        this.position = position;
+        this.parameterValue = parameterValue;
+        this.optionalName = optionalName;
+        this.isOptional = optionalName != null;
+        this.defaultValue = defaultValue;
+    }
 
     /**
      * @return the class of the parameter
@@ -83,21 +99,5 @@ public class CompiledParameter implements Serializable {
      */
     public Serializable getDefaultValue() {
         return defaultValue;
-    }
-
-    /**
-     * @param type the class of the parameter
-     * @param position the position of the parameter in the function call
-     * @param parameterValue the wrapper for the parameter value
-     * @param optionalName the name of the optional parameter that this parameter overrides (if any)
-     * @param defaultValue the default value of the parameter
-     */
-    public CompiledParameter(Class<? extends Serializable> type, Integer position, VariableSupplier<? extends Serializable> parameterValue, String optionalName, Serializable defaultValue) {
-        this.type = type;
-        this.position = position;
-        this.parameterValue = parameterValue;
-        this.optionalName = optionalName;
-        this.isOptional = optionalName != null;
-        this.defaultValue = defaultValue;
     }
 }

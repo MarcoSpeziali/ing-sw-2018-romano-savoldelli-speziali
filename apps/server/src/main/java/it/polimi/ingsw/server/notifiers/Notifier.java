@@ -5,5 +5,6 @@ import it.polimi.ingsw.server.sql.DatabasePlayer;
 
 public interface Notifier<T extends UpdateInterface> {
     void registerPlayerForUpdates(DatabasePlayer player, T updateInterface);
+
     void unregisterPlayerForUpdates(DatabasePlayer player);
 }

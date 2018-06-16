@@ -19,6 +19,7 @@ class ObjectiveCardTest {
         this.objectiveCard = new ObjectiveCard("test", CardVisibility.PUBLIC, "titleTest",
                 "descriptionTest", obj);
     }
+
     @Test
     void getCardId() {
         Assertions.assertEquals("test", objectiveCard.getCardId());

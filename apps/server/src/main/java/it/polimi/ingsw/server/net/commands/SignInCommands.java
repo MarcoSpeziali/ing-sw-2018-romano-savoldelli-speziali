@@ -13,7 +13,8 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 
 public class SignInCommands {
-    private SignInCommands() {}
+    private SignInCommands() {
+    }
 
     @Handles(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION)
     public static class SignInRequestCommand implements Command<ChallengeRequest, SignInRequest> {

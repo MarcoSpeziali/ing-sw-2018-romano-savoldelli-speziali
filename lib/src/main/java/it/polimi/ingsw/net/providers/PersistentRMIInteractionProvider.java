@@ -49,7 +49,7 @@ public class PersistentRMIInteractionProvider<R extends Remote> extends Persiste
             throw new NotBoundException();
         }
 
-        Object returnValue = targetMethod.invoke(this. remoteInterface, args);
+        Object returnValue = targetMethod.invoke(this.remoteInterface, args);
 
         if (returnValue == null) {
             return null;

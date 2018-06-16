@@ -1,11 +1,5 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.models.Cell;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-
 class CellCLIViewTest {
 
     private CellCLIView c1;

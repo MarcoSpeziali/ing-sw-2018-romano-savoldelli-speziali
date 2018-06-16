@@ -13,8 +13,8 @@ StartScreenGUIController {
 
     private FXMLLoader loader = new FXMLLoader();
 
-
-    public StartScreenGUIController() {}
+    public StartScreenGUIController() {
+    }
 
     public void onExitClicked() {
         primaryStage.close();

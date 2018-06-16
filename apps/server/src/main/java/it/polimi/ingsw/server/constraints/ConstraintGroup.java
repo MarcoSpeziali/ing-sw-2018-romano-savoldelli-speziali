@@ -20,6 +20,15 @@ public class ConstraintGroup implements EvaluableConstraint {
     private List<EvaluableConstraint> constraints;
 
     /**
+     * @param id          The constraint id.
+     * @param constraints The constraints of the {@link ConstraintGroup}.
+     */
+    public ConstraintGroup(String id, List<EvaluableConstraint> constraints) {
+        this.id = id;
+        this.constraints = constraints;
+    }
+
+    /**
      * @return The constraint id.
      */
     public String getId() {
@@ -31,15 +40,6 @@ public class ConstraintGroup implements EvaluableConstraint {
      */
     public List<EvaluableConstraint> getConstraints() {
         return this.constraints;
-    }
-
-    /**
-     * @param id The constraint id.
-     * @param constraints The constraints of the {@link ConstraintGroup}.
-     */
-    public ConstraintGroup(String id, List<EvaluableConstraint> constraints) {
-        this.id = id;
-        this.constraints = constraints;
     }
 
     @Override

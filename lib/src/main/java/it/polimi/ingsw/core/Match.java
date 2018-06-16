@@ -19,10 +19,6 @@ public class Match implements Serializable {
 
     private ToolCard[] toolCards;
 
-    public int getNumberOfPlayer() {
-        return this.players.length;
-    }
-
     private Match(Player[] players, Round[] rounds, RoundTrack roundTrack, Bag bag, DraftPool draftPool, ObjectiveCard[] publicObjectiveCards, ToolCard[] toolCards) {
         this.players = players;
         this.rounds = rounds;
@@ -31,5 +27,9 @@ public class Match implements Serializable {
         this.draftPool = draftPool;
         this.publicObjectiveCards = publicObjectiveCards;
         this.toolCards = toolCards;
+    }
+
+    public int getNumberOfPlayer() {
+        return this.players.length;
     }
 }

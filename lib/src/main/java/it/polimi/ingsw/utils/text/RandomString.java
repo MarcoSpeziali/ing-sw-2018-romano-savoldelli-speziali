@@ -4,11 +4,11 @@ import java.util.Random;
 
 // TODO: document
 public final class RandomString {
-    private RandomString() {}
-
+    private static final String ALL_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456";
     private static Random random = new Random(System.currentTimeMillis());
 
-    private static final String ALL_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456";
+    private RandomString() {
+    }
 
     public static String create() {
         int bound1 = random.nextInt(128);

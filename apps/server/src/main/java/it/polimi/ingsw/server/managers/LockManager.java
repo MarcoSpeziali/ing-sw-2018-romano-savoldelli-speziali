@@ -7,9 +7,10 @@ import java.util.Map;
 
 public class LockManager {
 
-    private LockManager() {}
-
     private static Map<Constants.LockTargets, Object> lockObjects = new EnumMap<>(Constants.LockTargets.class);
+
+    private LockManager() {
+    }
 
     public static Object getLockObject(Constants.LockTargets target) {
         if (lockObjects.containsKey(target)) {

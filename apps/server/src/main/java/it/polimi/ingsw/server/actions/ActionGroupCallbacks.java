@@ -18,7 +18,7 @@ public interface ActionGroupCallbacks extends Serializable {
     boolean shouldRepeat(int alreadyRepeatedFor, int maximumRepetitions);
 
     /**
-     * @param actions The possible actions.
+     * @param actions       The possible actions.
      * @param chooseBetween The number of possible actions to be chosen.
      * @return The chosen actions.
      */

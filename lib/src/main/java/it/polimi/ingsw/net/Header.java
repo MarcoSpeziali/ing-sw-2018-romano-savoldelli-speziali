@@ -21,6 +21,22 @@ public class Header implements JSONSerializable {
      */
     private EndPointFunction endPointFunction;
 
+    public Header() {
+    }
+
+    public Header(String clientToken) {
+        this(clientToken, null);
+    }
+
+    public Header(EndPointFunction endPointFunction) {
+        this(null, endPointFunction);
+    }
+
+    public Header(String clientToken, EndPointFunction endPointFunction) {
+        this.clientToken = clientToken;
+        this.endPointFunction = endPointFunction;
+    }
+
     /**
      * @return the user's token
      */
@@ -30,6 +46,7 @@ public class Header implements JSONSerializable {
 
     /**
      * Sets the user's token.
+     *
      * @param clientToken the user's token
      */
     public void setClientToken(String clientToken) {
@@ -47,21 +64,6 @@ public class Header implements JSONSerializable {
      * @param endPointFunction the endpoint function
      */
     public void setEndPointFunction(EndPointFunction endPointFunction) {
-        this.endPointFunction = endPointFunction;
-    }
-
-    public Header() { }
-
-    public Header(String clientToken) {
-        this(clientToken, null);
-    }
-
-    public Header(EndPointFunction endPointFunction) {
-        this(null, endPointFunction);
-    }
-
-    public Header(String clientToken, EndPointFunction endPointFunction) {
-        this.clientToken = clientToken;
         this.endPointFunction = endPointFunction;
     }
 

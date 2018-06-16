@@ -22,6 +22,17 @@ public class ClassDirective<T extends Serializable> implements Serializable {
     private List<ParameterDirective> parametersDirectives;
 
     /**
+     * @param id                   the id
+     * @param targetClass          the class to instantiate
+     * @param parametersDirectives the directives to instantiate the parameters
+     */
+    public ClassDirective(String id, Class<? extends T> targetClass, List<ParameterDirective> parametersDirectives) {
+        this.id = id;
+        this.targetClass = targetClass;
+        this.parametersDirectives = parametersDirectives;
+    }
+
+    /**
      * @return the id
      */
     public String getId() {
@@ -40,16 +51,5 @@ public class ClassDirective<T extends Serializable> implements Serializable {
      */
     public List<ParameterDirective> getParametersDirectives() {
         return parametersDirectives;
-    }
-
-    /**
-     * @param id the id
-     * @param targetClass the class to instantiate
-     * @param parametersDirectives the directives to instantiate the parameters
-     */
-    public ClassDirective(String id, Class<? extends T> targetClass, List<ParameterDirective> parametersDirectives) {
-        this.id = id;
-        this.targetClass = targetClass;
-        this.parametersDirectives = parametersDirectives;
     }
 }

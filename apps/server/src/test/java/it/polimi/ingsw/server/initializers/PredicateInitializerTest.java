@@ -28,7 +28,7 @@ class PredicateInitializerTest {
     @BeforeEach
     void setUp() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         this.context = Context.getSharedInstance();
-        this.context.put("row", new Die[] {
+        this.context.put("row", new Die[]{
                 new Die(GlassColor.RED, 2),
                 new Die(GlassColor.YELLOW, 2),
                 new Die(GlassColor.GREEN, 2),

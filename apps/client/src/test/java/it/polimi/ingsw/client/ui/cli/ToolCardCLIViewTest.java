@@ -10,6 +10,7 @@ import static org.mockito.Mockito.mock;
 class ToolCardCLIViewTest {
     private ToolCardCLIView toolCardCLIView;
     private ToolCard toolCard;
+
     @BeforeEach
     void setUp() {
         this.toolCard = new ToolCard(

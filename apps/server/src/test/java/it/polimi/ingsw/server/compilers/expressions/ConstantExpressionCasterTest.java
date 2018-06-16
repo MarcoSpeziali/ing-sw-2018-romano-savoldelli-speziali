@@ -11,6 +11,27 @@ import java.util.stream.Stream;
 
 class ConstantExpressionCasterTest {
 
+    private static Stream<Arguments> testBooleanArguments() {
+        return Stream.of(
+                Arguments.of("true", true),
+                Arguments.of("TRUE", true),
+                Arguments.of("True", true),
+                Arguments.of("false", false),
+                Arguments.of("FALSE", false),
+                Arguments.of("False", false)
+        );
+    }
+
+    private static Stream<Arguments> testStringVariableArguments() {
+        return Stream.of(
+                Arguments.of("red", GlassColor.RED),
+                Arguments.of("yellow", GlassColor.YELLOW),
+                Arguments.of("green", GlassColor.GREEN),
+                Arguments.of("blue", GlassColor.BLUE),
+                Arguments.of("purple", GlassColor.PURPLE)
+        );
+    }
+
     @Test
     void testNullVariable() {
         Assertions.assertNull(ConstantExpressionCaster.cast("null"));
@@ -86,26 +107,5 @@ class ConstantExpressionCasterTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             ConstantExpressionCaster.cast("test");
         });
-    }
-
-    private static Stream<Arguments> testBooleanArguments() {
-        return Stream.of(
-                Arguments.of("true", true),
-                Arguments.of("TRUE", true),
-                Arguments.of("True", true),
-                Arguments.of("false", false),
-                Arguments.of("FALSE", false),
-                Arguments.of("False", false)
-        );
-    }
-
-    private static Stream<Arguments> testStringVariableArguments() {
-        return Stream.of(
-                Arguments.of("red", GlassColor.RED),
-                Arguments.of("yellow", GlassColor.YELLOW),
-                Arguments.of("green", GlassColor.GREEN),
-                Arguments.of("blue", GlassColor.BLUE),
-                Arguments.of("purple", GlassColor.PURPLE)
-        );
     }
 }

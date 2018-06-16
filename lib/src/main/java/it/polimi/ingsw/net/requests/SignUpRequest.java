@@ -5,12 +5,10 @@ import org.json.JSONObject;
 
 public class SignUpRequest implements JSONSerializable {
 
-    private static final long serialVersionUID = 3564382168491273076L;
-
     public static final String USERNAME_FIELD = "username";
     @SuppressWarnings("squid:S2068")
     public static final String PASSWORD_FIELD = "password";
-
+    private static final long serialVersionUID = 3564382168491273076L;
     /**
      * The player's username.
      */
@@ -20,6 +18,14 @@ public class SignUpRequest implements JSONSerializable {
      * The player's password.
      */
     private String password;
+
+    public SignUpRequest() {
+    }
+
+    public SignUpRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     /**
      * @return the player's username
@@ -46,13 +52,6 @@ public class SignUpRequest implements JSONSerializable {
      * @param password the player's password
      */
     public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public SignUpRequest() { }
-
-    public SignUpRequest(String username, String password) {
-        this.username = username;
         this.password = password;
     }
 

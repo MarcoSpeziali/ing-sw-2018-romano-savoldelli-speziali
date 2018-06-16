@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ChooseLocation extends Serializable {
     List<Integer> getLocations();
+
     List<Die> getDice();
 }

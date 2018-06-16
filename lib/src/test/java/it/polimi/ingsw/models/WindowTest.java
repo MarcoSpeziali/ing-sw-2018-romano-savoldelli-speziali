@@ -19,18 +19,18 @@ class WindowTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.YELLOW,5);
+        this.die = new Die(GlassColor.YELLOW, 5);
         this.mockWindow = mock(Window.class);
 
-        this.cells = new Cell[][] { // 0, 1, 4, 5(edge), 11 // 0, 4, 9, 10  no 5,6
+        this.cells = new Cell[][]{ // 0, 1, 4, 5(edge), 11 // 0, 4, 9, 10  no 5,6
                 {
-                    new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
+                        new Cell(0, null), new Cell(5, null), new Cell(4, null), new Cell(0, GlassColor.GREEN)
                 },
                 {
-                    new Cell(0, null),      new Cell(0, null),      new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
+                        new Cell(0, null), new Cell(0, null), new Cell(2, null), new Cell(0, GlassColor.PURPLE)
                 },
                 {
-                    new Cell(0, GlassColor.BLUE), new Cell(2, null),      new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
+                        new Cell(0, GlassColor.BLUE), new Cell(2, null), new Cell(0, GlassColor.RED), new Cell(0, GlassColor.YELLOW)
                 }
         };
 
@@ -69,30 +69,30 @@ class WindowTest {
         Die d1 = new Die(GlassColor.GREEN, 3);
         Die d2 = new Die(GlassColor.PURPLE, 2);
 
-        List<Integer> expectedAtStart = List.of(0,4,9,10);
-        List<Integer> expectedAfterPutDie = List.of(0,5,8);
-        List<Integer> expectedIfAdjacencyIsIgnored = List.of(0,1,5,11);
+        List<Integer> expectedAtStart = List.of(0, 4, 9, 10);
+        List<Integer> expectedAfterPutDie = List.of(0, 5, 8);
+        List<Integer> expectedIfAdjacencyIsIgnored = List.of(0, 1, 5, 11);
 
 
         // Checking Exceptions
 
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> window.getPossiblePositionsForDie(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> window.getPossiblePositionsForDie(
                 new Die(null, 4), false, false, false)
         );
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> window.getPossiblePositionsForDie(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> window.getPossiblePositionsForDie(
                 new Die(GlassColor.YELLOW, 0), false, false, false)
         );
 
         // Checking initial available positions:
-        
+
         Assertions.assertTrue(window.getPossiblePositionsForDie(d,
                 false, false, false).containsAll(expectedAtStart));
         Assertions.assertEquals(4, window.getPossiblePositionsForDie(d,
                 false, false, false).size());
         Assertions.assertFalse(window.getPossiblePositionsForDie(d,
-                                        false,false,false).contains(5) &&
-                                        window.getPossiblePositionsForDie(d,
-                                        false,false,false).contains(6));
+                false, false, false).contains(5) &&
+                window.getPossiblePositionsForDie(d,
+                        false, false, false).contains(6));
 
         // Checking available positions after a die has been put:
 
@@ -109,11 +109,11 @@ class WindowTest {
 
         // Checking available positions with ignoreAdjacency set to true:
 
-        window.putDie(d1,3);
+        window.putDie(d1, 3);
         window.putDie(d2, 9);
 
         Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
-                false,false, true).containsAll(expectedIfAdjacencyIsIgnored));
+                false, false, true).containsAll(expectedIfAdjacencyIsIgnored));
         Assertions.assertEquals(4, window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
                 false, false, true).size());
 
@@ -123,9 +123,9 @@ class WindowTest {
     void putDieTest() {
         window.putDie(die, 7);
         Assertions.assertTrue(window.getDice().contains(die));
-        Assertions.assertThrows(AlreadyPutException.class, ()-> window.putDie(die, 7));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, ()-> window.putDie(die, 20));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, ()-> window.putDie(die, -1));
+        Assertions.assertThrows(AlreadyPutException.class, () -> window.putDie(die, 7));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> window.putDie(die, 20));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> window.putDie(die, -1));
     }
 
     @Test
@@ -144,7 +144,7 @@ class WindowTest {
         Assertions.assertTrue(window.getDice().contains(this.die));
         window.pickDie(die);
         Assertions.assertFalse(window.getDice().contains(die));
-        Assertions.assertEquals(12,window.getDice().size()); //Ha senso che venga restituita una lista di null?
+        Assertions.assertEquals(12, window.getDice().size()); //Ha senso che venga restituita una lista di null?
     }
 
     @Test
@@ -180,6 +180,6 @@ class WindowTest {
     void getNumberOfDiceTest() {
         Assertions.assertEquals(0, window.getNumberOfDice());
         window.putDie(mock(Die.class), 4);
-        Assertions.assertEquals(1,window.getNumberOfDice());
+        Assertions.assertEquals(1, window.getNumberOfDice());
     }
 }

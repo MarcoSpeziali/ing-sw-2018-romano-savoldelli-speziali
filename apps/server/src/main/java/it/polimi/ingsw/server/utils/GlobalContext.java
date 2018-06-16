@@ -15,6 +15,9 @@ public class GlobalContext extends Context {
      */
     private static GlobalContext singleton;
 
+    private GlobalContext() {
+    }
+
     /**
      * @return the shares instance of {@link GlobalContext}
      */
@@ -26,10 +29,9 @@ public class GlobalContext extends Context {
         return singleton;
     }
 
-    private GlobalContext() { }
-
     /**
      * If the context exists it gets returned, otherwise it gets created.
+     *
      * @param player the player owning the context
      * @return the {@link Context} for the provided {@code player}
      */

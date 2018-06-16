@@ -1,6 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.IEffect;
+
 public class ToolCard extends Card {
 
     private static final long serialVersionUID = 4573356302420625430L;
@@ -8,17 +9,24 @@ public class ToolCard extends Card {
     private IEffect effect;
 
     /**
+     * Sets up a new {@link ToolCard}
+     *
+     * @param cardId      is the card's Id
+     * @param nameKey     is the card's name
+     * @param effect      is the card's effect
+     * @param description is the card's description
+     */
+    public ToolCard(String cardId, String nameKey, String description, IEffect effect) {
+        super(nameKey, description);
+        this.cardId = cardId;
+        this.effect = effect;
+    }
+
+    /**
      * @return the tool card's id
      */
     public String getCardId() {
         return this.cardId;
-    }
-
-    /**
-     * @return the tool card's effect
-     */
-    public IEffect getEffect() {
-        return this.effect;
     }
 
     /**
@@ -29,22 +37,16 @@ public class ToolCard extends Card {
     }
 
     /**
-     * @param effect is the effect of the tool card
+     * @return the tool card's effect
      */
-    public void setEffect(IEffect effect) {
-        this.effect = effect;
+    public IEffect getEffect() {
+        return this.effect;
     }
 
     /**
-     * Sets up a new {@link ToolCard}
-     * @param cardId is the card's Id
-     * @param nameKey is the card's name
-     * @param effect is the card's effect
-     * @param description is the card's description
+     * @param effect is the effect of the tool card
      */
-    public ToolCard(String cardId, String nameKey, String description, IEffect effect) {
-        super(nameKey, description);
-        this.cardId = cardId;
+    public void setEffect(IEffect effect) {
         this.effect = effect;
     }
 

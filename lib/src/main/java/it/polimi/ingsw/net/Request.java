@@ -22,6 +22,14 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
      */
     private T body;
 
+    public Request() {
+    }
+
+    public Request(Header requestHeader, T requestBody) {
+        this.header = requestHeader;
+        this.body = requestBody;
+    }
+
     /**
      * @return the request header
      */
@@ -31,6 +39,7 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
 
     /**
      * Sets the request header.
+     *
      * @param requestHeader the request header
      */
     public void setHeader(Header requestHeader) {
@@ -46,16 +55,10 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
 
     /**
      * Sets the request body.
+     *
      * @param requestBody the request body
      */
     public void setBody(T requestBody) {
-        this.body = requestBody;
-    }
-
-    public Request() { }
-
-    public Request(Header requestHeader, T requestBody) {
-        this.header = requestHeader;
         this.body = requestBody;
     }
 
@@ -71,10 +74,10 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
 
             this.body = this.instantiateBody(bodyObject.getString(RequestFields.Body.CLASS_TYPE.toString()));
         }
-        catch ( NoSuchMethodException       |
-                InstantiationException      |
-                InvocationTargetException   |
-                ClassNotFoundException      |
+        catch (NoSuchMethodException |
+                InstantiationException |
+                InvocationTargetException |
+                ClassNotFoundException |
                 IllegalAccessException e) {
             throw new RuntimeException(e);
         }

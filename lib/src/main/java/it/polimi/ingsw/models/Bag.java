@@ -21,6 +21,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
 
     /**
      * Sets up a new {@link Bag} assigning a specified number of dice per color.
+     *
      * @param number the number of dice per color.
      */
     public Bag(int number) {
@@ -50,6 +51,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
 
     /**
      * Picks a random instance of die and decrements the initial amount of dice.
+     *
      * @return a random incance of {@link Die}.
      */
     @Override
@@ -75,7 +77,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
      */
     @Override
     public int getNumberOfDice() {
-        return dice.values().stream().reduce((sum, x) -> (sum+x)).orElse(0);
+        return dice.values().stream().reduce((sum, x) -> (sum + x)).orElse(0);
     }
 
     /**
@@ -91,7 +93,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
      */
     @Override
     public int getFreeSpace() {
-        return 5*this.number - this.getNumberOfDice();
+        return 5 * this.number - this.getNumberOfDice();
     }
 }
 

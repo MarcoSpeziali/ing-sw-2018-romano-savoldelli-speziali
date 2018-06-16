@@ -12,20 +12,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ActionGroupInitializer {
-    private ActionGroupInitializer() {}
+    private ActionGroupInitializer() {
+    }
 
     /**
      * Instantiate an {@link ActionGroup} from a {@link CompiledActionGroup}.
+     *
      * @param compiledActionGroup the compiled action group
      * @return an instance of {@link ActionGroup}  created from a {@link CompiledActionGroup}
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     public static ActionGroup instantiate(CompiledActionGroup compiledActionGroup) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return new ActionGroup(
@@ -39,14 +41,14 @@ public class ActionGroupInitializer {
     /**
      * @param compiledExecutableActions the list of sub-actions of a {@link CompiledActionGroup} to instantiate
      * @return a {@link List} of {@link ExecutableAction} created with the sub-actions of a {@link CompiledActionGroup}
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     private static List<ExecutableAction> instantiateSubActions(List<CompiledExecutableAction> compiledExecutableActions) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         try {

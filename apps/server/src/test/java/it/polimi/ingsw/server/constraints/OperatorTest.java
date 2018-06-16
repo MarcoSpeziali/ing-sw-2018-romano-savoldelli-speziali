@@ -10,26 +10,6 @@ import java.util.stream.Stream;
 
 class OperatorTest {
 
-    @ParameterizedTest
-    @MethodSource("testFromStringArguments")
-    void testFromString(String from, Operator expectedOperator) {
-        Assertions.assertEquals(expectedOperator, Operator.fromString(from));
-    }
-
-    @ParameterizedTest
-    @MethodSource("testToStringArguments")
-    void testToString(Operator operator, String expectedString) {
-        Assertions.assertEquals(expectedString, operator.toString());
-    }
-
-    @Test
-    void testFromStringThrows() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            //noinspection ResultOfMethodCallIgnored
-            Operator.fromString("test val");
-        });
-    }
-
     private static Stream<Arguments> testFromStringArguments() {
         return Stream.of(
                 Arguments.of("==", Operator.EQUALS),
@@ -50,5 +30,25 @@ class OperatorTest {
                 Arguments.of(Operator.LESS, "<"),
                 Arguments.of(Operator.LESS_EQUAL, "<=")
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("testFromStringArguments")
+    void testFromString(String from, Operator expectedOperator) {
+        Assertions.assertEquals(expectedOperator, Operator.fromString(from));
+    }
+
+    @ParameterizedTest
+    @MethodSource("testToStringArguments")
+    void testToString(Operator operator, String expectedString) {
+        Assertions.assertEquals(expectedString, operator.toString());
+    }
+
+    @Test
+    void testFromStringThrows() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            //noinspection ResultOfMethodCallIgnored
+            Operator.fromString("test val");
+        });
     }
 }

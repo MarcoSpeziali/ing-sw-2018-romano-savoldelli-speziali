@@ -7,9 +7,10 @@ import java.util.stream.Collectors;
 // TODO: docs
 public class EventDispatcher {
 
-    private EventDispatcher() {}
-
     private static Map<EventType, List<? super IEvent>> eventsMap = new EnumMap<>(EventType.class);
+
+    private EventDispatcher() {
+    }
 
     public static synchronized <E extends IEvent> void register(E event) {
         EnumSet<EventType> eventTypes = getEventTypesFromEvent(event);

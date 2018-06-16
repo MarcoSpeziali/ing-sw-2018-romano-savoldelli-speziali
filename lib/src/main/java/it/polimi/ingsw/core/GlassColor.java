@@ -16,6 +16,41 @@ public enum GlassColor implements Serializable {
     private final int hex;
 
     /**
+     * @param hex the hex value of the color
+     */
+    GlassColor(int hex) {
+        this.hex = hex;
+    }
+
+    /**
+     * Converts the string representation of the a {@link GlassColor} to an
+     * instance of {@link GlassColor} that can be represented by {@code rep}.
+     *
+     * @param rep the string representation of the a {@link GlassColor}
+     * @return the instance of {@link GlassColor} that can be represented by {@code rep}
+     */
+    public static GlassColor fromString(String rep) {
+        Objects.requireNonNull(rep);
+
+        rep = rep.trim().toLowerCase();
+
+        switch (rep) {
+            case "red":
+                return GlassColor.RED;
+            case "yellow":
+                return GlassColor.YELLOW;
+            case "green":
+                return GlassColor.GREEN;
+            case "blue":
+                return GlassColor.BLUE;
+            case "purple":
+                return GlassColor.PURPLE;
+            default:
+                throw new IllegalArgumentException("Unrecognized color: " + rep);
+        }
+    }
+
+    /**
      * @return the hex value of the color
      */
     public int getHex() {
@@ -41,40 +76,6 @@ public enum GlassColor implements Serializable {
      */
     public int getBlue() {
         return (this.hex & 0xFF);
-    }
-
-    /**
-     * @param hex the hex value of the color
-     */
-    GlassColor(int hex) {
-        this.hex = hex;
-    }
-
-    /**
-     * Converts the string representation of the a {@link GlassColor} to an
-     * instance of {@link GlassColor} that can be represented by {@code rep}.
-     * @param rep the string representation of the a {@link GlassColor}
-     * @return the instance of {@link GlassColor} that can be represented by {@code rep}
-     */
-    public static GlassColor fromString(String rep) {
-        Objects.requireNonNull(rep);
-
-        rep = rep.trim().toLowerCase();
-
-        switch (rep) {
-            case "red":
-                return GlassColor.RED;
-            case "yellow":
-                return GlassColor.YELLOW;
-            case "green":
-                return GlassColor.GREEN;
-            case "blue":
-                return GlassColor.BLUE;
-            case "purple":
-                return GlassColor.PURPLE;
-            default:
-                throw new IllegalArgumentException("Unrecognized color: " + rep);
-        }
     }
 
     @Override

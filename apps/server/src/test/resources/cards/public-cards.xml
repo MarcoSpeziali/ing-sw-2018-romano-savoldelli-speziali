@@ -3,7 +3,7 @@
     <card id="column_shade_variety" name="cards.public_cards.column_shade_variety.name">
         <objective pointsPerCompletion="4" description="cards.public_cards.column_shade_variety.description">
             <for-column column="COLUMN">
-                <take-if predicate="distinct_shade $COLUMN$" />
+                <take-if predicate="distinct_shade $COLUMN$"/>
             </for-column>
         </objective>
     </card>
@@ -17,7 +17,7 @@
     </card>
     <card id="color_diagonals" name="cards.public_cards.color_diagonals.name">
         <objective pointsPerCompletion="1" description="cards.public_cards.color_diagonals.description">
-            <count-diagonal filter="color" />
+            <count-diagonal filter="color"/>
         </objective>
     </card>
     <card id="color_variety" name="cards.public_cards.color_variety.name">

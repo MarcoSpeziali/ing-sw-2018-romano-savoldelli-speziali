@@ -38,11 +38,6 @@ import java.lang.reflect.Parameter;
  */
 public class RandomParametersExtension implements ParameterResolver {
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.PARAMETER)
-    public @interface Random {
-    }
-
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
         return parameterContext.getParameter().getAnnotation(Random.class) != null;
@@ -67,5 +62,10 @@ public class RandomParametersExtension implements ParameterResolver {
             return random.nextDouble();
         }
         throw new ParameterResolutionException("No random generator implemented for " + type);
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.PARAMETER)
+    public @interface Random {
     }
 }

@@ -13,33 +13,31 @@ import java.util.List;
 
 public class Player implements RandomPickLocation, RandomPutLocation {
     private static final long serialVersionUID = -2840357342425816145L;
-
+    private static Player currentPlayer;
+    List<OnDieUsedListener> onDieUsedListeners = new LinkedList<>();
+    List<OnToolCardUsedListener> onToolCardUsedListeners = new LinkedList<>();
     private IPlayerProfile profile;
     private ObjectiveCard[] privateObjectiveCard;
     private byte favourTokenCount;
     private Die pickedDie;
 
-    private static Player currentPlayer;
-
-    List<OnDieUsedListener> onDieUsedListeners = new LinkedList<>();
-    List<OnToolCardUsedListener> onToolCardUsedListeners = new LinkedList<>();
-
-    public static Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
     /**
      * Sets up a new {@link Player}
-     * @param profile is the player's profile
+     *
+     * @param profile              is the player's profile
      * @param privateObjectiveCard is the player's private objective card
-     * @param favourTokenCount the count of initial tokens
+     * @param favourTokenCount     the count of initial tokens
      */
-    public Player(IPlayerProfile profile, ObjectiveCard[] privateObjectiveCard, byte favourTokenCount){
+    public Player(IPlayerProfile profile, ObjectiveCard[] privateObjectiveCard, byte favourTokenCount) {
         this.profile = profile;
         this.privateObjectiveCard = privateObjectiveCard;
         this.favourTokenCount = favourTokenCount;
 
         currentPlayer = this;
+    }
+
+    public static Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     /**
@@ -50,20 +48,6 @@ public class Player implements RandomPickLocation, RandomPutLocation {
     }
 
     /**
-     * @return the player's private objective card
-     */
-    public ObjectiveCard[] getPrivateObjectiveCard() {
-        return privateObjectiveCard;
-    }
-
-    /**
-     * @return the player's amount of favour token
-     */
-    public byte getFavourTokenCount() {
-        return favourTokenCount;
-    }
-
-    /**
      * @param profile is the player's name
      */
     public void setProfile(IPlayerProfile profile) {
@@ -71,10 +55,24 @@ public class Player implements RandomPickLocation, RandomPutLocation {
     }
 
     /**
+     * @return the player's private objective card
+     */
+    public ObjectiveCard[] getPrivateObjectiveCard() {
+        return privateObjectiveCard;
+    }
+
+    /**
      * @param privateObjectiveCard is the player's private objective card
      */
     public void setPrivateObjectiveCard(ObjectiveCard[] privateObjectiveCard) {
         this.privateObjectiveCard = privateObjectiveCard;
+    }
+
+    /**
+     * @return the player's amount of favour token
+     */
+    public byte getFavourTokenCount() {
+        return favourTokenCount;
     }
 
     /**

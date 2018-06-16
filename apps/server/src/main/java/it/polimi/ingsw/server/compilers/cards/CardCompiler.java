@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.compilers.cards;
 
+import it.polimi.ingsw.core.CardVisibility;
+import it.polimi.ingsw.models.ToolCard;
+import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.constraints.ConstraintCompiler;
 import it.polimi.ingsw.server.compilers.effects.CompiledEffect;
@@ -9,10 +12,7 @@ import it.polimi.ingsw.server.compilers.instructions.directives.InstructionDirec
 import it.polimi.ingsw.server.compilers.instructions.predicates.directives.PredicateDirective;
 import it.polimi.ingsw.server.compilers.objectives.CompiledObjective;
 import it.polimi.ingsw.server.compilers.objectives.ObjectiveCompiler;
-import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.server.constraints.EvaluableConstraint;
-import it.polimi.ingsw.models.ToolCard;
-import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,10 +28,12 @@ import java.util.stream.Collectors;
 
 public class CardCompiler {
 
-    private CardCompiler() {}
+    private CardCompiler() {
+    }
 
     /**
      * Compiles a single tool card.
+     *
      * @param node the node identifying a single tool card
      * @return a {@link List} of {@link ToolCard}
      */
@@ -82,6 +84,7 @@ public class CardCompiler {
 
     /**
      * Compiles a single objective card.
+     *
      * @param node the node identifying a single tool card
      * @return a {@link List} of {@link CompiledObjectiveCard}
      */
@@ -108,6 +111,7 @@ public class CardCompiler {
 
     /**
      * Compiles every tool card in the default file.
+     *
      * @param actionDirectives the actions directives
      * @return a {@link List} of {@link CompiledToolCard}
      */
@@ -117,14 +121,15 @@ public class CardCompiler {
 
     /**
      * Compiles every tool card in the file at the given path.
-     * @param filePath the file path
-     * @param isResource if the path is relative to the resource folder
+     *
+     * @param filePath         the file path
+     * @param isResource       if the path is relative to the resource folder
      * @param actionDirectives the actions directives
      * @return a {@link List} of {@link CompiledToolCard}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledToolCard> compileToolCards(String filePath, Boolean isResource, List<ActionDirective> actionDirectives) throws ParserConfigurationException, SAXException, IOException {
         List<CompiledToolCard> compiledToolCards = new LinkedList<>();
@@ -150,13 +155,14 @@ public class CardCompiler {
 
     /**
      * Compiles every private objective card in the default file.
+     *
      * @param instructionDirectives the instructions directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return a {@link List} of {@link CompiledObjectiveCard}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePrivateObjectiveCards(List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws IOException, SAXException, ParserConfigurationException {
         return compilePrivateObjectiveCards(Constants.Resources.PRIVATE_CARDS.getRelativePath(), true, instructionDirectives, predicateDirectives);
@@ -164,15 +170,16 @@ public class CardCompiler {
 
     /**
      * Compiles every private objective card in the file at the given path.
-     * @param filePath the file path
-     * @param isResource if the path is relative to the resource folder
+     *
+     * @param filePath              the file path
+     * @param isResource            if the path is relative to the resource folder
      * @param instructionDirectives the instructions directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return a {@link List} of {@link CompiledObjectiveCard}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePrivateObjectiveCards(String filePath, Boolean isResource, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws ParserConfigurationException, SAXException, IOException {
         return compileObjectiveCards(filePath, isResource, CardVisibility.PRIVATE, instructionDirectives, predicateDirectives);
@@ -180,13 +187,14 @@ public class CardCompiler {
 
     /**
      * Compiles every public objective card in the default file.
+     *
      * @param instructionDirectives the instructions directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return a {@link List} of {@link CompiledObjectiveCard}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePublicObjectiveCards(List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws IOException, SAXException, ParserConfigurationException {
         return compilePublicObjectiveCards(Constants.Resources.PUBLIC_CARDS.getRelativePath(), true, instructionDirectives, predicateDirectives);
@@ -194,15 +202,16 @@ public class CardCompiler {
 
     /**
      * Compiles every public objective card in the file at the given path.
-     * @param filePath the file path
-     * @param isResource if the path is relative to the resource folder
+     *
+     * @param filePath              the file path
+     * @param isResource            if the path is relative to the resource folder
      * @param instructionDirectives the instructions directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return a {@link List} of {@link CompiledObjectiveCard}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<CompiledObjectiveCard> compilePublicObjectiveCards(String filePath, Boolean isResource, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws ParserConfigurationException, SAXException, IOException {
         return compileObjectiveCards(filePath, isResource, CardVisibility.PUBLIC, instructionDirectives, predicateDirectives);
@@ -210,16 +219,17 @@ public class CardCompiler {
 
     /**
      * Compiles every objective card in the file at the given path.
-     * @param filePath the file path
-     * @param isResource if the path is relative to the resource folder
-     * @param cardVisibility the visibility of the card
+     *
+     * @param filePath              the file path
+     * @param isResource            if the path is relative to the resource folder
+     * @param cardVisibility        the visibility of the card
      * @param instructionDirectives the instructions directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return a {@link List} of {@link CompiledObjectiveCard}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     private static List<CompiledObjectiveCard> compileObjectiveCards(String filePath, Boolean isResource, CardVisibility cardVisibility, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) throws ParserConfigurationException, SAXException, IOException {
         List<CompiledObjectiveCard> compiledObjectiveCards = new LinkedList<>();
@@ -245,6 +255,7 @@ public class CardCompiler {
 
     /**
      * Retrieves the basic card information.
+     *
      * @param cardInfo the info of the card
      * @return an instance of {@link CompiledCard} containing the basic information about the card
      */
@@ -261,6 +272,7 @@ public class CardCompiler {
 
     /**
      * Compiles the constraints.
+     *
      * @param constraintsInfo the constraints to compile
      * @return a {@link List} of {@link EvaluableConstraint}
      */
@@ -276,6 +288,7 @@ public class CardCompiler {
 
     /**
      * Compiles the constraint groups.
+     *
      * @param constraintsInfo the constraint groups to compile
      * @return a {@link List} of {@link EvaluableConstraint}
      */
@@ -291,6 +304,7 @@ public class CardCompiler {
 
     /**
      * Gets the nodes, in a card, which represents a constraint-group.
+     *
      * @param nodeList the list of children of a constrains node
      * @return a {@link List} of {@link Node} that represents a constraint-group
      */
@@ -310,6 +324,7 @@ public class CardCompiler {
 
     /**
      * Gets the node, in a card, which represents the constraints collection.
+     *
      * @param nodeList the list of children of a card node
      * @return a {@link Node} that represents the constraints collection
      */
@@ -326,9 +341,9 @@ public class CardCompiler {
     }
 
     /**
-     * @param node the node containing the effect
+     * @param node             the node containing the effect
      * @param actionDirectives the action directives
-     * @param constraints the constraints
+     * @param constraints      the constraints
      * @return an instance of {@link CompiledEffect}
      */
     private static CompiledEffect compileEffect(Node node, List<ActionDirective> actionDirectives, List<EvaluableConstraint> constraints) {
@@ -336,9 +351,9 @@ public class CardCompiler {
     }
 
     /**
-     * @param node the node containing the objective
+     * @param node                  the node containing the objective
      * @param instructionDirectives the instructions directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return an instance of {@link CompiledObjective}
      */
     private static CompiledObjective compileObjective(Node node, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) {
@@ -347,13 +362,14 @@ public class CardCompiler {
 
     /**
      * Reads the file and parses the xml in it into a {@link Map}.
-     * @param path The path to the file, or the resource name
+     *
+     * @param path       The path to the file, or the resource name
      * @param isResource {@code true} if the path points to a resource, {@code false} otherwise
      * @return the root node of the file
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     private static Node getRawCards(String path, boolean isResource) throws IOException, SAXException, ParserConfigurationException {
         Node node;
@@ -370,7 +386,7 @@ public class CardCompiler {
     }
 
     /**
-     * @param node the parent node
+     * @param node     the parent node
      * @param nodeName the name of the target node
      * @return the child of {@code node} which name is {@code nodeName}
      */
@@ -378,7 +394,7 @@ public class CardCompiler {
         NodeList nodeList = node.getChildNodes();
 
         for (int i = 0; i < nodeList.getLength(); i++) {
-            if (nodeList.item(i).getNodeName().equals(nodeName)){
+            if (nodeList.item(i).getNodeName().equals(nodeName)) {
                 return nodeList.item(i);
             }
         }

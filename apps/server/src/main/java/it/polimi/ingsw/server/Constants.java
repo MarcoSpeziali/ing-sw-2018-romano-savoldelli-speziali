@@ -8,7 +8,8 @@ import java.util.Set;
 
 public class Constants {
 
-    private Constants() {}
+    private Constants() {
+    }
 
     public enum Paths {
         PROJECT_FOLDER(java.nio.file.Paths.get(
@@ -68,6 +69,7 @@ public class Constants {
         DEFAULT_SETTINGS("default_settings.xml"),
         PRIVATE_KEY("private.der");
 
+        public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
         private final String relativePath;
 
         Resources(String relativePath) {
@@ -88,8 +90,6 @@ public class Constants {
             ClassLoader classLoader = ServerApp.class.getClassLoader();
             return it.polimi.ingsw.utils.io.Resources.getResource(classLoader, this.relativePath);
         }
-
-        public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
     }
 
     public enum ServerArguments {
@@ -117,16 +117,16 @@ public class Constants {
 
         private final String name;
 
+        Threads(String name) {
+            this.name = name;
+        }
+
         @Override
         public String toString() {
             return name;
         }
-
-        Threads(String name) {
-            this.name = name;
-        }
     }
-    
+
     public enum LockTargets {
         LOBBY
     }

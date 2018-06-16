@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import it.polimi.ingsw.client.ui.cli.CLIView;
 import it.polimi.ingsw.models.Bag;
 import it.polimi.ingsw.views.BagView;
 import javafx.scene.Node;

@@ -20,13 +20,16 @@ import java.io.IOException;
 // TODO: handle password rules (min 8 chars, no spaces, ..?)
 public class SignUpGUIController extends SignUpController {
 
+    @FXML
+    public JFXTextField user;
+    @FXML
+    public JFXPasswordField pass;
+    @FXML
+    public JFXPasswordField repeatPass;
     private FXMLLoader loader = new FXMLLoader();
 
-    @FXML public JFXTextField user;
-    @FXML public JFXPasswordField pass;
-    @FXML public JFXPasswordField repeatPass;
-
-    public SignUpGUIController() {}
+    public SignUpGUIController() {
+    }
 
     @FXML
     public void onSignUpClicked() {
@@ -60,7 +63,7 @@ public class SignUpGUIController extends SignUpController {
     @FXML
     public void onBackClicked() throws IOException {
         loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 720,480));
+        this.setScene(new Scene(loader.load(), 720, 480));
     }
 
     private void setScene(Scene scene) {

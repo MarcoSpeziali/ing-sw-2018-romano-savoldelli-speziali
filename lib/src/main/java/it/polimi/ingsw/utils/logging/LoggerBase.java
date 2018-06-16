@@ -9,34 +9,20 @@ import java.util.logging.*;
 
 public abstract class LoggerBase extends Logger {
 
-    /**
-     * Represents the path where the logging file will be created.
-     */
-    protected abstract String getLoggingPath();
-
     protected static FileHandler fileHandler;
-    private static boolean fileHandlerAlreadySet = false;
     protected static Level level;
-
-    /**
-     * Sets the logging level globally.
-     * @param level the logging level to globally use
-     */
-    public static void setLoggingLevel(Level level) {
-        LoggerBase.level = level;
-    }
-
+    private static boolean fileHandlerAlreadySet = false;
     /**
      * Protected method to construct a logger for a named subsystem.
      * <p>
      * The logger will be initially configured with a null Level
      * and with useParentHandlers set to true.
      *
-     * @param name               A name for the logger.  This should
-     *                           be a dot-separated name and should normally
-     *                           be based on the package name or class name
-     *                           of the subsystem, such as java.net
-     *                           or javax.swing.  It may be null for anonymous Loggers.
+     * @param name A name for the logger.  This should
+     *             be a dot-separated name and should normally
+     *             be based on the package name or class name
+     *             of the subsystem, such as java.net
+     *             or javax.swing.  It may be null for anonymous Loggers.
      */
     @SuppressWarnings("squid:S3010")
     protected LoggerBase(String name) {
@@ -64,6 +50,15 @@ public abstract class LoggerBase extends Logger {
     }
 
     /**
+     * Sets the logging level globally.
+     *
+     * @param level the logging level to globally use
+     */
+    public static void setLoggingLevel(Level level) {
+        LoggerBase.level = level;
+    }
+
+    /**
      * Closes the {@link FileHandler}.
      */
     public static synchronized void close() {
@@ -71,6 +66,11 @@ public abstract class LoggerBase extends Logger {
             fileHandler.close();
         }
     }
+
+    /**
+     * Represents the path where the logging file will be created.
+     */
+    protected abstract String getLoggingPath();
 
     /**
      * https://stackoverflow.com/questions/194765/how-do-i-get-java-logging-output-to-appear-on-a-single-line
@@ -87,6 +87,7 @@ public abstract class LoggerBase extends Logger {
 
         /**
          * Format the given LogRecord.
+         *
          * @param record the log record to be formatted.
          * @return a formatted log record
          */
@@ -110,7 +111,8 @@ public abstract class LoggerBase extends Logger {
             // Class name
             if (record.getSourceClassName() != null) {
                 sb.append(record.getSourceClassName());
-            } else {
+            }
+            else {
                 sb.append(record.getLoggerName());
             }
 
@@ -128,7 +130,7 @@ public abstract class LoggerBase extends Logger {
             sb.append(": ");
 
             int iOffset = (1000 - record.getLevel().intValue()) / 100;
-            for( int i = 0; i < iOffset;  i++ ){
+            for (int i = 0; i < iOffset; i++) {
                 sb.append(" ");
             }
 
@@ -141,7 +143,8 @@ public abstract class LoggerBase extends Logger {
                     record.getThrown().printStackTrace(pw);
                     pw.close();
                     sb.append(sw.toString());
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                 }
             }
             return sb.toString();

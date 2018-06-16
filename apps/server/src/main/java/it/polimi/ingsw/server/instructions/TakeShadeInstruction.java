@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.instructions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 
 public class TakeShadeInstruction extends Instruction {
 

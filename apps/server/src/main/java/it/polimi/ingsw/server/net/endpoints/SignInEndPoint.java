@@ -32,7 +32,8 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
      */
     private transient Socket client;
 
-    public SignInEndPoint() throws RemoteException { }
+    public SignInEndPoint() throws RemoteException {
+    }
 
     public void setSocket(Socket client) {
         this.client = client;
@@ -107,11 +108,13 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
 
             // sends back an internal server error
             return ResponseFactory.createInternalServerError(request);
-        } catch (NoSuchAlgorithmException e) {
+        }
+        catch (NoSuchAlgorithmException e) {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
             return ResponseFactory.createInternalServerError(request);
-        } catch (ServerNotActiveException e) {
+        }
+        catch (ServerNotActiveException e) {
             e.printStackTrace();
 
             return null;
@@ -184,11 +187,13 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
             else {
                 return ResponseFactory.createUnauthorisedError(request);
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError(request);
-        } catch (NoSuchAlgorithmException e) {
+        }
+        catch (NoSuchAlgorithmException e) {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
             return ResponseFactory.createInternalServerError(request);
@@ -197,7 +202,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
 
     /**
      * @param challenge the challenge
-     * @param password the user password
+     * @param password  the user password
      * @return the {@code sha1}-hashed version of the concatenation between {@code challenge} and {@code password}
      */
     private String getExpectedChallengeResult(String challenge, String password) {

@@ -14,12 +14,13 @@ import java.util.Map;
 
 public class ObjectiveCompiler {
 
-    private ObjectiveCompiler() {}
+    private ObjectiveCompiler() {
+    }
 
     /**
-     * @param node the node containing the effect
+     * @param node                  the node containing the effect
      * @param instructionDirectives the instruction directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return an instance of {@link CompiledObjective}
      */
     public static CompiledObjective compile(Node node, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) {
@@ -48,9 +49,9 @@ public class ObjectiveCompiler {
     }
 
     /**
-     * @param children the {@link NodeList} containing the instructions
+     * @param children              the {@link NodeList} containing the instructions
      * @param instructionDirectives the directives to compile the instructions
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return a {@link List} of {@link CompiledInstruction}
      */
     private static List<CompiledInstruction> compileInstructions(NodeList children, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) {

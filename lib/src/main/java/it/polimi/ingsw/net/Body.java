@@ -18,10 +18,12 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
     /**
      * Creates an empty {@link Body}.
      */
-    public Body() {}
+    public Body() {
+    }
 
     /**
      * Creates a {@link Body} with an endpoint and no arguments.
+     *
      * @param endPointFunction the endpoint
      */
     public Body(EndPointFunction endPointFunction) {
@@ -30,8 +32,9 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
 
     /**
      * Creates a {@link Body} with an endpoint and arguments.
+     *
      * @param endPointFunction the endpoint
-     * @param map a {@link Map} containing the arguments
+     * @param map              a {@link Map} containing the arguments
      */
     public Body(EndPointFunction endPointFunction, Map<String, Object> map) {
         this.setEndPointFunction(endPointFunction);
@@ -40,6 +43,7 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
 
     /**
      * Returns the endpoint function.
+     *
      * @return the endpoint function
      */
     public EndPointFunction getEndPointFunction() {
@@ -57,6 +61,7 @@ public class Body extends HashMap<String, Object> implements JSONSerializable {
 
     /**
      * Sets the endpoint function.
+     *
      * @param endPointFunction the endpoint function
      */
     public void setEndPointFunction(EndPointFunction endPointFunction) {

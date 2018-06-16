@@ -20,18 +20,19 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     private String id;
     private Window sibling;
     private Cell[][] cells;
-    private List<OnDiePutListener> onDiePutListeners =  new LinkedList<>();
+    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
     private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
 
     /**
      * Sets up a new {@link Window} with specified parameters.
+     *
      * @param difficulty an integer representing the difficulty of the Windows.
-     * @param rows the number of rows.
-     * @param columns the number of columns.
-     * @param id a unique {@link String} representing the name of the Window.
-     * @param sibling an instance of a sibling {@link Window}.
-     * @param cells a matrix representing the disposition of dice.
+     * @param rows       the number of rows.
+     * @param columns    the number of columns.
+     * @param id         a unique {@link String} representing the name of the Window.
+     * @param sibling    an instance of a sibling {@link Window}.
+     * @param cells      a matrix representing the disposition of dice.
      */
     public Window(int difficulty, int rows, int columns, String id, Window sibling, Cell[][] cells) {
         this.difficulty = difficulty;
@@ -79,7 +80,8 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Adds the die in a specified location.
-     * @param die the {@link Die} that must be put into.
+     *
+     * @param die      the {@link Die} that must be put into.
      * @param location the target location stretched in a one-dimensional array.
      */
     @Override
@@ -97,8 +99,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         List<Integer> locations = new LinkedList<>();
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
-                if (this.cells[i][j].isOccupied())
+                if (this.cells[i][j].isOccupied()) {
                     locations.add(i * this.columns + j);
+                }
             }
         }
         return locations;
@@ -128,6 +131,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Removes from cells and returns the same instance of the parameter, if present.
+     *
      * @param die the instance of {@link Die} than must be compared to the target.
      * @return an instance of {@link Die}
      */
@@ -147,6 +151,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Removes from cells and returns a die of a specified location.
+     *
      * @param location the one-dimensional index of the die in cells.
      * @return an instance of {@link Die}.
      */
@@ -181,9 +186,10 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Check which initial locations are allowed in the window for a spcified die.
-     * @param die the target {@link Die} which must be put.
-     * @param ignoreColor the boolean flag which avoids color control.
-     * @param ignoreShade the boolean flag which avoids shade control.
+     *
+     * @param die             the target {@link Die} which must be put.
+     * @param ignoreColor     the boolean flag which avoids color control.
+     * @param ignoreShade     the boolean flag which avoids shade control.
      * @param ignoreAdjacency the boolean flag which avoid adjacency control.
      * @return an instance of {@link List} of allowed locations.
      */
@@ -226,10 +232,11 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Checks if color and shade similarity rules of adjacent orthogonal dice are respected, then inspects a specified cell.
-     * @param die the {@link Die} which cell's color and shade must be compared with.
-     * @param location the previous one-dimensional index of the die in cells.
-     * @param i the current row index of the {@link Die} in cells.
-     * @param j the current column index of the {@link Die} in cells.
+     *
+     * @param die         the {@link Die} which cell's color and shade must be compared with.
+     * @param location    the previous one-dimensional index of the die in cells.
+     * @param i           the current row index of the {@link Die} in cells.
+     * @param j           the current column index of the {@link Die} in cells.
      * @param ignoreColor the boolean flag which avoids color control.
      * @param ignoreShade the boolean flag which avoids shade control.
      * @return a call of {@link #neighbour} method if control passes, null if it fails or cell is not occupied.
@@ -249,9 +256,10 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Inspects a specified cell, verifying its correct matching of color and shade with a target {@link Die}.
-     * @param die the {@link Die} which cell's color and shade must be compared with.
-     * @param i the row index of the {@link Die} in cells.
-     * @param j the column index of the {@link Die} in cells.
+     *
+     * @param die         the {@link Die} which cell's color and shade must be compared with.
+     * @param i           the row index of the {@link Die} in cells.
+     * @param j           the column index of the {@link Die} in cells.
      * @param ignoreColor the boolean flag which avoids color control.
      * @param ignoreShade the boolean flag which avoids shade control.
      * @return the index of neighbour if control passes, null if it fails or index is out of bounds.
@@ -269,8 +277,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Inspect the surrounding cells of a target one, referring to the location parameter.
-     * @param die a {@link Die} which must be compared with cells around.
-     * @param location the one-dimensional index of the die in cells.
+     *
+     * @param die         a {@link Die} which must be compared with cells around.
+     * @param location    the one-dimensional index of the die in cells.
      * @param ignoreColor the boolean flag which avoids color control.
      * @param ignoreShade the boolean flag which avoids shade control.
      * @return an instance of {@link List} of matching indexes.
@@ -297,9 +306,10 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     /**
      * Checks which locations are allowed in the window for a specified die.
-     * @param die the target {@link Die} which must be put.
-     * @param ignoreColor the boolean flag which avoids color control.
-     * @param ignoreShade the boolean flag which avoids shade control.
+     *
+     * @param die             the target {@link Die} which must be put.
+     * @param ignoreColor     the boolean flag which avoids color control.
+     * @param ignoreShade     the boolean flag which avoids shade control.
      * @param ignoreAdjacency the boolean flag which avoid adjacency control.
      * @return an instance a {@link List} of allowed locations.
      */
@@ -317,9 +327,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
 
         if (ignoreAdjacency) {
-            for (int i = 0; i < this.rows ; i++) {
+            for (int i = 0; i < this.rows; i++) {
                 for (int j = 0; j < this.columns; j++) {
-                        availablePositions.addAll(cellsAround(die, i * this.columns + j, ignoreColor, ignoreShade));
+                    availablePositions.addAll(cellsAround(die, i * this.columns + j, ignoreColor, ignoreShade));
                 }
             }
         }
@@ -333,7 +343,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         availablePositions.removeAll(Collections.singleton(null));
         return availablePositions.stream()
                 .distinct()
-                .filter(location -> !this.cells[location/this.columns][location%this.columns].isOccupied())
+                .filter(location -> !this.cells[location / this.columns][location % this.columns].isOccupied())
                 .collect(Collectors.toList());
 
     }

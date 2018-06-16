@@ -19,6 +19,10 @@ public class CellGUIView extends CellView implements GUIView {
 
     private String path;
 
+    public CellGUIView(Cell cell) {
+        super(cell);
+    }
+
     private void diePicked() {
         this.cellController.onDiePicked();
     }
@@ -26,11 +30,6 @@ public class CellGUIView extends CellView implements GUIView {
     private void diePut() {
         this.cellController.onDiePut(Player.getCurrentPlayer().pickDie());
     }
-
-    public CellGUIView(Cell cell) {
-        super(cell);
-    }
-
 
     @Override
     public void setCell(Cell cell) {

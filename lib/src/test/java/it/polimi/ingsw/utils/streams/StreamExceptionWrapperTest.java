@@ -14,7 +14,8 @@ class StreamExceptionWrapperTest {
             IntStream.range(0, 10).map(operand -> {
                 try {
                     return singleThrowableMethod();
-                } catch (ClassNotFoundException e) {
+                }
+                catch (ClassNotFoundException e) {
                     return StreamExceptionWrapper.wrap(e);
                 }
             }).toArray();
@@ -31,7 +32,8 @@ class StreamExceptionWrapperTest {
             IntStream.range(0, 10).map(operand -> {
                 try {
                     return multipleThrowableMethod();
-                } catch (ClassNotFoundException | IllegalAccessException e) {
+                }
+                catch (ClassNotFoundException | IllegalAccessException e) {
                     return StreamExceptionWrapper.wrap(e);
                 }
             }).toArray();
@@ -50,7 +52,8 @@ class StreamExceptionWrapperTest {
             IntStream.range(0, 10).map(operand -> {
                 try {
                     return multipleThrowableMethod();
-                } catch (ClassNotFoundException | IllegalAccessException e) {
+                }
+                catch (ClassNotFoundException | IllegalAccessException e) {
                     return StreamExceptionWrapper.wrap(e);
                 }
             }).toArray();
@@ -68,7 +71,8 @@ class StreamExceptionWrapperTest {
             IntStream.range(0, 10).map(operand -> {
                 try {
                     return multipleThrowableMethod();
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     return StreamExceptionWrapper.wrap(e);
                 }
             }).toArray();

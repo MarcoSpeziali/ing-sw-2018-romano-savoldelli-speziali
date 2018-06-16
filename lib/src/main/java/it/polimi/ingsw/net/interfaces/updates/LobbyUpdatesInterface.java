@@ -7,6 +7,8 @@ import java.rmi.RemoteException;
 // TODO: docs
 public interface LobbyUpdatesInterface extends UpdateInterface<ILobby> {
     void onTimerStarted(int duration) throws RemoteException;
+
     void onTimerStopped() throws RemoteException;
+
     void onMatchStarting(int matchId) throws RemoteException; // TODO: matchId needed?
 }

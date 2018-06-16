@@ -20,6 +20,7 @@ public class Die implements Serializable {
 
     /**
      * Sets up a new die
+     *
      * @param color is the color of the die
      * @param shade is the shade of the die
      */

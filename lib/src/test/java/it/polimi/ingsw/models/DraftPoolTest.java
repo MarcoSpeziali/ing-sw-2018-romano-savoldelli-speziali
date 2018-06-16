@@ -36,8 +36,8 @@ class DraftPoolTest {
     void pickDie1Test() {
         draftPool.putDie(die);
         Assertions.assertEquals(die, draftPool.pickDie(0));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, ()->draftPool.pickDie(0));
-        Assertions.assertThrows(IndexOutOfBoundsException.class, ()->draftPool.pickDie(100));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> draftPool.pickDie(0));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> draftPool.pickDie(100));
     }
 
     @Test

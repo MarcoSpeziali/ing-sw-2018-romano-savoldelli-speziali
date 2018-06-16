@@ -13,11 +13,12 @@ class ObjectiveCardCLIViewTest {
     private ObjectiveCardCLIView objectiveCardCLIView;
 
     @BeforeEach
-    void setUp(){
-        this.objectiveCard = new ObjectiveCard("deep_shades", CardVisibility.PUBLIC,"cards.public_cards.deep_shades.name",
-                "cards.public_cards.deep_shades.description", mock(IObjective.class) );
+    void setUp() {
+        this.objectiveCard = new ObjectiveCard("deep_shades", CardVisibility.PUBLIC, "cards.public_cards.deep_shades.name",
+                "cards.public_cards.deep_shades.description", mock(IObjective.class));
         objectiveCardCLIView = new ObjectiveCardCLIView(objectiveCard);
     }
+
     @Test
     void render() {
         objectiveCardCLIView.render();

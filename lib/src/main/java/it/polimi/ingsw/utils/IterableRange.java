@@ -15,29 +15,17 @@ import java.util.stream.StreamSupport;
 @SuppressWarnings("squid:S2055") // Range has a no-arg constructor
 public class IterableRange<T extends Comparable<? super T> & Serializable> extends Range<T> implements Iterable<T>, Serializable {
 
+    public static final IncrementsProvider<Integer> INTEGER_INCREMENT_FUNCTION = val -> ++val;
+    public static final IncrementsProvider<Float> FLOAT_INCREMENT_FUNCTION = val -> ++val;
+    public static final IncrementsProvider<Double> DOUBLE_INCREMENT_FUNCTION = val -> ++val;
+    public static final IncrementsProvider<Long> LONG_INCREMENT_FUNCTION = val -> ++val;
+    public static final IncrementsProvider<Byte> BYTE_INCREMENT_FUNCTION = val -> ++val;
+    public static final IncrementsProvider<Integer> INTEGER_DECREMENT_FUNCTION = val -> --val;
+    public static final IncrementsProvider<Float> FLOAT_DECREMENT_FUNCTION = val -> --val;
+    public static final IncrementsProvider<Double> DOUBLE_DECREMENT_FUNCTION = val -> --val;
+    public static final IncrementsProvider<Long> LONG_DECREMENT_FUNCTION = val -> --val;
+    public static final IncrementsProvider<Byte> BYTE_DECREMENT_FUNCTION = val -> --val;
     private static final long serialVersionUID = -4891369410626728370L;
-
-    @FunctionalInterface
-    public interface IncrementsProvider<R extends Comparable<? super R> & Serializable> extends Serializable {
-        /**
-         * Increments the parameter {@code previous}.
-         * @return the incrementation of {@code previous}
-         */
-        R increment(R previous);
-    }
-
-    public static final IncrementsProvider<Integer>  INTEGER_INCREMENT_FUNCTION  = val -> ++val;
-    public static final IncrementsProvider<Float>    FLOAT_INCREMENT_FUNCTION    = val -> ++val;
-    public static final IncrementsProvider<Double>   DOUBLE_INCREMENT_FUNCTION   = val -> ++val;
-    public static final IncrementsProvider<Long>     LONG_INCREMENT_FUNCTION     = val -> ++val;
-    public static final IncrementsProvider<Byte>     BYTE_INCREMENT_FUNCTION     = val -> ++val;
-
-    public static final IncrementsProvider<Integer>  INTEGER_DECREMENT_FUNCTION  = val -> --val;
-    public static final IncrementsProvider<Float>    FLOAT_DECREMENT_FUNCTION    = val -> --val;
-    public static final IncrementsProvider<Double>   DOUBLE_DECREMENT_FUNCTION   = val -> --val;
-    public static final IncrementsProvider<Long>     LONG_DECREMENT_FUNCTION     = val -> --val;
-    public static final IncrementsProvider<Byte>     BYTE_DECREMENT_FUNCTION     = val -> --val;
-
     /**
      * The functional function used to increment the value of type {@code T}.
      */
@@ -46,8 +34,8 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
     /**
      * Initializes {@code IterableRange<T>} with the starting and the ending value.
      *
-     * @param start The stating value of the range.
-     * @param end The ending value of the range.
+     * @param start             The stating value of the range.
+     * @param end               The ending value of the range.
      * @param incrementFunction The function used to increment the values.
      */
     public IterableRange(T start, T end, IncrementsProvider<T> incrementFunction) {
@@ -59,7 +47,8 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Initializes {@code IterableRange<T>} from an existing {@code Range<T>}.
-     * @param range The existing {@code Range<T>}.
+     *
+     * @param range             The existing {@code Range<T>}.
      * @param incrementFunction The function used to increment the values.
      */
     public IterableRange(Range<T> range, IncrementsProvider<T> incrementFunction) {
@@ -68,11 +57,12 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Creates a {@link Range} from a string representation.
-     * @param range The string representation.
-     * @param separator The separator between the two values.
+     *
+     * @param range              The string representation.
+     * @param separator          The separator between the two values.
      * @param conversionProvider A function that takes the string value and converts it to the desired object.
-     * @param incrementFunction The function used to increment the values.
-     * @param <K> The desired object type.
+     * @param incrementFunction  The function used to increment the values.
+     * @param <K>                The desired object type.
      * @return An instance of {@link Range}
      */
     public static <K extends Comparable<? super K> & Serializable> IterableRange<K> fromString(String range, String separator, Function<String, K> conversionProvider, IncrementsProvider<K> incrementFunction) {
@@ -84,9 +74,10 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Creates a {@link Range} from a single value (i.e. {@link #getStart()} points to the same value as {@link #getEnd()})
-     * @param value The starting and ending value.
+     *
+     * @param value             The starting and ending value.
      * @param incrementFunction The function used to increment the values.
-     * @param <K> The desired object type.
+     * @param <K>               The desired object type.
      * @return An instance of {@link Range}
      */
     public static <K extends Comparable<? super K> & Serializable> IterableRange<K> singleValued(K value, IncrementsProvider<K> incrementFunction) {
@@ -97,6 +88,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Creates an {@link Integer} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static IterableRange<Integer> unitaryInteger() {
@@ -105,6 +97,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Creates an {@link Float} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static IterableRange<Float> unitaryFloat() {
@@ -113,6 +106,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Creates an {@link Double} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static IterableRange<Double> unitaryDouble() {
@@ -121,6 +115,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Creates an {@link Byte} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static IterableRange<Byte> unitaryByte() {
@@ -129,6 +124,7 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
     /**
      * Creates an {@link Long} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static IterableRange<Long> unitaryLong() {
@@ -183,6 +179,16 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
         return Objects.hash(this.start, this.end, this.incrementFunction);
     }
 
+    @FunctionalInterface
+    public interface IncrementsProvider<R extends Comparable<? super R> & Serializable> extends Serializable {
+        /**
+         * Increments the parameter {@code previous}.
+         *
+         * @return the incrementation of {@code previous}
+         */
+        R increment(R previous);
+    }
+
     /**
      * The iterator used to iterate through a {@link IterableRange}.
      */
@@ -210,7 +216,8 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
         /**
          * Creates a RangeIterator.
-         * @param range The range to iterate through.
+         *
+         * @param range             The range to iterate through.
          * @param incrementFunction An unary operator that, given a value of type {@code T} returns the value incremented.
          */
         RangeIterator(Range<T> range, IncrementsProvider<T> incrementFunction) {
@@ -264,7 +271,8 @@ public class IterableRange<T extends Comparable<? super T> & Serializable> exten
 
         /**
          * Creates a RangeIterator.
-         * @param range The range to iterate through.
+         *
+         * @param range             The range to iterate through.
          * @param incrementFunction An unary operator that, given a value of type {@code T} returns the value incremented.
          */
         RangeSpliterator(Range<T> range, IncrementsProvider<T> incrementFunction) {

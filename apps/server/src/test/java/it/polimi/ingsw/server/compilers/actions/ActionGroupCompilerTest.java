@@ -39,7 +39,7 @@ class ActionGroupCompilerTest {
     void testEmptyGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group>" +
-                "</action-group>";
+                        "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(xmlActionGroup),
@@ -64,7 +64,7 @@ class ActionGroupCompilerTest {
     void testGroupWithFixedRepetitions() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group repetitions=\"4\">" +
-                "</action-group>";
+                        "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(xmlActionGroup),
@@ -90,7 +90,7 @@ class ActionGroupCompilerTest {
     void testGroupWithRangedRepetitions() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group repetitions=\"2..6\">" +
-                "</action-group>";
+                        "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(xmlActionGroup),
@@ -116,7 +116,7 @@ class ActionGroupCompilerTest {
     void testGroupWithFixedChooseBetween() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group chooseBetween=\"4\">" +
-                "</action-group>";
+                        "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(xmlActionGroup),
@@ -142,7 +142,7 @@ class ActionGroupCompilerTest {
     void testGroupWithRangedChooseBetween() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group chooseBetween=\"2..6\">" +
-                "</action-group>";
+                        "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(xmlActionGroup),
@@ -156,7 +156,7 @@ class ActionGroupCompilerTest {
         Assertions.assertEquals(6, compiledActionGroup.getChooseBetween().getEnd().intValue());
 
         ActionData actionData = compiledActionGroup.getActionData();
-        
+
         Assertions.assertNull(actionData.getDescriptionKey());
         Assertions.assertNull(actionData.getResultIdentifier());
         Assertions.assertNull(actionData.getConstraint());
@@ -198,7 +198,7 @@ class ActionGroupCompilerTest {
         Assertions.assertEquals(IncrementAction.class, firstAction.getClassToInstantiate());
 
         ActionData firstActionData = firstAction.getActionData();
-        
+
         Assertions.assertNull(firstActionData.getDescriptionKey());
         Assertions.assertNull(firstActionData.getResultIdentifier());
         Assertions.assertNull(firstActionData.getConstraint());
@@ -262,25 +262,25 @@ class ActionGroupCompilerTest {
     void testComplexGroup() throws ParserConfigurationException, IOException, SAXException {
         String xmlActionGroup =
                 "<action-group>\n" +
-                "    <action effect=\"increment $DIE$ [by=1]\"/>\n" +
-                "    <action effect=\"decrement $DIE$\"/>\n" +
-                "    <action-group chooseBetween=\"2\">\n" +
-                "        <action effect=\"choose_position $window$\" result=\"POS\"/>\n" +
-                "        <action effect=\"pick_at $window$ $POS$\" result=\"DIE\"/>\n" +
-                "        <action-group repetitions=\"1..2\">\n" +
-                "            <action effect=\"choose_die $window$ [color=$DIE_COLOR$]\" result=\"DIE\"/>\n" +
-                "            <action effect=\"pick_die $window$ $DIE$\" result=\"DIE\"/>\n" +
-                "            <action effect=\"choose_position_for_die $window$ $DIE$\" result=\"POS\"/>\n" +
-                "            <action effect=\"place $DIE$ $window$ $POS$\"/>\n" +
-                "        </action-group>\n" +
-                "    </action-group>\n" +
-                "    <action-group repetitions=\"0..4\" chooseBetween=\"1..7\">\n" +
-                "        <action effect=\"choose_die $draft_pool$\" result=\"DIE\" />\n" +
-                "        <action effect=\"flip $DIE$\" />\n" +
-                "    </action-group>\n" +
-                "    <action effect=\"choose_position_for_die $window$ $DIE$ [ignore_color=true]\" result=\"POS\"/>\n" +
-                "    <action effect=\"place $DIE$ $window$ $POS$\"/>\n" +
-                "</action-group>";
+                        "    <action effect=\"increment $DIE$ [by=1]\"/>\n" +
+                        "    <action effect=\"decrement $DIE$\"/>\n" +
+                        "    <action-group chooseBetween=\"2\">\n" +
+                        "        <action effect=\"choose_position $window$\" result=\"POS\"/>\n" +
+                        "        <action effect=\"pick_at $window$ $POS$\" result=\"DIE\"/>\n" +
+                        "        <action-group repetitions=\"1..2\">\n" +
+                        "            <action effect=\"choose_die $window$ [color=$DIE_COLOR$]\" result=\"DIE\"/>\n" +
+                        "            <action effect=\"pick_die $window$ $DIE$\" result=\"DIE\"/>\n" +
+                        "            <action effect=\"choose_position_for_die $window$ $DIE$\" result=\"POS\"/>\n" +
+                        "            <action effect=\"place $DIE$ $window$ $POS$\"/>\n" +
+                        "        </action-group>\n" +
+                        "    </action-group>\n" +
+                        "    <action-group repetitions=\"0..4\" chooseBetween=\"1..7\">\n" +
+                        "        <action effect=\"choose_die $draft_pool$\" result=\"DIE\" />\n" +
+                        "        <action effect=\"flip $DIE$\" />\n" +
+                        "    </action-group>\n" +
+                        "    <action effect=\"choose_position_for_die $window$ $DIE$ [ignore_color=true]\" result=\"POS\"/>\n" +
+                        "    <action effect=\"place $DIE$ $window$ $POS$\"/>\n" +
+                        "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(xmlActionGroup),

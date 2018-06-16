@@ -22,8 +22,8 @@ public class ForDieInstruction extends Instruction {
 
     /**
      * @param exposedVariableMapping the user-defined names for the exposed variables
-     * @param filterShade the shade to filter
-     * @param filterColor the color to filter
+     * @param filterShade            the shade to filter
+     * @param filterColor            the color to filter
      */
     public ForDieInstruction(Map<String, String> exposedVariableMapping, Integer filterShade, GlassColor filterColor) {
         this.filterShade = filterShade;

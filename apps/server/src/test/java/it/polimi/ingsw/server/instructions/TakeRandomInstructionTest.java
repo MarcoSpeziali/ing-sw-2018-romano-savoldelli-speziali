@@ -15,21 +15,6 @@ import static org.mockito.Mockito.when;
 
 class TakeRandomInstructionTest {
 
-    @ParameterizedTest
-    @MethodSource("testRunArguments")
-    void testRun(List<Instruction> instructionsList, List<Integer> expectedResults) {
-        TakeRandomInstruction instruction = new TakeRandomInstruction();
-        //noinspection unchecked
-        instruction.instructions = mock(List.class);
-
-        when(instruction.instructions.isEmpty()).thenReturn(instructionsList.isEmpty());
-        when(instruction.instructions.size()).thenReturn(instructionsList.size());
-        when(instruction.instructions.stream()).thenReturn(instructionsList.stream());
-
-        Integer result = instruction.run(null);
-        Assertions.assertTrue(expectedResults.isEmpty() ? result == 0 : expectedResults.contains(result));
-    }
-
     private static Stream<Arguments> testRunArguments() {
         Instruction instruction1 = mock(Instruction.class);
         when(instruction1.run(any(Context.class))).thenReturn(5);
@@ -64,5 +49,20 @@ class TakeRandomInstructionTest {
                         List.of(2)
                 )
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("testRunArguments")
+    void testRun(List<Instruction> instructionsList, List<Integer> expectedResults) {
+        TakeRandomInstruction instruction = new TakeRandomInstruction();
+        //noinspection unchecked
+        instruction.instructions = mock(List.class);
+
+        when(instruction.instructions.isEmpty()).thenReturn(instructionsList.isEmpty());
+        when(instruction.instructions.size()).thenReturn(instructionsList.size());
+        when(instruction.instructions.stream()).thenReturn(instructionsList.stream());
+
+        Integer result = instruction.run(null);
+        Assertions.assertTrue(expectedResults.isEmpty() ? result == 0 : expectedResults.contains(result));
     }
 }

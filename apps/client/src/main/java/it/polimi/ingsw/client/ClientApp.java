@@ -44,6 +44,7 @@ public class ClientApp {
 
     /**
      * Creates the folders needed by the server.
+     *
      * @throws IOException if some folders could not be created
      */
     private static void createProjectsFolders() throws IOException {

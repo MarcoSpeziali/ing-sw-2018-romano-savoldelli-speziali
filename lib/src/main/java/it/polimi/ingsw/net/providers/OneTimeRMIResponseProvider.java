@@ -20,23 +20,23 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
     private final Class<R> remoteInterfaceType;
     private final String rmiAddress;
     private final int rmiPort;
-    
+
     public OneTimeRMIResponseProvider(Class<R> remoteInterfaceType, String rmiAddress, int rmiPort) {
         this.remoteInterfaceType = remoteInterfaceType;
         this.rmiAddress = rmiAddress;
         this.rmiPort = rmiPort;
     }
-    
+
     @Override
     public String getServerAddress() {
         return this.rmiAddress;
     }
-    
+
     @Override
     public int getServerPort() {
         return this.rmiPort;
     }
-    
+
     /**
      * Sends a {@link Request} to the server and waits for a {@link Response} (blocking call).
      * Then the connection is terminated.
@@ -45,8 +45,8 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
      * @param hostAddress the address of the host
      * @param hostPort    the port of the host
      * @return a {@link Response} produced by the server
-     * @throws IOException       if any IO error occurs
-     * @throws NotBoundException if {@link Body#getEndPointFunction()} is not currently bound
+     * @throws IOException                  if any IO error occurs
+     * @throws NotBoundException            if {@link Body#getEndPointFunction()} is not currently bound
      * @throws ReflectiveOperationException if a reflection error occurs
      */
     @Override

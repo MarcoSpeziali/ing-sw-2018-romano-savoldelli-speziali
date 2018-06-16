@@ -25,6 +25,17 @@ public class CompiledObjective implements Serializable {
     private List<CompiledInstruction> instructions;
 
     /**
+     * @param pointsPerCompletion the number of point gained for each completions
+     * @param description         the description key of the objective
+     * @param instructions        the instructions to execute for calculating the number of completions
+     */
+    public CompiledObjective(String description, Integer pointsPerCompletion, List<CompiledInstruction> instructions) {
+        this.pointsPerCompletion = pointsPerCompletion;
+        this.description = description;
+        this.instructions = instructions;
+    }
+
+    /**
      * @return the number of point gained for each completions
      */
     public Integer getPointsPerCompletion() {
@@ -43,16 +54,5 @@ public class CompiledObjective implements Serializable {
      */
     public List<CompiledInstruction> getInstructions() {
         return instructions;
-    }
-
-    /**
-     * @param pointsPerCompletion the number of point gained for each completions
-     * @param description the description key of the objective
-     * @param instructions the instructions to execute for calculating the number of completions
-     */
-    public CompiledObjective(String description, Integer pointsPerCompletion, List<CompiledInstruction> instructions) {
-        this.pointsPerCompletion = pointsPerCompletion;
-        this.description = description;
-        this.instructions = instructions;
     }
 }

@@ -2,7 +2,6 @@ package it.polimi.ingsw.views;
 
 import it.polimi.ingsw.controllers.CellController;
 import it.polimi.ingsw.models.Cell;
-import javafx.scene.image.ImageView;
 
 public abstract class CellView {
 

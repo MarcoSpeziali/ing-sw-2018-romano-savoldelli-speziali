@@ -11,27 +11,18 @@ import java.util.*;
 public class LocalizedString implements Serializable {
 
     private static final long serialVersionUID = -9055375854863507509L;
-
-    /**
-     * The key of the {@link String} to localize.
-     */
-    private String localizationKey;
-
-    /**
-     * The cache used to store the localized strings.
-     */
-    private static transient InMemoryCache<String, String> memoryCache = new InMemoryCache<>();
-
     /**
      * The bundle name.
      */
     private static final String STRINGS_BUNDLE = "MessagesBundle";
-
+    /**
+     * The cache used to store the localized strings.
+     */
+    private static transient InMemoryCache<String, String> memoryCache = new InMemoryCache<>();
     /**
      * The resource bundle.
      */
     private static transient ResourceBundle resourceBundle;
-
     private static List<OnLocaleChanged> listeners = new LinkedList<>();
 
     static {
@@ -44,17 +35,47 @@ public class LocalizedString implements Serializable {
     }
 
     /**
-     * @return The key of the {@link String} to localize.
+     * The key of the {@link String} to localize.
      */
-    public String getLocalizationKey() {
-        return this.localizationKey;
-    }
+    private String localizationKey;
 
     /**
      * @param localizationKey The key of the {@link String} to localize.
      */
     public LocalizedString(String localizationKey) {
         this.localizationKey = localizationKey;
+    }
+
+    /**
+     * Invalidates the cache.
+     */
+    public static void invalidateCache() {
+        LocalizedString.memoryCache.invalidate();
+    }
+
+    /**
+     * Invalidates the cache and changes locale.
+     *
+     * @param newLocale The new locale used for every new translations.
+     */
+    public static void invalidateCacheForNewLocale(Locale newLocale) {
+        Locale oldLocale = resourceBundle.getLocale();
+
+        LocalizedString.invalidateCache();
+        LocalizedString.resourceBundle = ResourceBundle.getBundle(STRINGS_BUNDLE, newLocale);
+
+        listeners.forEach(onLocaleChanged -> onLocaleChanged.onLocaleChanged(oldLocale, newLocale));
+    }
+
+    public static void addListener(OnLocaleChanged onLocaleChanged) {
+        listeners.add(onLocaleChanged);
+    }
+
+    /**
+     * @return The key of the {@link String} to localize.
+     */
+    public String getLocalizationKey() {
+        return this.localizationKey;
     }
 
     /**
@@ -87,30 +108,6 @@ public class LocalizedString implements Serializable {
      */
     public synchronized String toString(Locale forLocale) {
         return ResourceBundle.getBundle(STRINGS_BUNDLE, forLocale).getString(this.localizationKey);
-    }
-
-    /**
-     * Invalidates the cache.
-     */
-    public static void invalidateCache() {
-        LocalizedString.memoryCache.invalidate();
-    }
-
-    /**
-     * Invalidates the cache and changes locale.
-     * @param newLocale The new locale used for every new translations.
-     */
-    public static void invalidateCacheForNewLocale(Locale newLocale) {
-        Locale oldLocale = resourceBundle.getLocale();
-
-        LocalizedString.invalidateCache();
-        LocalizedString.resourceBundle = ResourceBundle.getBundle(STRINGS_BUNDLE, newLocale);
-
-        listeners.forEach(onLocaleChanged -> onLocaleChanged.onLocaleChanged(oldLocale, newLocale));
-    }
-
-    public static void addListener(OnLocaleChanged onLocaleChanged) {
-        listeners.add(onLocaleChanged);
     }
 
     @FunctionalInterface

@@ -12,12 +12,14 @@ import java.util.stream.Collectors;
 
 public class ParametersCompiler {
 
-    private ParametersCompiler() {}
+    private ParametersCompiler() {
+    }
 
     /**
      * Parses the parameters of a function call.
-     * @param rawFunctionCall the function call
-     * @param directive the directive
+     *
+     * @param rawFunctionCall   the function call
+     * @param directive         the directive
      * @param functionCallRegex the regex that extracts the parameters
      * @return a {@link List} of {@link CompiledParameter}
      */
@@ -51,7 +53,8 @@ public class ParametersCompiler {
 
     /**
      * Parses the mandatory parameters.
-     * @param directive the directive
+     *
+     * @param directive     the directive
      * @param rawParameters the array of raw mandatory parameters
      * @return a {@link List} of {@link CompiledParameter}
      */
@@ -76,7 +79,8 @@ public class ParametersCompiler {
 
     /**
      * Parses the mandatory parameters.
-     * @param directive the directive
+     *
+     * @param directive     the directive
      * @param rawParameters the array of raw optional parameters
      * @return a {@link List} of {@link CompiledParameter}
      */
@@ -123,9 +127,10 @@ public class ParametersCompiler {
 
     /**
      * Parses a single parameter.
+     *
      * @param parameterDirective the directive of the parameter
-     * @param rawParameter the raw value of the parameter
-     * @param position the position of the parameter in the constructor
+     * @param rawParameter       the raw value of the parameter
+     * @param position           the position of the parameter in the constructor
      * @return an instance of {@link CompiledParameter} from the raw value
      */
     private static CompiledParameter parseParameter(ParameterDirective parameterDirective, String rawParameter, int position) {

@@ -25,9 +25,25 @@ public class ServerLogger extends LoggerBase {
         return path;
     };
 
-    @Override
-    protected String getLoggingPath() {
-        return loggingPath.get();
+    /**
+     * Protected method to construct a logger for a named subsystem.
+     * The logger will be initially configured with a null Level
+     * and with useParentHandlers set to true.
+     *
+     * @param name A name for the logger.  This should
+     *             be a dot-separated name and should normally
+     *             be based on the package name or class name
+     *             of the subsystem, such as java.net
+     *             or javax.swing.  It may be null for anonymous Loggers.
+     */
+    protected ServerLogger(String name) {
+        super(name);
+
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(level);
+        consoleHandler.setFormatter(new SingleLineFormatter());
+
+        this.addHandler(consoleHandler);
     }
 
     /**
@@ -38,24 +54,8 @@ public class ServerLogger extends LoggerBase {
         return new ServerLogger(caller.getName());
     }
 
-    /**
-     * Protected method to construct a logger for a named subsystem.
-     * The logger will be initially configured with a null Level
-     * and with useParentHandlers set to true.
-     *
-     * @param name               A name for the logger.  This should
-     *                           be a dot-separated name and should normally
-     *                           be based on the package name or class name
-     *                           of the subsystem, such as java.net
-     *                           or javax.swing.  It may be null for anonymous Loggers.
-     */
-    protected ServerLogger(String name) {
-        super(name);
-
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(level);
-        consoleHandler.setFormatter(new SingleLineFormatter());
-
-        this.addHandler(consoleHandler);
+    @Override
+    protected String getLoggingPath() {
+        return loggingPath.get();
     }
 }

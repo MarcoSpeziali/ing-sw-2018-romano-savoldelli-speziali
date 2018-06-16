@@ -22,10 +22,12 @@ public class ExpressionCompiler {
     /**
      * Declared so this class is not instantiable
      */
-    private ExpressionCompiler() {}
+    private ExpressionCompiler() {
+    }
 
     /**
      * Compiles the expression into a {@link VariableSupplier}.
+     *
      * @param variableString The expression to compile.
      * @return The compiled expression.
      */
@@ -53,6 +55,7 @@ public class ExpressionCompiler {
 
     /**
      * Returns the compiled {@link VariableSupplier} from a predicate.
+     *
      * @param predicate The predicate to compile
      * @return The compiled {@link VariableSupplier}
      */
@@ -94,6 +97,7 @@ public class ExpressionCompiler {
 
     /**
      * Checks if the predicate is a function call
+     *
      * @param call The predicate.
      * @return {@code true} is the predicate represents a function call else {@code false}.
      */
@@ -115,6 +119,7 @@ public class ExpressionCompiler {
 
     /**
      * Checks if the predicate is a field access
+     *
      * @param call The predicate.
      * @return {@code true} is the predicate represents a function call else {@code false}.
      */
@@ -132,10 +137,11 @@ public class ExpressionCompiler {
 
     /**
      * Executes the provided function (by name) on the provided target.
-     * @param target The object on which call the function
-     * @param call The function call <name>(<parameters>)
+     *
+     * @param target    The object on which call the function
+     * @param call      The function call <name>(<parameters>)
      * @param predicate The full predicate, used in case of an exception
-     * @param context The context
+     * @param context   The context
      * @return The result of the function call
      */
     private static Object executeFunction(Object target, String call, String predicate, Context context) {
@@ -193,7 +199,8 @@ public class ExpressionCompiler {
 
     /**
      * Gets the value of the specified field.
-     * @param target The target object
+     *
+     * @param target    The target object
      * @param fieldName The field name
      * @param predicate The full predicate, used in case of an exception
      * @return The value of the specified field.
@@ -212,10 +219,11 @@ public class ExpressionCompiler {
 
     /**
      * Retrieves the method specified.
-     * @param obj The object owning the method
-     * @param methodName The method name
+     *
+     * @param obj         The object owning the method
+     * @param methodName  The method name
      * @param paramsValue The parameters accepted by the method
-     * @param context The context
+     * @param context     The context
      * @return The specified method
      * @throws NoSuchMethodException if the method does not exists
      */
@@ -230,13 +238,15 @@ public class ExpressionCompiler {
                     .toArray(Class[]::new);
 
             return obj.getClass().getMethod(methodName, paramsClasses);
-        } else {
+        }
+        else {
             return obj.getClass().getMethod(methodName);
         }
     }
 
     /**
      * Retrieves the actual value of the parameters.
+     *
      * @param paramsString A comma-separated parameters list
      * @return The values of the parameters
      */
@@ -265,6 +275,7 @@ public class ExpressionCompiler {
 
     /**
      * Splits the predicate in its functions/fields calls.
+     *
      * @param predicate The predicate to split
      * @return An array of calls
      */

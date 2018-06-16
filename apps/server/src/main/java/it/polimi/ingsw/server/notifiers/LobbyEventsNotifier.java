@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.notifiers;
 import it.polimi.ingsw.net.interfaces.updates.LobbyUpdatesInterface;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.LobbyEventsListener;
-import it.polimi.ingsw.server.net.sockets.AnonymousClientHandler;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.sql.DatabaseLobby;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
@@ -15,16 +14,14 @@ import java.util.Map;
 public class LobbyEventsNotifier implements LobbyEventsListener, Notifier<LobbyUpdatesInterface> {
 
     private static LobbyEventsNotifier instance = new LobbyEventsNotifier();
+    private Map<DatabasePlayer, LobbyUpdatesInterface> rmiUpdatesInterfaces = new HashMap<>();
+    private Map<DatabasePlayer, AuthenticatedClientHandler> socketUpdatesInterfaces = new HashMap<>();
+    private LobbyEventsNotifier() {
+        EventDispatcher.register(this);
+    }
 
     public static LobbyEventsNotifier getInstance() {
         return instance;
-    }
-
-    private Map<DatabasePlayer, LobbyUpdatesInterface> rmiUpdatesInterfaces = new HashMap<>();
-    private Map<DatabasePlayer, AuthenticatedClientHandler> socketUpdatesInterfaces = new HashMap<>();
-
-    private LobbyEventsNotifier() {
-        EventDispatcher.register(this);
     }
 
     @Override

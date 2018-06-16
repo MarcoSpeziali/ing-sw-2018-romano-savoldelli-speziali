@@ -23,35 +23,28 @@ import java.io.IOException;
 
 public class SignInGUIController extends SignInController {
 
-    private FXMLLoader loader = new FXMLLoader();
-
     @FXML
     @LocalizedText(key = Constants.Strings.SIGN_IN_USERNAME_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
     public JFXTextField usernameField;
-
     @FXML
     @LocalizedText(key = Constants.Strings.SIGN_IN_PASSWORD_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)
     public JFXPasswordField passwordField;
-
     @FXML
     @LocalizedText(key = Constants.Strings.SIGN_IN_REGISTER_LINK_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Hyperlink registerLink;
-
     @FXML
     @LocalizedText(key = Constants.Strings.SIGN_IN_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton backButton;
-
     @FXML
     @LocalizedText(key = Constants.Strings.SIGN_IN_SING_IN_NOW_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label signInNowLabel;
-
     @FXML
     @LocalizedText(key = Constants.Strings.WELCOME_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label welcomeLabel;
-
     @FXML
     @LocalizedText(key = Constants.Strings.SIGN_IN_SIGN_IN_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton singInButton;
+    private FXMLLoader loader = new FXMLLoader();
 
     @FXML
     public void initialize() {
@@ -61,6 +54,7 @@ public class SignInGUIController extends SignInController {
     @FXML
     public void onSignInClicked() throws IOException {
         try {
+            // TODO: execute in separate thread and create a loading indicator in the view
             super.onSignInRequested(this.usernameField.getText(), this.passwordField.getText(), () -> {
                 try {
                     loader.setLocation(Constants.Resources.LOBBY.getURL());

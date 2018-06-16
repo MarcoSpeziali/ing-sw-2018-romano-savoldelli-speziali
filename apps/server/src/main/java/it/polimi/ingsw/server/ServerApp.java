@@ -4,10 +4,10 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.managers.ThreadManager;
 import it.polimi.ingsw.server.net.endpoints.LobbyEndPoint;
-import it.polimi.ingsw.server.net.sockets.ClientAcceptor;
-import it.polimi.ingsw.server.net.sockets.SocketRouter;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
+import it.polimi.ingsw.server.net.sockets.ClientAcceptor;
+import it.polimi.ingsw.server.net.sockets.SocketRouter;
 import it.polimi.ingsw.server.sql.SagradaDatabase;
 import it.polimi.ingsw.server.utils.LoggingLevelValueConverter;
 import it.polimi.ingsw.server.utils.ServerLogger;
@@ -64,7 +64,8 @@ public class ServerApp {
             // publishes requested classes on RMI registry
             registerRMIRemoteInterfaces();
 
-            for (;;) {}
+            for (; ; ) {
+            }
         }
         catch (Exception e) {
             ServerLogger.getLogger(ServerApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
@@ -94,6 +95,7 @@ public class ServerApp {
 
     /**
      * Creates the folders needed by the server.
+     *
      * @throws IOException if some folders could not be created
      */
     private static void createProjectsFolders() throws IOException {
@@ -117,12 +119,13 @@ public class ServerApp {
 
     /**
      * Compiles the resources if needed.
+     *
      * @param forceCompilation whether the compilation needs to be forces even if the compilations are up-to-date
-     * @throws ClassNotFoundException if the class of a card could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if the class of a card could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *         cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     private static void compileResources(boolean forceCompilation) throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         if (forceCompilation) {
@@ -135,6 +138,7 @@ public class ServerApp {
 
     /**
      * Starts the socket listener.
+     *
      * @throws IOException if any IO errors occurs
      */
     private static void startMultiplayerServer() throws IOException {
@@ -147,6 +151,7 @@ public class ServerApp {
 
     /**
      * Checks if the connection to the database can be made, if not the method throws a {@link SQLException}.
+     *
      * @throws SQLException if the connection to the database could not be made
      */
     private static void checkDatabaseConnection() throws SQLException {
@@ -155,6 +160,7 @@ public class ServerApp {
 
     /**
      * Creates the {@link Registry} and the binding between the endpoints and the created {@link Registry}.
+     *
      * @throws RemoteException if the reference to the {@link Registry} could not be created
      */
     private static void registerRMIRemoteInterfaces() throws RemoteException {
@@ -169,6 +175,7 @@ public class ServerApp {
 
     /**
      * Returns the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
+     *
      * @param endPointFunction the {@link EndPointFunction}
      * @return the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
      */

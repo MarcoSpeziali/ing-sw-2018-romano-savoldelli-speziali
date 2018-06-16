@@ -18,26 +18,11 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
      */
     @SuppressWarnings("squid:S1948")
     protected final T start;
-
-    /**
-     * @return The stating value of the range.
-     */
-    public T getStart() {
-        return start;
-    }
-
     /**
      * The ending value of the range.
      */
     @SuppressWarnings("squid:S1948")
     protected final T end;
-
-    /**
-     * @return The ending value of the range.
-     */
-    public T getEnd() {
-        return end;
-    }
 
     /**
      * Needed by {@link Serializable}.
@@ -51,7 +36,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
      * Initializes {@link Range} with the starting and the ending value.
      *
      * @param start The stating value of the range.
-     * @param end The ending value of the range.
+     * @param end   The ending value of the range.
      */
     public Range(T start, T end) {
         Objects.requireNonNull(start);
@@ -64,7 +49,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
             throw new IllegalArgumentException(
                     String.format(
                             "The specified range is invalid. %s is greater or equal than %s. " +
-                            "The starting value must be less or equal than the ending one.",
+                                    "The starting value must be less or equal than the ending one.",
                             this.start,
                             this.end
                     )
@@ -74,10 +59,11 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Creates a {@link Range} from a string representation.
-     * @param range The string representation.
-     * @param separator The separator between the two values.
+     *
+     * @param range              The string representation.
+     * @param separator          The separator between the two values.
      * @param conversionProvider A function that takes the string value and converts it to the desired object.
-     * @param <K> The desired object type.
+     * @param <K>                The desired object type.
      * @return An instance of {@link Range}
      */
     @SuppressWarnings("WeakerAccess")
@@ -109,8 +95,9 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Creates a {@link Range} from a single value (i.e. {@link #getStart()} points to the same value as {@link #getEnd()})
+     *
      * @param value The starting and ending value.
-     * @param <K> The desired object type.
+     * @param <K>   The desired object type.
      * @return An instance of {@link Range}
      */
     public static <K extends Comparable<? super K> & Serializable> Range<K> singleValued(K value) {
@@ -119,6 +106,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Creates an {@link Integer} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static Range<Integer> unitaryInteger() {
@@ -127,6 +115,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Creates an {@link Float} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static Range<Float> unitaryFloat() {
@@ -135,6 +124,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Creates an {@link Double} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static Range<Double> unitaryDouble() {
@@ -143,6 +133,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Creates an {@link Byte} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static Range<Byte> unitaryByte() {
@@ -151,10 +142,25 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Creates an {@link Long} {@link Range} as an unitary range.
+     *
      * @return An instance of {@link Range}
      */
     public static Range<Long> unitaryLong() {
         return Range.singleValued(1L);
+    }
+
+    /**
+     * @return The stating value of the range.
+     */
+    public T getStart() {
+        return start;
+    }
+
+    /**
+     * @return The ending value of the range.
+     */
+    public T getEnd() {
+        return end;
     }
 
     /**
@@ -168,6 +174,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Determines if the provided value is inside the range.
+     *
      * @param value The value to test.
      * @return {@code True} if the value is inside Range, {@code false} otherwise.
      */
@@ -177,6 +184,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Determines if this range is inside the bounds of another range.
+     *
      * @param range The parent range to test on.
      * @return {@code True} if the current range is inside the provided one, {@code false} otherwise.
      */
@@ -186,6 +194,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
 
     /**
      * Determines if another range is inside the bounds of this range.
+     *
      * @param range The child range to test.
      * @return {@code True} if the current range is inside the provided one, {@code false} otherwise.
      */

@@ -16,6 +16,7 @@ public interface ExecutableAction extends Serializable {
 
     /**
      * Runs the action.
+     *
      * @param context The context that holds the variables needed by the action.
      * @return The result of the action (if any).
      */

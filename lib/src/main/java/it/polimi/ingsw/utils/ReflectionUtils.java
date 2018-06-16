@@ -9,7 +9,8 @@ import java.util.function.Predicate;
 // TODO: docs
 public final class ReflectionUtils {
 
-    private ReflectionUtils() { }
+    private ReflectionUtils() {
+    }
 
     public static List<Method> findAnnotatedMethods(Class<?> targetClass, Class<? extends Annotation> annotationClass) {
         Method[] methods = targetClass.getMethods();

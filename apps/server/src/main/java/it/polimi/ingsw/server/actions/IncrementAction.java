@@ -21,7 +21,7 @@ public class IncrementAction extends Action {
     @Override
     public Object run(Context context) {
         super.run(context);
-        
+
         Integer result = this.die.get(context).getShade() + this.by.get(context);
         int modularResult = MathUtils.modular(result, 6);
 

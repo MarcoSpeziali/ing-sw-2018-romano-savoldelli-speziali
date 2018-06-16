@@ -8,7 +8,7 @@ public class ObjectiveCardCLIView extends ObjectiveCardView implements CLIView {
     private ObjectiveCard objectiveCard;
 
 
-    public ObjectiveCardCLIView (ObjectiveCard objectiveCard) {
+    public ObjectiveCardCLIView(ObjectiveCard objectiveCard) {
         this.objectiveCard = objectiveCard;
     }
 
@@ -18,7 +18,7 @@ public class ObjectiveCardCLIView extends ObjectiveCardView implements CLIView {
         System.out.println("titolo: " + this.objectiveCard.getTitle().toString());
         System.out.println("descrizione: " + this.objectiveCard.getDescription().toString());
         System.out.println("visibility: " + this.objectiveCard.getVisibility().toString());
-        System.out.println("obiettivo :" +  this.objectiveCard.getObjective());
+        System.out.println("obiettivo :" + this.objectiveCard.getObjective());
 
     }
 }

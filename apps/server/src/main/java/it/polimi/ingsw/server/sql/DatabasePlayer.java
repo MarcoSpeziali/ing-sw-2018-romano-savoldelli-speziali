@@ -28,29 +28,6 @@ public class DatabasePlayer implements IPlayer {
      */
     private String password;
 
-    /**
-     * @return the user's unique id
-     */
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @return the user's unique username
-     */
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * @return the sha representation of the user's password
-     */
-    public String getPassword() {
-        return password;
-    }
-
     DatabasePlayer(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
         this.username = resultSet.getString("username");
@@ -109,13 +86,13 @@ public class DatabasePlayer implements IPlayer {
             return database.executeQuery(query, DatabasePlayer::new);
         }
     }
-    
+
     public static void deletePlayer(int id) throws SQLException {
         String query = String.format(
                 "DELETE FROM player WHERE id = '%d'",
                 id
         );
-    
+
         try (SagradaDatabase database = new SagradaDatabase()) {
             database.executeVoidQuery(query);
         }
@@ -123,6 +100,29 @@ public class DatabasePlayer implements IPlayer {
 
     private static DatabasePlayer executeQuery(SagradaDatabase database, String query) throws SQLException {
         return database.executeQuery(query, DatabasePlayer::new);
+    }
+
+    /**
+     * @return the user's unique id
+     */
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @return the user's unique username
+     */
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @return the sha representation of the user's password
+     */
+    public String getPassword() {
+        return password;
     }
 
     /**
@@ -144,7 +144,7 @@ public class DatabasePlayer implements IPlayer {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        
+
         DatabasePlayer player = (DatabasePlayer) o;
         return id == player.id;
     }
@@ -153,7 +153,7 @@ public class DatabasePlayer implements IPlayer {
     public int hashCode() {
         return Objects.hash(id);
     }
-    
+
     @Override
     public String toString() {
         return this.username;

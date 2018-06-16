@@ -15,7 +15,7 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
     private final ServerSocket serverSocket;
     private final ExecutorService executorService;
     private boolean closed = false;
-    
+
     private String clientAddress;
 
     public ClientAcceptor(int port) throws IOException {
@@ -23,7 +23,7 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
         this.executorService = Executors.newCachedThreadPool(runnable -> {
             Thread thread = new Thread(runnable);
             thread.setName(Constants.Threads.CLIENT_HANDLER.toString() + this.clientAddress);
-            
+
             return thread;
         });
 

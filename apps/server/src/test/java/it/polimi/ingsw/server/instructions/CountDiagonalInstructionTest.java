@@ -22,6 +22,40 @@ class CountDiagonalInstructionTest {
     private Context context;
     private Die[][] dice;
 
+    private static Cell[][] cellsFromDice(Die[][] dice) {
+        Cell[][] cells = new Cell[dice.length][dice[0].length];
+
+        for (int i = 0; i < dice.length; i++) {
+            for (int j = 0; j < dice[i].length; j++) {
+                cells[i][j] = new Cell(0, null);
+                cells[i][j].putDie(dice[i][j]);
+            }
+        }
+
+        return cells;
+    }
+
+    private static Stream<Arguments> testStrictColorArguments() {
+        return Stream.of(
+                Arguments.of(GlassColor.RED, 9),
+                Arguments.of(GlassColor.GREEN, 5),
+                Arguments.of(GlassColor.BLUE, 0),
+                Arguments.of(GlassColor.YELLOW, 5),
+                Arguments.of(GlassColor.PURPLE, 0)
+        );
+    }
+
+    private static Stream<Arguments> testStrictShadeArguments() {
+        return Stream.of(
+                Arguments.of(1, 3),
+                Arguments.of(2, 4),
+                Arguments.of(3, 3),
+                Arguments.of(4, 2),
+                Arguments.of(5, 5),
+                Arguments.of(6, 0)
+        );
+    }
+
     @BeforeEach
     void setUp() {
         Window window = mock(Window.class);
@@ -36,7 +70,7 @@ class CountDiagonalInstructionTest {
          * [R:5][G:5][R:2][Y:3][R:4]
          * [G:5][R:5][Y:3][R:4][T:3]
          */
-        this.dice = new Die[][] {
+        this.dice = new Die[][]{
                 {
                         new Die(GlassColor.RED, 1),
                         new Die(GlassColor.GREEN, 4),
@@ -68,19 +102,6 @@ class CountDiagonalInstructionTest {
         };
     }
 
-    private static Cell[][] cellsFromDice(Die[][] dice) {
-        Cell[][] cells = new Cell[dice.length][dice[0].length];
-
-        for (int i = 0; i < dice.length; i++) {
-            for (int j = 0; j < dice[i].length; j++) {
-                cells[i][j] = new Cell(0, null);
-                cells[i][j].putDie(dice[i][j]);
-            }
-        }
-
-        return cells;
-    }
-
     @ParameterizedTest
     @MethodSource("testStrictColorArguments")
     void testStrictColor(GlassColor strictColor, Integer expectedResult) {
@@ -105,26 +126,5 @@ class CountDiagonalInstructionTest {
     void testGenericShade() {
         CountDiagonalInstruction instruction = new CountDiagonalInstruction(DieFilter.SHADE, 0, null);
         Assertions.assertEquals(17, instruction.run(this.context).intValue());
-    }
-
-    private static Stream<Arguments> testStrictColorArguments() {
-        return Stream.of(
-                Arguments.of(GlassColor.RED, 9),
-                Arguments.of(GlassColor.GREEN, 5),
-                Arguments.of(GlassColor.BLUE, 0),
-                Arguments.of(GlassColor.YELLOW, 5),
-                Arguments.of(GlassColor.PURPLE, 0)
-        );
-    }
-
-    private static Stream<Arguments> testStrictShadeArguments() {
-        return Stream.of(
-                Arguments.of(1, 3),
-                Arguments.of(2, 4),
-                Arguments.of(3, 3),
-                Arguments.of(4, 2),
-                Arguments.of(5, 5),
-                Arguments.of(6, 0)
-        );
     }
 }

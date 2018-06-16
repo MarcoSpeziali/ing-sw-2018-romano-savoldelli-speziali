@@ -25,6 +25,23 @@ public class ForColumnInstruction extends Instruction {
         this.exposedVariableMapping = exposedVariableMapping;
     }
 
+    /**
+     * Returns the dice in the column at {@code index}.
+     *
+     * @param window The window holding the dice.
+     * @param index  The index of the column containing the wanted dice.
+     * @return The dice in the column at {@code index}.
+     */
+    private static Die[] getDiceInColumnFromWindow(Window window, int index) {
+        Die[] columnDice = new Die[window.getCells().length];
+
+        for (int i = 0; i < columnDice.length; i++) {
+            columnDice[i] = window.getCells()[i][index].getDie();
+        }
+
+        return columnDice;
+    }
+
     @Override
     public Integer run(Context context) {
         // Gets the user-defined name for the exposed variable 'column'
@@ -42,32 +59,16 @@ public class ForColumnInstruction extends Instruction {
                 window.getCells()[0].length - 1,
                 IterableRange.INTEGER_INCREMENT_FUNCTION
         ).stream().mapToInt(index -> {
-                    // The exposed variable gets put inside the snapshot
-                    snapshot.put(exposedName, getDiceInColumnFromWindow(window, index));
+            // The exposed variable gets put inside the snapshot
+            snapshot.put(exposedName, getDiceInColumnFromWindow(window, index));
 
-                    // Returns the result of the sub-instructions
-                    return super.run(snapshot);
-                }).sum();
+            // Returns the result of the sub-instructions
+            return super.run(snapshot);
+        }).sum();
 
         // Reverts the context to its original state
         snapshot.revert();
 
         return result;
-    }
-
-    /**
-     * Returns the dice in the column at {@code index}.
-     * @param window The window holding the dice.
-     * @param index The index of the column containing the wanted dice.
-     * @return The dice in the column at {@code index}.
-     */
-    private static Die[] getDiceInColumnFromWindow(Window window, int index) {
-        Die[] columnDice = new Die[window.getCells().length];
-
-        for (int i = 0; i < columnDice.length; i++) {
-            columnDice[i] = window.getCells()[i][index].getDie();
-        }
-
-        return columnDice;
     }
 }

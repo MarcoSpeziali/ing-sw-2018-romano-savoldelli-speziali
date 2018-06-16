@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.instructions;
 
 import it.polimi.ingsw.core.Context;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,21 +14,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class TakeSumInstructionTest {
-
-    @ParameterizedTest
-    @MethodSource("testRunArguments")
-    void testRun(List<Instruction> instructionsList, Integer expectedResult) {
-        TakeSumInstruction instruction = new TakeSumInstruction();
-        //noinspection unchecked
-        instruction.instructions = mock(List.class);
-
-        when(instruction.instructions.isEmpty()).thenReturn(instructionsList.isEmpty());
-        when(instruction.instructions.size()).thenReturn(instructionsList.size());
-        when(instruction.instructions.stream()).thenReturn(instructionsList.stream());
-
-        Integer result = instruction.run(null);
-        Assertions.assertEquals(expectedResult, result);
-    }
 
     private static Stream<Arguments> testRunArguments() {
         Instruction instruction1 = mock(Instruction.class);
@@ -53,5 +37,20 @@ class TakeSumInstructionTest {
                 Arguments.of(List.of(instruction1, instruction2, instruction3, instruction4), 39),
                 Arguments.of(List.of(instruction5), 2)
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("testRunArguments")
+    void testRun(List<Instruction> instructionsList, Integer expectedResult) {
+        TakeSumInstruction instruction = new TakeSumInstruction();
+        //noinspection unchecked
+        instruction.instructions = mock(List.class);
+
+        when(instruction.instructions.isEmpty()).thenReturn(instructionsList.isEmpty());
+        when(instruction.instructions.size()).thenReturn(instructionsList.size());
+        when(instruction.instructions.stream()).thenReturn(instructionsList.stream());
+
+        Integer result = instruction.run(null);
+        Assertions.assertEquals(expectedResult, result);
     }
 }

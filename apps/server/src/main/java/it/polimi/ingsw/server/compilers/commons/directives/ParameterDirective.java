@@ -78,9 +78,10 @@ public class ParameterDirective implements Serializable {
 
     /**
      * Instantiate a non-optional parameter with its directives.
+     *
      * @param parameterType the class of the parameter
-     * @param position the position of the parameter in the constructor
-     * @param isMultiple {@code true} if the parameter class is an array, {@code false} otherwise
+     * @param position      the position of the parameter in the constructor
+     * @param isMultiple    {@code true} if the parameter class is an array, {@code false} otherwise
      */
     public ParameterDirective(Class<? extends Serializable> parameterType, Integer position, Boolean isMultiple) {
         this(parameterType, position, null, null, isMultiple);
@@ -88,11 +89,12 @@ public class ParameterDirective implements Serializable {
 
     /**
      * Instantiate an optional parameter with its directives.
+     *
      * @param parameterType the class of the parameter
-     * @param position the position of the parameter in the constructor
-     * @param name the name of the parameter
-     * @param defaultValue the default value of the parameter
-     * @param isMultiple {@code true} if the parameter class is an array, {@code false} otherwise
+     * @param position      the position of the parameter in the constructor
+     * @param name          the name of the parameter
+     * @param defaultValue  the default value of the parameter
+     * @param isMultiple    {@code true} if the parameter class is an array, {@code false} otherwise
      */
     public ParameterDirective(Class<? extends Serializable> parameterType, Integer position, String name, Serializable defaultValue, Boolean isMultiple) {
         this.parameterType = parameterType;

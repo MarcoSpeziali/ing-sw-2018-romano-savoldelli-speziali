@@ -1,16 +1,16 @@
 package it.polimi.ingsw.server.actions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.server.constraints.Constraint;
-import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
-import it.polimi.ingsw.server.constraints.Operator;
-import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.ChoosablePutLocation;
 import it.polimi.ingsw.core.locations.ChooseLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
+import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.constraints.Constraint;
+import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.server.constraints.Operator;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.Range;
 import org.junit.jupiter.api.Assertions;
@@ -313,9 +313,9 @@ class ActionGroupTest {
     @Test
     void testFixedChoice() {
         when(this.actionGroupCallbacks.getChosenActions(any(), any())).thenAnswer(invocationOnMock -> {
-           @SuppressWarnings("unchecked")
-           List<ExecutableAction> actions = (List<ExecutableAction>) invocationOnMock.getArguments()[0];
-           return List.of(actions.get(0));
+            @SuppressWarnings("unchecked")
+            List<ExecutableAction> actions = (List<ExecutableAction>) invocationOnMock.getArguments()[0];
+            return List.of(actions.get(0));
         });
 
         Die die = new Die(GlassColor.BLUE, 3);

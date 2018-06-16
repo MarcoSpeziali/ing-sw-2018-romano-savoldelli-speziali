@@ -23,6 +23,16 @@ public class SagradaDatabase implements AutoCloseable {
         connection.setAutoCommit(autoCommit);
     }
 
+    public static String quote(String original) {
+        return String.format("'%s'", original);
+    }
+
+    public static void disableAutoCommit(Runnable runnable) {
+        autoCommit = false;
+        runnable.run();
+        autoCommit = true;
+    }
+
     public <T> T executeQuery(String query, ResultSetMappingFunction<T> mapper) throws SQLException {
         try (Statement statement = this.connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(query)) {
@@ -34,7 +44,7 @@ public class SagradaDatabase implements AutoCloseable {
             }
         }
     }
-    
+
     public void executeVoidQuery(String query) throws SQLException {
         try (Statement statement = this.connection.createStatement()) {
             statement.executeUpdate(query);
@@ -49,15 +59,5 @@ public class SagradaDatabase implements AutoCloseable {
     @FunctionalInterface
     public interface ResultSetMappingFunction<T> {
         T map(ResultSet resultSet) throws SQLException;
-    }
-
-    public static String quote(String original) {
-        return String.format("'%s'", original);
-    }
-
-    public static void disableAutoCommit(Runnable runnable) {
-        autoCommit = false;
-        runnable.run();
-        autoCommit = true;
     }
 }

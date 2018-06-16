@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.function.Predicate;
 
 import static it.polimi.ingsw.utils.streams.StreamUtils.not;
-import static org.junit.jupiter.api.Assertions.*;
 
 class StreamUtilsTest {
 

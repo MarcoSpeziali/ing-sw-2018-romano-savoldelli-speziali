@@ -42,6 +42,23 @@ public class CompiledInstruction implements Serializable {
     private List<CompiledPredicate> predicates;
 
     /**
+     * @param instructionId    the instruction id
+     * @param instructionClass the class of the instruction
+     * @param subInstructions  the sub-instructions
+     * @param parameters       the parameters
+     * @param exposedVariables the exposed variables
+     * @param predicates       the predicates
+     */
+    public CompiledInstruction(String instructionId, Class<? extends Instruction> instructionClass, List<CompiledInstruction> subInstructions, List<CompiledParameter> parameters, List<CompiledExposedVariable> exposedVariables, List<CompiledPredicate> predicates) {
+        this.instructionId = instructionId;
+        this.instructionClass = instructionClass;
+        this.subInstructions = subInstructions;
+        this.parameters = parameters;
+        this.exposedVariables = exposedVariables;
+        this.predicates = predicates;
+    }
+
+    /**
      * @return the instruction id
      */
     public String getInstructionId() {
@@ -81,22 +98,5 @@ public class CompiledInstruction implements Serializable {
      */
     public List<CompiledPredicate> getPredicates() {
         return predicates;
-    }
-
-    /**
-     * @param instructionId the instruction id
-     * @param instructionClass the class of the instruction
-     * @param subInstructions the sub-instructions
-     * @param parameters the parameters
-     * @param exposedVariables the exposed variables
-     * @param predicates the predicates
-     */
-    public CompiledInstruction(String instructionId, Class<? extends Instruction> instructionClass, List<CompiledInstruction> subInstructions, List<CompiledParameter> parameters, List<CompiledExposedVariable> exposedVariables, List<CompiledPredicate> predicates) {
-        this.instructionId = instructionId;
-        this.instructionClass = instructionClass;
-        this.subInstructions = subInstructions;
-        this.parameters = parameters;
-        this.exposedVariables = exposedVariables;
-        this.predicates = predicates;
     }
 }

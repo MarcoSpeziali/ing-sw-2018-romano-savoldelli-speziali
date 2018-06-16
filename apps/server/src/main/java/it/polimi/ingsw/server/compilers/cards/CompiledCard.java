@@ -17,6 +17,15 @@ public class CompiledCard implements Serializable {
     private String name;
 
     /**
+     * @param id   the id of the card
+     * @param name the name key of the card
+     */
+    public CompiledCard(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    /**
      * @return the id of the card
      */
     public String getId() {
@@ -28,14 +37,5 @@ public class CompiledCard implements Serializable {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * @param id the id of the card
-     * @param name the name key of the card
-     */
-    public CompiledCard(String id, String name) {
-        this.id = id;
-        this.name = name;
     }
 }

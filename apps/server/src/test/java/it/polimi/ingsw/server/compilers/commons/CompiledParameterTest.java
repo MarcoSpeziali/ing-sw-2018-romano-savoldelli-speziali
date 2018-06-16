@@ -2,12 +2,9 @@ package it.polimi.ingsw.server.compilers.commons;
 
 import it.polimi.ingsw.server.utils.VariableSupplier;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CompiledParameterTest {
 

@@ -14,35 +14,35 @@ import java.util.function.Consumer;
  * {@link Response}, closes the connection.
  */
 public interface OneTimeNetworkResponseProvider {
-    
+
     // TODO: docs
     String getServerAddress();
-    
+
     // TODO: docs
     int getServerPort();
-    
+
     /**
      * Sends a {@link Request} to the server and waits for a {@link Response} (blocking call).
      * Then the connection is terminated.
      *
-     * @param request the {@link Request} to send
+     * @param request     the {@link Request} to send
      * @param hostAddress the address of the host
-     * @param hostPort the port of the host
+     * @param hostPort    the port of the host
      * @return a {@link Response} produced by the server
-     * @throws IOException if any IO error occurs
+     * @throws IOException       if any IO error occurs
      * @throws NotBoundException if {@link Body#getEndPointFunction()} is not currently bound
      */
     <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException;
-    
+
     /**
      * Sends a {@link Request} to the server.
      * Then the connection is terminated.
      *
-     * @param request the {@link Request} to send
-     * @param hostAddress the address of the host
-     * @param hostPort the port of the host
+     * @param request          the {@link Request} to send
+     * @param hostAddress      the address of the host
+     * @param hostPort         the port of the host
      * @param responseConsumer the {@link Consumer} which holds the {@link Response} produced by the server
-     * @param onError the {@link Consumer} called when an {@link Exception} occurs
+     * @param onError          the {@link Consumer} called when an {@link Exception} occurs
      */
     default <T extends JSONSerializable, K extends JSONSerializable> void getAsyncResponseFor(Request<K> request, String hostAddress, int hostPort, Consumer<Response<T>> responseConsumer, Consumer<Exception> onError) {
         new Thread(() -> {
@@ -58,7 +58,7 @@ public interface OneTimeNetworkResponseProvider {
             }
         }).start();
     }
-    
+
     default <T extends JSONSerializable, K extends JSONSerializable> void getAsyncResponseFor(Request<K> request, Consumer<Response<T>> responseConsumer, Consumer<Exception> onError) {
         new Thread(() -> {
             try {
@@ -73,7 +73,7 @@ public interface OneTimeNetworkResponseProvider {
             }
         }).start();
     }
-    
+
     default <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException, NotBoundException {
         return getSyncResponseFor(
                 request,

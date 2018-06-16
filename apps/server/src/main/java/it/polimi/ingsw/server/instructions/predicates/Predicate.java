@@ -25,6 +25,7 @@ public abstract class Predicate implements Serializable {
 
     /**
      * Evaluates the predicate.
+     *
      * @param context an instance of {@link Context}
      * @return {@code true} if the predicate is respected, {@code false} otherwise
      */

@@ -31,56 +31,8 @@ public class DatabaseLobby implements ILobby {
      */
     private long closingTime;
 
-    /**
-     * @return the user's unique id
-     */
-    public int getId() {
-        return id;
+    DatabaseLobby() {
     }
-
-    /**
-     * @return the lobby's opening time
-     */
-    @Override
-    public long getOpeningTime() {
-        return openingTime;
-    }
-
-    /**
-     * @return the lobby's closing time
-     */
-    @Override
-    public long getClosingTime() {
-        return closingTime;
-    }
-
-    @Override
-    public List<IPlayer> getPlayers() {
-        String query = String.format(
-                "SELECT p.* FROM lobby l " +
-                        "JOIN lobby_player lb ON lb.lobby = l.id " +
-                        "JOIN player p ON lb.player = p.id " +
-                        "WHERE id = '%d'",
-                this.id
-        );
-
-        try (SagradaDatabase database = new SagradaDatabase()) {
-            return Collections.unmodifiableList(database.executeQuery(query, resultSet -> {
-                LinkedList<IPlayer> databasePlayers = new LinkedList<>();
-
-                do {
-                    databasePlayers.add(new DatabasePlayer(resultSet));
-                } while (resultSet.next());
-
-                return databasePlayers;
-            }));
-        }
-        catch (SQLException e) {
-            return List.of();
-        }
-    }
-
-    DatabaseLobby() { }
 
     DatabaseLobby(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
@@ -159,6 +111,55 @@ public class DatabaseLobby implements ILobby {
 
         try (SagradaDatabase database = new SagradaDatabase()) {
             return database.executeQuery(query, DatabaseLobby::new);
+        }
+    }
+
+    /**
+     * @return the user's unique id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @return the lobby's opening time
+     */
+    @Override
+    public long getOpeningTime() {
+        return openingTime;
+    }
+
+    /**
+     * @return the lobby's closing time
+     */
+    @Override
+    public long getClosingTime() {
+        return closingTime;
+    }
+
+    @Override
+    public List<IPlayer> getPlayers() {
+        String query = String.format(
+                "SELECT p.* FROM lobby l " +
+                        "JOIN lobby_player lb ON lb.lobby = l.id " +
+                        "JOIN player p ON lb.player = p.id " +
+                        "WHERE id = '%d'",
+                this.id
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return Collections.unmodifiableList(database.executeQuery(query, resultSet -> {
+                LinkedList<IPlayer> databasePlayers = new LinkedList<>();
+
+                do {
+                    databasePlayers.add(new DatabasePlayer(resultSet));
+                } while (resultSet.next());
+
+                return databasePlayers;
+            }));
+        }
+        catch (SQLException e) {
+            return List.of();
         }
     }
 

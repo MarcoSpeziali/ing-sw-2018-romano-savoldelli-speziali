@@ -35,8 +35,8 @@ public abstract class PersistentNetworkInteractionProvider implements AutoClosea
      *
      * @param request the {@link Request} to send
      * @return a {@link Response} produced by the server
-     * @throws IOException if any IO error occurs
-     * @throws NotBoundException if {@link Body#getEndPointFunction()} is not currently bound
+     * @throws IOException                  if any IO error occurs
+     * @throws NotBoundException            if {@link Body#getEndPointFunction()} is not currently bound
      * @throws ReflectiveOperationException if a reflection error occurs
      */
     public abstract <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException, NotBoundException, ReflectiveOperationException;
@@ -44,9 +44,9 @@ public abstract class PersistentNetworkInteractionProvider implements AutoClosea
     /**
      * Sends a {@link Request} to the server.
      *
-     * @param request the {@link Request} to send
+     * @param request          the {@link Request} to send
      * @param responseConsumer the {@link Consumer} which holds the {@link Response} produced by the server
-     * @param onError the {@link Consumer} called when an {@link Exception} occurs
+     * @param onError          the {@link Consumer} called when an {@link Exception} occurs
      */
     public <T extends JSONSerializable, K extends JSONSerializable> void getAsyncResponseFor(Request<K> request, Consumer<Response<T>> responseConsumer, Consumer<Exception> onError) {
         new Thread(() -> {

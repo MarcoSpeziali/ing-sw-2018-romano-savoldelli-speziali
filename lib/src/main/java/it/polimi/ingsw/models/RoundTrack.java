@@ -11,28 +11,23 @@ import java.util.stream.Collectors;
 
 public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
 
-    private static final long serialVersionUID = -972922678430566496L;
-
     /**
      * The default number of rounds.
      */
     public static final byte DEFAULT_ROUND_NUMBER = 10;
-
     /**
      * The maximum number of rounds.
      */
     public static final byte MAX_ROUND_NUMBER = Byte.MAX_VALUE;
-
     /**
      * The minimum number of rounds.
      */
     public static final byte MIN_ROUND_NUMBER = 1;
-
     /**
      * The maximum number of discarded dice per round.
      */
     public static final byte MAX_NUMBER_OF_DICE_PER_ROUND = Byte.MAX_VALUE;
-
+    private static final long serialVersionUID = -972922678430566496L;
     /**
      * The number of rounds.
      */
@@ -99,7 +94,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
     }
 
     /**
-     * @param die the die to discard
+     * @param die   the die to discard
      * @param round the round of the discarded die
      * @param index the index of the discarded die of the provided round
      */
@@ -118,7 +113,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
     }
 
     /**
-     * @param die the die to add at the provided round
+     * @param die   the die to add at the provided round
      * @param round the round index
      */
     public void addDieForRound(Die die, int round) {
@@ -222,7 +217,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
 
     /**
      * @param roundIndex the index of the round
-     * @param dieIndex the index of the die in the round
+     * @param dieIndex   the index of the die in the round
      * @return the location representation of the index: 0x0000{roundIndex}{dieIndex}
      */
     private int computeLocation(int roundIndex, int dieIndex) {

@@ -10,6 +10,7 @@ public class StreamExceptionWrapper extends RuntimeException {
 
     /**
      * Wraps the generated exception.
+     *
      * @param exceptionToWrap the exception to wrap
      */
     public static <T> T wrap(Exception exceptionToWrap) {
@@ -18,8 +19,9 @@ public class StreamExceptionWrapper extends RuntimeException {
 
     /**
      * Tries to unwrap the provided exception.
+     *
      * @param exceptionClass the exception to unwrap
-     * @param <T> the exception to unwrap
+     * @param <T>            the exception to unwrap
      * @throws T if the exception has been successfully unwrapped
      */
     public <T extends Throwable> StreamExceptionWrapper tryUnwrap(Class<T> exceptionClass) throws T {
@@ -33,9 +35,10 @@ public class StreamExceptionWrapper extends RuntimeException {
 
     /**
      * Tries to unwrap the provided exception, if fails a {@link RuntimeException} is thrown.
+     *
      * @param exceptionClass the exception to unwrap
-     * @param <T> the exception to unwrap
-     * @param <K> the fake return value
+     * @param <T>            the exception to unwrap
+     * @param <K>            the fake return value
      * @throws T if the exception has been successfully unwrapped
      */
     @SuppressWarnings("squid:S00112")

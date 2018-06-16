@@ -13,5 +13,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Handles {
     EndPointFunction value();
+
     boolean requiresAuthentication() default false;
 }

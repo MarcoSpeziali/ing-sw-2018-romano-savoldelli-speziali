@@ -23,11 +23,11 @@ class ConstraintGroupCompilerTest {
     void testSimpleTrue() throws ParserConfigurationException, IOException, SAXException {
         String constraintGroupString =
                 "<constraint-group id=\"test_cg\">\n" +
-                "    <constraint>2 == 2</constraint>\n" +
-                "    <constraint><![CDATA[10.13 > 10.129999]]></constraint>\n" +
-                "    <constraint>null == null</constraint>\n" +
-                "    <constraint><![CDATA[\"test_val_a\" < \"test_val_b\"]]></constraint>\n" +
-                "</constraint-group>";
+                        "    <constraint>2 == 2</constraint>\n" +
+                        "    <constraint><![CDATA[10.13 > 10.129999]]></constraint>\n" +
+                        "    <constraint>null == null</constraint>\n" +
+                        "    <constraint><![CDATA[\"test_val_a\" < \"test_val_b\"]]></constraint>\n" +
+                        "</constraint-group>";
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -54,11 +54,11 @@ class ConstraintGroupCompilerTest {
     void testSimpleFalse() throws ParserConfigurationException, IOException, SAXException {
         String constraintGroupString =
                 "<constraint-group id=\"test_cg\">\n" +
-                "    <constraint>2 == 2</constraint>\n" +
-                "    <constraint><![CDATA[10.13 > 10.129999]]></constraint>\n" +
-                "    <constraint>null != null</constraint>\n" +
-                "    <constraint><![CDATA[\"test_val_a\" < \"test_val_b\"]]></constraint>\n" +
-                "</constraint-group>";
+                        "    <constraint>2 == 2</constraint>\n" +
+                        "    <constraint><![CDATA[10.13 > 10.129999]]></constraint>\n" +
+                        "    <constraint>null != null</constraint>\n" +
+                        "    <constraint><![CDATA[\"test_val_a\" < \"test_val_b\"]]></constraint>\n" +
+                        "</constraint-group>";
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -85,17 +85,17 @@ class ConstraintGroupCompilerTest {
     void testComplex() throws ParserConfigurationException, IOException, SAXException {
         String constraintGroupString =
                 "<constraint-group id=\"test_cg2\">\n" +
-                "    <constraint>2 == 2</constraint>\n" +
-                "    <constraint><![CDATA[10.13 > 10.129999]]></constraint>\n" +
-                "    <constraint>null == null</constraint>\n" +
-                "    <constraint><![CDATA[\"test_val_a\" < \"test_val_b\"]]></constraint>\n" +
-                "    <constraint-group>\n" +
-                "        <constraint><![CDATA[2 < 2.125]]></constraint>\n" +
-                "        <constraint-group>\n" +
-                "            <constraint>\"test_val_a\" != \"test_val_b\"</constraint>\n" +
-                "        </constraint-group>\n" +
-                "    </constraint-group>\n" +
-                "</constraint-group>";
+                        "    <constraint>2 == 2</constraint>\n" +
+                        "    <constraint><![CDATA[10.13 > 10.129999]]></constraint>\n" +
+                        "    <constraint>null == null</constraint>\n" +
+                        "    <constraint><![CDATA[\"test_val_a\" < \"test_val_b\"]]></constraint>\n" +
+                        "    <constraint-group>\n" +
+                        "        <constraint><![CDATA[2 < 2.125]]></constraint>\n" +
+                        "        <constraint-group>\n" +
+                        "            <constraint>\"test_val_a\" != \"test_val_b\"</constraint>\n" +
+                        "        </constraint-group>\n" +
+                        "    </constraint-group>\n" +
+                        "</constraint-group>";
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();

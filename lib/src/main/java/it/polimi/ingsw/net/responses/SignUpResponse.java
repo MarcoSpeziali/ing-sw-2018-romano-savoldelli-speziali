@@ -7,9 +7,8 @@ import java.util.Map;
 
 public class SignUpResponse implements JSONSerializable {
 
-    private static final long serialVersionUID = 5399125031412209261L;
-
     public static final String CREATED_FIELD = "created";
+    private static final long serialVersionUID = 5399125031412209261L;
 
     @Override
     public void deserialize(JSONObject jsonObject) {

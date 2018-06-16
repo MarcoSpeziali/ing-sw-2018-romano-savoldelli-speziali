@@ -26,36 +26,28 @@ import java.util.stream.Collectors;
 
 public class SettingsGUIController extends SettingsController implements Initializable {
 
-    private FXMLLoader loader = new FXMLLoader();
-
     @FXML
     @LocalizedText(key = "settings.save_button.text", fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton saveButton;
-
     @FXML
     @LocalizedText(key = "settings.title", fieldUpdater = LabeledLocalizationUpdater.class)
     public Label titleLabel;
-
     @FXML
     @LocalizedText(key = "settings.back_button.text", fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton backButton;
-
     @FXML
     @LocalizedText(key = "settings.connection_type_label.text", fieldUpdater = LabeledLocalizationUpdater.class)
     public Label connectionTypeLabel;
-
     @FXML
     @LocalizedText(key = "settings.full_screen_toggle_button.text", fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXToggleButton fullScreenToggle;
-
     @FXML
     public JFXRadioButton rmiToggle;
-
     @FXML
     public JFXRadioButton socketToggle;
-
     @FXML
     public JFXComboBox<String> languageComboBox;
+    private FXMLLoader loader = new FXMLLoader();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

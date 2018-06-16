@@ -5,11 +5,9 @@ import org.json.JSONObject;
 
 public class ChallengeRequest implements JSONSerializable {
 
-    private static final long serialVersionUID = -9158440026090712352L;
-
     public static final String CHALLENGE_FIELD = "challenge";
     public static final String SESSION_ID_FIELD = "session-id";
-
+    private static final long serialVersionUID = -9158440026090712352L;
     /**
      * The challenge to complete as part of the authentication process.
      */
@@ -19,6 +17,14 @@ public class ChallengeRequest implements JSONSerializable {
      * The id of the authentication session.
      */
     private int sessionId;
+
+    public ChallengeRequest() {
+    }
+
+    public ChallengeRequest(String challenge, int sessionId) {
+        this.challenge = challenge;
+        this.sessionId = sessionId;
+    }
 
     /**
      * @return the challenge to complete as part of the authentication process
@@ -45,13 +51,6 @@ public class ChallengeRequest implements JSONSerializable {
      * @param sessionId the id of the authentication session
      */
     public void setSessionId(int sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    public ChallengeRequest() { }
-
-    public ChallengeRequest(String challenge, int sessionId) {
-        this.challenge = challenge;
         this.sessionId = sessionId;
     }
 

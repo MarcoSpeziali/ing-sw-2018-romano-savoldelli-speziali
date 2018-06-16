@@ -1,12 +1,9 @@
 package it.polimi.ingsw.server.compilers.cards;
 
-import it.polimi.ingsw.core.CardVisibility;
-import it.polimi.ingsw.server.Effect;
 import it.polimi.ingsw.server.compilers.effects.CompiledEffect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

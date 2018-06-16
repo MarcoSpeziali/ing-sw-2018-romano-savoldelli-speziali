@@ -12,15 +12,8 @@ public class CompiledToolCard extends CompiledCard {
     private CompiledEffect effect;
 
     /**
-     * @return the effect of the tool card
-     */
-    public CompiledEffect getEffect() {
-        return effect;
-    }
-
-    /**
-     * @param id   the id of the card
-     * @param name the name key of the card
+     * @param id     the id of the card
+     * @param name   the name key of the card
      * @param effect the effect of the tool card
      */
     public CompiledToolCard(String id, String name, CompiledEffect effect) {
@@ -30,9 +23,16 @@ public class CompiledToolCard extends CompiledCard {
 
     /**
      * @param compiledCard the compiled card
-     * @param effect the effect of the tool card
+     * @param effect       the effect of the tool card
      */
     public CompiledToolCard(CompiledCard compiledCard, CompiledEffect effect) {
         this(compiledCard.getId(), compiledCard.getName(), effect);
+    }
+
+    /**
+     * @return the effect of the tool card
+     */
+    public CompiledEffect getEffect() {
+        return effect;
     }
 }

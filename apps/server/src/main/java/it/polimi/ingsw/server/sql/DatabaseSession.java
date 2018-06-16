@@ -12,37 +12,6 @@ public class DatabaseSession {
     private String token;
     private int preAuthenticationSessionId;
 
-    public int getId() {
-        return id;
-    }
-
-    public long getCreationTimeStamp() {
-        return creationTimeStamp;
-    }
-
-    public long getInvalidationTimeStamp() {
-        return invalidationTimeStamp;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public int getPreAuthenticationSessionId() {
-        return preAuthenticationSessionId;
-    }
-
-    public DatabasePreAuthenticationSession getPreAuthenticationSession() throws SQLException {
-        String query = String.format(
-                "SELECT pas.* FROM session s JOIN pre_authentication_session pas ON s.pre_auth_session = pas.id WHERE s.id = '%d'",
-                this.id
-        );
-
-        try (SagradaDatabase database = new SagradaDatabase()) {
-            return database.executeQuery(query, DatabasePreAuthenticationSession::new);
-        }
-    }
-
     DatabaseSession(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
         this.creationTimeStamp = resultSet.getTimestamp("creation_time").getTime();
@@ -106,5 +75,36 @@ public class DatabaseSession {
 
     private static DatabaseSession executeQuery(SagradaDatabase database, String query) throws SQLException {
         return database.executeQuery(query, DatabaseSession::new);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public long getCreationTimeStamp() {
+        return creationTimeStamp;
+    }
+
+    public long getInvalidationTimeStamp() {
+        return invalidationTimeStamp;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public int getPreAuthenticationSessionId() {
+        return preAuthenticationSessionId;
+    }
+
+    public DatabasePreAuthenticationSession getPreAuthenticationSession() throws SQLException {
+        String query = String.format(
+                "SELECT pas.* FROM session s JOIN pre_authentication_session pas ON s.pre_auth_session = pas.id WHERE s.id = '%d'",
+                this.id
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabasePreAuthenticationSession::new);
+        }
     }
 }

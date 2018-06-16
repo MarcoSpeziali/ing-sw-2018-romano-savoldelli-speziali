@@ -26,48 +26,48 @@ public class AuthenticatedClientHandler extends ClientHandler {
     private boolean shouldStop = false;
     private Request<? extends JSONSerializable> migrationRequest;
     private DatabasePlayer player;
-    
-    public DatabasePlayer getPlayer() {
-        return player;
+
+    public AuthenticatedClientHandler(ClientHandler clientHandler, DatabasePlayer player) throws IOException {
+        this(clientHandler.client, player);
     }
-    
+
+    public AuthenticatedClientHandler(Socket client, DatabasePlayer player) throws IOException {
+        super(client);
+
+        this.player = player;
+
+        clientHandlers.put(player, this);
+    }
+
     public static AuthenticatedClientHandler getHandlerForPlayer(DatabasePlayer databasePlayer) {
         return clientHandlers.getOrDefault(databasePlayer, null);
     }
-    
+
     public static List<AuthenticatedClientHandler> getHandlerForPlayersExcept(DatabasePlayer databasePlayer) {
         return clientHandlers.entrySet().stream()
                 .filter(entry -> !entry.getKey().equals(databasePlayer))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
-    
+
     public static AuthenticatedClientHandler migrate(AnonymousClientHandler clientHandler, DatabasePlayer databasePlayer, Request<? extends JSONSerializable> request) throws IOException {
         AuthenticatedClientHandler authenticatedClientHandler = new AuthenticatedClientHandler(clientHandler, databasePlayer);
         authenticatedClientHandler.migrationRequest = request;
         return authenticatedClientHandler;
     }
-    
-    public AuthenticatedClientHandler(ClientHandler clientHandler, DatabasePlayer player) throws IOException {
-        this(clientHandler.client, player);
+
+    public DatabasePlayer getPlayer() {
+        return player;
     }
-    
-    public AuthenticatedClientHandler(Socket client, DatabasePlayer player) throws IOException {
-        super(client);
-        
-        this.player = player;
-        
-        clientHandlers.put(player, this);
-    }
-    
+
     @Override
     public void run() {
         try {
             this.inputThread = new Thread(() -> {
                 Command handler;
-    
+
                 SocketAddress socketAddress = this.client.getRemoteSocketAddress();
-    
+
                 try {
                     do {
                         if (this.migrationRequest != null) {
@@ -77,7 +77,7 @@ public class AuthenticatedClientHandler extends ClientHandler {
                         else {
                             handler = handleIncomingRequest(AuthenticationManager::isAuthenticated);
                         }
-            
+
                         // if the handler needs the connection to be kept alive it wont be closed
                     } while (handler != null && handler.shouldBeKeptAlive() && !shouldStop);
                 }
@@ -88,19 +88,19 @@ public class AuthenticatedClientHandler extends ClientHandler {
             });
             this.inputThread.setName(Constants.Threads.PLAYER_INPUT_HANDLER.toString() + "-" + this.player.toString());
             this.inputThread.start();
-    
+
             this.inputThread.join();
         }
         catch (InterruptedException ignored) {
             Thread.currentThread().interrupt();
         }
     }
-    
+
     @Override
     public void close() throws IOException {
         this.shouldStop = true;
         this.inputThread.interrupt();
-        
+
         super.close();
     }
 }

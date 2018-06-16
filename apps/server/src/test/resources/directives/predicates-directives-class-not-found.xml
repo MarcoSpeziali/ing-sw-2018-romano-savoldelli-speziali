@@ -5,7 +5,8 @@
             <parameter-directives class="it.polimi.ingsw.models.Die" multiple="true"/>
         </parameters-directives>
     </predicate-directives>
-    <predicate-directives id="distinct_color" class="it.polimi.ingsw.server.instructions.predicates.DistinctColorPredicate">
+    <predicate-directives id="distinct_color"
+                          class="it.polimi.ingsw.server.instructions.predicates.DistinctColorPredicate">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" multiple="true"/>
         </parameters-directives>

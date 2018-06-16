@@ -22,6 +22,17 @@ public class CompiledExposedVariable implements Serializable {
     private Class<? extends Serializable> exposedVariableType;
 
     /**
+     * @param defaultName         the default name of the exposed variable
+     * @param overrideValue       the name of the variable that overrides the default name represented by {@link #getDefaultName()}
+     * @param exposedVariableType the class of the exposed variable
+     */
+    public CompiledExposedVariable(String defaultName, String overrideValue, Class<? extends Serializable> exposedVariableType) {
+        this.defaultName = defaultName;
+        this.overrideValue = overrideValue;
+        this.exposedVariableType = exposedVariableType;
+    }
+
+    /**
      * @return the default name of the exposed variable
      */
     public String getDefaultName() {
@@ -40,16 +51,5 @@ public class CompiledExposedVariable implements Serializable {
      */
     public Class<? extends Serializable> getExposedVariableType() {
         return exposedVariableType;
-    }
-
-    /**
-     * @param defaultName the default name of the exposed variable
-     * @param overrideValue the name of the variable that overrides the default name represented by {@link #getDefaultName()}
-     * @param exposedVariableType the class of the exposed variable
-     */
-    public CompiledExposedVariable(String defaultName, String overrideValue, Class<? extends Serializable> exposedVariableType) {
-        this.defaultName = defaultName;
-        this.overrideValue = overrideValue;
-        this.exposedVariableType = exposedVariableType;
     }
 }

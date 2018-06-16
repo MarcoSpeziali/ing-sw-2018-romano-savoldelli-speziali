@@ -138,14 +138,15 @@ class ExpressionCompilerTest {
 
     @SuppressWarnings("ALL")
     class TestClass {
-        private Integer b;
-
         public Integer a;
-
-        private Integer x() { return 2; }
+        private Integer b;
 
         public TestClass(int a) {
             this.a = a;
+        }
+
+        private Integer x() {
+            return 2;
         }
 
         public Integer getA() {

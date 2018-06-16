@@ -76,10 +76,12 @@ public class ConstantExpressionCaster {
         return pattern;
     };
 
-    private ConstantExpressionCaster() {}
+    private ConstantExpressionCaster() {
+    }
 
     /**
      * Casts a string object into its corresponding value.
+     *
      * @param textObject The object to cast.
      * @return The casted object.
      * @throws IllegalArgumentException if the object cannot be casted

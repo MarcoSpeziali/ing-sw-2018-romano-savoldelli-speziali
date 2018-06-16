@@ -3,8 +3,6 @@ package it.polimi.ingsw.utils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MathUtilsTest {
 
     @Test

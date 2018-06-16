@@ -10,12 +10,12 @@ public class RoundTrackController implements Serializable {
 
     private RoundTrack roundTrack;
 
-    public void setRoundTrackModel(RoundTrack roundTrack) {
-        this.roundTrack = roundTrack;
-    }
-
     public RoundTrackController(RoundTrack roundTrack) {
         this.setRoundTrackModel(roundTrack);
+    }
+
+    public void setRoundTrackModel(RoundTrack roundTrack) {
+        this.roundTrack = roundTrack;
     }
 
     public void putDieForRound(Die die, int round) {

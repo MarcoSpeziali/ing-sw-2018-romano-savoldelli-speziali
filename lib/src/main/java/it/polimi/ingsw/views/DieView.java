@@ -11,6 +11,7 @@ public abstract class DieView {
     public void setDieController(DieController dieController) {
         this.dieController = dieController;
     }
+
     public void setDie(Die die) {
         this.die = die;
     }

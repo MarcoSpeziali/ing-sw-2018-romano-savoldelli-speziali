@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.compilers.constraints;
 
 import it.polimi.ingsw.server.compilers.expressions.ExpressionCompiler;
-import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.server.constraints.Constraint;
 import it.polimi.ingsw.server.constraints.Operator;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 
@@ -16,12 +16,14 @@ import java.util.regex.Pattern;
  */
 public class ConstraintCompiler {
 
-    private ConstraintCompiler() {}
-
     private static final String CONSTRAINT_NODE_NAME = "constraint";
+
+    private ConstraintCompiler() {
+    }
 
     /**
      * Compiles a constraint from a {@link Node}.
+     *
      * @param node The node holding the constraint
      * @return The compiled constraint
      */
@@ -37,6 +39,7 @@ public class ConstraintCompiler {
 
     /**
      * Compiles a constraint from a {@link Map}.
+     *
      * @param constraintInfo the constraint info
      * @return the compiled constraint
      */

@@ -10,6 +10,7 @@ public class CellController {
     public CellController(Cell cell) {
         this.cell = cell;
     }
+
     public void setCellModel(Cell cell) {
         this.cell = cell;
     }

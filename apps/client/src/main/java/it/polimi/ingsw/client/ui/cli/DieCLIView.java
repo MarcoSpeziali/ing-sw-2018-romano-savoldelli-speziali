@@ -6,7 +6,7 @@ import org.fusesource.jansi.Ansi;
 
 import java.util.Scanner;
 
-import static org.fusesource.jansi.Ansi.Color.*;
+import static org.fusesource.jansi.Ansi.Color.WHITE;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class DieCLIView extends DieView {
@@ -28,7 +28,8 @@ public class DieCLIView extends DieView {
             }
         });
     }
-    public void render(){
+
+    public void render() {
 
         Ansi.Color color = Ansi.Color.valueOf(this.die.getColor().name());
         System.out.print(ansi().eraseScreen().bg(color).a(" " + this.die.getShade() + " ").fg(WHITE).reset());

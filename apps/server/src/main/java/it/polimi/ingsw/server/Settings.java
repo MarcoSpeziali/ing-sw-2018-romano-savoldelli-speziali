@@ -6,15 +6,6 @@ import it.polimi.ingsw.utils.SettingsBase;
 // TODO: docs
 public final class Settings extends SettingsBase {
 
-    public static Settings getSettings() {
-        try {
-            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Setting(id = "socket-port", defaultValue = "9000", type = Integer.class)
     private int socketPort;
     @Setting(id = "rmi-port", defaultValue = "1099", type = Integer.class)
@@ -31,6 +22,18 @@ public final class Settings extends SettingsBase {
     private String databasePassword;
     @Setting(id = "database-driver", defaultValue = "postgresql")
     private String databaseDriver;
+    private Settings(String path) throws IllegalAccessException {
+        super(path);
+    }
+
+    public static Settings getSettings() {
+        try {
+            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
+        }
+        catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public int getSocketPort() {
         return socketPort;
@@ -62,9 +65,5 @@ public final class Settings extends SettingsBase {
 
     public String getDatabaseDriver() {
         return databaseDriver;
-    }
-
-    private Settings(String path) throws IllegalAccessException {
-        super(path);
     }
 }

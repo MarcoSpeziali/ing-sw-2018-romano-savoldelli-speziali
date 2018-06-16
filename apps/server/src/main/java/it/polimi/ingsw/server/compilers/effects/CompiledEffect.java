@@ -31,6 +31,19 @@ public class CompiledEffect implements Serializable {
     private List<CompiledExecutableAction> compiledExecutableActions;
 
     /**
+     * @param description               the description key of the effect
+     * @param initialCost               the initial cost of the effect
+     * @param evaluableConstraint       the constraint to be evaluated before the effect can be run
+     * @param compiledExecutableActions the compiled actions of the effect
+     */
+    public CompiledEffect(String description, Integer initialCost, EvaluableConstraint evaluableConstraint, List<CompiledExecutableAction> compiledExecutableActions) {
+        this.description = description;
+        this.initialCost = initialCost;
+        this.evaluableConstraint = evaluableConstraint;
+        this.compiledExecutableActions = compiledExecutableActions;
+    }
+
+    /**
      * @return the description key of the effect
      */
     public String getDescription() {
@@ -56,18 +69,5 @@ public class CompiledEffect implements Serializable {
      */
     public List<CompiledExecutableAction> getCompiledExecutableActions() {
         return compiledExecutableActions;
-    }
-
-    /**
-     * @param description the description key of the effect
-     * @param initialCost the initial cost of the effect
-     * @param evaluableConstraint the constraint to be evaluated before the effect can be run
-     * @param compiledExecutableActions the compiled actions of the effect
-     */
-    public CompiledEffect(String description, Integer initialCost, EvaluableConstraint evaluableConstraint, List<CompiledExecutableAction> compiledExecutableActions) {
-        this.description = description;
-        this.initialCost = initialCost;
-        this.evaluableConstraint = evaluableConstraint;
-        this.compiledExecutableActions = compiledExecutableActions;
     }
 }

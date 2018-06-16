@@ -11,15 +11,15 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class OneTimeSocketResponseProvider implements OneTimeNetworkResponseProvider {
-    
+
     private final String socketAddress;
     private final int socketPort;
-    
+
     public OneTimeSocketResponseProvider(String socketAddress, int socketPort) {
         this.socketAddress = socketAddress;
         this.socketPort = socketPort;
     }
-    
+
     /**
      * Sends a {@link Request} to the server and waits for a {@link Response} (blocking call).
      * Then the connection is terminated.
@@ -34,7 +34,7 @@ public class OneTimeSocketResponseProvider implements OneTimeNetworkResponseProv
     public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException {
         try (Socket socket = new Socket()) {
             if (hostAddress.equals("localhost")) {
-                socket.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[] {127, 0, 0, 1}), 9000), 1000);
+                socket.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{127, 0, 0, 1}), 9000), 1000);
             }
             else {
                 socket.connect(new InetSocketAddress(hostAddress, hostPort), 1000);
@@ -55,12 +55,12 @@ public class OneTimeSocketResponseProvider implements OneTimeNetworkResponseProv
             return response;
         }
     }
-    
+
     @Override
     public String getServerAddress() {
         return this.socketAddress;
     }
-    
+
     @Override
     public int getServerPort() {
         return this.socketPort;

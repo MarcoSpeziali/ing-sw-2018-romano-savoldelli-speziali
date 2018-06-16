@@ -35,6 +35,13 @@ public class CompiledActionGroup implements CompiledExecutableAction, Serializab
      */
     private IterableRange<Integer> chooseBetween;
 
+    public CompiledActionGroup(ActionData actionData, List<CompiledExecutableAction> actions, IterableRange<Integer> repetitions, IterableRange<Integer> chooseBetween) {
+        this.actionData = actionData;
+        this.actions = actions;
+        this.repetitions = repetitions;
+        this.chooseBetween = chooseBetween;
+    }
+
     /**
      * @return the data of the action
      */
@@ -70,12 +77,5 @@ public class CompiledActionGroup implements CompiledExecutableAction, Serializab
      */
     public IterableRange<Integer> getChooseBetween() {
         return chooseBetween;
-    }
-
-    public CompiledActionGroup(ActionData actionData, List<CompiledExecutableAction> actions, IterableRange<Integer> repetitions, IterableRange<Integer> chooseBetween) {
-        this.actionData = actionData;
-        this.actions = actions;
-        this.repetitions = repetitions;
-        this.chooseBetween = chooseBetween;
     }
 }

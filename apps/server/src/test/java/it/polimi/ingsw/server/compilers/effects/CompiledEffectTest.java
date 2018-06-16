@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.compilers.effects;
 
-import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.compilers.actions.CompiledExecutableAction;
 import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class CompiledEffectTest {

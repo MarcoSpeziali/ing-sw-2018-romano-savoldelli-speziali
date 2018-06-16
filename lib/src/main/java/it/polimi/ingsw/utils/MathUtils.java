@@ -1,7 +1,8 @@
 package it.polimi.ingsw.utils;
 
 public final class MathUtils {
-    private MathUtils() {}
+    private MathUtils() {
+    }
 
     /**
      * @param number the number to modulate

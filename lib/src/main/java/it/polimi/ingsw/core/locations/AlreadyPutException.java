@@ -8,5 +8,6 @@ public class AlreadyPutException extends RuntimeException {
         super(message);
     }
 
-    public AlreadyPutException() {}
+    public AlreadyPutException() {
+    }
 }

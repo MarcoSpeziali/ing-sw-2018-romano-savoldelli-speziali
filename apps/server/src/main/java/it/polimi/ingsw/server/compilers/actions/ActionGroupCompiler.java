@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.compilers.actions;
 
-import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.actions.ActionData;
+import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.io.XMLUtils;
@@ -14,12 +14,14 @@ import java.util.Map;
 
 public class ActionGroupCompiler {
 
-    private ActionGroupCompiler() {}
+    private ActionGroupCompiler() {
+    }
 
     /**
      * Compiles a single action-group into its compiles representation: {@link CompiledActionGroup}.
-     * @param node the {@link Node} representing the action-group to compile
-     * @param directives the {@link List} containing the directives to compile the actions
+     *
+     * @param node        the {@link Node} representing the action-group to compile
+     * @param directives  the {@link List} containing the directives to compile the actions
      * @param constraints the {@link List} of precompiled constraints
      * @return an instance of {@link CompiledActionGroup}
      */
@@ -75,6 +77,7 @@ public class ActionGroupCompiler {
 
     /**
      * Parses the string literal for the repetitions number.
+     *
      * @param repetitionsString the string literal for the repetitions number
      * @return an instance of {@link IterableRange}
      */
@@ -94,6 +97,7 @@ public class ActionGroupCompiler {
 
     /**
      * Parses the string literal for the choose between number.
+     *
      * @param chooseBetweenString the string literal for the choose between number
      * @return an instance of {@link IterableRange} if the literal is not {@code null}, {@code null} otherwise
      */
@@ -130,8 +134,9 @@ public class ActionGroupCompiler {
 
     /**
      * Compiles a sub-action of the group.
-     * @param subAction the sub action
-     * @param directives the action directives
+     *
+     * @param subAction   the sub action
+     * @param directives  the action directives
      * @param constraints the constraints
      * @return a {@link CompiledAction}
      */
@@ -145,9 +150,10 @@ public class ActionGroupCompiler {
 
     /**
      * Compiles the sub-actions-groups of the group.
+     *
      * @param subActionGroup the sub action-groups
-     * @param directives the action directives
-     * @param constraints the constraints
+     * @param directives     the action directives
+     * @param constraints    the constraints
      * @return a {@link CompiledActionGroup}
      */
     private static CompiledActionGroup compileSubActionGroup(Node subActionGroup, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
@@ -170,6 +176,7 @@ public class ActionGroupCompiler {
         static final String ACTION_GROUP_SUB_ACTION = "action";
         static final String ACTION_GROUP_SUB_ACTION_GROUP = "action-group";
 
-        private ActionGroupNodes() {}
+        private ActionGroupNodes() {
+        }
     }
 }

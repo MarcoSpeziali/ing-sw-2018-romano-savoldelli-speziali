@@ -19,30 +19,30 @@ class WindowCompilerTest {
     void testOneCompilation() throws ParserConfigurationException, SAXException, IOException {
         String windowXmlString =
                 "<window rows=\"4\" columns=\"5\" id=\"kaleidoscopic_dream\" sibling=\"firmitas\" name=\"windows.kaleidoscopic_dream\" difficulty=\"4\">" +
-                "    <cell color=\"yellow\" />" +
-                "    <cell color=\"blue\" />" +
-                "    <cell />" +
-                "    <cell />" +
-                "    <cell shade=\"1\" />" +
+                        "    <cell color=\"yellow\" />" +
+                        "    <cell color=\"blue\" />" +
+                        "    <cell />" +
+                        "    <cell />" +
+                        "    <cell shade=\"1\" />" +
 
-                "    <cell color=\"green\" />" +
-                "    <cell />" +
-                "    <cell shade=\"5\"/>" +
-                "    <cell />" +
-                "    <cell shade=\"4\"/>" +
+                        "    <cell color=\"green\" />" +
+                        "    <cell />" +
+                        "    <cell shade=\"5\"/>" +
+                        "    <cell />" +
+                        "    <cell shade=\"4\"/>" +
 
-                "    <cell shade=\"3\"/>" +
-                "    <cell />" +
-                "    <cell color=\"red\"/>" +
-                "    <cell />" +
-                "    <cell color =\"green\"/>" +
+                        "    <cell shade=\"3\"/>" +
+                        "    <cell />" +
+                        "    <cell color=\"red\"/>" +
+                        "    <cell />" +
+                        "    <cell color =\"green\"/>" +
 
-                "    <cell shade=\"2\"/>" +
-                "    <cell />" +
-                "    <cell />" +
-                "    <cell color=\"blue\"/>" +
-                "    <cell color=\"yellow\"/>" +
-                "</window>";
+                        "    <cell shade=\"2\"/>" +
+                        "    <cell />" +
+                        "    <cell />" +
+                        "    <cell color=\"blue\"/>" +
+                        "    <cell color=\"yellow\"/>" +
+                        "</window>";
 
         Window window = WindowCompiler.compile(XMLUtils.parseXmlString(windowXmlString));
         Assertions.assertEquals("kaleidoscopic_dream", window.getId());

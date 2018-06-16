@@ -21,6 +21,15 @@ public abstract class Action implements ExecutableAction {
      */
     protected UserInteractionProvider userInteractionProvider;
 
+    /**
+     * Instantiates an {@code Action}.
+     *
+     * @param data The data which identifies the action.
+     */
+    public Action(ActionData data) {
+        this.data = data;
+    }
+
     @Override
     public ActionData getActionData() {
         return this.data;
@@ -38,14 +47,6 @@ public abstract class Action implements ExecutableAction {
      */
     public void setUserInteractionProvider(UserInteractionProvider userInteractionProvider) {
         this.userInteractionProvider = userInteractionProvider;
-    }
-
-    /**
-     * Instantiates an {@code Action}.
-     * @param data The data which identifies the action.
-     */
-    public Action(ActionData data) {
-        this.data = data;
     }
 
     @Override

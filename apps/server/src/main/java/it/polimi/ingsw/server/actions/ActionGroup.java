@@ -41,6 +41,23 @@ public class ActionGroup implements ExecutableAction {
      */
     private ActionGroupCallbacks callbacks;
 
+    /**
+     * @param data             The data of the action group.
+     * @param repetitionNumber A range of repetitions.
+     * @param chooseBetween    The number of actions to be chosen.
+     * @param actions          The actions to be executed.
+     */
+    public ActionGroup(
+            ActionData data,
+            IterableRange<Integer> repetitionNumber,
+            Range<Integer> chooseBetween,
+            List<ExecutableAction> actions) {
+        this.data = data;
+        this.repetitionNumber = repetitionNumber;
+        this.chooseBetween = chooseBetween;
+        this.actions = actions;
+    }
+
     @Override
     public ActionData getActionData() {
         return this.data;
@@ -81,23 +98,6 @@ public class ActionGroup implements ExecutableAction {
         this.callbacks = callbacks;
     }
 
-    /**
-     * @param data The data of the action group.
-     * @param repetitionNumber A range of repetitions.
-     * @param chooseBetween The number of actions to be chosen.
-     * @param actions The actions to be executed.
-     */
-    public ActionGroup(
-            ActionData data,
-            IterableRange<Integer> repetitionNumber,
-            Range<Integer> chooseBetween,
-            List<ExecutableAction> actions) {
-        this.data = data;
-        this.repetitionNumber = repetitionNumber;
-        this.chooseBetween = chooseBetween;
-        this.actions = actions;
-    }
-
     @Override
     public Object run(Context context) {
         if (this.data.getConstraint() != null && !this.data.getConstraint().evaluate(context)) {
@@ -121,6 +121,7 @@ public class ActionGroup implements ExecutableAction {
 
     /**
      * Executes the mandatory repetitions.
+     *
      * @param snapshot The {@link Context.Snapshot} that holds the variables of the current {@link ActionGroup}.
      */
     private void executeMandatoryRepetitions(Context.Snapshot snapshot) {
@@ -142,6 +143,7 @@ public class ActionGroup implements ExecutableAction {
 
     /**
      * Executes the optional repetitions.
+     *
      * @param snapshot The {@link Context.Snapshot} that holds the variables of the current {@link ActionGroup}.
      */
     private void executeOptionalRepetitions(Context.Snapshot snapshot) {

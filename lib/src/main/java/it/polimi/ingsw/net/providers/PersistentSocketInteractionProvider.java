@@ -43,10 +43,45 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
      * A {@link Map} of {@link ResponseError}s listeners.
      */
     private Map<EndPointFunction, Consumer<ResponseError>> errorListeners = new EnumMap<>(EndPointFunction.class);
+    private Runnable inputListenerRunnable = () -> {
+        while (!shouldStop) {
+            try {
+                String content = this.in.readLine();
+
+                JSONObject jsonObject = new JSONObject(content);
+
+                if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
+                    Response<? extends JSONSerializable> response = new Response<>();
+                    response.deserialize(new JSONObject(content));
+
+                    this.handleResponse(response);
+                }
+                else if (jsonObject.has(RequestFields.REQUEST.toString())) {
+                    Request<? extends JSONSerializable> request = new Request<>();
+                    request.deserialize(new JSONObject(content));
+
+                    Response<? extends JSONSerializable> response = handleRequest(request);
+
+                    if (response != null) {
+                        this.out.write(response.toString());
+                        this.out.newLine();
+                        this.out.flush();
+                    }
+                }
+            }
+            catch (IOException ignored) {
+            }
+        }
+    };
+
+    protected PersistentSocketInteractionProvider(String remoteAddress, int remotePort) {
+        super(remoteAddress, remotePort);
+    }
 
     /**
      * Adds a listener for the target endpoint.
-     * @param endPointTarget the target endpoint
+     *
+     * @param endPointTarget   the target endpoint
      * @param responseConsumer the {@link Consumer} that consumes the received {@link Response}
      */
     public void listenFor(EndPointFunction endPointTarget, Consumer<Response<? extends JSONSerializable>> responseConsumer) {
@@ -55,7 +90,8 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
 
     /**
      * Adds a listener for the target endpoint.
-     * @param endPointTarget the target endpoint
+     *
+     * @param endPointTarget   the target endpoint
      * @param responseFunction the {@link Function} that consumes the received
      *                         {@link Request} and produces a {@link Response}
      */
@@ -65,10 +101,6 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
 
     public void listerFor(EndPointFunction endPointTarget, Consumer<ResponseError> errorConsumer) {
         this.errorListeners.put(endPointTarget, errorConsumer);
-    }
-
-    protected PersistentSocketInteractionProvider(String remoteAddress, int remotePort) {
-        super(remoteAddress, remotePort);
     }
 
     public void open() throws IOException {
@@ -179,37 +211,6 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
 
         this.socket.close();
     }
-
-    private Runnable inputListenerRunnable = () -> {
-        while (!shouldStop) {
-            try {
-                String content = this.in.readLine();
-
-                JSONObject jsonObject = new JSONObject(content);
-
-                if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
-                    Response<? extends JSONSerializable> response = new Response<>();
-                    response.deserialize(new JSONObject(content));
-
-                    this.handleResponse(response);
-                }
-                else if (jsonObject.has(RequestFields.REQUEST.toString())) {
-                    Request<? extends JSONSerializable> request = new Request<>();
-                    request.deserialize(new JSONObject(content));
-
-                    Response<? extends JSONSerializable> response = handleRequest(request);
-
-                    if (response != null) {
-                        this.out.write(response.toString());
-                        this.out.newLine();
-                        this.out.flush();
-                    }
-                }
-            }
-            catch (IOException ignored) {
-            }
-        }
-    };
 
     private <T extends JSONSerializable> void handleResponse(Response<T> response) {
         if (response.getError() != null && this.errorListeners.containsKey(response.getHeader().getEndPointFunction())) {

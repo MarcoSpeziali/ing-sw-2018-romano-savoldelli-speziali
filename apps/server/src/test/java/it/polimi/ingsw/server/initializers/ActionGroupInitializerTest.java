@@ -28,7 +28,7 @@ class ActionGroupInitializerTest {
                 "<action-group repetitions=\"2\">" +
                         "<action effect=\"increment $DIE$ [by=3]\"/>\n" +
                         "<action effect=\"decrement $DIE$ [by=2]\"/>\n" +
-                "</action-group>";
+                        "</action-group>";
 
         CompiledActionGroup compiledActionGroup = ActionGroupCompiler.compile(
                 XMLUtils.parseXmlString(actionGroupText),

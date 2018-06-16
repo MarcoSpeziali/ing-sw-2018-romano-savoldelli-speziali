@@ -40,6 +40,35 @@ public class Effect implements IEffect {
     private List<ExecutableAction> actions;
 
     /**
+     * Creates a new instance of {@link Effect}.
+     *
+     * @param descriptionKey   The localization key for the description of the effect.
+     * @param effectConstraint The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
+     * @param actions          The actions to be run.
+     * @param initialCost      the initial cost of the effect
+     */
+    public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions, int initialCost) {
+        this.description = new LocalizedString(descriptionKey);
+        this.effectConstraint = effectConstraint;
+        this.actions = actions;
+        this.initialCost = initialCost;
+    }
+
+    /**
+     * Creates a new instance of {@link Effect}.
+     *
+     * @param descriptionKey   The localization key for the description of the effect.
+     * @param effectConstraint The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
+     * @param actions          The actions to be run.
+     */
+    public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions) {
+        this.description = new LocalizedString(descriptionKey);
+        this.effectConstraint = effectConstraint;
+        this.actions = actions;
+        this.initialCost = 1;
+    }
+
+    /**
      * @return The localized description of the effect.
      */
     public String getDescription() {
@@ -58,16 +87,16 @@ public class Effect implements IEffect {
         return initialCost;
     }
 
-    @Override
-    public int getCost() {
-        return this.initialCost + (this.usedOnce ? 1 : 0);
-    }
-
     /**
      * @param initialCost the initial cost of the effect
      */
     public void setInitialCost(int initialCost) {
         this.initialCost = initialCost;
+    }
+
+    @Override
+    public int getCost() {
+        return this.initialCost + (this.usedOnce ? 1 : 0);
     }
 
     /**
@@ -85,34 +114,8 @@ public class Effect implements IEffect {
     }
 
     /**
-     * Creates a new instance of {@link Effect}.
-     * @param descriptionKey The localization key for the description of the effect.
-     * @param effectConstraint The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
-     * @param actions The actions to be run.
-     * @param initialCost the initial cost of the effect
-     */
-    public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions, int initialCost) {
-        this.description = new LocalizedString(descriptionKey);
-        this.effectConstraint = effectConstraint;
-        this.actions = actions;
-        this.initialCost = initialCost;
-    }
-
-    /**
-     * Creates a new instance of {@link Effect}.
-     * @param descriptionKey The localization key for the description of the effect.
-     * @param effectConstraint The {@link EvaluableConstraint} that evaluates if the effect can be run or not.
-     * @param actions The actions to be run.
-     */
-    public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions) {
-        this.description = new LocalizedString(descriptionKey);
-        this.effectConstraint = effectConstraint;
-        this.actions = actions;
-        this.initialCost = 1;
-    }
-
-    /**
      * Runs the effect if the {@link EvaluableConstraint} is satisfied.
+     *
      * @param cardId The id of the card (used to create a snapshot).
      */
     @Override

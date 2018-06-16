@@ -8,5 +8,6 @@ public class EmptyBagException extends RuntimeException {
         super(message);
     }
 
-    public EmptyBagException() {}
+    public EmptyBagException() {
+    }
 }

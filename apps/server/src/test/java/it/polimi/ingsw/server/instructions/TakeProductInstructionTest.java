@@ -9,27 +9,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class TakeProductInstructionTest {
-
-    @ParameterizedTest
-    @MethodSource("testRunArguments")
-    void testRun(List<Instruction> instructionsList, Integer expectedResult) {
-        TakeProductInstruction instruction = new TakeProductInstruction();
-        //noinspection unchecked
-        instruction.instructions = mock(List.class);
-
-        when(instruction.instructions.isEmpty()).thenReturn(instructionsList.isEmpty());
-        when(instruction.instructions.size()).thenReturn(instructionsList.size());
-        when(instruction.instructions.stream()).thenReturn(instructionsList.stream());
-
-        Integer result = instruction.run(null);
-        Assertions.assertEquals(expectedResult, result);
-    }
 
     private static Stream<Arguments> testRunArguments() {
         Instruction instruction1 = mock(Instruction.class);
@@ -53,6 +37,21 @@ class TakeProductInstructionTest {
                 Arguments.of(List.of(instruction1, instruction2, instruction3, instruction4), 7020),
                 Arguments.of(List.of(instruction1), 5)
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("testRunArguments")
+    void testRun(List<Instruction> instructionsList, Integer expectedResult) {
+        TakeProductInstruction instruction = new TakeProductInstruction();
+        //noinspection unchecked
+        instruction.instructions = mock(List.class);
+
+        when(instruction.instructions.isEmpty()).thenReturn(instructionsList.isEmpty());
+        when(instruction.instructions.size()).thenReturn(instructionsList.size());
+        when(instruction.instructions.stream()).thenReturn(instructionsList.stream());
+
+        Integer result = instruction.run(null);
+        Assertions.assertEquals(expectedResult, result);
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 /**
  * Represents a memory-stored cache.
+ *
  * @param <K> The key type.
  * @param <V> The value type.
  */

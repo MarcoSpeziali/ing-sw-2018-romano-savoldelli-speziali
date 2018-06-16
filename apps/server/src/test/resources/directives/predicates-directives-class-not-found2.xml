@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <predicates-directives>
-    <predicate-directives id="distinct_shade" class="it.polimi.ingsw.server.instructions.predicates.DistinctShadePredicate">
+    <predicate-directives id="distinct_shade"
+                          class="it.polimi.ingsw.server.instructions.predicates.DistinctShadePredicate">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.NotExisting" multiple="true"/>
         </parameters-directives>
     </predicate-directives>
-    <predicate-directives id="distinct_color" class="it.polimi.ingsw.server.instructions.predicates.DistinctColorPredicate">
+    <predicate-directives id="distinct_color"
+                          class="it.polimi.ingsw.server.instructions.predicates.DistinctColorPredicate">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.models.Die" multiple="true"/>
         </parameters-directives>

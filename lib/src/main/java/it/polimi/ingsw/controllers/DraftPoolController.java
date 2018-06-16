@@ -2,7 +2,6 @@ package it.polimi.ingsw.controllers;
 
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.DraftPool;
-import it.polimi.ingsw.core.Player;
 
 public class DraftPoolController {
 
@@ -12,7 +11,7 @@ public class DraftPoolController {
         this.draftPool = draftPool;
     }
 
-    public void setDraftPoolModel(DraftPool draftPool){
+    public void setDraftPoolModel(DraftPool draftPool) {
         this.draftPool = draftPool;
     }
 

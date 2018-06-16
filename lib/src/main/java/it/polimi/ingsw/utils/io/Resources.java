@@ -5,10 +5,11 @@ import java.net.URL;
 import java.util.Arrays;
 
 public class Resources {
-    private Resources() {}
+    private Resources() {
+    }
 
     /**
-     * @param classLoader the {@link ClassLoader} of the {@link Class} calling this method
+     * @param classLoader  the {@link ClassLoader} of the {@link Class} calling this method
      * @param relativePath the path to the resource relative to the {@code resources} folder
      * @return the url which points to the resource
      */
@@ -57,6 +58,7 @@ public class Resources {
 
     /**
      * Reassembles the path skipping the first token.
+     *
      * @param tokens the splitted path
      * @return the reassembled path with the first token skipped
      */

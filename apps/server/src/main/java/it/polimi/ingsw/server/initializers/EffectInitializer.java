@@ -15,19 +15,20 @@ import java.util.stream.Collectors;
 
 public class EffectInitializer {
 
-    private EffectInitializer() {}
+    private EffectInitializer() {
+    }
 
     /**
      * @param compiledEffect the {@link CompiledEffect} to instantiate
      * @return an instance of {@link Effect}
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     public static Effect instantiate(CompiledEffect compiledEffect) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return new Effect(
@@ -40,16 +41,17 @@ public class EffectInitializer {
 
     /**
      * Instantiate a {@link List} of {@link CompiledExecutableAction}s.
+     *
      * @param executableActions the {@link List} of {@link CompiledExecutableAction}s
      * @return a {@link List} of {@link ExecutableAction}s
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     private static List<ExecutableAction> instantiateActions(List<CompiledExecutableAction> executableActions) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         try {
@@ -65,7 +67,8 @@ public class EffectInitializer {
                             else {
                                 return ActionInitializer.instantiate((CompiledAction) compiledExecutableAction);
                             }
-                        } catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
+                        }
+                        catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
                             return StreamExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());

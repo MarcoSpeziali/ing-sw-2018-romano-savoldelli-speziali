@@ -8,9 +8,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class DieFilterTest {
+
+    private static Stream<Arguments> testFromStringArguments() {
+        return Stream.of(
+                Arguments.of("color", DieFilter.COLOR),
+                Arguments.of("shade", DieFilter.SHADE)
+        );
+    }
 
     @ParameterizedTest
     @MethodSource("testFromStringArguments")
@@ -21,12 +26,5 @@ class DieFilterTest {
     @Test
     void testFromStringException() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> DieFilter.fromString("test"));
-    }
-
-    private static Stream<Arguments> testFromStringArguments() {
-        return Stream.of(
-                Arguments.of("color", DieFilter.COLOR),
-                Arguments.of("shade", DieFilter.SHADE)
-        );
     }
 }

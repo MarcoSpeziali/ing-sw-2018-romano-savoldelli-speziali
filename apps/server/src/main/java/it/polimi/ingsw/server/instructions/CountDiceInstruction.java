@@ -32,7 +32,7 @@ public class CountDiceInstruction extends Instruction {
                 window.getDice().stream()
                         .filter(die ->
                                 (this.filterShade == 0 || die.getShade().equals(this.filterShade)) &&
-                                (this.filterColor == null || die.getColor().equals(this.filterColor))
+                                        (this.filterColor == null || die.getColor().equals(this.filterColor))
                         ).count()
         );
     }

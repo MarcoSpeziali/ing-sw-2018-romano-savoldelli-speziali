@@ -6,9 +6,7 @@ import it.polimi.ingsw.server.managers.WorkflowManager;
 
 import java.util.List;
 
-import static it.polimi.ingsw.server.Turn.PerformedAction.END;
-import static it.polimi.ingsw.server.Turn.PerformedAction.START;
-import static it.polimi.ingsw.server.Turn.PerformedAction.TOOLCARD;
+import static it.polimi.ingsw.server.Turn.PerformedAction.*;
 
 
 public class Turn {
@@ -29,14 +27,19 @@ public class Turn {
 
         while (true) {
             this.setState();
-            if (state == END) break;
+            if (state == END) {
+                break;
+            }
 
             else {
                 if (toolCard.getEffect().getDescriptionKey().equals("non ricordo quale sia")) {
                     state = START;
-                    WorkflowManager.getInstance().setCurrentTurn(WorkflowManager.getInstance().getCurrentTurn()-1);
-                } else state = END;
-            toolCard.activate();
+                    WorkflowManager.getInstance().setCurrentTurn(WorkflowManager.getInstance().getCurrentTurn() - 1);
+                }
+                else {
+                    state = END;
+                }
+                toolCard.activate();
             }
         }
     }
@@ -47,15 +50,13 @@ public class Turn {
         player.addListener(toolCard -> {
             this.toolCard = toolCard;
             state = TOOLCARD;
-            });
+        });
         player.addListener(() -> state = END);
     }
 
     public enum PerformedAction {
         START, TOOLCARD, END
     }
-
-
 
 
 }

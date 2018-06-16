@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.compilers.cards;
 
+import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirectivesCompiler;
 import it.polimi.ingsw.server.compilers.instructions.directives.InstructionDirectiveCompiler;
 import it.polimi.ingsw.server.compilers.instructions.predicates.directives.PredicateDirectivesCompiler;
-import it.polimi.ingsw.core.GlassColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;

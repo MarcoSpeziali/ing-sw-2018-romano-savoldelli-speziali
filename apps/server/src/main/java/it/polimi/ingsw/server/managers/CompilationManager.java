@@ -27,10 +27,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class CompilationManager {
-    private CompilationManager() { }
-
     private static Logger logger = ServerLogger.getLogger(CompilationManager.class);
-
     /**
      * Gets the value returned by {@link #getLastCompilation()}.
      */
@@ -40,19 +37,23 @@ public class CompilationManager {
         return last;
     };
 
+    private CompilationManager() {
+    }
+
     public static long lastCompilation() {
         return lastCompilation.getAsLong();
     }
 
     /**
      * Compiles the resources even if they are up-to-date
+     *
      * @param resourcesToCompile an {@link EnumSet} of {@link Constants.Resources} to compile
      * @return a {@code long} value representing the time the last compilation occurred
-     * @throws ClassNotFoundException if any card class could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if any card class could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     public static long compile(Set<Constants.Resources> resourcesToCompile) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
         long compilationTime = System.currentTimeMillis();
@@ -173,12 +174,13 @@ public class CompilationManager {
 
     /**
      * Compiles the resources if needed.
+     *
      * @return a {@code long} value representing the time the last compilation occurred
-     * @throws ClassNotFoundException if any card class could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if any card class could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *         cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     public static long compileIfNeeded() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
         Set<Constants.Resources> resourcesToCompile = needsRecompilation();
@@ -203,7 +205,7 @@ public class CompilationManager {
 
     /**
      * @return a {@link Set} of {@link Constants.Resources} containing the resources
-     *         that needs recompilation
+     * that needs recompilation
      */
     public static Set<Constants.Resources> needsRecompilation() {
         List<Constants.Resources> resources = new LinkedList<>();
@@ -314,8 +316,8 @@ public class CompilationManager {
 
     /**
      * @return A {@code long} value representing the time the last compilation occurred,
-     *         measured in seconds since the epoch (00:00:00 GMT, January 1, 1970),
-     *         or {@code 0L} no compilations occurred.
+     * measured in seconds since the epoch (00:00:00 GMT, January 1, 1970),
+     * or {@code 0L} no compilations occurred.
      */
     private static long getLastCompilation() {
         // gets a list containing the name of the files in the provided directory
@@ -340,6 +342,7 @@ public class CompilationManager {
 
     /**
      * Creates the folder for the new compilation.
+     *
      * @param compilationTime the time of the new compilation
      * @return the created file
      * @throws IOException if any IO exception occurs
@@ -358,7 +361,7 @@ public class CompilationManager {
     }
 
     /**
-     * @param resource the resource to be copied
+     * @param resource          the resource to be copied
      * @param compilationFolder the destination folder
      * @throws IOException if any IO error occurs
      */
@@ -378,11 +381,12 @@ public class CompilationManager {
 
     /**
      * Compiles the windows and saves them at {@code compilationFolder}/windows.
+     *
      * @param compilationFolder the folder to save the compiled objects to
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     private static void compileWindows(File compilationFolder) throws ParserConfigurationException, SAXException, IOException {
         try {
@@ -404,12 +408,13 @@ public class CompilationManager {
 
     /**
      * Compiles the tool cards and saves them at {@code compilationFolder}/tool_cards.
+     *
      * @param compilationFolder the folder to save the compiled objects to
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
-     * @throws ClassNotFoundException if the class of a tool card objective card could not be found
+     *                                      cannot be created which satisfies the configuration requested
+     * @throws ClassNotFoundException       if the class of a tool card objective card could not be found
      */
     private static void compileToolCards(File compilationFolder) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
         try {
@@ -442,12 +447,13 @@ public class CompilationManager {
 
     /**
      * Compiles the action directives and saves them at {@code compilationFolder}/actions_directives.
+     *
      * @param compilationFolder the folder to save the compiled objects to
-     * @throws ClassNotFoundException if the class of an action directives could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if the class of an action directives could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     private static void compileActionDirectives(File compilationFolder) throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         try {
@@ -460,7 +466,8 @@ public class CompilationManager {
                     compilationFolder,
                     Constants.Resources.ACTIONS_DIRECTIVES.toString().toLowerCase()
             );
-        } catch (ParserConfigurationException | ClassNotFoundException | SAXException | IOException e) {
+        }
+        catch (ParserConfigurationException | ClassNotFoundException | SAXException | IOException e) {
             logger.severe("Could not compile action directives:");
             throw e;
         }
@@ -468,12 +475,13 @@ public class CompilationManager {
 
     /**
      * Compiles the predicates directives and saves them at {@code compilationFolder}/predicates_directives.
+     *
      * @param compilationFolder the folder to save the compiled objects to
-     * @throws ClassNotFoundException if the class of an predicate directives could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if the class of an predicate directives could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     private static void compilePredicatesDirectives(File compilationFolder) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         try {
@@ -495,12 +503,13 @@ public class CompilationManager {
 
     /**
      * Compiles the instructions directives and saves them at {@code compilationFolder}/instructions_directives.
+     *
      * @param compilationFolder the folder to save the compiled objects to
-     * @throws ClassNotFoundException if the class of an instruction directives could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if the class of an instruction directives could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     private static void compileInstructionsDirectives(File compilationFolder) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         try {
@@ -522,12 +531,13 @@ public class CompilationManager {
 
     /**
      * Compiles the private objective cards and saves them at {@code compilationFolder}/private_cards.
+     *
      * @param compilationFolder the folder to save the compiled objects to
-     * @throws ClassNotFoundException if the class of a private objective card could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if the class of a private objective card could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     private static void compilePrivateObjectiveCards(File compilationFolder) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         try {
@@ -574,12 +584,13 @@ public class CompilationManager {
 
     /**
      * Compiles the public objective cards and saves them at {@code compilationFolder}/public_cards.
+     *
      * @param compilationFolder the folder to save the compiled objects to
-     * @throws ClassNotFoundException if the class of a public objective card could not be found
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws ClassNotFoundException       if the class of a public objective card could not be found
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     private static void compilePublicObjectiveCards(File compilationFolder) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         try {
@@ -626,9 +637,10 @@ public class CompilationManager {
 
     /**
      * Serializes an array to a file.
-     * @param objects the objects to serialize
+     *
+     * @param objects           the objects to serialize
      * @param compilationFolder the folder to save the serialized objects to
-     * @param resourceName the name of the file to create
+     * @param resourceName      the name of the file to create
      * @throws IOException if any IO exception occurs
      */
     private static <T extends Serializable> void serializeObjects(T[] objects, File compilationFolder, String resourceName) throws IOException {
@@ -642,10 +654,11 @@ public class CompilationManager {
 
     /**
      * Deserialize an array from a file.
+     *
      * @param filePath the path to the file
-     * @param <T> the type of the serialized object
+     * @param <T>      the type of the serialized object
      * @return an array of type {@code T} containing the deserialized objects
-     * @throws IOException if any IO exception occurs
+     * @throws IOException            if any IO exception occurs
      * @throws ClassNotFoundException if a class could not be found
      */
     private static <T> T[] deserializeObjects(String filePath, Class<T[]> destinationClass) throws IOException, ClassNotFoundException {

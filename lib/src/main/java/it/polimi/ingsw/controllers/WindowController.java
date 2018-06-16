@@ -11,7 +11,7 @@ public class WindowController {
         this.window = window;
     }
 
-    public void setWindowModel(Window window){
+    public void setWindowModel(Window window) {
         this.window = window;
     }
 

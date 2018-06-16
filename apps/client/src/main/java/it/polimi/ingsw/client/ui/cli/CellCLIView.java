@@ -1,15 +1,10 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.controllers.CellController;
 import it.polimi.ingsw.models.Cell;
-import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.views.CellView;
-import javafx.scene.Parent;
 import org.fusesource.jansi.Ansi;
 
-import java.util.Scanner;
-
-import static org.fusesource.jansi.Ansi.Color.*;
+import static org.fusesource.jansi.Ansi.Color.BLACK;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class CellCLIView extends CellView implements CLIView {
@@ -24,12 +19,12 @@ public class CellCLIView extends CellView implements CLIView {
 
     @Override
     public void render() {
-        if(cell.isOccupied()) {
+        if (cell.isOccupied()) {
             ansiColor = Ansi.Color.valueOf(cell.getDie().getColor().toAnsiColor());
-            shade = (char) (cell.getDie().getShade()+48);
+            shade = (char) (cell.getDie().getShade() + 48);
         }
 
-        System.out.print(ansi().eraseScreen().bg(ansiColor).a(" "+shade+" ").fg(BLACK).reset());
+        System.out.print(ansi().eraseScreen().bg(ansiColor).a(" " + shade + " ").fg(BLACK).reset());
 
     }
 

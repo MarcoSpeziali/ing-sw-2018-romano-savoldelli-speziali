@@ -27,17 +27,17 @@ public abstract class Card implements Serializable {
     }
 
     /**
-     * @return the card's description
-     */
-    public LocalizedString getDescription() {
-        return this.description;
-    }
-
-    /**
      * @param title the card's title
      */
     public void setTitle(String title) {
         this.title = new LocalizedString(title);
+    }
+
+    /**
+     * @return the card's description
+     */
+    public LocalizedString getDescription() {
+        return this.description;
     }
 
     /**

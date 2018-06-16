@@ -10,7 +10,8 @@ import java.util.concurrent.TimeoutException;
 
 public final class AuthenticationManager {
 
-    private AuthenticationManager() {}
+    private AuthenticationManager() {
+    }
 
     // TODO: complete
     public static synchronized DatabasePlayer getAuthenticatedPlayer(Request<? extends JSONSerializable> request) throws SQLException, TimeoutException {

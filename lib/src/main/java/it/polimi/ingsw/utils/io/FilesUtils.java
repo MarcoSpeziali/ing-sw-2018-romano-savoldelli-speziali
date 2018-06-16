@@ -10,14 +10,16 @@ import java.util.stream.Collectors;
 
 public class FilesUtils {
 
-    private FilesUtils() {}
+    private FilesUtils() {
+    }
 
     /**
      * Gets a {@link List} {@link List} containing the name of the files in the
      * directory at the provided path.
+     *
      * @param filePath the path to target directory
      * @return {@code null} if the path does not denote a directory, a {@link List} containing
-     *         the name of the files in the directory at the provided path
+     * the name of the files in the directory at the provided path
      */
     public static List<String> listFilesInDirectory(String filePath) {
         return listFilesInDirectory(new File(filePath));
@@ -26,9 +28,10 @@ public class FilesUtils {
     /**
      * Gets a {@link List} {@link List} containing the name of the files in the
      * directory at the provided path.
+     *
      * @param targetDirectory the target directory
      * @return {@code null} if the path does not denote a directory, a {@link List} containing
-     *         the name of the files in the directory at the provided path
+     * the name of the files in the directory at the provided path
      */
     @SuppressWarnings("squid:S1168")
     public static List<String> listFilesInDirectory(File targetDirectory) {
@@ -60,7 +63,8 @@ public class FilesUtils {
     public static long getLastModifiedOfFile(URL url) {
         try {
             return url.openConnection().getLastModified();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             return 0L;
         }
     }
@@ -118,11 +122,11 @@ public class FilesUtils {
             return reader.lines().reduce("", (s, s2) -> s + '\n' + s2);
         }
     }
-    
+
     public static byte[] getFileContentAsBytes(String filePath) throws IOException {
         return Files.readAllBytes(Paths.get(filePath));
     }
-    
+
     public static byte[] getFileContentAsBytes(URL url) throws IOException {
         try (InputStream inputStream = url.openStream()) {
             return inputStream.readAllBytes();

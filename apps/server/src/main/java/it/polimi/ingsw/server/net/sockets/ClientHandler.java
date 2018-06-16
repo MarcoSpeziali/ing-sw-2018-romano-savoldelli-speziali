@@ -45,6 +45,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
 
     /**
      * Waits for the client to send a {@link Request}.
+     *
      * @param bufferedReader the {@link BufferedReader} which reads from the client
      * @return the {@link Request} created by the client
      * @throws IOException if any IO error occurs
@@ -60,6 +61,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
 
     /**
      * Sends a {@link Response} to the client.
+     *
      * @param response sends a {@link Response} to the connected client
      * @throws IOException if any IO error occurs
      */
@@ -71,31 +73,31 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         this.out.newLine();
         this.out.flush();
     }
-    
+
     protected Command handleAnonymousIncomingRequest() throws IOException, SQLException {
         return handleGenericRequest(null, SocketRouter::getHandlerForAnonymousRequest);
     }
-    
+
     protected Command handleIncomingRequest(CanContinueMiddleware<Request<? extends JSONSerializable>> shouldHandleRequestFunction) throws IOException, SQLException {
         return handleGenericRequest(shouldHandleRequestFunction, SocketRouter::getHandlerForRequest);
     }
-    
+
     private Command handleGenericRequest(CanContinueMiddleware<Request<? extends JSONSerializable>> shouldHandleRequestFunction, HandlerChooserMiddleware commandGetter) throws IOException, SQLException {
         SocketAddress socketAddress = this.client.getRemoteSocketAddress();
-    
+
         // waits for a request
         Request<? extends JSONSerializable> request = waitForRequest(this.in);
-    
+
         ServerLogger.getLogger(AnonymousClientHandler.class)
                 .fine(() -> String.format(
                         "Got request \"%s\", from client: %s",
                         request.toString(),
                         socketAddress.toString()
                 ));
-    
+
         return handleRequest(socketAddress.toString(), request, shouldHandleRequestFunction, commandGetter);
     }
-    
+
     protected Command handleMigrationRequest(Request<? extends JSONSerializable> request, CanContinueMiddleware<Request<? extends JSONSerializable>> shouldHandleRequestFunction) throws IOException, SQLException {
         return handleRequest(
                 this.client.getRemoteSocketAddress().toString(),
@@ -104,7 +106,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
                 SocketRouter::getHandlerForRequest
         );
     }
-    
+
     private Command handleRequest(String socketAddress, Request<? extends JSONSerializable> request, CanContinueMiddleware<Request<? extends JSONSerializable>> shouldHandleRequestFunction, HandlerChooserMiddleware commandGetter) throws IOException, SQLException {
         ServerLogger.getLogger(AnonymousClientHandler.class)
                 .fine(() -> String.format(
@@ -112,7 +114,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
                         request.toString(),
                         socketAddress
                 ));
-    
+
         try {
             if (shouldHandleRequestFunction != null && !shouldHandleRequestFunction.canContinue(request)) {
                 return null;
@@ -120,38 +122,38 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         }
         catch (SQLException e) {
             ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
-        
+
             return null;
         }
-    
+
         // selects the handler for the request
         Command handler = commandGetter.getHandler(request);
-    
+
         // if the handler is null it means that the endpoint does not exists
         if (handler == null) {
             return null;
         }
-    
+
         // asks for a response
         @SuppressWarnings("unchecked")
         Response<? extends JSONSerializable> response = handler.handle(request, this.client);
-    
+
         ServerLogger.getLogger(AnonymousClientHandler.class)
                 .fine(() -> String.format(
                         "Sending response \"%s\", to client: %s", response.toString(), socketAddress
                 ));
-    
+
         // and sends it
         this.sendResponse(response);
-    
+
         return handler;
     }
-    
+
     @FunctionalInterface
     public interface CanContinueMiddleware<T> {
         boolean canContinue(T value) throws SQLException, IOException;
     }
-    
+
     private interface HandlerChooserMiddleware {
         <T extends JSONSerializable> Command getHandler(Request<T> request) throws SQLException;
     }

@@ -28,6 +28,18 @@ public class ActionData implements Serializable {
     private final String resultIdentifier;
 
     /**
+     * Creates a new instance of {@code ActionData}.
+     *
+     * @param constraint       The constraint of the action.
+     * @param resultIdentifier The name of the result, used by the next actions.
+     */
+    public ActionData(String descriptionKey, EvaluableConstraint constraint, String resultIdentifier) {
+        this.descriptionKey = descriptionKey;
+        this.constraint = constraint;
+        this.resultIdentifier = resultIdentifier;
+    }
+
+    /**
      * @return The key of the string that describes the action.
      */
     public String getDescriptionKey() {
@@ -46,16 +58,5 @@ public class ActionData implements Serializable {
      */
     public String getResultIdentifier() {
         return resultIdentifier;
-    }
-
-    /**
-     * Creates a new instance of {@code ActionData}.
-     * @param constraint The constraint of the action.
-     * @param resultIdentifier The name of the result, used by the next actions.
-     */
-    public ActionData(String descriptionKey, EvaluableConstraint constraint, String resultIdentifier) {
-        this.descriptionKey = descriptionKey;
-        this.constraint = constraint;
-        this.resultIdentifier = resultIdentifier;
     }
 }

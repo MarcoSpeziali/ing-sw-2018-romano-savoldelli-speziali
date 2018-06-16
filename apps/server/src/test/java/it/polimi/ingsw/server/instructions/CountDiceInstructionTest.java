@@ -19,6 +19,27 @@ import static org.mockito.Mockito.when;
 
 class CountDiceInstructionTest {
 
+    private static Stream<Arguments> testColorFilterArguments() {
+        return Stream.of(
+                Arguments.of(GlassColor.RED, 9),
+                Arguments.of(GlassColor.GREEN, 5),
+                Arguments.of(GlassColor.BLUE, 0),
+                Arguments.of(GlassColor.YELLOW, 5),
+                Arguments.of(GlassColor.PURPLE, 1)
+        );
+    }
+
+    private static Stream<Arguments> testShadeFilterArguments() {
+        return Stream.of(
+                Arguments.of(1, 4),
+                Arguments.of(2, 4),
+                Arguments.of(3, 3),
+                Arguments.of(4, 4),
+                Arguments.of(5, 5),
+                Arguments.of(6, 0)
+        );
+    }
+
     @BeforeEach
     void setUp() {
         Window window = mock(Window.class);
@@ -70,26 +91,5 @@ class CountDiceInstructionTest {
     void testColorFilter(GlassColor colorFilter, Integer expectedValue) {
         CountDiceInstruction instruction = new CountDiceInstruction(0, colorFilter);
         Assertions.assertEquals(expectedValue, instruction.run(Context.getSharedInstance()));
-    }
-
-    private static Stream<Arguments> testColorFilterArguments() {
-        return Stream.of(
-                Arguments.of(GlassColor.RED, 9),
-                Arguments.of(GlassColor.GREEN, 5),
-                Arguments.of(GlassColor.BLUE, 0),
-                Arguments.of(GlassColor.YELLOW, 5),
-                Arguments.of(GlassColor.PURPLE, 1)
-        );
-    }
-
-    private static Stream<Arguments> testShadeFilterArguments() {
-        return Stream.of(
-                Arguments.of(1, 4),
-                Arguments.of(2, 4),
-                Arguments.of(3, 3),
-                Arguments.of(4, 4),
-                Arguments.of(5, 5),
-                Arguments.of(6, 0)
-        );
     }
 }

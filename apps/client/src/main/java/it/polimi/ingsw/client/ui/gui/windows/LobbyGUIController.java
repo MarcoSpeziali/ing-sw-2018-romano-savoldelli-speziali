@@ -18,10 +18,11 @@ import java.util.ResourceBundle;
 
 public class LobbyGUIController extends LobbyController implements Initializable {
 
+    @FXML
+    public JFXListView<Label> listView;
+    @FXML
+    public Label seconds;
     private FXMLLoader loader = new FXMLLoader();
-
-    @FXML public JFXListView<Label> listView;
-    @FXML public Label seconds;
 
 
     public LobbyGUIController() {
@@ -39,16 +40,16 @@ public class LobbyGUIController extends LobbyController implements Initializable
     }
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for (int i = 0; i <4 ; i++) {
+        for (int i = 0; i < 4; i++) {
             try {
-                Label lbl = new Label("Item "+i);
+                Label lbl = new Label("Item " + i);
                 lbl.setMinHeight(100);
 
                 listView.getItems().add(lbl);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }

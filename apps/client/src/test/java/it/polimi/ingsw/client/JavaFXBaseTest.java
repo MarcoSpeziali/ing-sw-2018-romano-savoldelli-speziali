@@ -11,6 +11,22 @@ public abstract class JavaFXBaseTest {
 
     private static boolean jfxIsSetup;
 
+    @BeforeAll
+    protected static void setupJavaFX() throws RuntimeException {
+        final CountDownLatch latch = new CountDownLatch(1);
+        SwingUtilities.invokeLater(() -> {
+            new JFXPanel(); // initializes JavaFX environment
+            latch.countDown();
+        });
+
+        try {
+            latch.await();
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected void doOnJavaFXThread(Runnable pRun) throws RuntimeException {
         if (!jfxIsSetup) {
             setupJavaFX();
@@ -24,22 +40,8 @@ public abstract class JavaFXBaseTest {
 
         try {
             countDownLatch.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
-    }
-
-    @BeforeAll
-    protected static void setupJavaFX() throws RuntimeException {
-        final CountDownLatch latch = new CountDownLatch(1);
-        SwingUtilities.invokeLater(() -> {
-            new JFXPanel(); // initializes JavaFX environment
-            latch.countDown();
-        });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

@@ -15,6 +15,7 @@ public abstract class Instruction {
 
     /**
      * Gets the instructions.
+     *
      * @return An ordered list of instructions which represents the inner instruction to execute.
      */
     public List<Instruction> getInstructions() {
@@ -23,6 +24,7 @@ public abstract class Instruction {
 
     /**
      * Sets the instructions.
+     *
      * @param instructions An ordered list of instructions which represents the inner instruction to execute.
      */
     public void setInstructions(List<Instruction> instructions) {
@@ -31,6 +33,7 @@ public abstract class Instruction {
 
     /**
      * Runs the instruction, if no instructions are provided the default value of 0 is returned.
+     *
      * @param context The context that holds the variables needed by the instruction.
      * @return The number of times that the objective has been achieved.
      */

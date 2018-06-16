@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server.compilers.actions.directives;
 
-import it.polimi.ingsw.server.utils.VariableSupplier;
+import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.compilers.commons.directives.ParameterDirective;
 import it.polimi.ingsw.server.compilers.expressions.ConstantExpressionCaster;
-import it.polimi.ingsw.server.actions.ExecutableAction;
-import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import org.w3c.dom.Node;
@@ -23,15 +23,17 @@ import java.util.stream.Collectors;
  */
 public final class ActionDirectivesCompiler {
 
-    private ActionDirectivesCompiler() {}
+    private ActionDirectivesCompiler() {
+    }
 
     /**
      * Compiles the directives to instantiate the actions.
+     *
      * @return A {@link List} of {@link ActionDirective}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     public static List<ActionDirective> compile() throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
         return compile(Constants.Resources.ACTIONS_DIRECTIVES.getRelativePath(), true);
@@ -39,13 +41,14 @@ public final class ActionDirectivesCompiler {
 
     /**
      * Compiles the directives to instantiate the actions.
+     *
      * @param directivesPath the path to the directives
-     * @param isResource if the path refers to a resource
+     * @param isResource     if the path refers to a resource
      * @return A list of {@link ActionDirective}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested
+     *                                      cannot be created which satisfies the configuration requested
      */
     @SuppressWarnings("squid:S00112") // throw new RuntimeException(e)
     public static List<ActionDirective> compile(String directivesPath, boolean isResource) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
@@ -62,7 +65,8 @@ public final class ActionDirectivesCompiler {
                         try {
                             // processes the action directive
                             return processActionDirective(rawDirective);
-                        } catch (ClassNotFoundException e) {
+                        }
+                        catch (ClassNotFoundException e) {
                             return StreamExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
@@ -74,6 +78,7 @@ public final class ActionDirectivesCompiler {
 
     /**
      * Processes the raw directive.
+     *
      * @param rawDirective The raw directive in form of a {@link Map}
      * @return The actual directive as {@link ActionDirective}
      * @throws ClassNotFoundException if any of the class of the found parameters does not exists
@@ -98,7 +103,8 @@ public final class ActionDirectivesCompiler {
                                 try {
                                     // processes the action directive
                                     return processActionParameterDirective(d);
-                                } catch (ClassNotFoundException e) {
+                                }
+                                catch (ClassNotFoundException e) {
                                     return StreamExceptionWrapper.wrap(e);
                                 }
                             }).collect(Collectors.toList());
@@ -118,6 +124,7 @@ public final class ActionDirectivesCompiler {
 
     /**
      * Processes the raw parameter directive.
+     *
      * @param rawDirective The raw parameter directive in form of a {@link Map}
      * @return The actual parameter directive as {@link ParameterDirective}
      * @throws ClassNotFoundException if the class of the parameter does not exists
@@ -158,13 +165,14 @@ public final class ActionDirectivesCompiler {
 
     /**
      * Reads the file and parses the xml in it into a {@link Map}.
-     * @param path The path to the file, or the resource name
+     *
+     * @param path       The path to the file, or the resource name
      * @param isResource {@code true} if the path points to a resource, {@code false} otherwise
      * @return The parsed xml as {@link Map}
-     * @throws IOException If any IO errors occur
-     * @throws SAXException If any parse errors occur
+     * @throws IOException                  If any IO errors occur
+     * @throws SAXException                 If any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     private static Map<String, Object>[] getRawDirectives(String path, boolean isResource) throws IOException, SAXException, ParserConfigurationException {
         Node node;
@@ -191,6 +199,7 @@ public final class ActionDirectivesCompiler {
 
     /**
      * Retrieves the parameters directives from the provided action directives.
+     *
      * @param actionDirectives The current action directives
      * @return the parameters directives from the provided action directives
      */
@@ -204,7 +213,7 @@ public final class ActionDirectivesCompiler {
     }
 
     /**
-     * @param className the original class name
+     * @param className  the original class name
      * @param isMultiple if the class represents an array
      * @return the array version of the provided class
      */
@@ -233,6 +242,7 @@ public final class ActionDirectivesCompiler {
         static final String ACTION_DIRECTIVES_PARAMETER_IS_MULTIPLE = "@multiple";
         static final String ACTION_DIRECTIVES_PARAMETER_IS_SUPPLIED = "@supplied";
 
-        private ActionDirectivesNodes() { }
+        private ActionDirectivesNodes() {
+        }
     }
 }

@@ -9,7 +9,8 @@ import java.util.Locale;
 import java.util.Set;
 
 public class Constants {
-    private Constants() {}
+    private Constants() {
+    }
 
     public enum Paths {
         PROJECT_FOLDER(java.nio.file.Paths.get(
@@ -57,6 +58,7 @@ public class Constants {
         SETTINGS_FXML("FXML/Window/Settings.fxml"),
         LOBBY("FXML/Window/Lobby.fxml");
 
+        public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
         private final String relativePath;
 
         Resources(String relativePath) {
@@ -77,8 +79,6 @@ public class Constants {
             ClassLoader classLoader = SagradaGUI.class.getClassLoader();
             return it.polimi.ingsw.utils.io.Resources.getResource(classLoader, this.relativePath);
         }
-
-        public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
     }
 
     public enum ClientArguments {
@@ -135,7 +135,8 @@ public class Constants {
         public static final String SIGN_IN_SING_IN_NOW_LABEL_TEXT = "sign_in.sign_in_now_label.text";
         public static final String SIGN_IN_SIGN_IN_BUTTON_TEXT = "sign_in.sign_in_button.text";
 
-        private Strings() {}
+        private Strings() {
+        }
 
         public static String toLocalized(String string) {
             return new LocalizedString(string).toString();

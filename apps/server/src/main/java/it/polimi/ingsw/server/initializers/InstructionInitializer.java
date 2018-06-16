@@ -1,12 +1,12 @@
 package it.polimi.ingsw.server.initializers;
 
-import it.polimi.ingsw.server.utils.VariableSupplier;
-import it.polimi.ingsw.server.instructions.Instruction;
-import it.polimi.ingsw.server.instructions.predicates.Predicate;
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
 import it.polimi.ingsw.server.compilers.instructions.CompiledExposedVariable;
 import it.polimi.ingsw.server.compilers.instructions.CompiledInstruction;
 import it.polimi.ingsw.server.compilers.instructions.predicates.CompiledPredicate;
+import it.polimi.ingsw.server.instructions.Instruction;
+import it.polimi.ingsw.server.instructions.predicates.Predicate;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 
 import java.lang.reflect.Constructor;
@@ -18,20 +18,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class InstructionInitializer {
-    private InstructionInitializer() {}
+    private InstructionInitializer() {
+    }
 
     /**
      * Instantiates an {@link Instruction} from a {@link CompiledInstruction}.
+     *
      * @param compiledInstruction the compiled instruction
      * @return an instance of {@link Instruction} created from a {@link CompiledInstruction}
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     public static Instruction instantiate(CompiledInstruction compiledInstruction) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         // gets the target class
@@ -110,17 +112,18 @@ public class InstructionInitializer {
 
     /**
      * Instantiates the provided predicates.
+     *
      * @param predicates the {@link List} of {@link CompiledPredicate} to initialize
      * @return a {@link Map} of {@link String}, which represents the predicate parameter
-     *         name, and {@link Predicate}, which represents the initialized predicate.
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * name, and {@link Predicate}, which represents the initialized predicate.
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     @SuppressWarnings("squid:S00112") // throw new RuntimeException(e)
     private static Map<String, Predicate> getPredicateMap(List<CompiledPredicate> predicates) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -132,7 +135,8 @@ public class InstructionInitializer {
                         // cannot be easily propagated
                         try {
                             return PredicateInitializer.instantiate(compiledPredicate);
-                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        }
+                        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                             return StreamExceptionWrapper.wrap(e);
                         }
                     }));
@@ -147,16 +151,17 @@ public class InstructionInitializer {
 
     /**
      * Instantiates the provided instructions.
+     *
      * @param instructions the {@link List} of {@link CompiledInstruction} to initialize
      * @return a {@link List} of {@link Instruction}
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     @SuppressWarnings("squid:S00112") // throw new RuntimeException(e)
     private static List<Instruction> instantiateSubInstructions(List<CompiledInstruction> instructions) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -174,7 +179,8 @@ public class InstructionInitializer {
                         // cannot be easily propagated
                         try {
                             return InstructionInitializer.instantiate(compiledInstruction);
-                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        }
+                        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                             return StreamExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());

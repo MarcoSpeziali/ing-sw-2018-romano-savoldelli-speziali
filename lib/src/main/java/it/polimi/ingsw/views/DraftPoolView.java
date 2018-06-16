@@ -8,15 +8,15 @@ public abstract class DraftPoolView {
     protected DieView[] dieView;
     protected DraftPoolController draftPoolController;
 
-    public void setDraftPool(DraftPool draftPool){
+    public DraftPoolView(DraftPool draftPool) {
+        this.draftPool = draftPool;
+    }
+
+    public void setDraftPool(DraftPool draftPool) {
         this.draftPool = draftPool;
     }
 
     public void setDraftPoolController(DraftPoolController draftPoolController) {
         this.draftPoolController = draftPoolController;
-    }
-
-    public DraftPoolView(DraftPool draftPool){
-        this.draftPool = draftPool;
     }
 }

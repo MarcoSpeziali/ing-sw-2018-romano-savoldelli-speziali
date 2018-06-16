@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LocalizedText {
     String key();
+
     Class<? extends FieldLocalizationUpdater> fieldUpdater();
 
     @Retention(RetentionPolicy.RUNTIME)

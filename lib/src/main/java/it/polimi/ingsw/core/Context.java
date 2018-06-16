@@ -1,14 +1,15 @@
 package it.polimi.ingsw.core;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Context implements Serializable {
-
-    private static final long serialVersionUID = -3619852381252122217L;
 
     public static final String WINDOW = "window";
     public static final String DRAFT_POOL = "draft_pool";
@@ -16,17 +17,22 @@ public class Context implements Serializable {
     public static final String ROUND_TRACK = "round_track";
     public static final String CURRENT_PLAYER = "current_player";
     public static final String MATCH = "match";
-
+    private static final long serialVersionUID = -3619852381252122217L;
+    /**
+     * The singleton of the {@link Context}.
+     */
+    private static Context singleton;
     /**
      * The context's variables are stored into an {@link HashMap}.
      */
     @SuppressWarnings("WeakerAccess")
     protected HashMap<String, Object> hashMap;
 
-    /**
-     * The singleton of the {@link Context}.
-     */
-    private static Context singleton;
+    protected Context() {
+        super();
+
+        this.hashMap = new HashMap<>();
+    }
 
     /**
      * @return The shared instance of the {@link Context} class.
@@ -37,12 +43,6 @@ public class Context implements Serializable {
         }
 
         return singleton;
-    }
-
-    protected Context() {
-        super();
-
-        this.hashMap = new HashMap<>();
     }
 
     /**
@@ -214,9 +214,9 @@ public class Context implements Serializable {
      * Exceptions thrown by the action are relayed to the caller.
      *
      * @param action The action to be performed for each entry
-     * @throws NullPointerException            if the specified action is null
+     * @throws NullPointerException                      if the specified action is null
      * @throws java.util.ConcurrentModificationException if an entry is found to be
-     *                                         removed during iteration
+     *                                                   removed during iteration
      * @implSpec The default implementation is equivalent to, for this {@code map}:
      * <pre> {@code
      * for (Map.Entry<K, V> entry : map.entrySet())
@@ -236,6 +236,7 @@ public class Context implements Serializable {
     /**
      * Creates a snapshot of the current state of the context. So every key created by the snapshot can
      * be removed by calling {@code ContextSnapshot::revert}.
+     *
      * @param snapshotId The id of the snapshot.
      * @return A new context with the same variables of the original one.
      */
@@ -246,8 +247,9 @@ public class Context implements Serializable {
     /**
      * Creates a snapshot of the current state of the context, executed the provided action and reverts the snapshot.
      * So every key created by the snapshot gets immediately removed.
+     *
      * @param snapshotId The id of the snapshot.
-     * @param action A {@link Consumer<Snapshot>} that consumes the snapshot.
+     * @param action     A {@link Consumer<Snapshot>} that consumes the snapshot.
      */
     @SuppressWarnings("UnusedReturnValue")
     public Context snapshot(String snapshotId, Consumer<Snapshot> action) {
@@ -275,6 +277,7 @@ public class Context implements Serializable {
         /**
          * Creates a snapshot of the current state of the context. So every key created by the snapshot can
          * be removed by calling {@code ContextSnapshot::revert}.
+         *
          * @param snapshotId The id of the snapshot.
          */
         private Snapshot(String snapshotId, Context parentContext) {

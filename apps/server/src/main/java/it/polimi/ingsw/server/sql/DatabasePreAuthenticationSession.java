@@ -14,45 +14,6 @@ public class DatabasePreAuthenticationSession {
     private String validForIp;
     private int validForPort;
 
-    public int getId() {
-        return id;
-    }
-
-    public int getPlayerId() {
-        return playerId;
-    }
-
-    public DatabasePlayer getPlayer() throws SQLException {
-        String query = String.format(
-                "SELECT p.* FROM pre_authentication_session pas JOIN player p ON pas.player = p.id WHERE pas.id = %d",
-                this.id
-        );
-
-        try (SagradaDatabase database = new SagradaDatabase()) {
-            return database.executeQuery(query, DatabasePlayer::new);
-        }
-    }
-
-    public String getExpectedChallengeResponse() {
-        return expectedChallengeResponse;
-    }
-
-    public long getCreationTimeStamp() {
-        return creationTimeStamp;
-    }
-
-    public long getInvalidationTimeStamp() {
-        return invalidationTimeStamp;
-    }
-
-    public String getValidForIp() {
-        return validForIp;
-    }
-
-    public int getValidForPort() {
-        return validForPort;
-    }
-
     DatabasePreAuthenticationSession(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
         this.playerId = resultSet.getInt("player");
@@ -109,5 +70,44 @@ public class DatabasePreAuthenticationSession {
 
     private static DatabasePreAuthenticationSession executeQuery(SagradaDatabase database, String query) throws SQLException {
         return database.executeQuery(query, DatabasePreAuthenticationSession::new);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public DatabasePlayer getPlayer() throws SQLException {
+        String query = String.format(
+                "SELECT p.* FROM pre_authentication_session pas JOIN player p ON pas.player = p.id WHERE pas.id = %d",
+                this.id
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabasePlayer::new);
+        }
+    }
+
+    public String getExpectedChallengeResponse() {
+        return expectedChallengeResponse;
+    }
+
+    public long getCreationTimeStamp() {
+        return creationTimeStamp;
+    }
+
+    public long getInvalidationTimeStamp() {
+        return invalidationTimeStamp;
+    }
+
+    public String getValidForIp() {
+        return validForIp;
+    }
+
+    public int getValidForPort() {
+        return validForPort;
     }
 }

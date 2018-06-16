@@ -29,6 +29,24 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
      */
     private ResponseError error;
 
+    public Response() {
+
+    }
+
+    public Response(Header header, T body, ResponseError error) {
+        this.header = header;
+        this.body = body;
+        this.error = error;
+    }
+
+    public Response(Header header, T body) {
+        this(header, body, null);
+    }
+
+    public Response(Header header, ResponseError error) {
+        this(header, null, error);
+    }
+
     /**
      * @return the header of the response
      */
@@ -50,24 +68,6 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
         return error;
     }
 
-    public Response() {
-
-    }
-
-    public Response(Header header, T body, ResponseError error) {
-        this.header = header;
-        this.body = body;
-        this.error = error;
-    }
-
-    public Response(Header header, T body) {
-        this(header, body, null);
-    }
-
-    public Response(Header header, ResponseError error) {
-        this(header, null, error);
-    }
-
     @Override
     public void deserialize(JSONObject jsonObject) {
         if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
@@ -83,10 +83,10 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
             try {
                 this.body = this.instantiateBody(bodyObject.getString(ResponseFields.Body.CLASS_TYPE.toString()));
             }
-            catch ( NoSuchMethodException       |
-                    InstantiationException      |
-                    InvocationTargetException   |
-                    ClassNotFoundException      |
+            catch (NoSuchMethodException |
+                    InstantiationException |
+                    InvocationTargetException |
+                    ClassNotFoundException |
                     IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

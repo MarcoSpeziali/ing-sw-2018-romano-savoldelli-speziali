@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <windows>
-    <window rows="4" columns="5" id="kaleidoscopic_dream" sibling="firmitas" name="windows.kaleidoscopic_dream" difficulty="4">
-        <cell color="yellow" />
-        <cell color="blue" />
-        <cell />
-        <cell />
-        <cell shade="1" />
+    <window rows="4" columns="5" id="kaleidoscopic_dream" sibling="firmitas" name="windows.kaleidoscopic_dream"
+            difficulty="4">
+        <cell color="yellow"/>
+        <cell color="blue"/>
+        <cell/>
+        <cell/>
+        <cell shade="1"/>
 
-        <cell color="green" />
-        <cell />
+        <cell color="green"/>
+        <cell/>
         <cell shade="5"/>
-        <cell />
+        <cell/>
         <cell shade="4"/>
-        
+
         <cell shade="3"/>
-        <cell />
+        <cell/>
         <cell color="red"/>
-        <cell />
-        <cell color ="green"/>
+        <cell/>
+        <cell color="green"/>
 
         <cell shade="2"/>
-        <cell />
-        <cell />
+        <cell/>
+        <cell/>
         <cell color="blue"/>
         <cell color="yellow"/>
     </window>
     <window rows="4" columns="5" id="firmitas" sibling="kaleidoscopic_dream" name="windows.firmitas" difficulty="5">
         <cell color="purple"/>
         <cell shade="6"/>
-        <cell />
-        <cell />
+        <cell/>
+        <cell/>
         <cell shade="3"/>
 
         <cell shade="5"/>
         <cell color="purple"/>
         <cell shade="3"/>
-        <cell />
-        <cell />
+        <cell/>
+        <cell/>
 
-        <cell />
+        <cell/>
         <cell shade="2"/>
         <cell color="purple"/>
         <cell shade="1"/>
-        <cell />
+        <cell/>
 
-        <cell />    
+        <cell/>
         <cell shade="1"/>
         <cell shade="5"/>
         <cell color="purple"/>

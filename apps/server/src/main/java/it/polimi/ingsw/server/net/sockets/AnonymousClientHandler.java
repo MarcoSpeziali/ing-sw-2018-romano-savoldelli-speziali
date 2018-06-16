@@ -32,38 +32,38 @@ public class AnonymousClientHandler extends ClientHandler {
             do {
                 // waits for a request
                 Request<? extends JSONSerializable> request = waitForRequest(this.in);
-    
+
                 if (tryMigration(request)) {
                     return;
                 }
-    
+
                 ServerLogger.getLogger(AnonymousClientHandler.class)
                         .fine(() -> String.format(
                                 "Got request \"%s\", from client: %s",
                                 request.toString(),
                                 socketAddress.toString()
                         ));
-    
+
                 // selects the handler for the request
                 handler = SocketRouter.getHandlerForAnonymousRequest(request);
-    
+
                 // if the handler is null it means that the endpoint does not exists
                 if (handler == null) {
                     return;
                 }
-    
+
                 // asks for a response
                 @SuppressWarnings("unchecked")
                 Response<? extends JSONSerializable> response = handler.handle(request, this.client);
-    
+
                 ServerLogger.getLogger(AnonymousClientHandler.class)
                         .fine(() -> String.format(
                                 "Sending response \"%s\", to client: %s", response.toString(), socketAddress.toString()
                         ));
-    
+
                 // and sends it
                 this.sendResponse(response);
-                
+
                 // if the handler needs the connection to be kept alive it wont be closed
             } while (handler.shouldBeKeptAlive());
         }
@@ -72,26 +72,26 @@ public class AnonymousClientHandler extends ClientHandler {
                     .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
         }
     }
-    
+
     // TODO: docs
     private boolean tryMigration(Request<?> request) throws SQLException, TimeoutException, IOException {
         DatabasePlayer databasePlayer = AuthenticationManager.getAuthenticatedPlayer(request);
-    
+
         if (databasePlayer != null) {
             AuthenticatedClientHandler clientHandler = AuthenticatedClientHandler.migrate(
                     this,
                     databasePlayer,
                     request
             );
-            
+
             new Thread(
                     clientHandler,
                     Constants.Threads.PLAYER_HANDLER + "-" + clientHandler.getPlayer().toString()
             ).start();
-            
+
             return true;
         }
-        
+
         return false;
     }
 

@@ -6,7 +6,8 @@
         </exposes-directives>
         <parameters-directives>
             <parameter-directives class="java.lang.Integer" name="filterShade" default="0" position="0"/>
-            <parameter-directives class="it.polimi.ingsw.core.GlassColor" default="null" name="filterColor" position="1"/>
+            <parameter-directives class="it.polimi.ingsw.core.GlassColor" default="null" name="filterColor"
+                                  position="1"/>
         </parameters-directives>
     </instruction-directives>
     <instruction-directives id="for-row" class="it.polimi.ingsw.server.instructions.ForRowInstruction">
@@ -34,18 +35,20 @@
     <instruction-directives id="take-max" class="it.polimi.ingsw.server.instructions.TakeMaxInstruction"/>
     <instruction-directives id="take-sum" class="it.polimi.ingsw.server.instructions.TakeSumInstruction"/>
     <instruction-directives id="take-rand" class="it.polimi.ingsw.server.instructions.TakeRandomInstruction"/>
-    <instruction-directives id="take-product" class="it.polimi.ingsw.server.instructions.TakeProductInstruction" />
+    <instruction-directives id="take-product" class="it.polimi.ingsw.server.instructions.TakeProductInstruction"/>
     <instruction-directives id="count-dice" class="it.polimi.ingsw.server.instructions.CountDiceInstruction">
         <parameters-directives>
             <parameter-directives name="filterShade" class="java.lang.Integer" default="0" position="0"/>
-            <parameter-directives name="filterColor" class="it.polimi.ingsw.core.GlassColor" default="null" position="1"/>
+            <parameter-directives name="filterColor" class="it.polimi.ingsw.core.GlassColor" default="null"
+                                  position="1"/>
         </parameters-directives>
     </instruction-directives>
     <instruction-directives id="count-diagonal" class="it.polimi.ingsw.server.instructions.CountDiagonalInstruction">
         <parameters-directives>
             <parameter-directives name="filter" class="it.polimi.ingsw.server.instructions.DieFilter" position="0"/>
             <parameter-directives name="strictShade" class="java.lang.Integer" default="0" position="1"/>
-            <parameter-directives name="strictColor" class="it.polimi.ingsw.core.GlassColor" default="null" position="2"/>
+            <parameter-directives name="strictColor" class="it.polimi.ingsw.core.GlassColor" default="null"
+                                  position="2"/>
         </parameters-directives>
     </instruction-directives>
 </instructions-directives>

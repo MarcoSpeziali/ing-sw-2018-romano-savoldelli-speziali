@@ -13,8 +13,8 @@ import it.polimi.ingsw.net.requests.SignUpRequest;
 import it.polimi.ingsw.net.responses.SignUpResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.text.CypherUtils;
 import it.polimi.ingsw.utils.io.FilesUtils;
+import it.polimi.ingsw.utils.text.CypherUtils;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -24,11 +24,6 @@ import java.security.GeneralSecurityException;
 public class SignUpManager {
 
     private static SignUpManager instance = new SignUpManager();
-
-    public static SignUpManager getManager() {
-        return instance;
-    }
-
     private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
 
     private SignUpManager() {
@@ -47,12 +42,16 @@ public class SignUpManager {
         }
     }
 
+    public static SignUpManager getManager() {
+        return instance;
+    }
+
     /**
      * @param username the username of the player
      * @param password the password of the player
      * @return {@code true} if the player successfully signed-up, {@code false} otherwise
-     * @throws IOException if the server's public key could not be retrieved
-     * @throws RemoteException if the operation could not be completed due to a connection or a server problem
+     * @throws IOException              if the server's public key could not be retrieved
+     * @throws RemoteException          if the operation could not be completed due to a connection or a server problem
      * @throws GeneralSecurityException if the password could not be encrypted with the server's public key
      */
     public boolean signUp(String username, String password) throws IOException, GeneralSecurityException, NotBoundException {

@@ -42,6 +42,24 @@ public abstract class SettingsBase {
         Setting.Builder.build(this, map);
     }
 
+    private static Map<String, String> parseSettingsNode(Node node) {
+        NodeList children = node.getChildNodes();
+
+        Map<String, String> settings = new HashMap<>();
+
+        for (int i = 0; i < children.getLength(); i++) {
+            Node child = children.item(i);
+
+            if (child.getNodeName().equals("#text")) {
+                continue;
+            }
+
+            settings.put(child.getNodeName(), child.getTextContent());
+        }
+
+        return settings;
+    }
+
     public void save() {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -77,23 +95,5 @@ public abstract class SettingsBase {
         catch (ParserConfigurationException | IllegalAccessException | TransformerException e) {
             e.printStackTrace();
         }
-    }
-
-    private static Map<String, String> parseSettingsNode(Node node) {
-        NodeList children = node.getChildNodes();
-
-        Map<String, String> settings = new HashMap<>();
-
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.item(i);
-
-            if (child.getNodeName().equals("#text")) {
-                continue;
-            }
-
-            settings.put(child.getNodeName(), child.getTextContent());
-        }
-
-        return settings;
     }
 }

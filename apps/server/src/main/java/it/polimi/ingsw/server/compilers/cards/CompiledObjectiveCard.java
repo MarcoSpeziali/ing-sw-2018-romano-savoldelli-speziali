@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.compilers.cards;
 
-import it.polimi.ingsw.server.compilers.objectives.CompiledObjective;
 import it.polimi.ingsw.core.CardVisibility;
+import it.polimi.ingsw.server.compilers.objectives.CompiledObjective;
 
 public class CompiledObjectiveCard extends CompiledCard {
 
@@ -18,6 +18,25 @@ public class CompiledObjectiveCard extends CompiledCard {
     private CardVisibility visibility;
 
     /**
+     * @param id        the id of the card
+     * @param name      the name key of the card
+     * @param objective the objective of the card
+     */
+    public CompiledObjectiveCard(String id, String name, CompiledObjective objective, CardVisibility visibility) {
+        super(id, name);
+        this.objective = objective;
+        this.visibility = visibility;
+    }
+
+    /**
+     * @param compiledCard the compiled card
+     * @param objective    the objective of the card
+     */
+    public CompiledObjectiveCard(CompiledCard compiledCard, CompiledObjective objective, CardVisibility visibility) {
+        this(compiledCard.getId(), compiledCard.getName(), objective, visibility);
+    }
+
+    /**
      * @return the objective of the card
      */
     public CompiledObjective getObjective() {
@@ -29,24 +48,5 @@ public class CompiledObjectiveCard extends CompiledCard {
      */
     public CardVisibility getVisibility() {
         return visibility;
-    }
-
-    /**
-     * @param id   the id of the card
-     * @param name the name key of the card
-     * @param objective the objective of the card
-     */
-    public CompiledObjectiveCard(String id, String name, CompiledObjective objective, CardVisibility visibility) {
-        super(id, name);
-        this.objective = objective;
-        this.visibility = visibility;
-    }
-
-    /**
-     * @param compiledCard the compiled card
-     * @param objective the objective of the card
-     */
-    public CompiledObjectiveCard(CompiledCard compiledCard, CompiledObjective objective, CardVisibility visibility) {
-        this(compiledCard.getId(), compiledCard.getName(), objective, visibility);
     }
 }

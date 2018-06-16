@@ -17,6 +17,7 @@ class DieCLIViewTest {
         this.dieCLIView.setDieModel(die);
 
     }
+
     @Test
     void renderTest() {
         dieCLIView.render();

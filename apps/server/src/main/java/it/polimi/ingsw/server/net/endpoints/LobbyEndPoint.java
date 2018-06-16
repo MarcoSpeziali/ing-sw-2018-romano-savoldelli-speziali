@@ -35,6 +35,12 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     private static final long serialVersionUID = 4733876915509624154L;
 
     private static LobbyEndPoint instance;
+    private static Map<DatabasePlayer, LobbyUpdatesInterface> lobbyUpdates = new HashMap<>();
+
+    protected LobbyEndPoint() throws RemoteException {
+        // register this class to listen to the implemented events
+        EventDispatcher.register(this);
+    }
 
     public static LobbyEndPoint getInstance() throws RemoteException {
         if (instance == null) {
@@ -42,13 +48,6 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
         }
 
         return instance;
-    }
-
-    private static Map<DatabasePlayer, LobbyUpdatesInterface> lobbyUpdates = new HashMap<>();
-
-    protected LobbyEndPoint() throws RemoteException {
-        // register this class to listen to the implemented events
-        EventDispatcher.register(this);
     }
 
     @Override
@@ -84,7 +83,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                         finalLobby,
                         player
                 ));
-    
+
                 // sends the updates to all rmi players
                 lobbyUpdates.forEach(
                         (databasePlayer, lobbyUpdatesInterface) -> {
@@ -99,18 +98,18 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 );
                 AuthenticatedClientHandler.getHandlerForPlayersExcept(player)
                         .forEach(client -> {
-                            try {
-                                client.sendResponse(new Response<>(
-                                        new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
-                                        (ILobby) finalLobby
-                                ));
-                            }
-                            catch (IOException e) {
-                                ServerLogger.getLogger(SignInEndPoint.class)
-                                        .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
-                            }
-                        }
-                );
+                                    try {
+                                        client.sendResponse(new Response<>(
+                                                new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
+                                                (ILobby) finalLobby
+                                        ));
+                                    }
+                                    catch (IOException e) {
+                                        ServerLogger.getLogger(SignInEndPoint.class)
+                                                .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
+                                    }
+                                }
+                        );
 
                 // finally returns the response
                 return ResponseFactory.createLobbyResponse(request, lobby);

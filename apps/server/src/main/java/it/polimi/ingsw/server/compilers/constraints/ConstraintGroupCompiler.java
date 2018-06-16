@@ -18,10 +18,12 @@ public class ConstraintGroupCompiler {
     private static final String CONSTRAINT_NODE_NAME = "constraint";
     private static final String CONSTRAINT_GROUP_NODE_NAME = "constraint-group";
 
-    private ConstraintGroupCompiler() {}
+    private ConstraintGroupCompiler() {
+    }
 
     /**
      * Compiles a constraint-group from a {@link Node}.
+     *
      * @param node The node holding the constraint-group
      * @return The compiled constraint-group
      */

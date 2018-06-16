@@ -6,9 +6,9 @@ import it.polimi.ingsw.views.ToolCardView;
 public class ToolCardCLIView extends ToolCardView implements CLIView {
     private ToolCard toolCard;
 
-    public ToolCardCLIView (ToolCard toolCard){
-    this.toolCard = toolCard;
-}
+    public ToolCardCLIView(ToolCard toolCard) {
+        this.toolCard = toolCard;
+    }
 
     @Override
     public void render() {

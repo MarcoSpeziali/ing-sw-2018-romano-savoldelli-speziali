@@ -4,7 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public final class HashUtils {
-    private HashUtils() {}
+    private HashUtils() {
+    }
 
     public static String sha1(String original) {
         try {
@@ -18,7 +19,8 @@ public final class HashUtils {
             }
 
             return stringBuffer.toString();
-        } catch (NoSuchAlgorithmException e) {
+        }
+        catch (NoSuchAlgorithmException e) {
             return null;
         }
     }

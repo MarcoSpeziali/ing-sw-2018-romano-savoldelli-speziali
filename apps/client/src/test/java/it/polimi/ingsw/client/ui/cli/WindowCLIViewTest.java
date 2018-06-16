@@ -13,28 +13,28 @@ class WindowCLIViewTest {
     private WindowCLIView windowCLIView;
     private Window window;
     private WindowController windowController;
-    private Cell[][] cells = new Cell[][] {
+    private Cell[][] cells = new Cell[][]{
             {
-                    new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
+                    new Cell(0, null), new Cell(5, null), new Cell(4, null), new Cell(0, GlassColor.GREEN)
             },
             {
-                    new Cell(0, null),      new Cell(0, null),      new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
+                    new Cell(0, null), new Cell(0, null), new Cell(2, null), new Cell(0, GlassColor.PURPLE)
             },
             {
-                    new Cell(0, GlassColor.BLUE), new Cell(2, null),      new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
+                    new Cell(0, GlassColor.BLUE), new Cell(2, null), new Cell(0, GlassColor.RED), new Cell(0, GlassColor.YELLOW)
             }
     };
 
     @BeforeEach
-    void setup () {
-        this.window = new Window(4, 3,4, "Test", null, cells);
+    void setup() {
+        this.window = new Window(4, 3, 4, "Test", null, cells);
         windowCLIView = new WindowCLIView(window);
     }
 
     @Test
     void renderTest() {
         windowCLIView.render();
-        window.putDie(new Die(GlassColor.YELLOW,5), 0);
+        window.putDie(new Die(GlassColor.YELLOW, 5), 0);
         windowCLIView.render();
     }
 

@@ -7,6 +7,24 @@ import it.polimi.ingsw.utils.SettingsBase;
 public final class Settings extends SettingsBase {
 
     private static Settings sharedInstance;
+    @Setting(id = "server-socket-address", defaultValue = "idra.weblink.it")
+    private String serverSocketAddress;
+    @Setting(id = "server-socket-port", defaultValue = "9000", type = Integer.class)
+    private int serverSocketPort;
+    @Setting(id = "server-rmi-address", defaultValue = "idra.weblink.it")
+    private String serverRMIAddress;
+    @Setting(id = "server-rmi-port", defaultValue = "1009", type = Integer.class)
+    private int serverRMIPort;
+    @Setting(id = "connection-protocol", defaultValue = "SOCKETS", type = Constants.Protocols.class)
+    private Constants.Protocols protocol;
+    @Setting(id = "fullscreen", defaultValue = "true", type = Boolean.class)
+    private boolean fullScreenMode;
+    @Setting(id = "language", defaultValue = "ENGLISH", type = Constants.Locales.class)
+    private Constants.Locales language;
+
+    private Settings(String path) throws IllegalAccessException {
+        super(path);
+    }
 
     public static Settings getSettings() {
         try {
@@ -20,25 +38,6 @@ public final class Settings extends SettingsBase {
             throw new RuntimeException(e);
         }
     }
-
-    @Setting(id = "server-socket-address", defaultValue = "idra.weblink.it")
-    private String serverSocketAddress;
-    @Setting(id = "server-socket-port", defaultValue = "9000", type = Integer.class)
-    private int serverSocketPort;
-
-    @Setting(id = "server-rmi-address", defaultValue = "idra.weblink.it")
-    private String serverRMIAddress;
-    @Setting(id = "server-rmi-port", defaultValue = "1009", type = Integer.class)
-    private int serverRMIPort;
-
-    @Setting(id = "connection-protocol", defaultValue = "SOCKETS", type = Constants.Protocols.class)
-    private Constants.Protocols protocol;
-
-    @Setting(id = "fullscreen", defaultValue = "true", type = Boolean.class)
-    private boolean fullScreenMode;
-
-    @Setting(id = "language", defaultValue = "ENGLISH", type = Constants.Locales.class)
-    private Constants.Locales language;
 
     public String getServerSocketAddress() {
         return serverSocketAddress;
@@ -94,9 +93,5 @@ public final class Settings extends SettingsBase {
 
     public void setLanguage(String language) {
         this.language = Constants.Locales.valueOf(language);
-    }
-
-    private Settings(String path) throws IllegalAccessException {
-        super(path);
     }
 }

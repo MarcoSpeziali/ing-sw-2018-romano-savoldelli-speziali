@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.compilers.actions;
 
+import it.polimi.ingsw.server.actions.ActionData;
 import it.polimi.ingsw.server.compilers.actions.directives.ActionDirective;
 import it.polimi.ingsw.server.compilers.commons.ParametersCompiler;
-import it.polimi.ingsw.server.actions.ActionData;
 import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
@@ -16,16 +16,18 @@ public class ActionCompiler {
 
     private static final String EFFECT_CALL_REGEX = "^(?<id>[a-zA-Z_][a-zA-Z0-9_]+)(?<params>[^\\[]+)*(\\[(?<opts>.+)])?$";
 
-    private ActionCompiler() {}
+    private ActionCompiler() {
+    }
 
     /**
      * Compiles a single action into its compiles representation: {@link CompiledAction}.
-     * @param actionNode The {@link Node} representing the action to compile
-     * @param directives The {@link List} containing the directives to compile the actions
+     *
+     * @param actionNode  The {@link Node} representing the action to compile
+     * @param directives  The {@link List} containing the directives to compile the actions
      * @param constraints The {@link List} of precompiled constraints
      * @return An instance of {@link CompiledAction}
      */
-    public static CompiledAction compile(Node actionNode, List<ActionDirective> directives,  List<EvaluableConstraint> constraints) {
+    public static CompiledAction compile(Node actionNode, List<ActionDirective> directives, List<EvaluableConstraint> constraints) {
         // this method only compiles a single <action ../>
         if (!actionNode.getNodeName().equals(ActionNodes.ROOT)) {
             throw new IllegalArgumentException("The provided org.w3c.dom.Node must refer to an action, instead of a " + actionNode.getNodeName());
@@ -36,8 +38,9 @@ public class ActionCompiler {
 
     /**
      * Compiles a single action into its compiles representation: {@link CompiledAction}.
-     * @param actionInfo The {@link Map} representing the action to compile
-     * @param directives The {@link List} containing the directives to compile the actions
+     *
+     * @param actionInfo  The {@link Map} representing the action to compile
+     * @param directives  The {@link List} containing the directives to compile the actions
      * @param constraints The {@link List} of precompiled constraints
      * @return An instance of {@link CompiledAction}
      */
@@ -111,6 +114,7 @@ public class ActionCompiler {
         static final String ACTION_CONSTRAINT = "@constraint";
         static final String ACTION_RESULT = "@result";
 
-        private ActionNodes() {}
+        private ActionNodes() {
+        }
     }
 }

@@ -19,16 +19,16 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 public final class SocketRouter {
-    private SocketRouter() {}
-
-    private static Map<EndPointFunction, Class<? extends Command>> routingTable;
-    private static Map<EndPointFunction, Class<? extends Command>> anonymousRoutingTable;
-
     private static final List<Class<? extends Command>> HANDLERS = List.of(
             SignInCommands.SignInRequestCommand.class,
             SignInCommands.FulfillChallengeCommand.class,
             SignUpCommand.class
     );
+    private static Map<EndPointFunction, Class<? extends Command>> routingTable;
+    private static Map<EndPointFunction, Class<? extends Command>> anonymousRoutingTable;
+
+    private SocketRouter() {
+    }
 
     public static void buildRoutingTables() {
         routingTable = new EnumMap<>(EndPointFunction.class);
@@ -78,7 +78,8 @@ public final class SocketRouter {
 
             try {
                 return targetClass.getDeclaredConstructor().newInstance();
-            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            }
+            catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 ServerLogger.getLogger(SocketRouter.class)
                         .log(
                                 Level.SEVERE,

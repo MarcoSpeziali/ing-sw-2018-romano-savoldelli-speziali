@@ -25,6 +25,17 @@ public class Objective implements IObjective {
     private List<Instruction> instructions;
 
     /**
+     * @param pointsPerCompletion the number of points gained for each completions
+     * @param description         the description key of the objective
+     * @param instructions        the instructions to execute for calculating the number of completions
+     */
+    public Objective(int pointsPerCompletion, String description, List<Instruction> instructions) {
+        this.pointsPerCompletion = pointsPerCompletion;
+        this.description = new LocalizedString(description);
+        this.instructions = instructions;
+    }
+
+    /**
      * @return the number of points gained for each completions
      */
     public int getPointsPerCompletion() {
@@ -43,17 +54,6 @@ public class Objective implements IObjective {
      */
     public List<Instruction> getInstructions() {
         return instructions;
-    }
-
-    /**
-     * @param pointsPerCompletion the number of points gained for each completions
-     * @param description the description key of the objective
-     * @param instructions the instructions to execute for calculating the number of completions
-     */
-    public Objective(int pointsPerCompletion, String description, List<Instruction> instructions) {
-        this.pointsPerCompletion = pointsPerCompletion;
-        this.description = new LocalizedString(description);
-        this.instructions = instructions;
     }
 
     @Override

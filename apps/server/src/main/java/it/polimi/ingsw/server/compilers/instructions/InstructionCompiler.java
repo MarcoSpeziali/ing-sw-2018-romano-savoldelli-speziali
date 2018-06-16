@@ -22,13 +22,15 @@ import static it.polimi.ingsw.utils.streams.StreamUtils.not;
 
 public class InstructionCompiler {
 
-    private InstructionCompiler() {}
+    private InstructionCompiler() {
+    }
 
     /**
      * Compiles the instruction and its sub-instructions.
-     * @param node the instruction node
+     *
+     * @param node                  the instruction node
      * @param instructionDirectives the instruction directives
-     * @param predicateDirectives the predicate directives
+     * @param predicateDirectives   the predicate directives
      * @return the compiled instruction
      */
     public static CompiledInstruction compile(Node node, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) {
@@ -63,7 +65,7 @@ public class InstructionCompiler {
 
     /**
      * @param instructionInfo the instruction info
-     * @param directive the instruction directive
+     * @param directive       the instruction directive
      * @return the parsed parameters
      */
     private static List<CompiledParameter> parseParameters(Map<String, Object> instructionInfo, InstructionDirective directive) {
@@ -93,7 +95,7 @@ public class InstructionCompiler {
     }
 
     /**
-     * @param value the value of the parameter
+     * @param value     the value of the parameter
      * @param directive the parameter directive
      * @return the compiled parameter
      */
@@ -126,7 +128,7 @@ public class InstructionCompiler {
 
     /**
      * @param instructionInfo the instruction info
-     * @param directive the instruction directive
+     * @param directive       the instruction directive
      * @return the parsed exposed variables
      */
     private static List<CompiledExposedVariable> parseExposedVariables(Map<String, Object> instructionInfo, InstructionDirective directive) {
@@ -159,7 +161,7 @@ public class InstructionCompiler {
     }
 
     /**
-     * @param parameterValue the name that overrides the default variable name
+     * @param parameterValue     the name that overrides the default variable name
      * @param parameterDirective the parameter directive
      * @return the compiled exposed variable
      */
@@ -172,9 +174,9 @@ public class InstructionCompiler {
     }
 
     /**
-     * @param children The list of children
+     * @param children              The list of children
      * @param instructionDirectives the instructions directives
-     * @param predicateDirectives the predicates directives
+     * @param predicateDirectives   the predicates directives
      * @return the compiled sub-instructions
      */
     private static List<CompiledInstruction> compileSubInstructions(NodeList children, List<InstructionDirective> instructionDirectives, List<PredicateDirective> predicateDirectives) {
@@ -202,8 +204,8 @@ public class InstructionCompiler {
     }
 
     /**
-     * @param instructionInfo the instruction info
-     * @param directive the instruction directive
+     * @param instructionInfo     the instruction info
+     * @param directive           the instruction directive
      * @param predicateDirectives the predicate directives
      * @return the parsed predicates
      */

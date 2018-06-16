@@ -4,7 +4,7 @@ import it.polimi.ingsw.views.PlayerView;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
-public class PlayerGUIView extends PlayerView implements GUIView{
+public class PlayerGUIView extends PlayerView implements GUIView {
 
     @Override
     public Node render() {

@@ -28,8 +28,7 @@ class CardTest {
     }
 
     @Test
-    void cardConstructorTest()
-    {
+    void cardConstructorTest() {
         this.description_test = "descriptionTest";
 
         CardImpl cardImp = new CardImpl("test_card", description_test);

@@ -110,7 +110,7 @@ class IterableRangeTest {
     void testForEach() {
         IterableRange<Integer> range = new IterableRange<>(3, 16, IterableRange.INTEGER_INCREMENT_FUNCTION);
 
-        Integer[] rangeArray = new Integer[] { 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+        Integer[] rangeArray = new Integer[]{3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
         AtomicInteger index = new AtomicInteger(0);
 
@@ -129,7 +129,7 @@ class IterableRangeTest {
                 .map(integer -> ++integer)
                 .collect(Collectors.toList());
 
-        Integer[] rangeArray = new Integer[] { 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+        Integer[] rangeArray = new Integer[]{3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
         for (int i = 0; i < rangeArray.length; i++) {
             Assertions.assertEquals(rangeArray[i] + 1, integerList.get(i).intValue());
@@ -144,7 +144,7 @@ class IterableRangeTest {
                 .map(integer -> ++integer)
                 .collect(Collectors.toList());
 
-        Integer[] rangeArray = new Integer[] { 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+        Integer[] rangeArray = new Integer[]{3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
         for (int i = 0; i < rangeArray.length; i++) {
             Assertions.assertEquals(rangeArray[i] + 1, integerList.get(i).intValue());

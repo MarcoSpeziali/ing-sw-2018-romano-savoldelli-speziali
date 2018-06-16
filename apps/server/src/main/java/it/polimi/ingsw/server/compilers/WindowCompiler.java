@@ -21,15 +21,17 @@ public class WindowCompiler {
      */
     private static final String WINDOWS_PATH = "windows.xml";
 
-    private WindowCompiler() {}
+    private WindowCompiler() {
+    }
 
     /**
      * Compiles all windows in the default file.
+     *
      * @return a {@link List} of {@link Window}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<Window> compileAll() throws IOException, SAXException, ParserConfigurationException {
         return compileAll(WINDOWS_PATH, true);
@@ -37,13 +39,14 @@ public class WindowCompiler {
 
     /**
      * Compiles all windows in the provided path.
-     * @param path the path to the file containing the windows
+     *
+     * @param path       the path to the file containing the windows
      * @param isResource {@code true} if the path is relative to the resource folder
      * @return a {@link List} of {@link Window}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     public static List<Window> compileAll(String path, boolean isResource) throws ParserConfigurationException, SAXException, IOException {
         Map<String, Object>[] rawWindows = getRawWindows(path, isResource);
@@ -75,6 +78,7 @@ public class WindowCompiler {
 
     /**
      * Compiles a window node into its corresponding {@link Window} class.
+     *
      * @param node the node to compile
      * @return an instance {@link Window}
      */
@@ -90,6 +94,7 @@ public class WindowCompiler {
 
     /**
      * Compiles a window node into its corresponding {@link Window} class.
+     *
      * @param windowInfo the info of the window to compile
      * @return an instance {@link Window}
      */
@@ -133,6 +138,7 @@ public class WindowCompiler {
 
     /**
      * Parses a cell.
+     *
      * @param cellInfo the info of the cell to parse
      * @return an instance of {@link Cell} coherently to the provided cell info
      */
@@ -154,13 +160,14 @@ public class WindowCompiler {
 
     /**
      * Returns an array of {@link Map} each one containing the information about a window.
-     * @param path the path to the file containing the windows
+     *
+     * @param path       the path to the file containing the windows
      * @param isResource {@code true} if the path is relative to the resource folder
      * @return a {@link List} of {@link Window}
-     * @throws IOException if any IO errors occur
-     * @throws SAXException if any parse errors occur
+     * @throws IOException                  if any IO errors occur
+     * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
-     *      cannot be created which satisfies the configuration requested.
+     *                                      cannot be created which satisfies the configuration requested.
      */
     private static Map<String, Object>[] getRawWindows(String path, boolean isResource) throws IOException, SAXException, ParserConfigurationException {
         Node node;
@@ -200,7 +207,8 @@ public class WindowCompiler {
         public static final String WINDOW_CELL_SHADE = "@shade";
         public static final String WINDOW_CELL_COLOR = "@color";
 
-        private WindowNodes() {}
+        private WindowNodes() {
+        }
     }
 }
 

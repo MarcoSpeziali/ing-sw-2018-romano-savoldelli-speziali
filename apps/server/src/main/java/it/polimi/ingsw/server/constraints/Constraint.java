@@ -33,6 +33,19 @@ public class Constraint implements EvaluableConstraint {
     private VariableSupplier<Object> rightOperand;
 
     /**
+     * @param id           The id of the constraint.
+     * @param leftOperand  The left operand.
+     * @param operator     The evaluation's operator.
+     * @param rightOperand The right operand.
+     */
+    public Constraint(String id, VariableSupplier<Object> leftOperand, Operator operator, VariableSupplier<Object> rightOperand) {
+        this.id = id;
+        this.leftOperand = leftOperand;
+        this.operator = operator;
+        this.rightOperand = rightOperand;
+    }
+
+    /**
      * @return The id of the constraint.
      */
     @Override
@@ -59,19 +72,6 @@ public class Constraint implements EvaluableConstraint {
      */
     public VariableSupplier<Object> getRightOperand() {
         return this.rightOperand;
-    }
-
-    /**
-     * @param id The id of the constraint.
-     * @param leftOperand The left operand.
-     * @param operator The evaluation's operator.
-     * @param rightOperand The right operand.
-     */
-    public Constraint(String id, VariableSupplier<Object> leftOperand, Operator operator, VariableSupplier<Object> rightOperand) {
-        this.id = id;
-        this.leftOperand = leftOperand;
-        this.operator = operator;
-        this.rightOperand = rightOperand;
     }
 
     /**

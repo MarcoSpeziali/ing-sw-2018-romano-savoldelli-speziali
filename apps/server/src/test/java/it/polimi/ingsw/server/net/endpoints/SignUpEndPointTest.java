@@ -77,7 +77,7 @@ class SignUpEndPointTest {
         Assertions.assertNotNull(databasePlayer);
         Assertions.assertEquals("test", databasePlayer.getUsername());
         Assertions.assertEquals(HashUtils.sha1("test_password"), databasePlayer.getPassword());
-    
+
         DatabasePlayer.deletePlayer(databasePlayer.getId());
     }
 }

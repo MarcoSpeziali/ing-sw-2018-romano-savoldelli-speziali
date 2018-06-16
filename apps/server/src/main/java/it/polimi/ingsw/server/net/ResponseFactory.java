@@ -16,7 +16,8 @@ import it.polimi.ingsw.utils.io.JSONSerializable;
 
 // TODO: docs
 public final class ResponseFactory {
-    private ResponseFactory() {}
+    private ResponseFactory() {
+    }
 
     public static Response<ChallengeRequest> createAuthenticationChallengeResponse(Request<SignInRequest> originalRequest, String challenge, int sessionId) {
         return new Response<>(

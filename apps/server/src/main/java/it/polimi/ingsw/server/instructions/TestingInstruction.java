@@ -23,6 +23,7 @@ public class TestingInstruction extends Instruction {
 
     /**
      * Sets the current listener.
+     *
      * @param listener The listener
      */
     public void setListener(OnTestingInstructionRunEvent listener) {

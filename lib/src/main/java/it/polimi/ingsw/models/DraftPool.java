@@ -16,7 +16,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
 
     private LinkedList<Die> dice;
 
-    private List<OnDiePutListener> onDiePutListeners =  new LinkedList<>();
+    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
     private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
 
@@ -30,14 +30,15 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
 
     /**
      * Removes the die from the DraftPool and returns it.
+     *
      * @param die the instance of {@link Die} to be removed.
      * @return the same instance of picked {@link Die}
      */
 
     @Override
     public Die pickDie(Die die) {
-        for (int i = 0; i < dice.size() ; i++) {
-            if(dice.get(i) == die) {
+        for (int i = 0; i < dice.size(); i++) {
+            if (dice.get(i) == die) {
                 this.onDiePutListeners.forEach(onDiePutListener
                         -> onDiePutListener.onDiePut(die));
 
@@ -53,6 +54,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
 
     /**
      * Removes the die from the DraftPool and returns it.
+     *
      * @param location the index of the {@link Die} in {@link #dice}.
      * @return the same instance of picked {@link Die}
      */
@@ -91,6 +93,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
     public List<Die> getDice() {
         return this.dice;
     }
+
     /**
      * @return the amount of dice left.
      */

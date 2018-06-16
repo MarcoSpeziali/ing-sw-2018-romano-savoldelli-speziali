@@ -21,6 +21,18 @@ public class ResponseError implements JSONSerializable {
      */
     private String reason;
 
+    public ResponseError() {
+    }
+
+    public ResponseError(ResponseFields.Error error) {
+        this(error.getCode(), error.getName());
+    }
+
+    public ResponseError(int errorCode, String reason) {
+        this.errorCode = errorCode;
+        this.reason = reason;
+    }
+
     /**
      * @return the code of the error
      */
@@ -33,17 +45,6 @@ public class ResponseError implements JSONSerializable {
      */
     public String getReason() {
         return reason;
-    }
-
-    public ResponseError() {}
-
-    public ResponseError(ResponseFields.Error error) {
-        this(error.getCode(), error.getName());
-    }
-
-    public ResponseError(int errorCode, String reason) {
-        this.errorCode = errorCode;
-        this.reason = reason;
     }
 
     @Override

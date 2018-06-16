@@ -23,6 +23,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
 
     /**
      * Sets up a new {@link Cell}.
+     *
      * @param shade the shade of that cell.
      * @param color the {@link GlassColor} of that cell.
      */
@@ -45,7 +46,9 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
         if (this.color != null) {
             return this.color;
         }
-        else return null;
+        else {
+            return null;
+        }
     }
 
     /**
@@ -71,15 +74,16 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
 
     /**
      * Compares a specified {@link Die} with the cell.
-     * @param die an instance of the {@link Die} to compare.
+     *
+     * @param die         an instance of the {@link Die} to compare.
      * @param ignoreColor the boolean flag which avoids color control.
      * @param ignoreShade the boolean flag which avoids shade control.
      * @return true if cell matches with color, shade or is blank, false otherwise.
      */
     public boolean matchesOrBlank(Die die, boolean ignoreColor, boolean ignoreShade) {
-        return  this.isBlank() ||
+        return this.isBlank() ||
                 (this.color == null || ignoreColor || this.color.equals(die.getColor())) &&
-                (this.shade == 0 || ignoreShade || this.shade.equals(die.getShade()));
+                        (this.shade == 0 || ignoreShade || this.shade.equals(die.getShade()));
     }
 
     /**
@@ -92,11 +96,14 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
 
     /**
      * Puts the die in the specified cell.
+     *
      * @param die the {@link Die} that must be put into.
      */
     @Override
     public void putDie(Die die) {
-        if (this.die == null) this.die = die;
+        if (this.die == null) {
+            this.die = die;
+        }
         else {
             throw new AlreadyPutException("A die has already been put on this cell!");
         }
@@ -107,6 +114,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
 
     /**
      * Picks up and removes a {@link Die} from the cell
+     *
      * @return the picked {@link Die}
      */
     @Override
@@ -121,7 +129,9 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
 
             return picked;
         }
-        else return null;
+        else {
+            return null;
+        }
     }
 
     /**

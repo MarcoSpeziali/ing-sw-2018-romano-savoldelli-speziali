@@ -27,6 +27,45 @@ class ForDieInstructionTest {
     private Context context;
     private List<Die> dieList;
 
+    private static Stream<Arguments> testColorAndShadeFilterArguments() {
+        return Stream.of(
+                Arguments.of(1, GlassColor.RED),
+                Arguments.of(2, GlassColor.RED),
+                Arguments.of(3, GlassColor.RED),
+                Arguments.of(4, GlassColor.RED),
+                Arguments.of(5, GlassColor.RED),
+                Arguments.of(6, GlassColor.RED),
+
+                Arguments.of(1, GlassColor.GREEN),
+                Arguments.of(2, GlassColor.GREEN),
+                Arguments.of(3, GlassColor.GREEN),
+                Arguments.of(4, GlassColor.GREEN),
+                Arguments.of(5, GlassColor.GREEN),
+                Arguments.of(6, GlassColor.GREEN),
+
+                Arguments.of(1, GlassColor.BLUE),
+                Arguments.of(2, GlassColor.BLUE),
+                Arguments.of(3, GlassColor.BLUE),
+                Arguments.of(4, GlassColor.BLUE),
+                Arguments.of(5, GlassColor.BLUE),
+                Arguments.of(6, GlassColor.BLUE),
+
+                Arguments.of(1, GlassColor.YELLOW),
+                Arguments.of(2, GlassColor.YELLOW),
+                Arguments.of(3, GlassColor.YELLOW),
+                Arguments.of(4, GlassColor.YELLOW),
+                Arguments.of(5, GlassColor.YELLOW),
+                Arguments.of(6, GlassColor.YELLOW),
+
+                Arguments.of(1, GlassColor.PURPLE),
+                Arguments.of(2, GlassColor.PURPLE),
+                Arguments.of(3, GlassColor.PURPLE),
+                Arguments.of(4, GlassColor.PURPLE),
+                Arguments.of(5, GlassColor.PURPLE),
+                Arguments.of(6, GlassColor.PURPLE)
+        );
+    }
+
     @BeforeEach
     @SuppressWarnings("Duplicates")
     void setUp() {
@@ -141,44 +180,5 @@ class ForDieInstructionTest {
 
         instruction.setInstructions(List.of(testingInstruction));
         instruction.run(this.context);
-    }
-
-    private static Stream<Arguments> testColorAndShadeFilterArguments() {
-        return Stream.of(
-                Arguments.of(1, GlassColor.RED),
-                Arguments.of(2, GlassColor.RED),
-                Arguments.of(3, GlassColor.RED),
-                Arguments.of(4, GlassColor.RED),
-                Arguments.of(5, GlassColor.RED),
-                Arguments.of(6, GlassColor.RED),
-
-                Arguments.of(1, GlassColor.GREEN),
-                Arguments.of(2, GlassColor.GREEN),
-                Arguments.of(3, GlassColor.GREEN),
-                Arguments.of(4, GlassColor.GREEN),
-                Arguments.of(5, GlassColor.GREEN),
-                Arguments.of(6, GlassColor.GREEN),
-
-                Arguments.of(1, GlassColor.BLUE),
-                Arguments.of(2, GlassColor.BLUE),
-                Arguments.of(3, GlassColor.BLUE),
-                Arguments.of(4, GlassColor.BLUE),
-                Arguments.of(5, GlassColor.BLUE),
-                Arguments.of(6, GlassColor.BLUE),
-
-                Arguments.of(1, GlassColor.YELLOW),
-                Arguments.of(2, GlassColor.YELLOW),
-                Arguments.of(3, GlassColor.YELLOW),
-                Arguments.of(4, GlassColor.YELLOW),
-                Arguments.of(5, GlassColor.YELLOW),
-                Arguments.of(6, GlassColor.YELLOW),
-
-                Arguments.of(1, GlassColor.PURPLE),
-                Arguments.of(2, GlassColor.PURPLE),
-                Arguments.of(3, GlassColor.PURPLE),
-                Arguments.of(4, GlassColor.PURPLE),
-                Arguments.of(5, GlassColor.PURPLE),
-                Arguments.of(6, GlassColor.PURPLE)
-        );
     }
 }

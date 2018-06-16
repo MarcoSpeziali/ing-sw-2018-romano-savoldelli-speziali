@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.instructions.predicates;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 
 import java.util.Arrays;
 import java.util.HashSet;

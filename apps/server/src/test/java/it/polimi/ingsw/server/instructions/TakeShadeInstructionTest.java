@@ -12,16 +12,6 @@ import java.util.stream.Stream;
 
 class TakeShadeInstructionTest {
 
-    @ParameterizedTest
-    @MethodSource("testRunArguments")
-    void testRun(Die die) {
-        Assertions.assertEquals(
-                die.getShade(),
-                new TakeShadeInstruction(context -> die)
-                        .run(Context.getSharedInstance())
-        );
-    }
-
     private static Stream<Arguments> testRunArguments() {
         return Stream.of(
                 Arguments.of(new Die(GlassColor.RED, 1)),
@@ -30,6 +20,16 @@ class TakeShadeInstructionTest {
                 Arguments.of(new Die(GlassColor.BLUE, 4)),
                 Arguments.of(new Die(GlassColor.PURPLE, 5)),
                 Arguments.of(new Die(GlassColor.GREEN, 6))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("testRunArguments")
+    void testRun(Die die) {
+        Assertions.assertEquals(
+                die.getShade(),
+                new TakeShadeInstruction(context -> die)
+                        .run(Context.getSharedInstance())
         );
     }
 }

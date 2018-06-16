@@ -16,12 +16,13 @@ import java.util.Map;
 
 public class EffectCompiler {
 
-    private EffectCompiler() {}
+    private EffectCompiler() {
+    }
 
     /**
-     * @param node the node containing the effect
+     * @param node             the node containing the effect
      * @param actionDirectives the action directives
-     * @param constraints the constraints
+     * @param constraints      the constraints
      * @return an instance of {@link CompiledEffect}
      */
     public static CompiledEffect compile(Node node, List<ActionDirective> actionDirectives, List<EvaluableConstraint> constraints) {
@@ -59,9 +60,9 @@ public class EffectCompiler {
     }
 
     /**
-     * @param children the {@link NodeList} containing the actions
+     * @param children         the {@link NodeList} containing the actions
      * @param actionDirectives the directives to compile the actions
-     * @param constraints the constraint to compile the actions
+     * @param constraints      the constraint to compile the actions
      * @return a {@link List} of {@link CompiledExecutableAction}
      */
     private static List<CompiledExecutableAction> compileActions(NodeList children, List<ActionDirective> actionDirectives, List<EvaluableConstraint> constraints) {

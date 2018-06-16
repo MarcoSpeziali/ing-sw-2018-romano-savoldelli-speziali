@@ -9,11 +9,11 @@ public class DieController implements Serializable {
 
     private Die dieModel;
 
-    public void setDieModel(Die dieModel) {
+    public DieController(Die dieModel) {
         this.dieModel = dieModel;
     }
 
-    public DieController(Die dieModel) {
+    public void setDieModel(Die dieModel) {
         this.dieModel = dieModel;
     }
 

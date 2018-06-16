@@ -15,19 +15,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ActionInitializer {
-    private ActionInitializer() {}
+    private ActionInitializer() {
+    }
 
     /**
      * Instantiate an {@link Action} from a {@link CompiledAction}.
+     *
      * @return an instance of {@link Action}  created from a {@link CompiledAction}
-     * @throws NoSuchMethodException if the constructor could not be found
-     * @throws IllegalAccessException if this {@code Constructor} object
-     *         is enforcing Java language access control and the underlying
-     *         constructor is inaccessible
-     * @throws InstantiationException if the class that declares the
-     *         underlying constructor represents an abstract class
+     * @throws NoSuchMethodException     if the constructor could not be found
+     * @throws IllegalAccessException    if this {@code Constructor} object
+     *                                   is enforcing Java language access control and the underlying
+     *                                   constructor is inaccessible
+     * @throws InstantiationException    if the class that declares the
+     *                                   underlying constructor represents an abstract class
      * @throws InvocationTargetException if the underlying constructor
-     *         throws an exception
+     *                                   throws an exception
      */
     public static Action instantiate(CompiledAction compiledAction) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // gets the class to instantiate

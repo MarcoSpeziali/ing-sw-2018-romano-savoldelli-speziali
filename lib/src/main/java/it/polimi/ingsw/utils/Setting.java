@@ -11,11 +11,14 @@ import java.util.Map;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Setting {
     String id();
+
     String defaultValue();
+
     Class<?> type() default String.class;
 
     class Builder {
-        private Builder() {}
+        private Builder() {
+        }
 
         public static void build(Object targetObject, Map<String, String> settings) throws IllegalAccessException {
             Class<?> targetClass = targetObject.getClass();
@@ -27,7 +30,7 @@ public @interface Setting {
                     field.setAccessible(true);
 
                     String value = settings.getOrDefault(settingAnnotation.id(), settingAnnotation.defaultValue());
-                    
+
                     if (settingAnnotation.type().equals(String.class)) {
                         field.set(targetObject, value);
                     }

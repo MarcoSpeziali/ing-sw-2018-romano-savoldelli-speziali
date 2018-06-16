@@ -24,7 +24,7 @@ class BagTest {
     void getDieTest() {
         Assertions.assertNotNull(bag.getDice());
         Assertions.assertEquals(90, bag.getNumberOfDice());
-        for(GlassColor color: GlassColor.values()) {
+        for (GlassColor color : GlassColor.values()) {
             Assertions.assertEquals(18, bag.getNumberPerColor(color));
         }
     }
@@ -66,7 +66,7 @@ class BagTest {
 
     @Test
     void getFreeSpaceTest() {
-        Assertions.assertEquals(90-bag.getNumberOfDice(), bag.getFreeSpace());
+        Assertions.assertEquals(90 - bag.getNumberOfDice(), bag.getFreeSpace());
         int removeN = new Random(System.currentTimeMillis()).nextInt(90);
 
         for (int i = 1; i <= removeN; i++) {

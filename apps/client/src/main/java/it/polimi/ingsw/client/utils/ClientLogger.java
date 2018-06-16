@@ -24,9 +24,19 @@ public class ClientLogger extends LoggerBase {
         return path;
     };
 
-    @Override
-    protected String getLoggingPath() {
-        return loggingPath.get();
+    /**
+     * Protected method to construct a logger for a named subsystem.
+     * The logger will be initially configured with a null Level
+     * and with useParentHandlers set to true.
+     *
+     * @param name A name for the logger.  This should
+     *             be a dot-separated name and should normally
+     *             be based on the package name or class name
+     *             of the subsystem, such as java.net
+     *             or javax.swing.  It may be null for anonymous Loggers.
+     */
+    protected ClientLogger(String name) {
+        super(name);
     }
 
     /**
@@ -37,18 +47,8 @@ public class ClientLogger extends LoggerBase {
         return new ClientLogger(caller.getName());
     }
 
-    /**
-     * Protected method to construct a logger for a named subsystem.
-     * The logger will be initially configured with a null Level
-     * and with useParentHandlers set to true.
-     *
-     * @param name               A name for the logger.  This should
-     *                           be a dot-separated name and should normally
-     *                           be based on the package name or class name
-     *                           of the subsystem, such as java.net
-     *                           or javax.swing.  It may be null for anonymous Loggers.
-     */
-    protected ClientLogger(String name) {
-        super(name);
+    @Override
+    protected String getLoggingPath() {
+        return loggingPath.get();
     }
 }

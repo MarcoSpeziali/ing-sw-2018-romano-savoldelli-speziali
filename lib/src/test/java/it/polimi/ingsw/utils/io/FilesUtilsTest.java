@@ -139,7 +139,7 @@ class FilesUtilsTest {
         File directory = mock(File.class);
         when(directory.exists()).thenReturn(true);
         when(directory.isDirectory()).thenReturn(true);
-        when(directory.listFiles()).thenReturn(new File[] { subFile, subFile, subFile });
+        when(directory.listFiles()).thenReturn(new File[]{subFile, subFile, subFile});
         when(directory.delete()).thenReturn(true);
 
         Assertions.assertTrue(FilesUtils.deleteDirectoryRecursively(directory));
