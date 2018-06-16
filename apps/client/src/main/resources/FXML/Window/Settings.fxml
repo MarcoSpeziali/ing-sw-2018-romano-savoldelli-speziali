@@ -36,13 +36,13 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </JFXToggleButton>
-                <JFXComboBox fx:id="languageComboBox" focusColor="#ffa59e" layoutX="197.0" layoutY="190.0" prefHeight="29.0" prefWidth="107.0" unFocusColor="#ffa59e" />
-                <Label fx:id="connectionTypeLabel" layoutX="48.0" layoutY="282.0" prefHeight="20.0" prefWidth="1.0" textFill="#ffa49c">
+                <JFXComboBox fx:id="languageComboBox" focusColor="#ffa59e" layoutX="197.0" layoutY="190.0" prefHeight="29.0" prefWidth="107.0" style="-fx-text-fill: #ffa59e;" styleClass="label" unFocusColor="#ffa59e" />
+                <Label fx:id="connectionTypeLabel" layoutX="54.0" layoutY="274.0" prefHeight="20.0" prefWidth="159.0" textFill="#ffa49c">
                     <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
-                <JFXRadioButton fx:id="rmiToggle" layoutX="197.0" layoutY="257.0" style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="RMI" textFill="#ffa59e">
+                <JFXRadioButton fx:id="rmiToggle" layoutX="232.0" layoutY="259.0" style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="RMI" textFill="#ffa59e">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
@@ -50,14 +50,14 @@
                         <ToggleGroup fx:id="connectionToggleGroup" />
                     </toggleGroup>
                 </JFXRadioButton>
-                <JFXRadioButton fx:id="socketToggle" layoutX="197.0" layoutY="291.0" style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="SOCKET" textFill="#ffa59e" toggleGroup="$connectionToggleGroup">
+                <JFXRadioButton fx:id="socketToggle" layoutX="232.0" layoutY="293.0" style="-jfx-selected-color: ffa49c; -jfx-unselected-color: ffa49c;" text="SOCKET" textFill="#ffa59e" toggleGroup="$connectionToggleGroup">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </JFXRadioButton>
-            <Label fx:id="languageTypeLabel" layoutX="54.0" layoutY="195.0" prefHeight="20.0" prefWidth="0.0" textFill="#ffa49c">
+            <Label fx:id="languageTypeLabel" layoutX="54.0" layoutY="195.0" prefHeight="20.0" prefWidth="132.0" textFill="#ffa49c">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Label>
             </children>
