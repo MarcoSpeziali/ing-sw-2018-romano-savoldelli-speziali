@@ -11,6 +11,7 @@ import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.rmi.NotBoundException;
@@ -74,7 +75,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         }
     };
 
-    protected PersistentSocketInteractionProvider(String remoteAddress, int remotePort) {
+    public PersistentSocketInteractionProvider(String remoteAddress, int remotePort) {
         super(remoteAddress, remotePort);
     }
 
@@ -103,9 +104,16 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         this.errorListeners.put(endPointTarget, errorConsumer);
     }
 
-    public void open() throws IOException {
+    @Override
+    public void open(EndPointFunction unused) throws IOException {
         this.socket = new Socket();
-        this.socket.connect(InetSocketAddress.createUnresolved(this.remoteAddress, this.remotePort), 1000);
+
+        if (this.remoteAddress.equals("localhost")) {
+            this.socket.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{127, 0, 0, 1}), 9000), 1000);
+        }
+        else {
+            this.socket.connect(new InetSocketAddress(this.remoteAddress, this.remotePort), 1000);
+        }
 
         this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         this.out = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
@@ -129,7 +137,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
             throw new IllegalStateException("The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.");
         }
 
-        AtomicReference<Consumer<Response<T>>> receivedResponse = new AtomicReference<>();
+        AtomicReference<Response<T>> receivedResponse = new AtomicReference<>();
 
         Consumer<Response<? extends JSONSerializable>> oldListener = this.responseListeners.getOrDefault(
                 request.getHeader().getEndPointFunction(),
@@ -138,7 +146,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
 
         this.responseListeners.put(
                 request.getHeader().getEndPointFunction(),
-                newValue -> receivedResponse.set((Consumer<Response<T>>) newValue)
+                newValue -> receivedResponse.set((Response<T>) newValue)
         );
 
         this.out.write(request.toString());

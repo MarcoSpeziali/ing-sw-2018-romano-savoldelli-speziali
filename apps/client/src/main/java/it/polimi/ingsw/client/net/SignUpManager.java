@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.net.authentication;
+package it.polimi.ingsw.client.net;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.Settings;
@@ -35,9 +35,9 @@ public class SignUpManager {
         }
         else {
             oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
-                    SignUpInterface.class,
                     Settings.getSettings().getServerRMIAddress(),
-                    Settings.getSettings().getServerRMIPort()
+                    Settings.getSettings().getServerRMIPort(),
+                    SignUpInterface.class
             );
         }
     }

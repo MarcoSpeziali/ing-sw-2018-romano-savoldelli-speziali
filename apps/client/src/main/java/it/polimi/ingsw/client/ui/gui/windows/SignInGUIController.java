@@ -13,8 +13,6 @@ import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import it.polimi.ingsw.utils.text.LocalizedText;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -58,8 +56,6 @@ public class SignInGUIController extends SignInController {
             super.onSignInRequested(this.usernameField.getText(), this.passwordField.getText(), () -> {
                 try {
                     loader.setLocation(Constants.Resources.LOBBY.getURL());
-
-                    LobbyGUIController controller = loader.getController();
                     SagradaGUI.showStage(loader.load(), 910, 720);
                 }
                 catch (IOException e) {

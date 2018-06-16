@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.net.sockets;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.server.events.EventDispatcher;
+import it.polimi.ingsw.server.events.EventType;
+import it.polimi.ingsw.server.events.PlayerEventsListener;
 import it.polimi.ingsw.server.managers.AuthenticationManager;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
@@ -68,6 +71,9 @@ public class AuthenticatedClientHandler extends ClientHandler {
 
                 SocketAddress socketAddress = this.client.getRemoteSocketAddress();
 
+                ServerLogger.getLogger(AuthenticatedClientHandler.class)
+                        .finer(() -> String.format("Handling client %s associated to player '%s'", socketAddress, this.player.getUsername()));
+
                 try {
                     do {
                         if (this.migrationRequest != null) {
@@ -84,11 +90,16 @@ public class AuthenticatedClientHandler extends ClientHandler {
                 catch (Exception e) {
                     ServerLogger.getLogger(AuthenticatedClientHandler.class)
                             .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
+
+                    EventDispatcher.dispatch(
+                            EventType.PLAYER_EVENTS,
+                            PlayerEventsListener.class,
+                            playerEventsListener -> playerEventsListener.onPlayerDisconnected(this.player)
+                    );
                 }
             });
             this.inputThread.setName(Constants.Threads.PLAYER_INPUT_HANDLER.toString() + "-" + this.player.toString());
             this.inputThread.start();
-
             this.inputThread.join();
         }
         catch (InterruptedException ignored) {

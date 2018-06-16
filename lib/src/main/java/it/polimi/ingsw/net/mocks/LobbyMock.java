@@ -13,6 +13,7 @@ public class LobbyMock implements ILobby {
     private int id;
     private long openingTime;
     private long closingTime;
+    private int timeRemaining;
     private List<IPlayer> players;
 
     @Override
@@ -31,8 +32,23 @@ public class LobbyMock implements ILobby {
     }
 
     @Override
+    public int getTimeRemaining() {
+        return this.timeRemaining;
+    }
+
+    @Override
     public List<IPlayer> getPlayers() {
         return this.players;
+    }
+
+    public LobbyMock() {}
+
+    public LobbyMock(ILobby iLobby) {
+        this.id = iLobby.getId();
+        this.openingTime = iLobby.getOpeningTime();
+        this.closingTime = iLobby.getClosingTime();
+        this.timeRemaining = iLobby.getTimeRemaining();
+        this.players = iLobby.getPlayers();
     }
 
     @Override
@@ -40,6 +56,7 @@ public class LobbyMock implements ILobby {
         this.id = jsonObject.getInt("id");
         this.openingTime = jsonObject.getLong("opening-time");
         this.closingTime = jsonObject.getLong("closing-time");
+        this.timeRemaining = jsonObject.getInt("time-remaining");
 
         JSONArray jsonArray = jsonObject.getJSONArray("players");
 

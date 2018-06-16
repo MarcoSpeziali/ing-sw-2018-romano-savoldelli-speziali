@@ -3,10 +3,7 @@ package it.polimi.ingsw.server.net.sockets;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.AuthenticationManager;
-import it.polimi.ingsw.server.net.commands.Command;
-import it.polimi.ingsw.server.net.commands.Handles;
-import it.polimi.ingsw.server.net.commands.SignInCommands;
-import it.polimi.ingsw.server.net.commands.SignUpCommand;
+import it.polimi.ingsw.server.net.commands.*;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 
@@ -22,7 +19,8 @@ public final class SocketRouter {
     private static final List<Class<? extends Command>> HANDLERS = List.of(
             SignInCommands.SignInRequestCommand.class,
             SignInCommands.FulfillChallengeCommand.class,
-            SignUpCommand.class
+            SignUpCommand.class,
+            LobbyCommand.class
     );
     private static Map<EndPointFunction, Class<? extends Command>> routingTable;
     private static Map<EndPointFunction, Class<? extends Command>> anonymousRoutingTable;

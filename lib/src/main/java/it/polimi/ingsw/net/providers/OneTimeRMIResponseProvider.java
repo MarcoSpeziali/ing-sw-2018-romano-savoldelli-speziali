@@ -22,7 +22,7 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
     private final String rmiAddress;
     private final int rmiPort;
 
-    public OneTimeRMIResponseProvider(Class<R> remoteInterfaceType, String rmiAddress, int rmiPort) {
+    public OneTimeRMIResponseProvider(String rmiAddress, int rmiPort, Class<R> remoteInterfaceType) {
         this.remoteInterfaceType = remoteInterfaceType;
         this.rmiAddress = rmiAddress;
         this.rmiPort = rmiPort;

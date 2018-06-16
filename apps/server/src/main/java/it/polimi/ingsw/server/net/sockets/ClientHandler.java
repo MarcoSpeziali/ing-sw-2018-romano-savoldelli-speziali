@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.net.sockets;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.server.net.commands.Command;
-import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 import org.json.JSONObject;
@@ -121,7 +120,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
             }
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger(getClass()).log(Level.SEVERE, "Error while querying the database", e);
 
             return null;
         }
@@ -131,6 +130,8 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
 
         // if the handler is null it means that the endpoint does not exists
         if (handler == null) {
+            ServerLogger.getLogger(ClientHandler.class)
+                    .warning(() -> String.format("Cannot handle request with endpoint: %s, it does not exists.", request.getHeader().getEndPointFunction().toString()));
             return null;
         }
 
@@ -138,7 +139,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         @SuppressWarnings("unchecked")
         Response<? extends JSONSerializable> response = handler.handle(request, this.client);
 
-        ServerLogger.getLogger(AnonymousClientHandler.class)
+        ServerLogger.getLogger(getClass())
                 .fine(() -> String.format(
                         "Sending response \"%s\", to client: %s", response.toString(), socketAddress
                 ));

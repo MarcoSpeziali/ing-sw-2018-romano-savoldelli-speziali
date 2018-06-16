@@ -9,6 +9,7 @@ import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
 import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.mocks.IPlayer;
 import it.polimi.ingsw.utils.text.LocalizedText;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -61,6 +62,8 @@ public class LobbyGUIController extends LobbyController implements Initializable
                 e.printStackTrace();
             }
         }
+
+        super.requestLobby();
     }
 
     public void onBackClicked() throws IOException {
@@ -74,25 +77,14 @@ public class LobbyGUIController extends LobbyController implements Initializable
     }
 
     @Override
-    public void onTimerStarted(int duration) throws RemoteException {
-
-    }
-
-    @Override
-    public void onTimerStopped() throws RemoteException {
-
-    }
-
-    @Override
-    public void onMatchStarting(int matchId) throws RemoteException {
-
-    }
-
-    @Override
     public void onUpdateReceived(ILobby update) throws RemoteException {
-        for (int i = 0; i < update.getPlayers().size(); i++) {
-            IPlayer player = update.getPlayers().get(i);
-            this.playersListView.getItems().get(i).setText(String.format("(%d) %s", player.getId(), player.getUsername()));
-        }
+        Platform.runLater(() -> {
+            for (int i = 0; i < update.getPlayers().size(); i++) {
+                IPlayer player = update.getPlayers().get(i);
+
+                this.playersListView.getItems().get(i)
+                        .setText(String.format("(%d) %s", player.getId(), player.getUsername()));
+            }
+        });
     }
 }

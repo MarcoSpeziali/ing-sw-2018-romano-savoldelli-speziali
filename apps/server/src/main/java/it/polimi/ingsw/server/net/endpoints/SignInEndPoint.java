@@ -10,6 +10,7 @@ import it.polimi.ingsw.net.responses.SignInResponse;
 import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.sql.DatabasePreAuthenticationSession;
+import it.polimi.ingsw.server.sql.DatabaseSession;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.text.HashUtils;
 import it.polimi.ingsw.utils.text.RandomString;
@@ -73,8 +74,12 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
 
             // if the player does not exists: a session is created anyway, but a token will be denied
             if (player == null) {
-                playerPassword = null;
-                playerId = -1;
+                // sends back a fake response
+                return ResponseFactory.createAuthenticationChallengeResponse(
+                        request,
+                        randomString,
+                        -1
+                );
             }
             else {
                 playerPassword = player.getPassword();
@@ -128,16 +133,15 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
 
             int sessionId = request.getBody().getSessionId();
 
+            if (sessionId == -1) {
+                return ResponseFactory.createUnauthorisedError(request);
+            }
+
             // retrieves the authentication session from the provided id
             DatabasePreAuthenticationSession preAuthenticationSession = DatabasePreAuthenticationSession.authenticationSessionWithId(sessionId);
 
             // if the authentication session does not exists then the user is unauthorised
             if (preAuthenticationSession == null) {
-                return ResponseFactory.createUnauthorisedError(request);
-            }
-
-            // if the player id is -1 then the session was fake (the player did not exist)
-            if (preAuthenticationSession.getPlayerId() == -1) {
                 return ResponseFactory.createUnauthorisedError(request);
             }
 
@@ -180,6 +184,9 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
                 if (hashedToken == null) {
                     throw new NoSuchAlgorithmException();
                 }
+
+                // inserts the session
+                DatabaseSession.insertSession(hashedToken, preAuthenticationSession.getId());
 
                 // the response is finally sent
                 return ResponseFactory.createAuthenticationTokenResponse(request, hashedToken);

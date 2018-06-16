@@ -4,6 +4,7 @@ import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.mocks.IPlayer;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -31,13 +32,20 @@ public class DatabaseLobby implements ILobby {
      */
     private long closingTime;
 
+    /**
+     * The time remaining before the match starts.
+     */
+    private int timeRemaining;
+
     DatabaseLobby() {
     }
 
     DatabaseLobby(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
         this.openingTime = resultSet.getDate("opening_time").getTime();
-        this.closingTime = resultSet.getDate("closing_time").getTime();
+
+        Date date = resultSet.getDate("closing_time");
+        this.closingTime = date == null ? -1L : date.getTime();
     }
 
     public static DatabaseLobby getLobbyWithId(int id) throws SQLException {
@@ -79,7 +87,7 @@ public class DatabaseLobby implements ILobby {
         );
 
         try (SagradaDatabase database = new SagradaDatabase()) {
-            database.executeQuery(query, null);
+            database.executeVoidQuery(query);
         }
     }
 
@@ -91,7 +99,7 @@ public class DatabaseLobby implements ILobby {
         );
 
         try (SagradaDatabase database = new SagradaDatabase()) {
-            database.executeQuery(query, null);
+            database.executeVoidQuery(query);
         }
     }
 
@@ -138,12 +146,21 @@ public class DatabaseLobby implements ILobby {
     }
 
     @Override
+    public int getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(int timeRemaining) {
+        this.timeRemaining = timeRemaining;
+    }
+
+    @Override
     public List<IPlayer> getPlayers() {
         String query = String.format(
                 "SELECT p.* FROM lobby l " +
                         "JOIN lobby_player lb ON lb.lobby = l.id " +
                         "JOIN player p ON lb.player = p.id " +
-                        "WHERE id = '%d'",
+                        "WHERE l.id = '%d'",
                 this.id
         );
 

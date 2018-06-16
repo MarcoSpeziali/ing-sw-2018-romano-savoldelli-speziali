@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.controllers;
 
-import it.polimi.ingsw.client.net.authentication.SignUpManager;
+import it.polimi.ingsw.client.net.SignUpManager;
 import it.polimi.ingsw.net.utils.ResponseFields;
 
 import java.io.IOException;
