@@ -77,9 +77,9 @@ public class SignUpGUIController extends SignUpController {
       }
       else {
           Alert alert = new Alert(Alert.AlertType.WARNING);
-          alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_UP_CREDENTIALS_PROPERTIES_ERROR_TITLE));
+          alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_UP_USER_PROPERTIES_ERROR_TITLE));
           //alert.setHeaderText("");
-          alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.SIGN_UP_USER_PROPERTIES_ERROR_TITLE));
+          alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.SIGN_UP_USER_PROPERTIES_ERROR_CONTENT_TEXT));
           alert.showAndWait();
       }
     }
