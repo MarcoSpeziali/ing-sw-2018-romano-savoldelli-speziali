@@ -129,10 +129,6 @@ public class Constants {
         public static final String CONNECTION_ERROR_HEADER_TEXT = "connection_error.header_text";
         public static final String CONNECTION_ERROR_CONTENT_TEXT = "connection_error.content_text";
 
-        public static final String START_SCREEN_PLAY_BUTTON_TEXT = "start_screen.play_button.text";
-        public static final String START_SCREEN_SETTINGS_BUTTON_TEXT = "start_screen.settings_button.text";
-        public static final String START_SCREEN_EXIT_BUTTON_TEXT = "start_screen.exit_button.text";
-
         public static final String SIGN_IN_ACCESS_DENIED_TITLE = "sign_in.access_denied.title";
         public static final String SIGN_IN_ACCESS_DENIED_HEADER_TEXT = "sign_in.access_denied.header_text";
         public static final String SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT = "sign_in.access_denied.content_text";
@@ -143,7 +139,6 @@ public class Constants {
         public static final String SIGN_IN_BACK_BUTTON_TEXT = "sign_in.back_button.text";
         public static final String SIGN_IN_SING_IN_NOW_LABEL_TEXT = "sign_in.sign_in_now_label.text";
         public static final String SIGN_IN_SIGN_IN_BUTTON_TEXT = "sign_in.sign_in_button.text";
-
         public static final String SETTINGS_TITLE = "settings.title";
         public static final String SETTINGS_SAVE_BUTTON_TEXT = "settings.save_button.text";
         public static final String SETTINGS_BACK_BUTTON_TEXT = "settings.back_button.text";
@@ -155,6 +150,25 @@ public class Constants {
         public static final String LOBBY_SECONDS_TEXT_LABEL_TEXT = "lobby.seconds_label_text.text";
         public static final String LOBBY_WAITING_FOR_PLAYERS_LABEL_TEXT = "lobby.waiting_for_players_label.text";
         public static final String LOBBY_BACK_BUTTON_TEXT = "lobby.back_button.text";
+
+        public static final String SIGN_UP_ALREADY_EXISTS_TITLE= "sign_up.already_exists.title";
+        public static final String SIGN_UP_ALREADY_EXISTS_HEADER_TEXT = "sign_up.already_exists.header_text";
+        public static final String SIGN_UP_ALREADY_EXISTS_CONTENT_TEXT = "sign_up.already_exists.content_text";
+        public static final String SIGN_UP_CREDENTIALS_PROPERTIES_ERROR_TITLE = "sign_up.credentials_properties_error.title";
+        public static final String SIGN_UP_CREDENTIAL_PROPERTIES_ERROR_CONTENT_TEXT = "sign_up.credential_properties_error.content_text";
+        public static final String SIGN_UP_MATCH_FAILED_TITLE = "sign_up.match_failed.title";
+        public static final String SIGN_UP_MATCH_FAILED_CONTENT_TEXT = "sign_up.match_failed.content_text";
+        public static final String SIGN_UP_USER_PROPERTIES_ERROR_TITLE = "sign_up.user_properties_error.title";
+        public static final String SIGN_UP_USER_PROPERTIES_ERROR_CONTENT_TEXT = "sign_up.user_properties_error.content_text";
+        public static final String START_SCREEN_PLAY_BUTTON_TEXT = "start_screen.play_button.text";
+        public static final String START_SCREEN_SETTINGS_BUTTON_TEXT = "start_screen.settings_button.text";
+        public static final String START_SCREEN_EXIT_BUTTON_TEXT = "start_screen.exit_button.text";
+
+
+
+
+
+
 
         private Strings() {
         }
