@@ -102,6 +102,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
         // if the index does not exists then the die is added
         if (this.rounds.get(round).size() <= index) {
             this.rounds.get(round).add(die);
+
         }
         else {
             this.rounds.get(round).set(index, die);
@@ -139,7 +140,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
 
     @Override
     public void putDie(Die die, Integer location) {
-        int roundIndex = location & 0x0000FF00 >> 8;
+        int roundIndex = (location & 0x0000FF00) >> 8;
         int dieIndex = location & 0x000000FF;
 
         this.setDieForRoundAtIndex(die, roundIndex, dieIndex);
@@ -185,7 +186,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
      * @param listener the listener to add
      * @return the provided instance of {@link OnDiePickedListener} so it can be unregistered later
      */
-    public OnDiePickedListener addListener(OnDiePickedListener listener) {
+    public OnDiePickedListener addPickListener(OnDiePickedListener listener) {
         this.onDiePickedListeners.add(listener);
 
         return listener;
@@ -195,7 +196,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
      * @param listener the listener to add
      * @return the provided instance of {@link OnDiePutListener} so it can be unregistered later
      */
-    public OnDiePutListener addListener(OnDiePutListener listener) {
+    public OnDiePutListener addPutListener(OnDiePutListener listener) {
         this.onDiePutListeners.add(listener);
 
         return listener;
@@ -204,14 +205,14 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
     /**
      * @param listener the listener to remove
      */
-    public void removeListener(OnDiePickedListener listener) {
+    public void removePickListener(OnDiePickedListener listener) {
         this.onDiePickedListeners.remove(listener);
     }
 
     /**
      * @param listener the listener to remove
      */
-    public void removeListener(OnDiePutListener listener) {
+    public void removePutListener(OnDiePutListener listener) {
         this.onDiePutListeners.remove(listener);
     }
 

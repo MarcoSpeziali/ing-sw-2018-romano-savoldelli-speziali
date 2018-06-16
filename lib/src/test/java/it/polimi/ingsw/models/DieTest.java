@@ -55,4 +55,17 @@ class DieTest {
     void toStringTest() {
         Assertions.assertEquals("Die(4, blue)", die.toString());
     }
+
+
+    @Test
+    void hashCodeTest() {
+        Die d1 = new Die(GlassColor.RED, 5);
+        Die d2 = new Die(GlassColor.RED, 5);
+        Assertions.assertEquals(d1.hashCode(), d2.hashCode());
+    }
+
+    /*@Test
+    void addListener() {
+    }
+    */
 }

@@ -117,11 +117,13 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
         return 2 * players + 1 - this.dice.size();
     }
 
-    public void addPutListener(OnDiePutListener onDiePutListener) {
+    public OnDiePutListener addPutListener(OnDiePutListener onDiePutListener) {
         this.onDiePutListeners.add(onDiePutListener);
+        return onDiePutListener;
     }
 
-    public void addPickListener(OnDiePickedListener onDiePickedListener) {
+    public OnDiePickedListener addPickListener(OnDiePickedListener onDiePickedListener) {
         this.onDiePickedListeners.add(onDiePickedListener);
+        return onDiePickedListener;
     }
 }
