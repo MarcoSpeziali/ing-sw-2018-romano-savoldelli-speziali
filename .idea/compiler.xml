@@ -20,7 +20,4 @@
       <module name="server" target="9" />
     </bytecodeTargetLevel>
   </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="&quot;--add-exports=javafx.graphics/com.sun.javafx.scene=com.jfoenix&quot;" />
-  </component>
 </project>

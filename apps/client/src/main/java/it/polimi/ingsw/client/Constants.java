@@ -54,6 +54,7 @@ public class Constants {
         START_SCREEN_FXML("FXML/Window/StartScreen.fxml"),
         SETTINGS_FXML("FXML/Window/Settings.fxml"),
         LOBBY("FXML/Window/Lobby.fxml"),
+        GAME_DASHBOARD("FXML/Window/GameDashboard.fxml"),
 
         TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.png"),
         TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.png"),

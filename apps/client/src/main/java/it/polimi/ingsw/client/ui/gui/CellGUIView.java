@@ -8,9 +8,11 @@ import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.utils.io.Resources;
 import it.polimi.ingsw.views.CellView;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class CellGUIView extends CellView implements GUIView {
     @Override
     public Node render() {
 
-        Node view;
+        Node cellView;
         if (super.cell.getShade() > 0) {
             switch (super.cell.getShade()) {
                 case 1:
@@ -67,30 +69,30 @@ public class CellGUIView extends CellView implements GUIView {
                     break;
 
             }
-            view = new ImageView();
-            ((ImageView) view).setFitWidth(100);
-            ((ImageView) view).setFitHeight(100);
+            cellView = new ImageView();
+            ((ImageView) cellView).setFitWidth(150);
+            ((ImageView) cellView).setFitHeight(150);
             try {
-                ((ImageView) view).setImage(new Image(Resources.getResource(CellGUIView.class.getClassLoader(), path).openStream()));
+                ((ImageView) cellView).setImage(new Image(Resources.getResource(CellGUIView.class.getClassLoader(), path).openStream()));
             }
             catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
         else {
-            view = new StackPane();
-            ((StackPane) view).setMinSize(100, 100);
-            if (super.cell.getShade() == 0 && super.cell.getColor() == null) {
-                view.setStyle("-fx-background-color: white");
+            cellView = new StackPane();
+            ((StackPane) cellView).setMinSize(150, 150);
+            if (super.cell.getShade() == 0 & super.cell.getColor() == null) {
+                cellView.setStyle("-fx-background-color: white");
             }
             else {
-                view.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
+                cellView.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
             }
 
         }
-        this.cell.addListener((OnDiePutListener) (die, location) -> this.cell.putDie(die));
         this.cell.addListener((OnDiePickedListener) (die, location) -> this.cell.pickDie());
-        return view;
+        this.cell.addListener((OnDiePutListener) (die, location) -> this.cell.putDie(die));
+        return cellView;
     }
 }
 

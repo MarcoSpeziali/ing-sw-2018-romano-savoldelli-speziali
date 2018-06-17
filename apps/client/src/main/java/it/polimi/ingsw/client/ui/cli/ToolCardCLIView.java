@@ -4,10 +4,9 @@ import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.views.ToolCardView;
 
 public class ToolCardCLIView extends ToolCardView implements CLIView {
-    private ToolCard toolCard;
 
     public ToolCardCLIView(ToolCard toolCard) {
-        this.toolCard = toolCard;
+        super(toolCard);
     }
 
     @Override
