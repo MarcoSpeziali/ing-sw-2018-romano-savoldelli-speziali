@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="722.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/9.0.1"
-            fx:controller="it.polimi.ingsw.client.ui.gui.windows.StartScreenGUIController">
+            fx:controller="it.polimi.ingsw.client.ui.gui.windows.StartScreenGUIController"
+            stylesheets="@../../application-stylesheet.css">
     <center>
         <Pane prefHeight="722.0" prefWidth="550.0">
             <children>
@@ -20,32 +20,35 @@
                 </ImageView>
                 <VBox alignment="CENTER" layoutX="118.0" layoutY="260.0" prefHeight="352.0" prefWidth="315.0">
                     <children>
-                        <JFXButton fx:id="playButton" alignment="CENTER" prefHeight="44.0" prefWidth="250.0"
-                                   style="-fx-background-color: #2ecc71;" text="PLAY GAME" textFill="#b0f7ce"
+                        <JFXButton id="playButton"
+                                   fx:id="playButton"
+                                   alignment="CENTER"
+                                   prefHeight="44.0"
+                                   prefWidth="250.0"
+                                   text="PLAY GAME"
                                    onAction="#onPlayGameClicked">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="25.0"/>
-                            </VBox.margin>
+                                        <VBox.margin>
+                                            <Insets bottom="25.0"/>
+                                        </VBox.margin>
                         </JFXButton>
-                        <JFXButton fx:id="settingsButton" alignment="CENTER" prefHeight="44.0" prefWidth="250.0"
-                                   style="-fx-background-color: #3498db;" text="SETTINGS" textFill="#bce4ff"
+                        <JFXButton id="settingsButton"
+                                   fx:id="settingsButton"
+                                   alignment="CENTER"
+                                   prefHeight="44.0"
+                                   prefWidth="250.0"
+                                   text="SETTINGS"
                                    onAction="#onSettingClicked">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="exitButton" alignment="CENTER" prefHeight="44.0" prefWidth="250.0"
-                                   style="-fx-background-color: #e74c3c;" text="EXIT" textFill="#ffa49c"
+                        <JFXButton id="exitButton"
+                                   fx:id="exitButton"
+                                   alignment="CENTER"
+                                   prefHeight="44.0"
+                                   prefWidth="250.0"
+                                   text="EXIT"
                                    onAction="#onExitClicked">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets top="25.0"/>
-                            </VBox.margin>
+                                        <VBox.margin>
+                                            <Insets top="25.0"/>
+                                        </VBox.margin>
                         </JFXButton>
                     </children>
                 </VBox>
