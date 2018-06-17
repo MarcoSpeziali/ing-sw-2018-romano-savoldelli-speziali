@@ -223,6 +223,9 @@ public class Constants {
         public static final String TOOL_CARD_EFFECT = "tool_card.flux_remover.effect";
         public static final String TOOL_CARD_TAP_WHEEL_TITLE = "tool_card.tap_wheel.title";
         public static final String TOOL_CARD_TAP_WHEEL_EFFECT = "tool_card.tap_wheel.effect";
+        public static final String TOOL_CARD_BAG_TEXT = "tool_card.bag.text";
+        public static final String TOOL_CARD_RESERVE = "tool_card.reserve.text";
+
 
         private Strings() {
         }
