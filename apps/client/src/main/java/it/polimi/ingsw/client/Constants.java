@@ -70,7 +70,24 @@ public class Constants {
         TOOL_CARD_CORK_BAKED_STRAINGHTEDGE("images/toolCards/cork_backed_strainghtedge.png"),
         TOOL_CARD_GRINDING_STONE("images/toolCards/grinding_stone.png"),
         TOOL_CARD_FLUX_REMOVER("images/toolCards/flux_remover.png"),
-        TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.png");
+        TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.png"),
+
+        OBJECTIVE_CARD_BLUE_SHADE("images/objectiveCards/blue_shade.png"),
+        OBJECTIVE_CARD_COLOR_DIAGONALS("images/objectiveCards/color_diagonals.png"),
+        OBJECTIVE_CARD_COLOR_VARIETY("images/objectiveCards/color_variety.png"),
+        OBJECTIVE_CARD_COLUMN_COLOR_VARIETY("images/objectiveCards/column_color_variety.png"),
+        OBJECTIVE_CARD_COLUMN_SHADE_VARIETY("images/objectiveCards/column_shade_variety.png"),
+        OBJECTIVE_CARD_DEEP_SHADES("images/objectiveCards/deep_shades.png"),
+        OBJECTIVE_CARD_GREEN_SHADES("images/objectiveCards/green_shade.png"),
+        OBJECTIVE_CARD_LIGHT_SHADES("images/objectiveCards/light_shades.png"),
+        OBJECTIVE_CARD_MEDIUM_SHADES("images/objectiveCards/medium_shades.png"),
+        OBJECTIVE_CARD_PURPLE_SHADES("images/objectiveCards/purple_shade.png"),
+        OBJECTIVE_CARD_RED_SHADE("images/objectiveCards/red_shade.png"),
+        OBJECTIVE_CARD_ROW_COLOR_VARIETY("images/objectiveCards/row_color_variety.png"),
+        OBJECTIVE_CARD_ROW_SHADE_VARIETY("images/objectiveCards/row_shade_variety.png"),
+        OBJECTIVE_CARD_SHADE_VARIETY("images/objectiveCards/shade_variety.png"),
+        OBJECTIVE_CARD_YELLOW_SHADE("images/objectiveCards/yellow_shade.png");
+
 
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
         private final String relativePath;
@@ -206,7 +223,7 @@ public class Constants {
         public static final String TOOL_CARD_EFFECT = "tool_card.flux_remover.effect";
         public static final String TOOL_CARD_TAP_WHEEL_TITLE = "tool_card.tap_wheel.title";
         public static final String TOOL_CARD_TAP_WHEEL_EFFECT = "tool_card.tap_wheel.effect";
-        
+
         private Strings() {
         }
 

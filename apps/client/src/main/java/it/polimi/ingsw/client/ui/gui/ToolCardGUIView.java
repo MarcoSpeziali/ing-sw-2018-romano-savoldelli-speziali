@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import it.polimi.ingsw.client.ClientApp;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.controllers.ToolCardController;
 import it.polimi.ingsw.models.ToolCard;
@@ -26,9 +25,9 @@ public class ToolCardGUIView extends ToolCardView implements GUIView {
     public Node render() {
         ImageView view = new ImageView();
         String path;
-        path = Constants.Resources.valueOf(String.format("TOOL_CARD_%s", toolCard.getCardId().toUpperCase())).getRelativePath();
-        view.setFitHeight(300);
-        view.setFitWidth(200);
+        path = Constants.Resources.TOOL_CARD_FLUX_BRUSH.getRelativePath();
+        view.setFitHeight(381);
+        view.setFitWidth(273);
         try {
             view.setImage(new Image(Resources.getResource(ToolCardGUIView.class.getClassLoader(), path).openStream()));
         } catch (IOException | NullPointerException e) {
