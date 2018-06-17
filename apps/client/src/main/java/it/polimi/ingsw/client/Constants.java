@@ -3,10 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.utils.text.LocalizedString;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 public class Constants {
     private Constants() {
@@ -56,7 +53,21 @@ public class Constants {
         SIGN_IN_FXML("FXML/Window/SignIn.fxml"),
         START_SCREEN_FXML("FXML/Window/StartScreen.fxml"),
         SETTINGS_FXML("FXML/Window/Settings.fxml"),
-        LOBBY("FXML/Window/Lobby.fxml");
+        LOBBY("FXML/Window/Lobby.fxml"),
+
+        TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.png"),
+        TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.png"),
+        TOOL_CARD_COPPER_FOIL_BURNISHER("images/toolCards/copper_foil_burnisher.png"),
+        TOOL_CARD_LATHEKIN("images/toolCards/lathekin.png"),
+        TOOL_CARD_LENS_CUTTER("images/toolCards/lens_cutter.png"),
+        TOOL_CARD_FLUX_BRUSH("images/toolCards/flux_brush.png"),
+        TOOL_CARD_GLAZING_HAMMER("images/toolCards/glazing_hammer.png"),
+        TOOL_CARD_RUNNING_PLIERS("images/toolCards/running_pliers.png"),
+        TOOL_CARD_CORK_BAKED_STRAINGHTEDGE("images/toolCards/cork_backed_strainghtedge.png"),
+        TOOL_CARD_GRINDING_STONE("images/toolCards/grinding_stone.png"),
+        TOOL_CARD_FLUX_REMOVER("images/toolCards/flux_remover.png"),
+        TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.png");
+
 
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
         private final String relativePath;
@@ -122,6 +133,7 @@ public class Constants {
         RMI
     }
 
+
     public static final class Strings {
         public static final String WELCOME_LABEL_TEXT = "welcome_label.text";
 
@@ -139,6 +151,7 @@ public class Constants {
         public static final String SIGN_IN_BACK_BUTTON_TEXT = "sign_in.back_button.text";
         public static final String SIGN_IN_SING_IN_NOW_LABEL_TEXT = "sign_in.sign_in_now_label.text";
         public static final String SIGN_IN_SIGN_IN_BUTTON_TEXT = "sign_in.sign_in_button.text";
+
         public static final String SETTINGS_TITLE = "settings.title";
         public static final String SETTINGS_SAVE_BUTTON_TEXT = "settings.save_button.text";
         public static final String SETTINGS_BACK_BUTTON_TEXT = "settings.back_button.text";
@@ -160,10 +173,35 @@ public class Constants {
         public static final String SIGN_UP_MATCH_FAILED_CONTENT_TEXT = "sign_up.match_failed.content_text";
         public static final String SIGN_UP_USER_PROPERTIES_ERROR_TITLE = "sign_up.user_properties_error.title";
         public static final String SIGN_UP_USER_PROPERTIES_ERROR_CONTENT_TEXT = "sign_up.user_properties_error.content_text";
+
         public static final String START_SCREEN_PLAY_BUTTON_TEXT = "start_screen.play_button.text";
         public static final String START_SCREEN_SETTINGS_BUTTON_TEXT = "start_screen.settings_button.text";
         public static final String START_SCREEN_EXIT_BUTTON_TEXT = "start_screen.exit_button.text";
 
+        public static final String TOOLCARD_GROZING_PLIERS_TITLE = "tool_card.grozing_pliers.title";
+        public static final String TOOLCARD_GROZING_PLIERS_EFFECT = "tool_card.grozing_pliers.effect";
+        public static final String TOOLCARD_EGLOMISE_BRUSH_TITLE = "tool_card.eglomise_brush.title";
+        public static final String TOOLCARD_EGLOMISE_BRUSH_EFFECT = "tool_card.eglomise_brush.effect";
+        public static final String TOOLCARD_COPPER_FOIL_BURNISHER_TITLE = "tool_card.copper_foil_burnisher.title";
+        public static final String TOOLCARD_COPPER_FOIL_BURNISHER_EFFECT = "tool_card.copper_foil_burnisher.effect";
+        public static final String TOOLCARD_LATHEKIN_TITLE = "tool_card.lathekin.title";
+        public static final String TOOLCARD_LATHEKIN_EFFECT = "tool_card.lathekin.title.effect";
+        public static final String TOOLCARD_LENS_CUTTER_TITLE = "tool_card.lens_cutter.title";
+        public static final String TOOLCARD_LENS_CUTTER_EFFECT = "tool_card.lens_cutter.effect";
+        public static final String TOOLCARD_FLUX_BRUSH_TITLE = "tool_card.flux_brush.title";
+        public static final String TOOLCARD_FLUX_BRUSH_EFFECT = "tool_card.flux_brush.effect";
+        public static final String TOOLCARD_GLAZING_HAMMER_TITLE = "tool_card.glazing_hammer.title";
+        public static final String TOOLCARD_GLAZING_HAMMER_EFFECT = "tool_card.glazing_hammer.effect";
+        public static final String TOOLCARD_RUNNING_PLIERS_TITLE = "tool_card.running_pliers.title";
+        public static final String TOOLCARD_RUNNING_PLIERS_EFFECT = "tool_card.running_pliers.effect";
+        public static final String TOOLCARD_CORK_BAKED_STRAINGHTEDGE_TITLE = "tool_card.cork_backed_strainghtedge.title";
+        public static final String TOOLCARD_CORK_BAKED_STRAINGHTEDGE_EFFECT = "tool_card.cork_backed_strainghtedge.effect";
+        public static final String TOOLCARD_GRINDING_STONE_TITLE = "tool_card.grinding_stone.title";
+        public static final String TOOLCARD_GRINDING_STONE_EFFECT = "tool_card.grinding_stone.effect";
+        public static final String TOOLCARD_FLUX_REMOVER_TITLE = "tool_card.flux_remover.title";
+        public static final String TOOLCARD_EFFECT = "tool_card.flux_remover.effect";
+        public static final String TOOLCARD_TAP_WHEEL_TITLE = "tool_card.tap_wheel.title";
+        public static final String TOOLCARD_TAP_WHEEL_EFFECT = "tool_card.tap_wheel.effect";
 
 
 
