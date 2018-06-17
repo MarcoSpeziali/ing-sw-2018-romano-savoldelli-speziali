@@ -24,9 +24,6 @@ public class GameDashboardGUIController extends Application {
 
     private FXMLLoader loader = new FXMLLoader();
 
-
-
-    //////////////////////////// TODO to be removed
     private Cell[][] cells = new Cell[][] {
             {
                     new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
@@ -57,10 +54,6 @@ public class GameDashboardGUIController extends Application {
         }
     });
     ToolCardGUIView toolCardGUIView = new ToolCardGUIView(toolCard);
-    //////////////////////////////
-
-
-
 
     public static Stage primaryStage;
     public static double xOffset = 0;
