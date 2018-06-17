@@ -1,9 +1,12 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.utils.text.LocalizedString;
+import org.fusesource.hawtjni.runtime.Library;
 
 import java.net.URL;
 import java.util.*;
+
+import static it.polimi.ingsw.client.Constants.Resources.*;
 
 public class Constants {
     private Constants() {
@@ -69,7 +72,6 @@ public class Constants {
         TOOL_CARD_FLUX_REMOVER("images/toolCards/flux_remover.png"),
         TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.png");
 
-
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
         private final String relativePath;
 
@@ -92,6 +94,7 @@ public class Constants {
             return it.polimi.ingsw.utils.io.Resources.getResource(classLoader, this.relativePath);
         }
     }
+
 
     public enum ClientArguments {
         CLI_MODE("cli");
@@ -179,36 +182,31 @@ public class Constants {
         public static final String START_SCREEN_SETTINGS_BUTTON_TEXT = "start_screen.settings_button.text";
         public static final String START_SCREEN_EXIT_BUTTON_TEXT = "start_screen.exit_button.text";
 
-        public static final String TOOLCARD_GROZING_PLIERS_TITLE = "tool_card.grozing_pliers.title";
-        public static final String TOOLCARD_GROZING_PLIERS_EFFECT = "tool_card.grozing_pliers.effect";
-        public static final String TOOLCARD_EGLOMISE_BRUSH_TITLE = "tool_card.eglomise_brush.title";
-        public static final String TOOLCARD_EGLOMISE_BRUSH_EFFECT = "tool_card.eglomise_brush.effect";
-        public static final String TOOLCARD_COPPER_FOIL_BURNISHER_TITLE = "tool_card.copper_foil_burnisher.title";
-        public static final String TOOLCARD_COPPER_FOIL_BURNISHER_EFFECT = "tool_card.copper_foil_burnisher.effect";
-        public static final String TOOLCARD_LATHEKIN_TITLE = "tool_card.lathekin.title";
-        public static final String TOOLCARD_LATHEKIN_EFFECT = "tool_card.lathekin.title.effect";
-        public static final String TOOLCARD_LENS_CUTTER_TITLE = "tool_card.lens_cutter.title";
-        public static final String TOOLCARD_LENS_CUTTER_EFFECT = "tool_card.lens_cutter.effect";
-        public static final String TOOLCARD_FLUX_BRUSH_TITLE = "tool_card.flux_brush.title";
-        public static final String TOOLCARD_FLUX_BRUSH_EFFECT = "tool_card.flux_brush.effect";
-        public static final String TOOLCARD_GLAZING_HAMMER_TITLE = "tool_card.glazing_hammer.title";
-        public static final String TOOLCARD_GLAZING_HAMMER_EFFECT = "tool_card.glazing_hammer.effect";
-        public static final String TOOLCARD_RUNNING_PLIERS_TITLE = "tool_card.running_pliers.title";
-        public static final String TOOLCARD_RUNNING_PLIERS_EFFECT = "tool_card.running_pliers.effect";
-        public static final String TOOLCARD_CORK_BAKED_STRAINGHTEDGE_TITLE = "tool_card.cork_backed_strainghtedge.title";
-        public static final String TOOLCARD_CORK_BAKED_STRAINGHTEDGE_EFFECT = "tool_card.cork_backed_strainghtedge.effect";
-        public static final String TOOLCARD_GRINDING_STONE_TITLE = "tool_card.grinding_stone.title";
-        public static final String TOOLCARD_GRINDING_STONE_EFFECT = "tool_card.grinding_stone.effect";
-        public static final String TOOLCARD_FLUX_REMOVER_TITLE = "tool_card.flux_remover.title";
-        public static final String TOOLCARD_EFFECT = "tool_card.flux_remover.effect";
-        public static final String TOOLCARD_TAP_WHEEL_TITLE = "tool_card.tap_wheel.title";
-        public static final String TOOLCARD_TAP_WHEEL_EFFECT = "tool_card.tap_wheel.effect";
-
-
-
-
-
-
+        public static final String TOOL_CARD_GROZING_PLIERS_TITLE = "tool_card.grozing_pliers.title";
+        public static final String TOOL_CARD_GROZING_PLIERS_EFFECT = "tool_card.grozing_pliers.effect";
+        public static final String TOOL_CARD_EGLOMISE_BRUSH_TITLE = "tool_card.eglomise_brush.title";
+        public static final String TOOL_CARD_EGLOMISE_BRUSH_EFFECT = "tool_card.eglomise_brush.effect";
+        public static final String TOOL_CARD_COPPER_FOIL_BURNISHER_TITLE = "tool_card.copper_foil_burnisher.title";
+        public static final String TOOL_CARD_COPPER_FOIL_BURNISHER_EFFECT = "tool_card.copper_foil_burnisher.effect";
+        public static final String TOOL_CARD_LATHEKIN_TITLE = "tool_card.lathekin.title";
+        public static final String TOOL_CARD_LATHEKIN_EFFECT = "tool_card.lathekin.title.effect";
+        public static final String TOOL_CARD_LENS_CUTTER_TITLE = "tool_card.lens_cutter.title";
+        public static final String TOOL_CARD_LENS_CUTTER_EFFECT = "tool_card.lens_cutter.effect";
+        public static final String TOOL_CARD_FLUX_BRUSH_TITLE = "tool_card.flux_brush.title";
+        public static final String TOOL_CARD_FLUX_BRUSH_EFFECT = "tool_card.flux_brush.effect";
+        public static final String TOOL_CARD_GLAZING_HAMMER_TITLE = "tool_card.glazing_hammer.title";
+        public static final String TOOL_CARD_GLAZING_HAMMER_EFFECT = "tool_card.glazing_hammer.effect";
+        public static final String TOOL_CARD_RUNNING_PLIERS_TITLE = "tool_card.running_pliers.title";
+        public static final String TOOL_CARD_RUNNING_PLIERS_EFFECT = "tool_card.running_pliers.effect";
+        public static final String TOOL_CARD_CORK_BAKED_STRAINGHTEDGE_TITLE = "tool_card.cork_backed_strainghtedge.title";
+        public static final String TOOL_CARD_CORK_BAKED_STRAINGHTEDGE_EFFECT = "tool_card.cork_backed_strainghtedge.effect";
+        public static final String TOOL_CARD_GRINDING_STONE_TITLE = "tool_card.grinding_stone.title";
+        public static final String TOOL_CARD_GRINDING_STONE_EFFECT = "tool_card.grinding_stone.effect";
+        public static final String TOOL_CARD_FLUX_REMOVER_TITLE = "tool_card.flux_remover.title";
+        public static final String TOOL_CARD_EFFECT = "tool_card.flux_remover.effect";
+        public static final String TOOL_CARD_TAP_WHEEL_TITLE = "tool_card.tap_wheel.title";
+        public static final String TOOL_CARD_TAP_WHEEL_EFFECT = "tool_card.tap_wheel.effect";
+        
         private Strings() {
         }
 
