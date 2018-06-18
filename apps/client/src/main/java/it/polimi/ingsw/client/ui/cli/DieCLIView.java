@@ -9,7 +9,7 @@ import java.util.Scanner;
 import static org.fusesource.jansi.Ansi.Color.WHITE;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class DieCLIView extends DieView {
+public class DieCLIView extends DieView implements CLIView{
 
     private Scanner scanner = new Scanner(System.in);
 
@@ -29,6 +29,7 @@ public class DieCLIView extends DieView {
         });
     }
 
+    @Override
     public void render() {
 
         Ansi.Color color = Ansi.Color.valueOf(this.die.getColor().name());

@@ -9,7 +9,6 @@ import it.polimi.ingsw.client.controllers.SignUpController;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
 import java.io.IOException;
@@ -87,12 +86,6 @@ public class SignUpGUIController extends SignUpController {
     @FXML
     public void onBackClicked() throws IOException {
         loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 720, 480));
-    }
-
-    private void setScene(Scene scene) {
-        SagradaGUI.primaryStage.setScene(scene);
-        //SagradaGUI.primaryStage.initStyle(StageStyle.UNDECORATED);
-        SagradaGUI.primaryStage.show();
+        SagradaGUI.showStage(loader.load(), 720, 480);
     }
 }

@@ -5,11 +5,9 @@ import it.polimi.ingsw.views.ObjectiveCardView;
 
 public class ObjectiveCardCLIView extends ObjectiveCardView implements CLIView {
 
-    private ObjectiveCard objectiveCard;
-
-
     public ObjectiveCardCLIView(ObjectiveCard objectiveCard) {
-        this.objectiveCard = objectiveCard;
+        super(objectiveCard);
+
     }
 
     @Override
