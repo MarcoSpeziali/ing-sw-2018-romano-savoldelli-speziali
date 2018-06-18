@@ -8,6 +8,7 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.views;
     exports it.polimi.ingsw.utils.streams;
     exports it.polimi.ingsw.controllers;
+    exports it.polimi.ingsw.controllers.proxies;
     exports it.polimi.ingsw.listeners;
     exports it.polimi.ingsw.net;
     exports it.polimi.ingsw.net.utils;
@@ -20,7 +21,6 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.utils.logging;
 
     requires java.xml;
-    requires javafx.graphics;
     requires java.rmi;
     requires json;
     requires java.logging;

@@ -43,7 +43,7 @@ public class LobbyManager {
         return instance;
     }
 
-    public boolean joinLobby(UpdateInterface<ILobby> lobbyUpdateInterface) throws IOException, NotBoundException, ReflectiveOperationException {
+    public void joinLobby(UpdateInterface<ILobby> lobbyUpdateInterface) throws IOException, NotBoundException, ReflectiveOperationException {
         Constants.Protocols protocol = Settings.getSettings().getProtocol();
 
         EndPointFunction endPointFunction = protocol == Constants.Protocols.SOCKETS ? EndPointFunction.LOBBY_JOIN_REQUEST :
@@ -74,7 +74,8 @@ public class LobbyManager {
             });
         }
         else {
-            PersistentRMIInteractionProvider persistentRMIInteractionProvider = (PersistentRMIInteractionProvider) this.persistentNetworkInteractionProvider;
+            //noinspection unchecked
+            PersistentRMIInteractionProvider<LobbyInterface> persistentRMIInteractionProvider = (PersistentRMIInteractionProvider<LobbyInterface>) this.persistentNetworkInteractionProvider;
 
             // makes the request
             requestResponse = persistentRMIInteractionProvider.getSyncResponseFor(joinRequest, lobbyUpdateInterface);
@@ -82,9 +83,11 @@ public class LobbyManager {
 
         if (requestResponse.getError() == null) {
             lobbyUpdateInterface.onUpdateReceived(requestResponse.getBody());
-            return true;
         }
 
-        return false;
+    }
+
+    public void close() throws IOException {
+        this.persistentNetworkInteractionProvider.close();
     }
 }

@@ -29,7 +29,7 @@ public class PersistentRMIInteractionProvider<R extends Remote> extends Persiste
     @Override
     public void open(EndPointFunction remoteEndPoint) throws IOException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(this.remoteAddress, this.remotePort);
-        this.remoteInterface = registry.lookup(remoteEndPoint.toString());
+        this.remoteInterface = registry.lookup(getRMIEndPointName(remoteEndPoint));
     }
 
     @Override
@@ -48,7 +48,12 @@ public class PersistentRMIInteractionProvider<R extends Remote> extends Persiste
             throw new NotBoundException();
         }
 
-        Object returnValue = targetMethod.invoke(this.remoteInterface, args);
+        Object[] arguments = new Object[1 + args.length];
+        arguments[0] = request;
+
+        System.arraycopy(args, 0, arguments, 1, args.length);
+
+        Object returnValue = targetMethod.invoke(this.remoteInterface, arguments);
 
         if (returnValue == null) {
             return null;
@@ -56,6 +61,21 @@ public class PersistentRMIInteractionProvider<R extends Remote> extends Persiste
 
         //noinspection unchecked
         return (Response<T>) returnValue;
+    }
+
+    /**
+     * Returns the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
+     *
+     * @param endPointFunction the {@link EndPointFunction}
+     * @return the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
+     */
+    private String getRMIEndPointName(EndPointFunction endPointFunction) {
+        return String.format(
+                "//%s:%d/%s",
+                this.remoteAddress,
+                this.remotePort,
+                endPointFunction.toString()
+        );
     }
 
     @Override

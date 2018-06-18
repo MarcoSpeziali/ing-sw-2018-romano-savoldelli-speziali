@@ -45,6 +45,4 @@ public abstract class JavaFXBaseTest {
             throw new RuntimeException(e);
         }
     }
-
-
 }

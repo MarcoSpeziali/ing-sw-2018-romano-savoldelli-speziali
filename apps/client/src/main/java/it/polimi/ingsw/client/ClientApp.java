@@ -35,7 +35,7 @@ public class ClientApp {
         }
         catch (Exception e) {
             e.printStackTrace();
-            ClientLogger.getLogger(ClientApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
+            ClientLogger.getLogger().log(Level.SEVERE, "An unrecoverable error occurred: ", e);
         }
     }
 

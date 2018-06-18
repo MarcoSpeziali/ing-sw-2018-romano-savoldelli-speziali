@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LobbyMock implements ILobby {
 
@@ -48,7 +49,9 @@ public class LobbyMock implements ILobby {
         this.openingTime = iLobby.getOpeningTime();
         this.closingTime = iLobby.getClosingTime();
         this.timeRemaining = iLobby.getTimeRemaining();
-        this.players = iLobby.getPlayers();
+        this.players = iLobby.getPlayers().stream()
+                .map(PlayerMock::new)
+                .collect(Collectors.toList());
     }
 
     @Override

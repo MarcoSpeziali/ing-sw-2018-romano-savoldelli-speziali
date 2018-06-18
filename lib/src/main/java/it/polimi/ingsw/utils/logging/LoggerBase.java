@@ -12,11 +12,14 @@ public abstract class LoggerBase extends Logger {
     protected static FileHandler fileHandler;
     protected static Level level;
     private static boolean fileHandlerAlreadySet = false;
+    private static final StackWalker stackWalker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+
     /**
      * Protected method to construct a logger for a named subsystem.
      * <p>
      * The logger will be initially configured with a null Level
      * and with useParentHandlers set to true.
+     * </p>
      *
      * @param name A name for the logger.  This should
      *             be a dot-separated name and should normally
@@ -47,6 +50,10 @@ public abstract class LoggerBase extends Logger {
         }
 
         this.setLevel(level);
+    }
+
+    protected LoggerBase() {
+        this(stackWalker.getCallerClass().getName());
     }
 
     /**

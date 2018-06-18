@@ -78,7 +78,7 @@ public final class SocketRouter {
                 return targetClass.getDeclaredConstructor().newInstance();
             }
             catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                ServerLogger.getLogger(SocketRouter.class)
+                ServerLogger.getLogger()
                         .log(
                                 Level.SEVERE,
                                 "Could not instantiate command handler for endpoint: " +

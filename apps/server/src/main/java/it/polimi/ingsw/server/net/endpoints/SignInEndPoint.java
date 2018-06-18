@@ -109,13 +109,13 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
             );
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
 
             // sends back an internal server error
             return ResponseFactory.createInternalServerError(request);
         }
         catch (NoSuchAlgorithmException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
             return ResponseFactory.createInternalServerError(request);
         }
@@ -196,12 +196,12 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
             }
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError(request);
         }
         catch (NoSuchAlgorithmException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Could not retrieve algorithm SHA-1", e);
 
             return ResponseFactory.createInternalServerError(request);
         }

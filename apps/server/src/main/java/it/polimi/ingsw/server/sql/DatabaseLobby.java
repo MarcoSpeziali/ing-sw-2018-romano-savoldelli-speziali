@@ -165,7 +165,7 @@ public class DatabaseLobby implements ILobby {
         );
 
         try (SagradaDatabase database = new SagradaDatabase()) {
-            return Collections.unmodifiableList(database.executeQuery(query, resultSet -> {
+            List<IPlayer> players = database.executeQuery(query, resultSet -> {
                 LinkedList<IPlayer> databasePlayers = new LinkedList<>();
 
                 do {
@@ -173,7 +173,13 @@ public class DatabaseLobby implements ILobby {
                 } while (resultSet.next());
 
                 return databasePlayers;
-            }));
+            });
+
+            if (players.isEmpty()) {
+                return List.of();
+            }
+
+            return Collections.unmodifiableList(players);
         }
         catch (SQLException e) {
             return List.of();

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.net.providers;
 
-import it.polimi.ingsw.net.Body;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
@@ -8,15 +7,16 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import org.json.JSONObject;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.rmi.NotBoundException;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -49,28 +49,21 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
             try {
                 String content = this.in.readLine();
 
-                JSONObject jsonObject = new JSONObject(content);
-
-                if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
-                    Response<? extends JSONSerializable> response = new Response<>();
-                    response.deserialize(new JSONObject(content));
-
-                    this.handleResponse(response);
-                }
-                else if (jsonObject.has(RequestFields.REQUEST.toString())) {
-                    Request<? extends JSONSerializable> request = new Request<>();
-                    request.deserialize(new JSONObject(content));
-
-                    Response<? extends JSONSerializable> response = handleRequest(request);
-
-                    if (response != null) {
-                        this.out.write(response.toString());
-                        this.out.newLine();
-                        this.out.flush();
+                this.handleData(content, response -> {
+                    try {
+                        if (response != null) {
+                            this.out.write(response.toString());
+                            this.out.newLine();
+                            this.out.flush();
+                        }
                     }
-                }
+                    catch (IOException e) {
+                        StreamExceptionWrapper.wrap(e);
+                    }
+                });
             }
-            catch (IOException ignored) {
+            catch (IOException | StreamExceptionWrapper e) {
+                throw new RuntimeException(e); // TODO: remove
             }
         }
     };
@@ -128,11 +121,9 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
      * @param request the {@link Request} to send
      * @return a {@link Response} produced by the server
      * @throws IOException                  if any IO error occurs
-     * @throws NotBoundException            if {@link Body#getEndPointFunction()} is not currently bound
-     * @throws ReflectiveOperationException if a reflection error occurs
      */
     @Override
-    public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException, NotBoundException, ReflectiveOperationException {
+    public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException {
         if (socket == null) {
             throw new IllegalStateException("The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.");
         }
@@ -144,6 +135,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                 null
         );
 
+        //noinspection unchecked
         this.responseListeners.put(
                 request.getHeader().getEndPointFunction(),
                 newValue -> receivedResponse.set((Response<T>) newValue)
@@ -168,7 +160,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
             );
         }
 
-        return (Response<T>) receivedResponse.get();
+        return receivedResponse.get();
     }
 
     @Override
@@ -186,6 +178,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
             this.responseListeners.put(
                     request.getHeader().getEndPointFunction(),
                     response -> {
+                        //noinspection unchecked
                         responseConsumer.accept((Response<T>) response);
 
                         if (oldListener == null) {
@@ -220,6 +213,27 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         this.socket.close();
     }
 
+    private void handleData(String jsonData, Consumer<Response<? extends JSONSerializable>> responseHandler) {
+        CompletableFuture.runAsync(() -> {
+            JSONObject jsonObject = new JSONObject(jsonData);
+
+            if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
+                Response<? extends JSONSerializable> response = new Response<>();
+                response.deserialize(new JSONObject(jsonData));
+
+                this.handleResponse(response);
+            }
+            else if (jsonObject.has(RequestFields.REQUEST.toString())) {
+                Request<? extends JSONSerializable> request = new Request<>();
+                request.deserialize(new JSONObject(jsonData));
+
+                Response<? extends JSONSerializable> response = handleRequest(request);
+
+                responseHandler.accept(response);
+            }
+        });
+    }
+
     private <T extends JSONSerializable> void handleResponse(Response<T> response) {
         if (response.getError() != null && this.errorListeners.containsKey(response.getHeader().getEndPointFunction())) {
             this.errorListeners.get(response.getHeader().getEndPointFunction()).accept(response.getError());
@@ -231,6 +245,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
 
     private <T extends JSONSerializable, K extends JSONSerializable> Response<T> handleRequest(Request<K> request) {
         if (this.requestListeners.containsKey(request.getHeader().getEndPointFunction())) {
+            //noinspection unchecked
             return (Response<T>) this.requestListeners.get(request.getHeader().getEndPointFunction()).apply(request);
         }
 

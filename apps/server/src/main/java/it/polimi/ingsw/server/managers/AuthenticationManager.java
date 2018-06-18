@@ -15,12 +15,10 @@ public final class AuthenticationManager {
 
     // TODO: complete
     public static synchronized DatabasePlayer getAuthenticatedPlayer(Request<? extends JSONSerializable> request) throws SQLException, TimeoutException {
-        if (request.getHeader().getClientToken() == null) {
-            return null;
-        }
+        return getAuthenticatedPlayer(request.getHeader().getClientToken());
+    }
 
-        String token = request.getHeader().getClientToken();
-
+    public static synchronized DatabasePlayer getAuthenticatedPlayer(String token) throws SQLException, TimeoutException {
         DatabaseSession session = DatabaseSession.sessionWithToken(token);
 
         if (session == null) {

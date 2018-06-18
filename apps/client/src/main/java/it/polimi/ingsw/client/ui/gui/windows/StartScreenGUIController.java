@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
-import it.polimi.ingsw.utils.text.LocalizedText;
+import it.polimi.ingsw.utils.text.Localized;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,20 +18,20 @@ import static it.polimi.ingsw.client.SagradaGUI.primaryStage;
 public class StartScreenGUIController implements Initializable {
 
     @FXML
-    @LocalizedText(key = Constants.Strings.START_SCREEN_PLAY_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.START_SCREEN_PLAY_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton playButton;
     @FXML
-    @LocalizedText(key = Constants.Strings.START_SCREEN_SETTINGS_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.START_SCREEN_SETTINGS_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton settingsButton;
     @FXML
-    @LocalizedText(key = Constants.Strings.START_SCREEN_EXIT_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.START_SCREEN_EXIT_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton exitButton;
 
     private FXMLLoader loader = new FXMLLoader();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        LocalizedText.Updater.update(this);
+        Localized.Updater.update(this);
     }
 
     public void onExitClicked() {

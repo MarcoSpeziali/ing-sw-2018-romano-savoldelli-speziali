@@ -71,8 +71,14 @@ public class AuthenticatedClientHandler extends ClientHandler {
 
                 SocketAddress socketAddress = this.client.getRemoteSocketAddress();
 
-                ServerLogger.getLogger(AuthenticatedClientHandler.class)
+                ServerLogger.getLogger()
                         .finer(() -> String.format("Handling client %s associated to player '%s'", socketAddress, this.player.getUsername()));
+
+                EventDispatcher.dispatch(
+                        EventType.PLAYER_EVENTS,
+                        PlayerEventsListener.class,
+                        playerEventsListener -> playerEventsListener.onPlayerConnected(this.player)
+                );
 
                 try {
                     do {
@@ -88,8 +94,10 @@ public class AuthenticatedClientHandler extends ClientHandler {
                     } while (handler != null && handler.shouldBeKeptAlive() && !shouldStop);
                 }
                 catch (Exception e) {
-                    ServerLogger.getLogger(AuthenticatedClientHandler.class)
+                    ServerLogger.getLogger()
                             .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
+
+                    clientHandlers.remove(this.player);
 
                     EventDispatcher.dispatch(
                             EventType.PLAYER_EVENTS,

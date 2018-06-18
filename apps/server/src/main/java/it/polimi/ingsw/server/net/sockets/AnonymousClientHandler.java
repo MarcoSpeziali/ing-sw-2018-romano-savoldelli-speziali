@@ -36,7 +36,7 @@ public class AnonymousClientHandler extends ClientHandler {
                     return;
                 }
 
-                ServerLogger.getLogger(AnonymousClientHandler.class)
+                ServerLogger.getLogger()
                         .fine(() -> String.format(
                                 "Got request \"%s\", from client: %s",
                                 request.toString(),
@@ -55,7 +55,7 @@ public class AnonymousClientHandler extends ClientHandler {
                 @SuppressWarnings("unchecked")
                 Response<? extends JSONSerializable> response = handler.handle(request, this.client);
 
-                ServerLogger.getLogger(AnonymousClientHandler.class)
+                ServerLogger.getLogger()
                         .fine(() -> String.format(
                                 "Sending response \"%s\", to client: %s", response.toString(), socketAddress.toString()
                         ));
@@ -67,7 +67,7 @@ public class AnonymousClientHandler extends ClientHandler {
             } while (handler.shouldBeKeptAlive());
         }
         catch (Exception e) {
-            ServerLogger.getLogger(AnonymousClientHandler.class)
+            ServerLogger.getLogger()
                     .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
         }
     }
@@ -83,7 +83,7 @@ public class AnonymousClientHandler extends ClientHandler {
                     request
             )) {
 
-                ServerLogger.getLogger(AnonymousClientHandler.class)
+                ServerLogger.getLogger()
                         .finer(() -> String.format(
                                 "Host %s migrated to AuthenticatedClientHandler, since it is authenticated as '%s'",
                                 this.client.getRemoteSocketAddress().toString(),

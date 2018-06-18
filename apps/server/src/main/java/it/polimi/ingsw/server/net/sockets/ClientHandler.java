@@ -52,6 +52,10 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
     protected Request<? extends JSONSerializable> waitForRequest(BufferedReader bufferedReader) throws IOException {
         String content = bufferedReader.readLine();
 
+        if (content == null) {
+            throw new IOException();
+        }
+
         Request<? extends JSONSerializable> request = new Request<>();
         request.deserialize(new JSONObject(content));
 
@@ -87,7 +91,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         // waits for a request
         Request<? extends JSONSerializable> request = waitForRequest(this.in);
 
-        ServerLogger.getLogger(AnonymousClientHandler.class)
+        ServerLogger.getLogger()
                 .fine(() -> String.format(
                         "Got request \"%s\", from client: %s",
                         request.toString(),
@@ -107,7 +111,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
     }
 
     private Command handleRequest(String socketAddress, Request<? extends JSONSerializable> request, CanContinueMiddleware<Request<? extends JSONSerializable>> shouldHandleRequestFunction, HandlerChooserMiddleware commandGetter) throws IOException, SQLException {
-        ServerLogger.getLogger(AnonymousClientHandler.class)
+        ServerLogger.getLogger()
                 .fine(() -> String.format(
                         "Got request \"%s\", from client: %s",
                         request.toString(),
@@ -120,7 +124,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
             }
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(getClass()).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
 
             return null;
         }
@@ -130,7 +134,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
 
         // if the handler is null it means that the endpoint does not exists
         if (handler == null) {
-            ServerLogger.getLogger(ClientHandler.class)
+            ServerLogger.getLogger()
                     .warning(() -> String.format("Cannot handle request with endpoint: %s, it does not exists.", request.getHeader().getEndPointFunction().toString()));
             return null;
         }
@@ -139,7 +143,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         @SuppressWarnings("unchecked")
         Response<? extends JSONSerializable> response = handler.handle(request, this.client);
 
-        ServerLogger.getLogger(getClass())
+        ServerLogger.getLogger()
                 .fine(() -> String.format(
                         "Sending response \"%s\", to client: %s", response.toString(), socketAddress
                 ));
