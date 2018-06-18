@@ -59,34 +59,34 @@ public class Constants {
         LOBBY("FXML/Window/Lobby.fxml"),
         GAME_DASHBOARD("FXML/Window/GameDashboard.fxml"),
 
-        TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.png"),
-        TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.png"),
-        TOOL_CARD_COPPER_FOIL_BURNISHER("images/toolCards/copper_foil_burnisher.png"),
-        TOOL_CARD_LATHEKIN("images/toolCards/lathekin.png"),
-        TOOL_CARD_LENS_CUTTER("images/toolCards/lens_cutter.png"),
-        TOOL_CARD_FLUX_BRUSH("images/toolCards/flux_brush.png"),
-        TOOL_CARD_GLAZING_HAMMER("images/toolCards/glazing_hammer.png"),
-        TOOL_CARD_RUNNING_PLIERS("images/toolCards/running_pliers.png"),
-        TOOL_CARD_CORK_BAKED_STRAINGHTEDGE("images/toolCards/cork_backed_strainghtedge.png"),
-        TOOL_CARD_GRINDING_STONE("images/toolCards/grinding_stone.png"),
-        TOOL_CARD_FLUX_REMOVER("images/toolCards/flux_remover.png"),
-        TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.png"),
+        TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.jpg"),
+        TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.jpg"),
+        TOOL_CARD_COPPER_FOIL_BURNISHER("images/toolCards/copper_foil_burnisher.jpg"),
+        TOOL_CARD_LATHEKIN("images/toolCards/lathekin.jpg"),
+        TOOL_CARD_LENS_CUTTER("images/toolCards/lens_cutter.jpg"),
+        TOOL_CARD_FLUX_BRUSH("images/toolCards/flux_brush.jpg"),
+        TOOL_CARD_GLAZING_HAMMER("images/toolCards/glazing_hammer.jpg"),
+        TOOL_CARD_RUNNING_PLIERS("images/toolCards/running_pliers.jpg"),
+        TOOL_CARD_CORK_BAKED_STRAINGHTEDGE("images/toolCards/cork_backed_strainghtedge.jpg"),
+        TOOL_CARD_GRINDING_STONE("images/toolCards/grinding_stone.jpg"),
+        TOOL_CARD_FLUX_REMOVER("images/toolCards/flux_remover.jpg"),
+        TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.jpg"),
 
-        OBJECTIVE_CARD_BLUE_SHADE("images/objectiveCards/blue_shade.png"),
-        OBJECTIVE_CARD_COLOR_DIAGONALS("images/objectiveCards/color_diagonals.png"),
-        OBJECTIVE_CARD_COLOR_VARIETY("images/objectiveCards/color_variety.png"),
-        OBJECTIVE_CARD_COLUMN_COLOR_VARIETY("images/objectiveCards/column_color_variety.png"),
-        OBJECTIVE_CARD_COLUMN_SHADE_VARIETY("images/objectiveCards/column_shade_variety.png"),
-        OBJECTIVE_CARD_DEEP_SHADES("images/objectiveCards/deep_shades.png"),
-        OBJECTIVE_CARD_GREEN_SHADES("images/objectiveCards/green_shade.png"),
-        OBJECTIVE_CARD_LIGHT_SHADES("images/objectiveCards/light_shades.png"),
-        OBJECTIVE_CARD_MEDIUM_SHADES("images/objectiveCards/medium_shades.png"),
-        OBJECTIVE_CARD_PURPLE_SHADES("images/objectiveCards/purple_shade.png"),
-        OBJECTIVE_CARD_RED_SHADE("images/objectiveCards/red_shade.png"),
-        OBJECTIVE_CARD_ROW_COLOR_VARIETY("images/objectiveCards/row_color_variety.png"),
-        OBJECTIVE_CARD_ROW_SHADE_VARIETY("images/objectiveCards/row_shade_variety.png"),
-        OBJECTIVE_CARD_SHADE_VARIETY("images/objectiveCards/shade_variety.png"),
-        OBJECTIVE_CARD_YELLOW_SHADE("images/objectiveCards/yellow_shade.png");
+        OBJECTIVE_CARD_BLUE_SHADE("images/objectiveCards/blue_shade.jpg"),
+        OBJECTIVE_CARD_COLOR_DIAGONALS("images/objectiveCards/color_diagonals.jpg"),
+        OBJECTIVE_CARD_COLOR_VARIETY("images/objectiveCards/color_variety.jpg"),
+        OBJECTIVE_CARD_COLUMN_COLOR_VARIETY("images/objectiveCards/column_color_variety.jpg"),
+        OBJECTIVE_CARD_COLUMN_SHADE_VARIETY("images/objectiveCards/column_shade_variety.jpg"),
+        OBJECTIVE_CARD_DEEP_SHADES("images/objectiveCards/deep_shades.jpg"),
+        OBJECTIVE_CARD_GREEN_SHADES("images/objectiveCards/green_shade.jpg"),
+        OBJECTIVE_CARD_LIGHT_SHADES("images/objectiveCards/light_shades.jpg"),
+        OBJECTIVE_CARD_MEDIUM_SHADES("images/objectiveCards/medium_shades.jpg"),
+        OBJECTIVE_CARD_PURPLE_SHADES("images/objectiveCards/purple_shade.jpg"),
+        OBJECTIVE_CARD_RED_SHADE("images/objectiveCards/red_shade.jpg"),
+        OBJECTIVE_CARD_ROW_COLOR_VARIETY("images/objectiveCards/row_color_variety.jpg"),
+        OBJECTIVE_CARD_ROW_SHADE_VARIETY("images/objectiveCards/row_shade_variety.jpg"),
+        OBJECTIVE_CARD_SHADE_VARIETY("images/objectiveCards/shade_variety.jpg"),
+        OBJECTIVE_CARD_YELLOW_SHADE("images/objectiveCards/yellow_shade.jpg");
 
 
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
@@ -206,7 +206,7 @@ public class Constants {
         public static final String TOOL_CARD_COPPER_FOIL_BURNISHER_TITLE = "tool_card.copper_foil_burnisher.title";
         public static final String TOOL_CARD_COPPER_FOIL_BURNISHER_EFFECT = "tool_card.copper_foil_burnisher.effect";
         public static final String TOOL_CARD_LATHEKIN_TITLE = "tool_card.lathekin.title";
-        public static final String TOOL_CARD_LATHEKIN_EFFECT = "tool_card.lathekin.title.effect";
+        public static final String TOOL_CARD_LATHEKIN_EFFECT = "tool_card.lathekin.effect";
         public static final String TOOL_CARD_LENS_CUTTER_TITLE = "tool_card.lens_cutter.title";
         public static final String TOOL_CARD_LENS_CUTTER_EFFECT = "tool_card.lens_cutter.effect";
         public static final String TOOL_CARD_FLUX_BRUSH_TITLE = "tool_card.flux_brush.title";
@@ -224,7 +224,39 @@ public class Constants {
         public static final String TOOL_CARD_TAP_WHEEL_TITLE = "tool_card.tap_wheel.title";
         public static final String TOOL_CARD_TAP_WHEEL_EFFECT = "tool_card.tap_wheel.effect";
         public static final String TOOL_CARD_BAG_TEXT = "tool_card.bag.text";
-        public static final String TOOL_CARD_RESERVE = "tool_card.reserve.text";
+        public static final String TOOL_CARD_DRAFT = "tool_card.draft.text";
+
+        public static final String OBJECTIVE_CARD_BLUE_SHADE_TITLE = "objective_card.blue_shade.title";
+        public static final String OBJECTIVE_CARD_BLUE_SHADE_DESCRIPTION = "objective_card.blue_shade.description";
+        public static final String OBJECTIVE_CARD_COLOR_DIAGONALS_TITLE = "objective_card.color_diagonals.title";
+        public static final String OBJECTIVE_CARD_COLOR_DIAGONALS_DESCRIPTION = "objective_card.color_diagonals.description";
+        public static final String OBJECTIVE_CARD_COLOR_VARIETY_TITLE = "objective_card.color_variety.title";
+        public static final String OBJECTIVE_CARD_COLOR_VARIETY_DESCRIPTION = "objective_card.color_variety.description";
+        public static final String OBJECTIVE_CARD_COLUMN_SHADE_VARIETY_TITLE = "objective_card.column_color_variety.title";
+        public static final String OBJECTIVE_CARD_COLUMN_SHADE_VARIETY_DESCRIPTION = "objective_card.column_color_variety.description";
+        public static final String OBJECTIVE_CARD_COLUMN_COLOR_VARIETY_TITLE = "objective_card.column_shade_variety.title";
+        public static final String OBJECTIVE_CARD_COLUMN_COLOR_VARIETY_DESCRIPTION = "objective_card.column_shade_variety.description";
+        public static final String OBJECTIVE_CARD_DEEP_SHADES_TITLE = "objective_card.deep_shades.title";
+        public static final String OBJECTIVE_CARD_DEEP_SHADES_DESCRIPTION = "objective_card.deep_shades.description";
+        public static final String OBJECTIVE_CARD_GREEN_SHADE_TITLE = "objective_card.green_shade.title";
+        public static final String OBJECTIVE_CARD_GREEN_SHADE_DESCRIPTION = "objective_card.green_shade.description";
+        public static final String OBJECTIVE_CARD_LIGHT_SHADES_TITLE = "objective_card.light_shades.title";
+        public static final String OBJECTIVE_CARD_LIGHT_SHADES_DESCRIPTION = "objective_card.light_shades.description";
+        public static final String OBJECTIVE_CARD_MEDIUM_SHADES_TITLE = "objective_card.medium_shades.title";
+        public static final String OBJECTIVE_CARD_MEDIUM_SHADES_DESCRIPTION = "objective_card.medium_shades.description";
+        public static final String OBJECTIVE_CARD_PURPLE_SHADE_TITLE = "objective_card.purple_shade.title";
+        public static final String OBJECTIVE_CARD_PURPLE_SHADE_DESCRIPTION = "objective_card.purple_shade.description";
+        public static final String OBJECTIVE_CARD_RED_SHADE_TITLE = "objective_card.red_shade.title";
+        public static final String OBJECTIVE_CARD_RED_SHADE_DESCRIPTION = "objective_card.red_shade.description";
+        public static final String OBJECTIVE_CARD_ROW_COLOR_VARIETY_TITLE = "objective_card.row_color_variety.title";
+        public static final String OBJECTIVE_CARD_ROW_COLOR_VARIETY_DESCRIPTION = "objective_card.row_color_variety.description";
+        public static final String OBJECTIVE_CARD_ROW_SHADE_VARIETY_TITLE = "objective_card.row_shade_variety.title";
+        public static final String OBJECTIVE_CARD_ROW_SHADE_VARIETY_DESCRIPTION = "objective_card.row_shade_variety.description";
+        public static final String OBJECTIVE_CARD_SHADE_VARIETY_TITLE = "objective_card.shade_variety.title";
+        public static final String OBJECTIVE_CARD_SHADE_VARIETY_DESCRIPTION = "objective_card.shade_variety.description";
+        public static final String OBJECTIVE_CARD_YELLOW_VARIETY_TITLE = "objective_card.yellow_shade.title";
+        public static final String OBJECTIVE_CARD_YELLOW_VARIETY_DESCRIPTION = "objective_card.yellow_shade.description";
+
 
 
         private Strings() {
