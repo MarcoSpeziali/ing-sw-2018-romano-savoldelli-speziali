@@ -3,10 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.utils.text.LocalizedString;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 public class Constants {
     private Constants() {
@@ -67,7 +64,7 @@ public class Constants {
         TOOL_CARD_FLUX_BRUSH("images/toolCards/flux_brush.jpg"),
         TOOL_CARD_GLAZING_HAMMER("images/toolCards/glazing_hammer.jpg"),
         TOOL_CARD_RUNNING_PLIERS("images/toolCards/running_pliers.jpg"),
-        TOOL_CARD_CORK_BAKED_STRAINGHTEDGE("images/toolCards/cork_backed_strainghtedge.jpg"),
+        TOOL_CARD_CORK_BACKED_STRAINGHTEDGE("images/toolCards/cork_backed_strainghtedge.jpg"),
         TOOL_CARD_GRINDING_STONE("images/toolCards/grinding_stone.jpg"),
         TOOL_CARD_FLUX_REMOVER("images/toolCards/flux_remover.jpg"),
         TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.jpg"),
@@ -185,7 +182,7 @@ public class Constants {
         public static final String LOBBY_WAITING_FOR_PLAYERS_LABEL_TEXT = "lobby.waiting_for_players_label.text";
         public static final String LOBBY_BACK_BUTTON_TEXT = "lobby.back_button.text";
 
-        public static final String SIGN_UP_ALREADY_EXISTS_TITLE= "sign_up.already_exists.title";
+        public static final String SIGN_UP_ALREADY_EXISTS_TITLE = "sign_up.already_exists.title";
         public static final String SIGN_UP_ALREADY_EXISTS_HEADER_TEXT = "sign_up.already_exists.header_text";
         public static final String SIGN_UP_ALREADY_EXISTS_CONTENT_TEXT = "sign_up.already_exists.content_text";
         public static final String SIGN_UP_CREDENTIALS_PROPERTIES_ERROR_TITLE = "sign_up.credentials_properties_error.title";
@@ -215,12 +212,12 @@ public class Constants {
         public static final String TOOL_CARD_GLAZING_HAMMER_EFFECT = "tool_card.glazing_hammer.effect";
         public static final String TOOL_CARD_RUNNING_PLIERS_TITLE = "tool_card.running_pliers.title";
         public static final String TOOL_CARD_RUNNING_PLIERS_EFFECT = "tool_card.running_pliers.effect";
-        public static final String TOOL_CARD_CORK_BAKED_STRAINGHTEDGE_TITLE = "tool_card.cork_backed_strainghtedge.title";
-        public static final String TOOL_CARD_CORK_BAKED_STRAINGHTEDGE_EFFECT = "tool_card.cork_backed_strainghtedge.effect";
+        public static final String TOOL_CARD_CORK_BACKED_STRAINGHTEDGE_TITLE = "tool_card.cork_backed_strainghtedge.title";
+        public static final String TOOL_CARD_CORK_BACKED_STRAINGHTEDGE_EFFECT = "tool_card.cork_backed_strainghtedge.effect";
         public static final String TOOL_CARD_GRINDING_STONE_TITLE = "tool_card.grinding_stone.title";
         public static final String TOOL_CARD_GRINDING_STONE_EFFECT = "tool_card.grinding_stone.effect";
         public static final String TOOL_CARD_FLUX_REMOVER_TITLE = "tool_card.flux_remover.title";
-        public static final String TOOL_CARD_EFFECT = "tool_card.flux_remover.effect";
+        public static final String TOOL_CARD_FLUX_REMOVER_EFFECT = "tool_card.flux_remover.effect";
         public static final String TOOL_CARD_TAP_WHEEL_TITLE = "tool_card.tap_wheel.title";
         public static final String TOOL_CARD_TAP_WHEEL_EFFECT = "tool_card.tap_wheel.effect";
         public static final String TOOL_CARD_BAG_TEXT = "tool_card.bag.text";
@@ -254,9 +251,8 @@ public class Constants {
         public static final String OBJECTIVE_CARD_ROW_SHADE_VARIETY_DESCRIPTION = "objective_card.row_shade_variety.description";
         public static final String OBJECTIVE_CARD_SHADE_VARIETY_TITLE = "objective_card.shade_variety.title";
         public static final String OBJECTIVE_CARD_SHADE_VARIETY_DESCRIPTION = "objective_card.shade_variety.description";
-        public static final String OBJECTIVE_CARD_YELLOW_VARIETY_TITLE = "objective_card.yellow_shade.title";
-        public static final String OBJECTIVE_CARD_YELLOW_VARIETY_DESCRIPTION = "objective_card.yellow_shade.description";
-
+        public static final String OBJECTIVE_CARD_YELLOW_SHADE_TITLE = "objective_card.yellow_shade.title";
+        public static final String OBJECTIVE_CARD_YELLOW_SHADE_DESCRIPTION = "objective_card.yellow_shade.description";
 
 
         private Strings() {
@@ -269,8 +265,7 @@ public class Constants {
         public static String getToolCardTitle(String toolCardId) {
             try {
                 return (String) Strings.class.getField(String.format("TOOL_CARD_%s_TITLE", toolCardId.toUpperCase())).get(null);
-            }
-            catch (NoSuchFieldException | IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 return null;
             }
         }
@@ -278,11 +273,27 @@ public class Constants {
         public static String getToolCardEffect(String toolCardId) {
             try {
                 return (String) Strings.class.getField(String.format("TOOL_CARD_%s_EFFECT", toolCardId.toUpperCase())).get(null);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                return null;
             }
-            catch (NoSuchFieldException | IllegalAccessException e) {
+        }
+
+        public static String getObjectiveCardTitle(String objectiveCardId) {
+            try {
+                return (String) String.class.getField(String.format("OBJECTIVE_CARD_%s_TITLE", objectiveCardId.toUpperCase())).get(null);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                return null;
+            }
+        }
+
+        public static String getObjectiveCardDescription(String objectiveCardId) {
+            try {
+                return (String) String.class.getField(String.format("OBJECTIVE_CARD_%s_DESCRIPTION", objectiveCardId.toUpperCase())).get(null);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 return null;
             }
         }
     }
-
 }
+
+
