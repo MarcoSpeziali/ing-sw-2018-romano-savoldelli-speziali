@@ -35,6 +35,7 @@ public class LobbySocketProxyController implements LobbyController {
     public void init() throws IOException {
         this.persistentSocketInteractionProvider.open(EndPointFunction.LOBBY_JOIN_REQUEST);
 
+        // TODO async
         Response<ILobby> lobbyResponse = persistentSocketInteractionProvider.getSyncResponseFor(new Request<>(
                 new Header(
                         clientToken,

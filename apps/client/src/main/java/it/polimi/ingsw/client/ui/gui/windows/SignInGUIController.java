@@ -90,7 +90,7 @@ public class SignInGUIController extends SignInController {
                     LobbyGUIController lobbyGUIController = loader.getController();
                     lobbyGUIController.setProxy(lobbyController);
 
-                    SagradaGUI.showStage(parent, 910, 720);
+                    SagradaGUI.showStage(parent, 353, 546);
                 }
                 catch (IOException | NotBoundException e) {
                     StreamExceptionWrapper.wrap(e);

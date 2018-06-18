@@ -22,6 +22,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.logging.Level;
 
 public class ServerApp {
@@ -64,8 +65,7 @@ public class ServerApp {
             // publishes requested classes on RMI registry
             registerRMIRemoteInterfaces();
 
-            for (; ; ) {
-            }
+            waitForCloseSignal();
         }
         catch (Exception e) {
             ServerLogger.getLogger().log(Level.SEVERE, "An unrecoverable error occurred: ", e);
@@ -77,6 +77,8 @@ public class ServerApp {
 
             ServerLogger.close();
         }
+
+        System.exit(0);
     }
 
     /**
@@ -149,7 +151,6 @@ public class ServerApp {
         socketServer = new ClientAcceptor(Settings.getSettings().getSocketPort());
 
         Thread thread = ThreadManager.addThread(Constants.Threads.SOCKET_LISTENER, socketServer);
-        thread.setDaemon(false);
         thread.start();
     }
 
@@ -190,5 +191,14 @@ public class ServerApp {
                 Settings.getSettings().getRmiPort(),
                 endPointFunction.toString()
         );
+    }
+
+    private static void waitForCloseSignal() {
+        Scanner scanner = new Scanner(System.in);
+
+        //noinspection StatementWithEmptyBody
+        while (!scanner.next().equals("\\q")) {
+            // nothing to do
+        }
     }
 }

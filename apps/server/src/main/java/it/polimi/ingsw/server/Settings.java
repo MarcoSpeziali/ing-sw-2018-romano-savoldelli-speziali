@@ -8,12 +8,19 @@ import java.util.concurrent.TimeUnit;
 // TODO: docs
 public final class Settings extends SettingsBase {
 
+    // --------------- NETWORK ---------------
     @Setting(id = "socket-port", defaultValue = "9000", type = Integer.class)
     private int socketPort;
     @Setting(id = "rmi-port", defaultValue = "1099", type = Integer.class)
     private int rmiPort;
     @Setting(id = "rmi-host", defaultValue = "idra.weblink.it")
     private String rmiHost;
+    @Setting(id = "rmi-heart-beat", defaultValue = "5000", type = Integer.class)
+    private long rmiHeartBeatTimeout;
+    @Setting(id = "rmi-heart-beat-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
+    private TimeUnit rmiHeartBeatTimeUnit;
+
+    // --------------- DATABASE ---------------
     @Setting(id = "database-url", defaultValue = "localhost:5432")
     private String databaseUrl;
     @Setting(id = "database-name", defaultValue = "sagrada")
@@ -24,10 +31,14 @@ public final class Settings extends SettingsBase {
     private String databasePassword;
     @Setting(id = "database-driver", defaultValue = "postgresql")
     private String databaseDriver;
-    @Setting(id = "rmi-heart-beat", defaultValue = "5000", type = Integer.class)
-    private long rmiHeartBeatTimeout;
-    @Setting(id = "rmi-heart-beat-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
-    private TimeUnit rmiHeartBeatTimeUnit;
+
+    // --------------- LOBBY LOGIC ---------------
+    @Setting(id = "num-players-timer-start", defaultValue = "2", type = Integer.class)
+    private int numberOfPlayersToStartTimer;
+    @Setting(id = "timer-duration-ms", defaultValue = "10000", type = Long.class)
+    private long timerDurationInMilliseconds;
+    @Setting(id = "maximum-num-players", defaultValue = "4", type = Integer.class)
+    private long maximumNumberOfPlayers;
 
     public int getSocketPort() {
         return socketPort;
@@ -59,6 +70,18 @@ public final class Settings extends SettingsBase {
 
     public String getDatabaseDriver() {
         return databaseDriver;
+    }
+
+    public int getNumberOfPlayersToStartTimer() {
+        return numberOfPlayersToStartTimer;
+    }
+
+    public long getTimerDurationInMilliseconds() {
+        return timerDurationInMilliseconds;
+    }
+
+    public long getMaximumNumberOfPlayers() {
+        return maximumNumberOfPlayers;
     }
 
     public long getRmiHeartBeatTimeout() {

@@ -175,20 +175,20 @@ public class CompilationManager {
     /**
      * Compiles the resources if needed.
      *
-     * @return a {@code long} value representing the time the last compilation occurred
      * @throws ClassNotFoundException       if any card class could not be found
      * @throws IOException                  if any IO errors occur
      * @throws SAXException                 if any parse errors occur
      * @throws ParserConfigurationException if a DocumentBuilder
      *                                      cannot be created which satisfies the configuration requested
      */
-    public static long compileIfNeeded() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
+    public static void compileIfNeeded() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException {
         Set<Constants.Resources> resourcesToCompile = needsRecompilation();
 
         if (resourcesToCompile == null) {
             logger.info("No resources need to be compiled");
 
-            return lastCompilation.getAsLong();
+            lastCompilation.getAsLong();
+            return;
         }
 
         Set<String> resourcesNames = resourcesToCompile.stream()
@@ -200,7 +200,7 @@ public class CompilationManager {
                 resourcesNames
         ));
 
-        return compile(resourcesToCompile);
+        compile(resourcesToCompile);
     }
 
     /**
@@ -302,11 +302,12 @@ public class CompilationManager {
 
         logger.log(
                 Level.FINER,
-                // SonarLint was complaining about this expression not being conditionally computed
-                () -> String.format("Resource %s has been compiled on %s, last compilation on: %s",
+                () -> String.format("Resource %s has been modified on %s (%s), last compilation was on: %s (%s)",
                         resource.toString().toLowerCase(),
                         String.valueOf(lastModified),
-                        String.valueOf(lastCompilation.getAsLong())
+                        new Date(lastModified).toString(),
+                        String.valueOf(lastCompilation.getAsLong()),
+                        new Date(lastCompilation.getAsLong()).toString()
                 )
         );
 

@@ -3,45 +3,36 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity"
-            prefHeight="720.0" xmlns="http://javafx.com/javafx/9.0.1"
-            fx:controller="it.polimi.ingsw.client.ui.gui.windows.LobbyGUIController">
-    <center>
-        <Pane prefHeight="720.0" prefWidth="550.0" BorderPane.alignment="CENTER">
-            <children>
-                <JFXListView fx:id="playersListView" depth="4" fixedCellSize="180.0" prefHeight="720.0" prefWidth="550.0"/>
-            </children>
-        </Pane>
-    </center>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.windows.LobbyGUIController">
     <left>
-        <Pane prefHeight="720.0" prefWidth="360.0" style="-fx-background-color: #2ecc71;" BorderPane.alignment="CENTER">
+        <Pane prefHeight="538.0" prefWidth="360.0" style="-fx-background-color: #2ecc71;" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="titleLabel" layoutX="141.0" layoutY="86.0" text="LOBBY" textFill="#c7ffde">
+                <Label fx:id="titleLabel" alignment="CENTER" layoutY="43.0" prefHeight="30.0" prefWidth="360.0" text="LOBBY" textAlignment="CENTER" textFill="#c7ffde">
                     <font>
-                        <Font name="System Bold" size="25.0"/>
+                        <Font name="System Bold" size="25.0" />
                     </font>
                 </Label>
-                <Label id="seconds" fx:id="secondsLabel" layoutX="140.0" layoutY="306.0" textFill="#c7ffde">
+                <Label fx:id="waitingForPlayersLabel" alignment="CENTER" layoutY="113.0" prefHeight="45.0" prefWidth="360.0" text="Waiting for other players to connect" textAlignment="CENTER" textFill="#c7ffde">
                     <font>
-                        <Font size="75.0"/>
+                        <Font size="17.0" />
                     </font>
                 </Label>
-                <Label fx:id="secondsTextLabel" layoutX="145.0" layoutY="391.0" text="second(s) left" textFill="#c7ffde"/>
-                <Label fx:id="waitingForPlayersLabel" layoutX="56.0" layoutY="129.0" text="Wait for other players to connect" textFill="#c7ffde">
+                <JFXButton fx:id="backButton" cancelButton="true" layoutX="55.0" layoutY="476.0" onAction="#onBackClicked" prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #27ae60;" text="BACK" textFill="#c8ffdf">
                     <font>
-                        <Font size="17.0"/>
-                    </font>
-                </Label>
-                <JFXButton fx:id="backButton" cancelButton="true" layoutX="55.0" layoutY="642.0" onAction="#onBackClicked"
-                           prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #27ae60;" text="BACK"
-                           textFill="#c8ffdf">
-                    <font>
-                        <Font name="System Bold" size="15.0"/>
+                        <Font name="System Bold" size="15.0" />
                     </font>
                 </JFXButton>
+                <JFXListView fx:id="playersListView" depth="4" fixedCellSize="50.0" focusTraversable="false" layoutX="78.0" layoutY="158.0" prefHeight="196.0" prefWidth="198.0" style="-fx-background-color: #00000000;" />
+                <Label id="seconds" fx:id="secondsLabel" layoutX="129.0" layoutY="354.0" text="30" textFill="#c7ffde">
+                    <font>
+                        <Font size="75.0" />
+                    </font>
+                </Label>
+                <Label fx:id="secondsTextLabel" alignment="CENTER" layoutY="434.0" prefHeight="16.0" prefWidth="360.0" text="second(s) before match starts" textFill="#c7ffde" />
             </children>
         </Pane>
     </left>

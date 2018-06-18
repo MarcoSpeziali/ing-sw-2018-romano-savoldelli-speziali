@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS lobby_player (
   lobby INTEGER NOT NULL REFERENCES lobby(id) ON UPDATE CASCADE ON DELETE CASCADE,
   joining_time TIMESTAMP(3) NOT NULL DEFAULT current_timestamp,
   leaving_time TIMESTAMP(3) DEFAULT NULL,
-  PRIMARY KEY (player, lobby)
+  PRIMARY KEY (lobby, player, joining_time)
 );
 
 CREATE TABLE IF NOT EXISTS match (

@@ -7,6 +7,7 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.mocks.ILobby;
+import it.polimi.ingsw.net.mocks.IPlayer;
 import it.polimi.ingsw.net.mocks.LobbyMock;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
@@ -28,13 +29,8 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeoutException;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 
 public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface, PlayerEventsListener {
@@ -43,13 +39,17 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
 
     private static LobbyEndPoint instance;
     private Map<DatabasePlayer, LobbyRMIProxyController> lobbyControllers = new HashMap<>();
-    private final transient ScheduledExecutorService scheduledExecutorService;
+
+    private final transient ScheduledExecutorService lobbyExecutorService;
+    private transient ScheduledFuture<?> rmiHeartBeatScheduledFuture;
+    private transient ScheduledFuture<?> timerScheduledFuture;
+    private transient int timeRemaining = -1;
 
     protected LobbyEndPoint() throws RemoteException {
         // register this class to listen to the implemented events
         EventDispatcher.register(this);
 
-        this.scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        this.lobbyExecutorService = Executors.newScheduledThreadPool(2);
         this.setUpHeartBeat();
     }
 
@@ -87,6 +87,37 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 // if there's an opened lobby then the player gets inserted into it
                 DatabaseLobby.insertPlayer(lobby.getId(), player.getId());
 
+                List<IPlayer> players = lobby.getPlayers();
+
+                // if the number of players in lobby is equal to NumberOfPlayersToStartTimer then the timer is started
+                // if the number of players is outside the range [NumberOfPlayersToStartTimer, MaximumNumberOfPlayers]
+                // then the timer has already been started
+                if (players.size() == Settings.getSettings().getNumberOfPlayersToStartTimer()) {
+                    this.timeRemaining = (int) Settings.getSettings().getTimerDurationInMilliseconds();
+                    this.timerScheduledFuture = this.lobbyExecutorService.scheduleAtFixedRate(
+                            this.executorTask,
+                            0,
+                            100,
+                            TimeUnit.MILLISECONDS
+                    );
+                }
+                // otherwise, if the number of players in lobby is equal to the MaximumNumberOfPlayers then the match stats
+                else if (players.size() == Settings.getSettings().getMaximumNumberOfPlayers()) {
+                    DatabaseLobby.closeLobby(lobby.getId());
+                    this.timerScheduledFuture.cancel(true);
+                    this.timeRemaining = -1;
+                    // TODO: create match, migrate players
+
+                    final DatabaseLobby finalLobby = lobby;
+                    EventDispatcher.dispatch(
+                            EventType.LOBBY_EVENTS,
+                            LobbyEventsListener.class,
+                            listener -> listener.onLobbyClosed(finalLobby, LobbyEventsListener.LobbyCloseReason.MATCH_STARTED)
+                    );
+                }
+
+                lobby.setTimeRemaining(this.timeRemaining == -1 ? -1 : (this.timeRemaining / 1000));
+
                 // notifies every listener
                 final DatabaseLobby finalLobby = lobby;
                 EventDispatcher.dispatch(EventType.LOBBY_EVENTS, LobbyEventsListener.class, listener -> listener.onPlayerJoined(
@@ -94,24 +125,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                         player
                 ));
 
-                // sends the updates to all rmi players
-                lobbyControllers.forEach(
-                        (databasePlayer, lobbyRMIProxyController) -> lobbyRMIProxyController.onUpdateReceived(new LobbyMock(finalLobby))
-                );
-                List<AuthenticatedClientHandler> clientsToUpdate = AuthenticatedClientHandler.getHandlerForPlayersExcept(player);
-                clientsToUpdate.forEach(client -> {
-                            try {
-                                client.sendResponse(new Response<>(
-                                        new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
-                                        new LobbyMock(finalLobby)
-                                ));
-                            }
-                            catch (IOException e) {
-                                ServerLogger.getLogger()
-                                        .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
-                            }
-                        }
-                );
+                sendUpdates(finalLobby, player);
 
                 // finally returns the response
                 return ResponseFactory.createLobbyResponse(request, new LobbyMock(lobby));
@@ -144,6 +158,10 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                     new Header(clientToken, EndPointFunction.LOBBY_JOIN_REQUEST),
                     new LobbyJoinRequest()
             ));
+
+            if (this.rmiHeartBeatScheduledFuture.isCancelled()) {
+                this.setUpHeartBeat();
+            }
 
             LobbyRMIProxyController lobbyRMIProxyController = new LobbyRMIProxyController();
             lobbyRMIProxyController.setStartingLobbyValue(lobbyResponse.getBody());
@@ -178,8 +196,36 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                     // removes the player
                     DatabaseLobby.removePlayer(lobby.getId(), player.getId());
 
+                    List<IPlayer> players = lobby.getPlayers();
+
+                    if (players.isEmpty()) {
+                        DatabaseLobby.closeLobby(lobby.getId());
+
+                        final DatabaseLobby finalLobby = lobby;
+                        EventDispatcher.dispatch(
+                                EventType.LOBBY_EVENTS,
+                                LobbyEventsListener.class,
+                                listener -> listener.onLobbyClosed(finalLobby, LobbyEventsListener.LobbyCloseReason.ALL_PLAYERS_LEFT)
+                        );
+
+                        this.lobbyControllers.clear();
+                        this.rmiHeartBeatScheduledFuture.cancel(true);
+
+                        return;
+                    }
+
+                    // if there are less than NumberOfPlayersToStartTimer then the timer is canceled
+                    if (players.size() < Settings.getSettings().getNumberOfPlayersToStartTimer()) {
+                        this.timerScheduledFuture.cancel(true);
+
+                        this.timeRemaining = -1;
+                        lobby.setTimeRemaining(-1);
+                    }
+
+                    lobby.setTimeRemaining(this.timeRemaining / 1000);
+
                     // and dispatches the relative event
-                    DatabaseLobby finalLobby = DatabaseLobby.getLobbyWithId(lobby.getId());
+                    final DatabaseLobby finalLobby = lobby;
                     EventDispatcher.dispatch(EventType.LOBBY_EVENTS, LobbyEventsListener.class, listener -> listener.onPlayerLeft(
                             finalLobby,
                             player
@@ -188,24 +234,8 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                     // removes the player from the updates
                     lobbyControllers.remove(player);
 
-                    // sends the updates to all rmi players
-                    lobbyControllers.forEach(
-                            (databasePlayer, lobbyRMIProxyController) -> lobbyRMIProxyController.onUpdateReceived(new LobbyMock(finalLobby))
-                    );
-                    List<AuthenticatedClientHandler> clientsToUpdate = AuthenticatedClientHandler.getHandlerForPlayersExcept(player);
-                    clientsToUpdate.forEach(client -> {
-                                try {
-                                    client.sendResponse(new Response<>(
-                                            new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
-                                            new LobbyMock(finalLobby)
-                                    ));
-                                }
-                                catch (IOException e) {
-                                    ServerLogger.getLogger()
-                                            .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
-                                }
-                            }
-                    );
+                    // send the updates
+                    sendUpdates(finalLobby, player);
                 }
             }
         }
@@ -215,7 +245,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     }
 
     private void setUpHeartBeat() {
-        this.scheduledExecutorService.scheduleAtFixedRate(() -> {
+        this.rmiHeartBeatScheduledFuture = this.lobbyExecutorService.scheduleAtFixedRate(() -> {
                     List<DatabasePlayer> scheduledForDeletion = new LinkedList<>();
 
                     this.lobbyControllers.forEach((player, lobbyRMIProxyController) -> {
@@ -237,6 +267,54 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 0,
                 Settings.getSettings().getRmiHeartBeatTimeout(),
                 Settings.getSettings().getRmiHeartBeatTimeUnit()
+        );
+    }
+
+    private transient Runnable executorTask = () -> {
+        if (timeRemaining != -1) {
+            timeRemaining -= 100;
+        }
+    };
+
+    private void sendUpdates(DatabaseLobby databaseLobby, DatabasePlayer exceptTo) {
+        lobbyControllers.forEach(
+                (databasePlayer, lobbyRMIProxyController) -> {
+                    if (!databasePlayer.equals(exceptTo)) {
+                        lobbyRMIProxyController.onUpdateReceived(new LobbyMock(databaseLobby));
+                    }
+                }
+        );
+        List<AuthenticatedClientHandler> clientsToUpdate = AuthenticatedClientHandler.getHandlerForPlayersExcept(exceptTo);
+        clientsToUpdate.forEach(client -> {
+                    try {
+                        client.sendResponse(new Response<>(
+                                new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
+                                new LobbyMock(databaseLobby)
+                        ));
+                    }
+                    catch (IOException e) {
+                        ServerLogger.getLogger()
+                                .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
+                    }
+                }
+        );
+    }
+
+    private void sendUpdates(DatabaseLobby databaseLobby) {
+        lobbyControllers.forEach(
+                (databasePlayer, lobbyRMIProxyController) -> lobbyRMIProxyController.onUpdateReceived(new LobbyMock(databaseLobby))
+        );
+        databaseLobby.getPlayers().forEach(iPlayer -> {
+                    try {
+                        AuthenticatedClientHandler.getHandlerForPlayer((DatabasePlayer) iPlayer).sendResponse(new Response<>(
+                                new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
+                                new LobbyMock(databaseLobby)));
+                    }
+                    catch (IOException e) {
+                        ServerLogger.getLogger()
+                                .log(Level.SEVERE, "Error while sending the update to player: " + iPlayer, e);
+                    }
+                }
         );
     }
 }
