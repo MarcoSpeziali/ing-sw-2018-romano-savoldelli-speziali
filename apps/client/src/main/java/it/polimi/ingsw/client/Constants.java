@@ -52,12 +52,21 @@ public class Constants {
         CELL_FIVE("images/cells/cell_five.png"),
         CELL_SIX("images/cells/cell_six.png"),
 
+        DICE_ONE("images/dice/dice_one.png"),
+        DICE_TWO("images/dice/dice_two.png"),
+        DICE_THREE("images/dice/dice_three.png"),
+        DICE_FOUR("images/dice/dice_four.png"),
+        DICE_FIVE("images/dice/dice_five.png"),
+        DICE_SIX("images/dice/dice_six.png"),
+
         SIGN_UP_FXML("FXML/Window/SignUp.fxml"),
         SIGN_IN_FXML("FXML/Window/SignIn.fxml"),
         START_SCREEN_FXML("FXML/Window/StartScreen.fxml"),
         SETTINGS_FXML("FXML/Window/Settings.fxml"),
-        LOBBY("FXML/Window/Lobby.fxml"),
-        GAME_DASHBOARD("FXML/Window/GameDashboard.fxml"),
+        LOBBY_FXML("FXML/Window/Lobby.fxml"),
+        GAME_DASHBOARD_FXML("FXML/Window/GameDashboard.fxml"),
+        DIE_VIEW_FXML("FXML/DieView.fxml"),
+        CELL_VIEW_FXML("FXML/CellView.fxml"),
 
         TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.png"),
         TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.png"),

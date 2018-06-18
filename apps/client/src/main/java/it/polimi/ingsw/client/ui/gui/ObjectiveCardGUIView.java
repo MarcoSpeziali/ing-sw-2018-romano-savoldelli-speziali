@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class ObjectiveCardGUIView extends ObjectiveCardView implements GUIView {
+public class ObjectiveCardGUIView extends ObjectiveCardView  {
     public ObjectiveCardGUIView(ObjectiveCard objectiveCard){
         super(objectiveCard);
     }
@@ -20,7 +20,7 @@ public class ObjectiveCardGUIView extends ObjectiveCardView implements GUIView {
         super.setObjectiveCardController(objectiveCardController);
     }
 
-    @Override
+
     public Node render() {
         ImageView view = new ImageView();
         String path = Constants.Resources.valueOf(String.format("OBJECTIVE_CARD_%s", objectiveCard.getCardId().toUpperCase())).getRelativePath();

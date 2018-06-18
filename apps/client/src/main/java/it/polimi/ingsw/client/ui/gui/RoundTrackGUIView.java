@@ -4,10 +4,6 @@ import it.polimi.ingsw.views.RoundTrackView;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
-public class RoundTrackGUIView extends RoundTrackView implements GUIView {
+public class RoundTrackGUIView extends RoundTrackView {
 
-    @Override
-    public Node render() {
-        return new Pane();
-    }
 }

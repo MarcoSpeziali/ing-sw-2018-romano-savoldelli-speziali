@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
-public class ToolCardGUIView extends ToolCardView implements GUIView {
+public class ToolCardGUIView extends ToolCardView {
     public ToolCardGUIView(ToolCard toolCard) {
         super(toolCard);
     }
@@ -21,7 +21,7 @@ public class ToolCardGUIView extends ToolCardView implements GUIView {
         super.setToolCardController(toolCardController);
     }
 
-    @Override
+
     public Node render() {
         ImageView view = new ImageView();
         String path;

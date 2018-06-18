@@ -6,23 +6,30 @@ import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
+import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.utils.io.Resources;
 import it.polimi.ingsw.views.CellView;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.concurrent.CompletableFuture;
 
-public class CellGUIView extends CellView implements GUIView {
+public class CellGUIView extends CellView {
 
     private String path;
 
     public CellGUIView(Cell cell) {
-        super(cell);
+        setCell(cell);
     }
 
     private void diePicked() {
@@ -33,20 +40,17 @@ public class CellGUIView extends CellView implements GUIView {
         this.cellController.onDiePut(Player.getCurrentPlayer().pickDie());
     }
 
+    @FXML
+    public AnchorPane colorAnchorPane, dieAnchorPane;
+
+    public AnchorPane defaultDieAnchorPane;
+
+    @FXML
+    public ImageView shadeImageView;
+
     @Override
     public void setCell(Cell cell) {
-        this.cell = cell;
-    }
-
-    @Override
-    public void setCellController(CellController cellController) {
-        super.setCellController(cellController);
-    }
-
-    @Override
-    public Node render() {
-
-        Node cellView;
+        super.cell = cell;
         if (super.cell.getShade() > 0) {
             switch (super.cell.getShade()) {
                 case 1:
@@ -69,31 +73,52 @@ public class CellGUIView extends CellView implements GUIView {
                     break;
 
             }
-            cellView = new ImageView();
-            ((ImageView) cellView).setFitWidth(150);
-            ((ImageView) cellView).setFitHeight(150);
+
             try {
-                ((ImageView) cellView).setImage(new Image(Resources.getResource(CellGUIView.class.getClassLoader(), path).openStream()));
+                shadeImageView.setImage(new Image(Resources.getResource(CellGUIView.class.getClassLoader(), path).openStream()));
             }
             catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
         else {
-            cellView = new StackPane();
-            ((StackPane) cellView).setMinSize(150, 150);
             if (super.cell.getShade() == 0 & super.cell.getColor() == null) {
-                cellView.setStyle("-fx-background-color: white");
+                colorAnchorPane.setStyle("-fx-background-color: white");
             }
             else {
-                cellView.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
+                colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
             }
 
         }
-        this.cell.addListener((OnDiePickedListener) (die, location) -> this.cell.pickDie());
-        this.cell.addListener((OnDiePutListener) (die, location) -> this.cell.putDie(die));
-        return cellView;
     }
+
+    public void onUpdateReceived(Cell cell) {
+        Platform.runLater(() -> {
+            if (!cell.isOccupied()) {
+            dieAnchorPane = defaultDieAnchorPane;
+            }
+            else {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
+                DieGUIView dieGUIView = loader.getController();
+                dieGUIView.setDie(cell.getDie());
+                defaultDieAnchorPane = dieAnchorPane;
+                try {
+                    dieAnchorPane = loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void setCellController(CellController cellController) {
+        super.setCellController(cellController);
+    }
+
+
 }
 
 

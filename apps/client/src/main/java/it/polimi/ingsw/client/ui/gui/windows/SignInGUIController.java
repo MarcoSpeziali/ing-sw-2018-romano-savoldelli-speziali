@@ -64,7 +64,7 @@ public class SignInGUIController extends SignInController {
             // TODO: execute in separate thread and create a loading indicator in the view
             super.onSignInRequested(this.usernameField.getText(), this.passwordField.getText(), () -> {
                 try {
-                    loader.setLocation(Constants.Resources.LOBBY.getURL());
+                    loader.setLocation(Constants.Resources.LOBBY_FXML.getURL());
 
                     LobbyController lobbyController;
 

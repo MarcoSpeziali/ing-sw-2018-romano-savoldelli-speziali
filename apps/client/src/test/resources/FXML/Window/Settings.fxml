@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="backgroundPane" maxHeight="480.0" maxWidth="720.0" minHeight="480.0" minWidth="720.0" prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.ingsw.client.ui.gui.windows.SettingsGUIController"
+            stylesheets="@../../application-stylesheet.css">
+    <left>
+        <Pane id="leftPane" prefHeight="480.0" prefWidth="360.0" BorderPane.alignment="CENTER">
+            <children>
+                <JFXButton fx:id="saveButton" layoutX="54.0" layoutY="343.0" onAction="#onSaveClicked" prefHeight="44.0" prefWidth="250.0"/>
+                <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="54.0" layoutY="57.0" prefHeight="45.0" prefWidth="250.0" textFill="#ffa49c">
+                    <font>
+                        <Font name="System Bold" size="25.0" />
+                    </font>
+                </Label>
+                <JFXButton fx:id="backButton" layoutX="54.0" layoutY="402.0" onAction="#onBackClicked" prefHeight="44.0" prefWidth="250.0"/>
+                <JFXToggleButton fx:id="fullScreenToggle" layoutX="77.0" layoutY="110.0" textFill="#ffa49c">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </JFXToggleButton>
+                <JFXComboBox fx:id="languageComboBox" layoutX="197.0" layoutY="190.0" prefHeight="29.0" prefWidth="107.0" styleClass="label"/>
+                <Label fx:id="connectionTypeLabel" layoutX="54.0" layoutY="274.0" prefHeight="20.0" prefWidth="159.0" textFill="#ffa49c">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+                <JFXRadioButton fx:id="rmiToggle" layoutX="232.0" layoutY="259.0" text="RMI">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="connectionToggleGroup" />
+                    </toggleGroup>
+                </JFXRadioButton>
+                <JFXRadioButton fx:id="socketToggle" layoutX="232.0" layoutY="293.0" text="SOCKET" toggleGroup="$connectionToggleGroup"/>
+            <Label fx:id="languageTypeLabel" layoutX="54.0" layoutY="195.0" prefHeight="20.0" prefWidth="132.0" textFill="#ffa49c">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            </children>
+        </Pane>
+    </left>
+    <center>
+        <ImageView fitHeight="220.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <image>
+                <Image url="@../../images/sagrada-icon.png" />
+            </image>
+        </ImageView>
+    </center>
+</BorderPane>
