@@ -15,6 +15,8 @@ public interface ILobby extends JSONSerializable, Remote {
 
     long getClosingTime();
 
+    int getTimeRemaining();
+
     List<IPlayer> getPlayers();
 
     @Override
@@ -24,6 +26,7 @@ public interface ILobby extends JSONSerializable, Remote {
         jsonObject.put("id", this.getId());
         jsonObject.put("opening-time", this.getOpeningTime());
         jsonObject.put("closing-time", this.getClosingTime());
+        jsonObject.put("time-remaining", this.getTimeRemaining());
         jsonObject.put("players", this.getPlayers().stream().map(JSONSerializable::serialize).collect(Collectors.toList()));
 
         return jsonObject;

@@ -19,6 +19,13 @@ public class PlayerMock implements IPlayer {
         return this.username;
     }
 
+    public PlayerMock() {}
+
+    public PlayerMock(IPlayer iPlayer) {
+        this.id = iPlayer.getId();
+        this.username = iPlayer.getUsername();
+    }
+
     @Override
     public void deserialize(JSONObject jsonObject) {
         this.id = jsonObject.getInt("id");

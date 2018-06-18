@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.net.sockets;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.managers.AuthenticationManager;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
@@ -37,7 +36,7 @@ public class AnonymousClientHandler extends ClientHandler {
                     return;
                 }
 
-                ServerLogger.getLogger(AnonymousClientHandler.class)
+                ServerLogger.getLogger()
                         .fine(() -> String.format(
                                 "Got request \"%s\", from client: %s",
                                 request.toString(),
@@ -56,7 +55,7 @@ public class AnonymousClientHandler extends ClientHandler {
                 @SuppressWarnings("unchecked")
                 Response<? extends JSONSerializable> response = handler.handle(request, this.client);
 
-                ServerLogger.getLogger(AnonymousClientHandler.class)
+                ServerLogger.getLogger()
                         .fine(() -> String.format(
                                 "Sending response \"%s\", to client: %s", response.toString(), socketAddress.toString()
                         ));
@@ -68,26 +67,31 @@ public class AnonymousClientHandler extends ClientHandler {
             } while (handler.shouldBeKeptAlive());
         }
         catch (Exception e) {
-            ServerLogger.getLogger(AnonymousClientHandler.class)
+            ServerLogger.getLogger()
                     .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
         }
     }
 
     // TODO: docs
-    private boolean tryMigration(Request<?> request) throws SQLException, TimeoutException, IOException {
+    private boolean tryMigration(Request<?> request) throws SQLException, TimeoutException, IOException, InterruptedException {
         DatabasePlayer databasePlayer = AuthenticationManager.getAuthenticatedPlayer(request);
 
         if (databasePlayer != null) {
-            AuthenticatedClientHandler clientHandler = AuthenticatedClientHandler.migrate(
+            try (AuthenticatedClientHandler clientHandler = AuthenticatedClientHandler.migrate(
                     this,
                     databasePlayer,
                     request
-            );
+            )) {
 
-            new Thread(
-                    clientHandler,
-                    Constants.Threads.PLAYER_HANDLER + "-" + clientHandler.getPlayer().toString()
-            ).start();
+                ServerLogger.getLogger()
+                        .finer(() -> String.format(
+                                "Host %s migrated to AuthenticatedClientHandler, since it is authenticated as '%s'",
+                                this.client.getRemoteSocketAddress().toString(),
+                                databasePlayer.getUsername())
+                        );
+
+                clientHandler.run();
+            }
 
             return true;
         }

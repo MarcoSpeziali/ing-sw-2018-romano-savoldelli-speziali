@@ -3,6 +3,8 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.utils.Setting;
 import it.polimi.ingsw.utils.SettingsBase;
 
+import java.util.concurrent.TimeUnit;
+
 // TODO: docs
 public final class Settings extends SettingsBase {
 
@@ -22,6 +24,10 @@ public final class Settings extends SettingsBase {
     private String databasePassword;
     @Setting(id = "database-driver", defaultValue = "postgresql")
     private String databaseDriver;
+    @Setting(id = "rmi-heart-beat", defaultValue = "5000", type = Integer.class)
+    private long rmiHeartBeatTimeout;
+    @Setting(id = "rmi-heart-beat-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
+    private TimeUnit rmiHeartBeatTimeUnit;
 
     public int getSocketPort() {
         return socketPort;
@@ -53,6 +59,14 @@ public final class Settings extends SettingsBase {
 
     public String getDatabaseDriver() {
         return databaseDriver;
+    }
+
+    public long getRmiHeartBeatTimeout() {
+        return rmiHeartBeatTimeout;
+    }
+
+    public TimeUnit getRmiHeartBeatTimeUnit() {
+        return rmiHeartBeatTimeUnit;
     }
 
     public static Settings getSettings() {

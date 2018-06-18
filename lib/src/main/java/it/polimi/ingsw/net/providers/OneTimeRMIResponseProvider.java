@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -22,7 +23,7 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
     private final String rmiAddress;
     private final int rmiPort;
 
-    public OneTimeRMIResponseProvider(Class<R> remoteInterfaceType, String rmiAddress, int rmiPort) {
+    public OneTimeRMIResponseProvider(String rmiAddress, int rmiPort, Class<R> remoteInterfaceType) {
         this.remoteInterfaceType = remoteInterfaceType;
         this.rmiAddress = rmiAddress;
         this.rmiPort = rmiPort;
@@ -48,7 +49,6 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
      * @return a {@link Response} produced by the server
      * @throws IOException                  if any IO error occurs
      * @throws NotBoundException            if {@link Body#getEndPointFunction()} is not currently bound
-     * @throws ReflectiveOperationException if a reflection error occurs
      */
     @Override
     public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException {
@@ -72,6 +72,38 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public <T> T getSyncRemoteObject(EndPointFunction endPointFunction, String hostAddress, int hostPort, Object... args) throws RemoteException, NotBoundException {
+        Method targetMethod = ReflectionUtils.findAnnotatedMethod(
+                remoteInterfaceType,
+                RespondsTo.class,
+                respondsTo -> respondsTo.value().equals(endPointFunction)
+        );
+
+        if (targetMethod == null) {
+            throw new EndPointResponderNotFound(endPointFunction, this.remoteInterfaceType);
+        }
+
+        Registry registry = LocateRegistry.getRegistry(hostAddress, hostPort);
+        Remote remoteInterface = registry.lookup(getRMIEndPointName(endPointFunction));
+
+        try {
+            //noinspection unchecked
+            return (T) targetMethod.invoke(remoteInterface, args);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <T> T getSyncRemoteObject(EndPointFunction endPointFunction, Object... args) throws RemoteException, NotBoundException {
+        return this.getSyncRemoteObject(
+                endPointFunction,
+                getServerAddress(),
+                getServerPort(),
+                args
+        );
     }
 
     /**

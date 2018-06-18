@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.utils.text.LocalizedString;
 import javafx.application.Application;
+import javafx.application.Platform;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
@@ -28,12 +29,13 @@ public class ClientApp {
             LocalizedString.invalidateCacheForNewLocale(Settings.getSettings().getLanguage().getLocale());
 
             if (!options.has(Constants.ClientArguments.CLI_MODE.toString())) {
+                Platform.setImplicitExit(false);
                 Application.launch(SagradaGUI.class, args);
             }
         }
         catch (Exception e) {
             e.printStackTrace();
-            ClientLogger.getLogger(ClientApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
+            ClientLogger.getLogger().log(Level.SEVERE, "An unrecoverable error occurred: ", e);
         }
     }
 

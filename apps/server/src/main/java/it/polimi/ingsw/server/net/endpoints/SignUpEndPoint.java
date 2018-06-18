@@ -42,7 +42,7 @@ public class SignUpEndPoint extends UnicastRemoteObject implements SignUpInterfa
 
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError(request);
         }
@@ -62,12 +62,12 @@ public class SignUpEndPoint extends UnicastRemoteObject implements SignUpInterfa
             DatabasePlayer.insertPlayer(username, password);
         }
         catch (IOException | GeneralSecurityException e) {
-            ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while decrypting the password", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while decrypting the password", e);
 
             return ResponseFactory.createInternalServerError(request);
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignUpEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError(request);
         }

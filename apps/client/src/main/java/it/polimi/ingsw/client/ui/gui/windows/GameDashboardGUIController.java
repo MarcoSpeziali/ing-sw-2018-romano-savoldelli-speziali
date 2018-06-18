@@ -1,5 +1,9 @@
 package it.polimi.ingsw.client.ui.gui.windows;
 
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
+import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.ToolCardGUIView;
 import it.polimi.ingsw.client.ui.gui.WindowGUIView;
@@ -10,50 +14,34 @@ import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.models.Window;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class GameDashboardGUIController extends Application {
+public class GameDashboardGUIController extends Application implements Initializable {
 
     private FXMLLoader loader = new FXMLLoader();
 
-    private Cell[][] cells = new Cell[][] {
-            {
-                    new Cell(0, null),      new Cell(5, null),      new Cell(4, null),       new Cell(0, GlassColor.GREEN)
-            },
-            {
-                    new Cell(0, null),      new Cell(0, null),      new Cell(2, null),       new Cell(0, GlassColor.PURPLE)
-            },
-            {
-                    new Cell(0, GlassColor.BLUE), new Cell(2, null),      new Cell(0, GlassColor.RED),   new Cell(0, GlassColor.YELLOW)
-            }
-    };
+    @FXML
+    public AnchorPane anchorPane;
+    @FXML
+    public JFXHamburger hamburger;
+    @FXML
+    public JFXDrawer drawer;
 
-    WindowGUIView windowGUIView =  new WindowGUIView(new Window(3,3,4,"ciao", null, cells));
-    private ToolCard toolCard = new ToolCard("ciao", "test", "eccomi", new IEffect() {
-        @Override
-        public void run(String cardId) {
 
-        }
 
-        @Override
-        public int getCost() {
-            return 0;
-        }
-
-        @Override
-        public String getDescriptionKey() {
-            return null;
-        }
-    });
-    ToolCardGUIView toolCardGUIView = new ToolCardGUIView(toolCard);
 
     public static Stage primaryStage;
     public static double xOffset = 0;
@@ -63,17 +51,35 @@ public class GameDashboardGUIController extends Application {
     public void start(Stage stage) throws IOException {
         loader.setLocation(Constants.Resources.GAME_DASHBOARD.getURL());
 
-        BorderPane root = null;
+        Parent root = null;
         try {
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
         //Pane main = (Pane) root.getChildren().get(0);
-        root.setCenter(toolCardGUIView.render());
+        //root.setCenter(toolCardGUIView.render());
         primaryStage = stage;
         showStage(root, 1280, 720);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static void showStage(Parent root, int width, int height) {
         root.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -95,5 +101,18 @@ public class GameDashboardGUIController extends Application {
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         primaryStage.show();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        HamburgerBackArrowBasicTransition hmb = new HamburgerBackArrowBasicTransition(hamburger);
+        hmb.setRate(1);
+        hamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
+            hmb.setRate(hmb.getRate()*-1);
+            hmb.play();
+            if (drawer.isOpened())
+                drawer.close();
+            else drawer.open();
+        });
     }
 }

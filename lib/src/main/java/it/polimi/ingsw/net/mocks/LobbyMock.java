@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LobbyMock implements ILobby {
 
@@ -13,6 +14,7 @@ public class LobbyMock implements ILobby {
     private int id;
     private long openingTime;
     private long closingTime;
+    private int timeRemaining;
     private List<IPlayer> players;
 
     @Override
@@ -31,8 +33,25 @@ public class LobbyMock implements ILobby {
     }
 
     @Override
+    public int getTimeRemaining() {
+        return this.timeRemaining;
+    }
+
+    @Override
     public List<IPlayer> getPlayers() {
         return this.players;
+    }
+
+    public LobbyMock() {}
+
+    public LobbyMock(ILobby iLobby) {
+        this.id = iLobby.getId();
+        this.openingTime = iLobby.getOpeningTime();
+        this.closingTime = iLobby.getClosingTime();
+        this.timeRemaining = iLobby.getTimeRemaining();
+        this.players = iLobby.getPlayers().stream()
+                .map(PlayerMock::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -40,6 +59,7 @@ public class LobbyMock implements ILobby {
         this.id = jsonObject.getInt("id");
         this.openingTime = jsonObject.getLong("opening-time");
         this.closingTime = jsonObject.getLong("closing-time");
+        this.timeRemaining = jsonObject.getInt("time-remaining");
 
         JSONArray jsonArray = jsonObject.getJSONArray("players");
 

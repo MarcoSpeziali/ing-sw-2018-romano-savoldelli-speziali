@@ -29,15 +29,9 @@ public class ServerLogger extends LoggerBase {
      * Protected method to construct a logger for a named subsystem.
      * The logger will be initially configured with a null Level
      * and with useParentHandlers set to true.
-     *
-     * @param name A name for the logger.  This should
-     *             be a dot-separated name and should normally
-     *             be based on the package name or class name
-     *             of the subsystem, such as java.net
-     *             or javax.swing.  It may be null for anonymous Loggers.
      */
-    protected ServerLogger(String name) {
-        super(name);
+    protected ServerLogger() {
+        super();
 
         ConsoleHandler consoleHandler = new ConsoleHandler();
         consoleHandler.setLevel(level);
@@ -47,11 +41,10 @@ public class ServerLogger extends LoggerBase {
     }
 
     /**
-     * @param caller the class that uses the logger
      * @return an instance of {@link Logger}
      */
-    public static LoggerBase getLogger(Class<?> caller) {
-        return new ServerLogger(caller.getName());
+    public static LoggerBase getLogger() {
+        return new ServerLogger();
     }
 
     @Override

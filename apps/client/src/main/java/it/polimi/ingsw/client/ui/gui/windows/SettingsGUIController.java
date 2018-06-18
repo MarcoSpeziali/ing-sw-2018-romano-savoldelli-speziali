@@ -9,8 +9,8 @@ import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.Settings;
 import it.polimi.ingsw.client.controllers.SettingsController;
 import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
+import it.polimi.ingsw.utils.text.Localized;
 import it.polimi.ingsw.utils.text.LocalizedString;
-import it.polimi.ingsw.utils.text.LocalizedText;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,19 +27,19 @@ import java.util.stream.Collectors;
 public class SettingsGUIController extends SettingsController implements Initializable {
 
     @FXML
-    @LocalizedText(key = Constants.Strings.SETTINGS_SAVE_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.SETTINGS_SAVE_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton saveButton;
     @FXML
-    @LocalizedText(key = Constants.Strings.SETTINGS_TITLE, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.SETTINGS_TITLE, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label titleLabel;
     @FXML
-    @LocalizedText(key = Constants.Strings.SETTINGS_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.SETTINGS_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton backButton;
     @FXML
-    @LocalizedText(key = Constants.Strings.SETTINGS_CONNECTION_TYPE_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.SETTINGS_CONNECTION_TYPE_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label connectionTypeLabel;
     @FXML
-    @LocalizedText(key = Constants.Strings.SETTINGS_FULLSCREEN_TOGGLE_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.SETTINGS_FULLSCREEN_TOGGLE_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXToggleButton fullScreenToggle;
     @FXML
     public JFXRadioButton rmiToggle;
@@ -48,7 +48,7 @@ public class SettingsGUIController extends SettingsController implements Initial
     @FXML
     public JFXComboBox<String> languageComboBox;
     @FXML
-    @LocalizedText(key = Constants.Strings.SETTINGS_LANGUAGE_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
+    @Localized(key = Constants.Strings.SETTINGS_LANGUAGE_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label languageTypeLabel;
 
     private FXMLLoader loader = new FXMLLoader();
@@ -61,7 +61,7 @@ public class SettingsGUIController extends SettingsController implements Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        LocalizedText.Updater.update(this);
+        Localized.Updater.update(this);
 
         this.fullScreenToggle.setSelected(Settings.getSettings().isFullScreenMode());
         this.rmiToggle.setSelected(Settings.getSettings().getProtocol() == Constants.Protocols.RMI);

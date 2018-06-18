@@ -27,7 +27,7 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
             return thread;
         });
 
-        ServerLogger.getLogger(ClientAcceptor.class)
+        ServerLogger.getLogger()
                 .log(Level.INFO, "Listening on port {0}", String.valueOf(port));
     }
 
@@ -38,13 +38,13 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
                 Socket client = this.serverSocket.accept();
                 this.clientAddress = client.getRemoteSocketAddress().toString();
 
-                ServerLogger.getLogger(ClientAcceptor.class)
+                ServerLogger.getLogger()
                         .info("New client with address: " + client.getRemoteSocketAddress());
 
                 this.executorService.submit(new AnonymousClientHandler(client));
             }
             catch (IOException e) {
-                ServerLogger.getLogger(ClientAcceptor.class)
+                ServerLogger.getLogger()
                         .log(Level.SEVERE, "I/O error waiting for players", e);
             }
         }
@@ -53,7 +53,7 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
             this.close();
         }
         catch (IOException e1) {
-            ServerLogger.getLogger(ClientAcceptor.class)
+            ServerLogger.getLogger()
                     .log(Level.SEVERE, "I/O error while closing the server socket and the executor service", e1);
 
             throw new RuntimeException(e1);

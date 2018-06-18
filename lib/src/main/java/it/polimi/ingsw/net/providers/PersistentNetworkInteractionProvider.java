@@ -3,6 +3,7 @@ package it.polimi.ingsw.net.providers;
 import it.polimi.ingsw.net.Body;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.utils.io.JSONSerializable;
 
 import java.io.IOException;
@@ -29,6 +30,14 @@ public abstract class PersistentNetworkInteractionProvider implements AutoClosea
         this.remoteAddress = remoteAddress;
         this.remotePort = remotePort;
     }
+
+    /**
+     * Opens the connection.
+     *
+     * @param remoteEndPoint the endpoint to connect to
+     * @throws IOException if any IO error occurs
+     */
+    public abstract void open(EndPointFunction remoteEndPoint) throws IOException, NotBoundException;
 
     /**
      * Sends a {@link Request} to the server and waits for a {@link Response} (blocking call).

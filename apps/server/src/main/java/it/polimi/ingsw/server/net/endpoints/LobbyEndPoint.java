@@ -1,14 +1,17 @@
 package it.polimi.ingsw.server.net.endpoints;
 
+import it.polimi.ingsw.controllers.LobbyController;
+import it.polimi.ingsw.controllers.proxies.LobbyRMIProxyController;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.LobbyInterface;
-import it.polimi.ingsw.net.interfaces.updates.LobbyUpdatesInterface;
 import it.polimi.ingsw.net.mocks.ILobby;
+import it.polimi.ingsw.net.mocks.LobbyMock;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.Constants;
+import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.EventType;
 import it.polimi.ingsw.server.events.LobbyEventsListener;
@@ -26,7 +29,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
@@ -35,11 +42,15 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     private static final long serialVersionUID = 4733876915509624154L;
 
     private static LobbyEndPoint instance;
-    private static Map<DatabasePlayer, LobbyUpdatesInterface> lobbyUpdates = new HashMap<>();
+    private Map<DatabasePlayer, LobbyRMIProxyController> lobbyControllers = new HashMap<>();
+    private final transient ScheduledExecutorService scheduledExecutorService;
 
     protected LobbyEndPoint() throws RemoteException {
         // register this class to listen to the implemented events
         EventDispatcher.register(this);
+
+        this.scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        this.setUpHeartBeat();
     }
 
     public static LobbyEndPoint getInstance() throws RemoteException {
@@ -63,9 +74,8 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
             }
 
             // since this method can be accessed by multiple users at the same time
-            // the risks in not synchronizing are:
-            //      1) creating more than a lobby at the same time
-            //      2) inserting more then 4 players in the same lobby
+            // the risks in not synchronizing is:
+            // inserting more then 4 players in the same lobby
             synchronized (LockManager.getLockObject(Constants.LockTargets.LOBBY)) {
                 DatabaseLobby lobby = DatabaseLobby.getOpenLobby();
 
@@ -85,38 +95,30 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 ));
 
                 // sends the updates to all rmi players
-                lobbyUpdates.forEach(
-                        (databasePlayer, lobbyUpdatesInterface) -> {
+                lobbyControllers.forEach(
+                        (databasePlayer, lobbyRMIProxyController) -> lobbyRMIProxyController.onUpdateReceived(new LobbyMock(finalLobby))
+                );
+                List<AuthenticatedClientHandler> clientsToUpdate = AuthenticatedClientHandler.getHandlerForPlayersExcept(player);
+                clientsToUpdate.forEach(client -> {
                             try {
-                                lobbyUpdatesInterface.onUpdateReceived(finalLobby);
+                                client.sendResponse(new Response<>(
+                                        new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
+                                        new LobbyMock(finalLobby)
+                                ));
                             }
-                            catch (RemoteException e) {
-                                ServerLogger.getLogger(SignInEndPoint.class)
-                                        .log(Level.SEVERE, "Error while sending the update to rmi client", e);
+                            catch (IOException e) {
+                                ServerLogger.getLogger()
+                                        .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
                             }
                         }
                 );
-                AuthenticatedClientHandler.getHandlerForPlayersExcept(player)
-                        .forEach(client -> {
-                                    try {
-                                        client.sendResponse(new Response<>(
-                                                new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
-                                                (ILobby) finalLobby
-                                        ));
-                                    }
-                                    catch (IOException e) {
-                                        ServerLogger.getLogger(SignInEndPoint.class)
-                                                .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
-                                    }
-                                }
-                        );
 
                 // finally returns the response
-                return ResponseFactory.createLobbyResponse(request, lobby);
+                return ResponseFactory.createLobbyResponse(request, new LobbyMock(lobby));
             }
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
 
             return ResponseFactory.createInternalServerError(request);
         }
@@ -127,34 +129,40 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     }
 
     @Override
-    public Response<ILobby> joinLobby(Request<LobbyJoinRequest> request, LobbyUpdatesInterface lobbyUpdateInterface) {
+    public LobbyController joinLobby(String clientToken) throws RemoteException {
         try {
             // gets the player from the token
-            DatabasePlayer player = AuthenticationManager.getAuthenticatedPlayer(request);
+            DatabasePlayer player = AuthenticationManager.getAuthenticatedPlayer(clientToken);
 
             // if the player is null then the request did not contain the client-token or the token is invalid
             if (player == null) {
                 // so an unauthorised response is created and sent
-                return ResponseFactory.createUnauthorisedError(request);
+                throw new IllegalCallerException();
             }
 
-            Response<ILobby> lobbyResponse = joinLobby(request);
+            Response<ILobby> lobbyResponse = joinLobby(new Request<>(
+                    new Header(clientToken, EndPointFunction.LOBBY_JOIN_REQUEST),
+                    new LobbyJoinRequest()
+            ));
+
+            LobbyRMIProxyController lobbyRMIProxyController = new LobbyRMIProxyController();
+            lobbyRMIProxyController.setStartingLobbyValue(lobbyResponse.getBody());
 
             synchronized (LockManager.getLockObject(Constants.LockTargets.LOBBY)) {
                 // the update-interface gets added
-                lobbyUpdates.put(player, lobbyUpdateInterface);
+                lobbyControllers.put(player, lobbyRMIProxyController);
 
-                return lobbyResponse;
+                return lobbyRMIProxyController;
             }
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
 
-            return ResponseFactory.createInternalServerError(request);
+            throw new RemoteException();
         }
         catch (TimeoutException e) {
             // the user was authenticated, but the token has expired
-            return ResponseFactory.createAuthenticationTimeoutError(request);
+            throw new RemoteException();
         }
     }
 
@@ -171,45 +179,64 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                     DatabaseLobby.removePlayer(lobby.getId(), player.getId());
 
                     // and dispatches the relative event
+                    DatabaseLobby finalLobby = DatabaseLobby.getLobbyWithId(lobby.getId());
                     EventDispatcher.dispatch(EventType.LOBBY_EVENTS, LobbyEventsListener.class, listener -> listener.onPlayerLeft(
-                            lobby,
+                            finalLobby,
                             player
                     ));
 
                     // removes the player from the updates
-                    lobbyUpdates.remove(player);
-                }
+                    lobbyControllers.remove(player);
 
-                // sends the updates to all rmi players
-                lobbyUpdates.forEach(
-                        (databasePlayer, lobbyUpdatesInterface) -> {
-                            try {
-                                lobbyUpdatesInterface.onUpdateReceived(lobby);
-                            }
-                            catch (RemoteException e) {
-                                ServerLogger.getLogger(SignInEndPoint.class)
-                                        .log(Level.SEVERE, "Error while sending the update to rmi client", e);
-                            }
-                        }
-                );
-                AuthenticatedClientHandler.getHandlerForPlayersExcept(player)
-                        .forEach(client -> {
-                                    try {
-                                        client.sendResponse(new Response<>(
-                                                new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
-                                                (ILobby) lobby
-                                        ));
-                                    }
-                                    catch (IOException e) {
-                                        ServerLogger.getLogger(SignInEndPoint.class)
-                                                .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
-                                    }
+                    // sends the updates to all rmi players
+                    lobbyControllers.forEach(
+                            (databasePlayer, lobbyRMIProxyController) -> lobbyRMIProxyController.onUpdateReceived(new LobbyMock(finalLobby))
+                    );
+                    List<AuthenticatedClientHandler> clientsToUpdate = AuthenticatedClientHandler.getHandlerForPlayersExcept(player);
+                    clientsToUpdate.forEach(client -> {
+                                try {
+                                    client.sendResponse(new Response<>(
+                                            new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
+                                            new LobbyMock(finalLobby)
+                                    ));
                                 }
-                        );
+                                catch (IOException e) {
+                                    ServerLogger.getLogger()
+                                            .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
+                                }
+                            }
+                    );
+                }
             }
         }
         catch (SQLException e) {
-            ServerLogger.getLogger(SignInEndPoint.class).log(Level.SEVERE, "Error while querying the database", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
         }
+    }
+
+    private void setUpHeartBeat() {
+        this.scheduledExecutorService.scheduleAtFixedRate(() -> {
+                    List<DatabasePlayer> scheduledForDeletion = new LinkedList<>();
+
+                    this.lobbyControllers.forEach((player, lobbyRMIProxyController) -> {
+                        try {
+                            if (!lobbyRMIProxyController.onHeartBeat()) {
+                                throw new RemoteException();
+                            }
+                        }
+                        catch (RemoteException e) {
+                            scheduledForDeletion.add(player);
+                        }
+                    });
+
+                    scheduledForDeletion.forEach(player -> {
+                        this.lobbyControllers.remove(player);
+                        EventDispatcher.dispatch(EventType.PLAYER_EVENTS, PlayerEventsListener.class, playerEventsListener -> playerEventsListener.onPlayerDisconnected(player));
+                    });
+                },
+                0,
+                Settings.getSettings().getRmiHeartBeatTimeout(),
+                Settings.getSettings().getRmiHeartBeatTimeUnit()
+        );
     }
 }

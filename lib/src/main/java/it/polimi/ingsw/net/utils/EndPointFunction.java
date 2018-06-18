@@ -7,7 +7,9 @@ public enum EndPointFunction {
     SIGN_UP("sign-up"),
     LOBBY_JOIN_REQUEST("lobby/join_request"),
     LOBBY_JOIN_REQUEST_RMI("lobby/join_request_rmi"),
-    LOBBY_UPDATE_RESPONSE("lobby/update_response");
+    LOBBY_UPDATE_RESPONSE("lobby/update_response"),
+    LOBBY_UPDATE_TIMER_STARTED("lobby/update_timer_started"),
+    LOBBY_UPDATE_TIMER_STOPPED("lobby/update_timer_stopped");
 
     private final String endPointFunctionName;
 

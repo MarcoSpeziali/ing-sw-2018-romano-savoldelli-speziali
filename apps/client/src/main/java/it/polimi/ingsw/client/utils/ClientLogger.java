@@ -28,23 +28,16 @@ public class ClientLogger extends LoggerBase {
      * Protected method to construct a logger for a named subsystem.
      * The logger will be initially configured with a null Level
      * and with useParentHandlers set to true.
-     *
-     * @param name A name for the logger.  This should
-     *             be a dot-separated name and should normally
-     *             be based on the package name or class name
-     *             of the subsystem, such as java.net
-     *             or javax.swing.  It may be null for anonymous Loggers.
      */
-    protected ClientLogger(String name) {
-        super(name);
+    protected ClientLogger() {
+        super();
     }
 
     /**
-     * @param caller the class that uses the logger
      * @return an instance of {@link Logger}
      */
-    public static Logger getLogger(Class<?> caller) {
-        return new ClientLogger(caller.getName());
+    public static Logger getLogger() {
+        return new ClientLogger();
     }
 
     @Override

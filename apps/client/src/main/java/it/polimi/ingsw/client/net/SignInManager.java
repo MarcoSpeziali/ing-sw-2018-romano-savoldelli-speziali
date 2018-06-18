@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.net.authentication;
+package it.polimi.ingsw.client.net;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.Settings;
@@ -36,9 +36,9 @@ public class SignInManager {
         }
         else {
             oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
-                    SignInInterface.class,
                     Settings.getSettings().getServerRMIAddress(),
-                    Settings.getSettings().getServerRMIPort()
+                    Settings.getSettings().getServerRMIPort(),
+                    SignInInterface.class
             );
         }
     }
@@ -118,7 +118,7 @@ public class SignInManager {
         //  - 408 Timeout
         //  - 401 Unauthorized
         if (fulfillResponse.getError() != null) {
-            int errorCode = requestResponse.getError().getErrorCode();
+            int errorCode = fulfillResponse.getError().getErrorCode();
 
             if (errorCode == ResponseFields.Error.INTERNAL_SERVER_ERROR.getCode()) {
                 throw new RemoteException();

@@ -68,7 +68,7 @@ public class ServerApp {
             }
         }
         catch (Exception e) {
-            ServerLogger.getLogger(ServerApp.class).log(Level.SEVERE, "An unrecoverable error occurred: ", e);
+            ServerLogger.getLogger().log(Level.SEVERE, "An unrecoverable error occurred: ", e);
         }
         finally {
             if (socketServer != null) {
