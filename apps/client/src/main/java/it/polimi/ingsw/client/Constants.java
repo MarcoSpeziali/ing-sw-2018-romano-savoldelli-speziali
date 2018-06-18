@@ -1,12 +1,12 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.utils.text.LocalizedString;
-import org.fusesource.hawtjni.runtime.Library;
 
 import java.net.URL;
-import java.util.*;
-
-import static it.polimi.ingsw.client.Constants.Resources.*;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Locale;
+import java.util.Set;
 
 public class Constants {
     private Constants() {
@@ -232,6 +232,24 @@ public class Constants {
 
         public static String toLocalized(String string) {
             return new LocalizedString(string).toString();
+        }
+
+        public static String getToolCardTitle(String toolCardId) {
+            try {
+                return (String) Strings.class.getField(String.format("TOOL_CARD_%s_TITLE", toolCardId.toUpperCase())).get(null);
+            }
+            catch (NoSuchFieldException | IllegalAccessException e) {
+                return null;
+            }
+        }
+
+        public static String getToolCardEffect(String toolCardId) {
+            try {
+                return (String) Strings.class.getField(String.format("TOOL_CARD_%s_EFFECT", toolCardId.toUpperCase())).get(null);
+            }
+            catch (NoSuchFieldException | IllegalAccessException e) {
+                return null;
+            }
         }
     }
 
