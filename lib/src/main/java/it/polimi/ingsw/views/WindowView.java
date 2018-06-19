@@ -3,6 +3,8 @@ package it.polimi.ingsw.views;
 import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.models.Window;
 
+import java.io.IOException;
+
 public abstract class WindowView {
     protected Window window;
     protected WindowController windowController;
@@ -11,7 +13,7 @@ public abstract class WindowView {
         this.window = window;
     }
 
-    public void setWindow(Window window) {
+    public void setWindow(Window window) throws IOException {
         this.window = window;
     }
 

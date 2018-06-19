@@ -13,7 +13,6 @@ public class CellCLIView extends CellView implements CLIView {
     private Ansi.Color ansiColor;
 
     public CellCLIView(Cell cell) {
-        super(cell);
         this.setCell(cell);
     }
 

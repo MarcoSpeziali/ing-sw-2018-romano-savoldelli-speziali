@@ -16,12 +16,12 @@ import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 
-public class ObjectiveCardGUIView extends ObjectiveCardView implements GUIView {
+public class ObjectiveCardGUIView extends ObjectiveCardView  {
     public ObjectiveCardGUIView(ObjectiveCard objectiveCard){
         super(objectiveCard);
     }
 
-    @Override
+
     public Node render() {
         ImageView view = new ImageView();
         AnchorPane root = new AnchorPane();

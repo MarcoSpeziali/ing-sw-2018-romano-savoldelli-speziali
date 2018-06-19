@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="722.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/9.0.1"
+            fx:controller="it.polimi.ingsw.client.ui.gui.windows.StartScreenGUIController"
+            stylesheets="@../../application-stylesheet.css">
+    <center>
+        <Pane prefHeight="722.0" prefWidth="550.0">
+            <children>
+                <ImageView fitHeight="724.0" fitWidth="550.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/splash-screen.jpg"/>
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER" layoutX="118.0" layoutY="260.0" prefHeight="352.0" prefWidth="315.0">
+                    <children>
+                        <JFXButton id="playButton"
+                                   fx:id="playButton"
+                                   alignment="CENTER"
+                                   prefHeight="44.0"
+                                   prefWidth="250.0"
+                                   text="PLAY GAME"
+                                   onAction="#onPlayGameClicked">
+                                        <VBox.margin>
+                                            <Insets bottom="25.0"/>
+                                        </VBox.margin>
+                        </JFXButton>
+                        <JFXButton id="settingsButton"
+                                   fx:id="settingsButton"
+                                   alignment="CENTER"
+                                   prefHeight="44.0"
+                                   prefWidth="250.0"
+                                   text="SETTINGS"
+                                   onAction="#onSettingClicked">
+                        </JFXButton>
+                        <JFXButton id="exitButton"
+                                   fx:id="exitButton"
+                                   alignment="CENTER"
+                                   prefHeight="44.0"
+                                   prefWidth="250.0"
+                                   text="EXIT"
+                                   onAction="#onExitClicked">
+                                        <VBox.margin>
+                                            <Insets top="25.0"/>
+                                        </VBox.margin>
+                        </JFXButton>
+                    </children>
+                </VBox>
+            </children>
+        </Pane>
+    </center>
+</BorderPane>

@@ -4,10 +4,6 @@ import it.polimi.ingsw.views.CardView;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
-public class CardGUIView extends CardView implements GUIView {
+public class CardGUIView extends CardView  {
 
-    @Override
-    public Node render() {
-        return new Pane();
-    }
 }

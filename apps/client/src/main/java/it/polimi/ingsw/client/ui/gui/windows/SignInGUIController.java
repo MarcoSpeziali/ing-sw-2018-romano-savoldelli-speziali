@@ -64,7 +64,7 @@ public class SignInGUIController extends SignInController {
             // TODO: execute in separate thread and create a loading indicator in the view
             super.onSignInRequested(this.usernameField.getText(), this.passwordField.getText(), () -> {
                 try {
-                    loader.setLocation(Constants.Resources.LOBBY.getURL());
+                    loader.setLocation(Constants.Resources.LOBBY_FXML.getURL());
 
                     LobbyController lobbyController;
 
@@ -90,7 +90,7 @@ public class SignInGUIController extends SignInController {
                     LobbyGUIController lobbyGUIController = loader.getController();
                     lobbyGUIController.setProxy(lobbyController);
 
-                    SagradaGUI.showStage(parent, 910, 720);
+                    SagradaGUI.showStage(parent, 353, 546);
                 }
                 catch (IOException | NotBoundException e) {
                     StreamExceptionWrapper.wrap(e);

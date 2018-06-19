@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.*?>
+<BorderPane id="backgroundPane" xmlns:fx="http://javafx.com/fxml/1" maxHeight="480.0" maxWidth="720.0" minHeight="480.0" minWidth="720.0"
+            prefHeight="480.0"
+            prefWidth="720.0"
+            xmlns="http://javafx.com/javafx/10.0.1"
+            fx:controller="it.polimi.ingsw.client.ui.gui.windows.SignInGUIController"
+            stylesheets="@../../application-stylesheet.css">
+    <left>
+        <Pane id="leftPane" prefHeight="480.0" prefWidth="360.0" BorderPane.alignment="CENTER">
+            <JFXTextField fx:id="usernameField" layoutX="54.0" layoutY="215.0" prefHeight="30.0" prefWidth="250.0" promptText="enter username"/>
+            <JFXPasswordField fx:id="passwordField" layoutX="54.0" layoutY="269.0" prefHeight="30.0" prefWidth="250.0" promptText="enter password"/>
+            <JFXButton fx:id="singInButton" layoutX="54.0" layoutY="343.0" prefHeight="44.0" prefWidth="250.0" text="SIGN IN" onAction="#onSignInClicked"/>
+            <Label fx:id="welcomeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="54.0" layoutY="57.0"
+                   prefHeight="45.0" prefWidth="250.0" text="Welcome to Sagrada" textFill="#ffa49c">
+                <font>
+                    <Font name="System Bold" size="25.0"/>
+                </font>
+            </Label>
+            <JFXButton fx:id="backButton" layoutX="54.0" layoutY="402.0" prefHeight="44.0" prefWidth="250.0" text="BACK" onAction="#onBackClicked"/>
+            <Hyperlink fx:id="registerLink" layoutX="191.0" layoutY="183.0" text="Not yet Registered?" onAction="#onNotYetRegisteredClicked"/>
+            <Label fx:id="signInNowLabel" layoutX="54.0" layoutY="184.0" text="SIGN IN NOW!" textFill="#ffa59e">
+                <font>
+                    <Font name="System Bold" size="15.0"/>
+                </font>
+            </Label>
+        </Pane>
+    </left>
+    <center>
+        <ImageView fitHeight="220.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true"
+                   BorderPane.alignment="CENTER">
+            <Image url="@../../images/sagrada-icon.png"/>
+        </ImageView>
+    </center>
+</BorderPane>

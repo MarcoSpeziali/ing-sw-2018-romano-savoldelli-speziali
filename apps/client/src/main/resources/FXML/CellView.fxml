@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="colorAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="125.0" prefWidth="125.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.CellGUIView">
+   <children>
+      <ImageView fx:id="shadeImageView" fitHeight="125.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
+      <AnchorPane fx:id="dieAnchorPane" layoutX="13.0" layoutY="13.0" prefHeight="100.0" prefWidth="100.0" />
+   </children>
+</AnchorPane>

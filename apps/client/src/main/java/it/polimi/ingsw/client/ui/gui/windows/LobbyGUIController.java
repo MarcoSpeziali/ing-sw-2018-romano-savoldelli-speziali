@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 
 public class LobbyGUIController implements Initializable {
@@ -51,6 +53,9 @@ public class LobbyGUIController implements Initializable {
 
     private FXMLLoader loader = new FXMLLoader();
 
+    private Timer timer = new Timer();
+    private int remainingTime = -1;
+
     public void setProxy(LobbyController proxyController) {
         this.proxyController = proxyController;
 
@@ -70,18 +75,21 @@ public class LobbyGUIController implements Initializable {
 
         for (int i = 0; i < 4; i++) {
             Label lbl = new Label();
-            lbl.setMinHeight(100);
+            lbl.setStyle("-fx-alignment: CENTER; -fx-background-color: #00000000");
 
             playersListView.getItems().add(lbl);
         }
+
+        this.secondsLabel.setText("");
+        this.secondsTextLabel.setOpacity(0);
     }
 
     @FXML
     public void onBackClicked() throws Exception {
         this.proxyController.close();
 
-        loader.setLocation(Constants.Resources.SIGN_IN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 720, 480));
+        loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
+        this.setScene(new Scene(loader.load(), 550, 722));
     }
 
     private void setScene(Scene scene) {
@@ -114,7 +122,42 @@ public class LobbyGUIController implements Initializable {
                 this.playersListView.getItems().get(i).setText("");
             }
 
+            if (update.getTimeRemaining() > 0) {
+                this.secondsLabel.setText(String.valueOf(update.getTimeRemaining()));
+                this.secondsTextLabel.setOpacity(1);
+
+                if (this.remainingTime == -1) {
+                    this.startTimer();
+                }
+
+                this.remainingTime = update.getTimeRemaining();
+            }
+            else {
+                this.secondsLabel.setText("");
+                this.secondsTextLabel.setOpacity(0);
+
+                this.remainingTime = -1;
+                this.stopTimer();
+            }
+
             setUpFuture();
         });
+    }
+
+    public void startTimer() {
+        this.timer = new Timer();
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    LobbyGUIController.this.secondsLabel.setText(String.valueOf(remainingTime));
+                    remainingTime--;
+                });
+            }
+        }, 0, 1000);
+    }
+
+    public void stopTimer() {
+        this.timer.cancel();
     }
 }

@@ -1,45 +1,64 @@
 package it.polimi.ingsw.client.ui.gui;
 
+import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.views.WindowView;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
-public class WindowGUIView extends WindowView implements GUIView {
+import java.io.IOException;
 
-    private CellGUIView[][] cellViews;
+public class WindowGUIView extends WindowView {
+
+    @FXML
+    public GridPane gridPane;
+
+    @FXML
+    public Label nameLabel;
+
+    @FXML
+    public HBox difficultyHbox;
+
+    FXMLLoader loader = new FXMLLoader();
 
     public WindowGUIView(Window window) {
         super(window);
+    }
 
-        this.cellViews = new CellGUIView[window.getRows()][window.getColumns()];
+    public void setWindow(Window window) throws IOException {
+        super.setWindow(window);
+
+        nameLabel.setText(window.getId());
 
         for (int i = 0; i < window.getRows(); i++) {
             for (int j = 0; j < window.getColumns(); j++) {
-                cellViews[i][j] = new CellGUIView(window.getCells()[i][j]);
+                loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
+                Parent cellView = loader.load();
+                CellGUIView controller = loader.getController();
+                controller.setCell(window.getCells()[i][j]);
+                gridPane.add(cellView, j, i);
             }
         }
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+
+        for (int i = 0; i < window.getDifficulty(); i++) {
+            Circle circle = (Circle) difficultyHbox.getChildren().get(i);
+            circle.setFill(Paint.valueOf("#2c3e50"));
+        }
+
     }
 
 
-    @Override
-    public Node render() {
-        GridPane grid = new GridPane();
-        grid.setStyle("-fx-background-color: #34495e;" +
-                "-fx-padding: 20 20 20 20");
-        grid.setHgap(10);
-        grid.setVgap(10);
-        for (int i = 0; i < window.getRows(); i++) {
-            for (int j = 0; j < window.getColumns(); j++) {
-                Node root = cellViews[i][j].render();
-                grid.add(root, j, i);
-            }
-        }
-        grid.setAlignment(Pos.CENTER);
-        return grid;
-    }
 
 
 }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
 import it.polimi.ingsw.utils.text.Localized;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,6 +37,7 @@ public class StartScreenGUIController implements Initializable {
 
     public void onExitClicked() {
         primaryStage.close();
+        Platform.exit();
     }
 
     public void onSettingClicked() throws IOException {

@@ -4,6 +4,7 @@ package it.polimi.ingsw.client.ui.cli;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.views.WindowView;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class WindowCLIView extends WindowView implements CLIView {
@@ -53,7 +54,7 @@ public class WindowCLIView extends WindowView implements CLIView {
 
     }
 
-    public void setWindow(Window window) {
+    public void setWindow(Window window) throws IOException {
         super.setWindow(window);
     }
 

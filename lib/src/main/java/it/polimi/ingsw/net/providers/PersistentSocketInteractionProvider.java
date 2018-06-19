@@ -62,8 +62,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                     }
                 });
             }
-            catch (IOException | StreamExceptionWrapper e) {
-                throw new RuntimeException(e); // TODO: remove
+            catch (IOException | StreamExceptionWrapper ignored) {
             }
         }
     };

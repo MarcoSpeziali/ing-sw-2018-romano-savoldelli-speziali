@@ -5,7 +5,7 @@ import it.polimi.ingsw.views.DraftPoolView;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
-public class DraftPoolGUIView extends DraftPoolView implements GUIView {
+public class DraftPoolGUIView extends DraftPoolView {
 
 
     public DraftPoolGUIView(DraftPool draftPool) {

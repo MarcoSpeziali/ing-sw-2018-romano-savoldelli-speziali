@@ -46,6 +46,7 @@ public class DatabaseLobby implements ILobby {
 
         Date date = resultSet.getDate("closing_time");
         this.closingTime = date == null ? -1L : date.getTime();
+        this.timeRemaining = -1;
     }
 
     public static DatabaseLobby getLobbyWithId(int id) throws SQLException {
@@ -93,7 +94,7 @@ public class DatabaseLobby implements ILobby {
 
     public static void removePlayer(int lobbyId, int playerId) throws SQLException {
         String query = String.format(
-                "DELETE FROM lobby_player WHERE lobby = '%d' AND player = '%d'",
+                "UPDATE lobby_player SET leaving_time = current_timestamp WHERE lobby = '%d' AND player = '%d'",
                 lobbyId,
                 playerId
         );
@@ -109,7 +110,7 @@ public class DatabaseLobby implements ILobby {
                         "%s = %s",
                         stringStringEntry.getKey(),
                         stringStringEntry.getValue())
-                ).reduce("", (s, s2) -> s + ", " + s2);
+                ).reduce("", (s, s2) -> s.isEmpty() ? s2 : (s + ", " + s2));
 
         String query = String.format(
                 "UPDATE lobby SET %s WHERE id = '%d' RETURNING *",
@@ -160,7 +161,7 @@ public class DatabaseLobby implements ILobby {
                 "SELECT p.* FROM lobby l " +
                         "JOIN lobby_player lb ON lb.lobby = l.id " +
                         "JOIN player p ON lb.player = p.id " +
-                        "WHERE l.id = '%d'",
+                        "WHERE l.id = '%d' AND lb.leaving_time IS NULL",
                 this.id
         );
 
@@ -175,6 +176,10 @@ public class DatabaseLobby implements ILobby {
                 return databasePlayers;
             });
 
+            if (players == null) {
+                return List.of();
+            }
+
             if (players.isEmpty()) {
                 return List.of();
             }
@@ -182,7 +187,7 @@ public class DatabaseLobby implements ILobby {
             return Collections.unmodifiableList(players);
         }
         catch (SQLException e) {
-            return List.of();
+            return null;
         }
     }
 

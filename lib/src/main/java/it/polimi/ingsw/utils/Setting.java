@@ -40,6 +40,9 @@ public @interface Setting {
                     else if (settingAnnotation.type().equals(Integer.class)) {
                         field.set(targetObject, Integer.parseInt(value));
                     }
+                    else if (settingAnnotation.type().equals(Long.class)) {
+                        field.set(targetObject, Long.parseLong(value));
+                    }
                     else if (settingAnnotation.type().equals(Float.class)) {
                         field.set(targetObject, Float.parseFloat(value));
                     }
