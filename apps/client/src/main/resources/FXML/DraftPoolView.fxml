@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="it.polimi.ingsw.controllers.DraftPoolController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane id="anchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: GREEN;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.controllers.DraftPoolController">
+   <children>
+      <AnchorPane id="dice_1" layoutX="75.0" layoutY="123.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 15;" />
+      <AnchorPane id="dice_2" layoutX="448.0" layoutY="97.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 33;" />
+      <AnchorPane id="dice_3" layoutX="162.0" layoutY="221.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 25;" />
+      <AnchorPane id="dice_4" layoutX="43.0" layoutY="286.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 45;" />
+      <AnchorPane id="dice_5" layoutX="259.0" layoutY="97.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 18;" />
+      <AnchorPane id="dice_6" layoutX="291.0" layoutY="310.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 5;" />
+      <AnchorPane id="dice_7" layoutX="440.0" layoutY="238.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 22;" />
+      <AnchorPane id="dice_8" layoutX="179.0" layoutY="34.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 30;" />
+      <AnchorPane id="dice_9" layoutX="343.0" layoutY="191.0" prefHeight="74.0" prefWidth="74.0" style="-fx-rotate: 4;" />
+   </children>
 </AnchorPane>
