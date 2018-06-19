@@ -78,7 +78,7 @@ public class Constants {
         OBJECTIVE_CARD_GREEN_SHADES("images/objectiveCards/green_shade.jpg"),
         OBJECTIVE_CARD_LIGHT_SHADES("images/objectiveCards/light_shades.jpg"),
         OBJECTIVE_CARD_MEDIUM_SHADES("images/objectiveCards/medium_shades.jpg"),
-        OBJECTIVE_CARD_PURPLE_SHADES("images/objectiveCards/purple_shade.jpg"),
+        OBJECTIVE_CARD_PURPLE_SHADE("images/objectiveCards/purple_shade.jpg"),
         OBJECTIVE_CARD_RED_SHADE("images/objectiveCards/red_shade.jpg"),
         OBJECTIVE_CARD_ROW_COLOR_VARIETY("images/objectiveCards/row_color_variety.jpg"),
         OBJECTIVE_CARD_ROW_SHADE_VARIETY("images/objectiveCards/row_shade_variety.jpg"),
@@ -280,20 +280,21 @@ public class Constants {
 
         public static String getObjectiveCardTitle(String objectiveCardId) {
             try {
-                return (String) String.class.getField(String.format("OBJECTIVE_CARD_%s_TITLE", objectiveCardId.toUpperCase())).get(null);
+                return (String) Strings.class.getField(String.format("OBJECTIVE_CARD_%s_TITLE", objectiveCardId.toUpperCase())).get(null);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                return null;
+            }
+        }
+        public static String getObjectiveCardDescription(String objectiveCardId) {
+            try {
+                return (String) Strings.class.getField(String.format("OBJECTIVE_CARD_%s_DESCRIPTION", objectiveCardId.toUpperCase())).get(null);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 return null;
             }
         }
 
-        public static String getObjectiveCardDescription(String objectiveCardId) {
-            try {
-                return (String) String.class.getField(String.format("OBJECTIVE_CARD_%s_DESCRIPTION", objectiveCardId.toUpperCase())).get(null);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                return null;
-            }
         }
     }
-}
+
 
 
