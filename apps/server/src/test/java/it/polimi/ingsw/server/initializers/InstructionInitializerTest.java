@@ -30,18 +30,18 @@ class InstructionInitializerTest {
     void testInitialization() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Window window = mock(Window.class);
         when(window.getDice()).thenAnswer(invocation -> List.of(
-                new Die(GlassColor.RED, 1),
-                new Die(GlassColor.RED, 5),
-                new Die(GlassColor.RED, 4),
-                new Die(GlassColor.GREEN, 6),
-                new Die(GlassColor.GREEN, 3),
-                new Die(GlassColor.GREEN, 1),
-                new Die(GlassColor.GREEN, 2),
-                new Die(GlassColor.PURPLE, 2),
-                new Die(GlassColor.BLUE, 5),
-                new Die(GlassColor.YELLOW, 2),
-                new Die(GlassColor.RED, 2),
-                new Die(GlassColor.YELLOW, 4)
+                new Die(1, GlassColor.RED),
+                new Die(5, GlassColor.RED),
+                new Die(4, GlassColor.RED),
+                new Die(6, GlassColor.GREEN),
+                new Die(3, GlassColor.GREEN),
+                new Die(1, GlassColor.GREEN),
+                new Die(2, GlassColor.GREEN),
+                new Die(2, GlassColor.PURPLE),
+                new Die(5, GlassColor.BLUE),
+                new Die(2, GlassColor.YELLOW),
+                new Die(2, GlassColor.RED),
+                new Die(4, GlassColor.YELLOW)
         ));
 
         Context.getSharedInstance().put(Context.WINDOW, window);

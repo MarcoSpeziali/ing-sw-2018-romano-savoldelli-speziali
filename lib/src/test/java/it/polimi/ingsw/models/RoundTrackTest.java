@@ -13,9 +13,9 @@ import java.util.List;
 class RoundTrackTest {
     private RoundTrack roundTrack;
     private byte numberOfRounds = 10;
-    private Die die1 = new Die(GlassColor.BLUE, 4);
-    private Die die2 = new Die(GlassColor.RED, 2);
-    private Die die3 = new Die(GlassColor.GREEN, 1);
+    private Die die1 = new Die(4, GlassColor.BLUE);
+    private Die die2 = new Die(2, GlassColor.RED);
+    private Die die3 = new Die(1, GlassColor.GREEN);
     private List<OnDiePickedListener> onDiePickedListeners;
     private List<OnDiePutListener> onDiePutListeners;
 

@@ -29,7 +29,7 @@ class DraftPoolTest {
     void setUp() {
         bag = new Bag(18);
         draftPool = new DraftPool();
-        die = new Die(GlassColor.BLUE, 0);
+        die = new Die(0, GlassColor.BLUE);
         onDiePickedListeners = new LinkedList<>();
         onDiePickedListener = mock(OnDiePickedListener.class);
 
@@ -39,7 +39,7 @@ class DraftPoolTest {
     void pickDieTest() {
         draftPool.putDie(die);
         Assertions.assertEquals(die, draftPool.pickDie(die));
-        Assertions.assertNull(draftPool.pickDie(new Die(GlassColor.GREEN, 9)));
+        Assertions.assertNull(draftPool.pickDie(new Die(9, GlassColor.GREEN)));
     }
 
     @Test
@@ -85,7 +85,7 @@ class DraftPoolTest {
     void addPutListenerTest() {
         List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
         Assertions.assertTrue(onDiePutListeners.isEmpty());
-        Die die1 = new Die(GlassColor.BLUE, 3);
+        Die die1 = new Die(3, GlassColor.BLUE);
 
         OnDiePutListener onDiePutListener = new OnDiePutListener() {
             @Override

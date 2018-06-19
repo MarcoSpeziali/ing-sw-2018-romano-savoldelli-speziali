@@ -19,7 +19,7 @@ class PickDieActionTest {
 
     @BeforeEach
     void setUp() {
-        Die die = new Die(GlassColor.BLUE, 4);
+        Die die = new Die(4, GlassColor.BLUE);
 
         ChoosablePickLocation location = mock(ChoosablePickLocation.class);
         when(location.pickDie(die)).thenReturn(die);

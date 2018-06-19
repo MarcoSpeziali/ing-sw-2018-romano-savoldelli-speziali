@@ -2,29 +2,36 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.listeners.DieInteractionListener;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class Die implements Serializable {
+public class Die implements JSONSerializable {
 
     private static final long serialVersionUID = -311416275888290395L;
 
+    @JSONElement("shade")
+    private Integer shade;
+    @JSONElement("color")
     private GlassColor color;
 
-    private Integer shade;
-
-    private List<DieInteractionListener> listeners = new LinkedList<>();
+    private transient List<DieInteractionListener> listeners = new LinkedList<>();
 
     /**
      * Sets up a new die
      *
-     * @param color is the color of the die
      * @param shade is the shade of the die
+     * @param color is the color of the die
      */
-    public Die(GlassColor color, Integer shade) {
+    @JSONDesignatedConstructor
+    public Die(
+            @JSONElement("shade") Integer shade,
+            @JSONElement("color") GlassColor color
+    ) {
         this.color = color;
         this.shade = shade;
     }

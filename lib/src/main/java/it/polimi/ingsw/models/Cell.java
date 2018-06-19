@@ -6,20 +6,28 @@ import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Cell implements RandomPutLocation, RandomPickLocation, Serializable {
+public class Cell implements RandomPutLocation, RandomPickLocation, JSONSerializable {
 
     private static final long serialVersionUID = 379193806872969294L;
 
+    @JSONElement("color")
     private GlassColor color;
+
+    @JSONElement("shade")
     private Integer shade;
+
+    @JSONElement("die")
     private Die die;
-    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
-    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+
+    private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
+    private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
     /**
      * Sets up a new {@link Cell}.
@@ -30,6 +38,13 @@ public class Cell implements RandomPutLocation, RandomPickLocation, Serializable
     public Cell(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
+    }
+
+    @JSONDesignatedConstructor
+    Cell(@JSONElement("shade") Integer shade, @JSONElement("color") GlassColor color, @JSONElement("die") Die die) {
+        this.shade = shade;
+        this.color = color;
+        this.die = die;
     }
 
     /**

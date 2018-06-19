@@ -22,7 +22,7 @@ class ActionInitializerTest {
 
     @Test
     void testInitialization() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Die die = new Die(GlassColor.RED, 4);
+        Die die = new Die(4, GlassColor.RED);
         Context.getSharedInstance().put("DIE", die);
 
         String actionText = "<action effect=\"increment $DIE$ [by=2]\"/>";

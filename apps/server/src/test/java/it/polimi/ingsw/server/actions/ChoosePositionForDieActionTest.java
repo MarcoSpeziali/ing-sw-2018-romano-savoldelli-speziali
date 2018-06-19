@@ -21,7 +21,7 @@ class ChoosePositionForDieActionTest {
     @BeforeEach
     void setUp() {
         RestrictedChoosablePutLocation location = mock(RestrictedChoosablePutLocation.class);
-        Die die = new Die(GlassColor.YELLOW, 1);
+        Die die = new Die(1, GlassColor.YELLOW);
 
         UserInteractionProvider interactionProvider = mock(UserInteractionProvider.class);
         when(interactionProvider.choosePosition(location, die, false, false, false)).thenReturn(6);

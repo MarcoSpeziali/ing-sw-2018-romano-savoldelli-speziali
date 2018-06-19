@@ -65,7 +65,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
             this.colors.remove(randColor);
         }
 
-        return new Die(randColor, shade);
+        return new Die(shade, randColor);
     }
 
     /**

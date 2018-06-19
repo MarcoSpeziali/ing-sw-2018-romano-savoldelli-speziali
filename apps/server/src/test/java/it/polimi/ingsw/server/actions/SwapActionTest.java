@@ -17,8 +17,8 @@ class SwapActionTest {
 
     @BeforeEach
     void setUp() {
-        this.die1 = new Die(GlassColor.PURPLE, 3);
-        this.die2 = new Die(GlassColor.YELLOW, 4);
+        this.die1 = new Die(3, GlassColor.PURPLE);
+        this.die2 = new Die(4, GlassColor.YELLOW);
 
         this.action = new SwapAction(this.testData, context -> this.die1, context -> this.die2);
     }

@@ -20,7 +20,7 @@ class SetValActionTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.PURPLE, 3);
+        this.die = new Die(3, GlassColor.PURPLE);
 
         UserInteractionProvider provider = mock(UserInteractionProvider.class);
         when(provider.chooseShade(this.die)).thenReturn(5);

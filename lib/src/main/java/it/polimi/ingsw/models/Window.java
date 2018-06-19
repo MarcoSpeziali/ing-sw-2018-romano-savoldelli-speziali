@@ -5,24 +5,32 @@ import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.utils.IterableRange;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation, Serializable {
+public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation, JSONSerializable {
 
     private static final long serialVersionUID = 733952479357429786L;
 
-    private int difficulty;
-    private int rows;
-    private int columns;
+    @JSONElement("id")
     private String id;
+    @JSONElement("difficulty")
+    private int difficulty;
+    @JSONElement("rows")
+    private int rows;
+    @JSONElement("columns")
+    private int columns;
+    // Cannot be serialized, because it will generate a stack overflow
     private Window sibling;
+    // A multi-dimensional array cannot be serialized
     private Cell[][] cells;
-    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
-    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
+    private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
+    private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
     /**
      * Sets up a new {@link Window} with specified parameters.
@@ -41,6 +49,27 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         this.id = id;
         this.sibling = sibling;
         this.cells = cells;
+    }
+
+    @JSONDesignatedConstructor
+    Window(
+            @JSONElement("id") String id,
+            @JSONElement("difficulty") int difficulty,
+            @JSONElement("rows") int rows,
+            @JSONElement("columns") int columns,
+            @JSONElement("sibling-id") String siblingId,
+            @JSONElement("cells") Cell[] cells
+    ) {
+        this.id = id;
+        this.difficulty = difficulty;
+        this.rows = rows;
+        this.columns = columns;
+
+        this.cells = new Cell[rows][columns];
+
+        for (int i = 0; i < rows; i++) {
+            System.arraycopy(cells, i * columns, this.cells[i], 0, columns);
+        }
     }
 
     /**
@@ -72,7 +101,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
 
     /**
-     * @return
+     * @return the cells in the window
      */
     public Cell[][] getCells() {
         return this.cells;

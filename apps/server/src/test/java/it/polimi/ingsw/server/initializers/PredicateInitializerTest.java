@@ -29,11 +29,11 @@ class PredicateInitializerTest {
     void setUp() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         this.context = Context.getSharedInstance();
         this.context.put("row", new Die[]{
-                new Die(GlassColor.RED, 2),
-                new Die(GlassColor.YELLOW, 2),
-                new Die(GlassColor.GREEN, 2),
-                new Die(GlassColor.BLUE, 2),
-                new Die(GlassColor.PURPLE, 2)
+                new Die(2, GlassColor.RED),
+                new Die(2, GlassColor.YELLOW),
+                new Die(2, GlassColor.GREEN),
+                new Die(2, GlassColor.BLUE),
+                new Die(2, GlassColor.PURPLE)
         });
 
         this.predicateDirectives = PredicateDirectivesCompiler.compile();

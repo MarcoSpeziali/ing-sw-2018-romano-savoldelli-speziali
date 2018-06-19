@@ -45,13 +45,13 @@ class ObjectiveTest {
         Context.getSharedInstance().put(Context.WINDOW, window);
 
         when(window.getDice()).thenReturn(List.of(
-                new Die(GlassColor.RED, 1),
-                new Die(GlassColor.RED, 2),
-                new Die(GlassColor.GREEN, 3),
-                new Die(GlassColor.RED, 4),
-                new Die(GlassColor.GREEN, 5),
-                new Die(GlassColor.RED, 6),
-                new Die(GlassColor.GREEN, 1)
+                new Die(1, GlassColor.RED),
+                new Die(2, GlassColor.RED),
+                new Die(3, GlassColor.GREEN),
+                new Die(4, GlassColor.RED),
+                new Die(5, GlassColor.GREEN),
+                new Die(6, GlassColor.RED),
+                new Die(1, GlassColor.GREEN)
         ));
     }
 

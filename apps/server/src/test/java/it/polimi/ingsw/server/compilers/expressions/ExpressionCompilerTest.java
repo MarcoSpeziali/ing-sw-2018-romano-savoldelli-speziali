@@ -13,7 +13,7 @@ class ExpressionCompilerTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.RED, 3);
+        this.die = new Die(3, GlassColor.RED);
 
         Context.getSharedInstance().put("DIE", this.die);
         Context.getSharedInstance().put("test_class", new TestClass(19));

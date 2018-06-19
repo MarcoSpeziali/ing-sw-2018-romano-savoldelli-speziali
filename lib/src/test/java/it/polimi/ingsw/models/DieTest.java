@@ -11,7 +11,7 @@ class DieTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.BLUE, 4);
+        this.die = new Die(4, GlassColor.BLUE);
     }
 
     @Test
@@ -40,10 +40,10 @@ class DieTest {
 
     @Test
     void equalsTest() {
-        Die d1 = new Die(GlassColor.RED, 5);
-        Die d2 = new Die(GlassColor.RED, 5);
-        Die d3 = new Die(GlassColor.YELLOW, 5);
-        Die d4 = new Die(GlassColor.RED, 4);
+        Die d1 = new Die(5, GlassColor.RED);
+        Die d2 = new Die(5, GlassColor.RED);
+        Die d3 = new Die(5, GlassColor.YELLOW);
+        Die d4 = new Die(4, GlassColor.RED);
         Assertions.assertEquals(d1, d2);
         Assertions.assertNotEquals(d1, d3);
         Assertions.assertNotEquals(d1, d4);
@@ -59,8 +59,8 @@ class DieTest {
 
     @Test
     void hashCodeTest() {
-        Die d1 = new Die(GlassColor.RED, 5);
-        Die d2 = new Die(GlassColor.RED, 5);
+        Die d1 = new Die(5, GlassColor.RED);
+        Die d2 = new Die(5, GlassColor.RED);
         Assertions.assertEquals(d1.hashCode(), d2.hashCode());
     }
 

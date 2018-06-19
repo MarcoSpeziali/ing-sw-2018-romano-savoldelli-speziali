@@ -20,7 +20,7 @@ class PickActionTest {
     @BeforeEach
     void setUp() {
         RandomPickLocation location = mock(RandomPickLocation.class);
-        when(location.pickDie()).thenReturn(new Die(GlassColor.BLUE, 4));
+        when(location.pickDie()).thenReturn(new Die(4, GlassColor.BLUE));
 
         action = new PickAction(this.testData, context -> location);
     }

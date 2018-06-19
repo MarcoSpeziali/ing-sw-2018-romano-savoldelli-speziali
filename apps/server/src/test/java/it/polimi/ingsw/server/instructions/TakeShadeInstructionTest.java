@@ -14,12 +14,12 @@ class TakeShadeInstructionTest {
 
     private static Stream<Arguments> testRunArguments() {
         return Stream.of(
-                Arguments.of(new Die(GlassColor.RED, 1)),
-                Arguments.of(new Die(GlassColor.YELLOW, 2)),
-                Arguments.of(new Die(GlassColor.RED, 3)),
-                Arguments.of(new Die(GlassColor.BLUE, 4)),
-                Arguments.of(new Die(GlassColor.PURPLE, 5)),
-                Arguments.of(new Die(GlassColor.GREEN, 6))
+                Arguments.of(new Die(1, GlassColor.RED)),
+                Arguments.of(new Die(2, GlassColor.YELLOW)),
+                Arguments.of(new Die(3, GlassColor.RED)),
+                Arguments.of(new Die(4, GlassColor.BLUE)),
+                Arguments.of(new Die(5, GlassColor.PURPLE)),
+                Arguments.of(new Die(6, GlassColor.GREEN))
         );
     }
 

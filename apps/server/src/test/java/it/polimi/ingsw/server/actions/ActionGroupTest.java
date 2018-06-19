@@ -44,9 +44,9 @@ class ActionGroupTest {
 
         this.interactionProvider = mock(UserInteractionProvider.class);
         when(this.interactionProvider.chooseDie(this.chooseLocation, null, 0))
-                .thenReturn(new Die(GlassColor.BLUE, 3));
+                .thenReturn(new Die(3, GlassColor.BLUE));
         when(this.interactionProvider.chooseDie(this.chooseLocation, GlassColor.BLUE, 0))
-                .thenReturn(new Die(GlassColor.BLUE, 2));
+                .thenReturn(new Die(2, GlassColor.BLUE));
 
         this.actionGroupCallbacks = mock(ActionGroupCallbacks.class);
     }
@@ -107,13 +107,13 @@ class ActionGroupTest {
     @Test
     void testSequential() {
         when(this.chooseLocation.getDice()).thenReturn(List.of(
-                new Die(GlassColor.BLUE, 3),
-                new Die(GlassColor.GREEN, 5),
-                new Die(GlassColor.PURPLE, 6)
+                new Die(3, GlassColor.BLUE),
+                new Die(5, GlassColor.GREEN),
+                new Die(6, GlassColor.PURPLE)
         ));
 
         when(this.choosablePickLocation.pickDie(any(Die.class)))
-                .thenReturn(new Die(GlassColor.BLUE, 2));
+                .thenReturn(new Die(2, GlassColor.BLUE));
 
         doAnswer(invocationOnMock -> {
             Die die = invocationOnMock.getArgumentAt(0, Die.class);
@@ -202,7 +202,7 @@ class ActionGroupTest {
                                         null,
                                         null
                                 ),
-                                context -> new Die(GlassColor.RED, 4),
+                                context -> new Die(4, GlassColor.RED),
                                 context -> this.choosablePutLocation,
                                 context -> 15
                         )
@@ -230,7 +230,7 @@ class ActionGroupTest {
                                         null,
                                         null
                                 ),
-                                context -> new Die(GlassColor.RED, 4),
+                                context -> new Die(4, GlassColor.RED),
                                 context -> this.choosablePutLocation,
                                 context -> 15
                         )
@@ -264,7 +264,7 @@ class ActionGroupTest {
                                         null,
                                         null
                                 ),
-                                context -> new Die(GlassColor.RED, 4),
+                                context -> new Die(4, GlassColor.RED),
                                 context -> this.choosablePutLocation,
                                 context -> 15
                         )
@@ -297,7 +297,7 @@ class ActionGroupTest {
                                         null,
                                         null
                                 ),
-                                context -> new Die(GlassColor.RED, 4),
+                                context -> new Die(4, GlassColor.RED),
                                 context -> this.choosablePutLocation,
                                 context -> 15
                         )
@@ -318,7 +318,7 @@ class ActionGroupTest {
             return List.of(actions.get(0));
         });
 
-        Die die = new Die(GlassColor.BLUE, 3);
+        Die die = new Die(3, GlassColor.BLUE);
 
         this.actionGroup = new ActionGroup(
                 this.actionData,

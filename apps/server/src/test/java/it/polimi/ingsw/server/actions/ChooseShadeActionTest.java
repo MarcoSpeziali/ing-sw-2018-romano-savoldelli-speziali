@@ -24,7 +24,7 @@ class ChooseShadeActionTest {
 
         UserInteractionProvider interactionProvider = mock(UserInteractionProvider.class);
         when(interactionProvider.chooseDie(location, null, 0))
-                .thenReturn(new Die(GlassColor.GREEN, 4));
+                .thenReturn(new Die(4, GlassColor.GREEN));
 
         action = new ChooseShadeAction(this.testData, context -> location, context -> null);
         action.setUserInteractionProvider(interactionProvider);

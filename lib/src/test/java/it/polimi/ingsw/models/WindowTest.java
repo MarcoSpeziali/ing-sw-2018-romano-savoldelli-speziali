@@ -19,7 +19,7 @@ class WindowTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.YELLOW, 5);
+        this.die = new Die(5, GlassColor.YELLOW);
         this.mockWindow = mock(Window.class);
 
         this.cells = new Cell[][]{ // 0, 1, 4, 5(edge), 11 // 0, 4, 9, 10  no 5,6
@@ -65,9 +65,9 @@ class WindowTest {
 
     @Test
     void getPossiblePositionsForDie() {
-        Die d = new Die(GlassColor.RED, 2);
-        Die d1 = new Die(GlassColor.GREEN, 3);
-        Die d2 = new Die(GlassColor.PURPLE, 2);
+        Die d = new Die(2, GlassColor.RED);
+        Die d1 = new Die(3, GlassColor.GREEN);
+        Die d2 = new Die(2, GlassColor.PURPLE);
 
         List<Integer> expectedAtStart = List.of(0, 4, 9, 10);
         List<Integer> expectedAfterPutDie = List.of(0, 5, 8);
@@ -77,10 +77,10 @@ class WindowTest {
         // Checking Exceptions
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> window.getPossiblePositionsForDie(
-                new Die(null, 4), false, false, false)
+                new Die(4, null), false, false, false)
         );
         Assertions.assertThrows(IllegalArgumentException.class, () -> window.getPossiblePositionsForDie(
-                new Die(GlassColor.YELLOW, 0), false, false, false)
+                new Die(0, GlassColor.YELLOW), false, false, false)
         );
 
         // Checking initial available positions:
@@ -98,13 +98,13 @@ class WindowTest {
 
         window.putDie(d, 4);
 
-        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
+        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(4, GlassColor.BLUE),
                 false, false, false).containsAll(expectedAfterPutDie));
-        Assertions.assertEquals(3, window.getPossiblePositionsForDie(new Die(GlassColor.BLUE, 4),
+        Assertions.assertEquals(3, window.getPossiblePositionsForDie(new Die(4, GlassColor.BLUE),
                 false, false, false).size());
-        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.RED, 2),
+        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(2, GlassColor.RED),
                 false, false, false).contains(9));
-        Assertions.assertEquals(1, window.getPossiblePositionsForDie(new Die(GlassColor.RED, 2),
+        Assertions.assertEquals(1, window.getPossiblePositionsForDie(new Die(2, GlassColor.RED),
                 false, false, false).size());
 
         // Checking available positions with ignoreAdjacency set to true:
@@ -112,9 +112,9 @@ class WindowTest {
         window.putDie(d1, 3);
         window.putDie(d2, 9);
 
-        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
+        Assertions.assertTrue(window.getPossiblePositionsForDie(new Die(5, GlassColor.YELLOW),
                 false, false, true).containsAll(expectedIfAdjacencyIsIgnored));
-        Assertions.assertEquals(4, window.getPossiblePositionsForDie(new Die(GlassColor.YELLOW, 5),
+        Assertions.assertEquals(4, window.getPossiblePositionsForDie(new Die(5, GlassColor.YELLOW),
                 false, false, true).size());
 
     }
@@ -140,7 +140,7 @@ class WindowTest {
     @Test
     void getDiceTest() {
         window.putDie(die, 7);
-        window.putDie(new Die(GlassColor.RED, 4), 0);
+        window.putDie(new Die(4, GlassColor.RED), 0);
         Assertions.assertTrue(window.getDice().contains(this.die));
         window.pickDie(die);
         Assertions.assertFalse(window.getDice().contains(die));
@@ -159,7 +159,7 @@ class WindowTest {
         window.putDie(die, 0);
         Assertions.assertSame(die, window.pickDie(0));
         window.putDie(die, 0);
-        Assertions.assertNull(window.pickDie(new Die(GlassColor.YELLOW, 5)));
+        Assertions.assertNull(window.pickDie(new Die(5, GlassColor.YELLOW)));
         Assertions.assertNotNull(window.getCells()[0][0].getDie());
         Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> window.pickDie(30));
         Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> window.pickDie(-2));

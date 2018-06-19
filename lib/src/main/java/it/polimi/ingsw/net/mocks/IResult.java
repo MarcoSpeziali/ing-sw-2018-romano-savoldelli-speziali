@@ -1,11 +1,16 @@
 package it.polimi.ingsw.net.mocks;
 
+import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-import java.rmi.Remote;
+public interface IResult extends JSONSerializable {
 
-public interface IResult extends JSONSerializable, Remote {
+    @JSONElement("player")
     IPlayer getPlayer();
+
+    @JSONElement("match")
     IMatch getMatch();
+
+    @JSONElement("points")
     int getPoints();
 }

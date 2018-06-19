@@ -29,32 +29,32 @@ class ForColumnInstructionTest {
         this.context = Context.getSharedInstance();
         this.diceMatrix = new Die[][]{
                 {
-                        new Die(GlassColor.RED, 1),
-                        new Die(GlassColor.GREEN, 4),
-                        new Die(GlassColor.RED, 1),
-                        new Die(GlassColor.YELLOW, 2),
-                        new Die(GlassColor.PURPLE, 4),
+                        new Die(1, GlassColor.RED),
+                        new Die(4, GlassColor.GREEN),
+                        new Die(1, GlassColor.RED),
+                        new Die(2, GlassColor.YELLOW),
+                        new Die(4, GlassColor.PURPLE),
                 },
                 {
-                        new Die(GlassColor.GREEN, 5),
-                        new Die(GlassColor.RED, 1),
-                        new Die(GlassColor.GREEN, 2),
-                        new Die(GlassColor.RED, 2),
-                        new Die(GlassColor.YELLOW, 1)
+                        new Die(5, GlassColor.GREEN),
+                        new Die(1, GlassColor.RED),
+                        new Die(2, GlassColor.GREEN),
+                        new Die(2, GlassColor.RED),
+                        new Die(1, GlassColor.YELLOW)
                 },
                 {
-                        new Die(GlassColor.RED, 5),
-                        new Die(GlassColor.GREEN, 5),
-                        new Die(GlassColor.RED, 2),
-                        new Die(GlassColor.YELLOW, 3),
-                        new Die(GlassColor.RED, 4)
+                        new Die(5, GlassColor.RED),
+                        new Die(5, GlassColor.GREEN),
+                        new Die(2, GlassColor.RED),
+                        new Die(3, GlassColor.YELLOW),
+                        new Die(4, GlassColor.RED)
                 },
                 {
-                        new Die(GlassColor.GREEN, 5),
-                        new Die(GlassColor.RED, 5),
-                        new Die(GlassColor.YELLOW, 3),
-                        new Die(GlassColor.RED, 4),
-                        new Die(GlassColor.YELLOW, 3)
+                        new Die(5, GlassColor.GREEN),
+                        new Die(5, GlassColor.RED),
+                        new Die(3, GlassColor.YELLOW),
+                        new Die(4, GlassColor.RED),
+                        new Die(3, GlassColor.YELLOW)
                 }
         };
 

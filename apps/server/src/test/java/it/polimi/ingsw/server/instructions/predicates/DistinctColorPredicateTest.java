@@ -11,11 +11,11 @@ class DistinctColorPredicateTest {
     @Test
     void testDistinct() {
         Die[] dice = {
-                new Die(GlassColor.GREEN, 1),
-                new Die(GlassColor.BLUE, 1),
-                new Die(GlassColor.RED, 1),
-                new Die(GlassColor.YELLOW, 1),
-                new Die(GlassColor.PURPLE, 1)
+                new Die(1, GlassColor.GREEN),
+                new Die(1, GlassColor.BLUE),
+                new Die(1, GlassColor.RED),
+                new Die(1, GlassColor.YELLOW),
+                new Die(1, GlassColor.PURPLE)
         };
 
         DistinctColorPredicate predicate = new DistinctColorPredicate(context -> dice);
@@ -27,11 +27,11 @@ class DistinctColorPredicateTest {
     @Test
     void testNotDistinct() {
         Die[] dice = {
-                new Die(GlassColor.GREEN, 1),
-                new Die(GlassColor.GREEN, 1),
-                new Die(GlassColor.RED, 1),
-                new Die(GlassColor.YELLOW, 1),
-                new Die(GlassColor.PURPLE, 1)
+                new Die(1, GlassColor.GREEN),
+                new Die(1, GlassColor.GREEN),
+                new Die(1, GlassColor.RED),
+                new Die(1, GlassColor.YELLOW),
+                new Die(1, GlassColor.PURPLE)
         };
 
         DistinctColorPredicate predicate = new DistinctColorPredicate(context -> dice);

@@ -28,7 +28,7 @@ class RedrawAllActionTest {
 
         dice = random
                 .ints(10, 1, 7)
-                .mapToObj(num -> new Die(GlassColor.values()[random.nextInt(5)], num))
+                .mapToObj(num -> new Die(num, GlassColor.values()[random.nextInt(5)]))
                 .toArray(Die[]::new);
 
         ChooseLocation location = mock(ChooseLocation.class);

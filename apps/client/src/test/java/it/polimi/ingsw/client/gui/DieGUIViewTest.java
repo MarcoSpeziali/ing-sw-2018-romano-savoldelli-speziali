@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 public class DieGUIViewTest extends Application {
 
     private DieGUIView dieGUIView;
-    private Die die = new Die(GlassColor.BLUE, 5);
+    private Die die = new Die(5, GlassColor.BLUE);
 
     @Override
     public void start(Stage primaryStage) throws Exception {

@@ -12,7 +12,7 @@ class DieCLIViewTest {
 
     @BeforeEach
     void setUp() {
-        die = new Die(GlassColor.BLUE, 5);
+        die = new Die(5, GlassColor.BLUE);
         this.dieCLIView = new DieCLIView();
         this.dieCLIView.setDieModel(die);
 

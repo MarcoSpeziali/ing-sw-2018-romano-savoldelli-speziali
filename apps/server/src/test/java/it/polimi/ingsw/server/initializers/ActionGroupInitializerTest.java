@@ -21,7 +21,7 @@ class ActionGroupInitializerTest {
 
     @Test
     void testInitialization() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Die die = new Die(GlassColor.RED, 1);
+        Die die = new Die(1, GlassColor.RED);
         Context.getSharedInstance().put("DIE", die);
 
         String actionGroupText =

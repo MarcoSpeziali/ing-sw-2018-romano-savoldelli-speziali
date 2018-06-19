@@ -16,7 +16,7 @@ class FlipActionTest {
 
     @BeforeEach
     void setUp() {
-        this.die = new Die(GlassColor.PURPLE, 3);
+        this.die = new Die(3, GlassColor.PURPLE);
         this.action = new FlipAction(this.testData, context -> this.die);
     }
 

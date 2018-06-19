@@ -34,7 +34,7 @@ class WindowCLIViewTest {
     @Test
     void renderTest() {
         windowCLIView.render();
-        window.putDie(new Die(GlassColor.YELLOW, 5), 0);
+        window.putDie(new Die(5, GlassColor.YELLOW), 0);
         windowCLIView.render();
     }
 

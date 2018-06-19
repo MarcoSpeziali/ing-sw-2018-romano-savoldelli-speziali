@@ -1,15 +1,22 @@
 package it.polimi.ingsw.net.mocks;
 
+import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-import java.rmi.Remote;
-import java.util.List;
+public interface IMatch extends JSONSerializable {
 
-public interface IMatch extends JSONSerializable, Remote {
-
+    @JSONElement("id")
     int getId();
+
+    @JSONElement("starting-time")
     long getStartingTime();
+
+    @JSONElement("ending-time")
     long getEndingTime();
+
+    @JSONElement("lobby")
     ILobby getLobby();
-    List<IPlayer> getPlayers();
+
+    @JSONElement("players")
+    IPlayer[] getPlayers();
 }

@@ -53,14 +53,14 @@ class BagTest {
     void getNumberOfDieTest() {
         GlassColor color = bag.pickDie().getColor();
         Assertions.assertEquals(17, bag.getNumberPerColor(color));
-        bag.putDie(new Die(color, 0));
+        bag.putDie(new Die(0, color));
         Assertions.assertEquals(18, bag.getNumberPerColor(color));
     }
 
     @Test
     void putDieTest() {
         int prev = bag.getNumberOfDice();
-        bag.putDie(new Die(GlassColor.BLUE, 0));
+        bag.putDie(new Die(0, GlassColor.BLUE));
         Assertions.assertEquals(prev + 1, bag.getNumberOfDice());
     }
 
