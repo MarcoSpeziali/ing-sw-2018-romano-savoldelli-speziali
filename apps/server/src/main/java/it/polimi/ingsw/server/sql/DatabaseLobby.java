@@ -2,12 +2,11 @@ package it.polimi.ingsw.server.sql;
 
 import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.mocks.IPlayer;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,9 @@ public class DatabaseLobby implements ILobby {
      */
     private int timeRemaining;
 
+    @JSONDesignatedConstructor
     DatabaseLobby() {
+        throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
     }
 
     DatabaseLobby(ResultSet resultSet) throws SQLException {
@@ -156,7 +157,7 @@ public class DatabaseLobby implements ILobby {
     }
 
     @Override
-    public List<IPlayer> getPlayers() {
+    public IPlayer[] getPlayers() {
         String query = String.format(
                 "SELECT p.* FROM lobby l " +
                         "JOIN lobby_player lb ON lb.lobby = l.id " +
@@ -177,27 +178,17 @@ public class DatabaseLobby implements ILobby {
             });
 
             if (players == null) {
-                return List.of();
+                return new IPlayer[0];
             }
 
             if (players.isEmpty()) {
-                return List.of();
+                return new IPlayer[0];
             }
 
-            return Collections.unmodifiableList(players);
+            return players.toArray(new IPlayer[0]);
         }
         catch (SQLException e) {
             return null;
         }
-    }
-
-    /**
-     * Deserialized a {@link JSONObject} into the implementing class.
-     *
-     * @param jsonObject the {@link JSONObject} to deserialize
-     */
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
     }
 }

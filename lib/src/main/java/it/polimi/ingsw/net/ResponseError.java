@@ -1,8 +1,9 @@
 package it.polimi.ingsw.net;
 
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.io.JSONSerializable;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 /**
  * Represents the error derived from a request.
@@ -14,24 +15,14 @@ public class ResponseError implements JSONSerializable {
     /**
      * The code of the error.
      */
+    @JSONElement("code")
     private int errorCode;
 
     /**
      * The reason of the error.
      */
+    @JSONElement("reason")
     private String reason;
-
-    public ResponseError() {
-    }
-
-    public ResponseError(ResponseFields.Error error) {
-        this(error.getCode(), error.getName());
-    }
-
-    public ResponseError(int errorCode, String reason) {
-        this.errorCode = errorCode;
-        this.reason = reason;
-    }
 
     /**
      * @return the code of the error
@@ -47,19 +38,19 @@ public class ResponseError implements JSONSerializable {
         return reason;
     }
 
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        this.errorCode = jsonObject.getInt("code");
-        this.reason = jsonObject.getString("reason");
+    public ResponseError() {
     }
 
-    @Override
-    public JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
+    public ResponseError(ResponseFields.Error error) {
+        this(error.getCode(), error.getName());
+    }
 
-        jsonObject.put("code", this.errorCode);
-        jsonObject.put("reason", this.reason);
-
-        return jsonObject;
+    @JSONDesignatedConstructor
+    public ResponseError(
+            @JSONElement("code") int errorCode,
+            @JSONElement("reason") String reason
+    ) {
+        this.errorCode = errorCode;
+        this.reason = reason;
     }
 }

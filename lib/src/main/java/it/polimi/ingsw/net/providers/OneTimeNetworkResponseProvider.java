@@ -1,9 +1,8 @@
 package it.polimi.ingsw.net.providers;
 
-import it.polimi.ingsw.net.Body;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -30,7 +29,7 @@ public interface OneTimeNetworkResponseProvider {
      * @param hostPort    the port of the host
      * @return a {@link Response} produced by the server
      * @throws IOException       if any IO error occurs
-     * @throws NotBoundException if {@link Body#getEndPointFunction()} is not currently bound
+     * @throws NotBoundException if the endpoint is not currently bound
      */
     <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException;
 

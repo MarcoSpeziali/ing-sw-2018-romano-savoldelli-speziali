@@ -4,7 +4,7 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.utils.ServerLogger;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -49,17 +49,15 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
      * @return the {@link Request} created by the client
      * @throws IOException if any IO error occurs
      */
-    protected Request<? extends JSONSerializable> waitForRequest(BufferedReader bufferedReader) throws IOException {
+    protected Request waitForRequest(BufferedReader bufferedReader) throws IOException {
         String content = bufferedReader.readLine();
 
         if (content == null) {
             throw new IOException();
         }
 
-        Request<? extends JSONSerializable> request = new Request<>();
-        request.deserialize(new JSONObject(content));
-
-        return request;
+        //noinspection unchecked
+        return JSONSerializable.deserialize(Request.class, content);
     }
 
     /**
@@ -89,7 +87,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         SocketAddress socketAddress = this.client.getRemoteSocketAddress();
 
         // waits for a request
-        Request<? extends JSONSerializable> request = waitForRequest(this.in);
+        @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = waitForRequest(this.in);
 
         ServerLogger.getLogger()
                 .fine(() -> String.format(

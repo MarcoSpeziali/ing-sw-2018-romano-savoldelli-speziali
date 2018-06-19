@@ -23,7 +23,7 @@ public class LocalizedString implements Serializable {
      * The resource bundle.
      */
     private static transient ResourceBundle resourceBundle;
-    private static List<OnLocaleChanged> listeners = new LinkedList<>();
+    private static transient List<OnLocaleChanged> listeners = new LinkedList<>();
 
     static {
         try {

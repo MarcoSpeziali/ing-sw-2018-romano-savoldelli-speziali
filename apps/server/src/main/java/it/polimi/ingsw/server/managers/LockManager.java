@@ -18,7 +18,8 @@ public class LockManager {
         );
     }
 
-    private LockManager() {}
+    private LockManager() {
+    }
 
     public static Object getLockObject(Constants.LockTargets target) {
         return lockObjects.get(target);

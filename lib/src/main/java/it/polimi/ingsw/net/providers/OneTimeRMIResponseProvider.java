@@ -1,13 +1,12 @@
 package it.polimi.ingsw.net.providers;
 
-import it.polimi.ingsw.net.Body;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.EndPointResponderNotFound;
 import it.polimi.ingsw.net.interfaces.RespondsTo;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.utils.ReflectionUtils;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -47,8 +46,8 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
      * @param hostAddress the address of the host
      * @param hostPort    the port of the host
      * @return a {@link Response} produced by the server
-     * @throws IOException                  if any IO error occurs
-     * @throws NotBoundException            if {@link Body#getEndPointFunction()} is not currently bound
+     * @throws IOException       if any IO error occurs
+     * @throws NotBoundException if the endpoint is not currently bound
      */
     @Override
     public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request, String hostAddress, int hostPort) throws IOException, NotBoundException {

@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.net.commands;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.net.Socket;

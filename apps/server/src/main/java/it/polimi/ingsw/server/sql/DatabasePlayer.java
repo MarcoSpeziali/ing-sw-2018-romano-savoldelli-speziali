@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.sql;
 
 import it.polimi.ingsw.net.mocks.IPlayer;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +27,11 @@ public class DatabasePlayer implements IPlayer {
      * The sha representation of the user's password.
      */
     private String password;
+
+    @JSONDesignatedConstructor
+    DatabasePlayer() {
+        throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
+    }
 
     DatabasePlayer(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
@@ -123,16 +128,6 @@ public class DatabasePlayer implements IPlayer {
      */
     public String getPassword() {
         return password;
-    }
-
-    /**
-     * Deserialized a {@link JSONObject} into the implementing class.
-     *
-     * @param jsonObject the {@link JSONObject} to deserialize
-     */
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
     }
 
     @Override

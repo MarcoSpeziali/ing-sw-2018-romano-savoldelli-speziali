@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +31,17 @@ public final class ReflectionUtils {
                 .filter(method -> filter.test(method.getAnnotation(annotationClass)))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static Constructor<?> findAnnotatedConstructor(Class<?> targetClass, Class<? extends Annotation> annotationClass) {
+        Constructor<?>[] constructors = targetClass.getDeclaredConstructors();
+
+        for (Constructor<?> constructor : constructors) {
+            if (constructor.isAnnotationPresent(annotationClass)) {
+                return constructor;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,11 +1,9 @@
 package it.polimi.ingsw.net.mocks;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 public class LobbyMock implements ILobby {
 
@@ -15,60 +13,62 @@ public class LobbyMock implements ILobby {
     private long openingTime;
     private long closingTime;
     private int timeRemaining;
-    private List<IPlayer> players;
+    private IPlayer[] players;
+
+    public LobbyMock(ILobby iLobby) {
+        this(
+                iLobby.getId(),
+                iLobby.getOpeningTime(),
+                iLobby.getClosingTime(),
+                iLobby.getTimeRemaining(),
+                Arrays.stream(iLobby.getPlayers())
+                        .map(PlayerMock::new)
+                        .toArray(PlayerMock[]::new)
+        );
+    }
+
+    @JSONDesignatedConstructor
+    public LobbyMock(
+            @JSONElement("id") int id,
+            @JSONElement("opening-time") long openingTime,
+            @JSONElement("closing-time") long closingTime,
+            @JSONElement("time-remaining") int timeRemaining,
+            @JSONElement("players") PlayerMock[] players
+    ) {
+        this.id = id;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.timeRemaining = timeRemaining;
+        this.players = players;
+    }
 
     @Override
+    @JSONElement("id")
     public int getId() {
         return this.id;
     }
 
     @Override
+    @JSONElement("opening-time")
     public long getOpeningTime() {
         return this.openingTime;
     }
 
     @Override
+    @JSONElement("closing-time")
     public long getClosingTime() {
         return this.closingTime;
     }
 
     @Override
+    @JSONElement("time-remaining")
     public int getTimeRemaining() {
         return this.timeRemaining;
     }
 
     @Override
-    public List<IPlayer> getPlayers() {
+    @JSONElement("players")
+    public IPlayer[] getPlayers() {
         return this.players;
-    }
-
-    public LobbyMock() {}
-
-    public LobbyMock(ILobby iLobby) {
-        this.id = iLobby.getId();
-        this.openingTime = iLobby.getOpeningTime();
-        this.closingTime = iLobby.getClosingTime();
-        this.timeRemaining = iLobby.getTimeRemaining();
-        this.players = iLobby.getPlayers().stream()
-                .map(PlayerMock::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        this.id = jsonObject.getInt("id");
-        this.openingTime = jsonObject.getLong("opening-time");
-        this.closingTime = jsonObject.getLong("closing-time");
-        this.timeRemaining = jsonObject.getInt("time-remaining");
-
-        JSONArray jsonArray = jsonObject.getJSONArray("players");
-
-        this.players = new LinkedList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            PlayerMock playerMock = new PlayerMock();
-            playerMock.deserialize(jsonArray.getJSONObject(i));
-
-            this.players.add(playerMock);
-        }
     }
 }

@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.DieGUIView;
-import it.polimi.ingsw.controllers.DieController;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Die;
 import javafx.application.Application;
@@ -10,8 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class DieGUIViewTest extends Application {
 

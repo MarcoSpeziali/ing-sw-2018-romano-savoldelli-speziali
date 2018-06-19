@@ -1,0 +1,68 @@
+#backgroundPane {
+    -fx-background-color: #ecf0f1;
+}
+
+#leftPane {
+    -fx-background-color: #c0392b;
+}
+
+#playButton {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: #b0f7ce;
+}
+
+#settingsButton {
+    -fx-background-color: #3498db;
+    -fx-text-fill: #bce4ff;
+}
+
+#exitButton {
+    -fx-background-color: #e74c3c;
+    -jfx-text-fill: #bce4ff;
+}
+
+.jfx-button {
+    -fx-background-color: #e74c3c;
+    -fx-font-size: 15;
+    -fx-text-fill: #ffa49c;
+    -fx-font-weight: bold;
+}
+
+.jfx-radio-button {
+    -jfx-selected-color: #ffa49c;
+    -jfx-unselected-color: #ffa49c;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffa59e;
+}
+
+.jfx-combo-box {
+    -jfx-focus-color: #ffa49c;
+    -jfx-unfocus-color: #ffa49c;
+}
+
+.jfx-combo-box .cell {
+    -fx-text-fill: #ffa49c;
+    -fx-font-weight: bold;
+    -fx-background-color: #c0392b;
+}
+
+.jfx-text-field {
+    -jfx-focus-color: #ffa49c;
+    -jfx-unfocus-color: #e54a3c;
+    -fx-text-fill: #ffa49c;
+    -fx-prompt-text-fill: #e54a3c;
+    -fx-font-size: 16;
+}
+
+.jfx-password-field {
+    -jfx-focus-color: #ffa49c;
+    -jfx-unfocus-color: #e54a3c;
+    -fx-text-fill: #ffa49c;
+    -fx-prompt-text-fill: #e54a3c;
+    -fx-font-size: 16;
+}
+
+.hyperlink {
+    -fx-text-fill: #ffa49c;
+}

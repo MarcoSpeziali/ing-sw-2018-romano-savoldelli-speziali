@@ -10,9 +10,8 @@ import java.rmi.server.UnicastRemoteObject;
 public class LobbyRMIProxyController extends UnicastRemoteObject implements LobbyController, HeartBeatListener {
 
     private static final long serialVersionUID = 6402299999494663705L;
-
-    private ILobby lobbyResult;
     private final transient Object syncObject = new Object();
+    private ILobby lobbyResult;
     private Boolean shouldBeKeptAlive;
 
     public LobbyRMIProxyController() throws RemoteException {

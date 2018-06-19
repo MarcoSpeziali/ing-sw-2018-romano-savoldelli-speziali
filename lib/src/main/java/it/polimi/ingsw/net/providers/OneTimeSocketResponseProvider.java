@@ -2,8 +2,7 @@ package it.polimi.ingsw.net.providers;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.utils.io.JSONSerializable;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -49,10 +48,8 @@ public class OneTimeSocketResponseProvider implements OneTimeNetworkResponseProv
 
             String content = input.readLine();
 
-            Response<T> response = new Response<>();
-            response.deserialize(new JSONObject(content));
-
-            return response;
+            //noinspection unchecked
+            return (Response<T>) JSONSerializable.deserialize(Response.class, content);
         }
     }
 

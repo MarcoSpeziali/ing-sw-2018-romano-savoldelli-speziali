@@ -29,6 +29,6 @@
             <artifactId>LM37</artifactId>
             <version>0.1</version>
         </dependency>
-        
+
     </dependencies>
 </project>

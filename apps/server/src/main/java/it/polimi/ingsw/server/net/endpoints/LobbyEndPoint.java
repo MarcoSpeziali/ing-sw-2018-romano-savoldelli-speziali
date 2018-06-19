@@ -38,12 +38,16 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     private static final long serialVersionUID = 4733876915509624154L;
 
     private static LobbyEndPoint instance;
-    private Map<DatabasePlayer, LobbyRMIProxyController> lobbyControllers = new HashMap<>();
-
     private final transient ScheduledExecutorService lobbyExecutorService;
+    private Map<DatabasePlayer, LobbyRMIProxyController> lobbyControllers = new HashMap<>();
     private transient ScheduledFuture<?> rmiHeartBeatScheduledFuture;
     private transient ScheduledFuture<?> timerScheduledFuture;
     private transient int timeRemaining = -1;
+    private transient Runnable executorTask = () -> {
+        if (timeRemaining != -1) {
+            timeRemaining -= 100;
+        }
+    };
 
     protected LobbyEndPoint() throws RemoteException {
         // register this class to listen to the implemented events
@@ -87,12 +91,12 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 // if there's an opened lobby then the player gets inserted into it
                 DatabaseLobby.insertPlayer(lobby.getId(), player.getId());
 
-                List<IPlayer> players = lobby.getPlayers();
+                IPlayer[] players = lobby.getPlayers();
 
                 // if the number of players in lobby is equal to NumberOfPlayersToStartTimer then the timer is started
                 // if the number of players is outside the range [NumberOfPlayersToStartTimer, MaximumNumberOfPlayers]
                 // then the timer has already been started
-                if (players.size() == Settings.getSettings().getNumberOfPlayersToStartTimer()) {
+                if (players.length == Settings.getSettings().getNumberOfPlayersToStartTimer()) {
                     this.timeRemaining = (int) Settings.getSettings().getTimerDurationInMilliseconds();
                     this.timerScheduledFuture = this.lobbyExecutorService.scheduleAtFixedRate(
                             this.executorTask,
@@ -102,7 +106,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                     );
                 }
                 // otherwise, if the number of players in lobby is equal to the MaximumNumberOfPlayers then the match stats
-                else if (players.size() == Settings.getSettings().getMaximumNumberOfPlayers()) {
+                else if (players.length == Settings.getSettings().getMaximumNumberOfPlayers()) {
                     DatabaseLobby.closeLobby(lobby.getId());
                     this.timerScheduledFuture.cancel(true);
                     this.timeRemaining = -1;
@@ -192,13 +196,13 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 DatabaseLobby lobby = DatabaseLobby.getOpenLobby();
 
                 // the lobby could not exist if the player disconnected during a match
-                if (lobby != null && lobby.getPlayers().contains(player)) {
+                if (lobby != null && Arrays.stream(lobby.getPlayers()).anyMatch(iPlayer -> iPlayer.equals(player))) {
                     // removes the player
                     DatabaseLobby.removePlayer(lobby.getId(), player.getId());
 
-                    List<IPlayer> players = lobby.getPlayers();
+                    IPlayer[] players = lobby.getPlayers();
 
-                    if (players.isEmpty()) {
+                    if (players.length == 0) {
                         DatabaseLobby.closeLobby(lobby.getId());
 
                         final DatabaseLobby finalLobby = lobby;
@@ -215,7 +219,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                     }
 
                     // if there are less than NumberOfPlayersToStartTimer then the timer is canceled
-                    if (players.size() < Settings.getSettings().getNumberOfPlayersToStartTimer()) {
+                    if (players.length < Settings.getSettings().getNumberOfPlayersToStartTimer()) {
                         this.timerScheduledFuture.cancel(true);
 
                         this.timeRemaining = -1;
@@ -270,12 +274,6 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
         );
     }
 
-    private transient Runnable executorTask = () -> {
-        if (timeRemaining != -1) {
-            timeRemaining -= 100;
-        }
-    };
-
     private void sendUpdates(DatabaseLobby databaseLobby, DatabasePlayer exceptTo) {
         lobbyControllers.forEach(
                 (databasePlayer, lobbyRMIProxyController) -> {
@@ -304,7 +302,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
         lobbyControllers.forEach(
                 (databasePlayer, lobbyRMIProxyController) -> lobbyRMIProxyController.onUpdateReceived(new LobbyMock(databaseLobby))
         );
-        databaseLobby.getPlayers().forEach(iPlayer -> {
+        Arrays.stream(databaseLobby.getPlayers()).forEach(iPlayer -> {
                     try {
                         AuthenticatedClientHandler.getHandlerForPlayer((DatabasePlayer) iPlayer).sendResponse(new Response<>(
                                 new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),

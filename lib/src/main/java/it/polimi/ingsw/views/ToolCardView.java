@@ -6,6 +6,7 @@ import it.polimi.ingsw.models.ToolCard;
 public abstract class ToolCardView {
     protected ToolCard toolCard;
     protected ToolCardController toolCardController;
+
     public ToolCardView(ToolCard toolCard) {
         this.toolCard = new ToolCard(toolCard.getCardId(), toolCard.getTitle().toString(), toolCard.getDescription().toString(), toolCard.getEffect());
     }

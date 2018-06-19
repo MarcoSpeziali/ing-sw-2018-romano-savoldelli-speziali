@@ -5,7 +5,7 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.AuthenticationManager;
 import it.polimi.ingsw.server.net.commands.*;
 import it.polimi.ingsw.server.utils.ServerLogger;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;

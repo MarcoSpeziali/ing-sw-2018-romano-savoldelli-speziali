@@ -1,6 +1,7 @@
 package it.polimi.ingsw.net.mocks;
 
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
 
 public class PlayerMock implements IPlayer {
 
@@ -9,26 +10,28 @@ public class PlayerMock implements IPlayer {
     private int id;
     private String username;
 
+    public PlayerMock(IPlayer iPlayer) {
+        this(iPlayer.getId(), iPlayer.getUsername());
+    }
+
+    @JSONDesignatedConstructor
+    public PlayerMock(
+            @JSONElement("id") int id,
+            @JSONElement("username") String username
+    ) {
+        this.id = id;
+        this.username = username;
+    }
+
     @Override
+    @JSONElement("id")
     public int getId() {
         return this.id;
     }
 
     @Override
+    @JSONElement("username")
     public String getUsername() {
         return this.username;
-    }
-
-    public PlayerMock() {}
-
-    public PlayerMock(IPlayer iPlayer) {
-        this.id = iPlayer.getId();
-        this.username = iPlayer.getUsername();
-    }
-
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        this.id = jsonObject.getInt("id");
-        this.username = jsonObject.getString("username");
     }
 }

@@ -12,7 +12,7 @@ import it.polimi.ingsw.net.responses.ChallengeResponse;
 import it.polimi.ingsw.net.responses.SignInResponse;
 import it.polimi.ingsw.net.responses.SignUpResponse;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 // TODO: docs
 public final class ResponseFactory {

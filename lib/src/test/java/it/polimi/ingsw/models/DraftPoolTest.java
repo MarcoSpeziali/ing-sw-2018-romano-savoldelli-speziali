@@ -11,7 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,7 @@ class DraftPoolTest {
     private Bag bag;
     private List<OnDiePickedListener> onDiePickedListeners;
     private OnDiePickedListener onDiePickedListener;
+
     @BeforeEach
     void setUp() {
         bag = new Bag(18);
@@ -94,7 +96,7 @@ class DraftPoolTest {
         };
         onDiePutListeners.add(onDiePutListener);
         OnDiePutListener onDiePutListener1 = onDiePutListeners.get(0);
-        Assertions.assertTrue(onDiePutListeners.size()!=0);
+        Assertions.assertTrue(onDiePutListeners.size() != 0);
         Assertions.assertEquals(onDiePutListener, onDiePutListener1);
 
     }

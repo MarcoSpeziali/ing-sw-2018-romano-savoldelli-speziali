@@ -9,10 +9,10 @@ import java.util.logging.*;
 
 public abstract class LoggerBase extends Logger {
 
+    private static final StackWalker stackWalker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
     protected static FileHandler fileHandler;
     protected static Level level;
     private static boolean fileHandlerAlreadySet = false;
-    private static final StackWalker stackWalker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
 
     /**
      * Protected method to construct a logger for a named subsystem.

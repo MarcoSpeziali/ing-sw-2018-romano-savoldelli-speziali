@@ -1,21 +1,13 @@
 package it.polimi.ingsw.net.mocks;
 
-import it.polimi.ingsw.utils.io.JSONSerializable;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 // TODO: docs
 public interface IPlayer extends JSONSerializable {
+    @JSONElement("id")
     int getId();
 
+    @JSONElement("username")
     String getUsername();
-
-    @Override
-    default JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("id", this.getId());
-        jsonObject.put("username", this.getUsername());
-
-        return jsonObject;
-    }
 }

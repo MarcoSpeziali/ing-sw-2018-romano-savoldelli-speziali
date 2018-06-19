@@ -1,34 +1,23 @@
 package it.polimi.ingsw.net.mocks;
 
-import it.polimi.ingsw.utils.io.JSONSerializable;
-import org.json.JSONObject;
-
-import java.rmi.Remote;
-import java.util.List;
-import java.util.stream.Collectors;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 // TODO: docs
-public interface ILobby extends JSONSerializable, Remote {
+public interface ILobby extends JSONSerializable {
+
+    @JSONElement("id")
     int getId();
 
+    @JSONElement("opening-time")
     long getOpeningTime();
 
+    @JSONElement("closing-time")
     long getClosingTime();
 
+    @JSONElement("time-remaining")
     int getTimeRemaining();
 
-    List<IPlayer> getPlayers();
-
-    @Override
-    default JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("id", this.getId());
-        jsonObject.put("opening-time", this.getOpeningTime());
-        jsonObject.put("closing-time", this.getClosingTime());
-        jsonObject.put("time-remaining", this.getTimeRemaining());
-        jsonObject.put("players", this.getPlayers().stream().map(JSONSerializable::serialize).collect(Collectors.toList()));
-
-        return jsonObject;
-    }
+    @JSONElement("players")
+    IPlayer[] getPlayers();
 }

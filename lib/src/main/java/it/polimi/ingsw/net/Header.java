@@ -1,9 +1,9 @@
 package it.polimi.ingsw.net;
 
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.net.utils.RequestFields;
-import it.polimi.ingsw.utils.io.JSONSerializable;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 /**
  * Represents the header of the request or a response.
@@ -14,11 +14,13 @@ public class Header implements JSONSerializable {
     /**
      * The user's token.
      */
+    @JSONElement("client-token")
     private String clientToken;
 
     /**
      * The endpoint function.
      */
+    @JSONElement("endpoint")
     private EndPointFunction endPointFunction;
 
     public Header() {
@@ -32,7 +34,11 @@ public class Header implements JSONSerializable {
         this(null, endPointFunction);
     }
 
-    public Header(String clientToken, EndPointFunction endPointFunction) {
+    @JSONDesignatedConstructor
+    public Header(
+            @JSONElement("client-token") String clientToken,
+            @JSONElement("endpoint") EndPointFunction endPointFunction
+    ) {
         this.clientToken = clientToken;
         this.endPointFunction = endPointFunction;
     }
@@ -65,40 +71,6 @@ public class Header implements JSONSerializable {
      */
     public void setEndPointFunction(EndPointFunction endPointFunction) {
         this.endPointFunction = endPointFunction;
-    }
-
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        if (jsonObject.has(RequestFields.Header.CLIENT_TOKEN.toString())) {
-            this.clientToken = jsonObject.getString(RequestFields.Header.CLIENT_TOKEN.toString());
-        }
-
-        if (jsonObject.has(RequestFields.Header.ENDPOINT.toString())) {
-            this.endPointFunction = EndPointFunction.fromEndPointFunctionName(
-                    jsonObject.getString(RequestFields.Header.ENDPOINT.toString())
-            );
-        }
-    }
-
-    @Override
-    public JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
-
-        if (this.clientToken != null) {
-            jsonObject.put(
-                    RequestFields.Header.CLIENT_TOKEN.toString(),
-                    this.clientToken
-            );
-        }
-
-        if (this.endPointFunction != null) {
-            jsonObject.put(
-                    RequestFields.Header.ENDPOINT.toString(),
-                    this.endPointFunction.toString()
-            );
-        }
-
-        return jsonObject;
     }
 
     @Override

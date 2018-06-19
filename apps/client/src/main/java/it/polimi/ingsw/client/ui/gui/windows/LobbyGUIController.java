@@ -27,30 +27,23 @@ import java.util.concurrent.CompletableFuture;
 
 public class LobbyGUIController implements Initializable {
 
-    private LobbyController proxyController;
-
     @FXML
     @Localized(key = Constants.Strings.LOBBY_TITLE, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label titleLabel;
-
     @FXML
     public JFXListView<Label> playersListView;
-
     @FXML
     public Label secondsLabel;
-
     @FXML
     @Localized(key = Constants.Strings.LOBBY_SECONDS_TEXT_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label secondsTextLabel;
-
     @FXML
     @Localized(key = Constants.Strings.LOBBY_WAITING_FOR_PLAYERS_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label waitingForPlayersLabel;
-
     @FXML
     @Localized(key = Constants.Strings.LOBBY_BACK_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton backButton;
-
+    private LobbyController proxyController;
     private FXMLLoader loader = new FXMLLoader();
 
     private Timer timer = new Timer();
@@ -111,14 +104,14 @@ public class LobbyGUIController implements Initializable {
 
     public void onUpdateReceived(ILobby update) {
         Platform.runLater(() -> {
-            for (int i = 0; i < update.getPlayers().size(); i++) {
-                IPlayer player = update.getPlayers().get(i);
+            for (int i = 0; i < update.getPlayers().length; i++) {
+                IPlayer player = update.getPlayers()[i];
 
                 this.playersListView.getItems().get(i)
                         .setText(String.format("(%d) %s", player.getId(), player.getUsername()));
             }
 
-            for (int i = update.getPlayers().size(); i < 4; i++) {
+            for (int i = update.getPlayers().length; i < 4; i++) {
                 this.playersListView.getItems().get(i).setText("");
             }
 

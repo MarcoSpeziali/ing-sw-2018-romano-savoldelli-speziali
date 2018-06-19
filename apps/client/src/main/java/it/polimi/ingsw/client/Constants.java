@@ -39,22 +39,23 @@ public class Constants {
         }
     }
 
+    @SuppressWarnings({"unused", "SpellCheckingInspection"})
     public enum Resources {
         IDRA_PUBLIC_KEY("public.der"),
 
-        CELL_ONE("images/cells/cell_one.png"),
-        CELL_TWO("images/cells/cell_two.png"),
-        CELL_THREE("images/cells/cell_three.png"),
-        CELL_FOUR("images/cells/cell_four.png"),
-        CELL_FIVE("images/cells/cell_five.png"),
-        CELL_SIX("images/cells/cell_six.png"),
+        CELL_1("images/cells/cell_one.png"),
+        CELL_2("images/cells/cell_two.png"),
+        CELL_3("images/cells/cell_three.png"),
+        CELL_4("images/cells/cell_four.png"),
+        CELL_5("images/cells/cell_five.png"),
+        CELL_6("images/cells/cell_six.png"),
 
-        DICE_ONE("images/dice/dice_one.png"),
-        DICE_TWO("images/dice/dice_two.png"),
-        DICE_THREE("images/dice/dice_three.png"),
-        DICE_FOUR("images/dice/dice_four.png"),
-        DICE_FIVE("images/dice/dice_five.png"),
-        DICE_SIX("images/dice/dice_six.png"),
+        DIE_1("images/dice/dice_one.png"),
+        DIE_2("images/dice/dice_two.png"),
+        DIE_3("images/dice/dice_three.png"),
+        DIE_4("images/dice/dice_four.png"),
+        DIE_5("images/dice/dice_five.png"),
+        DIE_6("images/dice/dice_six.png"),
 
         SIGN_UP_FXML("FXML/Window/SignUp.fxml"),
         SIGN_IN_FXML("FXML/Window/SignIn.fxml"),
@@ -93,7 +94,6 @@ public class Constants {
         OBJECTIVE_CARD_ROW_SHADE_VARIETY("images/objectiveCards/row_shade_variety.jpg"),
         OBJECTIVE_CARD_SHADE_VARIETY("images/objectiveCards/shade_variety.jpg"),
         OBJECTIVE_CARD_YELLOW_SHADE("images/objectiveCards/yellow_shade.jpg");
-
 
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
         private final String relativePath;

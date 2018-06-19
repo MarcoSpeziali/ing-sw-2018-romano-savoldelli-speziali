@@ -40,6 +40,19 @@ public final class Settings extends SettingsBase {
     @Setting(id = "maximum-num-players", defaultValue = "4", type = Integer.class)
     private long maximumNumberOfPlayers;
 
+    private Settings(String path) throws IllegalAccessException {
+        super(path);
+    }
+
+    public static Settings getSettings() {
+        try {
+            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
+        }
+        catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public int getSocketPort() {
         return socketPort;
     }
@@ -90,18 +103,5 @@ public final class Settings extends SettingsBase {
 
     public TimeUnit getRmiHeartBeatTimeUnit() {
         return rmiHeartBeatTimeUnit;
-    }
-
-    public static Settings getSettings() {
-        try {
-            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    private Settings(String path) throws IllegalAccessException {
-        super(path);
     }
 }

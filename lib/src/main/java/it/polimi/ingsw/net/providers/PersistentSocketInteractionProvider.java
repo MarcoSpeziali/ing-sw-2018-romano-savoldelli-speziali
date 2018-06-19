@@ -6,7 +6,7 @@ import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import org.json.JSONObject;
 
@@ -119,7 +119,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
      *
      * @param request the {@link Request} to send
      * @return a {@link Response} produced by the server
-     * @throws IOException                  if any IO error occurs
+     * @throws IOException if any IO error occurs
      */
     @Override
     public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException {
@@ -217,14 +217,12 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
             JSONObject jsonObject = new JSONObject(jsonData);
 
             if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
-                Response<? extends JSONSerializable> response = new Response<>();
-                response.deserialize(new JSONObject(jsonData));
+                @SuppressWarnings("unchecked") Response<? extends JSONSerializable> response = JSONSerializable.deserialize(Response.class, jsonData);
 
                 this.handleResponse(response);
             }
             else if (jsonObject.has(RequestFields.REQUEST.toString())) {
-                Request<? extends JSONSerializable> request = new Request<>();
-                request.deserialize(new JSONObject(jsonData));
+                @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = JSONSerializable.deserialize(Request.class, jsonData);
 
                 Response<? extends JSONSerializable> response = handleRequest(request);
 

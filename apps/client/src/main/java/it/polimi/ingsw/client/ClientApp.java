@@ -16,6 +16,8 @@ public class ClientApp {
         // parses the arguments
         OptionSet options = getOptionParser().parse(args);
 
+        Thread.setDefaultUncaughtExceptionHandler(ClientApp::logError);
+
         try {
             ClientLogger.setLoggingLevel(Level.FINEST);
 
@@ -34,7 +36,6 @@ public class ClientApp {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
             ClientLogger.getLogger().log(Level.SEVERE, "An unrecoverable error occurred: ", e);
         }
     }
@@ -64,5 +65,9 @@ public class ClientApp {
         if (!logFolder.isDirectory() && !logFolder.mkdirs()) {
             throw new IOException("Could not directory structure: " + (Constants.Paths.LOG_FOLDER.getAbsolutePath()));
         }
+    }
+
+    private static void logError(Thread t, Throwable e) {
+        ClientLogger.getLogger().log(Level.SEVERE, "Exception in thread " + t.getName(), e);
     }
 }

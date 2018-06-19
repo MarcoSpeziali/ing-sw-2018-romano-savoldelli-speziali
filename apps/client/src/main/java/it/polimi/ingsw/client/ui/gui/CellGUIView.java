@@ -1,30 +1,36 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.CellController;
 import it.polimi.ingsw.core.Player;
-import it.polimi.ingsw.listeners.OnDiePickedListener;
-import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
-import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.utils.io.Resources;
 import it.polimi.ingsw.views.CellView;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.concurrent.CompletableFuture;
+import java.net.URL;
+import java.util.logging.Level;
 
 public class CellGUIView extends CellView {
+
+    @FXML
+    public AnchorPane colorAnchorPane;
+
+    @FXML
+    public AnchorPane dieAnchorPane;
+
+    @FXML
+    public AnchorPane defaultDieAnchorPane;
+
+    @FXML
+    public ImageView shadeImageView;
 
     private String path;
 
@@ -40,62 +46,38 @@ public class CellGUIView extends CellView {
         this.cellController.onDiePut(Player.getCurrentPlayer().pickDie());
     }
 
-    @FXML
-    public AnchorPane colorAnchorPane, dieAnchorPane;
-
-    public AnchorPane defaultDieAnchorPane;
-
-    @FXML
-    public ImageView shadeImageView;
-
     @Override
     public void setCell(Cell cell) {
         super.cell = cell;
         if (super.cell.getShade() > 0) {
-            switch (super.cell.getShade()) {
-                case 1:
-                    path = Constants.Resources.CELL_ONE.getRelativePath();
-                    break;
-                case 2:
-                    path = Constants.Resources.CELL_TWO.getRelativePath();
-                    break;
-                case 3:
-                    path = Constants.Resources.CELL_THREE.getRelativePath();
-                    break;
-                case 4:
-                    path = Constants.Resources.CELL_FOUR.getRelativePath();
-                    break;
-                case 5:
-                    path = Constants.Resources.CELL_FIVE.getRelativePath();
-                    break;
-                case 6:
-                    path = Constants.Resources.CELL_SIX.getRelativePath();
-                    break;
+            String resourceName = String.format("CELL_%d", super.cell.getShade());
+            String relativePath = Constants.Resources.valueOf(resourceName).getRelativePath();
+            URL resourceUrl = Resources.getResource(CellGUIView.class.getClassLoader(), relativePath);
 
-            }
-
-            try {
-                shadeImageView.setImage(new Image(Resources.getResource(CellGUIView.class.getClassLoader(), path).openStream()));
-            }
-            catch (IOException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            if (super.cell.getShade() == 0 & super.cell.getColor() == null) {
-                colorAnchorPane.setStyle("-fx-background-color: white");
+            if (resourceUrl != null) {
+                try {
+                    this.shadeImageView.setImage(new Image(resourceUrl.openStream()));
+                }
+                catch (IOException e) {
+                    ClientLogger.getLogger().log(Level.SEVERE, "IOException while reading image at path: " + relativePath, e);
+                }
             }
             else {
-                colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
+                ClientLogger.getLogger().log(Level.WARNING, "Could not retrieve image for resource {0}", resourceName);
             }
-
+        }
+        else if (super.cell.getColor() == null) { // super.cell.getShade() == 0 always
+            colorAnchorPane.setStyle("-fx-background-color: white");
+        }
+        else {
+            colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
         }
     }
 
     public void onUpdateReceived(Cell cell) {
         Platform.runLater(() -> {
             if (!cell.isOccupied()) {
-            dieAnchorPane = defaultDieAnchorPane;
+                dieAnchorPane = defaultDieAnchorPane;
             }
             else {
                 FXMLLoader loader = new FXMLLoader();
@@ -105,7 +87,8 @@ public class CellGUIView extends CellView {
                 defaultDieAnchorPane = dieAnchorPane;
                 try {
                     dieAnchorPane = loader.load();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }

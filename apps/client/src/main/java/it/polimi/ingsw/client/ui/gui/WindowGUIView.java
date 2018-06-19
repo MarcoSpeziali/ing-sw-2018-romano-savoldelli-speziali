@@ -5,10 +5,7 @@ import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.views.WindowView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -57,8 +54,6 @@ public class WindowGUIView extends WindowView {
         }
 
     }
-
-
 
 
 }

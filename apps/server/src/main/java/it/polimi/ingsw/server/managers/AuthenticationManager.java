@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.managers;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.sql.DatabaseSession;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;

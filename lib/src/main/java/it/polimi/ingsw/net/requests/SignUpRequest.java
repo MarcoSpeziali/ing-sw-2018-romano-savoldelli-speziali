@@ -1,28 +1,33 @@
 package it.polimi.ingsw.net.requests;
 
-import it.polimi.ingsw.utils.io.JSONSerializable;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 public class SignUpRequest implements JSONSerializable {
 
-    public static final String USERNAME_FIELD = "username";
-    @SuppressWarnings("squid:S2068")
-    public static final String PASSWORD_FIELD = "password";
     private static final long serialVersionUID = 3564382168491273076L;
+
     /**
      * The player's username.
      */
+    @JSONElement("username")
     private String username;
 
     /**
      * The player's password.
      */
+    @JSONElement("password")
     private String password;
 
     public SignUpRequest() {
     }
 
-    public SignUpRequest(String username, String password) {
+    @JSONDesignatedConstructor
+    public SignUpRequest(
+            @JSONElement("username") String username,
+            @JSONElement("password") String password
+    ) {
         this.username = username;
         this.password = password;
     }
@@ -53,21 +58,5 @@ public class SignUpRequest implements JSONSerializable {
      */
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        this.username = jsonObject.getString(USERNAME_FIELD);
-        this.password = jsonObject.getString(PASSWORD_FIELD);
-    }
-
-    @Override
-    public JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put(USERNAME_FIELD, this.username);
-        jsonObject.put(PASSWORD_FIELD, this.password);
-
-        return jsonObject;
     }
 }

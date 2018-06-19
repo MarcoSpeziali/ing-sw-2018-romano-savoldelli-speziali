@@ -1,16 +1,11 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import it.polimi.ingsw.client.ClientApp;
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.controllers.ToolCardController;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.utils.io.Resources;
 import it.polimi.ingsw.views.ToolCardView;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.skin.LabeledSkinBase;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,12 +15,11 @@ import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 
-public class ToolCardGUIView extends ToolCardView implements GUIView {
+public class ToolCardGUIView extends ToolCardView {
     public ToolCardGUIView(ToolCard toolCard) {
         super(toolCard);
     }
 
-    @Override
     public Node render() {
         ImageView view = new ImageView();
         AnchorPane root = new AnchorPane();
@@ -63,7 +57,8 @@ public class ToolCardGUIView extends ToolCardView implements GUIView {
         view.setFitWidth(200);
         try {
             view.setImage(new Image(Resources.getResource(ToolCardGUIView.class.getClassLoader(), path).openStream()));
-        } catch (IOException | NullPointerException e) {
+        }
+        catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
         root.getChildren().add(view);

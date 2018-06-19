@@ -4,6 +4,6 @@ import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface UpdateInterface<T extends Remote> extends Remote, Serializable {
+public interface UpdateInterface<T extends Serializable> extends Remote, Serializable {
     void onUpdateReceived(T update) throws RemoteException;
 }

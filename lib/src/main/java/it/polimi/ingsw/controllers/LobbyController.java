@@ -7,5 +7,6 @@ import java.io.IOException;
 
 public interface LobbyController extends ProxyUpdateInterface<ILobby> {
     void init() throws IOException;
+
     void close() throws IOException;
 }

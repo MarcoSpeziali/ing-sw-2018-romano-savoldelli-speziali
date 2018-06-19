@@ -6,32 +6,28 @@ import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
-
-/**
- *
- */
 public class Bag implements RandomPutLocation, RandomPickLocation {
+
+    private static final long serialVersionUID = 6448459092375565034L;
 
     private Map<GlassColor, Integer> dice = new EnumMap<>(GlassColor.class);
     private List<GlassColor> colors;
-    private int number;
-
+    private int numberOfDicePerColor;
+    private Random randomProvider;
 
     /**
-     * Sets up a new {@link Bag} assigning a specified number of dice per color.
+     * Sets up a new {@link Bag} assigning a specified numberOfDicePerColor of dice per color.
      *
-     * @param number the number of dice per color.
+     * @param number the numberOfDicePerColor of dice per color.
      */
     public Bag(int number) {
-
-        this.number = number;
+        this.randomProvider = new Random(System.currentTimeMillis());
+        this.numberOfDicePerColor = number;
         this.colors = new ArrayList<>(Arrays.asList(GlassColor.values()));
 
-        for (GlassColor color : GlassColor.values()) {
-            dice.put(color, number);
-        }
+        Arrays.stream(GlassColor.values())
+                .forEach(color -> dice.put(color, number));
     }
 
     /**
@@ -52,17 +48,17 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
     /**
      * Picks a random instance of die and decrements the initial amount of dice.
      *
-     * @return a random incance of {@link Die}.
+     * @return a random instance of {@link Die}.
      */
     @Override
     public Die pickDie() {
-
         if (colors.isEmpty()) {
             throw new EmptyBagException("The bag has no dice left!");
         }
-        int shade = ThreadLocalRandom.current().nextInt(1, 7);
-        Random rand = new Random();
-        GlassColor randColor = colors.get(rand.nextInt(colors.size()));
+
+        int shade = randomProvider.nextInt(7) + 1;
+        GlassColor randColor = colors.get(randomProvider.nextInt(colors.size()));
+
         dice.merge(randColor, -1, Integer::sum);
 
         if (dice.get(randColor) == 0) {
@@ -77,7 +73,9 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
      */
     @Override
     public int getNumberOfDice() {
-        return dice.values().stream().reduce((sum, x) -> (sum + x)).orElse(0);
+        return dice.values().stream()
+                .reduce(Integer::sum)
+                .orElse(0);
     }
 
     /**
@@ -93,7 +91,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation {
      */
     @Override
     public int getFreeSpace() {
-        return 5 * this.number - this.getNumberOfDice();
+        return GlassColor.values().length * this.numberOfDicePerColor - this.getNumberOfDice();
     }
 }
 

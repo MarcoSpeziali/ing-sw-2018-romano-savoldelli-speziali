@@ -1,21 +1,21 @@
 package it.polimi.ingsw.net.requests;
 
-import it.polimi.ingsw.utils.io.JSONSerializable;
-import org.json.JSONObject;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 public class SignInRequest implements JSONSerializable {
 
-    public static final String USERNAME_FIELD = "username";
     private static final long serialVersionUID = 4772264309612799337L;
+
     /**
      * The player's username.
      */
+    @JSONElement("username")
     private String username;
 
-    public SignInRequest() {
-    }
-
-    public SignInRequest(String username) {
+    @JSONDesignatedConstructor
+    public SignInRequest(@JSONElement("username") String username) {
         this.username = username;
     }
 
@@ -31,19 +31,5 @@ public class SignInRequest implements JSONSerializable {
      */
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @Override
-    public void deserialize(JSONObject jsonObject) {
-        this.username = jsonObject.getString(USERNAME_FIELD);
-    }
-
-    @Override
-    public JSONObject serialize() {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put(USERNAME_FIELD, this.username);
-
-        return jsonObject;
     }
 }

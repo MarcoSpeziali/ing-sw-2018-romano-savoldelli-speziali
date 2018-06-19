@@ -16,10 +16,9 @@ public class LobbySocketProxyController implements LobbyController {
 
     private static final long serialVersionUID = -6798215473610760987L;
     private final String clientToken;
-
+    private final transient Object syncObject = new Object();
     private transient PersistentSocketInteractionProvider persistentSocketInteractionProvider;
     private transient ILobby lobbyResult;
-    private final transient Object syncObject = new Object();
 
     public LobbySocketProxyController(String remoteHost, int remotePort, String clientToken) {
         this.clientToken = clientToken;

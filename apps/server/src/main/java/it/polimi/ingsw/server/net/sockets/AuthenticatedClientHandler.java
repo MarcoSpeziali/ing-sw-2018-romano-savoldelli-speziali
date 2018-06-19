@@ -9,7 +9,7 @@ import it.polimi.ingsw.server.managers.AuthenticationManager;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.net.Socket;

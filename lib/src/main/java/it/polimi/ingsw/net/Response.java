@@ -1,15 +1,16 @@
 package it.polimi.ingsw.net;
 
-import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.io.JSONSerializable;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONRootElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import org.json.JSONObject;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Represents a response to a request.
  */
+@JSONRootElement(value = "response", isOptional = true)
 public class Response<T extends JSONSerializable> implements JSONSerializable {
 
     private static final long serialVersionUID = -3163357263339164222L;
@@ -17,25 +18,39 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
     /**
      * The header of the response.
      */
+    @JSONElement("header")
     private Header header;
 
     /**
      * The body of the response.
      */
+    @JSONElement("body")
     private T body;
 
     /**
      * The error (if any) of the response.
      */
+    @JSONElement("error")
     private ResponseError error;
-
-    public Response() {
-
-    }
 
     public Response(Header header, T body, ResponseError error) {
         this.header = header;
         this.body = body;
+        this.error = error;
+    }
+
+    @JSONDesignatedConstructor
+    Response(
+            @JSONElement("header") Header requestHeader,
+            @JSONElement("error") ResponseError error,
+            @JSONElement(value = "body", keepRaw = true) JSONObject responseBody
+    ) throws ClassNotFoundException {
+        this.header = requestHeader;
+        //noinspection unchecked
+        this.body = JSONSerializable.deserialize(
+                (Class<T>) Class.forName(responseBody.getString(ResponseFields.Body.CLASS_TYPE.toString())),
+                responseBody
+        );
         this.error = error;
     }
 
@@ -69,71 +84,19 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
     }
 
     @Override
-    public void deserialize(JSONObject jsonObject) {
-        if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
-            jsonObject = jsonObject.getJSONObject(ResponseFields.RESPONSE.toString());
-        }
-
-        this.header = new Header();
-        this.header.deserialize(jsonObject.getJSONObject(RequestFields.HEADER.toString()));
-
-        if (jsonObject.has(ResponseFields.BODY.toString())) {
-            JSONObject bodyObject = jsonObject.getJSONObject(ResponseFields.BODY.toString());
-
-            try {
-                this.body = this.instantiateBody(bodyObject.getString(ResponseFields.Body.CLASS_TYPE.toString()));
-            }
-            catch (NoSuchMethodException |
-                    InstantiationException |
-                    InvocationTargetException |
-                    ClassNotFoundException |
-                    IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-
-            this.body.deserialize(jsonObject.getJSONObject(ResponseFields.BODY.toString()));
-        }
-
-        if (jsonObject.has(ResponseFields.ERROR.toString())) {
-            this.error = new ResponseError();
-            this.error.deserialize(jsonObject.getJSONObject(ResponseFields.ERROR.toString()));
-        }
-    }
-
-    @Override
     public JSONObject serialize() {
-        JSONObject mainJsonObject = new JSONObject();
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = JSONSerializable.super.serialize();
 
-        jsonObject.put(ResponseFields.HEADER.toString(), this.header.serialize());
+        jsonObject
+                .getJSONObject(ResponseFields.RESPONSE.toString())
+                .getJSONObject(ResponseFields.BODY.toString())
+                .put(ResponseFields.Body.CLASS_TYPE.toString(), this.body.getClass().getName());
 
-        if (this.error != null) {
-            jsonObject.put(
-                    ResponseFields.ERROR.toString(),
-                    this.error.serialize()
-            );
-        }
-
-        if (this.body != null) {
-            JSONObject serializedBody = this.body.serialize();
-            serializedBody.put(ResponseFields.Body.CLASS_TYPE.toString(), this.body.getClass().getName());
-
-            jsonObject.put(
-                    ResponseFields.BODY.toString(),
-                    serializedBody
-            );
-        }
-
-        mainJsonObject.put(ResponseFields.RESPONSE.toString(), jsonObject);
-        return mainJsonObject;
+        return jsonObject;
     }
 
     @Override
     public String toString() {
         return this.serialize().toString();
-    }
-
-    private T instantiateBody(String className) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-        return (T) Class.forName(className).getConstructor().newInstance();
     }
 }
