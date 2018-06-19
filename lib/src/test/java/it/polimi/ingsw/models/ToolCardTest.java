@@ -1,6 +1,6 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.IEffect;
+import it.polimi.ingsw.net.mocks.IEffect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

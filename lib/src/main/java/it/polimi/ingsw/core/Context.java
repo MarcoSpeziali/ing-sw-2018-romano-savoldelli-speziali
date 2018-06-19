@@ -17,15 +17,17 @@ public class Context implements Serializable {
     public static final String ROUND_TRACK = "round_track";
     public static final String CURRENT_PLAYER = "current_player";
     public static final String MATCH = "match";
+    
     private static final long serialVersionUID = -3619852381252122217L;
+    
     /**
      * The singleton of the {@link Context}.
      */
     private static Context singleton;
+    
     /**
      * The context's variables are stored into an {@link HashMap}.
      */
-    @SuppressWarnings("WeakerAccess")
     protected HashMap<String, Object> hashMap;
 
     protected Context() {

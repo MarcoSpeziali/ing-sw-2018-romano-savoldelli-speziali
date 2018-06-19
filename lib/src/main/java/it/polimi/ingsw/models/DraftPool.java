@@ -6,28 +6,36 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class DraftPool implements ChoosablePickLocation, RandomPutLocation {
+public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSONSerializable {
 
     private static final long serialVersionUID = -7184365776887971173L;
 
+    @JSONElement("dice")
     private LinkedList<Die> dice;
 
-    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
-    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+    private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
+    private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
 
     /**
      * Sets up a new {@link DraftPool}.
      */
-
     public DraftPool() {
         this.dice = new LinkedList<>();
     }
 
+    @JSONDesignatedConstructor
+    DraftPool(@JSONElement("dice") List<Die> dice) {
+        this.dice = new LinkedList<>(dice);
+    }
+    
     /**
      * Removes the die from the DraftPool and returns it.
      *

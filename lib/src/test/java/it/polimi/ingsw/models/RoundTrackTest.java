@@ -1,32 +1,22 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.listeners.OnDiePickedListener;
-import it.polimi.ingsw.listeners.OnDiePutListener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 
 class RoundTrackTest {
     private RoundTrack roundTrack;
-    private byte numberOfRounds = 10;
     private Die die1 = new Die(4, GlassColor.BLUE);
     private Die die2 = new Die(2, GlassColor.RED);
     private Die die3 = new Die(1, GlassColor.GREEN);
-    private List<OnDiePickedListener> onDiePickedListeners;
-    private List<OnDiePutListener> onDiePutListeners;
-
 
     @BeforeEach
     void setUp() {
-
+        byte numberOfRounds = 10;
         roundTrack = new RoundTrack(numberOfRounds);
-        onDiePutListeners = new LinkedList<>();
-        onDiePickedListeners = new LinkedList<>();
-
     }
 
     @Test
@@ -125,21 +115,5 @@ class RoundTrackTest {
         roundTrack.setDieForRoundAtIndex(die2, 2, 1);
         roundTrack.setDieForRoundAtIndex(die1, 5, 0);
         Assertions.assertEquals(1266, roundTrack.getFreeSpace());
-    }
-
-    @Test
-    void addPickListener() {
-    }
-
-    @Test
-    void addPutListener1() {
-    }
-
-    @Test
-    void removePickListener() {
-    }
-
-    @Test
-    void removePutListener1() {
     }
 }

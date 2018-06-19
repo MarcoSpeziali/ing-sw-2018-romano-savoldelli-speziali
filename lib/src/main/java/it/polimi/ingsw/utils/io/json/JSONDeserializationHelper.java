@@ -11,6 +11,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class JSONDeserializationHelper {
 
@@ -145,6 +148,27 @@ class JSONDeserializationHelper {
         if (targetClass.isArray()) {
             return getArrayObject(targetClass, elementInfo, jsonObject);
         }
+        else if (List.class.isAssignableFrom(targetClass)) {
+            Object obj = getArrayObject(targetClass, elementInfo, jsonObject);
+            
+            if (obj == null) {
+                return null;
+            }
+            
+            return List.of((Object[]) obj);
+        }
+        else if (Set.class.isAssignableFrom(targetClass)) {
+            Object obj = getArrayObject(targetClass, elementInfo, jsonObject);
+    
+            if (obj == null) {
+                return null;
+            }
+    
+            return Set.of((Object[]) obj);
+        }
+        else if (Map.class.isAssignableFrom(targetClass)) {
+            return getMapOrNull(elementInfo, jsonObject);
+        }
         else if (JSONSerializable.class.isAssignableFrom(targetClass)) {
             if (jsonObject.has(elementInfo.value())) {
                 return deserialize(targetClass.asSubclass(JSONSerializable.class), jsonObject.getJSONObject(elementInfo.value()));
@@ -161,6 +185,9 @@ class JSONDeserializationHelper {
             return getOrNull(jsonObject, elementInfo.value());
         }
         else if (targetClass.equals(Integer.class) || targetClass.equals(int.class)) {
+            return getOrZero(jsonObject, elementInfo.value());
+        }
+        else if (targetClass.equals(Byte.class) || targetClass.equals(byte.class)) {
             return getOrZero(jsonObject, elementInfo.value());
         }
         else if (targetClass.equals(Long.class) || targetClass.equals(long.class)) {
@@ -216,10 +243,6 @@ class JSONDeserializationHelper {
 
             Object[] objects = getJSONSerializableObjects(targetClass.getComponentType(), jsonObjects);
 
-            if (objects == null) {
-                return null;
-            }
-
             //noinspection unchecked
             return Arrays.copyOf(objects, objects.length, (Class<T[]>) targetClass);
         }
@@ -227,12 +250,16 @@ class JSONDeserializationHelper {
             return getOrNull(jsonObject, elementInfo.value());
         }
     }
-
-    private static <T extends JSONSerializable> Object[] getJSONSerializableObjects(Class<?> targetClass, JSONObject[] jsonObjects) {
-        if (jsonObjects == null) {
+    
+    private static Map getMapOrNull(JSONElement elementInfo, JSONObject jsonObject) {
+        if (!jsonObject.has(elementInfo.value())) {
             return null;
         }
+        
+        return (Map) jsonObject.get(elementInfo.value());
+    }
 
+    private static <T extends JSONSerializable> Object[] getJSONSerializableObjects(Class<?> targetClass, JSONObject[] jsonObjects) {
         Object[] objects = new Object[jsonObjects.length];
 
         for (int i = 0; i < objects.length; i++) {

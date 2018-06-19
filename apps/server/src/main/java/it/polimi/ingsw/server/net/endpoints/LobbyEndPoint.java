@@ -277,6 +277,9 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     private void sendUpdates(DatabaseLobby databaseLobby, DatabasePlayer exceptTo) {
         lobbyControllers.forEach(
                 (databasePlayer, lobbyRMIProxyController) -> {
+                    
+                    // TODO: check if player in lobby
+                    
                     if (!databasePlayer.equals(exceptTo)) {
                         lobbyRMIProxyController.onUpdateReceived(new LobbyMock(databaseLobby));
                     }
@@ -284,6 +287,8 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
         );
         List<AuthenticatedClientHandler> clientsToUpdate = AuthenticatedClientHandler.getHandlerForPlayersExcept(exceptTo);
         clientsToUpdate.forEach(client -> {
+                    // TODO: check if player in lobby
+            
                     try {
                         client.sendResponse(new Response<>(
                                 new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
@@ -300,9 +305,13 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
 
     private void sendUpdates(DatabaseLobby databaseLobby) {
         lobbyControllers.forEach(
+                // TODO: check if player in lobby
+                
                 (databasePlayer, lobbyRMIProxyController) -> lobbyRMIProxyController.onUpdateReceived(new LobbyMock(databaseLobby))
         );
         Arrays.stream(databaseLobby.getPlayers()).forEach(iPlayer -> {
+                    // TODO: check if player in lobby
+            
                     try {
                         AuthenticatedClientHandler.getHandlerForPlayer((DatabasePlayer) iPlayer).sendResponse(new Response<>(
                                 new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),

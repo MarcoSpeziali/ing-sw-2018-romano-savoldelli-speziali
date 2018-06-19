@@ -24,6 +24,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     private int rows;
     @JSONElement("columns")
     private int columns;
+    private String siblingId;
     // Cannot be serialized, because it will generate a stack overflow
     private Window sibling;
     // A multi-dimensional array cannot be serialized
@@ -70,6 +71,8 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         for (int i = 0; i < rows; i++) {
             System.arraycopy(cells, i * columns, this.cells[i], 0, columns);
         }
+        
+        this.siblingId = siblingId;
     }
 
     /**
@@ -205,14 +208,18 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     public int getRows() {
         return rows;
     }
-
+    
     /**
      * @return the number of columns.
      */
     public int getColumns() {
         return columns;
     }
-
+    
+    public String getSiblingId() {
+        return siblingId;
+    }
+    
     /**
      * Check which initial locations are allowed in the window for a spcified die.
      *
@@ -258,7 +265,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
         return edges;
     }
-
+    
     /**
      * Checks if color and shade similarity rules of adjacent orthogonal dice are respected, then inspects a specified cell.
      *
@@ -282,7 +289,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
         return null;
     }
-
+    
     /**
      * Inspects a specified cell, verifying its correct matching of color and shade with a target {@link Die}.
      *
@@ -303,7 +310,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
         return null;
     }
-
+    
     /**
      * Inspect the surrounding cells of a target one, referring to the location parameter.
      *
@@ -332,7 +339,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
         return surrounding;
     }
-
+    
     /**
      * Checks which locations are allowed in the window for a specified die.
      *
@@ -376,11 +383,11 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 .collect(Collectors.toList());
 
     }
-
+    
     public void addPutListener(OnDiePutListener onDiePutListener) {
         this.onDiePutListeners.add(onDiePutListener);
     }
-
+    
     public void addPickListener(OnDiePickedListener onDiePickedListener) {
         this.onDiePickedListeners.add(onDiePickedListener);
     }

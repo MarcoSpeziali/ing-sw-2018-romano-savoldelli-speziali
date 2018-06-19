@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.IEffect;
+import it.polimi.ingsw.net.mocks.IEffect;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;

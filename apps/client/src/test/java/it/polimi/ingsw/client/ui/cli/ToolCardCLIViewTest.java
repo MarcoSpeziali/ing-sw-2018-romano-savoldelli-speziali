@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.core.IEffect;
+import it.polimi.ingsw.net.mocks.IEffect;
 import it.polimi.ingsw.models.ToolCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

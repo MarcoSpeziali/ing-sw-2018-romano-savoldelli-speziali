@@ -16,7 +16,6 @@ public class Turn {
     private PerformedAction state;
     private ToolCard toolCard;
 
-
     public Turn(Player currentPlayer, List<Turn> turns) {
         state = START;
         this.player = currentPlayer;

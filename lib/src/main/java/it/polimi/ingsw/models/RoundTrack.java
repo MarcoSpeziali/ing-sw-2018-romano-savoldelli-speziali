@@ -4,44 +4,57 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.ChoosablePutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
+import static it.polimi.ingsw.utils.streams.StreamUtils.invertBiConsumer;
 
+public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, JSONSerializable {
+    
+    private static final long serialVersionUID = -972922678430566496L;
+    
     /**
      * The default number of rounds.
      */
     public static final byte DEFAULT_ROUND_NUMBER = 10;
+    
     /**
      * The maximum number of rounds.
      */
     public static final byte MAX_ROUND_NUMBER = Byte.MAX_VALUE;
+    
     /**
      * The minimum number of rounds.
      */
     public static final byte MIN_ROUND_NUMBER = 1;
+    
     /**
      * The maximum number of discarded dice per round.
      */
     public static final byte MAX_NUMBER_OF_DICE_PER_ROUND = Byte.MAX_VALUE;
-    private static final long serialVersionUID = -972922678430566496L;
+    
     /**
      * The number of rounds.
      */
+    @JSONElement("round-number")
     private final byte numberOfRounds;
 
     /**
      *
      */
-    private List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
+    private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
 
     /**
      *
      */
-    private List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+    private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
     /**
      * Holds the dice discarded at the end of each round.
@@ -74,6 +87,16 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
         for (int i = 0; i < numberOfRounds; i++) {
             this.rounds.add(new LinkedList<>());
         }
+    }
+    
+    @JSONDesignatedConstructor
+    RoundTrack(
+            @JSONElement("round-number") byte numberOfRounds,
+            @JSONElement("location-die-map") Map<Integer, Die> locationDieMap
+    ) {
+        this(numberOfRounds);
+        
+        locationDieMap.forEach(invertBiConsumer(this::putDie));
     }
 
     /**
@@ -223,5 +246,23 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation {
      */
     private int computeLocation(int roundIndex, int dieIndex) {
         return (roundIndex << 8 & 0x0000FF00) | (dieIndex & 0x000000FF);
+    }
+    
+    @JSONElement("location-die-map")
+    Map<Integer, Die> getLocationDieMap() {
+        Map<Integer, Die> integerDieMap = new HashMap<>();
+    
+        for (int i = 0; i < this.numberOfRounds; i++) {
+            List<Die> roundDice = this.getDiceForRound(i);
+    
+            for (int j = 0; j < roundDice.size(); j++) {
+                integerDieMap.put(
+                        this.computeLocation(i, j),
+                        roundDice.get(j)
+                );
+            }
+        }
+        
+        return integerDieMap;
     }
 }

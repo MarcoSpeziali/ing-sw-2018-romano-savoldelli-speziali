@@ -1,50 +1,58 @@
 package it.polimi.ingsw.models;
 
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import it.polimi.ingsw.utils.text.LocalizedString;
 
-import java.io.Serializable;
-
-public abstract class Card implements Serializable {
+public abstract class Card implements JSONSerializable {
 
     private static final long serialVersionUID = -3678332528456922553L;
 
-    protected LocalizedString title;
-    protected LocalizedString description;
+    @JSONElement("title")
+    protected String title;
+    
+    @JSONElement("description")
+    protected String description;
 
     /**
      * @param title       the card's title
      * @param description the card's description
      */
-    public Card(String title, String description) {
-        this.title = new LocalizedString(title);
-        this.description = new LocalizedString(description);
+    @JSONDesignatedConstructor
+    public Card(
+            @JSONElement("title") String title,
+            @JSONElement("description") String description
+    ) {
+        this.title = title;
+        this.description = description;
     }
 
     /**
      * @return the card's title
      */
-    public LocalizedString getTitle() {
-        return this.title;
+    public String getTitle() {
+        return new LocalizedString(this.title).toString();
     }
 
     /**
      * @param title the card's title
      */
     public void setTitle(String title) {
-        this.title = new LocalizedString(title);
+        this.title = title;
     }
 
     /**
      * @return the card's description
      */
-    public LocalizedString getDescription() {
-        return this.description;
+    public String getDescription() {
+        return new LocalizedString(this.description).toString();
     }
 
     /**
      * @param description the card's description
      */
     public void setDescription(String description) {
-        this.description = new LocalizedString(description);
+        this.description = description;
     }
 }

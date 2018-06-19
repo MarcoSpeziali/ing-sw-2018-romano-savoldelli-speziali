@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.IObjective;
+import it.polimi.ingsw.net.mocks.IObjective;
 import it.polimi.ingsw.server.instructions.Instruction;
 import it.polimi.ingsw.utils.text.LocalizedString;
 

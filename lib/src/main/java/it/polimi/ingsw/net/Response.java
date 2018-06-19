@@ -46,11 +46,15 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
             @JSONElement(value = "body", keepRaw = true) JSONObject responseBody
     ) throws ClassNotFoundException {
         this.header = requestHeader;
-        //noinspection unchecked
-        this.body = JSONSerializable.deserialize(
-                (Class<T>) Class.forName(responseBody.getString(ResponseFields.Body.CLASS_TYPE.toString())),
-                responseBody
-        );
+        
+        if (responseBody != null) {
+            //noinspection unchecked
+            this.body = JSONSerializable.deserialize(
+                    (Class<T>) Class.forName(responseBody.getString(ResponseFields.Body.CLASS_TYPE.toString())),
+                    responseBody
+            );
+        }
+        
         this.error = error;
     }
 
@@ -87,10 +91,12 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
     public JSONObject serialize() {
         JSONObject jsonObject = JSONSerializable.super.serialize();
 
-        jsonObject
-                .getJSONObject(ResponseFields.RESPONSE.toString())
-                .getJSONObject(ResponseFields.BODY.toString())
-                .put(ResponseFields.Body.CLASS_TYPE.toString(), this.body.getClass().getName());
+        if (this.body != null) {
+            jsonObject
+                    .getJSONObject(ResponseFields.RESPONSE.toString())
+                    .getJSONObject(ResponseFields.BODY.toString())
+                    .put(ResponseFields.Body.CLASS_TYPE.toString(), this.body.getClass().getName());
+        }
 
         return jsonObject;
     }

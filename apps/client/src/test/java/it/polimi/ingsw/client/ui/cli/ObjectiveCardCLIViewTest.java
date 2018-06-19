@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.core.CardVisibility;
-import it.polimi.ingsw.core.IObjective;
+import it.polimi.ingsw.net.mocks.IObjective;
 import it.polimi.ingsw.models.ObjectiveCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

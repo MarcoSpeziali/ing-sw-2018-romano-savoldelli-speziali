@@ -4,24 +4,35 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.locations.EmptyBagException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.util.*;
 
-public class Bag implements RandomPutLocation, RandomPickLocation {
+public class Bag implements RandomPutLocation, RandomPickLocation, JSONSerializable {
 
     private static final long serialVersionUID = 6448459092375565034L;
 
+    @JSONElement("colors-remaining")
     private Map<GlassColor, Integer> dice = new EnumMap<>(GlassColor.class);
-    private List<GlassColor> colors;
+    
+    private transient List<GlassColor> colors;
+    
+    @JSONElement("dice-per-color")
     private int numberOfDicePerColor;
-    private Random randomProvider;
+    
+    private transient Random randomProvider;
 
     /**
      * Sets up a new {@link Bag} assigning a specified numberOfDicePerColor of dice per color.
      *
      * @param number the numberOfDicePerColor of dice per color.
      */
-    public Bag(int number) {
+    @JSONDesignatedConstructor
+    public Bag(
+            @JSONElement("dice-per-color") int number
+    ) {
         this.randomProvider = new Random(System.currentTimeMillis());
         this.numberOfDicePerColor = number;
         this.colors = new ArrayList<>(Arrays.asList(GlassColor.values()));
