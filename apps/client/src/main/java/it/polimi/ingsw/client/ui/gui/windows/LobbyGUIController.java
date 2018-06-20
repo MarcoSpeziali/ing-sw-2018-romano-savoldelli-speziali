@@ -68,7 +68,9 @@ public class LobbyGUIController implements Initializable {
 
         for (int i = 0; i < 4; i++) {
             Label lbl = new Label();
-            lbl.setStyle("-fx-alignment: CENTER; -fx-background-color: #00000000");
+            lbl.setStyle("-fx-alignment: CENTER; " +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14;");
 
             playersListView.getItems().add(lbl);
         }
@@ -82,12 +84,7 @@ public class LobbyGUIController implements Initializable {
         this.proxyController.close();
 
         loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
-        this.setScene(new Scene(loader.load(), 550, 722));
-    }
-
-    private void setScene(Scene scene) {
-        SagradaGUI.primaryStage.setScene(scene);
-        SagradaGUI.primaryStage.show();
+        SagradaGUI.showStage(loader.load(), 550, 722);
     }
 
     private void setUpFuture() {

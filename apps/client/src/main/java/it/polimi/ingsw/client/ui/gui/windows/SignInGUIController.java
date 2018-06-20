@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.ui.gui.windows;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.Settings;
@@ -18,16 +16,22 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import it.polimi.ingsw.utils.text.Localized;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
+
+import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 
 public class SignInGUIController extends SignInController {
 
@@ -52,6 +56,9 @@ public class SignInGUIController extends SignInController {
     @FXML
     @Localized(key = Constants.Strings.SIGN_IN_SIGN_IN_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public JFXButton singInButton;
+    @FXML
+    public StackPane stackPane;
+
     private FXMLLoader loader = new FXMLLoader();
 
     @FXML
@@ -97,29 +104,30 @@ public class SignInGUIController extends SignInController {
                     StreamExceptionWrapper.wrap(e);
                 }
             }, responseError -> {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                Text contentText = new Text();
+                JFXDialogLayout content = new JFXDialogLayout();
+                JFXDialog dialog = new JFXDialog(stackPane, content, CENTER);
+                JFXButton button = new JFXButton("OK");
+                button.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        dialog.close();
+                    }
+                });
 
                 if (responseError == ResponseFields.Error.UNAUTHORIZED) {
-                    alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_TITLE));
-                    alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT));
-                    contentText.setText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT));
+                    content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT)));
+                    content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT)));
                 }
                 else if (responseError == ResponseFields.Error.ALREADY_EXISTS) {
-                    alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ALREADY_EXISTS_TITLE));
-                    contentText.setText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ALREADY_EXISTS_CONTEXT_TEXT));
+                    content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ALREADY_EXISTS_TITLE)));
+                    content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ALREADY_EXISTS_CONTEXT_TEXT)));
                 }
                 else {
-                    alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_TITLE));
-                    alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_HEADER_TEXT));
-                    contentText.setText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_CONTENT_TEXT));
+                    content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_HEADER_TEXT)));
+                    content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_CONTENT_TEXT)));
                 }
-
-                contentText.setWrappingWidth(500);
-
-                alert.getDialogPane().setContent(contentText);
-
-                alert.showAndWait();
+                content.setActions(button);
+                dialog.show();
             });
         }
         catch (StreamExceptionWrapper e) {

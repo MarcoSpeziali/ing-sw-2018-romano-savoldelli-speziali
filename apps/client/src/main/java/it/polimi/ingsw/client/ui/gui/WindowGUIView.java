@@ -5,6 +5,7 @@ import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.views.WindowView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -25,33 +26,36 @@ public class WindowGUIView extends WindowView {
     @FXML
     public HBox difficultyHbox;
 
-    FXMLLoader loader = new FXMLLoader();
-
-    public WindowGUIView(Window window) {
-        super(window);
+    public WindowGUIView(){
     }
+
+
 
     public void setWindow(Window window) throws IOException {
         super.setWindow(window);
 
         nameLabel.setText(window.getId());
-
-        for (int i = 0; i < window.getRows(); i++) {
-            for (int j = 0; j < window.getColumns(); j++) {
-                loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
-                Parent cellView = loader.load();
-                CellGUIView controller = loader.getController();
-                controller.setCell(window.getCells()[i][j]);
-                gridPane.add(cellView, j, i);
-            }
-        }
         gridPane.setVgap(10);
         gridPane.setHgap(10);
+        for (int i = 0; i < window.getRows(); i++) {
+            for (int j = 0; j < window.getColumns(); j++) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
+                Node root = loader.load();
+                CellGUIView controller = loader.getController();
+                controller.setCell(window.getCells()[i][j]);
+                gridPane.add(root, j, i);
+
+            }
+        }
+
 
         for (int i = 0; i < window.getDifficulty(); i++) {
             Circle circle = (Circle) difficultyHbox.getChildren().get(i);
             circle.setFill(Paint.valueOf("#2c3e50"));
         }
+
+
 
     }
 

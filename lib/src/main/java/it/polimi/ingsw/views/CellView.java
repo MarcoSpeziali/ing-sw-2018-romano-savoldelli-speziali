@@ -11,8 +11,8 @@ public abstract class CellView {
     protected Cell cell;
 
     public CellView() {
-        this.cell.addListener((OnDiePickedListener) (die, location) -> this.cell.pickDie());
-        this.cell.addListener((OnDiePutListener) (die, location) -> this.cell.putDie(die));
+        //this.cell.addListener((OnDiePickedListener) (die, location) -> this.cell.pickDie());
+        //this.cell.addListener((OnDiePutListener) (die, location) -> this.cell.putDie(die));
     }
 
     public void setCellController(CellController cellController) {

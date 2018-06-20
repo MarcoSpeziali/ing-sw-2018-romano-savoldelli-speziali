@@ -16,7 +16,7 @@
                         <Font name="System Bold" size="25.0" />
                     </font>
                 </Label>
-                <Label fx:id="waitingForPlayersLabel" alignment="CENTER" layoutY="113.0" prefHeight="45.0" prefWidth="360.0" text="Waiting for other players to connect" textAlignment="CENTER" textFill="#c7ffde">
+                <Label fx:id="waitingForPlayersLabel" alignment="CENTER" layoutY="86.0" prefHeight="45.0" prefWidth="360.0" text="Waiting for other players to connect" textAlignment="CENTER" textFill="#c7ffde">
                     <font>
                         <Font size="17.0" />
                     </font>
@@ -26,13 +26,13 @@
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </JFXButton>
-                <JFXListView fx:id="playersListView" depth="4" fixedCellSize="50.0" focusTraversable="false" layoutX="78.0" layoutY="158.0" prefHeight="196.0" prefWidth="198.0" style="-fx-background-color: #00000000;" />
-                <Label id="seconds" fx:id="secondsLabel" layoutX="129.0" layoutY="354.0" text="30" textFill="#c7ffde">
+                <JFXListView fx:id="playersListView" depth="4" fixedCellSize="50.0" focusTraversable="false" layoutX="81.0" layoutY="131.0" prefHeight="203.0" prefWidth="198.0" style="-fx-background-color: #00000000;" />
+                <Label id="seconds" fx:id="secondsLabel" layoutX="140.0" layoutY="337.0" text="30" textFill="#c7ffde">
                     <font>
                         <Font size="75.0" />
                     </font>
                 </Label>
-                <Label fx:id="secondsTextLabel" alignment="CENTER" layoutY="434.0" prefHeight="16.0" prefWidth="360.0" text="second(s) before match starts" textFill="#c7ffde" />
+                <Label fx:id="secondsTextLabel" alignment="CENTER" layoutY="428.0" prefHeight="16.0" prefWidth="360.0" text="second(s) left" textFill="#c7ffde" />
             </children>
         </Pane>
     </left>

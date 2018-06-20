@@ -12,8 +12,12 @@ public class WindowCLIView extends WindowView implements CLIView {
     private CellCLIView[][] cellViews;
     private Scanner scanner = new Scanner(System.in); // FIXME usage?
 
-    public WindowCLIView(Window window) {
-        super(window);
+    public WindowCLIView() {
+    }
+
+    @Override
+    public void setWindow(Window window) throws IOException {
+        super.setWindow(window);
 
         this.cellViews = new CellCLIView[window.getRows()][window.getColumns()];
 
@@ -52,10 +56,6 @@ public class WindowCLIView extends WindowView implements CLIView {
         System.out.println();
 
 
-    }
-
-    public void setWindow(Window window) throws IOException {
-        super.setWindow(window);
     }
 
 }

@@ -65,6 +65,7 @@ public class Constants {
         GAME_DASHBOARD_FXML("FXML/Window/GameDashboard.fxml"),
         DIE_VIEW_FXML("FXML/DieView.fxml"),
         CELL_VIEW_FXML("FXML/CellView.fxml"),
+        WINDOW_VIEW("FXML/WindowView.fxml"),
 
         TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.jpg"),
         TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.jpg"),

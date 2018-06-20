@@ -8,6 +8,8 @@ import it.polimi.ingsw.models.Window;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 class WindowCLIViewTest {
 
     private WindowCLIView windowCLIView;
@@ -26,9 +28,10 @@ class WindowCLIViewTest {
     };
 
     @BeforeEach
-    void setup() {
+    void setup() throws IOException {
         this.window = new Window(4, 3, 4, "Test", null, cells);
-        windowCLIView = new WindowCLIView(window);
+        windowCLIView = new WindowCLIView();
+        windowCLIView.setWindow(window);
     }
 
     @Test

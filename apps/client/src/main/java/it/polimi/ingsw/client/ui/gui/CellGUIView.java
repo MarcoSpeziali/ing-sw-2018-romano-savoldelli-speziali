@@ -34,9 +34,7 @@ public class CellGUIView extends CellView {
 
     private String path;
 
-    public CellGUIView(Cell cell) {
-        setCell(cell);
-    }
+    public CellGUIView() {}
 
     private void diePicked() {
         this.cellController.onDiePicked();

@@ -9,8 +9,7 @@ public abstract class WindowView {
     protected Window window;
     protected WindowController windowController;
 
-    public WindowView(Window window) {
-        this.window = window;
+    public WindowView() {
     }
 
     public void setWindow(Window window) throws IOException {
