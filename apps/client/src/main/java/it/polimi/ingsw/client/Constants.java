@@ -171,6 +171,8 @@ public class Constants {
         public static final String SIGN_IN_ACCESS_DENIED_TITLE = "sign_in.access_denied.title";
         public static final String SIGN_IN_ACCESS_DENIED_HEADER_TEXT = "sign_in.access_denied.header_text";
         public static final String SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT = "sign_in.access_denied.content_text";
+        public static final String SIGN_IN_ALREADY_EXISTS_TITLE = "sign_in.already_exists.title";
+        public static final String SIGN_IN_ALREADY_EXISTS_CONTEXT_TEXT = "sign_in.already_exists.content_text";
         public static final String SIGN_IN_USERNAME_FIELD_PROMPT_TEXT = "sign_in.username_field.prompt_text";
         @SuppressWarnings("squid:S2068") // SonarLint = <3
         public static final String SIGN_IN_PASSWORD_FIELD_PROMPT_TEXT = "sign_in.password_field.prompt_text";

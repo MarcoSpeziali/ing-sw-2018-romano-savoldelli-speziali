@@ -76,13 +76,13 @@ public class DatabasePlayer implements IPlayer {
     public static DatabasePlayer updatePlayer(int id, Map<String, String> updateMap) throws SQLException {
         String update = updateMap.entrySet().stream()
                 .map(stringStringEntry -> String.format(
-                        "%s = '%s'",
+                        "%s = %s",
                         stringStringEntry.getKey(),
                         stringStringEntry.getValue())
-                ).reduce("", (s, s2) -> s + ", " + s2);
+                ).reduce("", (s, s2) -> s.isEmpty() ? s2 : (s + ", " + s2));
 
         String query = String.format(
-                "UPDATE player SET (%s) WHERE id = '%d' RETURNING *",
+                "UPDATE player SET %s WHERE id = '%d' RETURNING *",
                 update,
                 id
         );

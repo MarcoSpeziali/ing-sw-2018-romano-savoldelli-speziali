@@ -5,6 +5,7 @@ import it.polimi.ingsw.utils.logging.LoggerBase;
 
 import java.nio.file.Paths;
 import java.util.function.Supplier;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
 public class ClientLogger extends LoggerBase {
@@ -24,6 +25,8 @@ public class ClientLogger extends LoggerBase {
         return path;
     };
 
+    private static boolean logToConsole = false;
+
     /**
      * Protected method to construct a logger for a named subsystem.
      * The logger will be initially configured with a null Level
@@ -31,17 +34,32 @@ public class ClientLogger extends LoggerBase {
      */
     protected ClientLogger() {
         super();
+
+        if (logToConsole) {
+            ConsoleHandler consoleHandler = new ConsoleHandler();
+            consoleHandler.setLevel(level);
+            consoleHandler.setFormatter(new SingleLineFormatter());
+
+            this.addHandler(consoleHandler);
+        }
     }
 
     /**
      * @return an instance of {@link Logger}
      */
-    public static Logger getLogger() {
+    public static LoggerBase getLogger() {
         return new ClientLogger();
     }
 
     @Override
     protected String getLoggingPath() {
         return loggingPath.get();
+    }
+
+    /**
+     * Sets up the logger to log also to the console.
+     */
+    public static void setUpConsoleLogger() {
+        logToConsole = true;
     }
 }

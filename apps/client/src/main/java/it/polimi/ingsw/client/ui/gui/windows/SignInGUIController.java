@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -97,17 +98,26 @@ public class SignInGUIController extends SignInController {
                 }
             }, responseError -> {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
+                Text contentText = new Text();
 
                 if (responseError == ResponseFields.Error.UNAUTHORIZED) {
                     alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_TITLE));
                     alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT));
-                    alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT));
+                    contentText.setText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_CONTEXT_TEXT));
+                }
+                else if (responseError == ResponseFields.Error.ALREADY_EXISTS) {
+                    alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ALREADY_EXISTS_TITLE));
+                    contentText.setText(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ALREADY_EXISTS_CONTEXT_TEXT));
                 }
                 else {
                     alert.setTitle(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_TITLE));
                     alert.setHeaderText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_HEADER_TEXT));
-                    alert.setContentText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_CONTENT_TEXT));
+                    contentText.setText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_CONTENT_TEXT));
                 }
+
+                contentText.setWrappingWidth(100);
+
+                alert.getDialogPane().setContent(contentText);
 
                 alert.showAndWait();
             });

@@ -31,6 +31,8 @@ public class ClientApp {
             LocalizedString.invalidateCacheForNewLocale(Settings.getSettings().getLanguage().getLocale());
 
             if (!options.has(Constants.ClientArguments.CLI_MODE.toString())) {
+                ClientLogger.setUpConsoleLogger();
+
                 Platform.setImplicitExit(true);
                 Application.launch(SagradaGUI.class, args);
             }

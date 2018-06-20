@@ -9,20 +9,23 @@ import java.util.function.Consumer;
 public class SignInController {
 
     public void onSignInRequested(String username, String password, Runnable onCompletion, Consumer<ResponseFields.Error> onError) {
-        Task<Boolean> signInTask = new Task<>() {
+        Task<ResponseFields.Error> signInTask = new Task<>() {
             @Override
-            protected Boolean call() throws Exception {
+            protected ResponseFields.Error call() throws Exception {
                 return SignInManager.getManager().signIn(username, password);
             }
         };
         signInTask.setOnSucceeded(event -> {
-            boolean signedIn = signInTask.getValue();
+            ResponseFields.Error response = signInTask.getValue();
 
-            if (onCompletion != null && signedIn) {
+            if (onCompletion != null && response == null) {
                 onCompletion.run();
             }
-            else if (onError != null && !signedIn) {
+            else if (onError != null && response.getCode() == ResponseFields.Error.UNAUTHORIZED.getCode()) {
                 onError.accept(ResponseFields.Error.UNAUTHORIZED);
+            }
+            else if (onError != null && response.getCode() == ResponseFields.Error.ALREADY_EXISTS.getCode()) {
+                onError.accept(ResponseFields.Error.ALREADY_EXISTS);
             }
         });
         signInTask.setOnFailed(event -> {

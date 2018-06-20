@@ -80,7 +80,7 @@ public class SignInManager {
      * @throws IOException       if a server error or a connection error occurred
      * @throws NotBoundException if the {@link EndPointFunction} is not bound
      */
-    public boolean signIn(String username, String password) throws IOException, NotBoundException {
+    public ResponseFields.Error signIn(String username, String password) throws IOException, NotBoundException {
         // builds the sign-in request
         Request<SignInRequest> authenticationRequest = new Request<>(
                 new Header(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION),
@@ -90,9 +90,14 @@ public class SignInManager {
         // first a login request is made
         Response<ChallengeRequest> requestResponse = this.oneTimeNetworkResponseProvider.getSyncResponseFor(authenticationRequest);
 
-        // the only possible error that can occur is a 500 Internal Server Error
+
         if (requestResponse.getError() != null) {
-            throw new RemoteException();
+            if (requestResponse.getError().getErrorCode() == ResponseFields.Error.INTERNAL_SERVER_ERROR.getCode()) {
+                throw new RemoteException();
+            }
+            else {
+                return ResponseFields.Error.ALREADY_EXISTS;
+            }
         }
 
         int sessionId = requestResponse.getBody().getSessionId();
@@ -127,11 +132,11 @@ public class SignInManager {
                 return signIn(username, password);
             }
 
-            return false; // 401 Unauthorized
+            return ResponseFields.Error.UNAUTHORIZED;
         }
 
         // the token is saved and true is returned
         this.token = fulfillResponse.getBody().getToken();
-        return true;
+        return null;
     }
 }

@@ -31,6 +31,17 @@ public class DatabaseSession {
         }
     }
 
+    public static DatabaseSession latestActiveSessionForPlayer(DatabasePlayer databasePlayer) throws SQLException {
+        String query = String.format(
+                "SELECT s.* FROM session s JOIN pre_authentication_session pas ON pas.id = s.pre_auth_session WHERE pas.player = '%d' AND s.invalidation_time > current_timestamp",
+                databasePlayer.getId()
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return executeQuery(database, query);
+        }
+    }
+
     public static DatabaseSession sessionWithToken(String token) throws SQLException {
         String query = String.format(
                 "SELECT * FROM session WHERE token = '%s'",
@@ -57,13 +68,13 @@ public class DatabaseSession {
     public static DatabaseSession updateSession(int id, Map<String, String> updateMap) throws SQLException {
         String update = updateMap.entrySet().stream()
                 .map(stringStringEntry -> String.format(
-                        "%s = '%s'",
+                        "%s = %s",
                         stringStringEntry.getKey(),
                         stringStringEntry.getValue())
-                ).reduce("", (s, s2) -> s + ", " + s2);
+                ).reduce("", (s, s2) -> s.isEmpty() ? s2 : (s + ", " + s2));
 
         String query = String.format(
-                "UPDATE session SET (%s) WHERE id = '%d' RETURNING *",
+                "UPDATE session SET %s WHERE id = '%d' RETURNING *",
                 update,
                 id
         );

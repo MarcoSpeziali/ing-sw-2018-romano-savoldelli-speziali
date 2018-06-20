@@ -74,6 +74,12 @@ public abstract class LoggerBase extends Logger {
         }
     }
 
+    @Override
+    @SuppressWarnings("squid:S1185")
+    public void log(Level level, String msg, Object... params) {
+        super.log(level, msg, params);
+    }
+
     /**
      * Represents the path where the logging file will be created.
      */
@@ -82,7 +88,7 @@ public abstract class LoggerBase extends Logger {
     /**
      * https://stackoverflow.com/questions/194765/how-do-i-get-java-logging-output-to-appear-on-a-single-line
      */
-    public class SingleLineFormatter extends Formatter {
+    public static class SingleLineFormatter extends Formatter {
 
         private static final String FORMAT = "{0,date} {0,time}";
 

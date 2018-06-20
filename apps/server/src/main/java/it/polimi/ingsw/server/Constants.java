@@ -127,6 +127,7 @@ public class Constants {
     }
 
     public enum LockTargets {
-        LOBBY
+        LOBBY,
+        PLAYER
     }
 }

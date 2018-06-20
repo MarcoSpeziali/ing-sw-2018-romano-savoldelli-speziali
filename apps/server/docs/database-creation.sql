@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS pre_authentication_session (
   valid_for_port INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS session (
+CREATE TABLE IF NOT EXISTS "session" (
   id SERIAL PRIMARY KEY,
   creation_time TIMESTAMP(3) NOT NULL DEFAULT current_timestamp,
   invalidation_time TIMESTAMP(3) NOT NULL DEFAULT current_timestamp + INTERVAL '12 hours',
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS lobby_player (
   PRIMARY KEY (lobby, player, joining_time)
 );
 
-CREATE TABLE IF NOT EXISTS match (
+CREATE TABLE IF NOT EXISTS "match" (
   id SERIAL PRIMARY KEY,
   starting_time TIMESTAMP(3) NOT NULL DEFAULT current_timestamp,
   ending_time TIMESTAMP(3) DEFAULT NULL,
