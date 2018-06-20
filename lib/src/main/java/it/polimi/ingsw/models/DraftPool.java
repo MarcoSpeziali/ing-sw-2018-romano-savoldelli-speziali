@@ -3,6 +3,7 @@ package it.polimi.ingsw.models;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
+import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,23 +19,30 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
 
     private static final long serialVersionUID = -7184365776887971173L;
 
+    @JSONElement("dice-max")
+    private final int maxNumberOfDice;
+
     @JSONElement("dice")
-    private LinkedList<Die> dice;
+    private Die[] dice;
 
     private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
     private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
 
-
     /**
      * Sets up a new {@link DraftPool}.
      */
-    public DraftPool() {
-        this.dice = new LinkedList<>();
+    public DraftPool(int maxNumberOfDice) {
+        this.maxNumberOfDice = maxNumberOfDice;
+        this.dice = new Die[maxNumberOfDice];
     }
 
     @JSONDesignatedConstructor
-    DraftPool(@JSONElement("dice") List<Die> dice) {
-        this.dice = new LinkedList<>(dice);
+    DraftPool(
+            @JSONElement("dice") Die[] dice,
+            @JSONElement("dice-max") int maxNumberOfDice
+    ) {
+        this.maxNumberOfDice = maxNumberOfDice;
+        this.dice = Arrays.copyOf(dice, dice.length);
     }
     
     /**
@@ -42,15 +51,14 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
      * @param die the instance of {@link Die} to be removed.
      * @return the same instance of picked {@link Die}
      */
-
     @Override
     public Die pickDie(Die die) {
-        for (int i = 0; i < dice.size(); i++) {
-            if (dice.get(i) == die) {
+        for (int i = 0; i < dice.length; i++) {
+            if (dice[i] == die) {
                 this.onDiePutListeners.forEach(onDiePutListener
                         -> onDiePutListener.onDiePut(die));
 
-                return dice.remove(i);
+                return getAndRemove(dice, i);
             }
         }
 
@@ -72,7 +80,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
             throw new IndexOutOfBoundsException();
         }
 
-        Die d = this.dice.remove((int) location);
+        Die d = getAndRemove(dice, location);
 
         this.onDiePickedListeners.forEach(onDiePickedListener
                 -> onDiePickedListener.onDiePicked(d));
@@ -87,7 +95,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
     public List<Integer> getLocations() {
         LinkedList<Integer> locations = new LinkedList<>();
 
-        for (int i = 0; i < dice.size(); i++) {
+        for (int i = 0; i < dice.length; i++) {
             locations.add(i);
         }
 
@@ -99,7 +107,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
      */
     @Override
     public List<Die> getDice() {
-        return this.dice;
+        return Arrays.asList(this.dice);
     }
 
     /**
@@ -107,22 +115,28 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
      */
     @Override
     public int getNumberOfDice() {
-        return this.dice.size();
+        return this.dice.length;
     }
 
     @Override
     public void putDie(Die die) {
-        dice.add(die);
+        for (int i = 0; i < this.dice.length; i++) {
+            if (this.dice[i] == null) {
+                dice[i] = die;
 
-        this.onDiePutListeners.forEach(onDiePutListener
-                -> onDiePutListener.onDiePut(die));
+                this.onDiePutListeners.forEach(onDiePutListener
+                        -> onDiePutListener.onDiePut(die));
+            }
+        }
+
+        throw new FullLocationException(this);
     }
 
     @Override
     public int getFreeSpace() {
         int players = ((Match) Context.getSharedInstance().get(Context.MATCH)).getNumberOfPlayer();
 
-        return 2 * players + 1 - this.dice.size();
+        return 2 * players + 1 - this.dice.length;
     }
 
     public OnDiePutListener addPutListener(OnDiePutListener onDiePutListener) {
@@ -133,5 +147,11 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
     public OnDiePickedListener addPickListener(OnDiePickedListener onDiePickedListener) {
         this.onDiePickedListeners.add(onDiePickedListener);
         return onDiePickedListener;
+    }
+
+    private static Die getAndRemove(Die[] dice, int index) {
+        Die toReturn = dice[index];
+        dice[index] = null;
+        return toReturn;
     }
 }

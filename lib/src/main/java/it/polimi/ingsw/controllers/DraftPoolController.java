@@ -1,41 +1,17 @@
 package it.polimi.ingsw.controllers;
 
+import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.DraftPool;
 
-public class DraftPoolController {
+import java.rmi.RemoteException;
 
-    private DraftPool draftPool;
+public interface DraftPoolController extends ProxyUpdateInterface<DraftPool> {
+    DraftPool getDraftPool() throws RemoteException;
 
-    public DraftPoolController(DraftPool draftPool) {
-        this.draftPool = draftPool;
-    }
+    Die tryToPick(Die die) throws RemoteException, DieInteractionException;
 
-    public void setDraftPoolModel(DraftPool draftPool) {
-        this.draftPool = draftPool;
-    }
+    Die tryToPick(Integer location) throws RemoteException, DieInteractionException;
 
-    public Die onDiePicked(Die die) {
-        return this.draftPool.pickDie(die);
-    }
-
-    public Die onDiePicked(int location) {
-        return this.draftPool.pickDie(location);
-    }
-
-    public void onDiePut(Die die) {
-        this.draftPool.putDie(die);
-    }
-
-    /*public void onDieChosen(Die die, Player player) {
-        player.setPickedDie(die);
-        draftPool.pickDie(die);
-    }
-
-    public void onDieRejected(Player player) {
-        Die  die = player.getPickedDie();
-        player.setPickedDie(null);
-        draftPool.putDie(die);
-    }
-    */ //TODO manca la classe player
+    void tryToPut(Die die) throws RemoteException, DieInteractionException;
 }

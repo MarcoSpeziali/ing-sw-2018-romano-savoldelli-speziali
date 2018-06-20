@@ -1,8 +1,6 @@
 package it.polimi.ingsw.views;
 
 import it.polimi.ingsw.controllers.CellController;
-import it.polimi.ingsw.listeners.OnDiePickedListener;
-import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
 
 public abstract class CellView {

@@ -5,6 +5,7 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.mocks.ILobby;
+import it.polimi.ingsw.net.mocks.PlayerMock;
 import it.polimi.ingsw.net.requests.ChallengeRequest;
 import it.polimi.ingsw.net.requests.SignInRequest;
 import it.polimi.ingsw.net.requests.SignUpRequest;
@@ -28,12 +29,12 @@ public final class ResponseFactory {
         );
     }
 
-    public static Response<SignInResponse> createAuthenticationTokenResponse(Request<ChallengeResponse> originalRequest, String token) {
+    public static Response<SignInResponse> createAuthenticationTokenResponse(Request<ChallengeResponse> originalRequest, String token, PlayerMock player) {
         return new Response<>(
                 new Header(
                         originalRequest.getHeader().getEndPointFunction()
                 ),
-                new SignInResponse(token)
+                new SignInResponse(token, player)
         );
     }
 

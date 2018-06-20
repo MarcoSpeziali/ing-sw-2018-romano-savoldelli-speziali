@@ -1,28 +1,17 @@
 package it.polimi.ingsw.controllers;
 
+import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.RoundTrack;
 
-import java.io.Serializable;
+import java.rmi.RemoteException;
 
-public class RoundTrackController implements Serializable {
-    private static final long serialVersionUID = -9067002400585127131L;
+public interface RoundTrackController extends ProxyUpdateInterface<RoundTrack> {
+    RoundTrack getRoundTrack() throws RemoteException;
 
-    private RoundTrack roundTrack;
+    Die tryToPick(Die die) throws RemoteException, DieInteractionException;
 
-    public RoundTrackController(RoundTrack roundTrack) {
-        this.setRoundTrackModel(roundTrack);
-    }
+    Die tryToPick(Integer location) throws RemoteException, DieInteractionException;
 
-    public void setRoundTrackModel(RoundTrack roundTrack) {
-        this.roundTrack = roundTrack;
-    }
-
-    public void putDieForRound(Die die, int round) {
-        this.putDieForRoundAtIndex(die, round, RoundTrack.MAX_NUMBER_OF_DICE_PER_ROUND);
-    }
-
-    public void putDieForRoundAtIndex(Die die, int round, int index) {
-        this.roundTrack.setDieForRoundAtIndex(die, round, index);
-    }
+    void tryToPut(Die die, Integer location) throws RemoteException, DieInteractionException;
 }

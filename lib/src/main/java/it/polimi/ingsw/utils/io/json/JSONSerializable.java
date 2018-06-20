@@ -18,10 +18,12 @@ public interface JSONSerializable extends Serializable {
         return JSONSerializationHelper.serialize(this);
     }
 
+    // TODO: 20/06/18 document
     static <T extends JSONSerializable> T deserialize(Class<T> targetClass, String json) {
         return deserialize(targetClass, new JSONObject(json));
     }
 
+    // TODO: 20/06/18 document
     static <T extends JSONSerializable> T deserialize(Class<T> targetClass, JSONObject jsonObject) {
         return JSONDeserializationHelper.deserialize(targetClass, jsonObject);
     }

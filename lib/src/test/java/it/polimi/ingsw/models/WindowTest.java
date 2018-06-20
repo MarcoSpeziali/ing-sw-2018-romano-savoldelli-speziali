@@ -1,7 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.locations.AlreadyPutException;
+import it.polimi.ingsw.core.locations.FullLocationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -123,7 +123,7 @@ class WindowTest {
     void putDieTest() {
         window.putDie(die, 7);
         Assertions.assertTrue(window.getDice().contains(die));
-        Assertions.assertThrows(AlreadyPutException.class, () -> window.putDie(die, 7));
+        Assertions.assertThrows(FullLocationException.class, () -> window.putDie(die, 7));
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> window.putDie(die, 20));
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> window.putDie(die, -1));
     }

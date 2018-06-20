@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.controllers.ObjectiveCardController;
 import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.utils.io.Resources;
 import it.polimi.ingsw.views.ObjectiveCardView;
@@ -9,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;

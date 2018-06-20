@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.CellController;
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.utils.io.Resources;
 import it.polimi.ingsw.views.CellView;
@@ -37,11 +36,14 @@ public class CellGUIView extends CellView {
     public CellGUIView() {}
 
     private void diePicked() {
-        this.cellController.onDiePicked();
+        // this.cellController.onDiePicked();
+        // TODO: 20/06/18 First: correct using new implementation
+        // TODO: 20/06/18 Second: pick die returns a die, where should we put it? In the player? This should not be done here
     }
 
     private void diePut() {
-        this.cellController.onDiePut(Player.getCurrentPlayer().pickDie());
+        // this.cellController.onDiePut(Player.getCurrentPlayer().pickDie());
+        // TODO: 20/06/18 First: correct using new implementation
     }
 
     @Override

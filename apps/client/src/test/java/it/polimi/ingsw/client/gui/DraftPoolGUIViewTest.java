@@ -13,10 +13,11 @@ import javafx.scene.control.Control;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+// FIXME: 20/06/18 WTF is this?
 public class DraftPoolGUIViewTest extends Application {
 
     private DraftPoolGUIView draftPoolGUIView;
-    private DraftPool draftPool = new DraftPool();
+    private DraftPool draftPool = new DraftPool(5);
 
 
     @Override

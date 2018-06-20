@@ -1,26 +1,15 @@
 package it.polimi.ingsw.controllers;
 
+import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Die;
 
-public class CellController {
+import java.rmi.RemoteException;
 
-    private Cell cell;
+public interface CellController extends ProxyUpdateInterface<Cell> {
+    Cell getCell() throws RemoteException;
 
-    public CellController(Cell cell) {
-        this.cell = cell;
-    }
+    Die tryToPick() throws RemoteException, DieInteractionException;
 
-    public void setCellModel(Cell cell) {
-        this.cell = cell;
-    }
-
-    public Die onDiePicked() {
-        return this.cell.pickDie();
-    }
-
-    public void onDiePut(Die die) {
-        this.cell.putDie(die);
-    }
-
+    void tryToPut(Die die) throws RemoteException, DieInteractionException;
 }

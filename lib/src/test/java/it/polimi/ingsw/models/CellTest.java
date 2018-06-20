@@ -1,7 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.locations.AlreadyPutException;
+import it.polimi.ingsw.core.locations.FullLocationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ class CellTest {
     void putDieTest() {
         blankCell.putDie(this.die);
         Assertions.assertTrue(blankCell.isOccupied());
-        Assertions.assertThrows(AlreadyPutException.class, () ->
+        Assertions.assertThrows(FullLocationException.class, () ->
                 blankCell.putDie(this.die));
     }
 

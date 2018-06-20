@@ -1,7 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.locations.AlreadyPutException;
+import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
@@ -120,7 +120,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation, JSONSerializ
             this.die = die;
         }
         else {
-            throw new AlreadyPutException("A die has already been put on this cell!");
+            throw new FullLocationException(this);
         }
 
         this.onDiePutListeners.forEach(dieInteractionListener ->

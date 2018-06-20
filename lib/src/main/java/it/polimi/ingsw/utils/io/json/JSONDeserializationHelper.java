@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+// TODO: 20/06/18 document
 class JSONDeserializationHelper {
 
     private JSONDeserializationHelper() {}
