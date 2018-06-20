@@ -1,7 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.locations.EmptyBagException;
+import it.polimi.ingsw.core.locations.EmptyLocationException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
@@ -64,7 +64,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation, JSONSerializa
     @Override
     public Die pickDie() {
         if (colors.isEmpty()) {
-            throw new EmptyBagException("The bag has no dice left!");
+            throw new EmptyLocationException(this);
         }
 
         int shade = randomProvider.nextInt(7) + 1;

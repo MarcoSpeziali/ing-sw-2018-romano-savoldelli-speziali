@@ -2,7 +2,6 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
-import it.polimi.ingsw.server.managers.ThreadManager;
 import it.polimi.ingsw.server.net.endpoints.LobbyEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
@@ -150,7 +149,8 @@ public class ServerApp {
     private static void startMultiplayerServer() throws IOException {
         socketServer = new ClientAcceptor(Settings.getSettings().getSocketPort());
 
-        Thread thread = ThreadManager.addThread(Constants.Threads.SOCKET_LISTENER, socketServer);
+        Thread thread = new Thread(socketServer);
+        thread.setName(Constants.Threads.SOCKET_LISTENER.toString());
         thread.start();
     }
 

@@ -1,124 +1,91 @@
 package it.polimi.ingsw.core;
 
+import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
-import it.polimi.ingsw.listeners.OnDieUsedListener;
-import it.polimi.ingsw.listeners.OnToolCardUsedListener;
 import it.polimi.ingsw.models.Die;
-import it.polimi.ingsw.models.ObjectiveCard;
-import it.polimi.ingsw.models.ToolCard;
+import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-import java.util.LinkedList;
-import java.util.List;
+public class Player implements JSONSerializable, IPlayer, RandomPutLocation, RandomPickLocation {
 
-public class Player implements RandomPickLocation, RandomPutLocation {
-    private static final long serialVersionUID = -2840357342425816145L;
-    private static Player currentPlayer;
-    List<OnDieUsedListener> onDieUsedListeners = new LinkedList<>();
-    List<OnToolCardUsedListener> onToolCardUsedListeners = new LinkedList<>();
-    private IPlayerProfile profile;
-    private ObjectiveCard[] privateObjectiveCard;
-    private byte favourTokenCount;
-    private Die pickedDie;
+    private static final long serialVersionUID = 513182840776549527L;
 
-    /**
-     * Sets up a new {@link Player}
-     *
-     * @param profile              is the player's profile
-     * @param privateObjectiveCard is the player's private objective card
-     * @param favourTokenCount     the count of initial tokens
-     */
-    public Player(IPlayerProfile profile, ObjectiveCard[] privateObjectiveCard, byte favourTokenCount) {
-        this.profile = profile;
-        this.privateObjectiveCard = privateObjectiveCard;
-        this.favourTokenCount = favourTokenCount;
-
-        currentPlayer = this;
-    }
+    private static Player sharedInstance;
 
     public static Player getCurrentPlayer() {
-        return currentPlayer;
+        return sharedInstance;
     }
 
-    /**
-     * @return the player's profile
-     */
-    public IPlayerProfile getProfile() {
-        return profile;
-    }
+    private final int id;
+    private final String username;
+    private final int tokenCount;
 
-    /**
-     * @param profile is the player's name
-     */
-    public void setProfile(IPlayerProfile profile) {
-        this.profile = profile;
-    }
+    private Die heldDie;
 
-    /**
-     * @return the player's private objective card
-     */
-    public ObjectiveCard[] getPrivateObjectiveCard() {
-        return privateObjectiveCard;
-    }
+    @SuppressWarnings("squid:S3010")
+    @JSONDesignatedConstructor
+    Player(
+            @JSONElement("id") int id,
+            @JSONElement("username") String username,
+            @JSONElement("favour-tokens") int tokenCount,
+            @JSONElement("held-die") Die heldDie
+    ) {
+        this.id = id;
+        this.username = username;
+        this.tokenCount = tokenCount;
+        this.heldDie = heldDie;
 
-    /**
-     * @param privateObjectiveCard is the player's private objective card
-     */
-    public void setPrivateObjectiveCard(ObjectiveCard[] privateObjectiveCard) {
-        this.privateObjectiveCard = privateObjectiveCard;
+        sharedInstance = this;
     }
-
-    /**
-     * @return the player's amount of favour token
-     */
-    public byte getFavourTokenCount() {
-        return favourTokenCount;
-    }
-
-    /**
-     * @param favourTokenCount is the players's amount of favour token
-     */
-    public void setFavourTokenCount(byte favourTokenCount) {
-        this.favourTokenCount = favourTokenCount;
-    }
-
-    public void useToolCard(ToolCard toolCard) {
-        toolCard.activate();
-        this.onToolCardUsedListeners.forEach(listener -> listener.onToolCardUsed(toolCard));
-    }
-
 
     @Override
-    public Die pickDie() {
-        Die die = this.pickedDie;
-        this.pickedDie = null;
-        this.onDieUsedListeners.forEach(OnDieUsedListener::onDieUsed);
+    @JSONElement("id")
+    public int getId() {
+        return this.id;
+    }
 
-        return die;
+    @Override
+    @JSONElement("username")
+    public String getUsername() {
+        return this.username;
+    }
+
+    @JSONElement("favour-tokens")
+    public int getFavourTokens() {
+        return tokenCount;
     }
 
     @Override
     public int getNumberOfDice() {
-        return 1 - getFreeSpace();
-    }
-
-    @Override
-    public void putDie(Die die) {
-        this.pickedDie = die;
-        this.onDieUsedListeners.forEach(OnDieUsedListener::onDieUsed);
+        return this.heldDie == null ? 0 : 1;
     }
 
     @Override
     public int getFreeSpace() {
-        return this.pickedDie == null ? 1 : 0;
+        return 1 - this.getNumberOfDice();
     }
 
-
-    public void addListener(OnDieUsedListener onDieUsedListener) {
-        this.onDieUsedListeners.add(onDieUsedListener);
+    @Override
+    public Die pickDie() {
+        Die die = this.heldDie;
+        this.heldDie = null;
+        return die;
     }
 
-    public void addListener(OnToolCardUsedListener onToolCardUsedListener) {
-        this.onToolCardUsedListeners.add(onToolCardUsedListener);
+    @Override
+    public void putDie(Die die) {
+        if (this.heldDie != null) {
+            throw new FullLocationException(this);
+        }
+
+        this.heldDie = die;
+    }
+
+    @JSONElement("held-die")
+    public Die getHeldDie() {
+        return heldDie;
     }
 }

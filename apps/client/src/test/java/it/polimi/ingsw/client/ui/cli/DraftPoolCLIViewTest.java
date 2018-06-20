@@ -14,7 +14,7 @@ class DraftPoolCLIViewTest {
     @BeforeEach
     void setUp() throws IOException {
         Bag bag = new Bag(18);
-        this.draftPool = new DraftPool();
+        this.draftPool = new DraftPool(5);
         draftPoolCLIView = new DraftPoolCLIView();
         draftPoolCLIView.setDraftPool(draftPool);
     }

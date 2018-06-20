@@ -1,5 +1,7 @@
 package it.polimi.ingsw.net.responses;
 
+import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.net.mocks.PlayerMock;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -14,9 +16,16 @@ public class SignInResponse implements JSONSerializable {
     @JSONElement("token")
     private String token;
 
+    @JSONElement("player")
+    private PlayerMock player;
+
     @JSONDesignatedConstructor
-    public SignInResponse(@JSONElement("token") String token) {
+    public SignInResponse(
+            @JSONElement("token") String token,
+            @JSONElement("player") PlayerMock player
+    ) {
         this.token = token;
+        this.player = player;
     }
 
     /**
@@ -31,5 +40,9 @@ public class SignInResponse implements JSONSerializable {
      */
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public IPlayer getPlayer() {
+        return player;
     }
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.net.endpoints;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.SignInInterface;
+import it.polimi.ingsw.net.mocks.PlayerMock;
 import it.polimi.ingsw.net.requests.ChallengeRequest;
 import it.polimi.ingsw.net.requests.SignInRequest;
 import it.polimi.ingsw.net.responses.ChallengeResponse;
@@ -203,7 +204,7 @@ public class SignInEndPoint extends UnicastRemoteObject implements SignInInterfa
                     DatabaseSession.insertSession(hashedToken, preAuthenticationSession.getId());
 
                     // the response is finally sent
-                    return ResponseFactory.createAuthenticationTokenResponse(request, hashedToken);
+                    return ResponseFactory.createAuthenticationTokenResponse(request, hashedToken, new PlayerMock(player));
                 }
                 else {
                     return ResponseFactory.createUnauthorisedError(request);

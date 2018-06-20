@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: 20/06/18 document
 class JSONSerializationHelper {
     private JSONSerializationHelper() {}
 

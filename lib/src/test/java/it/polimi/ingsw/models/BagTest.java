@@ -1,7 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.locations.EmptyBagException;
+import it.polimi.ingsw.core.locations.EmptyLocationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ class BagTest {
             Assertions.assertNotNull(picked);
             Assertions.assertTrue(colorList.contains(picked.getColor()));
         }
-        Assertions.assertThrows(EmptyBagException.class, () -> this.bag.pickDie());
+        Assertions.assertThrows(EmptyLocationException.class, () -> this.bag.pickDie());
     }
 
     @Test

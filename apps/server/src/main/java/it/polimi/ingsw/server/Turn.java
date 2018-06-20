@@ -45,12 +45,12 @@ public class Turn {
 
 
     public void setState() {
-
-        player.addListener(toolCard -> {
+        // FIXME: 20/06/18 idk
+        /*player.addListener(toolCard -> {
             this.toolCard = toolCard;
             state = TOOLCARD;
         });
-        player.addListener(() -> state = END);
+        player.addListener(() -> state = END);*/
     }
 
     public enum PerformedAction {

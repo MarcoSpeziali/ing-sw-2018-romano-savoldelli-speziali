@@ -1,23 +1,12 @@
 package it.polimi.ingsw.controllers;
 
+import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.models.Die;
 
-import java.io.Serializable;
+import java.rmi.RemoteException;
 
-public class DieController implements Serializable {
-    private static final long serialVersionUID = 867107781400962437L;
+public interface DieController extends ProxyUpdateInterface<Die> {
+    Die getDie() throws RemoteException;
 
-    private Die dieModel;
-
-    public DieController(Die dieModel) {
-        this.dieModel = dieModel;
-    }
-
-    public void setDieModel(Die dieModel) {
-        this.dieModel = dieModel;
-    }
-
-    public void setDieShade(int shade) {
-        this.dieModel.setShade(shade);
-    }
+    void setShade(Integer shade) throws RemoteException;
 }

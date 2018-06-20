@@ -17,14 +17,15 @@ public class DieCLIView extends DieView implements CLIView {
     public void setDieModel(Die die) {
         super.setDie(die);
 
-        this.die.addListener((newShade) -> {
+        this.die.addListener(newShade -> {
             this.die.setShade(newShade);
             this.render();
 
             newShade = scanner.nextInt();
 
             if (newShade != -1) {
-                this.dieController.setDieShade(newShade);
+                // this.dieController.setDieShade(newShade);
+                // TODO: 20/06/18 Correct
             }
         });
     }

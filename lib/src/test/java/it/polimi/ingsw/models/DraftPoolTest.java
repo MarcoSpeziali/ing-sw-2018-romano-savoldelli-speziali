@@ -28,7 +28,7 @@ class DraftPoolTest {
     @BeforeEach
     void setUp() {
         bag = new Bag(18);
-        draftPool = new DraftPool();
+        draftPool = new DraftPool(5);
         die = new Die(0, GlassColor.BLUE);
         onDiePickedListeners = new LinkedList<>();
         onDiePickedListener = mock(OnDiePickedListener.class);

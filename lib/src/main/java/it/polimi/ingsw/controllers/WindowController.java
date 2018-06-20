@@ -1,29 +1,17 @@
 package it.polimi.ingsw.controllers;
 
+import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
 
-public class WindowController {
+import java.rmi.RemoteException;
 
-    private Window window;
+public interface WindowController extends ProxyUpdateInterface<Window> {
+    Window getWindow() throws RemoteException;
 
-    public WindowController(Window window) {
-        this.window = window;
-    }
+    Die tryToPick(Die die) throws RemoteException, DieInteractionException;
 
-    public void setWindowModel(Window window) {
-        this.window = window;
-    }
+    Die tryToPick(Integer integer) throws RemoteException, DieInteractionException;
 
-    public Die onDiePicked(Die die) {
-        return this.window.pickDie(die);
-    }
-
-    public Die onDiePicked(int location) {
-        return this.window.pickDie(location);
-    }
-
-    public void onDiePut(Die die, int location) {
-        this.window.putDie(die, location);
-    }
+    void tryToPut(Die die, Integer location) throws RemoteException, DieInteractionException;
 }
