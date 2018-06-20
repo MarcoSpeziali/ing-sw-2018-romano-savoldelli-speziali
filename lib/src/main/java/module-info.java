@@ -20,6 +20,7 @@ module it.polimi.ingsw {
     exports it.polimi.ingsw.net.interfaces.updates;
     exports it.polimi.ingsw.utils.logging;
     exports it.polimi.ingsw.utils.io.json;
+    exports it.polimi.ingsw.controllers.proxies.socket;
 
     requires java.xml;
     requires java.rmi;
