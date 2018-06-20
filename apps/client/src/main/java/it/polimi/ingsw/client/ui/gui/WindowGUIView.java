@@ -50,7 +50,7 @@ public class WindowGUIView extends WindowView {
         }
 
 
-        for (int i = 0; i < window.getDifficulty(); i++) {
+        for (int i = 0; i < 6-window.getDifficulty(); i++) {  // FIXME molto oscuro il perchè funzioni solo così...
             Circle circle = (Circle) difficultyHbox.getChildren().get(i);
             circle.setFill(Paint.valueOf("#2c3e50"));
         }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.gui;
+package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.CellGUIView;

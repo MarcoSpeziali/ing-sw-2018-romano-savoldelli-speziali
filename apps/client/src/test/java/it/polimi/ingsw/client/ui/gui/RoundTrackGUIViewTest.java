@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.gui;
+package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.RoundTrackGUIView;
@@ -17,7 +17,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RoundTrackGUIViewTest extends Application{
+class RoundTrackGUIViewTest extends Application {
+
+    public RoundTrackGUIViewTest(){}
 
     private RoundTrackGUIView roundTrackGUIView;
     private RoundTrackController roundTrackController;
@@ -55,6 +57,7 @@ class RoundTrackGUIViewTest extends Application{
         fxmlLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW.getURL());
         Parent root = fxmlLoader.load();
         roundTrackGUIView = fxmlLoader.getController();
+        //setUp();
         roundTrackGUIView.setRoundTrack(roundTrack);
         Scene scene = new Scene(root, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
         primaryStage.setScene(scene);

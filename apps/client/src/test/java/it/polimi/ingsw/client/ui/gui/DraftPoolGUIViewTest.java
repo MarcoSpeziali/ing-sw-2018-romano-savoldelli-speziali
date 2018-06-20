@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.gui;
+package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.DraftPoolGUIView;
@@ -26,7 +26,7 @@ public class DraftPoolGUIViewTest extends Application {
         loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW.getURL());
         Parent root = loader.load();
         draftPoolGUIView =  loader.getController();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 5; i++) {
             draftPool.putDie(new Die(6, GlassColor.RED));
         }
         draftPoolGUIView.setDraftPool(draftPool);
