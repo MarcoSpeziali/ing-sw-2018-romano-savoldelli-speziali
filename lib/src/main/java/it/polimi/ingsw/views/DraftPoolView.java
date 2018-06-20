@@ -3,16 +3,17 @@ package it.polimi.ingsw.views;
 import it.polimi.ingsw.controllers.DraftPoolController;
 import it.polimi.ingsw.models.DraftPool;
 
+import java.io.IOException;
+
 public abstract class DraftPoolView {
     protected DraftPool draftPool;
     protected DieView[] dieView;
     protected DraftPoolController draftPoolController;
 
-    public DraftPoolView(DraftPool draftPool) {
-        this.draftPool = draftPool;
+    public DraftPoolView() {
     }
 
-    public void setDraftPool(DraftPool draftPool) {
+    public void setDraftPool(DraftPool draftPool) throws IOException {
         this.draftPool = draftPool;
     }
 

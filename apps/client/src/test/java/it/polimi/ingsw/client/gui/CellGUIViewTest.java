@@ -25,8 +25,8 @@ public class CellGUIViewTest extends Application {
         Parent root = loader.load();
         cellGUIView = loader.getController();
         cellGUIView.setCell(cell);
-        //cell.putDie(new Die(5, GlassColor.RED));
-        //cellGUIView.onUpdateReceived(cell);
+        cell.putDie(new Die(5, GlassColor.RED));
+        cellGUIView.onUpdateReceived(cell);
         Scene scene = new Scene(root, Control.USE_PREF_SIZE, Control.USE_PREF_SIZE);
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -5,6 +5,6 @@
 
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-radius: 5;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.DieGUIView">
    <children>
-      <ImageView fx:id="imageView" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" style="-fx-background-radius: 5;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <ImageView fx:id="imageView" fitHeight="125.0" fitWidth="125.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" style="-fx-background-radius: 5;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

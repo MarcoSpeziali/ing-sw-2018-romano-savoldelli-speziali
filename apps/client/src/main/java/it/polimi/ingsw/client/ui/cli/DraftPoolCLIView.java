@@ -4,13 +4,14 @@ import it.polimi.ingsw.models.DraftPool;
 import it.polimi.ingsw.views.DraftPoolView;
 import org.fusesource.jansi.Ansi;
 
+import java.io.IOException;
+
 import static org.fusesource.jansi.Ansi.Color.BLACK;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class DraftPoolCLIView extends DraftPoolView implements CLIView {
 
-    public DraftPoolCLIView(DraftPool draftPool) {
-        super(draftPool);
+    public DraftPoolCLIView() {
         this.dieView = new DieCLIView[draftPool.getNumberOfDice()];
 
         for (int i = 0; i < this.draftPool.getNumberOfDice(); i++) {
@@ -18,6 +19,11 @@ public class DraftPoolCLIView extends DraftPoolView implements CLIView {
             dieView[i].setDie(this.draftPool.getDice().get(i));
 
         }
+    }
+
+    @Override
+    public void setDraftPool(DraftPool draftPool) throws IOException {
+        super.setDraftPool(draftPool);
     }
 
     @Override
