@@ -115,7 +115,7 @@ public class SignInGUIController extends SignInController {
                     contentText.setText(Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_CONTENT_TEXT));
                 }
 
-                contentText.setWrappingWidth(100);
+                contentText.setWrappingWidth(500);
 
                 alert.getDialogPane().setContent(contentText);
 
