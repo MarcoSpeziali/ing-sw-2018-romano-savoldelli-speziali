@@ -36,6 +36,14 @@ public class ClientApp {
                 Platform.setImplicitExit(true);
                 Application.launch(SagradaGUI.class, args);
             }
+            else {
+                System.out.println("  ███████╗ █████╗  ██████╗ ██████╗  █████╗ ██████╗  █████╗ ");
+                System.out.println("  ██╔════╝██╔══██╗██╔════╝ ██╔══██╗██╔══██╗██╔══██╗██╔══██╗");
+                System.out.println("  ███████╗███████║██║  ███╗██████╔╝███████║██║  ██║███████║");
+                System.out.println("  ╚════██║██╔══██║██║   ██║██╔══██╗██╔══██║██║  ██║██╔══██║");
+                System.out.println("  ███████║██║  ██║╚██████╔╝██║  ██║██║  ██║██████╔╝██║  ██║");
+                System.out.println("  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝");
+            }
         }
         catch (Exception e) {
             ClientLogger.getLogger().log(Level.SEVERE, "An unrecoverable error occurred: ", e);

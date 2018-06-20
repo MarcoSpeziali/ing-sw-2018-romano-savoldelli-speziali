@@ -19,17 +19,17 @@ public class DatabaseLobby implements ILobby {
     /**
      * The lobby's unique id.
      */
-    private int id;
+    private final int id;
 
     /**
      * The lobby's opening time.
      */
-    private long openingTime;
+    private final long openingTime;
 
     /**
      * The lobby's closing time.
      */
-    private long closingTime;
+    private final long closingTime;
 
     /**
      * The time remaining before the match starts.
@@ -48,6 +48,38 @@ public class DatabaseLobby implements ILobby {
         Date date = resultSet.getDate("closing_time");
         this.closingTime = date == null ? -1L : date.getTime();
         this.timeRemaining = -1;
+    }
+
+    /**
+     * @return the user's unique id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @return the lobby's opening time
+     */
+    @Override
+    public long getOpeningTime() {
+        return openingTime;
+    }
+
+    /**
+     * @return the lobby's closing time
+     */
+    @Override
+    public long getClosingTime() {
+        return closingTime;
+    }
+
+    @Override
+    public int getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(int timeRemaining) {
+        this.timeRemaining = timeRemaining;
     }
 
     public static DatabaseLobby getLobbyWithId(int id) throws SQLException {
@@ -124,38 +156,6 @@ public class DatabaseLobby implements ILobby {
         }
     }
 
-    /**
-     * @return the user's unique id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @return the lobby's opening time
-     */
-    @Override
-    public long getOpeningTime() {
-        return openingTime;
-    }
-
-    /**
-     * @return the lobby's closing time
-     */
-    @Override
-    public long getClosingTime() {
-        return closingTime;
-    }
-
-    @Override
-    public int getTimeRemaining() {
-        return timeRemaining;
-    }
-
-    public void setTimeRemaining(int timeRemaining) {
-        this.timeRemaining = timeRemaining;
-    }
-
     @Override
     public IPlayer[] getPlayers() {
         String query = String.format(
@@ -166,6 +166,7 @@ public class DatabaseLobby implements ILobby {
                 this.id
         );
 
+        //noinspection Duplicates
         try (SagradaDatabase database = new SagradaDatabase()) {
             List<IPlayer> players = database.executeQuery(query, resultSet -> {
                 LinkedList<IPlayer> databasePlayers = new LinkedList<>();
@@ -177,11 +178,7 @@ public class DatabaseLobby implements ILobby {
                 return databasePlayers;
             });
 
-            if (players == null) {
-                return new IPlayer[0];
-            }
-
-            if (players.isEmpty()) {
+            if (players == null || players.isEmpty()) {
                 return new IPlayer[0];
             }
 

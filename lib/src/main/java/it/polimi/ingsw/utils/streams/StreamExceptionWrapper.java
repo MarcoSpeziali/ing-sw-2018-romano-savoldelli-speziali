@@ -24,7 +24,7 @@ public class StreamExceptionWrapper extends RuntimeException {
      * @param <T>            the exception to unwrap
      * @throws T if the exception has been successfully unwrapped
      */
-    public <T extends Throwable> StreamExceptionWrapper tryUnwrap(Class<T> exceptionClass) throws T {
+    public <T extends Exception> StreamExceptionWrapper tryUnwrap(Class<T> exceptionClass) throws T {
         if (this.getCause().getClass().equals(exceptionClass)) {
             //noinspection unchecked
             throw (T) this.getCause();
@@ -42,7 +42,7 @@ public class StreamExceptionWrapper extends RuntimeException {
      * @throws T if the exception has been successfully unwrapped
      */
     @SuppressWarnings("squid:S00112")
-    public <T extends Throwable, K> K tryFinalUnwrap(Class<T> exceptionClass) throws T {
+    public <T extends Exception, K> K tryFinalUnwrap(Class<T> exceptionClass) throws T {
         if (this.getCause().getClass().equals(exceptionClass)) {
             //noinspection unchecked
             throw (T) this.getCause();

@@ -1,4 +1,181 @@
 package it.polimi.ingsw.server.sql;
 
-public class DatabaseMatch {
+import it.polimi.ingsw.net.mocks.ILobby;
+import it.polimi.ingsw.net.mocks.IMatch;
+import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class DatabaseMatch implements IMatch {
+
+    private static final long serialVersionUID = 6299805944235610022L;
+
+    /**
+     * The match unique id.
+     */
+    private int id;
+
+    /**
+     * The match ending time.
+     */
+    private long startingTime;
+
+    /**
+     * The match starting time.
+     */
+    private long endingTime;
+
+    @JSONDesignatedConstructor
+    DatabaseMatch() {
+        throw new UnsupportedOperationException("A database object cannot be deserialized for security reasons");
+    }
+
+    DatabaseMatch(ResultSet resultSet) throws SQLException {
+        this.id = resultSet.getInt("id");
+        this.startingTime = resultSet.getDate("starting_time").getTime();
+
+        Date endingDate = resultSet.getDate("ending_time");
+        this.endingTime = endingDate == null ? -1L : endingDate.getTime();
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public long getStartingTime() {
+        return startingTime;
+    }
+
+    @Override
+    public long getEndingTime() {
+        return endingTime;
+    }
+
+    @Override
+    public ILobby getLobby() {
+        String query = String.format(
+                "SELECT l.* FROM match m JOIN lobby l ON m.lobby = l.id WHERE m.id = %d",
+                this.id
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabaseLobby::new);
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public IPlayer[] getPlayers() {
+        String query = String.format(
+                "SELECT p.* FROM match m " +
+                        "JOIN match_player mb ON mb.match = m.id " +
+                        "JOIN player p ON mb.player = p.id " +
+                        "WHERE m.id = '%d' AND mb.leaving_time IS NULL",
+                this.id
+        );
+
+        //noinspection Duplicates
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            List<IPlayer> players = database.executeQuery(query, resultSet -> {
+                LinkedList<IPlayer> databasePlayers = new LinkedList<>();
+
+                do {
+                    databasePlayers.add(new DatabasePlayer(resultSet));
+                } while (resultSet.next());
+
+                return databasePlayers;
+            });
+
+            if (players == null || players.isEmpty()) {
+                return new IPlayer[0];
+            }
+
+            return players.toArray(new IPlayer[0]);
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static DatabaseMatch getMatchWithId(int id) throws SQLException {
+        String query = String.format(
+                "SELECT * FROM match WHERE id = '%d'",
+                id
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabaseMatch::new);
+        }
+    }
+
+    public static DatabaseMatch getOpenMatches() throws SQLException {
+        String query = "SELECT * FROM match WHERE closing_time IS NULL";
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabaseMatch::new);
+        }
+    }
+
+    public static DatabaseMatch insertMatchFromLobby(int lobbyId) throws SQLException {
+        String matchCreationQuery = String.format("INSERT INTO match (lobby) VALUES (%d) RETURNING *", lobbyId);
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            DatabaseMatch match = database.executeQuery(matchCreationQuery, DatabaseMatch::new);
+
+            String playerInsertionQuery = String.format(
+                    "INSERT INTO match_player (SELECT lp.player AS player, %d FROM lobby_player lp WHERE lp.lobby = %d AND lp.leaving_time IS NULL)",
+                    match.id,
+                    lobbyId
+            );
+
+            database.executeVoidQuery(playerInsertionQuery);
+
+            return match;
+        }
+    }
+
+    public static DatabaseMatch endMatch(int matchId) throws SQLException {
+        return updateMatch(matchId, Map.of("ending_time", "current_timestamp"));
+    }
+
+    public static DatabaseMatch updateMatch(int id, Map<String, String> updateMap) throws SQLException {
+        String update = updateMap.entrySet().stream()
+                .map(stringStringEntry -> String.format(
+                        "%s = %s",
+                        stringStringEntry.getKey(),
+                        stringStringEntry.getValue())
+                ).reduce("", (s, s2) -> s.isEmpty() ? s2 : (s + ", " + s2));
+
+        String query = String.format(
+                "UPDATE match SET %s WHERE id = '%d' RETURNING *",
+                update,
+                id
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabaseMatch::new);
+        }
+    }
+
+    public static void removePlayer(int matchId, int playerId) throws SQLException {
+        String query = String.format(
+                "UPDATE match_player SET leaving_time = current_timestamp WHERE match = '%d' AND player = '%d'",
+                matchId,
+                playerId
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            database.executeVoidQuery(query);
+        }
+    }
 }

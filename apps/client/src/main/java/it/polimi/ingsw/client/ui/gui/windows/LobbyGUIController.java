@@ -14,7 +14,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
@@ -81,7 +80,7 @@ public class LobbyGUIController implements Initializable {
 
     @FXML
     public void onBackClicked() throws Exception {
-        this.proxyController.close();
+        this.proxyController.leave();
 
         loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
         SagradaGUI.showStage(loader.load(), 550, 722);

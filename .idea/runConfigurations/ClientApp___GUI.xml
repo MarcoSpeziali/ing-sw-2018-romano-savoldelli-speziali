@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ClientApp" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="ClientApp - GUI" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.client.ClientApp" />
     <module name="client" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />

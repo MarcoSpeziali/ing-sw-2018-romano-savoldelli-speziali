@@ -1,7 +1,8 @@
-package it.polimi.ingsw.controllers.proxies;
+package it.polimi.ingsw.controllers.proxies.rmi;
 
 import it.polimi.ingsw.controllers.LobbyController;
 import it.polimi.ingsw.net.mocks.ILobby;
+import it.polimi.ingsw.net.mocks.IMatch;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,8 +11,10 @@ import java.rmi.server.UnicastRemoteObject;
 public class LobbyRMIProxyController extends UnicastRemoteObject implements LobbyController, HeartBeatListener {
 
     private static final long serialVersionUID = 6402299999494663705L;
-    private final transient Object syncObject = new Object();
+    private final transient Object matchSyncObject = new Object();
+    private final transient Object updateSyncObject = new Object();
     private ILobby lobbyResult;
+    private IMatch matchResult;
     private Boolean shouldBeKeptAlive;
 
     public LobbyRMIProxyController() throws RemoteException {
@@ -26,31 +29,48 @@ public class LobbyRMIProxyController extends UnicastRemoteObject implements Lobb
 
     @Override
     public ILobby waitForUpdate() throws InterruptedException {
-        synchronized (syncObject) {
+        synchronized (updateSyncObject) {
             while (getLobbyResult() == null) {
                 // waits until there is a result
-                syncObject.wait();
+                updateSyncObject.wait();
             }
 
             return resetLobbyResult();
         }
     }
 
-    public ILobby getLobbyResult() {
-        synchronized (syncObject) {
+    private ILobby getLobbyResult() {
+        synchronized (updateSyncObject) {
             return this.lobbyResult;
         }
     }
 
-    public ILobby resetLobbyResult() {
-        synchronized (syncObject) {
+    private ILobby resetLobbyResult() {
+        synchronized (updateSyncObject) {
             ILobby result = this.lobbyResult;
             this.lobbyResult = null;
             return result;
         }
     }
 
-    public void close() {
+    @Override
+    public IMatch waitForMigrationRequest() throws InterruptedException {
+        synchronized (matchSyncObject) {
+            while (getMatchResult() == null) {
+                matchSyncObject.wait();
+            }
+
+            return getMatchResult();
+        }
+    }
+
+    private IMatch getMatchResult() {
+        synchronized (matchSyncObject) {
+            return this.matchResult;
+        }
+    }
+
+    public void leave() {
         shouldBeKeptAlive = false;
     }
 
@@ -60,10 +80,10 @@ public class LobbyRMIProxyController extends UnicastRemoteObject implements Lobb
 
     @Override
     public synchronized void onUpdateReceived(ILobby update) {
-        synchronized (syncObject) {
+        synchronized (updateSyncObject) {
             this.lobbyResult = update;
 
-            syncObject.notifyAll();
+            updateSyncObject.notifyAll();
         }
     }
 

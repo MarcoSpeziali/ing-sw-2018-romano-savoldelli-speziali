@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controllers.proxies;
+package it.polimi.ingsw.controllers.proxies.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
