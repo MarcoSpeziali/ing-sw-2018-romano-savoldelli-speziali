@@ -40,12 +40,7 @@ public class SignUpGUIController extends SignUpController {
         JFXDialogLayout content = new JFXDialogLayout();
         JFXDialog dialog = new JFXDialog(stackPane, content, CENTER);
         JFXButton button = new JFXButton("OK");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-            }
-        });
+        button.setOnAction(event -> dialog.close());
         content.setActions(button);
         if (user.getText().length() > 8 && !user.getText().contains(" ")) {
 

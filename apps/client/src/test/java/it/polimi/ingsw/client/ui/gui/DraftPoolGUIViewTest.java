@@ -23,7 +23,7 @@ public class DraftPoolGUIViewTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW.getURL());
+        loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
         Parent root = loader.load();
         draftPoolGUIView =  loader.getController();
         for (int i = 0; i < 5; i++) {
