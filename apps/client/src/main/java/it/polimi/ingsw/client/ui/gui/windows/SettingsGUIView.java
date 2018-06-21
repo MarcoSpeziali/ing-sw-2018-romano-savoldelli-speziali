@@ -6,11 +6,9 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXToggleButton;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
-import it.polimi.ingsw.client.Settings;
 import it.polimi.ingsw.client.controllers.SettingsController;
 import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
 import it.polimi.ingsw.utils.text.Localized;
-import it.polimi.ingsw.utils.text.LocalizedString;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,12 +17,9 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
-public class SettingsGUIController extends SettingsController implements Initializable {
+public class SettingsGUIView implements Initializable {
 
     @FXML
     @Localized(key = Constants.Strings.SETTINGS_SAVE_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
@@ -51,52 +46,56 @@ public class SettingsGUIController extends SettingsController implements Initial
     @Localized(key = Constants.Strings.SETTINGS_LANGUAGE_LABEL_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)
     public Label languageTypeLabel;
 
+    private SettingsController settingsController;
+
     private FXMLLoader loader = new FXMLLoader();
 
-    private Locale previousLocale;
+    public void setController(SettingsController settingsController) {
+        this.settingsController = settingsController;
+        this.settingsController.init();
 
-    public SettingsGUIController() {
-        previousLocale = Settings.getSettings().getLanguage().getLocale();
+        this.fullScreenToggle.setSelected(this.settingsController.isFullScreenMode());
+        this.fullScreenToggle.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> this.settingsController.onFullScreenStateChanged(newValue));
+
+        this.rmiToggle.setSelected(this.settingsController.isUsingRMI());
+        this.rmiToggle.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> this.settingsController.onProtocolChanged(newValue ? Constants.Protocols.RMI : Constants.Protocols.SOCKETS));
+
+        this.socketToggle.setSelected(this.settingsController.isUsingSockets());
+        this.socketToggle.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> this.settingsController.onProtocolChanged(newValue ? Constants.Protocols.SOCKETS : Constants.Protocols.RMI));
+
+        this.languageComboBox.setItems(
+                FXCollections.unmodifiableObservableList(FXCollections.observableList(
+                        this.settingsController.getSupportedLocales()
+                ))
+        );
+        this.languageComboBox.setValue(this.settingsController.getCurrentLanguageName());
+        this.languageComboBox.valueProperty()
+                .addListener((observable, oldValue, newValue) -> this.settingsController.onLanguageChanged(newValue));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Localized.Updater.update(this);
-
-        this.fullScreenToggle.setSelected(Settings.getSettings().isFullScreenMode());
-        this.rmiToggle.setSelected(Settings.getSettings().getProtocol() == Constants.Protocols.RMI);
-        this.socketToggle.setSelected(Settings.getSettings().getProtocol() == Constants.Protocols.SOCKETS);
-        this.languageComboBox.setItems(
-                FXCollections.unmodifiableObservableList(FXCollections.observableList(
-                        Arrays.stream(Constants.Locales.values())
-                                .filter(locales -> locales != Constants.Locales.DEFAULT)
-                                .map(Enum::toString)
-                                .collect(Collectors.toList())
-                ))
-        );
-        this.languageComboBox.setValue(Settings.getSettings().getLanguage().name());
-        this.languageComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Constants.Locales locale = Constants.Locales.valueOf(newValue);
-            LocalizedString.invalidateCacheForNewLocale(locale.getLocale());
-        });
     }
 
     @FXML
     public void onSaveClicked() throws IOException {
-        Settings.getSettings().setFullScreenMode(this.fullScreenToggle.isSelected());
-        Settings.getSettings().setProtocol(this.rmiToggle.isSelected() ? Constants.Protocols.RMI : Constants.Protocols.SOCKETS);
-        Settings.getSettings().setLanguage(this.languageComboBox.getSelectionModel().getSelectedItem());
+        this.settingsController.close(true);
 
-        previousLocale = Settings.getSettings().getLanguage().getLocale();
-
-        super.onSaveRequested();
-        this.onBackClicked();
+        this.pushBack();
     }
 
     @FXML
     public void onBackClicked() throws IOException {
-        LocalizedString.invalidateCacheForNewLocale(previousLocale);
+        this.settingsController.close(false);
 
+        this.pushBack();
+    }
+
+    private void pushBack() throws IOException {
         loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
         SagradaGUI.showStage(loader.load(), 550, 722);
     }

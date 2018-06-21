@@ -17,7 +17,7 @@ import javafx.stage.StageStyle;
 public class WindowGUIViewTest extends Application {
 
     private WindowGUIView windowGUIView;
-    private WindowController windowController;
+
     private Cell[][] cells = new Cell[][]{
             {
                     new Cell(6, null), new Cell(5, null), new Cell(4, null), new Cell(0, GlassColor.GREEN)
@@ -34,7 +34,7 @@ public class WindowGUIViewTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Constants.Resources.WINDOW_VIEW.getURL());
+        loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
         Parent root = loader.load();
         windowGUIView = loader.getController();
         windowGUIView.setWindow(window);

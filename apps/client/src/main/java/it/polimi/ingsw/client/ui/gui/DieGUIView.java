@@ -6,9 +6,11 @@ import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.io.Resources;
 import it.polimi.ingsw.views.DieView;
 import javafx.fxml.FXML;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,9 +30,15 @@ public class DieGUIView extends DieView {
     public void setDie(Die die) {
         super.setDie(die);
 
-        anchorPane.setStyle(
+        anchorPane.setStyle("-fx-background-radius: 10;"+
                 "-fx-background-color: #" + Integer.toHexString(this.die.getColor().getHex())
         );
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(5.0);
+        dropShadow.setOffsetX(3.0);
+        dropShadow.setOffsetY(3.0);
+        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+        anchorPane.setEffect(dropShadow);
 
         String resourceName = String.format("DIE_%d", super.die.getShade());
         String relativePath = Constants.Resources.valueOf(resourceName).getRelativePath();

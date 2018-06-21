@@ -16,8 +16,6 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
 import it.polimi.ingsw.utils.text.Localized;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -93,7 +91,7 @@ public class SignInGUIController extends SignInController {
 
                     Parent parent = loader.load();
 
-                    LobbyGUIController lobbyGUIController = loader.getController();
+                    LobbyGUIView lobbyGUIController = loader.getController();
                     lobbyGUIController.setProxy(lobbyController);
 
                     SagradaGUI.showStage(parent, 353, 546);
@@ -105,12 +103,7 @@ public class SignInGUIController extends SignInController {
                 JFXDialogLayout content = new JFXDialogLayout();
                 JFXDialog dialog = new JFXDialog(stackPane, content, CENTER);
                 JFXButton button = new JFXButton("OK");
-                button.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        dialog.close();
-                    }
-                });
+                button.setOnAction(event -> dialog.close());
 
                 if (responseError == ResponseFields.Error.UNAUTHORIZED) {
                     content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.SIGN_IN_ACCESS_DENIED_HEADER_TEXT)));

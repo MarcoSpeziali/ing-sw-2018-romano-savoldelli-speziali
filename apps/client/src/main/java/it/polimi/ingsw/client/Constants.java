@@ -141,7 +141,7 @@ public class Constants {
 
     @SuppressWarnings("SpellCheckingInspection")
     public enum Locales {
-        DEFAULT(null),
+        DEFAULT(Locale.ENGLISH),
         ENGLISH(Locale.ENGLISH),
         ITALIANO(Locale.ITALIAN);
 

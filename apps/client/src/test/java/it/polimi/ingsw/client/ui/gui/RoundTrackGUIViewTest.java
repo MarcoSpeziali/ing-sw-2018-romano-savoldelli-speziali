@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.client.ui.gui.RoundTrackGUIView;
 import it.polimi.ingsw.controllers.RoundTrackController;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Die;
@@ -13,12 +12,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.stage.Stage;
 
-class RoundTrackGUIViewTest extends Application {
-
-    public RoundTrackGUIViewTest(){}
+public class RoundTrackGUIViewTest extends Application {
 
     private RoundTrackGUIView roundTrackGUIView;
-    private RoundTrackController roundTrackController;
+
     private Die die1 = new Die(5, GlassColor.RED);
     private Die die2 = new Die(1, GlassColor.GREEN);
     private Die die3 = new Die(2, GlassColor.PURPLE);
@@ -51,10 +48,10 @@ class RoundTrackGUIViewTest extends Application {
     public void start(Stage primaryStage) throws Exception {
         setUp();
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW.getURL());
+        fxmlLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
         Parent root = fxmlLoader.load();
         roundTrackGUIView = fxmlLoader.getController();
-        //setUp();
+        setUp();
         roundTrackGUIView.setRoundTrack(roundTrack);
         Scene scene = new Scene(root, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
         primaryStage.setScene(scene);

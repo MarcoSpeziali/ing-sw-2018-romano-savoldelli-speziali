@@ -38,7 +38,7 @@ public class LobbySocketProxyController implements LobbyController {
 
     @Override
     @SuppressWarnings("squid:S1602")
-    public void init() throws IOException {
+    public void init(Object... args) throws IOException {
         this.persistentSocketInteractionProvider.open(EndPointFunction.LOBBY_JOIN_REQUEST);
 
         try {
@@ -53,7 +53,10 @@ public class LobbySocketProxyController implements LobbyController {
                     StreamExceptionWrapper.wrap(new RemoteException());
                 }
 
-                this.lobbyResult = response.getBody();
+                synchronized (updateSyncObject) {
+                    this.lobbyResult = response.getBody();
+                    updateSyncObject.notifyAll();
+                }
             }, StreamExceptionWrapper::wrap);
         }
         catch (StreamExceptionWrapper e) {
@@ -69,6 +72,16 @@ public class LobbySocketProxyController implements LobbyController {
                         updateSyncObject.notifyAll();
                     }
                 });
+
+        persistentSocketInteractionProvider.listenFor(
+                EndPointFunction.MATCH_MIGRATION,
+                response -> {
+                    synchronized (matchSyncObject) {
+                        this.matchResult = (IMatch) response.getBody();
+                        matchSyncObject.notifyAll();
+                    }
+                }
+        );
     }
 
     @Override
@@ -96,12 +109,6 @@ public class LobbySocketProxyController implements LobbyController {
         }
     }
 
-    public void postMigrationRequest(IMatch matchResult) {
-        synchronized (matchSyncObject) {
-            this.matchResult = matchResult;
-        }
-    }
-
     @Override
     public IMatch waitForMigrationRequest() throws InterruptedException {
         synchronized (matchSyncObject) {
@@ -119,7 +126,7 @@ public class LobbySocketProxyController implements LobbyController {
         }
     }
 
-    public void leave() throws IOException {
+    public void close(Object... args) throws IOException {
         this.persistentSocketInteractionProvider.close();
     }
 }

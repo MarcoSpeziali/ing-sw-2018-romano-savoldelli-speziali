@@ -6,6 +6,7 @@ import javafx.concurrent.Task;
 
 import java.util.function.Consumer;
 
+// TODO: recreate like SettingsController
 public class SignInController {
 
     public void onSignInRequested(String username, String password, Runnable onCompletion, Consumer<ResponseFields.Error> onError) {
