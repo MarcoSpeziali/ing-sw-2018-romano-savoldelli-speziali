@@ -14,8 +14,8 @@ import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 
-public class ObjectiveCardGUIView extends ObjectiveCardView {
-    public ObjectiveCardGUIView(ObjectiveCard objectiveCard) {
+public class ObjectiveCardGUIView2 extends ObjectiveCardView {
+    public ObjectiveCardGUIView2(ObjectiveCard objectiveCard) {
         super(objectiveCard);
     }
 
@@ -42,7 +42,7 @@ public class ObjectiveCardGUIView extends ObjectiveCardView {
         view.setFitWidth(300);
 
         try {
-            view.setImage(new Image(Resources.getResource(ObjectiveCardGUIView.class.getClassLoader(), path).openStream()));
+            view.setImage(new Image(Resources.getResource(ObjectiveCardGUIView2.class.getClassLoader(), path).openStream()));
         }
         catch (IOException | NullPointerException e) {
             e.printStackTrace();

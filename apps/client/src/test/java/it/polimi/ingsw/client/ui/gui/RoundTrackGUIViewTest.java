@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.RoundTrackGUIView;
-import it.polimi.ingsw.client.ui.gui.WindowGUIView;
 import it.polimi.ingsw.controllers.RoundTrackController;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Die;
@@ -13,9 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTrackGUIViewTest extends Application {
 
@@ -53,6 +49,7 @@ class RoundTrackGUIViewTest extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        setUp();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW.getURL());
         Parent root = fxmlLoader.load();

@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="it.polimi.ingsw.controllers.ObjectiveCardController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
+
+<AnchorPane prefHeight="354.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.controllers.ObjectiveCardController">
+   <children>
+      <ImageView fx:id="imageView" fitHeight="376.0" fitWidth="340.0" preserveRatio="true" />
+      <Text fx:id="title" layoutX="69.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="173.0">
+         <font>
+            <Font name="Copperplate Gothic Bold" size="13.0" />
+         </font>
+      </Text>
+      <Text fx:id="effect" layoutX="75.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="JUSTIFY" wrappingWidth="166.5">
+         <font>
+            <Font name="Copperplate Gothic Bold" size="11.0" />
+         </font>
+      </Text>
+   </children>
 </AnchorPane>

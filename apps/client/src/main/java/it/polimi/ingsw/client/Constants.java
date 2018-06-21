@@ -68,6 +68,8 @@ public class Constants {
         WINDOW_VIEW("FXML/WindowView.fxml"),
         DRAFTPOOL_VIEW("FXML/DraftPoolView.fxml"),
         ROUNDTRACK_VIEW("FXML/RoundTrackView.fxml"),
+        TOOL_CARD_VIEW("FXML/ToolCardView.fxml"),
+        OBJECTIVE_CARD_VIEW("FXML/ObjectiveCardView.fxml"),
 
         TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.jpg"),
         TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.jpg"),
