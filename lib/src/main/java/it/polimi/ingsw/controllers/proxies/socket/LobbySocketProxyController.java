@@ -126,7 +126,7 @@ public class LobbySocketProxyController implements LobbyController {
         }
     }
 
-    public void close() throws IOException {
+    public void close(Object... args) throws IOException {
         this.persistentSocketInteractionProvider.close();
     }
 }

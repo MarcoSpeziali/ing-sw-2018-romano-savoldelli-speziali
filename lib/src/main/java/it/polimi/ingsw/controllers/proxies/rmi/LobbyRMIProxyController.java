@@ -78,7 +78,7 @@ public class LobbyRMIProxyController extends UnicastRemoteObject implements Lobb
         }
     }
 
-    public void close() {
+    public void close(Object... args) {
         shouldBeKeptAlive = false;
     }
 
