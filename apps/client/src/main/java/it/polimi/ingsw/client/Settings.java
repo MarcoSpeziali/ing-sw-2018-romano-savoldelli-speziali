@@ -94,4 +94,8 @@ public final class Settings extends SettingsBase {
     public void setLanguage(String language) {
         this.language = Constants.Locales.valueOf(language);
     }
+
+    public void setLanguage(Constants.Locales language) {
+        this.language = language;
+    }
 }

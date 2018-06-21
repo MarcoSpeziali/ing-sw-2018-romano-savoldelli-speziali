@@ -3,11 +3,13 @@ package it.polimi.ingsw.client.ui.gui.windows;
 import com.jfoenix.controls.JFXButton;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
+import it.polimi.ingsw.client.controllers.SettingsController;
 import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
 import it.polimi.ingsw.utils.text.Localized;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +43,11 @@ public class StartScreenGUIController implements Initializable {
 
     public void onSettingClicked() throws IOException {
         loader.setLocation(Constants.Resources.SETTINGS_FXML.getURL());
-        SagradaGUI.showStage(loader.load(), 720, 480);
+
+        Parent parent = loader.load();
+        ((SettingsGUIView) loader.getController()).setController(new SettingsController());
+
+        SagradaGUI.showStage(parent, 720, 480);
     }
 
     public void onPlayGameClicked() throws IOException {

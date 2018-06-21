@@ -24,7 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 
-public class LobbyGUIController implements Initializable {
+public class LobbyGUIView implements Initializable {
 
     @FXML
     @Localized(key = Constants.Strings.LOBBY_TITLE, fieldUpdater = LabeledLocalizationUpdater.class)
@@ -80,7 +80,7 @@ public class LobbyGUIController implements Initializable {
 
     @FXML
     public void onBackClicked() throws Exception {
-        this.proxyController.leave();
+        this.proxyController.close();
 
         loader.setLocation(Constants.Resources.START_SCREEN_FXML.getURL());
         SagradaGUI.showStage(loader.load(), 550, 722);
@@ -139,7 +139,7 @@ public class LobbyGUIController implements Initializable {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    LobbyGUIController.this.secondsLabel.setText(String.valueOf(remainingTime));
+                    LobbyGUIView.this.secondsLabel.setText(String.valueOf(remainingTime));
                     remainingTime--;
                 });
             }
