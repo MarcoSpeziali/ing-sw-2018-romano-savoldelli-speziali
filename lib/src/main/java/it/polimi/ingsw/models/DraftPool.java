@@ -14,6 +14,7 @@ import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSONSerializable {
 
@@ -82,6 +83,10 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
 
         Die d = getAndRemove(dice, location);
 
+        if (d == null) {
+            throw new IndexOutOfBoundsException();
+        }
+
         this.onDiePickedListeners.forEach(onDiePickedListener
                 -> onDiePickedListener.onDiePicked(d));
 
@@ -126,6 +131,8 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
 
                 this.onDiePutListeners.forEach(onDiePutListener
                         -> onDiePutListener.onDiePut(die));
+
+                return;
             }
         }
 
@@ -136,7 +143,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
     public int getFreeSpace() {
         int players = ((Match) Context.getSharedInstance().get(Context.MATCH)).getNumberOfPlayer();
 
-        return 2 * players + 1 - this.dice.length;
+        return (int) (2 * players + 1 - Arrays.stream(this.dice).filter(Objects::nonNull).count());
     }
 
     public OnDiePutListener addPutListener(OnDiePutListener onDiePutListener) {

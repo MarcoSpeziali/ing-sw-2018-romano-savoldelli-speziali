@@ -5,6 +5,9 @@ import it.polimi.ingsw.controllers.proxies.RemotelyClosable;
 import it.polimi.ingsw.controllers.proxies.RemotelyInitializable;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.net.mocks.IMatch;
+import it.polimi.ingsw.net.mocks.IPlayer;
+
+import java.util.Map;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
 
@@ -12,5 +15,10 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
     Window[] waitForWindowRequest();
     void respondToWindowRequest(Window window);
 
-    
+    // then the opponents' windows are sent
+    Map<IPlayer, Window> waitForOpponentsWindowsUpdate();
+
+    int waitForTurnWithTimeout();
+
+
 }

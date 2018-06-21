@@ -29,11 +29,9 @@ class RoundTrackTest {
 
     @Test
     void getDiceForRoundAtIndex() {
-
         roundTrack.setDieForRoundAtIndex(die1, 2, 0);
         roundTrack.setDieForRoundAtIndex(die3, 2, 1);
         Assertions.assertEquals(roundTrack.getDiceForRoundAtIndex(2, 1), die3);
-
     }
 
     @Test
@@ -41,7 +39,6 @@ class RoundTrackTest {
         roundTrack.setDieForRoundAtIndex(die1, 1, 0);
         roundTrack.setDieForRoundAtIndex(die3, 1, 1);
         Assertions.assertEquals(die3, roundTrack.getDiceForRoundAtIndex(1, 1));
-
     }
 
     @Test
@@ -54,13 +51,8 @@ class RoundTrackTest {
     @Test
     void pickDie() {
         roundTrack.setDieForRoundAtIndex(die3, 2, 0);
-        try {
-            roundTrack.pickDie(die3);
-            assert false;
-        }
-        catch (UnsupportedOperationException exception) {
-            assert true;
-        }
+
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> roundTrack.pickDie(die3));
     }
 
     @Test
