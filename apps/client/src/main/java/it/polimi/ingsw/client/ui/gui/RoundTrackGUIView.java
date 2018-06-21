@@ -16,15 +16,14 @@ public class RoundTrackGUIView extends RoundTrackView {
     @FXML
     public GridPane gridPane;
 
-    FXMLLoader loader = new FXMLLoader();
-
     public RoundTrackGUIView(){
-
     }
+
     @Override
     public void setRoundTrack(RoundTrack roundTrack) throws IOException {
         super.setRoundTrack(roundTrack);
         for (int i = 0; i < 10; i++) {
+            FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
             Parent dieView = loader.load();
             DieGUIView controller = loader.getController();
@@ -38,7 +37,6 @@ public class RoundTrackGUIView extends RoundTrackView {
 
         }
         gridPane.setHgap(10);
-        gridPane.setVgap(10);
 
     }
 

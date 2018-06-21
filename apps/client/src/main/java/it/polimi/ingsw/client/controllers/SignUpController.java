@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.security.GeneralSecurityException;
 import java.util.function.Consumer;
 
+// TODO: recreate like SettingsController
 public class SignUpController {
     public void onSignUpRequested(String username, String password, Runnable onCompletion, Consumer<ResponseFields.Error> onError) {
         try {

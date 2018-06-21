@@ -29,7 +29,7 @@ public class MenuCLIView implements CLIView {
         System.out.println("Welcome to SagradaGUI Game:\n");
         System.out.println("[1] Play game");
         System.out.println("[2] Scoreboard");
-        System.out.println("[3] SettingsGUIController");
+        System.out.println("[3] SettingsGUIView");
     }
 }
 

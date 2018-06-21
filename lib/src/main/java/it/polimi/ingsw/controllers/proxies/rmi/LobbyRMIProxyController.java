@@ -23,7 +23,7 @@ public class LobbyRMIProxyController extends UnicastRemoteObject implements Lobb
     }
 
     @Override
-    public void init() {
+    public void init(Object... args) {
         // useless in rmi
     }
 
@@ -70,7 +70,15 @@ public class LobbyRMIProxyController extends UnicastRemoteObject implements Lobb
         }
     }
 
-    public void leave() {
+    public void postMigrationRequest(IMatch matchResult) {
+        synchronized (matchSyncObject) {
+            this.matchResult = matchResult;
+
+            this.matchSyncObject.notifyAll();
+        }
+    }
+
+    public void close(Object... args) {
         shouldBeKeptAlive = false;
     }
 
@@ -79,7 +87,7 @@ public class LobbyRMIProxyController extends UnicastRemoteObject implements Lobb
     }
 
     @Override
-    public synchronized void onUpdateReceived(ILobby update) {
+    public void onUpdateReceived(ILobby update) {
         synchronized (updateSyncObject) {
             this.lobbyResult = update;
 
