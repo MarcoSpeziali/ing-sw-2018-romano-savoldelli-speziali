@@ -4,15 +4,15 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.RestrictedChoosablePutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
+import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation, JSONSerializable {
+public class Window implements RestrictedChoosablePutLocation, ChoosablePickLocation, IWindow {
 
     private static final long serialVersionUID = 733952479357429786L;
 
@@ -78,6 +78,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     /**
      * @return an {@link Integer} representing the difficulty of the window.
      */
+    @JSONElement("difficulty")
     public int getDifficulty() {
         return this.difficulty;
     }
@@ -85,6 +86,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     /**
      * @return a {@link String} representing the name of the window.
      */
+    @JSONElement("id")
     public String getId() {
         return this.id;
     }
@@ -108,6 +110,35 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
      */
     public Cell[][] getCells() {
         return this.cells;
+    }
+
+    /**
+     * @return the number of rows.
+     */
+    @JSONElement("rows")
+    public int getRows() {
+        return rows;
+    }
+
+    /**
+     * @return the number of columns.
+     */
+    @JSONElement("columns")
+    public int getColumns() {
+        return columns;
+    }
+
+    @JSONElement("sibling-id")
+    public String getSiblingId() {
+        return siblingId;
+    }
+
+    @Override
+    @JSONElement("cells")
+    public Cell[] getFlatCells() {
+        return Arrays.stream(this.cells)
+                .flatMap(Arrays::stream)
+                .toArray(Cell[]::new);
     }
 
     /**
@@ -202,24 +233,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return this.rows * this.columns - getFreeSpace();
     }
 
-    /**
-     * @return the number of rows.
-     */
-    public int getRows() {
-        return rows;
-    }
-    
-    /**
-     * @return the number of columns.
-     */
-    public int getColumns() {
-        return columns;
-    }
-    
-    public String getSiblingId() {
-        return siblingId;
-    }
-    
     /**
      * Check which initial locations are allowed in the window for a spcified die.
      *

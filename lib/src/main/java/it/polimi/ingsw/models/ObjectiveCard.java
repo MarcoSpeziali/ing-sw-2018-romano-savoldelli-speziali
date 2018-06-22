@@ -20,7 +20,7 @@ public class ObjectiveCard extends Card {
     /**
      * Sets up a new objective card
      *
-     * @param cardId      is the card's ID
+     * @param cardId      is the card's id
      * @param visibility  is the card's visibility
      * @param title       is the card's title
      * @param description is the card's description

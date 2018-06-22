@@ -6,14 +6,14 @@ import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
+import it.polimi.ingsw.net.mocks.ICell;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Cell implements RandomPutLocation, RandomPickLocation, JSONSerializable {
+public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
 
     private static final long serialVersionUID = 379193806872969294L;
 
@@ -50,6 +50,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation, JSONSerializ
     /**
      * @return an instance of {@link Die} of the cell, if present.
      */
+    @Override
     public Die getDie() {
         return this.die;
     }
@@ -57,34 +58,17 @@ public class Cell implements RandomPutLocation, RandomPickLocation, JSONSerializ
     /**
      * @return the color of the cell, null otherwise.
      */
+    @Override
     public GlassColor getColor() {
-        if (this.color != null) {
-            return this.color;
-        }
-        else {
-            return null;
-        }
+        return this.color;
     }
 
     /**
      * @return the shade of the cell.
      */
+    @Override
     public Integer getShade() {
         return this.shade;
-    }
-
-    /**
-     * @return true if a {@link Die} is present in the cell, false otherwise.
-     */
-    public boolean isOccupied() {
-        return this.die != null;
-    }
-
-    /**
-     * @return true if the cell has not shade nor color, false otherwise.
-     */
-    public boolean isBlank() {
-        return this.color == null && this.shade == 0;
     }
 
     /**
