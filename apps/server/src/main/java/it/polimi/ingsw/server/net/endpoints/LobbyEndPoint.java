@@ -31,7 +31,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface, PlayerEventsListener {
 
@@ -312,14 +311,12 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 }
         );
 
-        List<AuthenticatedClientHandler> clientsToUpdate = Arrays.stream(databaseLobby.getPlayers())
+        Arrays.stream(databaseLobby.getPlayers())
                 .filter(player -> player.getId() != exceptTo.getId())
                 .map(iPlayer -> (DatabasePlayer) iPlayer)
                 .map(AuthenticatedClientHandler::getHandlerForPlayer)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        // TODO: join
-        clientsToUpdate.forEach(client -> {
+                .forEach(client -> {
                     try {
                         client.sendResponse(new Response<>(
                                 new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
@@ -346,22 +343,14 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                     ));
                     
                     lobbyRMIProxyController.postMigrationRequest(matchMock);
-    
-                    ServerLogger.getLogger().log(Level.FINEST, () -> String.format(
-                            "Sent match (%d) to player (%d) using rmi",
-                            matchMock.getId(),
-                            databasePlayer.getId()
-                    ));
                 }
         );
     
-        List<AuthenticatedClientHandler> clientsToUpdate = Arrays.stream(databaseLobby.getPlayers())
+        Arrays.stream(databaseLobby.getPlayers())
                 .map(iPlayer -> (DatabasePlayer) iPlayer)
                 .map(AuthenticatedClientHandler::getHandlerForPlayer)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        // TODO: join
-        clientsToUpdate.forEach(client -> {
+                .forEach(client -> {
                     try {
                         ServerLogger.getLogger().log(Level.FINER, () -> String.format(
                                 "Sending match (%d) to player (%d) using sockets",
@@ -372,12 +361,6 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                         client.sendResponse(new Response<>(
                                 new Header(EndPointFunction.MATCH_MIGRATION),
                                 matchMock
-                        ));
-    
-                        ServerLogger.getLogger().log(Level.FINEST, () -> String.format(
-                                "Sent match (%d) to player (%d) using sockets",
-                                matchMock.getId(),
-                                client.getPlayer().getId()
                         ));
                     }
                     catch (IOException e) {

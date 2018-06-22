@@ -24,22 +24,8 @@ import java.security.GeneralSecurityException;
 public class SignUpManager {
 
     private static SignUpManager instance = new SignUpManager();
-    private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
-
+    
     private SignUpManager() {
-        if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
-            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
-                    Settings.getSettings().getServerSocketAddress(),
-                    Settings.getSettings().getServerSocketPort()
-            );
-        }
-        else {
-            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
-                    Settings.getSettings().getServerRMIAddress(),
-                    Settings.getSettings().getServerRMIPort(),
-                    SignUpInterface.class
-            );
-        }
     }
 
     public static SignUpManager getManager() {
@@ -55,6 +41,22 @@ public class SignUpManager {
      * @throws GeneralSecurityException if the password could not be encrypted with the server's public key
      */
     public boolean signUp(String username, String password) throws IOException, GeneralSecurityException, NotBoundException {
+        OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
+        
+        if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
+            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
+                    Settings.getSettings().getServerSocketAddress(),
+                    Settings.getSettings().getServerSocketPort()
+            );
+        }
+        else {
+            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
+                    Settings.getSettings().getServerRMIAddress(),
+                    Settings.getSettings().getServerRMIPort(),
+                    SignUpInterface.class
+            );
+        }
+        
         // encrypts the password with the server's public key
         String encryptedString = CypherUtils.encryptString(
                 password,
@@ -72,7 +74,7 @@ public class SignUpManager {
         );
 
         // requests the sign-up
-        Response<SignUpResponse> response = this.oneTimeNetworkResponseProvider.getSyncResponseFor(signUpRequest);
+        Response<SignUpResponse> response = oneTimeNetworkResponseProvider.getSyncResponseFor(signUpRequest);
 
         // the possible errors are:
         //  - 409 Already Exists
