@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class ToolCardGUIView extends ToolCardView{
+public class ToolCardGUIView extends ToolCardView {
 
    @FXML
    public ImageView imageView;
@@ -26,10 +26,9 @@ public class ToolCardGUIView extends ToolCardView{
 
    private String path;
 
-
-    public ToolCardGUIView(ToolCard toolCard){
-        super(toolCard);
+    public ToolCardGUIView() {
     }
+
     public void setToolCard(ToolCard toolCard) {
         draft.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_DRAFT));
         bag.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_BAG_TEXT));

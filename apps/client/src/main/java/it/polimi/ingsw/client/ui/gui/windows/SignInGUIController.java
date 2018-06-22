@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
+import static com.jfoenix.controls.JFXDialog.DialogTransition.TOP;
 
 public class SignInGUIController extends SignInController {
 
@@ -101,7 +102,7 @@ public class SignInGUIController extends SignInController {
                 }
             }, responseError -> {
                 JFXDialogLayout content = new JFXDialogLayout();
-                JFXDialog dialog = new JFXDialog(stackPane, content, CENTER);
+                JFXDialog dialog = new JFXDialog(stackPane, content, TOP);
                 JFXButton button = new JFXButton("OK");
                 button.setOnAction(event -> dialog.close());
 

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.client.ui.gui.ToolCardGUIView;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.net.mocks.IEffect;
 import javafx.application.Application;
@@ -32,7 +31,7 @@ public class ToolCardGUIViewTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(Constants.Resources.TOOL_CARD_VIEW.getURL());
+        fxmlLoader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
         Parent root = fxmlLoader.load();
         toolCardGUIView = fxmlLoader.getController();
         toolCardGUIView.setToolCard(toolCard);

@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXDrawer?>
-<?import com.jfoenix.controls.JFXHamburger?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 
 
-<BorderPane prefHeight="400.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.windows.GameDashboardGUIController">
-   <top>
-      <BorderPane BorderPane.alignment="CENTER">
-         <left>
-            <JFXHamburger fx:id="hamburger" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #34495e;" stylesheets="@../../../../../Downloads/style.css" BorderPane.alignment="CENTER" />
-         </left>
-      </BorderPane>
-   </top>
-   <left>
-      <JFXDrawer fx:id="drawer" defaultDrawerSize="370.0" direction="RIGHT" miniDrawerSize="50.0" overLayVisible="false" prefHeight="350.0" prefWidth="370.0" resizeContent="true" style="-fx-background-color: #34495e;" BorderPane.alignment="CENTER" />
-   </left>
-</BorderPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="776.0" prefWidth="1241.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.windows.GameDashboardGUIController">
+   <children>
+      <GridPane fx:id="cardsPane" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+      </GridPane>
+      <GridPane fx:id="windowsPane" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+      </GridPane>
+   </children>
+</AnchorPane>

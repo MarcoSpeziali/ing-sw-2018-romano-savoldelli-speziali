@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
+import static com.jfoenix.controls.JFXDialog.DialogTransition.TOP;
 
 
 public class SignUpGUIController extends SignUpController {
@@ -38,7 +39,7 @@ public class SignUpGUIController extends SignUpController {
     public void onSignUpClicked() {
 
         JFXDialogLayout content = new JFXDialogLayout();
-        JFXDialog dialog = new JFXDialog(stackPane, content, CENTER);
+        JFXDialog dialog = new JFXDialog(stackPane, content, TOP);
         JFXButton button = new JFXButton("OK");
         button.setOnAction(event -> dialog.close());
         content.setActions(button);

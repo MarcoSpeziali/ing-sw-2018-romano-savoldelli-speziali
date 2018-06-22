@@ -7,6 +7,9 @@ public abstract class ToolCardView {
     protected ToolCard toolCard;
     protected ToolCardController toolCardController;
 
+    public ToolCardView() {
+    }
+
     public ToolCardView(ToolCard toolCard) {
         this.toolCard = new ToolCard(toolCard.getCardId(), toolCard.getTitle().toString(), toolCard.getDescription().toString(), toolCard.getEffect());
     }

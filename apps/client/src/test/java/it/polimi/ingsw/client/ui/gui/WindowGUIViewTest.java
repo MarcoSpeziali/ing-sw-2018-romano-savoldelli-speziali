@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.client.ui.gui.WindowGUIView;
-import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Window;
@@ -29,7 +27,7 @@ public class WindowGUIViewTest extends Application {
                     new Cell(0, GlassColor.BLUE), new Cell(2, null), new Cell(0, GlassColor.RED), new Cell(0, GlassColor.YELLOW)
             }
     };
-    private Window window = new Window(4, 3,4,"MadonnaGay", null, cells);
+    private Window window = new Window(4, 3,4,"DIOCAN", null, cells);
 
     @Override
     public void start(Stage primaryStage) throws Exception {
