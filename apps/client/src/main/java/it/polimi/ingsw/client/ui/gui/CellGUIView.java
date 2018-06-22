@@ -4,8 +4,8 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.CellController;
 import it.polimi.ingsw.models.Cell;
+import it.polimi.ingsw.net.mocks.ICell;
 import it.polimi.ingsw.utils.io.Resources;
-import it.polimi.ingsw.views.CellView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +15,10 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 
-public class CellGUIView extends CellView {
+public class CellGUIView extends GUIView {
 
     @FXML
     public AnchorPane colorAnchorPane;
@@ -47,10 +48,11 @@ public class CellGUIView extends CellView {
     }
 
     @Override
-    public void setCell(Cell cell) {
-        super.cell = cell;
-        if (super.cell.getShade() > 0) {
-            String resourceName = String.format("CELL_%d", super.cell.getShade());
+    public void setController(CellController controller) throws RemoteException {
+        super.controller = controller;
+        ICell iCell =  controller.getCell();
+        if (iCell.getShade() > 0) {
+            String resourceName = String.format("CELL_%d", iCell.getShade());
             String relativePath = Constants.Resources.valueOf(resourceName).getRelativePath();
             URL resourceUrl = Resources.getResource(CellGUIView.class.getClassLoader(), relativePath);
 
@@ -66,11 +68,11 @@ public class CellGUIView extends CellView {
                 ClientLogger.getLogger().log(Level.WARNING, "Could not retrieve image for resource {0}", resourceName);
             }
         }
-        else if (super.cell.getColor() == null) { // super.cell.getShade() == 0 always
+        else if (iCell.getColor() == null) { // super.iCell.getShade() == 0 always
             colorAnchorPane.setStyle("-fx-background-color: white");
         }
         else {
-            colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", this.cell.getColor().getHex()));
+            colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", iCell.getColor().getHex()));
         }
     }
 
@@ -94,13 +96,6 @@ public class CellGUIView extends CellView {
             }
         });
     }
-
-
-    @Override
-    public void setCellController(CellController cellController) {
-        super.setCellController(cellController);
-    }
-
 
 }
 

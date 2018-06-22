@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.ObjectiveCard;
-import it.polimi.ingsw.views.ObjectiveCardView;
+import it.polimi.ingsw.client.ui.views.ObjectiveCardView;
 
 public class ObjectiveCardCLIView extends ObjectiveCardView implements CLIView {
 

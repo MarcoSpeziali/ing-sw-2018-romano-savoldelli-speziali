@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.io.Resources;
-import it.polimi.ingsw.views.DieView;
 import javafx.fxml.FXML;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
-public class DieGUIView extends DieView {
+public class DieGUIView extends GUIView {
 
     @FXML
     public ImageView imageView;
@@ -26,7 +25,7 @@ public class DieGUIView extends DieView {
     public DieGUIView() {
     }
 
-    @Override
+    /*@Override
     public void setDie(Die die) {
         super.setDie(die);
 
@@ -55,5 +54,5 @@ public class DieGUIView extends DieView {
         else {
             ClientLogger.getLogger().log(Level.WARNING, "Could not retrieve image for resource {0}", resourceName);
         }
-    }
+    }*/
 }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.utils.io.Resources;
-import it.polimi.ingsw.views.ToolCardView;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,7 +10,7 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class ToolCardGUIView extends ToolCardView {
+public class ToolCardGUIView extends GUIView {
 
    @FXML
    public ImageView imageView;

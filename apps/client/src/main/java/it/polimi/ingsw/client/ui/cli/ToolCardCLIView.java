@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.ToolCard;
-import it.polimi.ingsw.views.ToolCardView;
+import it.polimi.ingsw.client.ui.views.ToolCardView;
 
 public class ToolCardCLIView extends ToolCardView implements CLIView {
 

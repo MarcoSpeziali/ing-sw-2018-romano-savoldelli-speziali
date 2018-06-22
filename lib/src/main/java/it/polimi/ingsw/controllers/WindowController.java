@@ -3,11 +3,14 @@ package it.polimi.ingsw.controllers;
 import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
+import it.polimi.ingsw.net.mocks.IWindow;
 
 import java.rmi.RemoteException;
 
-public interface WindowController extends ProxyUpdateInterface<Window> {
-    Window getWindow() throws RemoteException;
+public interface WindowController extends ProxyUpdateInterface<IWindow> {
+    IWindow getWindow() throws RemoteException;
+
+    CellController getCellController(int i, int j);
 
     Die tryToPick(Die die) throws RemoteException, DieInteractionException;
 

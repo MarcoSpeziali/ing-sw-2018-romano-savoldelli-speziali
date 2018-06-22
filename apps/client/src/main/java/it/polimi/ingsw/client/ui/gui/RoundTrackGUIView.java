@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.RoundTrack;
-import it.polimi.ingsw.views.RoundTrackView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +9,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class RoundTrackGUIView extends RoundTrackView {
+public class RoundTrackGUIView {
 
     @FXML
     public GridPane gridPane;
@@ -19,9 +17,8 @@ public class RoundTrackGUIView extends RoundTrackView {
     public RoundTrackGUIView(){
     }
 
-    @Override
+    // TODO change implementation of setRoundtrack, should extend GUIView and use IRoundtrack
     public void setRoundTrack(RoundTrack roundTrack) throws IOException {
-        super.setRoundTrack(roundTrack);
         for (int i = 0; i < 10; i++) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());

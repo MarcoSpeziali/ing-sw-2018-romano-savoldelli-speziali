@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.utils.io.Resources;
-import it.polimi.ingsw.views.ObjectiveCardView;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,7 +10,7 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class ObjectiveCardGUIView extends ObjectiveCardView {
+public class ObjectiveCardGUIView extends GUIView {
     @FXML
     public ImageView imageView;
     @FXML
@@ -20,8 +19,9 @@ public class ObjectiveCardGUIView extends ObjectiveCardView {
     public Text description;
 
     public ObjectiveCardGUIView(ObjectiveCard objectiveCard){
-        super(objectiveCard);
     }
+
+
     public void setToolCard(ObjectiveCard objectiveCard) {
         title.setText(Constants.Strings.toLocalized(Constants.Strings.getObjectiveCardTitle(objectiveCard.getCardId())));
         description.setText(Constants.Strings.toLocalized(Constants.Strings.getObjectiveCardDescription(objectiveCard.getCardId())));

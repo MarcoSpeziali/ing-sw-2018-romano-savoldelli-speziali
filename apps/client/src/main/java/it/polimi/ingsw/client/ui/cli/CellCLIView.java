@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.Cell;
-import it.polimi.ingsw.views.CellView;
+import it.polimi.ingsw.client.ui.views.CellView;
 import org.fusesource.jansi.Ansi;
 
 import static org.fusesource.jansi.Ansi.Color.BLACK;

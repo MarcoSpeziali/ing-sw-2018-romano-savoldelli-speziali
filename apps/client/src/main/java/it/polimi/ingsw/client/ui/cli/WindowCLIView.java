@@ -2,7 +2,7 @@ package it.polimi.ingsw.client.ui.cli;
 
 
 import it.polimi.ingsw.models.Window;
-import it.polimi.ingsw.views.WindowView;
+import it.polimi.ingsw.client.ui.views.WindowView;
 
 import java.io.IOException;
 import java.util.Scanner;

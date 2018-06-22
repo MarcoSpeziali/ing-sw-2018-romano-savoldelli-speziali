@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.DraftPool;
-import it.polimi.ingsw.views.DraftPoolView;
+import it.polimi.ingsw.client.ui.views.DraftPoolView;
 import org.fusesource.jansi.Ansi;
 
 import java.io.IOException;
