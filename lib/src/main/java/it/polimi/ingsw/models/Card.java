@@ -1,18 +1,15 @@
 package it.polimi.ingsw.models;
 
+import it.polimi.ingsw.net.mocks.ICard;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import it.polimi.ingsw.utils.text.LocalizedString;
 
-public abstract class Card implements JSONSerializable {
+public abstract class Card implements ICard {
 
     private static final long serialVersionUID = -3678332528456922553L;
 
-    @JSONElement("title")
     protected String title;
-    
-    @JSONElement("description")
     protected String description;
 
     /**
@@ -31,6 +28,8 @@ public abstract class Card implements JSONSerializable {
     /**
      * @return the card's title
      */
+    @Override
+    @JSONElement("title")
     public String getTitle() {
         return new LocalizedString(this.title).toString();
     }
@@ -45,6 +44,8 @@ public abstract class Card implements JSONSerializable {
     /**
      * @return the card's description
      */
+    @Override
+    @JSONElement("description")
     public String getDescription() {
         return new LocalizedString(this.description).toString();
     }

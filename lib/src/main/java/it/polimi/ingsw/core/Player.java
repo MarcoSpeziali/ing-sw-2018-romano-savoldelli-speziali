@@ -6,11 +6,12 @@ import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
+import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.net.mocks.PlayerMock;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-public class Player implements JSONSerializable, ILivePlayer, RandomPutLocation, RandomPickLocation {
+public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocation {
 
     private static final long serialVersionUID = 513182840776549527L;
 
@@ -45,13 +46,11 @@ public class Player implements JSONSerializable, ILivePlayer, RandomPutLocation,
         sharedInstance = this;
     }
 
-    @Override
     @JSONElement("id")
     public int getId() {
         return this.id;
     }
 
-    @Override
     @JSONElement("username")
     public String getUsername() {
         return this.username;
@@ -65,6 +64,14 @@ public class Player implements JSONSerializable, ILivePlayer, RandomPutLocation,
     @JSONElement("window")
     public Window getWindow() {
         return window;
+    }
+
+    @Override
+    public IPlayer getPlayer() {
+        return new PlayerMock(
+                this.id,
+                this.username
+        );
     }
 
     @Override

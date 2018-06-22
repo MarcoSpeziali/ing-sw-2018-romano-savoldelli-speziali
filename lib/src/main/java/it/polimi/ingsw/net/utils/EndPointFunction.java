@@ -9,6 +9,7 @@ public enum EndPointFunction {
     LOBBY_JOIN_REQUEST_RMI("lobby/join_request_rmi"),
     LOBBY_UPDATE_RESPONSE("lobby/update_response"),
     MATCH_MIGRATION("match/migration"),
+    MATCH_MIGRATION_RMI("match/migration_rmi"),
     MATCH_UPDATE_RESPONSE("match/update_response");
 
     private final String endPointFunctionName;

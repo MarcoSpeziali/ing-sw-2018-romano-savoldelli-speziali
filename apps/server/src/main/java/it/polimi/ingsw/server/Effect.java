@@ -118,7 +118,6 @@ public class Effect implements IEffect {
      *
      * @param cardId The id of the card (used to create a snapshot).
      */
-    @Override
     public void run(String cardId) {
         this.usedOnce = true;
 

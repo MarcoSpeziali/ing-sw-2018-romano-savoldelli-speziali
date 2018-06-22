@@ -3,11 +3,15 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.net.mocks.IObjective;
 import it.polimi.ingsw.server.instructions.Instruction;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.text.LocalizedString;
 
 import java.util.List;
 
 public class Objective implements IObjective {
+
+    private static final long serialVersionUID = -6454176762990817582L;
 
     /**
      * The number of points gained for each completions.
@@ -22,7 +26,7 @@ public class Objective implements IObjective {
     /**
      * The instructions to execute for calculating the number of completions.
      */
-    private List<Instruction> instructions;
+    private transient List<Instruction> instructions;
 
     /**
      * @param pointsPerCompletion the number of points gained for each completions
@@ -35,9 +39,15 @@ public class Objective implements IObjective {
         this.instructions = instructions;
     }
 
+    @JSONDesignatedConstructor
+    Objective(@JSONElement("points-per-completion") int pointsPerCompletion) {
+        this.pointsPerCompletion = pointsPerCompletion;
+    }
+
     /**
      * @return the number of points gained for each completions
      */
+    @JSONElement("points-per-completion")
     public int getPointsPerCompletion() {
         return pointsPerCompletion;
     }
@@ -56,7 +66,6 @@ public class Objective implements IObjective {
         return instructions;
     }
 
-    @Override
     public synchronized int calculatePoints(Context context) {
         Context.Snapshot snapshot = Context.getSharedInstance()
                 .snapshot("Objective(" + this.description.getLocalizationKey() + ")");

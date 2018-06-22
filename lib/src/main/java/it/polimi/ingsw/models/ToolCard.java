@@ -61,11 +61,4 @@ public class ToolCard extends Card {
     public void setEffect(IEffect effect) {
         this.effect = effect;
     }
-
-    /**
-     * Activates the effect of the tool card.
-     */
-    public void activate() {
-        this.effect.run(cardId);
-    }
 }

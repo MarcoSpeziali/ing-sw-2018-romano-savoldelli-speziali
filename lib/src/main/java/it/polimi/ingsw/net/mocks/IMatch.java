@@ -18,5 +18,7 @@ public interface IMatch extends JSONSerializable {
     ILobby getLobby();
 
     @JSONElement("players")
-    IPlayer[] getPlayers();
+    ILivePlayer[] getPlayers();
+
+    
 }

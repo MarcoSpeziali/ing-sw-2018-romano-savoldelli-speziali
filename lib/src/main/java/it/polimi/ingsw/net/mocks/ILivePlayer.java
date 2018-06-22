@@ -1,12 +1,15 @@
 package it.polimi.ingsw.net.mocks;
 
-import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-public interface ILivePlayer extends IPlayer {
+public interface ILivePlayer extends JSONSerializable {
     @JSONElement("favour-tokens")
     int getFavourTokens();
 
     @JSONElement("window")
-    Window getWindow();
+    IWindow getWindow();
+
+    @JSONElement("player")
+    IPlayer getPlayer();
 }

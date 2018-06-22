@@ -12,11 +12,6 @@ import javafx.stage.Stage;
 public class ToolCardGUIViewTest extends Application {
     private IEffect iEffect = new IEffect() {
         @Override
-        public void run(String cardId) {
-
-        }
-
-        @Override
         public int getCost() {
             return 0;
         }

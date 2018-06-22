@@ -13,7 +13,7 @@ public class MatchMock implements IMatch {
     private final long startingTime;
     private final long endingTime;
     private final LobbyMock lobby;
-    private final PlayerMock[] players;
+    private final LivePlayerMock[] players;
 
     public MatchMock(IMatch iMatch) {
         this(
@@ -22,8 +22,8 @@ public class MatchMock implements IMatch {
                 iMatch.getEndingTime(),
                 new LobbyMock(iMatch.getLobby()),
                 Arrays.stream(iMatch.getPlayers())
-                        .map(PlayerMock::new)
-                        .toArray(PlayerMock[]::new)
+                        .map(LivePlayerMock::new)
+                        .toArray(LivePlayerMock[]::new)
         );
     }
 
@@ -33,7 +33,7 @@ public class MatchMock implements IMatch {
             @JSONElement("starting-time") long startingTime,
             @JSONElement("ending-time") long endingTime,
             @JSONElement("lobby") LobbyMock lobby,
-            @JSONElement("players") PlayerMock[] players
+            @JSONElement("players") LivePlayerMock[] players
     ) {
         this.id = id;
         this.startingTime = startingTime;
@@ -68,7 +68,7 @@ public class MatchMock implements IMatch {
 
     @Override
     @JSONElement("players")
-    public IPlayer[] getPlayers() {
+    public LivePlayerMock[] getPlayers() {
         return players;
     }
 }

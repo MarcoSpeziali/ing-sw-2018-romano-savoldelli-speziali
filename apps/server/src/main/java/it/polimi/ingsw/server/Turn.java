@@ -38,7 +38,7 @@ public class Turn {
                 else {
                     state = END;
                 }
-                toolCard.activate();
+                // toolCard.activate();
             }
         }
     }

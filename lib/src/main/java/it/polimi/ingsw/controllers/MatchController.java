@@ -3,8 +3,6 @@ package it.polimi.ingsw.controllers;
 import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.controllers.proxies.RemotelyClosable;
 import it.polimi.ingsw.controllers.proxies.RemotelyInitializable;
-import it.polimi.ingsw.models.ObjectiveCard;
-import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.net.mocks.IMatch;
@@ -18,11 +16,11 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
     IWindow[] waitForWindowRequest();
     WindowController respondToWindowRequest(IWindow window);
 
-    ToolCard[] waitForToolCards();
+    ToolCardController[] waitForToolCards();
 
-    ObjectiveCard[] waitForPublicObjectiveCards();
+    ObjectiveCardController[] waitForPublicObjectiveCards();
 
-    ObjectiveCard waitForPrivateObjectiveCard();
+    ObjectiveCardController waitForPrivateObjectiveCard();
 
     // then the opponents' Window are sent
     Map<ILivePlayer, Window> waitForOpponentsWindowsUpdate();

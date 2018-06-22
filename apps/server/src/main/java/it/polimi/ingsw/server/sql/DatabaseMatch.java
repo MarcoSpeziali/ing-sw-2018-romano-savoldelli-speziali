@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.sql;
 
-import it.polimi.ingsw.net.mocks.ILobby;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 
 import java.sql.Date;
@@ -75,7 +73,7 @@ public class DatabaseMatch implements IMatch {
     }
 
     @Override
-    public IPlayer[] getPlayers() {
+    public ILivePlayer[] getPlayers() {
         String query = String.format(
                 "SELECT p.* FROM match m " +
                         "JOIN match_player mb ON mb.match = m.id " +
@@ -84,30 +82,30 @@ public class DatabaseMatch implements IMatch {
                 this.id
         );
 
-        //noinspection Duplicates
         try (SagradaDatabase database = new SagradaDatabase()) {
-            List<IPlayer> players = database.executeQuery(query, resultSet -> {
-                LinkedList<IPlayer> databasePlayers = new LinkedList<>();
+            List<ILivePlayer> players = database.executeQuery(query, resultSet -> {
+                LinkedList<ILivePlayer> databasePlayers = new LinkedList<>();
 
                 do {
-                    databasePlayers.add(new DatabasePlayer(resultSet));
+                    // FIXME: 22/06/18 
+                    // databasePlayers.add(new LivePlayerMock(resultSet));
                 } while (resultSet.next());
 
                 return databasePlayers;
             });
 
             if (players == null || players.isEmpty()) {
-                return new IPlayer[0];
+                return new ILivePlayer[0];
             }
 
-            return players.toArray(new IPlayer[0]);
+            return players.toArray(new ILivePlayer[0]);
         }
         catch (SQLException e) {
             return null;
         }
     }
 
-    public static DatabaseMatch getMatchWithId(int id) throws SQLException {
+    public static DatabaseMatch matchWithId(int id) throws SQLException {
         String query = String.format(
                 "SELECT * FROM match WHERE id = '%d'",
                 id
