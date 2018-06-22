@@ -28,19 +28,6 @@ public class SignInManager {
     private OneTimeNetworkResponseProvider oneTimeNetworkResponseProvider;
 
     private SignInManager() {
-        if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
-            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
-                    Settings.getSettings().getServerSocketAddress(),
-                    Settings.getSettings().getServerSocketPort()
-            );
-        }
-        else {
-            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
-                    Settings.getSettings().getServerRMIAddress(),
-                    Settings.getSettings().getServerRMIPort(),
-                    SignInInterface.class
-            );
-        }
     }
 
     public static SignInManager getManager() {
@@ -81,6 +68,20 @@ public class SignInManager {
      * @throws NotBoundException if the {@link EndPointFunction} is not bound
      */
     public ResponseFields.Error signIn(String username, String password) throws IOException, NotBoundException {
+        if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
+            oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
+                    Settings.getSettings().getServerSocketAddress(),
+                    Settings.getSettings().getServerSocketPort()
+            );
+        }
+        else {
+            oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
+                    Settings.getSettings().getServerRMIAddress(),
+                    Settings.getSettings().getServerRMIPort(),
+                    SignInInterface.class
+            );
+        }
+        
         // builds the sign-in request
         Request<SignInRequest> authenticationRequest = new Request<>(
                 new Header(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION),
