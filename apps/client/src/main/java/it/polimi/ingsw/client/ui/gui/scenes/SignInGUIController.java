@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui.windows;
+package it.polimi.ingsw.client.ui.gui.scenes;
 
 import com.jfoenix.controls.*;
 import it.polimi.ingsw.client.Constants;
@@ -14,7 +14,7 @@ import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.providers.OneTimeRMIResponseProvider;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
+import it.polimi.ingsw.utils.streams.ExceptionWrapper;
 import it.polimi.ingsw.utils.text.Localized;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -98,7 +98,7 @@ public class SignInGUIController extends SignInController {
                     SagradaGUI.showStage(parent, 353, 546);
                 }
                 catch (IOException | NotBoundException e) {
-                    StreamExceptionWrapper.wrap(e);
+                    ExceptionWrapper.wrap(e);
                 }
             }, responseError -> {
                 JFXDialogLayout content = new JFXDialogLayout();
@@ -122,7 +122,7 @@ public class SignInGUIController extends SignInController {
                 dialog.show();
             });
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             e.tryUnwrap(NotBoundException.class)
                     .tryFinalUnwrap(IOException.class);
         }

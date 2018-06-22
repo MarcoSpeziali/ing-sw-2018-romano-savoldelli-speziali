@@ -7,7 +7,7 @@ import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
-import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
+import it.polimi.ingsw.utils.streams.ExceptionWrapper;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -58,11 +58,11 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                         }
                     }
                     catch (IOException e) {
-                        StreamExceptionWrapper.wrap(e);
+                        ExceptionWrapper.wrap(e);
                     }
                 });
             }
-            catch (IOException | StreamExceptionWrapper ignored) {
+            catch (IOException | ExceptionWrapper ignored) {
             }
         }
     };

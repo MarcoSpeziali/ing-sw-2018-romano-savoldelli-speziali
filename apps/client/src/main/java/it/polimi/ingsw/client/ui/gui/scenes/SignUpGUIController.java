@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui.windows;
+package it.polimi.ingsw.client.ui.gui.scenes;
 
 
 import com.jfoenix.controls.*;
@@ -6,11 +6,8 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.controllers.SignUpController;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 

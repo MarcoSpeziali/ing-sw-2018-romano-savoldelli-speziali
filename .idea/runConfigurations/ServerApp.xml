@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ServerApp" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="ServerApp" type="Application" factoryName="Application" singleton="true" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.server.ServerApp" />
     <module name="server" />
     <option name="PROGRAM_PARAMETERS" value="--log-level FINEST" />

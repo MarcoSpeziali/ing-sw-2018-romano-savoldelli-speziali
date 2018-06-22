@@ -18,7 +18,7 @@ class WindowCompilerTest {
     @Test
     void testOneCompilation() throws ParserConfigurationException, SAXException, IOException {
         String windowXmlString =
-                "<window rows=\"4\" columns=\"5\" id=\"kaleidoscopic_dream\" sibling=\"firmitas\" name=\"windows.kaleidoscopic_dream\" difficulty=\"4\">" +
+                "<window rows=\"4\" columns=\"5\" id=\"kaleidoscopic_dream\" sibling=\"firmitas\" name=\"Window.kaleidoscopic_dream\" difficulty=\"4\">" +
                         "    <cell color=\"yellow\" />" +
                         "    <cell color=\"blue\" />" +
                         "    <cell />" +

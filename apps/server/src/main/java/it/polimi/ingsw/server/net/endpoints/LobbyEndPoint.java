@@ -9,6 +9,7 @@ import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.mocks.IPlayer;
 import it.polimi.ingsw.net.mocks.LobbyMock;
+import it.polimi.ingsw.net.mocks.MatchMock;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.Constants;
@@ -45,7 +46,15 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     private transient ScheduledFuture<?> timerScheduledFuture;
     private transient int timeRemaining = -1;
     private transient Runnable executorTask = () -> {
-        if (timeRemaining != -1) {
+        if (timeRemaining == 0) {
+            try {
+                closeLobbyAndStartMatch();
+            }
+            catch (SQLException e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error while querying the database", e);
+            }
+        }
+        else if (timeRemaining != -1) {
             timeRemaining -= 100;
         }
     };
@@ -111,25 +120,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 }
                 // otherwise, if the number of players in lobby is equal to the MaximumNumberOfPlayers then the match stats
                 else if (players.length == Settings.getSettings().getMaximumNumberOfPlayers()) {
-                    this.timerScheduledFuture.cancel(true);
-                    this.timeRemaining = -1;
-
-                    DatabaseMatch databaseMatch = DatabaseMatch.insertMatchFromLobby(lobby.getId());
-                    DatabaseLobby.closeLobby(lobby.getId());
-
-                    final DatabaseLobby finalLobby = lobby;
-                    EventDispatcher.dispatch(
-                            EventType.LOBBY_EVENTS,
-                            LobbyEventsListener.class,
-                            listener -> listener.onLobbyClosed(finalLobby, LobbyEventsListener.LobbyCloseReason.MATCH_STARTED)
-                    );
-                    EventDispatcher.dispatch(
-                            EventType.MATCH_EVENTS,
-                            MatchEventListeners.class,
-                            matchEventListeners -> matchEventListeners.onMatchCreated(databaseMatch)
-                    );
-
-
+                    closeLobbyAndStartMatch();
                 }
 
                 lobby.setTimeRemaining(this.timeRemaining == -1 ? -1 : (this.timeRemaining / 1000));
@@ -285,6 +276,32 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 Settings.getSettings().getRmiHeartBeatTimeUnit()
         );
     }
+    
+    private void closeLobbyAndStartMatch() throws SQLException {
+        synchronized (LockManager.getLockObject(Constants.LockTargets.LOBBY)) {
+            DatabaseLobby lobby = DatabaseLobby.getOpenLobby();
+            
+            this.timerScheduledFuture.cancel(true);
+            this.timeRemaining = -1;
+    
+            DatabaseMatch databaseMatch = DatabaseMatch.insertMatchFromLobby(lobby.getId());
+            DatabaseLobby.closeLobby(lobby.getId());
+    
+            final DatabaseLobby finalLobby = lobby;
+            EventDispatcher.dispatch(
+                    EventType.LOBBY_EVENTS,
+                    LobbyEventsListener.class,
+                    listener -> listener.onLobbyClosed(finalLobby, LobbyEventsListener.LobbyCloseReason.MATCH_STARTED)
+            );
+            EventDispatcher.dispatch(
+                    EventType.MATCH_EVENTS,
+                    MatchEventListeners.class,
+                    matchEventListeners -> matchEventListeners.onMatchCreated(databaseMatch)
+            );
+    
+            sendMatchMigrationRequest(lobby, databaseMatch);
+        }
+    }
 
     private void sendUpdates(DatabaseLobby databaseLobby, DatabasePlayer exceptTo) {
         lobbyControllers.forEach(
@@ -299,7 +316,9 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 .filter(player -> player.getId() != exceptTo.getId())
                 .map(iPlayer -> (DatabasePlayer) iPlayer)
                 .map(AuthenticatedClientHandler::getHandlerForPlayer)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+        // TODO: join
         clientsToUpdate.forEach(client -> {
                     try {
                         client.sendResponse(new Response<>(
@@ -316,26 +335,54 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     }
 
     private void sendMatchMigrationRequest(DatabaseLobby databaseLobby, DatabaseMatch databaseMatch) {
+        MatchMock matchMock = new MatchMock(databaseMatch);
+        
         lobbyControllers.forEach(
                 (databasePlayer, lobbyRMIProxyController) -> {
-                        lobbyRMIProxyController.onUpdateReceived(new LobbyMock(databaseLobby));
+                    ServerLogger.getLogger().log(Level.FINER, () -> String.format(
+                            "Sending match (%d) to player (%d) using rmi",
+                            matchMock.getId(),
+                            databasePlayer.getId()
+                    ));
+                    
+                    lobbyRMIProxyController.postMigrationRequest(matchMock);
+    
+                    ServerLogger.getLogger().log(Level.FINEST, () -> String.format(
+                            "Sent match (%d) to player (%d) using rmi",
+                            matchMock.getId(),
+                            databasePlayer.getId()
+                    ));
                 }
         );
-
+    
         List<AuthenticatedClientHandler> clientsToUpdate = Arrays.stream(databaseLobby.getPlayers())
                 .map(iPlayer -> (DatabasePlayer) iPlayer)
                 .map(AuthenticatedClientHandler::getHandlerForPlayer)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+        // TODO: join
         clientsToUpdate.forEach(client -> {
                     try {
+                        ServerLogger.getLogger().log(Level.FINER, () -> String.format(
+                                "Sending match (%d) to player (%d) using sockets",
+                                matchMock.getId(),
+                                client.getPlayer().getId()
+                        ));
+                        
                         client.sendResponse(new Response<>(
-                                new Header(EndPointFunction.LOBBY_UPDATE_RESPONSE),
-                                new LobbyMock(databaseLobby)
+                                new Header(EndPointFunction.MATCH_MIGRATION),
+                                matchMock
+                        ));
+    
+                        ServerLogger.getLogger().log(Level.FINEST, () -> String.format(
+                                "Sent match (%d) to player (%d) using sockets",
+                                matchMock.getId(),
+                                client.getPlayer().getId()
                         ));
                     }
                     catch (IOException e) {
                         ServerLogger.getLogger()
-                                .log(Level.SEVERE, "Error while sending the update to player: " + client.getPlayer(), e);
+                                .log(Level.SEVERE, "Error while sending the migration request to player: " + client.getPlayer(), e);
                     }
                 }
         );

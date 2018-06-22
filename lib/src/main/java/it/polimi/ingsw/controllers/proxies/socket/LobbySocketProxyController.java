@@ -9,7 +9,7 @@ import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
+import it.polimi.ingsw.utils.streams.ExceptionWrapper;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -50,16 +50,16 @@ public class LobbySocketProxyController implements LobbyController {
                     new LobbyJoinRequest()
             ), (Response<ILobby> response) -> {
                 if (response.getError() != null) {
-                    StreamExceptionWrapper.wrap(new RemoteException());
+                    ExceptionWrapper.wrap(new RemoteException());
                 }
 
                 synchronized (updateSyncObject) {
                     this.lobbyResult = response.getBody();
                     updateSyncObject.notifyAll();
                 }
-            }, StreamExceptionWrapper::wrap);
+            }, ExceptionWrapper::wrap);
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             e.tryUnwrap(RemoteException.class)
                     .tryFinalUnwrap(IOException.class);
         }

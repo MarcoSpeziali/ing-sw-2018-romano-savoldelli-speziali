@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="722.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/9.0.1"
-            fx:controller="it.polimi.ingsw.client.ui.gui.windows.StartScreenGUIController">
+            fx:controller="it.polimi.ingsw.client.ui.gui.scenes.StartScreenGUIController">
     <center>
         <Pane prefHeight="722.0" prefWidth="550.0">
             <children>

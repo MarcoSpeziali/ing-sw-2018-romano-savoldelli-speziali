@@ -15,10 +15,6 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
     Window[] waitForWindowRequest();
     void respondToWindowRequest(Window window);
 
-    // then the opponents' windows are sent
+    // then the opponents' Window are sent
     Map<IPlayer, Window> waitForOpponentsWindowsUpdate();
-
-    int waitForTurnWithTimeout();
-
-
 }

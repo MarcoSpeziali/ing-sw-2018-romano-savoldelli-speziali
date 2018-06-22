@@ -62,7 +62,7 @@ public class DatabaseMatch implements IMatch {
     @Override
     public ILobby getLobby() {
         String query = String.format(
-                "SELECT l.* FROM match m JOIN lobby l ON m.lobby = l.id WHERE m.id = %d",
+                "SELECT l.* FROM match m JOIN lobby l ON m.from_lobby = l.id WHERE m.id = %d",
                 this.id
         );
 
@@ -70,7 +70,7 @@ public class DatabaseMatch implements IMatch {
             return database.executeQuery(query, DatabaseLobby::new);
         }
         catch (SQLException e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -127,7 +127,7 @@ public class DatabaseMatch implements IMatch {
     }
 
     public static DatabaseMatch insertMatchFromLobby(int lobbyId) throws SQLException {
-        String matchCreationQuery = String.format("INSERT INTO match (lobby) VALUES (%d) RETURNING *", lobbyId);
+        String matchCreationQuery = String.format("INSERT INTO match (from_lobby) VALUES (%d) RETURNING *", lobbyId);
 
         try (SagradaDatabase database = new SagradaDatabase()) {
             DatabaseMatch match = database.executeQuery(matchCreationQuery, DatabaseMatch::new);

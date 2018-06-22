@@ -25,7 +25,7 @@ public class WindowCompiler {
     }
 
     /**
-     * Compiles all windows in the default file.
+     * Compiles all Window in the default file.
      *
      * @return a {@link List} of {@link Window}
      * @throws IOException                  if any IO errors occur
@@ -38,9 +38,9 @@ public class WindowCompiler {
     }
 
     /**
-     * Compiles all windows in the provided path.
+     * Compiles all Window in the provided path.
      *
-     * @param path       the path to the file containing the windows
+     * @param path       the path to the file containing the Window
      * @param isResource {@code true} if the path is relative to the resource folder
      * @return a {@link List} of {@link Window}
      * @throws IOException                  if any IO errors occur
@@ -72,7 +72,7 @@ public class WindowCompiler {
             window.setSibling(windowMap.get(windowSibling));
         }
 
-        // finally return the windows
+        // finally return the Window
         return windows;
     }
 
@@ -161,7 +161,7 @@ public class WindowCompiler {
     /**
      * Returns an array of {@link Map} each one containing the information about a window.
      *
-     * @param path       the path to the file containing the windows
+     * @param path       the path to the file containing the Window
      * @param isResource {@code true} if the path is relative to the resource folder
      * @return a {@link List} of {@link Window}
      * @throws IOException                  if any IO errors occur
@@ -184,7 +184,7 @@ public class WindowCompiler {
         Map<String, Object> document = XMLUtils.xmlToMap(node);
 
         if (document.containsKey(WindowNodes.WINDOW_NODE_NAME)) {
-            // the children of windows (window)
+            // the children of Window (window)
             return XMLUtils.getMapArrayAnyway(document, WindowNodes.WINDOW_NODE_NAME);
         }
 

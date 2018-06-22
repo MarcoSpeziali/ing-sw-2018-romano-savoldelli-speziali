@@ -20,7 +20,11 @@ public class ClientApp {
 
         try {
             ClientLogger.setLoggingLevel(Level.FINEST);
-
+    
+            if (!options.has(Constants.ClientArguments.CLI_MODE.toString())) {
+                ClientLogger.setUpConsoleLogger();
+            }
+            
             // create the folders needed by the server
             createProjectsFolders();
 

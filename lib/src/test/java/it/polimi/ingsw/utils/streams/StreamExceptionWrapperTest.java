@@ -16,11 +16,11 @@ class StreamExceptionWrapperTest {
                     return singleThrowableMethod();
                 }
                 catch (ClassNotFoundException e) {
-                    return StreamExceptionWrapper.wrap(e);
+                    return ExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             Assertions.assertThrows(ClassNotFoundException.class, () -> e.tryUnwrap(ClassNotFoundException.class));
         }
     }
@@ -34,11 +34,11 @@ class StreamExceptionWrapperTest {
                     return multipleThrowableMethod();
                 }
                 catch (ClassNotFoundException | IllegalAccessException e) {
-                    return StreamExceptionWrapper.wrap(e);
+                    return ExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             e.tryUnwrap(IllegalAccessException.class);
 
             Assertions.assertThrows(ClassNotFoundException.class, () -> e.tryUnwrap(ClassNotFoundException.class));
@@ -54,11 +54,11 @@ class StreamExceptionWrapperTest {
                     return multipleThrowableMethod();
                 }
                 catch (ClassNotFoundException | IllegalAccessException e) {
-                    return StreamExceptionWrapper.wrap(e);
+                    return ExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             Assertions.assertThrows(ClassNotFoundException.class, () -> e.tryUnwrap(IllegalAccessException.class)
                     .tryUnwrap(ClassNotFoundException.class));
         }
@@ -73,11 +73,11 @@ class StreamExceptionWrapperTest {
                     return multipleThrowableMethod();
                 }
                 catch (Exception e) {
-                    return StreamExceptionWrapper.wrap(e);
+                    return ExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             Assertions.assertThrows(RuntimeException.class, () -> e.tryUnwrap(IllegalAccessException.class)
                     .tryFinalUnwrap(IllegalArgumentException.class));
         }

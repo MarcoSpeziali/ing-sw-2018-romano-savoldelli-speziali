@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui.windows;
+package it.polimi.ingsw.client.ui.gui.scenes;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -49,8 +49,13 @@ public class SettingsGUIView implements Initializable {
     private SettingsController settingsController;
 
     private FXMLLoader loader = new FXMLLoader();
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Localized.Updater.update(this);
+    }
 
-    public void setController(SettingsController settingsController) {
+    public void setController(@SuppressWarnings("ClassEscapesDefinedScope") SettingsController settingsController) {
         this.settingsController = settingsController;
         this.settingsController.init();
 
@@ -74,11 +79,6 @@ public class SettingsGUIView implements Initializable {
         this.languageComboBox.setValue(this.settingsController.getCurrentLanguageName());
         this.languageComboBox.valueProperty()
                 .addListener((observable, oldValue, newValue) -> this.settingsController.onLanguageChanged(newValue));
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Localized.Updater.update(this);
     }
 
     @FXML

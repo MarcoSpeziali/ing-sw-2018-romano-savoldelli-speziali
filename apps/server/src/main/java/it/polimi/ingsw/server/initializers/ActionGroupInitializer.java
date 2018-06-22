@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.compilers.actions.CompiledAction;
 import it.polimi.ingsw.server.compilers.actions.CompiledActionGroup;
 import it.polimi.ingsw.server.compilers.actions.CompiledExecutableAction;
-import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
+import it.polimi.ingsw.utils.streams.ExceptionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -70,11 +70,11 @@ public class ActionGroupInitializer {
                             }
                         }
                         catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                            return StreamExceptionWrapper.wrap(e);
+                            return ExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             return e.tryUnwrap(NoSuchMethodException.class)
                     .tryUnwrap(InvocationTargetException.class)
                     .tryUnwrap(IllegalAccessException.class)

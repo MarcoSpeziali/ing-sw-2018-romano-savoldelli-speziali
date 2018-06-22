@@ -64,13 +64,13 @@ public class CompilationManager {
 
         try {
             if (resourcesToCompile.contains(Constants.Resources.WINDOWS)) {
-                logger.fine("Starting windows compilation");
+                logger.fine("Starting Window compilation");
 
                 long start = System.currentTimeMillis();
                 compileWindows(compilationFolder);
                 long end = System.currentTimeMillis();
 
-                logger.log(Level.FINE, "Done compiling windows, took {0}ms", end - start);
+                logger.log(Level.FINE, "Done compiling Window, took {0}ms", end - start);
             }
             else {
                 copyResource(Constants.Resources.WINDOWS, compilationFolder);
@@ -242,7 +242,7 @@ public class CompilationManager {
     }
 
     /**
-     * @return whether the windows need to be recompiled
+     * @return whether the Window need to be recompiled
      */
     public static boolean windowsNeedRecompilation() {
         return resourceNeedsRecompilation(Constants.Resources.WINDOWS);
@@ -381,7 +381,7 @@ public class CompilationManager {
     }
 
     /**
-     * Compiles the windows and saves them at {@code compilationFolder}/windows.
+     * Compiles the Window and saves them at {@code compilationFolder}/Window.
      *
      * @param compilationFolder the folder to save the compiled objects to
      * @throws IOException                  if any IO errors occur
@@ -391,10 +391,10 @@ public class CompilationManager {
      */
     private static void compileWindows(File compilationFolder) throws ParserConfigurationException, SAXException, IOException {
         try {
-            // compiles the windows
+            // compiles the Window
             List<Window> windows = WindowCompiler.compileAll();
 
-            // and then serializes the window array info a file called windows
+            // and then serializes the window array info a file called Window
             serializeObjects(
                     windows.toArray(new Serializable[0]),
                     compilationFolder,
@@ -402,7 +402,7 @@ public class CompilationManager {
             );
         }
         catch (IOException | SAXException | ParserConfigurationException e) {
-            logger.severe("Could not compile windows:");
+            logger.severe("Could not compile Window:");
             throw e;
         }
     }
@@ -433,7 +433,7 @@ public class CompilationManager {
             // compiles the tool cards
             List<CompiledToolCard> toolCards = CardCompiler.compileToolCards(actionDirectives);
 
-            // and then serializes the window array info a file called windows
+            // and then serializes the window array info a file called Window
             serializeObjects(
                     toolCards.toArray(new Serializable[0]),
                     compilationFolder,
@@ -489,7 +489,7 @@ public class CompilationManager {
             // compiles the predicates directives
             List<PredicateDirective> predicateDirectives = PredicateDirectivesCompiler.compile();
 
-            // and then serializes the window array info a file called windows
+            // and then serializes the window array info a file called Window
             serializeObjects(
                     predicateDirectives.toArray(new Serializable[0]),
                     compilationFolder,
@@ -517,7 +517,7 @@ public class CompilationManager {
             // compiles the instructions directives
             List<InstructionDirective> instructionDirectives = InstructionDirectiveCompiler.compile();
 
-            // and then serializes the window array info a file called windows
+            // and then serializes the window array info a file called Window
             serializeObjects(
                     instructionDirectives.toArray(new Serializable[0]),
                     compilationFolder,
@@ -570,7 +570,7 @@ public class CompilationManager {
                     predicatesDirectives
             );
 
-            // and then serializes the window array info a file called windows
+            // and then serializes the window array info a file called Window
             serializeObjects(
                     objectiveCards.toArray(new Serializable[0]),
                     compilationFolder,
@@ -623,7 +623,7 @@ public class CompilationManager {
                     predicatesDirectives
             );
 
-            // and then serializes the window array info a file called windows
+            // and then serializes the window array info a file called Window
             serializeObjects(
                     objectiveCards.toArray(new Serializable[0]),
                     compilationFolder,

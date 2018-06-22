@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui.windows;
+package it.polimi.ingsw.client.ui.gui.scenes;
 
 import com.jfoenix.controls.JFXButton;
 import it.polimi.ingsw.client.Constants;

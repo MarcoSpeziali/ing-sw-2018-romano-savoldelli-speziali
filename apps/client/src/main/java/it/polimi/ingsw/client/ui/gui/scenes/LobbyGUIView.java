@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.gui.windows;
+package it.polimi.ingsw.client.ui.gui.scenes;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -14,15 +14,16 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 
-import java.io.IOException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
+
+import static it.polimi.ingsw.utils.streams.ExceptionWrapper.unchecked;
 
 public class LobbyGUIView implements Initializable {
 
@@ -51,13 +52,11 @@ public class LobbyGUIView implements Initializable {
     public void setProxy(LobbyController proxyController) {
         this.proxyController = proxyController;
 
-        try {
+        unchecked(() -> {
             this.proxyController.init();
-            setUpFuture();
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            setUpUpdateFuture();
+            setUpMatchFuture();
+        }).run();
     }
 
     @Override
@@ -86,18 +85,22 @@ public class LobbyGUIView implements Initializable {
         SagradaGUI.showStage(loader.load(), 550, 722);
     }
 
-    private void setUpFuture() {
-        CompletableFuture<ILobby> completableFuture = CompletableFuture.supplyAsync(() -> {
-            try {
-                return this.proxyController.waitForUpdate();
-            }
-            catch (RemoteException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        completableFuture.thenAccept(this::onUpdateReceived);
+    private void setUpUpdateFuture() {
+        CompletableFuture.supplyAsync(unchecked(() -> this.proxyController.waitForUpdate()))
+                .thenAccept(this::onUpdateReceived);
     }
 
+    private void setUpMatchFuture() {
+        CompletableFuture.supplyAsync(unchecked(() -> this.proxyController.waitForMigrationRequest()))
+                .thenAccept(iMatch -> Platform.runLater(unchecked(() -> {
+                    loader.setLocation(Constants.Resources.GAME_DASHBOARD_FXML.getURL());
+                    Parent parent = loader.load();
+                    // GameDashboardGUIController gameDashboardGUIController = loader.getController();
+                    // gameDashboardGUIController...
+                    SagradaGUI.showStage(parent, 1280, 720);
+                })));
+    }
+    
     public void onUpdateReceived(ILobby update) {
         Platform.runLater(() -> {
             for (int i = 0; i < update.getPlayers().length; i++) {
@@ -129,7 +132,7 @@ public class LobbyGUIView implements Initializable {
                 this.stopTimer();
             }
 
-            setUpFuture();
+            setUpUpdateFuture();
         });
     }
 

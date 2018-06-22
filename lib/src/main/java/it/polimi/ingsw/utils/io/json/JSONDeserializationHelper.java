@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils.io.json;
 
 import it.polimi.ingsw.utils.ReflectionUtils;
-import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
+import it.polimi.ingsw.utils.streams.ExceptionWrapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -117,13 +117,13 @@ class JSONDeserializationHelper {
                             field.set(instance, deserializeObject(field.getType(), field.getAnnotation(JSONElement.class), jsonObject));
                         }
                         catch (IllegalAccessException e) {
-                            StreamExceptionWrapper.wrap(e);
+                            ExceptionWrapper.wrap(e);
                         }
 
                         field.setAccessible(false);
                     });
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             e.tryFinalUnwrap(IllegalAccessException.class);
         }
 

@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.server.instructions.predicates.Predicate;
 import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.io.XMLUtils;
-import it.polimi.ingsw.utils.streams.StreamExceptionWrapper;
+import it.polimi.ingsw.utils.streams.ExceptionWrapper;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -63,11 +63,11 @@ public class PredicateDirectivesCompiler {
                             return processPredicateDirective(rawDirective);
                         }
                         catch (ClassNotFoundException e) {
-                            return StreamExceptionWrapper.wrap(e);
+                            return ExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             return e.tryFinalUnwrap(ClassNotFoundException.class);
         }
     }
@@ -93,11 +93,11 @@ public class PredicateDirectivesCompiler {
                                     return processPredicateParameterDirective(d);
                                 }
                                 catch (ClassNotFoundException e) {
-                                    return StreamExceptionWrapper.wrap(e);
+                                    return ExceptionWrapper.wrap(e);
                                 }
                             }).collect(Collectors.toList());
         }
-        catch (StreamExceptionWrapper e) {
+        catch (ExceptionWrapper e) {
             return e.tryFinalUnwrap(ClassNotFoundException.class);
         }
 
