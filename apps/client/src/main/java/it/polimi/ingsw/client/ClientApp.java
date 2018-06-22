@@ -31,6 +31,9 @@ public class ClientApp {
             // builds the settings
             Settings.getSettings();
 
+            // sets the rmi hostname
+            System.setProperty("java.rmi.server.hostname", Settings.getSettings().getServerRMIAddress());
+
             // sets the locale to the one found in the settings
             LocalizedString.invalidateCacheForNewLocale(Settings.getSettings().getLanguage().getLocale());
 

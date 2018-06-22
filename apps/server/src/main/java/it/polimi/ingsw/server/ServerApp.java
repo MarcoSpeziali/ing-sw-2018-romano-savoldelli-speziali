@@ -169,6 +169,9 @@ public class ServerApp {
      * @throws RemoteException if the reference to the {@link Registry} could not be created
      */
     private static void registerRMIRemoteInterfaces() throws RemoteException {
+        // sets the rmi hostname
+        System.setProperty("java.rmi.server.hostname", Settings.getSettings().getRmiHost());
+
         Registry registry = LocateRegistry.createRegistry(Settings.getSettings().getRmiPort());
 
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE), new SignInEndPoint());
