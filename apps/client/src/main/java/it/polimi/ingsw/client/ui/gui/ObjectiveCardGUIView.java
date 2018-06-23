@@ -32,5 +32,10 @@ public class ObjectiveCardGUIView extends GUIView {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void init() {
+
+    }
 }
 

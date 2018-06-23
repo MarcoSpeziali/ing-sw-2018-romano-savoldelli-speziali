@@ -1,14 +1,17 @@
 package it.polimi.ingsw.client.controllers;
 
 import it.polimi.ingsw.controllers.CellController;
+import it.polimi.ingsw.controllers.DieInteractionException;
 import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.net.mocks.ICell;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.net.mocks.WindowMock;
 
 import java.rmi.RemoteException;
 
 public class WindowMockController implements WindowController {
+    private static final long serialVersionUID = 1911746152357955296L;
     private IWindow iWindow;
 
     public WindowMockController(IWindow iWindow) {
@@ -16,14 +19,36 @@ public class WindowMockController implements WindowController {
     }
 
     @Override
-    public IWindow getWindow() throws RemoteException {
+    public IWindow getWindow() {
         return this.iWindow;
     }
 
     @Override
     public CellController getCellController(int i, int j) {
-        //return this.iWindow.getCells()[i][j].getController();
-        throw new UnsupportedOperationException();
+        final ICell iCell = this.iWindow.getCells()[i][j];
+        return new CellController() {
+            private static final long serialVersionUID = 5858787543621651199L;
+
+            @Override
+            public ICell getCell() {
+                return iCell;
+            }
+
+            @Override
+            public Die tryToPick()  {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void tryToPut(Die die) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public ICell waitForUpdate() {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 
     @Override

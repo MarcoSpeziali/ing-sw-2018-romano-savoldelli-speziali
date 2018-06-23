@@ -1,11 +1,10 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.ObjectiveCard;
-import it.polimi.ingsw.client.ui.views.ObjectiveCardView;
 
-public class ObjectiveCardCLIView extends ObjectiveCardView implements CLIView {
+public class ObjectiveCardCLIView implements CLIView {
 
-    public ObjectiveCardCLIView(ObjectiveCard objectiveCard) {
+ /*   public ObjectiveCardCLIView(ObjectiveCard objectiveCard) {
         super(objectiveCard);
 
     }
@@ -18,5 +17,5 @@ public class ObjectiveCardCLIView extends ObjectiveCardView implements CLIView {
         System.out.println("visibility: " + this.objectiveCard.getVisibility().toString());
         System.out.println("obiettivo :" + this.objectiveCard.getObjective());
 
-    }
+    }*/
 }

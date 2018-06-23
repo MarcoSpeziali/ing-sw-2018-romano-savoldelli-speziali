@@ -23,7 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 
-import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unchecked;
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class LobbyGUIView implements Initializable {
 
@@ -52,7 +52,7 @@ public class LobbyGUIView implements Initializable {
     public void setProxy(LobbyController proxyController) {
         this.proxyController = proxyController;
 
-        unchecked(() -> {
+        unsafe(() -> {
             this.proxyController.init();
             setUpUpdateFuture();
             setUpMatchFuture();
@@ -86,13 +86,13 @@ public class LobbyGUIView implements Initializable {
     }
 
     private void setUpUpdateFuture() {
-        CompletableFuture.supplyAsync(unchecked(() -> this.proxyController.waitForUpdate()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.proxyController.waitForUpdate()))
                 .thenAccept(this::onUpdateReceived);
     }
 
     private void setUpMatchFuture() {
-        CompletableFuture.supplyAsync(unchecked(() -> this.proxyController.waitForMigrationRequest()))
-                .thenAccept(iMatch -> Platform.runLater(unchecked(() -> {
+        CompletableFuture.supplyAsync(unsafe(() -> this.proxyController.waitForMigrationRequest()))
+                .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
                     loader.setLocation(Constants.Resources.GAME_DASHBOARD_FXML.getURL());
                     Parent parent = loader.load();
                     // GameDashboardGUIController gameDashboardGUIController = loader.getController();

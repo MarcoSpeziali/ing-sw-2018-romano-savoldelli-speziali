@@ -25,10 +25,10 @@ public class RoundTrackGUIView {
             Parent dieView = loader.load();
             DieGUIView controller = loader.getController();
             if (roundTrack.getDiceForRound(i).size() <= 1) {
-                controller.setDie(roundTrack.getDiceForRoundAtIndex(1,0));
+                //controller.setDie(roundTrack.getDiceForRoundAtIndex(1,0));
             }
             else {
-                controller.setDie(roundTrack.getDiceForRoundAtIndex(i, 1));
+                //controller.setDie(roundTrack.getDiceForRoundAtIndex(i, 1));
             }
             gridPane.add(dieView, i,0);
 

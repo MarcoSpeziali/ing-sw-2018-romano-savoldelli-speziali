@@ -25,6 +25,11 @@ public class DieGUIView extends GUIView {
     public DieGUIView() {
     }
 
+    @Override
+    public void init() {
+
+    }
+
     /*@Override
     public void setDie(Die die) {
         super.setDie(die);

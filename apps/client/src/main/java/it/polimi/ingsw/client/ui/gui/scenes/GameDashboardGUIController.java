@@ -66,9 +66,14 @@ public class GameDashboardGUIController {
                             try {
                                 Node window = loader.load();
                                 guiView.setController(new WindowMockController(iWindows[i]));
-                                window.setOnMousePressed(event-> showChosen(window));
+                                window.setOnMousePressed(event -> showChosen(window));
                                 window.setCursor(Cursor.CLOSED_HAND);
                                 gridPane.add(window, j, i);
+                                content.setHeading(new Text("Choose your Window."));
+                                content.setBody(gridPane);
+                                content.setActions(button);
+                                content.setAlignment(Pos.CENTER);
+                                dialog.show();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -76,12 +81,6 @@ public class GameDashboardGUIController {
                     }
 
                 });
-
-        content.setHeading(new Text("Choose your Window."));
-        content.setBody(gridPane);
-        content.setActions(button);
-        content.setAlignment(Pos.CENTER);
-        dialog.show();
     }
 
     private void showChosen(Node window) {

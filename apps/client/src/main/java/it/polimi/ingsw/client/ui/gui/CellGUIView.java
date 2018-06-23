@@ -47,7 +47,7 @@ public class CellGUIView extends GUIView {
         // TODO: 20/06/18 First: correct using new implementation
     }
 
-    @Override
+    //@Override
     public void setController(CellController controller) throws RemoteException {
         super.controller = controller;
         ICell iCell =  controller.getCell();
@@ -85,7 +85,7 @@ public class CellGUIView extends GUIView {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
                 DieGUIView dieGUIView = loader.getController();
-                dieGUIView.setDie(cell.getDie());
+                //dieGUIView.setDie(cell.getDie());
                 defaultDieAnchorPane = dieAnchorPane;
                 try {
                     dieAnchorPane = loader.load();
@@ -97,6 +97,10 @@ public class CellGUIView extends GUIView {
         });
     }
 
+    @Override
+    public void init() {
+
+    }
 }
 
 

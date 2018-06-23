@@ -33,5 +33,10 @@ public class DraftPoolGUIView extends GUIView {
             placeholder.getChildren().add(die);
         }
     }
+
+    @Override
+    public void init() {
+
+    }
 }
 

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.DraftPool;
-import it.polimi.ingsw.client.ui.views.DraftPoolView;
 import org.fusesource.jansi.Ansi;
 
 import java.io.IOException;
@@ -9,8 +8,8 @@ import java.io.IOException;
 import static org.fusesource.jansi.Ansi.Color.BLACK;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class DraftPoolCLIView extends DraftPoolView implements CLIView {
-
+public class DraftPoolCLIView implements CLIView {
+/*
     public DraftPoolCLIView() {
         this.dieView = new DieCLIView[draftPool.getNumberOfDice()];
 
@@ -35,5 +34,5 @@ public class DraftPoolCLIView extends DraftPoolView implements CLIView {
             System.out.print(" ");
         }
 
-    }
+    }*/
 }

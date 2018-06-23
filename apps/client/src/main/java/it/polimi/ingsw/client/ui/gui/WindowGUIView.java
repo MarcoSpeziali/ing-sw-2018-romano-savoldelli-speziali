@@ -14,7 +14,7 @@ import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 
-public class WindowGUIView extends GUIView {
+public class WindowGUIView extends GUIView<WindowController> {
 
     @FXML
     public GridPane gridPane;
@@ -60,4 +60,8 @@ public class WindowGUIView extends GUIView {
     }
 
 
+    @Override
+    public void init() {
+
+    }
 }

@@ -1,22 +1,21 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.models.Cell;
-import it.polimi.ingsw.client.ui.views.CellView;
 import org.fusesource.jansi.Ansi;
 
 import static org.fusesource.jansi.Ansi.Color.BLACK;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class CellCLIView extends CellView implements CLIView {
+public class CellCLIView implements CLIView {
 
     private char shade;
     private Ansi.Color ansiColor;
 
-    public CellCLIView(Cell cell) {
-        this.setCell(cell);
+    //public CellCLIView(Cell cell) {
+    //    this.setCell(cell);
     }
 
-    @Override
+    /*@Override
     public void render() {
         if (cell.isOccupied()) {
             ansiColor = Ansi.Color.valueOf(cell.getDie().getColor().toAnsiColor());
@@ -39,6 +38,6 @@ public class CellCLIView extends CellView implements CLIView {
         }
 
         shade = cell.getShade() == 0 ? ' ' : cell.getShade().toString().charAt(0);
-    }
-}
+    }*/
+
 

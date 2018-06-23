@@ -2,19 +2,18 @@ package it.polimi.ingsw.client.ui.cli;
 
 
 import it.polimi.ingsw.models.Window;
-import it.polimi.ingsw.client.ui.views.WindowView;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class WindowCLIView extends WindowView implements CLIView {
+public class WindowCLIView implements CLIView {
 
     private CellCLIView[][] cellViews;
     private Scanner scanner = new Scanner(System.in); // FIXME usage?
 
     public WindowCLIView() {
     }
-
+/*
     @Override
     public void setWindow(Window window) throws IOException {
         super.setWindow(window);
@@ -56,6 +55,6 @@ public class WindowCLIView extends WindowView implements CLIView {
         System.out.println();
 
 
-    }
+    }*/
 
 }

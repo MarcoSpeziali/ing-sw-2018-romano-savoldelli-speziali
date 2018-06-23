@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.controllers.ToolCardController;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.fxml.FXML;
@@ -10,7 +11,7 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class ToolCardGUIView extends GUIView {
+public class ToolCardGUIView extends GUIView<ToolCardController> {
 
    @FXML
    public ImageView imageView;
@@ -39,6 +40,11 @@ public class ToolCardGUIView extends GUIView {
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void init() {
+
     }
 }
 
