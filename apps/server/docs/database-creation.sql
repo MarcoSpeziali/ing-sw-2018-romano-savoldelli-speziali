@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "session" (
   creation_time TIMESTAMP(3) NOT NULL DEFAULT current_timestamp,
   invalidation_time TIMESTAMP(3) NOT NULL DEFAULT current_timestamp + INTERVAL '12 hours',
   token CHAR(40) NOT NULL,
-  pre_auth_session INTEGER NOT NULL REFERENCES pre_authentication_session(id)
+  pre_auth_session INTEGER NOT NULL REFERENCES pre_authentication_session(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS lobby (

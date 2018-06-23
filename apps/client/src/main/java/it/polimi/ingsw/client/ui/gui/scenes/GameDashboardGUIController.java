@@ -7,7 +7,7 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
 import it.polimi.ingsw.client.ui.gui.WindowGUIView;
 import it.polimi.ingsw.controllers.MatchController;
-
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
 public class GameDashboardGUIController {
@@ -56,15 +57,17 @@ public class GameDashboardGUIController {
         JFXButton button = new JFXButton("Exit");
         button.setOnAction(event -> dialog.close());
 
-        CompletableFuture.supplyAsync(()-> this.matchController.waitForWindowRequest())
-                .thenAccept(iWindows -> {
-                    for (int i=0; i<iWindows.length; i++) {
-                        for (int j=0; j<2; j++) {
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForWindowRequest()))
+                .thenAccept(iWindows -> Platform.runLater(unsafe(() -> {
+                    for (int i = 0; i < iWindows.length; i++) {
+                        for (int j = 0; j < 2; j++) {
                             FXMLLoader loader = new FXMLLoader();
                             loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+
+                            Node window = loader.load();
                             WindowGUIView guiView = loader.getController();
                             try {
-                                Node window = loader.load();
+                                Node iwindow = loader.load();
                                 guiView.setController(new WindowMockController(iWindows[i]));
                                 window.setOnMousePressed(event -> showChosen(window));
                                 window.setCursor(Cursor.CLOSED_HAND);
@@ -79,8 +82,7 @@ public class GameDashboardGUIController {
                             }
                         }
                     }
-
-                });
+                })));
     }
 
     private void showChosen(Node window) {

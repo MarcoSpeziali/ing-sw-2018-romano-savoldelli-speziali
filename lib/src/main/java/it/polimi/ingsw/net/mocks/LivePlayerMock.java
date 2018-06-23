@@ -15,7 +15,7 @@ public class LivePlayerMock implements ILivePlayer {
         this(
                 iLivePlayer.getFavourTokens(),
                 iLivePlayer.getWindow(),
-                iLivePlayer.getPlayer()
+                new PlayerMock(iLivePlayer.getPlayer())
         );
     }
 
@@ -23,7 +23,7 @@ public class LivePlayerMock implements ILivePlayer {
         this(
                 0,
                 null,
-                iPlayer
+                new PlayerMock(iPlayer)
         );
     }
 

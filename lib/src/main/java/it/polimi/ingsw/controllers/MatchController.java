@@ -8,20 +8,21 @@ import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
 
+import java.rmi.RemoteException;
 import java.util.Map;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
 
     // first thing is to choose the window to play with
-    IWindow[] waitForWindowRequest();
-    WindowController respondToWindowRequest(IWindow window);
+    IWindow[] waitForWindowRequest() throws RemoteException;
+    WindowController respondToWindowRequest(IWindow window) throws RemoteException;
 
-    ToolCardController[] waitForToolCards();
+    ToolCardController[] waitForToolCards() throws RemoteException;
 
-    ObjectiveCardController[] waitForPublicObjectiveCards();
+    ObjectiveCardController[] waitForPublicObjectiveCards() throws RemoteException;
 
-    ObjectiveCardController waitForPrivateObjectiveCard();
+    ObjectiveCardController waitForPrivateObjectiveCard() throws RemoteException;
 
     // then the opponents' Window are sent
-    Map<ILivePlayer, Window> waitForOpponentsWindowsUpdate();
+    Map<ILivePlayer, Window> waitForOpponentsWindowsUpdate() throws RemoteException;
 }

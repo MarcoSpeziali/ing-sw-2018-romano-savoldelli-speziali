@@ -69,7 +69,7 @@ public class LobbyManager implements PlayerEventsListener {
     /**
      * The {@link Runnable} to execute each timer tick.
      */
-    private Runnable timerExecutorTask = () -> {
+    private final Runnable timerExecutorTask = () -> {
         if (timeRemaining == 0) {
             try {
                 closeLobbyAndStartMatch();
@@ -92,7 +92,7 @@ public class LobbyManager implements PlayerEventsListener {
         // creates a new lobby in the database
         this.databaseLobby = DatabaseLobby.insertLobby();
         
-        // sents the creation event to any listeners
+        // sends the creation event to any listeners
         EventDispatcher.dispatch(
                 EventType.LOBBY_EVENTS,
                 LobbyEventsListener.class,
@@ -275,19 +275,16 @@ public class LobbyManager implements PlayerEventsListener {
      */
     private void closeLobbyAndStartMatch() throws SQLException {
         synchronized (LockManager.getLockObject(Constants.LockTargets.LOBBY)) {
-            DatabaseLobby lobby = DatabaseLobby.getOpenLobby();
-            
-            this.timerScheduledFuture.cancel(true);
+            this.timerScheduledFuture.cancel(false);
             this.timeRemaining = -1;
             
-            DatabaseMatch databaseMatch = DatabaseMatch.insertMatchFromLobby(lobby.getId());
-            DatabaseLobby.closeLobby(lobby.getId());
-            
-            final DatabaseLobby finalLobby = lobby;
+            DatabaseMatch databaseMatch = DatabaseMatch.insertMatchFromLobby(this.databaseLobby.getId());
+            DatabaseLobby.closeLobby(this.databaseLobby.getId());
+
             EventDispatcher.dispatch(
                     EventType.LOBBY_EVENTS,
                     LobbyEventsListener.class,
-                    listener -> listener.onLobbyClosed(finalLobby, LobbyEventsListener.LobbyCloseReason.MATCH_STARTED)
+                    listener -> listener.onLobbyClosed(this.databaseLobby, LobbyEventsListener.LobbyCloseReason.MATCH_STARTED)
             );
             EventDispatcher.dispatch(
                     EventType.MATCH_EVENTS,

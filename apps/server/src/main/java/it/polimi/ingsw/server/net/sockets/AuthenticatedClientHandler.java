@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.EventType;
 import it.polimi.ingsw.server.events.PlayerEventsListener;
-import it.polimi.ingsw.server.managers.AuthenticationManager;
+import it.polimi.ingsw.server.utils.AuthenticationHelper;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
@@ -83,11 +83,11 @@ public class AuthenticatedClientHandler extends ClientHandler {
                 try {
                     do {
                         if (this.migrationRequest != null) {
-                            handler = handleMigrationRequest(this.migrationRequest, AuthenticationManager::isAuthenticated);
+                            handler = handleMigrationRequest(this.migrationRequest, AuthenticationHelper::isAuthenticated);
                             this.migrationRequest = null;
                         }
                         else {
-                            handler = handleIncomingRequest(AuthenticationManager::isAuthenticated);
+                            handler = handleIncomingRequest(AuthenticationHelper::isAuthenticated);
                         }
 
                         // if the handler needs the connection to be kept alive it wont be closed

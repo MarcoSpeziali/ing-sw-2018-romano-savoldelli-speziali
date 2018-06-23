@@ -10,7 +10,7 @@ import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.LobbyEventsListener;
-import it.polimi.ingsw.server.managers.AuthenticationManager;
+import it.polimi.ingsw.server.utils.AuthenticationHelper;
 import it.polimi.ingsw.server.managers.LobbyManager;
 import it.polimi.ingsw.server.managers.LockManager;
 import it.polimi.ingsw.server.net.ResponseFactory;
@@ -49,7 +49,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     public Response<ILobby> joinLobby(Request<LobbyJoinRequest> request) {
         try {
             // gets the player from the token
-            DatabasePlayer player = AuthenticationManager.getAuthenticatedPlayer(request);
+            DatabasePlayer player = AuthenticationHelper.getAuthenticatedPlayer(request);
 
             // if the player is null then the request did not contain the client-token or the token is invalid
             if (player == null) {
@@ -88,7 +88,7 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
     public LobbyController joinLobby(String clientToken) throws RemoteException {
         try {
             // gets the player from the token
-            DatabasePlayer player = AuthenticationManager.getAuthenticatedPlayer(clientToken);
+            DatabasePlayer player = AuthenticationHelper.getAuthenticatedPlayer(clientToken);
 
             // if the player is null then the request did not contain the client-token or the token is invalid
             if (player == null) {
@@ -104,10 +104,11 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
                 }
     
                 LobbyRMIProxyController lobbyRMIProxyController = new LobbyRMIProxyController();
-                lobbyRMIProxyController.setStartingLobbyValue(this.lobbyManager.getDatabaseLobby());
-                
+
                 // adds the player to the lobby
                 this.lobbyManager.addPlayer(player, lobbyRMIProxyController);
+
+                lobbyRMIProxyController.setStartingLobbyValue(this.lobbyManager.getDatabaseLobby());
 
                 return lobbyRMIProxyController;
             }

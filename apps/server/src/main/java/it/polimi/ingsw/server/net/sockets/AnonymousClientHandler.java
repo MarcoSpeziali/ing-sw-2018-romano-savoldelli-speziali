@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.net.sockets;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.server.managers.AuthenticationManager;
+import it.polimi.ingsw.server.utils.AuthenticationHelper;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
@@ -74,7 +74,7 @@ public class AnonymousClientHandler extends ClientHandler {
 
     // TODO: docs
     private boolean tryMigration(Request<?> request) throws SQLException, TimeoutException, IOException, InterruptedException {
-        DatabasePlayer databasePlayer = AuthenticationManager.getAuthenticatedPlayer(request);
+        DatabasePlayer databasePlayer = AuthenticationHelper.getAuthenticatedPlayer(request);
 
         if (databasePlayer != null) {
             try (AuthenticatedClientHandler clientHandler = AuthenticatedClientHandler.migrate(

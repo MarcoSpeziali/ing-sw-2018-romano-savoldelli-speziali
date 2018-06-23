@@ -6,7 +6,6 @@ import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.net.mocks.ICell;
 import it.polimi.ingsw.net.mocks.IWindow;
-import it.polimi.ingsw.net.mocks.WindowMock;
 
 import java.rmi.RemoteException;
 

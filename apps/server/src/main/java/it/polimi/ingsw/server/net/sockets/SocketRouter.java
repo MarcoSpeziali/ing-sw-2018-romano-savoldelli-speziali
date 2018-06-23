@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.net.sockets;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.server.managers.AuthenticationManager;
+import it.polimi.ingsw.server.utils.AuthenticationHelper;
 import it.polimi.ingsw.server.net.commands.*;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -54,7 +54,7 @@ public final class SocketRouter {
     }
 
     public static <R extends JSONSerializable> Command getHandlerForRequest(Request<R> request) throws SQLException {
-        if (AuthenticationManager.isAuthenticated(request)) {
+        if (AuthenticationHelper.isAuthenticated(request)) {
             return getHandlerForRequestFromRoutingTable(request, routingTable);
         }
         else {
