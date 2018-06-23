@@ -151,6 +151,6 @@ public class DatabasePlayer implements IPlayer {
 
     @Override
     public String toString() {
-        return this.username;
+        return String.format("(%d) %s", this.id, this.username);
     }
 }
