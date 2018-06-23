@@ -23,7 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 
-import static it.polimi.ingsw.utils.streams.ExceptionWrapper.unchecked;
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unchecked;
 
 public class LobbyGUIView implements Initializable {
 

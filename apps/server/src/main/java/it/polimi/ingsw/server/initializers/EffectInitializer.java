@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.compilers.actions.CompiledAction;
 import it.polimi.ingsw.server.compilers.actions.CompiledActionGroup;
 import it.polimi.ingsw.server.compilers.actions.CompiledExecutableAction;
 import it.polimi.ingsw.server.compilers.effects.CompiledEffect;
-import it.polimi.ingsw.utils.streams.ExceptionWrapper;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -69,11 +69,11 @@ public class EffectInitializer {
                             }
                         }
                         catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                            return ExceptionWrapper.wrap(e);
+                            return FunctionalExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             return e.tryUnwrap(NoSuchMethodException.class)
                     .tryUnwrap(InstantiationException.class)
                     .tryUnwrap(InvocationTargetException.class)

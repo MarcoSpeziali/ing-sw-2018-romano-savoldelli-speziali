@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.Objective;
 import it.polimi.ingsw.server.compilers.instructions.CompiledInstruction;
 import it.polimi.ingsw.server.compilers.objectives.CompiledObjective;
 import it.polimi.ingsw.server.instructions.Instruction;
-import it.polimi.ingsw.utils.streams.ExceptionWrapper;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -57,11 +57,11 @@ public class ObjectiveInitializer {
                             return InstructionInitializer.instantiate(compiledInstruction);
                         }
                         catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                            return ExceptionWrapper.wrap(e);
+                            return FunctionalExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             return e.tryUnwrap(NoSuchMethodException.class)
                     .tryUnwrap(InstantiationException.class)
                     .tryUnwrap(InvocationTargetException.class)

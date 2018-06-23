@@ -19,6 +19,14 @@ public class LivePlayerMock implements ILivePlayer {
         );
     }
 
+    public LivePlayerMock(IPlayer iPlayer) {
+        this(
+                0,
+                null,
+                iPlayer
+        );
+    }
+
     @JSONDesignatedConstructor
     public LivePlayerMock(
             @JSONElement("favour-tokens") int favourTokens,

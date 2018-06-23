@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.compilers.instructions.predicates.CompiledPredicat
 import it.polimi.ingsw.server.instructions.Instruction;
 import it.polimi.ingsw.server.instructions.predicates.Predicate;
 import it.polimi.ingsw.server.utils.VariableSupplier;
-import it.polimi.ingsw.utils.streams.ExceptionWrapper;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -137,11 +137,11 @@ public class InstructionInitializer {
                             return PredicateInitializer.instantiate(compiledPredicate);
                         }
                         catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-                            return ExceptionWrapper.wrap(e);
+                            return FunctionalExceptionWrapper.wrap(e);
                         }
                     }));
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             return e.tryUnwrap(NoSuchMethodException.class)
                     .tryUnwrap(IllegalAccessException.class)
                     .tryUnwrap(InvocationTargetException.class)
@@ -181,11 +181,11 @@ public class InstructionInitializer {
                             return InstructionInitializer.instantiate(compiledInstruction);
                         }
                         catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-                            return ExceptionWrapper.wrap(e);
+                            return FunctionalExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             return e.tryUnwrap(NoSuchMethodException.class)
                     .tryUnwrap(IllegalAccessException.class)
                     .tryUnwrap(InvocationTargetException.class)

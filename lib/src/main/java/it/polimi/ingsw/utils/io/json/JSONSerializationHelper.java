@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.io.json;
 
-import it.polimi.ingsw.utils.streams.ExceptionWrapper;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
@@ -63,14 +63,14 @@ class JSONSerializationHelper {
                             objectMap.put(jsonElement.value(), value);
                         }
                         catch (IllegalAccessException e) {
-                            ExceptionWrapper.wrap(e);
+                            FunctionalExceptionWrapper.wrap(e);
                         }
                         finally {
                             field.setAccessible(false);
                         }
                     });
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             e.tryFinalUnwrap(IllegalAccessException.class);
         }
 
@@ -105,14 +105,14 @@ class JSONSerializationHelper {
                             objectMap.put(jsonElement.value(), value);
                         }
                         catch (IllegalAccessException | InvocationTargetException e) {
-                            ExceptionWrapper.wrap(e);
+                            FunctionalExceptionWrapper.wrap(e);
                         }
                         finally {
                             field.setAccessible(false);
                         }
                     });
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             e.tryUnwrap(InvocationTargetException.class)
                     .tryFinalUnwrap(IllegalAccessException.class);
         }

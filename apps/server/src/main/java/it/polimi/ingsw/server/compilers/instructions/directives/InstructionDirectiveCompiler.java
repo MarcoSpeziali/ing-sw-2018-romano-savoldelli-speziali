@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.compilers.expressions.ConstantExpressionCaster;
 import it.polimi.ingsw.server.instructions.Instruction;
 import it.polimi.ingsw.server.utils.VariableSupplier;
 import it.polimi.ingsw.utils.io.XMLUtils;
-import it.polimi.ingsw.utils.streams.ExceptionWrapper;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -64,11 +64,11 @@ public class InstructionDirectiveCompiler {
                             return processInstructionDirective(rawDirective);
                         }
                         catch (ClassNotFoundException e) {
-                            return ExceptionWrapper.wrap(e);
+                            return FunctionalExceptionWrapper.wrap(e);
                         }
                     }).collect(Collectors.toList());
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             return e.tryFinalUnwrap(ClassNotFoundException.class);
         }
     }
@@ -101,11 +101,11 @@ public class InstructionDirectiveCompiler {
                                     return processInstructionParameterDirective(d);
                                 }
                                 catch (ClassNotFoundException e) {
-                                    return ExceptionWrapper.wrap(e);
+                                    return FunctionalExceptionWrapper.wrap(e);
                                 }
                             }).collect(Collectors.toList());
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             return e.tryFinalUnwrap(ClassNotFoundException.class);
         }
 
@@ -122,11 +122,11 @@ public class InstructionDirectiveCompiler {
                                     return processInstructionExposedVariableDirective(d);
                                 }
                                 catch (ClassNotFoundException e) {
-                                    return ExceptionWrapper.wrap(e);
+                                    return FunctionalExceptionWrapper.wrap(e);
                                 }
                             }).collect(Collectors.toList());
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             return e.tryFinalUnwrap(ClassNotFoundException.class);
         }
 

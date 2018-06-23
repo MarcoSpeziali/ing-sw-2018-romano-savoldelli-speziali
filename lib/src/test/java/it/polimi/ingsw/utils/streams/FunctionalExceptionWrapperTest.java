@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
 
-class StreamExceptionWrapperTest {
+class FunctionalExceptionWrapperTest {
 
     @Test
     void testSingleWrap() {
@@ -16,11 +16,11 @@ class StreamExceptionWrapperTest {
                     return singleThrowableMethod();
                 }
                 catch (ClassNotFoundException e) {
-                    return ExceptionWrapper.wrap(e);
+                    return FunctionalExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             Assertions.assertThrows(ClassNotFoundException.class, () -> e.tryUnwrap(ClassNotFoundException.class));
         }
     }
@@ -34,11 +34,11 @@ class StreamExceptionWrapperTest {
                     return multipleThrowableMethod();
                 }
                 catch (ClassNotFoundException | IllegalAccessException e) {
-                    return ExceptionWrapper.wrap(e);
+                    return FunctionalExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             e.tryUnwrap(IllegalAccessException.class);
 
             Assertions.assertThrows(ClassNotFoundException.class, () -> e.tryUnwrap(ClassNotFoundException.class));
@@ -54,11 +54,11 @@ class StreamExceptionWrapperTest {
                     return multipleThrowableMethod();
                 }
                 catch (ClassNotFoundException | IllegalAccessException e) {
-                    return ExceptionWrapper.wrap(e);
+                    return FunctionalExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             Assertions.assertThrows(ClassNotFoundException.class, () -> e.tryUnwrap(IllegalAccessException.class)
                     .tryUnwrap(ClassNotFoundException.class));
         }
@@ -73,11 +73,11 @@ class StreamExceptionWrapperTest {
                     return multipleThrowableMethod();
                 }
                 catch (Exception e) {
-                    return ExceptionWrapper.wrap(e);
+                    return FunctionalExceptionWrapper.wrap(e);
                 }
             }).toArray();
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             Assertions.assertThrows(RuntimeException.class, () -> e.tryUnwrap(IllegalAccessException.class)
                     .tryFinalUnwrap(IllegalArgumentException.class));
         }

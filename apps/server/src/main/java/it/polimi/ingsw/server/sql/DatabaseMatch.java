@@ -87,8 +87,7 @@ public class DatabaseMatch implements IMatch {
                 LinkedList<ILivePlayer> databasePlayers = new LinkedList<>();
 
                 do {
-                    // FIXME: 22/06/18 
-                    // databasePlayers.add(new LivePlayerMock(resultSet));
+                    databasePlayers.add(new LivePlayerMock(new DatabasePlayer(resultSet)));
                 } while (resultSet.next());
 
                 return databasePlayers;

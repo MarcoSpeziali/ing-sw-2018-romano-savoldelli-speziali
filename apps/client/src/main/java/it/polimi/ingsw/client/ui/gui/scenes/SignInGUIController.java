@@ -14,7 +14,7 @@ import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.providers.OneTimeRMIResponseProvider;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.streams.ExceptionWrapper;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import it.polimi.ingsw.utils.text.Localized;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +27,6 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 
-import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static com.jfoenix.controls.JFXDialog.DialogTransition.TOP;
 
 public class SignInGUIController extends SignInController {
@@ -98,7 +97,7 @@ public class SignInGUIController extends SignInController {
                     SagradaGUI.showStage(parent, 353, 546);
                 }
                 catch (IOException | NotBoundException e) {
-                    ExceptionWrapper.wrap(e);
+                    FunctionalExceptionWrapper.wrap(e);
                 }
             }, responseError -> {
                 JFXDialogLayout content = new JFXDialogLayout();
@@ -122,7 +121,7 @@ public class SignInGUIController extends SignInController {
                 dialog.show();
             });
         }
-        catch (ExceptionWrapper e) {
+        catch (FunctionalExceptionWrapper e) {
             e.tryUnwrap(NotBoundException.class)
                     .tryFinalUnwrap(IOException.class);
         }
