@@ -18,7 +18,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 
-public class CellGUIView extends GUIView {
+public class CellGUIView extends GUIView<CellController> {
 
     @FXML
     public AnchorPane colorAnchorPane;
@@ -34,7 +34,7 @@ public class CellGUIView extends GUIView {
 
     private String path;
 
-    public CellGUIView() {}
+    public CellGUIView(){}
 
     private void diePicked() {
         // this.cellController.onDiePicked();
@@ -47,7 +47,7 @@ public class CellGUIView extends GUIView {
         // TODO: 20/06/18 First: correct using new implementation
     }
 
-    //@Override
+    @Override
     public void setController(CellController controller) throws RemoteException {
         super.controller = controller;
         ICell iCell =  controller.getCell();

@@ -2,7 +2,9 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.utils.ClientLogger;
+import it.polimi.ingsw.controllers.DieController;
 import it.polimi.ingsw.models.Die;
+import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.fxml.FXML;
 import javafx.scene.effect.DropShadow;
@@ -15,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
-public class DieGUIView extends GUIView {
+public class DieGUIView extends GUIView<DieController> {
 
     @FXML
     public ImageView imageView;
@@ -30,12 +32,14 @@ public class DieGUIView extends GUIView {
 
     }
 
-    /*@Override
-    public void setDie(Die die) {
-        super.setDie(die);
+    @Override
+    public void setController(DieController dieController) throws IOException {
+        super.setController(dieController);
+
+        IDie iDie = dieController.getDie();
 
         anchorPane.setStyle("-fx-background-radius: 10;"+
-                "-fx-background-color: #" + Integer.toHexString(this.die.getColor().getHex())
+                "-fx-background-color: #" + Integer.toHexString(iDie.getColor().getHex())
         );
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(5.0);
@@ -44,7 +48,7 @@ public class DieGUIView extends GUIView {
         dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
         anchorPane.setEffect(dropShadow);
 
-        String resourceName = String.format("DIE_%d", super.die.getShade());
+        String resourceName = String.format("DIE_%d", iDie.getShade());
         String relativePath = Constants.Resources.valueOf(resourceName).getRelativePath();
         URL resourceUrl = Resources.getResource(DieGUIView.class.getClassLoader(), relativePath);
 
@@ -59,5 +63,5 @@ public class DieGUIView extends GUIView {
         else {
             ClientLogger.getLogger().log(Level.WARNING, "Could not retrieve image for resource {0}", resourceName);
         }
-    }*/
+    }
 }

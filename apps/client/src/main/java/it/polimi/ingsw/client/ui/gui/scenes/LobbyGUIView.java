@@ -153,3 +153,4 @@ public class LobbyGUIView implements Initializable {
         this.timer.cancel();
     }
 }
+

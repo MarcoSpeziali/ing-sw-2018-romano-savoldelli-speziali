@@ -15,6 +15,7 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
 
     // first thing is to choose the window to play with
     IWindow[] waitForWindowRequest() throws RemoteException;
+
     WindowController respondToWindowRequest(IWindow window) throws RemoteException;
 
     ToolCardController[] waitForToolCards() throws RemoteException;
@@ -23,6 +24,6 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
 
     ObjectiveCardController waitForPrivateObjectiveCard() throws RemoteException;
 
-    // then the opponents' Window are sent
-    Map<ILivePlayer, Window> waitForOpponentsWindowsUpdate() throws RemoteException;
+    // then the opponents' Window are sent // FIXME: corrected Window with IWindow
+    Map<ILivePlayer, IWindow> waitForOpponentsWindowsUpdate() throws RemoteException;
 }
