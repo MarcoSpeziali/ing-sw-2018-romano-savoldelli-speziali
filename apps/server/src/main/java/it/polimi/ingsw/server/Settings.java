@@ -5,6 +5,8 @@ import it.polimi.ingsw.utils.SettingsBase;
 
 import java.util.concurrent.TimeUnit;
 
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
+
 // TODO: docs
 public final class Settings extends SettingsBase {
 
@@ -15,10 +17,14 @@ public final class Settings extends SettingsBase {
     private int rmiPort;
     @Setting(id = "rmi-host", defaultValue = "idra.weblink.it")
     private String rmiHost;
-    @Setting(id = "rmi-heart-beat", defaultValue = "5000", type = Integer.class)
-    private long rmiHeartBeatTimeout;
-    @Setting(id = "rmi-heart-beat-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
-    private TimeUnit rmiHeartBeatTimeUnit;
+    @Setting(id = "rmi-heart-beat-lobby", defaultValue = "1000", type = Integer.class)
+    private long rmiHeartBeatLobbyTimeout;
+    @Setting(id = "rmi-heart-beat-lobby-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
+    private TimeUnit rmiHeartBeatLobbyTimeUnit;
+    @Setting(id = "rmi-heart-beat-match", defaultValue = "5", type = Integer.class)
+    private long rmiHeartBeatMatchTimeout;
+    @Setting(id = "rmi-heart-beat-match-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
+    private TimeUnit rmiHeartBeatMatchTimeUnit;
 
     // --------------- DATABASE ---------------
     @Setting(id = "database-url", defaultValue = "localhost:5432")
@@ -45,12 +51,8 @@ public final class Settings extends SettingsBase {
     }
 
     public static Settings getSettings() {
-        try {
-            return new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath());
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        return unsafe(() -> new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath()))
+                .get();
     }
 
     public int getSocketPort() {
@@ -97,11 +99,19 @@ public final class Settings extends SettingsBase {
         return maximumNumberOfPlayers;
     }
 
-    public long getRmiHeartBeatTimeout() {
-        return rmiHeartBeatTimeout;
+    public long getRmiHeartBeatLobbyTimeout() {
+        return rmiHeartBeatLobbyTimeout;
     }
 
-    public TimeUnit getRmiHeartBeatTimeUnit() {
-        return rmiHeartBeatTimeUnit;
+    public TimeUnit getRmiHeartBeatLobbyTimeUnit() {
+        return rmiHeartBeatLobbyTimeUnit;
+    }
+    
+    public long getRmiHeartBeatMatchTimeout() {
+        return rmiHeartBeatMatchTimeout;
+    }
+    
+    public TimeUnit getRmiHeartBeatMatchTimeUnit() {
+        return rmiHeartBeatMatchTimeUnit;
     }
 }

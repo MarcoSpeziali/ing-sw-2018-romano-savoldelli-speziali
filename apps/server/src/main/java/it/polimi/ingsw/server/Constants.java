@@ -13,7 +13,7 @@ public class Constants {
 
     public enum Paths {
         PROJECT_FOLDER(java.nio.file.Paths.get(
-                System.getProperty("user.home").replace("%20", " "),
+                System.getProperty("user.home"),
                 ".sagrada-server"
         ).toAbsolutePath().toString()),
 
@@ -35,17 +35,10 @@ public class Constants {
         SETTINGS_PATH(java.nio.file.Paths.get(
                 Paths.PROJECT_FOLDER.absolutePath,
                 "settings.xml"
-        ).toAbsolutePath().toString()),
-
-        SSH_KEY_PATH(java.nio.file.Paths.get(
-                System.getProperty("user.home"),
-                ".ssh",
-                "id_rsa"
         ).toAbsolutePath().toString());
 
         private final String absolutePath;
 
-        @SuppressWarnings("squid:UnusedPrivateMethod")
         Paths(String absolutePath) {
             this.absolutePath = absolutePath;
         }
@@ -85,7 +78,7 @@ public class Constants {
         /**
          * @return the {@link URL} that locates the resource or {@code null} if the resource could not be located
          */
-        public URL getURL() { // mi sa che fa un encoding dei caratteri aspetta
+        public URL getURL() {
             ClassLoader classLoader = ServerApp.class.getClassLoader();
             return it.polimi.ingsw.utils.io.Resources.getResource(classLoader, this.relativePath);
         }
@@ -127,7 +120,8 @@ public class Constants {
     }
 
     public enum LockTargets {
+        PLAYER,
         LOBBY,
-        PLAYER
+        MATCH
     }
 }

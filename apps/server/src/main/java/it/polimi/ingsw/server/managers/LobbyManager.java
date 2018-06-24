@@ -247,7 +247,8 @@ public class LobbyManager implements PlayerEventsListener {
     private void setUpHeartBeat() {
         this.rmiHeartBeatScheduledFuture = this.lobbyExecutorService.scheduleAtFixedRate(() -> {
                     List<DatabasePlayer> scheduledForDeletion = new LinkedList<>();
-                    
+            
+                    //noinspection Duplicates
                     this.rmiPlayersHandlers.forEach((player, lobbyRMIProxyController) -> {
                         try {
                             if (!lobbyRMIProxyController.onHeartBeat()) {
@@ -265,8 +266,8 @@ public class LobbyManager implements PlayerEventsListener {
                     });
                 },
                 0,
-                Settings.getSettings().getRmiHeartBeatTimeout(),
-                Settings.getSettings().getRmiHeartBeatTimeUnit()
+                Settings.getSettings().getRmiHeartBeatLobbyTimeout(),
+                Settings.getSettings().getRmiHeartBeatLobbyTimeUnit()
         );
     }
     

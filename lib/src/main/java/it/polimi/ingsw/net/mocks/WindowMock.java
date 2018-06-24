@@ -1,6 +1,5 @@
 package it.polimi.ingsw.net.mocks;
 
-import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
@@ -46,7 +45,7 @@ public class WindowMock implements IWindow {
         this.siblingId = siblingId;
 
         this.cells = new ICell[rows][columns];
-
+        
         for (int i = 0; i < rows; i++) {
             System.arraycopy(cells, i * columns, this.cells[i], 0, columns);
         }

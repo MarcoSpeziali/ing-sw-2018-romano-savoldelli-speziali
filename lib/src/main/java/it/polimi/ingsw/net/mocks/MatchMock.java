@@ -41,6 +41,18 @@ public class MatchMock implements IMatch {
         this.lobby = lobby;
         this.players = players;
     }
+    
+    public MatchMock(IMatch iMatch, ILivePlayer[] players) {
+        this(
+                iMatch.getId(),
+                iMatch.getStartingTime(),
+                iMatch.getEndingTime(),
+                new LobbyMock(iMatch.getLobby()),
+                Arrays.stream(players)
+                        .map(LivePlayerMock::new)
+                        .toArray(LivePlayerMock[]::new)
+        );
+    }
 
     @Override
     @JSONElement("id")

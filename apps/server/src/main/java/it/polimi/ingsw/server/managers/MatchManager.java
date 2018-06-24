@@ -2,21 +2,34 @@ package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
+import it.polimi.ingsw.net.mocks.ILobby;
+import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.net.mocks.MatchMock;
+import it.polimi.ingsw.server.Settings;
+import it.polimi.ingsw.server.events.EventDispatcher;
+import it.polimi.ingsw.server.events.EventType;
 import it.polimi.ingsw.server.events.PlayerEventsListener;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
+import it.polimi.ingsw.server.sql.DatabaseLobby;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
+import java.rmi.RemoteException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
 public class MatchManager implements PlayerEventsListener {
 
     private DatabaseMatch databaseMatch;
+    
+    private boolean migrationClosed = false;
 
     private final ScheduledExecutorService matchExecutorService;
 
@@ -47,18 +60,94 @@ public class MatchManager implements PlayerEventsListener {
      */
     private ScheduledFuture<?> moveTimerScheduledFuture;
 
-    private final Runnable connectionTimerExecutorTask = () -> {
-        // on expiration match starts
+    private final FunctionalExceptionWrapper.UnsafeRunnable connectionTimerExecutorTask = () -> {
+        // on expiration match starts:
+        // the players that did not respond to migration request
+        // are marked as left from the lobby, they cannot join back
+        migrationClosed = true;
+    
+        ILobby lobby = this.databaseMatch.getLobby();
+        
+        List<IPlayer> lobbyPlayers = Arrays.asList(lobby.getPlayers());
+        List<IPlayer> matchPlayers = Arrays.stream(this.databaseMatch.getPlayers())
+                .map(ILivePlayer::getPlayer)
+                .collect(Collectors.toList());
+        
+        List<IPlayer> timedOutPlayers = new ArrayList<>(lobbyPlayers);
+        timedOutPlayers.removeAll(matchPlayers);
+    
+        try {
+            timedOutPlayers.forEach(wrap(iPlayer -> {
+                DatabaseLobby.removePlayer(lobby.getId(), iPlayer.getId());
+            }));
+        }
+        catch (FunctionalExceptionWrapper e) {
+            e.tryFinalUnwrap(SQLException.class);
+        }
     };
 
     private final Runnable moveTimerExecutorTask = () -> {
         // on expiration turn is over and the next player is awaken
     };
-
+    
+    public MatchMock getMatch() {
+        // FIXME: correct with more info
+        return new MatchMock(this.databaseMatch);
+    }
+    
     public MatchManager(int lobbyId) throws SQLException {
         this.databaseMatch = DatabaseMatch.insertMatchFromLobby(lobbyId);
 
         // creates the executor service
         this.matchExecutorService = Executors.newScheduledThreadPool(1);
+        
+        // TODO: start connection timer
+    }
+    
+    public void addPlayer(DatabasePlayer databasePlayer, AuthenticatedClientHandler authenticatedClientHandler) throws SQLException {
+        this.socketPlayersHandlers.put(databasePlayer, authenticatedClientHandler);
+    }
+    
+    public void addPlayer(DatabasePlayer databasePlayer, MatchRMIProxyController matchController) throws SQLException {
+        this.rmiPlayersHandlers.put(databasePlayer, matchController);
+    
+        if (this.rmiHeartBeatScheduledFuture.isCancelled()) {
+            this.setUpHeartBeat();
+        }
+    }
+    
+    /**
+     * Sets up the heart beat timer.
+     */
+    private void setUpHeartBeat() {
+        this.rmiHeartBeatScheduledFuture = this.matchExecutorService.scheduleAtFixedRate(() -> {
+                    List<DatabasePlayer> scheduledForDeletion = new LinkedList<>();
+            
+                    //noinspection Duplicates
+                    this.rmiPlayersHandlers.forEach((player, matchRMIProxyController) -> {
+                        try {
+                            if (!matchRMIProxyController.onHeartBeat()) {
+                                throw new RemoteException();
+                            }
+                        }
+                        catch (RemoteException e) {
+                            scheduledForDeletion.add(player);
+                        }
+                    });
+                    
+                    scheduledForDeletion.forEach(player -> {
+                        this.rmiPlayersHandlers.remove(player);
+                        EventDispatcher.dispatch(EventType.PLAYER_EVENTS, PlayerEventsListener.class, playerEventsListener -> playerEventsListener.onPlayerDisconnected(player));
+                    });
+                },
+                0,
+                Settings.getSettings().getRmiHeartBeatMatchTimeout(),
+                Settings.getSettings().getRmiHeartBeatMatchTimeUnit()
+        );
+    }
+    
+    @Override
+    public void onPlayerDisconnected(DatabasePlayer player) {
+    
     }
 }

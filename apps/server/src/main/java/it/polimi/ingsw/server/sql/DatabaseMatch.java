@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DatabaseMatch implements IMatch {
 
@@ -114,6 +115,30 @@ public class DatabaseMatch implements IMatch {
             return database.executeQuery(query, DatabaseMatch::new);
         }
     }
+    
+    public static DatabaseMatch insertPlayer(int matchId, int playerId) throws SQLException {
+        String query = String.format(
+                "INSERT INTO player_match (match, player) VALUES (%d, %d)",
+                matchId,
+                playerId
+        );
+    
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabaseMatch::new);
+        }
+    }
+    
+    public static boolean hasPlayer(int matchId, int playerId) throws SQLException {
+        String query = String.format(
+                "SELECT EXISTS(SELECT 1 FROM match_player WHERE match = %d AND player = %d)",
+                matchId,
+                playerId
+        );
+    
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, Objects::nonNull);
+        }
+    }
 
     public static DatabaseMatch getOpenMatches() throws SQLException {
         String query = "SELECT * FROM match WHERE closing_time IS NULL";
@@ -124,20 +149,10 @@ public class DatabaseMatch implements IMatch {
     }
 
     public static DatabaseMatch insertMatchFromLobby(int lobbyId) throws SQLException {
-        String matchCreationQuery = String.format("INSERT INTO match (from_lobby) VALUES (%d) RETURNING *", lobbyId);
+        String query = String.format("INSERT INTO match (from_lobby) VALUES (%d) RETURNING *", lobbyId);
 
         try (SagradaDatabase database = new SagradaDatabase()) {
-            DatabaseMatch match = database.executeQuery(matchCreationQuery, DatabaseMatch::new);
-
-            String playerInsertionQuery = String.format(
-                    "INSERT INTO match_player (SELECT lp.player AS player, %d FROM lobby_player lp WHERE lp.lobby = %d AND lp.leaving_time IS NULL)",
-                    match.id,
-                    lobbyId
-            );
-
-            database.executeVoidQuery(playerInsertionQuery);
-
-            return match;
+            return database.executeQuery(query, DatabaseMatch::new);
         }
     }
 
