@@ -13,14 +13,14 @@ public class CellMock implements ICell {
     private IDie die;
 
     public CellMock(ICell iCell) {
-        this(iCell.getShade(), iCell.getColor(), iCell.getDie());
+        this(iCell.getShade(), iCell.getColor(), new DieMock(iCell.getDie()));
     }
 
     @JSONDesignatedConstructor
     public CellMock(
             @JSONElement("shade") int shade,
             @JSONElement("color") GlassColor color,
-            @JSONElement("die") IDie die
+            @JSONElement("die") DieMock die
     ) {
         this.shade = shade;
         this.color = color;

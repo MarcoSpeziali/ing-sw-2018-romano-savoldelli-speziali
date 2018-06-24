@@ -238,8 +238,13 @@ class JSONDeserializationHelper {
                     jsonObjects[i] = jsonArray.getJSONObject(i);
                 }
             }
-            else {
+            else if (array instanceof JSONObject[]) {
                 jsonObjects = (JSONObject[]) array;
+            }
+            else {
+                Object[] objects = (Object[]) array;
+
+                jsonObjects = Arrays.copyOf(objects, objects.length, JSONObject[].class);
             }
 
             Object[] objects = getJSONSerializableObjects(targetClass.getComponentType(), jsonObjects);
