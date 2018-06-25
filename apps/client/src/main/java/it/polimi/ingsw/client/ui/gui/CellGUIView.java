@@ -74,6 +74,7 @@ public class CellGUIView extends GUIView<CellController> {
         else {
             colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", iCell.getColor().getHex()));
         }
+
     }
 
     public void onUpdateReceived(Cell cell) {
@@ -85,7 +86,7 @@ public class CellGUIView extends GUIView<CellController> {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
                 DieGUIView dieGUIView = loader.getController();
-                //dieGUIView.setDie(cell.getDie());
+                //DieGUIView.setController();
                 defaultDieAnchorPane = dieAnchorPane;
                 try {
                     dieAnchorPane = loader.load();

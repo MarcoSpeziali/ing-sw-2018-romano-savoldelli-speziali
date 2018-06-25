@@ -5,6 +5,7 @@ import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -41,10 +42,17 @@ public class WindowGUIView extends GUIView<WindowController> {
             for (int j = 0; j < iWindow.getColumns(); j++) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
-                Node root = loader.load();
+                Node cell = loader.load();
+                int finalI = i, finalJ = j;
+                cell.setOnDragDropped(event -> {
+                    if (iWindow.getPossiblePositionForDie().contains(2 * finalI + finalJ)) {
+                        //cell.putDie() TODO !!!
+                    }
+                    else cell.setCursor(Cursor.WAIT);
+                });
                 CellGUIView guiView = loader.getController();
                 guiView.setController(windowController.getCellController(i, j));
-                gridPane.add(root, j, i);
+                gridPane.add(cell, j, i);
 
             }
         }

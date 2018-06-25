@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.DieController;
-import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.fxml.FXML;

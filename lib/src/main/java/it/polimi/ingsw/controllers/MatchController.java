@@ -26,4 +26,8 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
 
     // then the opponents' Window are sent // FIXME: corrected Window with IWindow
     Map<ILivePlayer, IWindow> waitForOpponentsWindowsUpdate() throws RemoteException;
+
+    DraftPoolController waitForDraftPool();
+
+    RoundTrackController waitForRoundTrack();
 }

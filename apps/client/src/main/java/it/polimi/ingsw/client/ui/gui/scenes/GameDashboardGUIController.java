@@ -5,11 +5,8 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
-import it.polimi.ingsw.client.ui.gui.ObjectiveCardGUIView;
-import it.polimi.ingsw.client.ui.gui.ToolCardGUIView;
-import it.polimi.ingsw.client.ui.gui.WindowGUIView;
+import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,15 +14,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
@@ -55,7 +54,7 @@ public class GameDashboardGUIController {
     public void init() {
         chooseWindow();
         loadElements();
-        showWindows();
+        loadOpponentsWindows();
     }
 
     private void loadElements() {
@@ -68,13 +67,14 @@ public class GameDashboardGUIController {
                         FXMLLoader loader = new FXMLLoader();
                         loader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
                         Node node = loader.load();
+                        node.setOnMousePressed(event -> dialog.show());
                         ToolCardGUIView toolCardGUIView = loader.getController();
                         toolCardGUIView.setController(toolCardControllers[i]);
 
                         content.setBody(node);
                         JFXButton use = new JFXButton("Use");
                         //use.setOnMousePressed(event -> toolCardControllers[i].getToolCard(). TODO set actions on tc
-                        JFXButton cancel = new JFXButton("Cancel");
+                        JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
                         content.setActions(use, cancel);
 
@@ -89,27 +89,53 @@ public class GameDashboardGUIController {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
                     Node node = loader.load();
+                    node.setOnMousePressed(event -> dialog.show());
                     ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
                     objectiveCardGUIView.setController(objectiveCardController);
 
                     content.setBody(node);
+                    JFXButton cancel = new JFXButton("Back");
+                    cancel.setOnMousePressed(event -> dialog.close());
+                    content.setActions(cancel);
                     cardsPane.add(node, 0, 1);
                 })));
         CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForPublicObjectiveCards()))
                 .thenAccept(objectiveCardControllers -> Platform.runLater(unsafe(() -> {
-                        for (int i=1; i<objectiveCardControllers.length; i++) {
+                        for (int i=0; i<objectiveCardControllers.length; i++) {
                             JFXDialogLayout content = new JFXDialogLayout();
                             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
                             FXMLLoader loader = new FXMLLoader();
                             loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
                             Node node = loader.load();
+                            node.setOnMousePressed(event -> dialog.show());
                             ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
                             objectiveCardGUIView.setController(objectiveCardControllers[i]);
 
                             content.setBody(node);
-                            cardsPane.add(node, i, 1);
+                            JFXButton cancel = new JFXButton("Back");
+                            cancel.setOnMousePressed(event -> dialog.close());
+                            content.setActions(cancel);
+                            cardsPane.add(node, i+1, 1);
                         }
+                })));
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForDraftPool()))
+                .thenAccept(draftPoolController -> Platform.runLater(unsafe(() -> {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
+                    Node node = loader.load();
+                    DraftPoolGUIView draftPoolGUIView = loader.getController();
+                    draftPoolGUIView.setController(draftPoolController);
+                    // TODO Luca: add layout position (use anchors)
+                })));
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForRoundTrack()))
+                .thenAccept(roundTrackController -> Platform.runLater(unsafe(() -> {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
+                    Node node = loader.load();
+                    RoundTrackGUIView roundTrackGUIView = loader.getController();
+                    //roundTrackGUIView.setController(roundTrackController); TODO Luca: fix all these lacks
+                    // TODO Luca: add layout position (use anchors)
                 })));
     }
 
@@ -155,23 +181,29 @@ public class GameDashboardGUIController {
                 })));
     }
     
-    private void showWindows() {
+    private void loadOpponentsWindows() {
         CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForOpponentsWindowsUpdate()))
                 .thenAccept(map -> Platform.runLater(unsafe(() -> {
-                            for (Map.Entry<ILivePlayer, IWindow> entry : map.entrySet()) {
-                                IWindow iWindow = map.get(entry);
+                    AtomicInteger index = new AtomicInteger();
+                    map.forEach((ILivePlayer, IWindow) -> {
+                                IWindow iWindow = map.get(ILivePlayer);
                                 FXMLLoader loader = new FXMLLoader();
                                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
                                 try {
                                     Node node = loader.load();
+                                    HBox hBox = new HBox();
+                                    Label label = new Label(ILivePlayer.getPlayer().getUsername());
+                                    label.setAlignment(Pos.CENTER);
+                                    label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
+                                    hBox.getChildren().addAll(node, label);
                                     WindowGUIView windowGUIView = loader.getController();
                                     windowGUIView.setController(new WindowMockController(iWindow));
-                                    //windowsPane.add(node, i / 2, i / 2); // TODO check index
+                                    windowsPane.add(node, index.get() / 2, index.get() / 2); // TODO check indexes
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                            }
-                        }
-                )));
+                                index.getAndIncrement();
+                    });
+                })));
     }
 }
