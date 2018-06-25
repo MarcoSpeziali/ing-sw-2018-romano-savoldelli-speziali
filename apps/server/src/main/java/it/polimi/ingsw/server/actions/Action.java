@@ -8,9 +8,9 @@ import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
  * Represents a single action which implements {@code ExecutableAction}
  */
 public abstract class Action implements ExecutableAction {
-
-    private static final long serialVersionUID = -4013759218081695459L;
-
+    
+    private static final long serialVersionUID = -3796338420482907445L;
+    
     /**
      * The data of the action.
      */

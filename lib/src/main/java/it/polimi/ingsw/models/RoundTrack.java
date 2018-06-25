@@ -4,9 +4,9 @@ import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.ChoosablePutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
+import it.polimi.ingsw.net.mocks.DieMock;
+import it.polimi.ingsw.net.mocks.IDie;
+import it.polimi.ingsw.net.mocks.IRoundTrack;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.utils.streams.StreamUtils.invertBiConsumer;
-
-public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, JSONSerializable {
+public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, IRoundTrack {
     
     private static final long serialVersionUID = -972922678430566496L;
     
@@ -43,7 +41,6 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
     /**
      * The number of rounds.
      */
-    @JSONElement("round-number")
     private final byte numberOfRounds;
 
     /**
@@ -87,16 +84,6 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
         for (int i = 0; i < numberOfRounds; i++) {
             this.rounds.add(new LinkedList<>());
         }
-    }
-    
-    @JSONDesignatedConstructor
-    RoundTrack(
-            @JSONElement("round-number") byte numberOfRounds,
-            @JSONElement("location-die-map") Map<Integer, Die> locationDieMap
-    ) {
-        this(numberOfRounds);
-        
-        locationDieMap.forEach(invertBiConsumer(this::putDie));
     }
 
     /**
@@ -248,12 +235,14 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
         return (roundIndex << 8 & 0x0000FF00) | (dieIndex & 0x000000FF);
     }
     
-    @JSONElement("location-die-map")
-    Map<Integer, Die> getLocationDieMap() {
-        Map<Integer, Die> integerDieMap = new HashMap<>();
+    @Override
+    public Map<Integer, IDie> getLocationDieMap() {
+        Map<Integer, IDie> integerDieMap = new HashMap<>();
     
         for (int i = 0; i < this.numberOfRounds; i++) {
-            List<Die> roundDice = this.getDiceForRound(i);
+            List<IDie> roundDice = this.getDiceForRound(i).stream()
+                    .map(DieMock::new)
+                    .collect(Collectors.toList());
     
             for (int j = 0; j < roundDice.size(); j++) {
                 integerDieMap.put(
@@ -264,5 +253,10 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
         }
         
         return integerDieMap;
+    }
+    
+    @Override
+    public byte getNumberOfRounds() {
+        return numberOfRounds;
     }
 }

@@ -7,23 +7,19 @@ import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
+import it.polimi.ingsw.net.mocks.DieMock;
+import it.polimi.ingsw.net.mocks.IDie;
+import it.polimi.ingsw.net.mocks.IDraftPool;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSONSerializable {
+public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDraftPool {
 
     private static final long serialVersionUID = -7184365776887971173L;
-
-    @JSONElement("dice-max")
-    private final int maxNumberOfDice;
-
-    @JSONElement("dice")
+    
+    private final byte maxNumberOfDice;
     private Die[] dice;
 
     private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
@@ -32,18 +28,9 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
     /**
      * Sets up a new {@link DraftPool}.
      */
-    public DraftPool(int maxNumberOfDice) {
+    public DraftPool(byte maxNumberOfDice) {
         this.maxNumberOfDice = maxNumberOfDice;
         this.dice = new Die[maxNumberOfDice];
-    }
-
-    @JSONDesignatedConstructor
-    DraftPool(
-            @JSONElement("dice") Die[] dice,
-            @JSONElement("dice-max") int maxNumberOfDice
-    ) {
-        this.maxNumberOfDice = maxNumberOfDice;
-        this.dice = Arrays.copyOf(dice, dice.length);
     }
     
     /**
@@ -106,7 +93,19 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, JSON
 
         return locations;
     }
-
+    
+    @Override
+    public byte getMaxNumberOfDice() {
+        return maxNumberOfDice;
+    }
+    
+    @Override
+    public Map<Integer, IDie> getLocationDieMap() {
+        return IntStream.range(0, this.maxNumberOfDice)
+                .boxed()
+                .collect(Collectors.toMap(o -> o, o -> new DieMock(this.dice[o])));
+    }
+    
     /**
      * @return a {@link LinkedList} containing the dice.
      */

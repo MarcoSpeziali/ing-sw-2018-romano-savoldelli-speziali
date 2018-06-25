@@ -1,10 +1,35 @@
 package it.polimi.ingsw.server.actions;
 
-// TODO: create class
-public class SkipTurnAction extends Action {
-    private static final long serialVersionUID = 2063160010847896719L;
+import it.polimi.ingsw.core.Context;
+import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.server.managers.turns.PlayerTurnList;
+import it.polimi.ingsw.server.utils.VariableSupplier;
 
-    public SkipTurnAction(ActionData data) {
+public class SkipTurnAction extends Action {
+    
+    private static final long serialVersionUID = -7395997444394564125L;
+    
+    private final VariableSupplier<Integer> round;
+    private final VariableSupplier<Integer> turn;
+    private final VariableSupplier<IPlayer> playerVariableSupplier;
+    
+    public SkipTurnAction(ActionData data, VariableSupplier<Integer> round, VariableSupplier<Integer> turn, VariableSupplier<IPlayer> playerVariableSupplier) {
         super(data);
+    
+        this.round = round;
+        this.turn = turn;
+        this.playerVariableSupplier = playerVariableSupplier;
+    }
+    
+    @Override
+    public Object run(Context context) {
+        PlayerTurnList playerTurnList = (PlayerTurnList) context.get(Context.TURN_LIST);
+        playerTurnList.skipPlayerTurn(
+                this.playerVariableSupplier.get(context),
+                round.get(context),
+                turn.get(context)
+        );
+        
+        return null;
     }
 }

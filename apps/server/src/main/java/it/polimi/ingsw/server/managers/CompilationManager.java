@@ -302,13 +302,17 @@ public class CompilationManager {
 
         logger.log(
                 Level.FINER,
-                () -> String.format("Resource %s has been modified on %s (%s), last compilation was on: %s (%s)",
+                () -> String.format("Resource %s has been modified on %s (%s), %s",
                         resource.toString().toLowerCase(),
                         String.valueOf(lastModified),
                         new Date(lastModified).toString(),
-                        String.valueOf(lastCompilation.getAsLong()),
-                        new Date(lastCompilation.getAsLong()).toString()
-                )
+                        lastCompilation.getAsLong() == Long.MIN_VALUE ?
+                                "it was never compiled" :
+                                String.format("last compilation was on: %s (%s)",
+                                        String.valueOf(lastCompilation.getAsLong()),
+                                        new Date(lastCompilation.getAsLong()).toString()
+                                )
+                        )
         );
 
         // the resource needs to be computed only if it has been modified after the last compilation

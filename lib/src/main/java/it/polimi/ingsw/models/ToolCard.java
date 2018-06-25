@@ -1,17 +1,12 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.net.mocks.IEffect;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
 
 public class ToolCard extends Card {
 
     private static final long serialVersionUID = 4573356302420625430L;
     
-    @JSONElement("id")
     private String cardId;
-    
-    @JSONElement("effect")
     private IEffect effect;
 
     /**
@@ -22,13 +17,7 @@ public class ToolCard extends Card {
      * @param effect      is the card's effect
      * @param description is the card's description
      */
-    @JSONDesignatedConstructor
-    public ToolCard(
-            @JSONElement("id") String cardId,
-            @JSONElement("title") String nameKey,
-            @JSONElement("description") String description,
-            @JSONElement("effect") IEffect effect
-    ) {
+    public ToolCard(String cardId, String nameKey, String description, IEffect effect) {
         super(nameKey, description);
         this.cardId = cardId;
         this.effect = effect;

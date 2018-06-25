@@ -11,8 +11,10 @@ import java.util.regex.Pattern;
  */
 public class ConstantExpressionCaster {
 
-    private static final String INTEGER_PATTERN = "[+-]?[0-9]+";
-    private static final String DOUBLE_PATTERN = "[+-]?[0-9]*[.][0-9]+";
+    private static final String INTEGER_PATTERN = "[+\\-]?[0-9]+";
+    private static final String BINARY_INTEGER_LITERAL_PATTERN = "[+\\-]?0b[01]{1,32}";
+    private static final String HEX_INTEGER_LITERAL_PATTERN = "[+\\-]?0x[0-9A-Fa-f]{1,8}";
+    private static final String DOUBLE_PATTERN = "[+\\-]?[0-9]*[.][0-9]+";
     private static final String STRING_PATTERN = "\".*\"";
     private static final String NULL_PATTERN = "null";
     private static final String COLOR_PATTERN = "(red|yellow|blue|green|purple)";
@@ -28,6 +30,24 @@ public class ConstantExpressionCaster {
     private static Supplier<Pattern> integerPattern = () -> {
         Pattern pattern = Pattern.compile(INTEGER_PATTERN);
         integerPattern = () -> pattern;
+        return pattern;
+    };
+    
+    /**
+     * Lazily return the pattern.
+     */
+    private static Supplier<Pattern> binaryIntegerLiteralPatter = () -> {
+        Pattern pattern = Pattern.compile(BINARY_INTEGER_LITERAL_PATTERN);
+        binaryIntegerLiteralPatter = () -> pattern;
+        return pattern;
+    };
+    
+    /**
+     * Lazily return the pattern.
+     */
+    private static Supplier<Pattern> hexIntegerLiteralPatter = () -> {
+        Pattern pattern = Pattern.compile(HEX_INTEGER_LITERAL_PATTERN);
+        hexIntegerLiteralPatter = () -> pattern;
         return pattern;
     };
 
@@ -90,6 +110,16 @@ public class ConstantExpressionCaster {
         Matcher matcher = integerPattern.get().matcher(textObject);
         if (matcher.matches()) {
             return Integer.parseInt(textObject);
+        }
+    
+        matcher = binaryIntegerLiteralPatter.get().matcher(textObject);
+        if (matcher.matches()) {
+            return Integer.parseInt(textObject.replace("0b", ""), 2);
+        }
+    
+        matcher = hexIntegerLiteralPatter.get().matcher(textObject);
+        if (matcher.matches()) {
+            return Integer.parseInt(textObject.replace("0x", ""), 16);
         }
 
         matcher = doublePattern.get().matcher(textObject);

@@ -1,7 +1,15 @@
 package it.polimi.ingsw.net.mocks;
 
-import java.io.Serializable;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-public class IRoundTrack implements Serializable {
-    private static final long serialVersionUID = -137265424539946563L;
+import java.util.Map;
+
+public interface IRoundTrack extends JSONSerializable {
+    
+    @JSONElement("number-of-rounds")
+    byte getNumberOfRounds();
+    
+    @JSONElement("location-die-map")
+    Map<Integer, IDie> getLocationDieMap();
 }

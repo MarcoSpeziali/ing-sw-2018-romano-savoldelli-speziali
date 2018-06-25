@@ -42,7 +42,6 @@ public class GlobalContext extends Context {
         else {
             String username = player.getUsername();
 
-            // TODO: change getProfileCall
             Context playerContext = (Context) this.put(username, this.snapshot(username));
             playerContext.put(Context.CURRENT_PLAYER, player);
 

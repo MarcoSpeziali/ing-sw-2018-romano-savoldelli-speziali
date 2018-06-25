@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
@@ -153,12 +152,12 @@ public class LobbyManager implements PlayerEventsListener {
         // if the number of players is outside the range [NumberOfPlayersToStartTimer, MaximumNumberOfPlayers]
         // then the timer has already been started
         if (players.length == Settings.getSettings().getNumberOfPlayersToStartTimer()) {
-            this.timeRemaining = (int) Settings.getSettings().getTimerDurationInMilliseconds();
+            this.timeRemaining = (int) Settings.getSettings().getLobbyTimerDuration();
             this.timerScheduledFuture = this.lobbyExecutorService.scheduleAtFixedRate(
                     this.timerExecutorTask,
                     0,
-                    100,
-                    TimeUnit.MILLISECONDS
+                    Settings.getSettings().getLobbyTimerDuration() / 100,
+                    Settings.getSettings().getLobbyTimerTimeUnit()
             );
         }
         // otherwise, if the number of players in lobby is equal to the MaximumNumberOfPlayers then the match stats

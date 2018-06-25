@@ -1,8 +1,6 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.net.mocks.ICard;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.text.LocalizedString;
 
 public abstract class Card implements ICard {
@@ -16,11 +14,7 @@ public abstract class Card implements ICard {
      * @param title       the card's title
      * @param description the card's description
      */
-    @JSONDesignatedConstructor
-    public Card(
-            @JSONElement("title") String title,
-            @JSONElement("description") String description
-    ) {
+    public Card(String title, String description) {
         this.title = title;
         this.description = description;
     }
@@ -29,7 +23,6 @@ public abstract class Card implements ICard {
      * @return the card's title
      */
     @Override
-    @JSONElement("title")
     public String getTitle() {
         return new LocalizedString(this.title).toString();
     }
@@ -45,7 +38,6 @@ public abstract class Card implements ICard {
      * @return the card's description
      */
     @Override
-    @JSONElement("description")
     public String getDescription() {
         return new LocalizedString(this.description).toString();
     }

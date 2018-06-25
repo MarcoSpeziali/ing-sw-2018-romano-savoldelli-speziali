@@ -45,6 +45,51 @@ class ConstantExpressionCasterTest {
         Assertions.assertEquals(Integer.class, casted.getClass());
         Assertions.assertEquals(12, casted);
     }
+    
+    @Test
+    void testNegativeIntegerVariable() {
+        Object casted = ConstantExpressionCaster.cast("-12");
+        
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Integer.class, casted.getClass());
+        Assertions.assertEquals(-12, casted);
+    }
+    
+    @Test
+    void testBinaryIntegerLiteralVariable() {
+        Object casted = ConstantExpressionCaster.cast("0b0011001010");
+    
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Integer.class, casted.getClass());
+        Assertions.assertEquals(0b0011001010, casted);
+    }
+    
+    @Test
+    void testNegativeBinaryIntegerLiteralVariable() {
+        Object casted = ConstantExpressionCaster.cast("-0b0011001010");
+        
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Integer.class, casted.getClass());
+        Assertions.assertEquals(-0b0011001010, casted);
+    }
+    
+    @Test
+    void testHexIntegerLiteralVariable() {
+        Object casted = ConstantExpressionCaster.cast("0xACDf9");
+        
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Integer.class, casted.getClass());
+        Assertions.assertEquals(0xACDf9, casted);
+    }
+    
+    @Test
+    void testNegativeHexIntegerLiteralVariable() {
+        Object casted = ConstantExpressionCaster.cast("-0xACDf9");
+        
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Integer.class, casted.getClass());
+        Assertions.assertEquals(-0xACDf9, casted);
+    }
 
     @Test
     void testFloatVariable1() {
@@ -71,6 +116,33 @@ class ConstantExpressionCasterTest {
         Assertions.assertNotNull(casted);
         Assertions.assertEquals(Double.class, casted.getClass());
         Assertions.assertEquals(0.04D, casted);
+    }
+    
+    @Test
+    void testNegativeFloatVariable1() {
+        Object casted = ConstantExpressionCaster.cast("-12.0");
+        
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Double.class, casted.getClass());
+        Assertions.assertEquals(-12.0D, casted);
+    }
+    
+    @Test
+    void testNegativeFloatVariable2() {
+        Object casted = ConstantExpressionCaster.cast("-.04");
+        
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Double.class, casted.getClass());
+        Assertions.assertEquals(-.04D, casted);
+    }
+    
+    @Test
+    void testNegativeFloatVariable3() {
+        Object casted = ConstantExpressionCaster.cast("-0.04");
+        
+        Assertions.assertNotNull(casted);
+        Assertions.assertEquals(Double.class, casted.getClass());
+        Assertions.assertEquals(-0.04D, casted);
     }
 
     @Test

@@ -24,7 +24,7 @@ class JSONDeserializationHelper {
         jsonObject = JSONDeserializationHelper.parseRootElement(targetClass, jsonObject);
 
         Constructor<?> designatedConstructor = ReflectionUtils.findAnnotatedConstructor(targetClass, JSONDesignatedConstructor.class);
-
+        
         if (designatedConstructor != null) {
             try {
                 return parseDesignatedConstructor(designatedConstructor, jsonObject);

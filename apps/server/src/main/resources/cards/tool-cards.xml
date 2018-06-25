@@ -59,7 +59,7 @@
         <constraints>
             <constraint-group id="player_turn">
                 <constraint>$PLAYER_TURN$ == 2</constraint>
-                <constraint>$PLAYER_TURN_PHASE$ == 0</constraint>
+                <constraint>$PLAYER_TURN_PHASE$ == 0b10</constraint>
             </constraint-group>
         </constraints>
     </card>
@@ -69,12 +69,12 @@
             <action effect="pick_at $draft_pool$ $POS$" result="DIE"/>
             <action effect="choose_position_for_die $window$ $DIE$" result="POS"/>
             <action effect="place $DIE$ $window$"/>
-            <action effect="skip_turn 2 $CURRENT_ROUND$ $CURRENT_PLAYER$"/>
+            <action effect="skip_turn $CURRENT_ROUND$ 2 $CURRENT_PLAYER$"/>
         </effect>
         <constraints>
             <constraint-group id="player_turn">
                 <constraint>$PLAYER_TURN$ == 1</constraint>
-                <constraint>$PLAYER_TURN_PHASE$ == END</constraint>
+                <constraint>$PLAYER_TURN_PHASE$ == 0b11</constraint>
             </constraint-group>
         </constraints>
     </card>
@@ -85,7 +85,7 @@
             <action effect="place $DIE$ $window$ $POS$"/>
         </effect>
         <constraints>
-            <constraint id="die_already_picked">$player_die$ != null</constraint>
+            <constraint id="die_already_picked">$CURRENT_PLAYER::getHeldDie()$ != null</constraint>
         </constraints>
     </card>
     <card id="grinding_stone" name="cards.tool_cards.grinding_stone.name">

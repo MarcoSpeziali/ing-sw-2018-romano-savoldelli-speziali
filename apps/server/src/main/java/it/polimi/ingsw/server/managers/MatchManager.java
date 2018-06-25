@@ -23,6 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
 public class MatchManager implements PlayerEventsListener {
@@ -59,7 +60,8 @@ public class MatchManager implements PlayerEventsListener {
      * The {@link ScheduledFuture} that handles the move timer.
      */
     private ScheduledFuture<?> moveTimerScheduledFuture;
-
+    
+    @SuppressWarnings("squid:S1602") // Lamdbas containing only one statement should not nest this statement in a block
     private final FunctionalExceptionWrapper.UnsafeRunnable connectionTimerExecutorTask = () -> {
         // on expiration match starts:
         // the players that did not respond to migration request
@@ -101,19 +103,36 @@ public class MatchManager implements PlayerEventsListener {
         // creates the executor service
         this.matchExecutorService = Executors.newScheduledThreadPool(1);
         
-        // TODO: start connection timer
+        this.connectionTimerScheduledFuture = matchExecutorService.scheduleWithFixedDelay(
+                unsafe(this.connectionTimerExecutorTask),
+                Settings.getSettings().getMatchConnectionTimerDuration(),
+                Long.MAX_VALUE, // prevents the execution (gives time to cancel the timer)
+                Settings.getSettings().getMatchConnectionTimerTimeUnit()
+        );
     }
     
     public void addPlayer(DatabasePlayer databasePlayer, AuthenticatedClientHandler authenticatedClientHandler) throws SQLException {
+        if (!canAcceptPlayer(databasePlayer)) {
+            return;
+        }
+        
         this.socketPlayersHandlers.put(databasePlayer, authenticatedClientHandler);
     }
     
     public void addPlayer(DatabasePlayer databasePlayer, MatchRMIProxyController matchController) throws SQLException {
+        if (!canAcceptPlayer(databasePlayer)) {
+            return;
+        }
+        
         this.rmiPlayersHandlers.put(databasePlayer, matchController);
     
         if (this.rmiHeartBeatScheduledFuture.isCancelled()) {
             this.setUpHeartBeat();
         }
+    }
+    
+    private boolean canAcceptPlayer(DatabasePlayer player) throws SQLException {
+        return !this.migrationClosed || this.databaseMatch.getLeftPlayers().contains(player);
     }
     
     /**
@@ -149,5 +168,14 @@ public class MatchManager implements PlayerEventsListener {
     @Override
     public void onPlayerDisconnected(DatabasePlayer player) {
     
+    }
+    
+    private enum MatchState {
+        WAITING_FOR_PLAYERS,
+        WAITING_FOR_WINDOW_RESPONSES,
+        WAITING_FOR_CONTROLLERS_ACK,
+        RUNNING_ROUNDS,
+        CALCULATING_RESULTS,
+        CLOSING_MATCH
     }
 }

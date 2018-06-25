@@ -19,6 +19,4 @@ public interface IMatch extends JSONSerializable {
 
     @JSONElement("players")
     ILivePlayer[] getPlayers();
-
-    
 }

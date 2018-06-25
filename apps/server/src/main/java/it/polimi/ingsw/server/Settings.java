@@ -10,21 +10,13 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 // TODO: docs
 public final class Settings extends SettingsBase {
 
-    // --------------- NETWORK ---------------
+    // --------------- GENERIC NETWORK ---------------
     @Setting(id = "socket-port", defaultValue = "9000", type = Integer.class)
     private int socketPort;
     @Setting(id = "rmi-port", defaultValue = "1099", type = Integer.class)
     private int rmiPort;
     @Setting(id = "rmi-host", defaultValue = "idra.weblink.it")
     private String rmiHost;
-    @Setting(id = "rmi-heart-beat-lobby", defaultValue = "1000", type = Integer.class)
-    private long rmiHeartBeatLobbyTimeout;
-    @Setting(id = "rmi-heart-beat-lobby-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
-    private TimeUnit rmiHeartBeatLobbyTimeUnit;
-    @Setting(id = "rmi-heart-beat-match", defaultValue = "5", type = Integer.class)
-    private long rmiHeartBeatMatchTimeout;
-    @Setting(id = "rmi-heart-beat-match-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
-    private TimeUnit rmiHeartBeatMatchTimeUnit;
 
     // --------------- DATABASE ---------------
     @Setting(id = "database-url", defaultValue = "localhost:5432")
@@ -41,11 +33,27 @@ public final class Settings extends SettingsBase {
     // --------------- LOBBY LOGIC ---------------
     @Setting(id = "num-players-timer-start", defaultValue = "2", type = Integer.class)
     private int numberOfPlayersToStartTimer;
-    @Setting(id = "timer-duration-ms", defaultValue = "10000", type = Long.class)
-    private long timerDurationInMilliseconds;
+    @Setting(id = "lobby-timer-duration", defaultValue = "10000", type = Long.class)
+    private long lobbyTimerDuration;
+    @Setting(id = "lobby-timer-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
+    private TimeUnit lobbyTimerTimeUnit;
     @Setting(id = "maximum-num-players", defaultValue = "4", type = Integer.class)
     private long maximumNumberOfPlayers;
-
+    @Setting(id = "rmi-heart-beat-lobby", defaultValue = "1000", type = Integer.class)
+    private long rmiHeartBeatLobbyTimeout;
+    @Setting(id = "rmi-heart-beat-lobby-time-unit", defaultValue = "MILLISECONDS", type = TimeUnit.class)
+    private TimeUnit rmiHeartBeatLobbyTimeUnit;
+    @Setting(id = "rmi-heart-beat-match", defaultValue = "5", type = Integer.class)
+    private long rmiHeartBeatMatchTimeout;
+    @Setting(id = "rmi-heart-beat-match-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
+    private TimeUnit rmiHeartBeatMatchTimeUnit;
+    
+    // --------------- MATCH LOGIC ---------------
+    @Setting(id = "match-connection-timer-duration-ms", defaultValue = "30", type = Integer.class)
+    private int matchConnectionTimerDuration;
+    @Setting(id = "match-connection-timer-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
+    private TimeUnit matchConnectionTimerTimeUnit;
+    
     private Settings(String path) throws IllegalAccessException {
         super(path);
     }
@@ -54,7 +62,9 @@ public final class Settings extends SettingsBase {
         return unsafe(() -> new Settings(Constants.Paths.SETTINGS_PATH.getAbsolutePath()))
                 .get();
     }
-
+    
+    // --------------- GENERIC NETWORK ---------------
+    
     public int getSocketPort() {
         return socketPort;
     }
@@ -66,6 +76,8 @@ public final class Settings extends SettingsBase {
     public String getRmiHost() {
         return rmiHost;
     }
+    
+    // --------------- DATABASE ---------------
 
     public String getDatabaseUrl() {
         return databaseUrl;
@@ -86,15 +98,21 @@ public final class Settings extends SettingsBase {
     public String getDatabaseDriver() {
         return databaseDriver;
     }
-
+    
+    // --------------- LOBBY LOGIC ---------------
+    
     public int getNumberOfPlayersToStartTimer() {
         return numberOfPlayersToStartTimer;
     }
 
-    public long getTimerDurationInMilliseconds() {
-        return timerDurationInMilliseconds;
+    public long getLobbyTimerDuration() {
+        return lobbyTimerDuration;
     }
-
+    
+    public TimeUnit getLobbyTimerTimeUnit() {
+        return lobbyTimerTimeUnit;
+    }
+    
     public long getMaximumNumberOfPlayers() {
         return maximumNumberOfPlayers;
     }
@@ -107,11 +125,21 @@ public final class Settings extends SettingsBase {
         return rmiHeartBeatLobbyTimeUnit;
     }
     
+    // --------------- MATCH LOGIC ---------------
+    
     public long getRmiHeartBeatMatchTimeout() {
         return rmiHeartBeatMatchTimeout;
     }
     
     public TimeUnit getRmiHeartBeatMatchTimeUnit() {
         return rmiHeartBeatMatchTimeUnit;
+    }
+    
+    public int getMatchConnectionTimerDuration() {
+        return matchConnectionTimerDuration;
+    }
+    
+    public TimeUnit getMatchConnectionTimerTimeUnit() {
+        return matchConnectionTimerTimeUnit;
     }
 }

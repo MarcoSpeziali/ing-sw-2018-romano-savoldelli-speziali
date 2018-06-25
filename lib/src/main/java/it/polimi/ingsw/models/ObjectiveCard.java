@@ -2,19 +2,12 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.net.mocks.IObjective;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
 
 public class ObjectiveCard extends Card {
     private static final long serialVersionUID = -348932210289943581L;
     
-    @JSONElement("id")
     private String cardId;
-    
-    @JSONElement("visibility")
     private CardVisibility visibility;
-    
-    @JSONElement("objective")
     private IObjective objective;
 
     /**
@@ -26,14 +19,7 @@ public class ObjectiveCard extends Card {
      * @param description is the card's description
      * @param objective   is the card's objective
      */
-    @JSONDesignatedConstructor
-    public ObjectiveCard(
-            @JSONElement("id") String cardId,
-            @JSONElement("visibility") CardVisibility visibility,
-            @JSONElement("title") String title,
-            @JSONElement("description") String description,
-            @JSONElement("objective") IObjective objective
-    ) {
+    public ObjectiveCard(String cardId, CardVisibility visibility, String title, String description, IObjective objective) {
         super(title, description);
         this.cardId = cardId;
         this.visibility = visibility;

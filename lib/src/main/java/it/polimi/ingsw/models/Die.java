@@ -3,8 +3,6 @@ package it.polimi.ingsw.models;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.listeners.DieInteractionListener;
 import it.polimi.ingsw.net.mocks.IDie;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,11 +23,7 @@ public class Die implements IDie {
      * @param shade is the shade of the die
      * @param color is the color of the die
      */
-    @JSONDesignatedConstructor
-    public Die(
-            @JSONElement("shade") Integer shade,
-            @JSONElement("color") GlassColor color
-    ) {
+    public Die(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
     }
@@ -38,7 +32,6 @@ public class Die implements IDie {
      * @return the die's shade
      */
     @Override
-    @JSONElement("shade")
     public Integer getShade() {
         return this.shade;
     }
@@ -58,7 +51,6 @@ public class Die implements IDie {
      * @return the die's color
      */
     @Override
-    @JSONElement("color")
     public GlassColor getColor() {
         return this.color;
     }

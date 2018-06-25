@@ -7,8 +7,6 @@ import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.net.mocks.ICell;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,13 +15,8 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
 
     private static final long serialVersionUID = 379193806872969294L;
 
-    @JSONElement("color")
     private GlassColor color;
-
-    @JSONElement("shade")
     private Integer shade;
-
-    @JSONElement("die")
     private Die die;
 
     private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
@@ -38,13 +31,6 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
     public Cell(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
-    }
-
-    @JSONDesignatedConstructor
-    Cell(@JSONElement("shade") Integer shade, @JSONElement("color") GlassColor color, @JSONElement("die") Die die) {
-        this.shade = shade;
-        this.color = color;
-        this.die = die;
     }
 
     /**

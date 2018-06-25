@@ -104,6 +104,31 @@ public class DatabaseMatch implements IMatch {
             return null;
         }
     }
+    
+    public List<IPlayer> getLeftPlayers() throws SQLException {
+        String query = String.format(
+                "SELECT p.* FROM match m " +
+                        "JOIN match_player mb ON mb.match = m.id " +
+                        "JOIN player p ON mb.player = p.id " +
+                        "WHERE m.id = %d",
+                this.id
+        );
+    
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, resultSet -> {
+                LinkedList<IPlayer> databasePlayers = new LinkedList<>();
+            
+                do {
+                    databasePlayers.add(new DatabasePlayer(resultSet));
+                } while (resultSet.next());
+            
+                return databasePlayers;
+            });
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
 
     public static DatabaseMatch matchWithId(int id) throws SQLException {
         String query = String.format(

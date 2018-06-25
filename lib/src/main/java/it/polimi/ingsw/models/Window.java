@@ -6,8 +6,6 @@ import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.utils.IterableRange;
-import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
-import it.polimi.ingsw.utils.io.json.JSONElement;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,13 +14,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
     private static final long serialVersionUID = 733952479357429786L;
 
-    @JSONElement("id")
     private String id;
-    @JSONElement("difficulty")
     private int difficulty;
-    @JSONElement("rows")
     private int rows;
-    @JSONElement("columns")
     private int columns;
     private String siblingId;
     // Cannot be serialized, because it will generate a stack overflow
@@ -52,33 +46,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         this.cells = cells;
     }
 
-    @JSONDesignatedConstructor
-    Window(
-            @JSONElement("id") String id,
-            @JSONElement("difficulty") int difficulty,
-            @JSONElement("rows") int rows,
-            @JSONElement("columns") int columns,
-            @JSONElement("sibling-id") String siblingId,
-            @JSONElement("cells") Cell[] cells
-    ) {
-        this.id = id;
-        this.difficulty = difficulty;
-        this.rows = rows;
-        this.columns = columns;
-
-        this.cells = new Cell[rows][columns];
-
-        for (int i = 0; i < rows; i++) {
-            System.arraycopy(cells, i * columns, this.cells[i], 0, columns);
-        }
-        
-        this.siblingId = siblingId;
-    }
-
     /**
      * @return an {@link Integer} representing the difficulty of the window.
      */
-    @JSONElement("difficulty")
     public int getDifficulty() {
         return this.difficulty;
     }
@@ -86,7 +56,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     /**
      * @return a {@link String} representing the name of the window.
      */
-    @JSONElement("id")
     public String getId() {
         return this.id;
     }
@@ -108,6 +77,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     /**
      * @return the cells in the window
      */
+    @Override
     public Cell[][] getCells() {
         return this.cells;
     }
@@ -115,7 +85,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     /**
      * @return the number of rows.
      */
-    @JSONElement("rows")
+    @Override
     public int getRows() {
         return rows;
     }
@@ -123,18 +93,17 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     /**
      * @return the number of columns.
      */
-    @JSONElement("columns")
+    @Override
     public int getColumns() {
         return columns;
     }
-
-    @JSONElement("sibling-id")
+    
+    @Override
     public String getSiblingId() {
         return siblingId;
     }
 
     @Override
-    @JSONElement("cells")
     public Cell[] getFlatCells() {
         return Arrays.stream(this.cells)
                 .flatMap(Arrays::stream)
