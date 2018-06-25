@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.controllers.ToolCardController;
 import it.polimi.ingsw.models.ToolCard;
+import it.polimi.ingsw.net.mocks.IToolCard;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -13,28 +14,33 @@ import java.io.IOException;
 
 public class ToolCardGUIView extends GUIView<ToolCardController> {
 
-   @FXML
-   public ImageView imageView;
-   @FXML
-   public Text title;
-   @FXML
-   public Text effect;
-   @FXML
-   public Text draft;
-   @FXML
-   public Text bag;
+    @FXML
+    public ImageView imageView;
+    @FXML
+    public Text title;
+    @FXML
+    public Text effect;
+    @FXML
+    public Text draft;
+    @FXML
+    public Text bag;
 
-   private String path;
+    private String path;
 
-    public ToolCardGUIView() {
+    public ToolCardGUIView (){
+
     }
 
-    public void setToolCard(ToolCard toolCard) {
+
+    public void setController(ToolCardController toolCardController) throws IOException {
+        super.setController(toolCardController);
+
+        IToolCard iToolCard = toolCardController.getToolCard();
         draft.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_DRAFT));
         bag.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_BAG_TEXT));
-        title.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardTitle(toolCard.getCardId())));
-        effect.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardEffect(toolCard.getCardId())));
-        path = Constants.Resources.valueOf(String.format("TOOL_CARD_%s", toolCard.getCardId().toUpperCase())).getRelativePath();
+        title.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardTitle(iToolCard.getCardId())));
+        effect.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardEffect(iToolCard.getCardId())));
+        path = Constants.Resources.valueOf(String.format("TOOL_CARD_%s", iToolCard.getCardId().toUpperCase())).getRelativePath();
         try {
             imageView.setImage(new Image(Resources.getResource(ToolCardGUIView.class.getClassLoader(), path).openStream()));
         } catch (IOException | NullPointerException e) {
@@ -42,9 +48,10 @@ public class ToolCardGUIView extends GUIView<ToolCardController> {
         }
     }
 
-    @Override
-    public void init() {
+        @Override
+        public void init () {
 
     }
 }
+
 

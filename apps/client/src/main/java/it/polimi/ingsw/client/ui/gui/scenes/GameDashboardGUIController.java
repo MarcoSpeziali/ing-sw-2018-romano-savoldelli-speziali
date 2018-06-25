@@ -69,7 +69,7 @@ public class GameDashboardGUIController {
                         loader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
                         Node node = loader.load();
                         ToolCardGUIView toolCardGUIView = loader.getController();
-                        //toolCardGUIView.setToolCard(); // TODO pass controller
+                        toolCardGUIView.setController(toolCardControllers[i]);
 
                         content.setBody(node);
                         JFXButton use = new JFXButton("Use");
@@ -90,7 +90,7 @@ public class GameDashboardGUIController {
                     loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
                     Node node = loader.load();
                     ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
-                    //.setToolCard(); // TODO pass controller
+                    objectiveCardGUIView.setController(objectiveCardController);
 
                     content.setBody(node);
                     cardsPane.add(node, 0, 1);
@@ -105,7 +105,7 @@ public class GameDashboardGUIController {
                             loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
                             Node node = loader.load();
                             ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
-                            //.setToolCard(); // TODO pass controller
+                            objectiveCardGUIView.setController(objectiveCardControllers[i]);
 
                             content.setBody(node);
                             cardsPane.add(node, i, 1);
