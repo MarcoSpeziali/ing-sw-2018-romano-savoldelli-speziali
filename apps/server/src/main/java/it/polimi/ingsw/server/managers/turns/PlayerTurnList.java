@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.managers.turns;
 
 import it.polimi.ingsw.net.mocks.IPlayer;
 import it.polimi.ingsw.server.utils.BiHashMap;
+import it.polimi.ingsw.utils.ArrayUtils;
 
 import java.util.*;
 
@@ -46,7 +47,7 @@ public class PlayerTurnList {
         this.numberOfRounds = numberOfRounds;
         
         // shuffling the array to avoid having any non-random order in the turns
-        final IPlayer[] shuffledArray = shuffleArray(players);
+        final IPlayer[] shuffledArray = ArrayUtils.shuffleArray(players);
         
         // the turn list holds NUMBER_OF_TURNS_PER_PLAYER * players.length items, the order is
         // shuffledArray -> inverted(shuffledArray) -> shuffledArray -> inverted(shuffledArray) -> ...
@@ -245,29 +246,6 @@ public class PlayerTurnList {
     private boolean scheduledToSkip(IPlayer player, int turn) {
         HashSet<Integer> turnToSkip = this.roundsToSkipForPlayer.getOrDefault(player, currentRound, null);
         return turnToSkip != null && turnToSkip.contains(turn);
-    }
-    
-    /**
-     * Shuffles the provided array.
-     *
-     * @param array the original array
-     * @param <T> the type of elements of the array
-     * @return the shuffled array
-     */
-    private static <T> T[] shuffleArray(final T[] array) {
-        T[] arrayCopy = Arrays.copyOf(array, array.length);
-        
-        Random random = new Random(System.currentTimeMillis());
-        
-        for (int i = arrayCopy.length - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
-            
-            T value = arrayCopy[index];
-            arrayCopy[index] = arrayCopy[i];
-            arrayCopy[i] = value;
-        }
-        
-        return arrayCopy;
     }
     
     private static class PlayerTurn {

@@ -18,7 +18,7 @@ class WindowCompilerTest {
     @Test
     void testOneCompilation() throws ParserConfigurationException, SAXException, IOException {
         String windowXmlString =
-                "<window rows=\"4\" columns=\"5\" id=\"kaleidoscopic_dream\" sibling=\"firmitas\" name=\"Window.kaleidoscopic_dream\" difficulty=\"4\">" +
+                "<window rows=\"4\" columns=\"5\" id=\"kaleidoscopic_dream\" name=\"Window.kaleidoscopic_dream\" difficulty=\"4\">" +
                         "    <cell color=\"yellow\" />" +
                         "    <cell color=\"blue\" />" +
                         "    <cell />" +
@@ -46,7 +46,6 @@ class WindowCompilerTest {
 
         Window window = WindowCompiler.compile(XMLUtils.parseXmlString(windowXmlString));
         Assertions.assertEquals("kaleidoscopic_dream", window.getId());
-        Assertions.assertNull(window.getSibling());
 
         testKaleidoscopicDream(window);
     }
@@ -55,9 +54,6 @@ class WindowCompilerTest {
     void testTwoCompilation() throws ParserConfigurationException, SAXException, IOException {
         List<Window> windows = WindowCompiler.compileAll();
         Assertions.assertEquals(2, windows.size());
-
-        Assertions.assertSame(windows.get(1), windows.get(0).getSibling());
-        Assertions.assertSame(windows.get(0), windows.get(1).getSibling());
 
         testKaleidoscopicDream(windows.get(0));
         testVirmitas(windows.get(1));

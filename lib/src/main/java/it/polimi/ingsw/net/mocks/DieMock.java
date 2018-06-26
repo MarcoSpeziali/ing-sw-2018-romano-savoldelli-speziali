@@ -10,18 +10,21 @@ public class DieMock implements IDie {
 
     private GlassColor color;
     private Integer shade;
+    private final int uuid;
 
     public DieMock(IDie iDie) {
-        this(iDie.getShade(), iDie.getColor());
+        this(iDie.getShade(), iDie.getColor(), iDie.getUUID());
     }
 
     @JSONDesignatedConstructor
     public DieMock(
             @JSONElement("shade") Integer shade,
-            @JSONElement("color") GlassColor color
+            @JSONElement("color") GlassColor color,
+            @JSONElement("uuid") int uuid
     ) {
         this.color = color;
         this.shade = shade;
+        this.uuid = uuid;
     }
 
     @Override
@@ -34,5 +37,11 @@ public class DieMock implements IDie {
     @JSONElement("shade")
     public Integer getShade() {
         return this.shade;
+    }
+
+    @Override
+    @JSONElement("uuid")
+    public int getUUID() {
+        return uuid;
     }
 }

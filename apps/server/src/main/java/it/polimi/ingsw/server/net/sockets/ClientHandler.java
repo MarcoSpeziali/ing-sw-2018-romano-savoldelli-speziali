@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.net.sockets;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.responses.NullResponse;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -140,6 +141,11 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         // asks for a response
         @SuppressWarnings("unchecked")
         Response<? extends JSONSerializable> response = handler.handle(request, this.client);
+
+        if (request.getBody() instanceof NullResponse) {
+            // no response is sent back
+            return handler;
+        }
 
         ServerLogger.getLogger()
                 .fine(() -> String.format(

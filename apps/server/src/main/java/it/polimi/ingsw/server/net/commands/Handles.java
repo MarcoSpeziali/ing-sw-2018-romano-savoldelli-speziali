@@ -12,7 +12,17 @@ import java.lang.annotation.*;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Handles {
-    EndPointFunction value();
+    /**
+     * Gets the {@link EndPointFunction}s handles by the decorated type.
+     *
+     * @return the {@link EndPointFunction}s handles by the decorated type
+     */
+    EndPointFunction[] value();
 
+    /**
+     * Gets whether the {@link EndPointFunction} returned by {@link #value()} requires the user to be authenticated.
+     *
+     * @return whether the {@link EndPointFunction} returned by {@link #value()} requires the user to be authenticated
+     */
     boolean requiresAuthentication() default false;
 }

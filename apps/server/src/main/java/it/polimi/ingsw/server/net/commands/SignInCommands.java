@@ -17,7 +17,7 @@ public class SignInCommands {
     }
 
     @Handles(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION)
-    public static class SignInRequestCommand implements Command<ChallengeRequest, SignInRequest> {
+    public static class SignInRequestCommand implements Command<SignInRequest, ChallengeRequest> {
 
         @Override
         public Response<ChallengeRequest> handle(Request<SignInRequest> request, Socket client) throws RemoteException {
@@ -34,7 +34,7 @@ public class SignInCommands {
     }
 
     @Handles(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE)
-    public static class FulfillChallengeCommand implements Command<SignInResponse, ChallengeResponse> {
+    public static class FulfillChallengeCommand implements Command<ChallengeResponse, SignInResponse> {
 
         @Override
         public Response<SignInResponse> handle(Request<ChallengeResponse> request, Socket client) throws RemoteException {

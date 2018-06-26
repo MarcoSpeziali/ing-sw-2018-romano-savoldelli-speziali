@@ -14,6 +14,9 @@ public interface MatchEventListeners extends IEvent {
     default void onMatchEnded(DatabaseMatch databaseMatch) {
     }
 
+    default void onPlayerMigrated(DatabaseMatch databaseMatch, DatabasePlayer databasePlayer) {
+    }
+
     default void onPlayerLeft(DatabaseMatch databaseMatch, DatabasePlayer databasePlayer) {
     }
 

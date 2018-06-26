@@ -5,7 +5,15 @@ import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.MatchInterface;
 import it.polimi.ingsw.net.mocks.IMatch;
 
-public class MatchEndPoint implements MatchInterface {
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MatchEndPoint extends UnicastRemoteObject implements MatchInterface {
+
+    protected MatchEndPoint(IMatch iMatch) throws RemoteException {
+
+    }
+
     @Override
     public Response<IMatch> confirmMatchJoin(Response<IMatch> migrationResponse) {
         return null;

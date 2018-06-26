@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 // TODO: docs
-public interface Command<T extends JSONSerializable, K extends JSONSerializable> {
+public interface Command<K extends JSONSerializable, T extends JSONSerializable> {
     @SuppressWarnings("squid:S00112")
     Response<T> handle(Request<K> request, Socket client) throws IOException;
 

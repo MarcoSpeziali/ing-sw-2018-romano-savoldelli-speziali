@@ -18,9 +18,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     private int difficulty;
     private int rows;
     private int columns;
-    private String siblingId;
-    // Cannot be serialized, because it will generate a stack overflow
-    private Window sibling;
     // A multi-dimensional array cannot be serialized
     private Cell[][] cells;
 
@@ -34,15 +31,13 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
      * @param rows       the number of rows.
      * @param columns    the number of columns.
      * @param id         a unique {@link String} representing the name of the Window.
-     * @param sibling    an instance of a sibling {@link Window}.
      * @param cells      a matrix representing the disposition of dice.
      */
-    public Window(int difficulty, int rows, int columns, String id, Window sibling, Cell[][] cells) {
+    public Window(int difficulty, int rows, int columns, String id, Cell[][] cells) {
         this.difficulty = difficulty;
         this.rows = rows;
         this.columns = columns;
         this.id = id;
-        this.sibling = sibling;
         this.cells = cells;
     }
 
@@ -58,20 +53,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
      */
     public String getId() {
         return this.id;
-    }
-
-    /**
-     * @return an instance of the sibling {@link Window}.
-     */
-    public Window getSibling() {
-        return this.sibling;
-    }
-
-    /**
-     * @param sibling the target {@link Window} which must be set as sibling.
-     */
-    public void setSibling(Window sibling) {
-        this.sibling = sibling;
     }
 
     /**
@@ -96,11 +77,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     @Override
     public int getColumns() {
         return columns;
-    }
-    
-    @Override
-    public String getSiblingId() {
-        return siblingId;
     }
 
     @Override
@@ -171,7 +147,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     public Die pickDie(Die die) {
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
-                if (die == this.cells[i][j].getDie()) {
+                if (die.equals(this.cells[i][j].getDie())) {
                     return this.cells[i][j].pickDie();
                 }
             }
@@ -370,6 +346,25 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     
     public void addPickListener(OnDiePickedListener onDiePickedListener) {
         this.onDiePickedListeners.add(onDiePickedListener);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Window window = (Window) o;
+        return Objects.equals(id, window.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 

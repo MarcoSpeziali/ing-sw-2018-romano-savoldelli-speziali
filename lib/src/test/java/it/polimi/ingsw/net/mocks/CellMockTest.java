@@ -6,10 +6,8 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CellMockTest {
-    private DieMock dieMock = new DieMock(3, GlassColor.PURPLE);
+    private DieMock dieMock = new DieMock(3, GlassColor.PURPLE, 0);
     private CellMock cellMock = new CellMock(0,GlassColor.PURPLE, dieMock);
 
     @Test

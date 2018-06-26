@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 // TODO: docs
 public class EventDispatcher {
 
-    private static Map<EventType, List<? super IEvent>> eventsMap = new EnumMap<>(EventType.class);
+    private static Map<EventType, List<IEvent>> eventsMap = new EnumMap<>(EventType.class);
 
     private EventDispatcher() {
     }
@@ -17,7 +17,7 @@ public class EventDispatcher {
         eventTypes.forEach(eventType -> register(eventType, event));
     }
 
-    public static synchronized <E extends IEvent> void register(EventType eventType, E event) {
+    public static synchronized void register(EventType eventType, IEvent event) {
         if (!eventsMap.containsKey(eventType)) {
             eventsMap.put(eventType, new LinkedList<>());
         }

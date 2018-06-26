@@ -11,8 +11,7 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 
 @Handles(EndPointFunction.SIGN_UP)
-public class SignUpCommand implements Command<SignUpResponse, SignUpRequest> {
-
+public class SignUpCommand implements Command<SignUpRequest, SignUpResponse> {
 
     @Override
     public Response<SignUpResponse> handle(Request<SignUpRequest> request, Socket client) throws RemoteException {

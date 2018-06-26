@@ -13,7 +13,6 @@ public class WindowMock implements IWindow {
     private final int difficulty;
     private final int rows;
     private final int columns;
-    private final String siblingId;
     private final ICell[][] cells;
 
     public WindowMock(IWindow iWindow) {
@@ -22,7 +21,6 @@ public class WindowMock implements IWindow {
                 iWindow.getDifficulty(),
                 iWindow.getRows(),
                 iWindow.getColumns(),
-                iWindow.getSiblingId(),
                 Arrays.stream(iWindow.getFlatCells())
                         .map(CellMock::new)
                         .toArray(CellMock[]::new)
@@ -35,14 +33,12 @@ public class WindowMock implements IWindow {
             @JSONElement("difficulty") int difficulty,
             @JSONElement("rows") int rows,
             @JSONElement("columns") int columns,
-            @JSONElement("sibling-id") String siblingId,
             @JSONElement("cells") CellMock[] cells
     ) {
         this.id = id;
         this.difficulty = difficulty;
         this.rows = rows;
         this.columns = columns;
-        this.siblingId = siblingId;
 
         this.cells = new ICell[rows][columns];
         
@@ -74,12 +70,6 @@ public class WindowMock implements IWindow {
     @JSONElement("columns")
     public int getColumns() {
         return this.columns;
-    }
-
-    @Override
-    @JSONElement("sibling-id")
-    public String getSiblingId() {
-        return this.siblingId;
     }
 
     @Override

@@ -52,28 +52,10 @@ public class WindowCompiler {
         Map<String, Object>[] rawWindows = getRawWindows(path, isResource);
 
         // compiles every window and puts the result in a list
-        List<Window> windows = Arrays.stream(rawWindows)
+        // and returns them
+        return Arrays.stream(rawWindows)
                 .map(WindowCompiler::compile)
                 .collect(Collectors.toList());
-
-        // creates a map containing windowId: Window
-        Map<String, Window> windowMap = windows.stream()
-                .collect(Collectors.toMap(Window::getId, o -> o));
-
-        // sets the sibling to every window
-        for (int i = 0; i < rawWindows.length; i++) {
-            // gets the current window
-            Window window = windows.get(i);
-
-            // gets the sibling id for the current window
-            String windowSibling = (String) rawWindows[i].get(WindowNodes.WINDOW_SIBLING);
-
-            // sets the sibling to the current window
-            window.setSibling(windowMap.get(windowSibling));
-        }
-
-        // finally return the Window
-        return windows;
     }
 
     /**
@@ -130,8 +112,6 @@ public class WindowCompiler {
                 rows,
                 columns,
                 id,
-                // the sibling is set to null because it is not known now
-                null,
                 cells
         );
     }
@@ -201,7 +181,6 @@ public class WindowCompiler {
         public static final String WINDOW_NUMBER_OF_COLUMNS = "@columns";
         public static final String WINDOW_ID = "@id";
         public static final String WINDOW_DIFFICULTY = "@difficulty";
-        public static final String WINDOW_SIBLING = "@sibling";
         public static final String WINDOW_NAME_KEY = "@name";
         public static final String WINDOW_CELL = "cell";
         public static final String WINDOW_CELL_SHADE = "@shade";

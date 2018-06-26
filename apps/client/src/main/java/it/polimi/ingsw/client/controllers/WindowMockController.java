@@ -37,7 +37,7 @@ public class WindowMockController implements WindowController {
             }
 
             @Override
-            public void tryToPut(Die die) {
+            public void tryToPut(IDie die) {
                 throw new UnsupportedOperationException();
             }
 

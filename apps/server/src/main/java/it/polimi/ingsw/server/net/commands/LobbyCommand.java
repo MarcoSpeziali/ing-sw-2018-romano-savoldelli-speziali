@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 @Handles(value = EndPointFunction.LOBBY_JOIN_REQUEST, requiresAuthentication = true)
-public class LobbyCommand implements Command<ILobby, LobbyJoinRequest> {
+public class LobbyCommand implements Command<LobbyJoinRequest, ILobby> {
 
     @Override
     public Response<ILobby> handle(Request<LobbyJoinRequest> request, Socket client) throws IOException {

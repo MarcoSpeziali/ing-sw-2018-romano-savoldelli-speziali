@@ -1,6 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.locations.EmptyLocationException;
 import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
@@ -101,7 +102,7 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
             return picked;
         }
         else {
-            return null;
+            throw new EmptyLocationException(this);
         }
     }
 

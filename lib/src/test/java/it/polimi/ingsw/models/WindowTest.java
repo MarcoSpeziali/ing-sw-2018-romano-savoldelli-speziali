@@ -34,7 +34,7 @@ class WindowTest {
                 }
         };
 
-        this.window = new Window(22, 3, 4, "test", null, cells);
+        this.window = new Window(22, 3, 4, null, cells);
     }
 
     @Test
@@ -48,19 +48,8 @@ class WindowTest {
     }
 
     @Test
-    void getSiblingTest() {
-        Assertions.assertNull(window.getSibling());
-    }
-
-    @Test
     void getCellsTest() {
         Assertions.assertEquals(cells, window.getCells());
-    }
-
-    @Test
-    void setSiblingTest() {
-        window.setSibling(mockWindow);
-        Assertions.assertSame(mockWindow, window.getSibling());
     }
 
     @Test

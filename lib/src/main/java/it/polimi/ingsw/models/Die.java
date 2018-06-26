@@ -15,6 +15,14 @@ public class Die implements IDie {
     private Integer shade;
     private GlassColor color;
 
+    private static int lastUUID;
+
+    private static synchronized int getNextUUID() {
+        return ++lastUUID;
+    }
+
+    private final int uuid;
+
     private transient List<DieInteractionListener> listeners = new LinkedList<>();
 
     /**
@@ -26,6 +34,7 @@ public class Die implements IDie {
     public Die(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
+        this.uuid = getNextUUID();
     }
 
     /**
@@ -55,6 +64,11 @@ public class Die implements IDie {
         return this.color;
     }
 
+    @Override
+    public int getUUID() {
+        return uuid;
+    }
+
     /**
      * @param color assign the color to the die
      */
@@ -70,28 +84,21 @@ public class Die implements IDie {
         return String.format("Die(%d, %s)", this.shade, this.color);
     }
 
-    /**
-     * @param obj is the die to be compared with the current instance
-     * @return true if the two dice have the same shade and color
-     */
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
-        if (!(obj instanceof Die)) {
-            return false;
-        }
-
-        Die die = (Die) obj;
-
-        return this.color.equals(die.color) && this.shade.equals(die.shade);
+        Die die = (Die) o;
+        return uuid == die.uuid;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.color, this.shade);
+        return Objects.hash(this.uuid);
     }
 
     public void addListener(DieInteractionListener dieInteractionListener) {

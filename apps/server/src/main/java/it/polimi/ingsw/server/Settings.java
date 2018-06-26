@@ -53,6 +53,8 @@ public final class Settings extends SettingsBase {
     private int matchConnectionTimerDuration;
     @Setting(id = "match-connection-timer-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
     private TimeUnit matchConnectionTimerTimeUnit;
+    @Setting(id = "number-of-windows-per-player-to-choose", defaultValue = "4", type = Integer.class)
+    private int numberOfWindowsPerPlayerToChoose;
     
     private Settings(String path) throws IllegalAccessException {
         super(path);
@@ -141,5 +143,9 @@ public final class Settings extends SettingsBase {
     
     public TimeUnit getMatchConnectionTimerTimeUnit() {
         return matchConnectionTimerTimeUnit;
+    }
+
+    public int getNumberOfWindowsPerPlayerToChoose() {
+        return numberOfWindowsPerPlayerToChoose;
     }
 }

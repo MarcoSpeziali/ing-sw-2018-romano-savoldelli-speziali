@@ -13,8 +13,6 @@ public interface IWindow extends JSONSerializable {
     int getRows();
     @JSONElement("columns")
     int getColumns();
-    @JSONElement("sibling-id")
-    String getSiblingId();
     @JSONElement("cells")
     ICell[] getFlatCells();
 

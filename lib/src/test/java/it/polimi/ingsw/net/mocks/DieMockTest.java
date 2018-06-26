@@ -1,17 +1,13 @@
 package it.polimi.ingsw.net.mocks;
 
 import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class DieMockTest {
-    DieMock die = new DieMock(3, GlassColor.PURPLE);
+    DieMock die = new DieMock(3, GlassColor.PURPLE, 0);
 
     @Test
     void testSerializationAndDeserialization(){
