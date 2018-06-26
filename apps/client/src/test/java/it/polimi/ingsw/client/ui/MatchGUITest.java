@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.client.ui.gui.scenes.MatchGUIController;
+import it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView;
 import it.polimi.ingsw.controllers.*;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.net.mocks.*;
@@ -26,9 +26,9 @@ public class MatchGUITest extends Application {
         loader.setLocation(Constants.Resources.MATCH_FXML.getURL());
         Parent root = loader.load();
         Scene scene = new Scene(root, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
-        MatchGUIController matchGUIController = loader.getController();
+        MatchGUIView matchGUIView = loader.getController();
 
-        matchGUIController.setController(new MatchController() {
+        matchGUIView.setController(new MatchController() {
             @Override
             public IWindow[] waitForWindowRequest() throws RemoteException {
                 CellMock[] cells1 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
@@ -43,10 +43,10 @@ public class MatchGUITest extends Application {
                 CellMock[] cells4 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.YELLOW, 0), new CellMock(null, 6),
                         new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
 
-                IWindow[] iWindows = {new WindowMock("window 1", 3, 2, 3, "null", cells1),
-                        new WindowMock("window 2", 1, 2, 3, "null", cells2),
-                        new WindowMock("window 3", 1, 2, 3, "null", cells3),
-                        new WindowMock("window 4", 1, 2, 3, "null", cells4)
+                IWindow[] iWindows = {new WindowMock("window 1", 3, 2, 3, cells1),
+                        new WindowMock("window 2", 1, 2, 3, cells2),
+                        new WindowMock("window 3", 1, 2, 3, cells3),
+                        new WindowMock("window 4", 1, 2, 3, cells4)
                 };
 
                 return iWindows;

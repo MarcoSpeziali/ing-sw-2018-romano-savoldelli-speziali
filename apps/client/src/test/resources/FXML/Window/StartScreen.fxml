@@ -8,7 +8,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="722.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/9.0.1"
-            fx:controller="it.polimi.ingsw.client.ui.gui.scenes.StartScreenGUIController"
+            fx:controller="it.polimi.ingsw.client.ui.gui.scenes.StartScreenGUIView"
             stylesheets="@../../application-stylesheet.css">
     <center>
         <Pane prefHeight="722.0" prefWidth="550.0">

@@ -6,10 +6,13 @@ import it.polimi.ingsw.controllers.DraftPoolController;
 import it.polimi.ingsw.models.DraftPool;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IDraftPool;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.scene.transform.Scale;
 
 import java.io.IOException;
 import java.util.Map;
@@ -40,18 +43,27 @@ public class DraftPoolGUIView extends GUIView<DraftPoolController> {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
             AnchorPane die = loader.load();
-
             die.setCursor(Cursor.OPEN_HAND);
+            Scale scale = new Scale(1.5,1.5);
+
             die.setOnMousePressed(event -> {
                 mouseX = event.getSceneX();
                 mouseY = event.getSceneY();
                 die.setCursor(Cursor.CLOSED_HAND);
+                die.getTransforms().add(scale);
+                die.setStyle("-fx-opacity: 0.5");
             });
             die.setOnMouseDragged(event-> {
                 die.relocate(event.getSceneX() - mouseX, event.getScreenY() - mouseY);
             });
             die.setOnMouseReleased(event -> {
                 die.setCursor(Cursor.OPEN_HAND);
+                try {
+                    die.getTransforms().add(scale.createInverse());
+                    die.setStyle("-fx-opacity: 1.0");
+                } catch (NonInvertibleTransformException e) {
+                    e.printStackTrace();
+                }
             });
 
 

@@ -29,7 +29,7 @@ import java.rmi.NotBoundException;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.TOP;
 
-public class SignInGUIController extends SignInController {
+public class SignInGUIView extends SignInController {
 
     @FXML
     @Localized(key = Constants.Strings.SIGN_IN_USERNAME_FIELD_PROMPT_TEXT, fieldUpdater = TextInputControlPlaceholderLocalizationUpdater.class)

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.controllers.DieMockController;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.CellController;
 import it.polimi.ingsw.models.Cell;
@@ -17,7 +18,10 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
+
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class CellGUIView extends GUIView<CellController> {
 
@@ -37,7 +41,8 @@ public class CellGUIView extends GUIView<CellController> {
 
     private String path;
 
-    public CellGUIView(){}
+    public CellGUIView() {
+    }
 
     private void diePicked() {
         // this.cellController.onDiePicked();
@@ -53,7 +58,7 @@ public class CellGUIView extends GUIView<CellController> {
     @Override
     public void setController(CellController controller) throws RemoteException {
         super.controller = controller;
-        ICell iCell =  controller.getCell();
+        ICell iCell = controller.getCell();
         if (iCell.getShade() > 0) {
             String resourceName = String.format("CELL_%d", iCell.getShade());
             String relativePath = Constants.Resources.valueOf(resourceName).getRelativePath();
@@ -62,52 +67,49 @@ public class CellGUIView extends GUIView<CellController> {
             if (resourceUrl != null) {
                 try {
                     this.shadeImageView.setImage(new Image(resourceUrl.openStream()));
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     ClientLogger.getLogger().log(Level.SEVERE, "IOException while reading image at path: " + relativePath, e);
                 }
-            }
-            else {
+            } else {
                 ClientLogger.getLogger().log(Level.WARNING, "Could not retrieve image for resource {0}", resourceName);
             }
-        }
-        else if (iCell.getColor() == null) { // super.iCell.getShade() == 0 always
+        } else if (iCell.getColor() == null) { // super.iCell.getShade() == 0 always
             colorAnchorPane.setStyle("-fx-background-color: white");
-        }
-        else {
+        } else {
             colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", iCell.getColor().getHex()));
         }
 
     }
 
-    public void onUpdateReceived(Cell cell) {
+    public void onUpdateReceived(ICell update) {
         Platform.runLater(() -> {
-            if (!cell.isOccupied()) {
+            if (!update.isOccupied()) {
                 dieAnchorPane = defaultDieAnchorPane;
-            }
-            else {
+            } else {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
                 DieGUIView dieGUIView = loader.getController();
-                //DieGUIView.setController();
-                defaultDieAnchorPane = dieAnchorPane;
                 try {
+                    dieGUIView.setController(new DieMockController(update.getDie()));
+                    defaultDieAnchorPane = dieAnchorPane;
                     dieAnchorPane = loader.load();
-                }
-                catch (IOException e) {
+
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+            setUpUpdateFuture();
         });
+    }
+
+    private void setUpUpdateFuture() {
+        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForUpdate()))
+                .thenAccept(this::onUpdateReceived);
     }
 
     @Override
     public void init() {
 
-    }
-
-    public void setDisable(boolean disable) {
-        this.unallowedPane.setDisable(disable);
     }
 }
 

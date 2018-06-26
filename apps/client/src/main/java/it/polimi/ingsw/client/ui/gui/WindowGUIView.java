@@ -9,8 +9,10 @@ import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -65,11 +67,11 @@ public class WindowGUIView extends GUIView<WindowController> {
                     }
 
                     try {
-                        cell.setCursor(Cursor.cursor(Constants.Resources.DICE_CURSOR.getRelativePath()));
+                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
                         this.controller.tryToPut(heldDie, 2 * finalI + finalJ);
                     }
                     catch (DieInteractionException e) {
-                        cell.setCursor(Cursor.WAIT);
+                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
                         cell.setDisable(true);
                     }
                     catch (RemoteException e) {
@@ -77,7 +79,7 @@ public class WindowGUIView extends GUIView<WindowController> {
                     }
                 });
 
-                cell.setOnMouseClicked(event -> {
+                cell.setOnDragDetected(event -> {
 
                 });
 

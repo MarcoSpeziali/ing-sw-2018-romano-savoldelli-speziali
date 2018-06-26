@@ -17,7 +17,7 @@ import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static com.jfoenix.controls.JFXDialog.DialogTransition.TOP;
 
 
-public class SignUpGUIController extends SignUpController {
+public class SignUpGUIView extends SignUpController {
 
     @FXML
     public JFXTextField user;
@@ -29,7 +29,7 @@ public class SignUpGUIController extends SignUpController {
     public StackPane stackPane;
     private FXMLLoader loader = new FXMLLoader();
 
-    public SignUpGUIController() {
+    public SignUpGUIView() {
     }
 
     @FXML

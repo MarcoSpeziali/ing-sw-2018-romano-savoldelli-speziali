@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.client.SagradaGUI.primaryStage;
 
-public class StartScreenGUIController implements Initializable {
+public class StartScreenGUIView implements Initializable {
 
     @FXML
     @Localized(key = Constants.Strings.START_SCREEN_PLAY_BUTTON_TEXT, fieldUpdater = LabeledLocalizationUpdater.class)

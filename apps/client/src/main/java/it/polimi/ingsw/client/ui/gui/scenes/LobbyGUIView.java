@@ -95,7 +95,7 @@ public class LobbyGUIView implements Initializable {
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
                     loader.setLocation(Constants.Resources.MATCH_FXML.getURL());
                     Parent parent = loader.load();
-                    // MatchGUIController gameDashboardGUIController = loader.getController();
+                    // MatchGUIView gameDashboardGUIController = loader.getController();
                     // gameDashboardGUIController...
                     SagradaGUI.showStage(parent, 1280, 720);
                 })));

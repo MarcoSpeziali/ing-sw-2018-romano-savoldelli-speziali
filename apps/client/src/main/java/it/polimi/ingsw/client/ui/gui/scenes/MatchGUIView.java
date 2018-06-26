@@ -7,24 +7,23 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
+import it.polimi.ingsw.net.mocks.ILivePlayer;
+import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,7 +31,7 @@ import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
-public class MatchGUIController {
+public class MatchGUIView {
 
     @FXML
     public StackPane outerPane;
@@ -55,11 +54,11 @@ public class MatchGUIController {
 
     public void init() {
         chooseWindow();
-        loadElements();
-        loadOpponentsWindows();
+        //loadElements();
+        setUpUpdateFuture();
     }
 
-    private void loadElements() {
+  /*  private void loadElements() {
         CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForToolCards()))
                 .thenAccept(toolCardControllers -> Platform.runLater(unsafe(() -> {
                     for (int i=0; i<toolCardControllers.length; i++) {
@@ -139,7 +138,7 @@ public class MatchGUIController {
                     //roundTrackGUIView.setController(roundTrackController); TODO Luca: fix all these lacks
                     // TODO Luca: add layout position (use anchors)
                 })));
-    }
+    }*/
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
@@ -184,29 +183,34 @@ public class MatchGUIController {
                 })));
     }
     
-    private void loadOpponentsWindows() { //TODO change me
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForOpponentsWindowsUpdate()))
-                .thenAccept(map -> Platform.runLater(unsafe(() -> {
-                    AtomicInteger index = new AtomicInteger();
-                    map.forEach((ILivePlayer, IWindow) -> {
-                                IWindow iWindow = map.get(ILivePlayer);
-                                FXMLLoader loader = new FXMLLoader();
-                                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
-                                try {
-                                    Node node = loader.load();
-                                    HBox hBox = new HBox();
-                                    Label label = new Label(ILivePlayer.getPlayer().getUsername());
-                                    label.setAlignment(Pos.CENTER);
-                                    label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
-                                    hBox.getChildren().addAll(node, label);
-                                    WindowGUIView windowGUIView = loader.getController();
-                                    windowGUIView.setController(new WindowMockController(iWindow));
-                                    windowsPane.add(node, index.get() / 2, index.get() / 2); // TODO check indexes
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                index.getAndIncrement();
+   /* private void setOpponentsWindows(IMatch i) { //TODO change me
+                    Platform.runLater(() -> {
+                        AtomicInteger index = new AtomicInteger();
+                        map.forEach((ILivePlayer, IWindow) -> {
+                                    IWindow iWindow = map.get(ILivePlayer);
+                                    FXMLLoader loader = new FXMLLoader();
+                                    loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+                                    try {
+                                        Node node = loader.load();
+                                        VBox vBox = new VBox();
+                                        Label label = new Label(ILivePlayer.getPlayer().getUsername());
+                                        label.setAlignment(Pos.CENTER);
+                                        label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
+                                        vBox.getChildren().addAll(node, label);
+                                        WindowGUIView windowGUIView = loader.getController();
+                                        windowGUIView.setController(new WindowMockController(iWindow));
+                                        windowsPane.add(node, index.get() / 2, index.get() / 2); // TODO check indexes
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    index.getAndIncrement();
+                        });
+                        setUpUpdateFuture();
                     });
-                })));
+    }*/
+
+    private void setUpUpdateFuture() {
+        /*CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForUpdate()))
+                .thenAccept();*/
     }
 }
