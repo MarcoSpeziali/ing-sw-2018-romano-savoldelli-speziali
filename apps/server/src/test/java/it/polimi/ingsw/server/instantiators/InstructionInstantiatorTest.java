@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.initializers;
+package it.polimi.ingsw.server.instantiators;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
@@ -24,7 +24,7 @@ import java.util.List;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class InstructionInitializerTest {
+class InstructionInstantiatorTest {
 
     @Test
     void testInitialization() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -54,7 +54,7 @@ class InstructionInitializerTest {
                 PredicateDirectivesCompiler.compile()
         );
 
-        Instruction instruction = InstructionInitializer.instantiate(compiledInstruction);
+        Instruction instruction = InstructionInstantiator.instantiate(compiledInstruction);
 
         Assertions.assertNotNull(instruction);
         Assertions.assertEquals(ForDieInstruction.class, instruction.getClass());

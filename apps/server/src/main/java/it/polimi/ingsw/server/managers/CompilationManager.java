@@ -27,7 +27,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class CompilationManager {
+    
     private static Logger logger = ServerLogger.getLogger();
+    
     /**
      * Gets the value returned by {@link #getLastCompilation()}.
      */

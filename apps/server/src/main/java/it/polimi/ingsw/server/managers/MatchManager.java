@@ -2,11 +2,10 @@ package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.controllers.proxies.socket.MatchSocketProxyController;
-import it.polimi.ingsw.models.Window;
+import it.polimi.ingsw.models.*;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.server.Settings;
-import it.polimi.ingsw.server.controllers.CellControllerImpl;
-import it.polimi.ingsw.server.controllers.WindowControllerImpl;
+import it.polimi.ingsw.server.controllers.*;
 import it.polimi.ingsw.server.events.*;
 import it.polimi.ingsw.server.sql.DatabaseLobby;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
@@ -14,6 +13,7 @@ import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.ArrayUtils;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
+import it.polimi.ingsw.utils.streams.StreamUtils;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -38,6 +38,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     // ------ MATCH OBJECTS CACHE ------
     private final List<IPlayer> lobbyPlayers;
     private List<Window> possibleChosenWindows;
+    private List<IPlayer> matchPlayers;
+    private Map<IPlayer, ILivePlayer> playerToLivePlayerMap;
 
     // ------ TIMERS AND FUTURES ------
     private final ScheduledExecutorService matchExecutorService;
@@ -56,19 +58,13 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
     // ------ FSM OBJECTS ------
     private MatchState matchState = MatchState.WAITING_FOR_PLAYERS;
-    private boolean migrationClosed = false;
-
-
-    private final Map<DatabasePlayer, ILivePlayer> databaseToLivePlayerMap = new HashMap<>();
-
-
-    private final Runnable moveTimerExecutorTask = () -> {
-        // on expiration turn is over and the next player is awaken
-    };
     
     public MatchMock getMatch() {
-        // FIXME: correct with more info
-        return new MatchMock(this.databaseMatch);
+        return new MatchMock(
+                this.databaseMatch,
+                playerToLivePlayerMap.values()
+                        .toArray(new ILivePlayer[0])
+        );
     }
     
     public MatchManager(int lobbyId) throws SQLException {
@@ -82,7 +78,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
         this.matchCommunicationsManager = new MatchCommunicationsManager(this.databaseMatch);
         this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch);
+        this.matchPlayers = new ArrayList<>(this.lobbyPlayers.size());
+        this.playerToLivePlayerMap = new HashMap<>();
     }
+    
+    // ------ LIFE CYCLE ------
     
     public void addPlayer(DatabasePlayer databasePlayer, MatchSocketProxyController matchSocketProxyController) throws SQLException {
         if (canAcceptPlayer(databasePlayer)) {
@@ -104,8 +104,13 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         }
     }
     
+    private boolean canAcceptPlayer(DatabasePlayer player) throws SQLException {
+        return lobbyPlayers.contains(player) && this.matchState != MatchState.WAITING_FOR_PLAYERS || this.databaseMatch.getLeftPlayers().contains(player);
+    }
+    
     public void addPlayerCommons(DatabasePlayer databasePlayer) throws SQLException {
         this.databaseMatch = DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
+        this.matchPlayers.add(databasePlayer);
     
         IPlayer[] players = Arrays.stream(this.databaseMatch.getPlayers())
                 .map(ILivePlayer::getPlayer)
@@ -115,13 +120,13 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         // then the connection timer is stopped and the windows can be sent
         if (players.length == this.lobbyPlayers.size()) {
             this.connectionTimerScheduledFuture.cancel(true);
-
+            
             try {
-                this.matchCommunicationsManager.sendWindowsToChoose(createWindows(players));
+                // the pre-processing is done by connectionTask, so it can be run manually instead of waiting for the
+                connectionTask.run();
             }
-            catch (IOException | ClassNotFoundException e) {
-                ServerLogger.getLogger().log(Level.SEVERE, "Could not deserialize windows from file", e);
-
+            catch (Exception e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred in the connection task:", e);
                 throw new RuntimeException(e);
             }
         }
@@ -132,11 +137,19 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 matchEventListeners -> matchEventListeners.onPlayerMigrated(this.databaseMatch, databasePlayer)
         );
     }
-
+    
+    // ------ NETWORK COMMUNICATION ------
+    
+    public void sendWindowsToChoose(IPlayer[] players) throws IOException, ClassNotFoundException {
+        this.matchCommunicationsManager.sendWindowsToChoose(createWindows(players));
+    }
+    
+    // ------ MODELS AND CONTROLLERS CREATION ------
+    
     private Map<IPlayer, IWindow[]> createWindows(IPlayer[] players) throws IOException, ClassNotFoundException {
         Map<IPlayer, IWindow[]> playerWindowsMap = new HashMap<>();
 
-        Window[] windows = InitializationManager.initializeWindows();
+        Window[] windows = InstantiationManager.instantiateWindows();
         windows = ArrayUtils.shuffleArray(windows);
 
         int windowsPerPlayer = Settings.getSettings().getNumberOfWindowsPerPlayerToChoose();
@@ -160,41 +173,111 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         return playerWindowsMap;
     }
     
-    private boolean canAcceptPlayer(DatabasePlayer player) throws SQLException {
-        return lobbyPlayers.contains(player) && this.matchState != MatchState.WAITING_FOR_PLAYERS || this.databaseMatch.getLeftPlayers().contains(player);
+    private void createRemainingModelsAndControllers() throws IOException, ClassNotFoundException {
+        // ------ DO NOT NEED A CONTROLLER ------
+        Bag bag = new Bag(Settings.getSettings().getNumberOfDicePerColorInBag());
+        ObjectiveCard[] publicObjectiveCards = getPublicObjectiveCards();
+        ObjectiveCard[] privateObjectiveCards = getPrivateObjectiveCards();
+        
+        this.matchObjectsManager.setBag(bag);
+        this.matchObjectsManager.setPublicObjectiveCards(publicObjectiveCards);
+        StreamUtils.indexedForEach(
+                this.matchPlayers,
+                (i, player) -> this.matchObjectsManager.setPrivateObjectiveCardForPlayer(
+                        privateObjectiveCards[i],
+                        player
+                )
+        );
+    
+        // ------ NEEDS A CONTROLLER ------
+        RoundTrack roundTrack = new RoundTrack();
+        DraftPool draftPool = new DraftPool((byte) this.matchPlayers.size());
+        ToolCard[] toolCards = getToolCards();
+    
+        RoundTrackControllerImpl roundTrackController = new RoundTrackControllerImpl(roundTrack);
+        DraftPoolControllerImpl draftPoolController = new DraftPoolControllerImpl(draftPool);
+        ToolCardControllerImpl[] toolCardControllers = Arrays.stream(toolCards)
+                .map(ToolCardControllerImpl::new)
+                .toArray(ToolCardControllerImpl[]::new);
+        
+        this.matchObjectsManager.setRoundTrackController(roundTrackController);
+        this.matchObjectsManager.setDraftPoolController(draftPoolController);
+        this.matchObjectsManager.setToolCardControllers(toolCardControllers);
     }
-
+    
+    private ObjectiveCard[] getPublicObjectiveCards() throws IOException, ClassNotFoundException {
+        ObjectiveCard[] objectiveCards = InstantiationManager.instantiatePublicObjectiveCards();
+        objectiveCards = ArrayUtils.shuffleArray(objectiveCards);
+        
+        return ArrayUtils.sliceArray(
+                objectiveCards,
+                Settings.getSettings().getNumberOfPublicObjectiveCards()
+        );
+    }
+    
+    private ObjectiveCard[] getPrivateObjectiveCards() throws IOException, ClassNotFoundException {
+        ObjectiveCard[] objectiveCards = InstantiationManager.instantiatePrivateObjectiveCards();
+        objectiveCards = ArrayUtils.shuffleArray(objectiveCards);
+        
+        return ArrayUtils.sliceArray(
+                objectiveCards,
+                Settings.getSettings().getNumberOfPrivateObjectiveCards() * this.matchPlayers.size()
+        );
+    }
+    
+    private ToolCard[] getToolCards() throws IOException, ClassNotFoundException {
+        ToolCard[] toolCards = InstantiationManager.instantiateToolCards();
+        toolCards = ArrayUtils.shuffleArray(toolCards);
+    
+        return ArrayUtils.sliceArray(
+                toolCards,
+                Settings.getSettings().getNumberOfToolCards()
+        );
+    }
+    
+    // ------ TIMERS AND TASKS ------
+    
+    @SuppressWarnings("squid:S1602") // Lambdas containing only one statement should not nest this statement in a block
+    private final Runnable connectionTask = unsafe(() -> {
+        // on expiration match starts:
+        // the players that did not respond to migration request
+        // are marked as left from the lobby, they cannot join back
+        this.matchState = MatchState.WAITING_FOR_WINDOW_RESPONSES;
+    
+        ILobby lobby = this.databaseMatch.getLobby();
+    
+        List<IPlayer> playersInLobby = Arrays.asList(lobby.getPlayers());
+        List<IPlayer> playersInMatch = Arrays.stream(this.databaseMatch.getPlayers())
+                .map(ILivePlayer::getPlayer)
+                .collect(Collectors.toList());
+    
+        List<IPlayer> timedOutPlayers = new ArrayList<>(playersInLobby);
+        timedOutPlayers.removeAll(playersInMatch);
+    
+        try {
+            timedOutPlayers.forEach(wrap(iPlayer -> {
+                DatabaseLobby.removePlayer(lobby.getId(), iPlayer.getId());
+            }));
+    
+            this.sendWindowsToChoose(playersInMatch.toArray(new IPlayer[0]));
+        }
+        catch (FunctionalExceptionWrapper e) {
+            e.tryUnwrap(SQLException.class)
+                    .tryUnwrap(IOException.class)
+                    .tryFinalUnwrap(ClassNotFoundException.class);
+        }
+    });
+    
+    private final Runnable moveTimerExecutorTask = () -> {
+        // on expiration turn is over and the next player is awaken
+    };
+    
     /**
      * Sets up the connection timer.
      */
-    @SuppressWarnings("squid:S1602") // Lambdas containing only one statement should not nest this statement in a block
     private void setUpConnectionTimer() {
         this.connectionTimerScheduledFuture = matchExecutorService.scheduleWithFixedDelay(
-                unsafe(() -> {
-                    // on expiration match starts:
-                    // the players that did not respond to migration request
-                    // are marked as left from the lobby, they cannot join back
-                    migrationClosed = true;
-
-                    ILobby lobby = this.databaseMatch.getLobby();
-
-                    List<IPlayer> playersInLobby = Arrays.asList(lobby.getPlayers());
-                    List<IPlayer> playersInMatch = Arrays.stream(this.databaseMatch.getPlayers())
-                            .map(ILivePlayer::getPlayer)
-                            .collect(Collectors.toList());
-
-                    List<IPlayer> timedOutPlayers = new ArrayList<>(playersInLobby);
-                    timedOutPlayers.removeAll(playersInMatch);
-
-                    try {
-                        timedOutPlayers.forEach(wrap(iPlayer -> {
-                            DatabaseLobby.removePlayer(lobby.getId(), iPlayer.getId());
-                        }));
-                    }
-                    catch (FunctionalExceptionWrapper e) {
-                        e.tryFinalUnwrap(SQLException.class);
-                    }
-                }),
+                connectionTask,
                 Settings.getSettings().getMatchConnectionTimerDuration(),
                 Long.MAX_VALUE, // prevents the execution (gives time to cancel the timer)
                 Settings.getSettings().getMatchConnectionTimerTimeUnit()
@@ -231,9 +314,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         );
     }
     
+    // ------ EXTERNAL EVENTS ------
+    
     @Override
     public void onPlayerDisconnected(DatabasePlayer player) {
-
+    
     }
 
     @Override
@@ -251,6 +336,19 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
         this.matchObjectsManager.setWindowControllerForPlayer(windowController, databasePlayer);
         matchCommunicationsManager.sendWindowController(windowController);
+        
+        if (this.matchObjectsManager.getPlayerWindowMap().size() == this.matchPlayers.size()) {
+            this.matchState = MatchState.WAITING_FOR_CONTROLLERS_ACK;
+    
+            try {
+                createRemainingModelsAndControllers();
+                // TODO: send models
+            }
+            catch (IOException | ClassNotFoundException e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers:", e);
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private enum MatchState {

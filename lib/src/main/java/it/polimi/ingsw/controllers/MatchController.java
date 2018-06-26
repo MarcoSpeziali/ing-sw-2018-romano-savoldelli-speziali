@@ -3,31 +3,35 @@ package it.polimi.ingsw.controllers;
 import it.polimi.ingsw.controllers.proxies.ProxyUpdateInterface;
 import it.polimi.ingsw.controllers.proxies.RemotelyClosable;
 import it.polimi.ingsw.controllers.proxies.RemotelyInitializable;
-import it.polimi.ingsw.models.Window;
-import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.net.mocks.IMatch;
+import it.polimi.ingsw.net.mocks.IObjectiveCard;
 import it.polimi.ingsw.net.mocks.IWindow;
 
 import java.rmi.RemoteException;
-import java.util.Map;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
-
-    // first thing is to choose the window to play with
+    
+    void postWindowsToChoose(IWindow[] windows);
+    
     IWindow[] waitForWindowRequest() throws RemoteException;
-
-    WindowController respondToWindowRequest(IWindow window) throws RemoteException;
-
-    ToolCardController[] waitForToolCards() throws RemoteException;
-
-    ObjectiveCardController[] waitForPublicObjectiveCards() throws RemoteException;
-
-    ObjectiveCardController waitForPrivateObjectiveCard() throws RemoteException;
-
-    // then the opponents' Window are sent // FIXME: corrected Window with IWindow
-    Map<ILivePlayer, IWindow> waitForOpponentsWindowsUpdate() throws RemoteException;
-
-    DraftPoolController waitForDraftPool();
-
-    RoundTrackController waitForRoundTrack();
+    
+    void respondToWindowRequest(IWindow window) throws RemoteException;
+    
+    void postWindowController(WindowController windowController) throws RemoteException;
+    
+    WindowController waitForWindowController() throws RemoteException;
+    
+    void postToolCardControllers(ToolCardController[] toolCardControllers) throws RemoteException;
+    
+    ToolCardController[] waitForToolCardControllers() throws RemoteException;
+    
+    void postPublicObjectiveCards(IObjectiveCard[] objectiveCards) throws RemoteException;
+    
+    IObjectiveCard[] waitForPublicObjectiveCards() throws RemoteException;
+    
+    IObjectiveCard waitForPrivateObjectiveCard() throws RemoteException;
+    
+    DraftPoolController waitForDraftPool() throws RemoteException;
+    
+    RoundTrackController waitForRoundTrack() throws RemoteException;
 }

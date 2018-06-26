@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.initializers;
+package it.polimi.ingsw.server.instantiators;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-class ActionInitializerTest {
+class ActionInstantiatorTest {
 
     @Test
     void testInitialization() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -33,7 +33,7 @@ class ActionInitializerTest {
                 List.of()
         );
 
-        Action action = ActionInitializer.instantiate(compiledAction);
+        Action action = ActionInstantiator.instantiate(compiledAction);
 
         Assertions.assertNotNull(action);
         Assertions.assertEquals(IncrementAction.class, action.getClass());

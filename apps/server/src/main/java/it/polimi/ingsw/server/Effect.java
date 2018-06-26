@@ -116,16 +116,17 @@ public class Effect implements IEffect {
     /**
      * Runs the effect if the {@link EvaluableConstraint} is satisfied.
      *
-     * @param cardId The id of the card (used to create a snapshot).
+     * @param cardId the id of the card (used to create a snapshot)
+     * @param playerContext the context of the player running the effect
      */
-    public void run(String cardId) {
+    public void run(String cardId, Context playerContext) {
         this.usedOnce = true;
 
         if (this.effectConstraint != null && this.effectConstraint.evaluate(Context.getSharedInstance())) {
             throw new ConstraintEvaluationException();
         }
-
-        Context.getSharedInstance().snapshot(
+    
+        playerContext.snapshot(
                 "Effect(" + cardId + ")",
                 snapshot -> this.actions.forEach(action -> {
                     if (action.getActionData().getResultIdentifier() == null) {
@@ -136,5 +137,14 @@ public class Effect implements IEffect {
                     }
                 })
         );
+    }
+    
+    /**
+     * Runs the effect if the {@link EvaluableConstraint} is satisfied.
+     *
+     * @param cardId the id of the card (used to create a snapshot)
+     */
+    public void run(String cardId) {
+        this.run(cardId, Context.getSharedInstance());
     }
 }

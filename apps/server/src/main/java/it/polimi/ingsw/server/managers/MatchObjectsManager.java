@@ -1,15 +1,19 @@
 package it.polimi.ingsw.server.managers;
 
-import it.polimi.ingsw.controllers.*;
 import it.polimi.ingsw.models.Bag;
+import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.server.controllers.DraftPoolControllerImpl;
+import it.polimi.ingsw.server.controllers.RoundTrackControllerImpl;
+import it.polimi.ingsw.server.controllers.ToolCardControllerImpl;
 import it.polimi.ingsw.server.controllers.WindowControllerImpl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+// TODO: docs
 public class MatchObjectsManager {
 
     private static final Map<Integer, MatchObjectsManager> instances = new HashMap<>();
@@ -25,19 +29,19 @@ public class MatchObjectsManager {
     private final int matchId;
 
     private Bag bag;
-    private DraftPoolController draftPoolController;
-    private RoundTrackController roundTrackController;
-    private ObjectiveCardController[] publicObjectiveCardControllers;
-    private ToolCardController[] toolCardControllers;
+    private DraftPoolControllerImpl draftPoolController;
+    private RoundTrackControllerImpl roundTrackController;
+    private ObjectiveCard[] publicObjectiveCards;
+    private ToolCardControllerImpl[] toolCardControllers;
 
     private Map<IPlayer, WindowControllerImpl> playerWindowMap;
-    private Map<IPlayer, ObjectiveCardController> playerObjectiveCardControllerMap;
+    private Map<IPlayer, ObjectiveCard> playerPrivateObjectiveCardMap;
 
     private MatchObjectsManager(int matchId) {
         this.matchId = matchId;
 
         playerWindowMap = new HashMap<>();
-        playerObjectiveCardControllerMap = new HashMap<>();
+        playerPrivateObjectiveCardMap = new HashMap<>();
     }
 
     public Bag getBag() {
@@ -48,52 +52,56 @@ public class MatchObjectsManager {
         this.bag = bag;
     }
 
-    public DraftPoolController getDraftPoolController() {
+    public DraftPoolControllerImpl getDraftPoolController() {
         return draftPoolController;
     }
 
-    public void setDraftPoolController(DraftPoolController draftPoolController) {
+    public void setDraftPoolController(DraftPoolControllerImpl draftPoolController) {
         this.draftPoolController = draftPoolController;
     }
 
-    public RoundTrackController getRoundTrackController() {
+    public RoundTrackControllerImpl getRoundTrackController() {
         return roundTrackController;
     }
 
-    public void setRoundTrackController(RoundTrackController roundTrackController) {
+    public void setRoundTrackController(RoundTrackControllerImpl roundTrackController) {
         this.roundTrackController = roundTrackController;
     }
 
-    public ObjectiveCardController[] getPublicObjectiveCardControllers() {
-        return publicObjectiveCardControllers;
+    public ObjectiveCard[] getPublicObjectiveCards() {
+        return publicObjectiveCards;
     }
 
-    public void setPublicObjectiveCardControllers(ObjectiveCardController[] publicObjectiveCardControllers) {
-        this.publicObjectiveCardControllers = publicObjectiveCardControllers;
+    public void setPublicObjectiveCards(ObjectiveCard[] publicObjectiveCards) {
+        this.publicObjectiveCards = publicObjectiveCards;
     }
 
-    public ToolCardController[] getToolCardControllers() {
+    public ToolCardControllerImpl[] getToolCardControllers() {
         return toolCardControllers;
     }
 
-    public void setToolCardControllers(ToolCardController[] toolCardControllers) {
+    public void setToolCardControllers(ToolCardControllerImpl[] toolCardControllers) {
         this.toolCardControllers = toolCardControllers;
     }
 
     public WindowControllerImpl getWindowControllerForPlayer(IPlayer player) {
         return playerWindowMap.get(player);
     }
-
+    
+    public Map<IPlayer, WindowControllerImpl> getPlayerWindowMap() {
+        return playerWindowMap;
+    }
+    
     public void setWindowControllerForPlayer(WindowControllerImpl windowController, IPlayer player) {
         this.playerWindowMap.put(player, windowController);
     }
 
-    public ObjectiveCardController getObjectiveCardControllerForPlayer(IPlayer player) {
-        return playerObjectiveCardControllerMap.get(player);
+    public ObjectiveCard getObjectiveCardForPlayer(IPlayer player) {
+        return playerPrivateObjectiveCardMap.get(player);
     }
 
-    public void setObjectiveCardControllerForPlayer(ObjectiveCardController objectiveCardController, IPlayer player) {
-        this.playerObjectiveCardControllerMap.put(player, objectiveCardController);
+    public void setPrivateObjectiveCardForPlayer(ObjectiveCard objectiveCard, IPlayer player) {
+        this.playerPrivateObjectiveCardMap.put(player, objectiveCard);
     }
 
     @Override

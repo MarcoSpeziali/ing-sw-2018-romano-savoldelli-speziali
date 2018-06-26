@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.initializers;
+package it.polimi.ingsw.server.instantiators;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-class PredicateInitializerTest {
+class PredicateInstantiatorTest {
 
     Context context;
     List<PredicateDirective> predicateDirectives;
@@ -46,7 +46,7 @@ class PredicateInitializerTest {
                 this.predicateDirectives
         );
 
-        Predicate predicate = PredicateInitializer.instantiate(compiledPredicate);
+        Predicate predicate = PredicateInstantiator.instantiate(compiledPredicate);
         Assertions.assertNotNull(predicate);
         Assertions.assertEquals(DistinctColorPredicate.class, predicate.getClass());
         Assertions.assertTrue(predicate.evaluate(context));
@@ -59,7 +59,7 @@ class PredicateInitializerTest {
                 this.predicateDirectives
         );
 
-        Predicate predicate = PredicateInitializer.instantiate(compiledPredicate);
+        Predicate predicate = PredicateInstantiator.instantiate(compiledPredicate);
         Assertions.assertNotNull(predicate);
         Assertions.assertEquals(DistinctShadePredicate.class, predicate.getClass());
         Assertions.assertFalse(predicate.evaluate(context));

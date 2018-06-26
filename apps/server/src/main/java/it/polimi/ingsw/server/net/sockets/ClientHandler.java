@@ -5,8 +5,9 @@ import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.responses.NullResponse;
 import it.polimi.ingsw.server.net.commands.Command;
 import it.polimi.ingsw.server.utils.ServerLogger;
+import it.polimi.ingsw.server.utils.io.JSONBufferedReader;
+import it.polimi.ingsw.server.utils.io.JSONBufferedWriter;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
-import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,7 +15,6 @@ import java.net.SocketAddress;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-// TODO: docs
 public abstract class ClientHandler implements Runnable, AutoCloseable {
 
     /**
@@ -25,17 +25,17 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
     /**
      * The {@link BufferedReader} of the client's connection.
      */
-    protected final BufferedReader in;
+    protected final JSONBufferedReader in;
 
     /**
      * The {@link BufferedWriter} of the client's connection.
      */
-    protected final BufferedWriter out;
+    protected final JSONBufferedWriter out;
 
     public ClientHandler(Socket client) throws IOException {
         this.client = client;
-        this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        this.out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+        this.in = new JSONBufferedReader(new InputStreamReader(client.getInputStream()));
+        this.out = new JSONBufferedWriter(new OutputStreamWriter(client.getOutputStream()), true);
     }
 
     @Override
@@ -46,19 +46,11 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
     /**
      * Waits for the client to send a {@link Request}.
      *
-     * @param bufferedReader the {@link BufferedReader} which reads from the client
      * @return the {@link Request} created by the client
      * @throws IOException if any IO error occurs
      */
-    protected Request waitForRequest(BufferedReader bufferedReader) throws IOException {
-        String content = bufferedReader.readLine();
-
-        if (content == null) {
-            throw new IOException();
-        }
-
-        //noinspection unchecked
-        return JSONSerializable.deserialize(Request.class, content);
+    protected Request waitForRequest() throws IOException {
+        return JSONSerializable.deserialize(Request.class, this.in.readJSON());
     }
 
     /**
@@ -68,16 +60,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
      * @throws IOException if any IO error occurs
      */
     public void sendResponse(Response<? extends JSONSerializable> response) throws IOException {
-        JSONObject jsonObject = response.serialize();
-        String jsonString = jsonObject.toString();
-
-        this.out.write(jsonString);
-        this.out.newLine();
-        this.out.flush();
-    }
-
-    protected Command handleAnonymousIncomingRequest() throws IOException, SQLException {
-        return handleGenericRequest(null, SocketRouter::getHandlerForAnonymousRequest);
+        this.out.writeJSON(response.serialize());
     }
 
     protected Command handleIncomingRequest(CanContinueMiddleware<Request<? extends JSONSerializable>> shouldHandleRequestFunction) throws IOException, SQLException {
@@ -88,7 +71,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         SocketAddress socketAddress = this.client.getRemoteSocketAddress();
 
         // waits for a request
-        @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = waitForRequest(this.in);
+        @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = waitForRequest();
 
         ServerLogger.getLogger()
                 .fine(() -> String.format(

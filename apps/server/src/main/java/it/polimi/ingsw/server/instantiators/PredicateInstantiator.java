@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.initializers;
+package it.polimi.ingsw.server.instantiators;
 
 import it.polimi.ingsw.server.compilers.commons.CompiledParameter;
 import it.polimi.ingsw.server.compilers.instructions.predicates.CompiledPredicate;
@@ -10,8 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.List;
 
-public class PredicateInitializer {
-    private PredicateInitializer() {
+public class PredicateInstantiator {
+    private PredicateInstantiator() {
     }
 
     /**

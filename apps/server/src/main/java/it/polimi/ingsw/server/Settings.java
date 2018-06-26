@@ -56,6 +56,16 @@ public final class Settings extends SettingsBase {
     @Setting(id = "number-of-windows-per-player-to-choose", defaultValue = "4", type = Integer.class)
     private int numberOfWindowsPerPlayerToChoose;
     
+        // --------------- MODELS CONSTANTS ---------------
+        @Setting(id = "number-of-dice-per-color-in-bag", defaultValue = "18", type = Integer.class)
+        private int numberOfDicePerColorInBag;
+        @Setting(id = "number-of-private-objective-cards", defaultValue = "1", type = Integer.class)
+        private int numberOfPrivateObjectiveCards;
+        @Setting(id = "number-of-public-objective-cards", defaultValue = "3", type = Integer.class)
+        private int numberOfPublicObjectiveCards;
+        @Setting(id = "number-of-tool-cards", defaultValue = "3", type = Integer.class)
+        private int numberOfToolCards;
+    
     private Settings(String path) throws IllegalAccessException {
         super(path);
     }
@@ -148,4 +158,22 @@ public final class Settings extends SettingsBase {
     public int getNumberOfWindowsPerPlayerToChoose() {
         return numberOfWindowsPerPlayerToChoose;
     }
+    
+        // --------------- MODELS CONSTANTS ---------------
+        
+        public int getNumberOfDicePerColorInBag() {
+            return numberOfDicePerColorInBag;
+        }
+    
+        public int getNumberOfPrivateObjectiveCards() {
+            return numberOfPrivateObjectiveCards;
+        }
+    
+        public int getNumberOfPublicObjectiveCards() {
+            return numberOfPublicObjectiveCards;
+        }
+    
+        public int getNumberOfToolCards() {
+            return numberOfToolCards;
+        }
 }

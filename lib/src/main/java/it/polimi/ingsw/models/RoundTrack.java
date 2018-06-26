@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, IRoundTrack {
@@ -133,7 +134,22 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
 
     @Override
     public Die pickDie(Die die) {
-        throw new UnsupportedOperationException();
+        AtomicInteger pickLocation = new AtomicInteger(-1);
+        
+        this.getLocations().forEach(location -> {
+            int roundIndex = (location & 0x0000FF00) >> 8;
+            int dieIndex = location & 0x000000FF;
+            
+            if (this.rounds.get(roundIndex).get(dieIndex).equals(die)) {
+                pickLocation.set(location);
+            }
+        });
+        
+        if (pickLocation.get() != -1) {
+            return this.pickDie(pickLocation.get());
+        }
+        
+        throw new IllegalArgumentException();
     }
 
     @Override

@@ -25,6 +25,7 @@ public final class MatchCommands {
         public Response<NullResponse> handle(Request<MatchInteraction> request, Socket client) throws IOException {
             return null;
         }
+        
         @Override
         public boolean shouldBeKeptAlive() {
             return true;

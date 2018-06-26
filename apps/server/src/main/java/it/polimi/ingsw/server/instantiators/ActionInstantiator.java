@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.initializers;
+package it.polimi.ingsw.server.instantiators;
 
 import it.polimi.ingsw.server.actions.Action;
 import it.polimi.ingsw.server.actions.ActionData;
@@ -14,8 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ActionInitializer {
-    private ActionInitializer() {
+public class ActionInstantiator {
+    private ActionInstantiator() {
     }
 
     /**

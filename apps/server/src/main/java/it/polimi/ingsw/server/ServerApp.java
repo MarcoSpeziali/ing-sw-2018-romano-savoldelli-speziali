@@ -64,6 +64,7 @@ public class ServerApp {
             // publishes requested classes on RMI registry
             registerRMIRemoteInterfaces();
 
+            // stops the main thread until the string \q is found
             waitForCloseSignal();
         }
         catch (Exception e) {
@@ -195,7 +196,10 @@ public class ServerApp {
                 endPointFunction.toString()
         );
     }
-
+    
+    /**
+     * Waits for the string "\q" and when found the server is stopped.
+     */
     private static void waitForCloseSignal() {
         Scanner scanner = new Scanner(System.in);
 

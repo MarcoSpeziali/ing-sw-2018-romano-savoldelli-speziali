@@ -33,7 +33,9 @@ public class MatchCommunicationsManager {
     }
 
     public void sendWindowsToChoose(Map<IPlayer, IWindow[]> playerToWindowsMap) {
-
+        playerToWindowsMap.forEach((player, iWindows) -> {
+            playersHandler.get(player).postWindowsToChoose(iWindows);
+        });
     }
 
     public void sendWindowController(WindowControllerImpl windowController) {

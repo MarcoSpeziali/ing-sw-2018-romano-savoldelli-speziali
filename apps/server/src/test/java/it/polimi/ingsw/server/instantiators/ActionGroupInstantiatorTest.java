@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.initializers;
+package it.polimi.ingsw.server.instantiators;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-class ActionGroupInitializerTest {
+class ActionGroupInstantiatorTest {
 
     @Test
     void testInitialization() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -36,7 +36,7 @@ class ActionGroupInitializerTest {
                 List.of()
         );
 
-        ActionGroup actionGroup = ActionGroupInitializer.instantiate(compiledActionGroup);
+        ActionGroup actionGroup = ActionGroupInstantiator.instantiate(compiledActionGroup);
 
         Assertions.assertNotNull(actionGroup);
 

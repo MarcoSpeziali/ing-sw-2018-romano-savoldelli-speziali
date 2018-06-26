@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.utils;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.server.sql.DatabasePlayer;
+import it.polimi.ingsw.net.mocks.IPlayer;
 
 /**
  * Represents the context globally shader between players.
@@ -35,7 +35,7 @@ public class GlobalContext extends Context {
      * @param player the player owning the context
      * @return the {@link Context} for the provided {@code player}
      */
-    public Context getContextForPlayer(DatabasePlayer player) {
+    public Context getContextForPlayer(IPlayer player) {
         if (this.containsKey(player.getUsername())) {
             return (Context) this.get(player.getUsername());
         }

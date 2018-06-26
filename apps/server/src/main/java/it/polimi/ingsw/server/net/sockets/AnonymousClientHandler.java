@@ -30,7 +30,7 @@ public class AnonymousClientHandler extends ClientHandler {
         try {
             do {
                 // waits for a request
-                Request<? extends JSONSerializable> request = waitForRequest(this.in);
+                @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = waitForRequest();
 
                 if (tryMigration(request)) {
                     return;

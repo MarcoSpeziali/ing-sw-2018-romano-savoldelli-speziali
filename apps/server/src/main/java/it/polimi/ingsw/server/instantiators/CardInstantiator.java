@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.initializers;
+package it.polimi.ingsw.server.instantiators;
 
 import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.models.ToolCard;
@@ -7,8 +7,8 @@ import it.polimi.ingsw.server.compilers.cards.CompiledToolCard;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class CardInitializer {
-    private CardInitializer() {
+public class CardInstantiator {
+    private CardInstantiator() {
     }
 
     /**
@@ -28,7 +28,7 @@ public class CardInitializer {
                 toolCard.getId(),
                 toolCard.getName(),
                 toolCard.getEffect().getDescription(),
-                EffectInitializer.instantiate(toolCard.getEffect())
+                EffectInstantiator.instantiate(toolCard.getEffect())
         );
     }
 
@@ -50,7 +50,7 @@ public class CardInitializer {
                 objectiveCard.getVisibility(),
                 objectiveCard.getName(),
                 objectiveCard.getObjective().getDescription(),
-                ObjectiveInitializer.instantiate(objectiveCard.getObjective())
+                ObjectiveInstantiator.instantiate(objectiveCard.getObjective())
         );
     }
 }
