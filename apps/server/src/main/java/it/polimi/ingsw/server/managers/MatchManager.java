@@ -36,9 +36,9 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     private final MatchObjectsManager matchObjectsManager;
 
     // ------ MATCH OBJECTS CACHE ------
-    private final List<IPlayer> lobbyPlayers;
+    private final List<DatabasePlayer> lobbyPlayers;
     private List<Window> possibleChosenWindows;
-    private List<IPlayer> matchPlayers;
+    private List<DatabasePlayer> matchPlayers;
     private Map<IPlayer, ILivePlayer> playerToLivePlayerMap;
 
     // ------ TIMERS AND FUTURES ------
@@ -69,7 +69,9 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
     public MatchManager(int lobbyId) throws SQLException {
         this.databaseMatch = DatabaseMatch.insertMatchFromLobby(lobbyId);
-        this.lobbyPlayers = Arrays.asList(DatabaseLobby.getLobbyWithId(lobbyId).getPlayers());
+        this.lobbyPlayers = Arrays.stream(DatabaseLobby.getLobbyWithId(lobbyId).getPlayers())
+                .map(player -> (DatabasePlayer) player)
+                .collect(Collectors.toList());
 
         // creates the executor service
         this.matchExecutorService = Executors.newScheduledThreadPool(1);
@@ -112,9 +114,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         this.databaseMatch = DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
         this.matchPlayers.add(databasePlayer);
     
-        IPlayer[] players = Arrays.stream(this.databaseMatch.getPlayers())
-                .map(ILivePlayer::getPlayer)
-                .toArray(IPlayer[]::new);
+        DatabasePlayer[] players = this.databaseMatch.getDatabasePlayers();
 
         // if the number of players in the match is equal to the number of players in the lobby
         // then the connection timer is stopped and the windows can be sent
@@ -140,14 +140,14 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
     // ------ NETWORK COMMUNICATION ------
     
-    public void sendWindowsToChoose(IPlayer[] players) throws IOException, ClassNotFoundException {
+    public void sendWindowsToChoose(DatabasePlayer[] players) throws IOException, ClassNotFoundException {
         this.matchCommunicationsManager.sendWindowsToChoose(createWindows(players));
     }
     
     // ------ MODELS AND CONTROLLERS CREATION ------
     
-    private Map<IPlayer, IWindow[]> createWindows(IPlayer[] players) throws IOException, ClassNotFoundException {
-        Map<IPlayer, IWindow[]> playerWindowsMap = new HashMap<>();
+    private Map<DatabasePlayer, IWindow[]> createWindows(DatabasePlayer[] players) throws IOException, ClassNotFoundException {
+        Map<DatabasePlayer, IWindow[]> playerWindowsMap = new HashMap<>();
 
         Window[] windows = InstantiationManager.instantiateWindows();
         windows = ArrayUtils.shuffleArray(windows);
@@ -246,12 +246,13 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
         ILobby lobby = this.databaseMatch.getLobby();
     
-        List<IPlayer> playersInLobby = Arrays.asList(lobby.getPlayers());
-        List<IPlayer> playersInMatch = Arrays.stream(this.databaseMatch.getPlayers())
-                .map(ILivePlayer::getPlayer)
+        List<DatabasePlayer> playersInLobby = Arrays.stream(lobby.getPlayers())
+                .map(player -> (DatabasePlayer) player)
                 .collect(Collectors.toList());
+        
+        List<DatabasePlayer> playersInMatch = Arrays.asList(this.databaseMatch.getDatabasePlayers());
     
-        List<IPlayer> timedOutPlayers = new ArrayList<>(playersInLobby);
+        List<DatabasePlayer> timedOutPlayers = new ArrayList<>(playersInLobby);
         timedOutPlayers.removeAll(playersInMatch);
     
         try {
@@ -259,7 +260,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 DatabaseLobby.removePlayer(lobby.getId(), iPlayer.getId());
             }));
     
-            this.sendWindowsToChoose(playersInMatch.toArray(new IPlayer[0]));
+            this.sendWindowsToChoose(playersInMatch.toArray(new DatabasePlayer[0]));
         }
         catch (FunctionalExceptionWrapper e) {
             e.tryUnwrap(SQLException.class)
@@ -335,7 +336,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         WindowControllerImpl windowController = new WindowControllerImpl(chosenWindow, CellControllerImpl::new);
 
         this.matchObjectsManager.setWindowControllerForPlayer(windowController, databasePlayer);
-        matchCommunicationsManager.sendWindowController(windowController);
+        matchCommunicationsManager.sendWindowController(databasePlayer, windowController);
         
         if (this.matchObjectsManager.getPlayerWindowMap().size() == this.matchPlayers.size()) {
             this.matchState = MatchState.WAITING_FOR_CONTROLLERS_ACK;

@@ -13,8 +13,7 @@ public class CellMock implements ICell {
     private IDie die;
 
     // FIXME: we uagliò ci simme lamentàt ppe mis ro' fatto ca' o' costruttòr e' Die
-    // FIXME: avessè nu' ordinè divèrs ra chello e' Cell e mo' o' invèrt e' nuovò?
-    // FIXME: <3
+    // FIXME: avessè nu' ordinè divèrs ra chello e' Cell e mo' o' invèrt e' nuovò? <3
     public CellMock(GlassColor color, Integer shade) {
         this.color = color;
         this.shade = shade;

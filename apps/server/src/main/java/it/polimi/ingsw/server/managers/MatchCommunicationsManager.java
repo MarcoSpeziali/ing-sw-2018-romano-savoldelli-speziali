@@ -4,11 +4,14 @@ import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.controllers.proxies.socket.MatchSocketProxyController;
 import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IPlayer;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.server.controllers.WindowControllerImpl;
+import it.polimi.ingsw.server.events.EventDispatcher;
+import it.polimi.ingsw.server.events.EventType;
+import it.polimi.ingsw.server.events.PlayerEventsListener;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -32,12 +35,22 @@ public class MatchCommunicationsManager {
         this.playersHandler.remove(databasePlayer);
     }
 
-    public void sendWindowsToChoose(Map<IPlayer, IWindow[]> playerToWindowsMap) {
+    public void sendWindowsToChoose(Map<DatabasePlayer, IWindow[]> playerToWindowsMap) {
         //noinspection SuspiciousMethodCalls
-        playerToWindowsMap.forEach((player, iWindows) -> playersHandler.get(player).postWindowsToChoose(iWindows));
+        playerToWindowsMap.forEach((player, iWindows) -> {
+            try {
+                playersHandler.get(player).postWindowsToChoose(iWindows);
+            }
+            catch (RemoteException e) {
+                EventDispatcher.dispatch(
+                        EventType.PLAYER_EVENTS,
+                        PlayerEventsListener.class,
+                        playerEventsListener -> playerEventsListener.onPlayerDisconnected(player));
+            }
+        });
     }
 
-    public void sendWindowController(WindowControllerImpl windowController) {
+    public void sendWindowController(DatabasePlayer databasePlayer, WindowControllerImpl windowController) {
     
     }
 

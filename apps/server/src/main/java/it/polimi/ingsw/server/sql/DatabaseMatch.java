@@ -6,10 +6,7 @@ import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class DatabaseMatch implements IMatch {
 
@@ -75,6 +72,12 @@ public class DatabaseMatch implements IMatch {
 
     @Override
     public ILivePlayer[] getPlayers() {
+        return Arrays.stream(this.getDatabasePlayers())
+                .map(LivePlayerMock::new)
+                .toArray(ILivePlayer[]::new);
+    }
+    
+    public DatabasePlayer[] getDatabasePlayers() {
         String query = String.format(
                 "SELECT p.* FROM match m " +
                         "JOIN match_player mb ON mb.match = m.id " +
@@ -82,23 +85,23 @@ public class DatabaseMatch implements IMatch {
                         "WHERE m.id = '%d' AND mb.leaving_time IS NULL",
                 this.id
         );
-
+    
         try (SagradaDatabase database = new SagradaDatabase()) {
-            List<ILivePlayer> players = database.executeQuery(query, resultSet -> {
-                LinkedList<ILivePlayer> databasePlayers = new LinkedList<>();
-
+            List<DatabasePlayer> players = database.executeQuery(query, resultSet -> {
+                LinkedList<DatabasePlayer> databasePlayers = new LinkedList<>();
+            
                 do {
-                    databasePlayers.add(new LivePlayerMock(new DatabasePlayer(resultSet)));
+                    databasePlayers.add(new DatabasePlayer(resultSet));
                 } while (resultSet.next());
-
+            
                 return databasePlayers;
             });
-
+        
             if (players == null || players.isEmpty()) {
-                return new ILivePlayer[0];
+                return new DatabasePlayer[0];
             }
-
-            return players.toArray(new ILivePlayer[0]);
+        
+            return players.toArray(new DatabasePlayer[0]);
         }
         catch (SQLException e) {
             return null;

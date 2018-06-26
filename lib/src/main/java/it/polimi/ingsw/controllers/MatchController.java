@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
     
-    void postWindowsToChoose(IWindow[] windows);
+    void postWindowsToChoose(IWindow[] windows) throws RemoteException;
     
     IWindow[] waitForWindowRequest() throws RemoteException;
     
