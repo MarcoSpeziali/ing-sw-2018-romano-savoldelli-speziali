@@ -4,6 +4,7 @@ import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class WindowMock implements IWindow {
 
@@ -79,4 +80,5 @@ public class WindowMock implements IWindow {
                 .flatMap(Arrays::stream)
                 .toArray(ICell[]::new);
     }
+
 }

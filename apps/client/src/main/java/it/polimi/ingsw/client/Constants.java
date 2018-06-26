@@ -43,6 +43,10 @@ public class Constants {
     public enum Resources {
         IDRA_PUBLIC_KEY("public.der"),
 
+        DICE_CURSOR("cursors/dice.gif"),
+        STOP_CURSOR("cursors/stop.gif"),
+        WARNING_CURSOR("cursors/warning.gif"),
+
         CELL_1("images/cells/cell_one.png"),
         CELL_2("images/cells/cell_two.png"),
         CELL_3("images/cells/cell_three.png"),
@@ -62,7 +66,7 @@ public class Constants {
         START_SCREEN_FXML("FXML/Window/StartScreen.fxml"),
         SETTINGS_FXML("FXML/Window/Settings.fxml"),
         LOBBY_FXML("FXML/Window/Lobby.fxml"),
-        GAME_DASHBOARD_FXML("FXML/Window/GameDashboard.fxml"),
+        MATCH_FXML("FXML/Window/Match.fxml"),
         DIE_VIEW_FXML("FXML/DieView.fxml"),
         CELL_VIEW_FXML("FXML/CellView.fxml"),
         WINDOW_VIEW_FXML("FXML/WindowView.fxml"),

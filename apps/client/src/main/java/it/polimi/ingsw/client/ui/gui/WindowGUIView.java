@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
@@ -48,18 +49,14 @@ public class WindowGUIView extends GUIView<WindowController> {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
                 Node cell = loader.load();
+                CellGUIView guiView = loader.getController();
+                guiView.setController(windowController.getCellController(i, j));
+
                 int finalI = i;
                 int finalJ = j;
                 cell.setOnDragDropped(event -> {
-                    /*
-                    TODO: possible positionS for die ok ma che die? Probabilmente Player.getCurrentPlayer().getHeldDie();
-                    if (iWindow.getPossiblePositionForDie().contains(2 * finalI + finalJ)) {
-                        //cell.putDie() TODO !!!
-                    }
-                    else cell.setCursor(Cursor.WAIT);
 
-                    TODO: opterei per una versione di questo tipo:
-                    */
+                    //TODO: opterei per una versione di questo tipo:
 
                     IDie heldDie = Player.getCurrentPlayer().getHeldDie();
 
@@ -68,24 +65,27 @@ public class WindowGUIView extends GUIView<WindowController> {
                     }
 
                     try {
+                        cell.setCursor(Cursor.cursor(Constants.Resources.DICE_CURSOR.getRelativePath()));
                         this.controller.tryToPut(heldDie, 2 * finalI + finalJ);
                     }
                     catch (DieInteractionException e) {
                         cell.setCursor(Cursor.WAIT);
+                        cell.setDisable(true);
                     }
                     catch (RemoteException e) {
-                        // CIAONE PROPRIO
+                        e.printStackTrace();
                     }
                 });
 
-                CellGUIView guiView = loader.getController();
-                guiView.setController(windowController.getCellController(i, j));
+                cell.setOnMouseClicked(event -> {
+
+                });
+
                 gridPane.add(cell, j, i);
             }
         }
 
-        // for (int i = 0; i < 6- iWindow.getDifficulty(); i++) {  // FIXME molto oscuro il perchè funzioni solo così... @marco: semplicemente (basta vederlo da scenebuilder) i pallini sono in ordine inverso, vanno da sx a dx
-        for (int i = iWindow.getDifficulty() - 1; i > 0; i--) {
+        for (int i = 0; i < 6 - iWindow.getDifficulty(); i++) {
             Circle circle = (Circle) difficultyHbox.getChildren().get(i);
             circle.setFill(Paint.valueOf("#2c3e50"));
         }

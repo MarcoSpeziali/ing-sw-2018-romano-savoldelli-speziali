@@ -12,6 +12,11 @@ public class CellMock implements ICell {
     private Integer shade;
     private IDie die;
 
+    public CellMock(GlassColor color, Integer shade) {
+        this.color = color;
+        this.shade = shade;
+    }
+
     public CellMock(ICell iCell) {
         this(iCell.getShade(), iCell.getColor(), new DieMock(iCell.getDie()));
     }

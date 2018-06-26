@@ -8,6 +8,6 @@
    <children>
       <ImageView fx:id="shadeImageView" fitHeight="125.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
       <AnchorPane fx:id="dieAnchorPane" layoutX="13.0" layoutY="13.0" prefHeight="100.0" prefWidth="100.0" />
-      <Pane opacity="0.5" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Pane fx:id="unallowedPane" disable="true" opacity="0.5" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

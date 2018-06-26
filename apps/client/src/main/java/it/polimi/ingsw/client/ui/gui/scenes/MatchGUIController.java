@@ -13,8 +13,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -30,7 +32,7 @@ import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
-public class GameDashboardGUIController {
+public class MatchGUIController {
 
     @FXML
     public StackPane outerPane;
@@ -141,6 +143,8 @@ public class GameDashboardGUIController {
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
         JFXDialogLayout content = new JFXDialogLayout();
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
@@ -166,8 +170,7 @@ public class GameDashboardGUIController {
                                     }
                                     dialog.close();
                                 });
-                                window.setCursor(Cursor.CLOSED_HAND);
-                                // TODO check indexes
+                                window.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
                                 gridPane.add(window, i/(iWindows.length/2), i%(iWindows.length/2));
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -181,7 +184,7 @@ public class GameDashboardGUIController {
                 })));
     }
     
-    private void loadOpponentsWindows() {
+    private void loadOpponentsWindows() { //TODO change me
         CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForOpponentsWindowsUpdate()))
                 .thenAccept(map -> Platform.runLater(unsafe(() -> {
                     AtomicInteger index = new AtomicInteger();

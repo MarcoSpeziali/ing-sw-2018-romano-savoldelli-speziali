@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="outerPane" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.scenes.MatchGUIController">
+   <children>
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="776.0" prefWidth="1241.0">
+         <children>
+            <GridPane fx:id="cardsPane" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+      </GridPane>
+            <GridPane fx:id="windowsPane" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+      </GridPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

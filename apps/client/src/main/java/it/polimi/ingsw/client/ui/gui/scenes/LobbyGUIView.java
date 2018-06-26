@@ -93,9 +93,9 @@ public class LobbyGUIView implements Initializable {
     private void setUpMatchFuture() {
         CompletableFuture.supplyAsync(unsafe(() -> this.proxyController.waitForMigrationRequest()))
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
-                    loader.setLocation(Constants.Resources.GAME_DASHBOARD_FXML.getURL());
+                    loader.setLocation(Constants.Resources.MATCH_FXML.getURL());
                     Parent parent = loader.load();
-                    // GameDashboardGUIController gameDashboardGUIController = loader.getController();
+                    // MatchGUIController gameDashboardGUIController = loader.getController();
                     // gameDashboardGUIController...
                     SagradaGUI.showStage(parent, 1280, 720);
                 })));
