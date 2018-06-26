@@ -29,77 +29,113 @@ public class MatchGUITest extends Application {
         MatchGUIView matchGUIView = loader.getController();
 
         matchGUIView.setController(new MatchController() {
+    
+            @Override
+            public void init(Object... args) throws IOException {
+        
+            }
+    
+            @Override
+            public void close(Object... args) throws IOException {
+        
+            }
+    
+            @Override
+            public IMatch waitForUpdate() throws RemoteException, InterruptedException {
+                return null;
+            }
+    
+            @Override
+            public void postWindowsToChoose(IWindow[] windows) {
+        
+            }
+    
             @Override
             public IWindow[] waitForWindowRequest() throws RemoteException {
                 CellMock[] cells1 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
                         new CellMock(null, 0), new CellMock(null, 4), new CellMock(GlassColor.PURPLE,0) };
-
+    
                 CellMock[] cells2 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
                         new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
-
+    
                 CellMock[] cells3 = {new CellMock(GlassColor.GREEN, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
                         new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
-
+    
                 CellMock[] cells4 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.YELLOW, 0), new CellMock(null, 6),
                         new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
-
+    
                 IWindow[] iWindows = {new WindowMock("window 1", 3, 2, 3, cells1),
                         new WindowMock("window 2", 1, 2, 3, cells2),
                         new WindowMock("window 3", 1, 2, 3, cells3),
                         new WindowMock("window 4", 1, 2, 3, cells4)
                 };
-
+    
                 return iWindows;
             }
-
+    
             @Override
-            public WindowController respondToWindowRequest(IWindow window) throws RemoteException {
+            public void respondToWindowRequest(IWindow window) throws RemoteException {
+        
+            }
+    
+            @Override
+            public void postWindowController(WindowController windowController) throws RemoteException {
+        
+            }
+    
+            @Override
+            public WindowController waitForWindowController() throws RemoteException {
                 return null;
             }
-
+    
             @Override
-            public ToolCardController[] waitForToolCards() throws RemoteException {
+            public void postToolCardControllers(ToolCardController[] toolCardControllers) throws RemoteException {
+        
+            }
+    
+            @Override
+            public ToolCardController[] waitForToolCardControllers() throws RemoteException {
                 return new ToolCardController[0];
             }
-
+    
             @Override
-            public ObjectiveCardController[] waitForPublicObjectiveCards() throws RemoteException {
+            public void postPublicObjectiveCards(IObjectiveCard[] objectiveCards) throws RemoteException {
+        
+            }
+    
+            @Override
+            public ObjectiveCardController[] waitForPublicObjectiveCardControllers() throws RemoteException {
                 return new ObjectiveCardController[0];
             }
-
+    
             @Override
-            public ObjectiveCardController waitForPrivateObjectiveCard() throws RemoteException {
+            public void postPrivateObjectiveCard(IObjectiveCard objectiveCard) throws RemoteException {
+        
+            }
+    
+            @Override
+            public ObjectiveCardController waitForPrivateObjectiveCardController() throws RemoteException {
                 return null;
             }
-
+    
             @Override
-            public Map<ILivePlayer, IWindow> waitForOpponentsWindowsUpdate() throws RemoteException {
+            public void postDraftPoolController(DraftPoolController draftPoolController) throws RemoteException {
+        
+            }
+    
+            @Override
+            public DraftPoolController waitForDraftPoolController() throws RemoteException {
                 return null;
             }
-
+    
             @Override
-            public DraftPoolController waitForDraftPool() {
+            public void postRoundTrackController(RoundTrackController roundTrackController) throws RemoteException {
+        
+            }
+    
+            @Override
+            public RoundTrackController waitForRoundTrackController() throws RemoteException {
                 return null;
-            }
-
-            @Override
-            public RoundTrackController waitForRoundTrack() {
-                return null;
-            }
-
-            @Override
-            public IMatch waitForUpdate() throws RemoteException, InterruptedException {
-                return null;
-            }
-
-            @Override
-            public void close(Object... args) throws IOException {
-
-            }
-
-            @Override
-            public void init(Object... args) throws IOException {
-
             }
         });
         primaryStage.setFullScreen(true);

@@ -27,11 +27,17 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
     
     void postPublicObjectiveCards(IObjectiveCard[] objectiveCards) throws RemoteException;
     
-    IObjectiveCard[] waitForPublicObjectiveCards() throws RemoteException;
+    ObjectiveCardController[] waitForPublicObjectiveCardControllers() throws RemoteException;
     
-    IObjectiveCard waitForPrivateObjectiveCard() throws RemoteException;
+    void postPrivateObjectiveCard(IObjectiveCard objectiveCard) throws RemoteException;
     
-    DraftPoolController waitForDraftPool() throws RemoteException;
+    ObjectiveCardController waitForPrivateObjectiveCardController() throws RemoteException;
     
-    RoundTrackController waitForRoundTrack() throws RemoteException;
+    void postDraftPoolController(DraftPoolController draftPoolController) throws RemoteException;
+    
+    DraftPoolController waitForDraftPoolController() throws RemoteException;
+    
+    void postRoundTrackController(RoundTrackController roundTrackController) throws RemoteException;
+    
+    RoundTrackController waitForRoundTrackController() throws RemoteException;
 }
