@@ -1,9 +1,6 @@
 package it.polimi.ingsw.controllers.proxies.rmi;
 
-import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.controllers.ObjectiveCardController;
-import it.polimi.ingsw.controllers.ToolCardController;
-import it.polimi.ingsw.controllers.WindowController;
+import it.polimi.ingsw.controllers.*;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
@@ -42,7 +39,17 @@ public class MatchRMIProxyController implements MatchController, HeartBeatListen
     public Map<ILivePlayer, IWindow> waitForOpponentsWindowsUpdate() throws RemoteException {
         return null;
     }
-    
+
+    @Override
+    public DraftPoolController waitForDraftPool() {
+        return null;
+    }
+
+    @Override
+    public RoundTrackController waitForRoundTrack() {
+        return null;
+    }
+
     @Override
     public IMatch waitForUpdate() throws RemoteException, InterruptedException {
         return null;

@@ -247,7 +247,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
         return edges;
     }
-    
+
     /**
      * Checks if color and shade similarity rules of adjacent orthogonal dice are respected, then inspects a specified cell.
      *
@@ -271,7 +271,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
         return null;
     }
-    
+
     /**
      * Inspects a specified cell, verifying its correct matching of color and shade with a target {@link Die}.
      *
@@ -292,7 +292,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
         return null;
     }
-    
+
     /**
      * Inspect the surrounding cells of a target one, referring to the location parameter.
      *
@@ -321,7 +321,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
 
         return surrounding;
     }
-    
+
     /**
      * Checks which locations are allowed in the window for a specified die.
      *
@@ -333,7 +333,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
      */
     @Override
     public List<Integer> getPossiblePositionsForDie(Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency) {
-
         List<Integer> availablePositions = new ArrayList<>(this.rows * this.columns);
 
         if (die.getShade() == 0 || die.getColor() == null) {
@@ -363,7 +362,6 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 .distinct()
                 .filter(location -> !this.cells[location / this.columns][location % this.columns].isOccupied())
                 .collect(Collectors.toList());
-
     }
     
     public void addPutListener(OnDiePutListener onDiePutListener) {

@@ -3,8 +3,6 @@ package it.polimi.ingsw.net.mocks;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-import java.util.List;
-
 public interface IWindow extends JSONSerializable {
 
     @JSONElement("difficulty")
@@ -19,8 +17,6 @@ public interface IWindow extends JSONSerializable {
     String getSiblingId();
     @JSONElement("cells")
     ICell[] getFlatCells();
-
-    List<Integer> getPossiblePositionForDie();
 
     default ICell[][] getCells() {
         ICell[][] cells = new ICell[getRows()][getColumns()];

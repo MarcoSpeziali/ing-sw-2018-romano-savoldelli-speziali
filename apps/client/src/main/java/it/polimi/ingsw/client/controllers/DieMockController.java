@@ -1,4 +1,4 @@
-package it.polimi.client.controllers;
+package it.polimi.ingsw.client.controllers;
 
 import it.polimi.ingsw.controllers.DieController;
 import it.polimi.ingsw.models.Die;

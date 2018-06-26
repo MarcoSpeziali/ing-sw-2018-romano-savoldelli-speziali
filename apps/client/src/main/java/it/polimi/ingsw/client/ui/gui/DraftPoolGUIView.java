@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import it.polimi.client.controllers.DieMockController;
+import it.polimi.ingsw.client.controllers.DieMockController;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.controllers.DraftPoolController;
 import it.polimi.ingsw.models.DraftPool;

@@ -1,13 +1,11 @@
 package it.polimi.ingsw.client.controllers;
 
 import it.polimi.ingsw.controllers.CellController;
-import it.polimi.ingsw.controllers.DieInteractionException;
 import it.polimi.ingsw.controllers.WindowController;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.net.mocks.ICell;
+import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
-
-import java.rmi.RemoteException;
 
 public class WindowMockController implements WindowController {
     private static final long serialVersionUID = 1911746152357955296L;
@@ -51,7 +49,7 @@ public class WindowMockController implements WindowController {
     }
 
     @Override
-    public Die tryToPick(Die die) {
+    public Die tryToPick(IDie die) {
         throw new UnsupportedOperationException();
     }
 
@@ -61,7 +59,7 @@ public class WindowMockController implements WindowController {
     }
 
     @Override
-    public void tryToPut(Die die, Integer location) {
+    public void tryToPut(IDie die, Integer location) {
         throw new UnsupportedOperationException();
     }
 

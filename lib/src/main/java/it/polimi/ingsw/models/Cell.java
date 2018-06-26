@@ -58,20 +58,6 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
     }
 
     /**
-     * Compares a specified {@link Die} with the cell.
-     *
-     * @param die         an instance of the {@link Die} to compare.
-     * @param ignoreColor the boolean flag which avoids color control.
-     * @param ignoreShade the boolean flag which avoids shade control.
-     * @return true if cell matches with color, shade or is blank, false otherwise.
-     */
-    public boolean matchesOrBlank(Die die, boolean ignoreColor, boolean ignoreShade) {
-        return this.isBlank() ||
-                (this.color == null || ignoreColor || this.color.equals(die.getColor())) &&
-                        (this.shade == 0 || ignoreShade || this.shade.equals(die.getShade()));
-    }
-
-    /**
      * @return 1 if cell is free, 0 otherwise.
      */
     @Override
