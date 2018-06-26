@@ -35,7 +35,7 @@ public class DraftPoolGUIView extends GUIView<DraftPoolController> {
         IDraftPool iDraftPool = draftPoolController.getDraftPool();
         Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap(); // FIXME: why using it?
 
-        for (int i = 0; i < iDraftPool.getMaxNumberOfDice(); i++) {
+        for (int i = 0; i < iDraftPool.getLocationDieMap().size(); i++) {
             AnchorPane placeholder = (AnchorPane) anchorPane.getChildren().get(i);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());

@@ -83,6 +83,14 @@ public @interface Localized {
         public static void update(Object classInstance) {
             new Updater(classInstance);
         }
+    
+        /**
+         * @param classInstance the instance of the calling class
+         */
+        public static void remove(Object classInstance) {
+            listeners.remove(classInstance);
+            fieldsTable.remove(classInstance.getClass());
+        }
 
         /**
          * Adds to {@link #fieldsTable} the fields of {@code currentInstance} if needed.

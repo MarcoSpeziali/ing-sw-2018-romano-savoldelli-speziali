@@ -4,7 +4,6 @@ import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.ObjectiveCardController;
 import it.polimi.ingsw.controllers.ToolCardController;
 import it.polimi.ingsw.controllers.WindowController;
-import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
@@ -40,7 +39,7 @@ public class MatchRMIProxyController implements MatchController, HeartBeatListen
     }
     
     @Override
-    public Map<ILivePlayer, Window> waitForOpponentsWindowsUpdate() throws RemoteException {
+    public Map<ILivePlayer, IWindow> waitForOpponentsWindowsUpdate() throws RemoteException {
         return null;
     }
     

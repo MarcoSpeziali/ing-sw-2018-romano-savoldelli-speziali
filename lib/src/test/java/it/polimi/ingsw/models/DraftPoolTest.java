@@ -19,7 +19,7 @@ class DraftPoolTest {
 
     @BeforeEach
     void setUp() {
-        draftPool = new DraftPool(5);
+        draftPool = new DraftPool((byte) 5);
         die = new Die(0, GlassColor.BLUE);
     }
 

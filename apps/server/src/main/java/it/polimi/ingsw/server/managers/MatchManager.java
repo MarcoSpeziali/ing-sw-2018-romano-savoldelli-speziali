@@ -27,8 +27,9 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
 public class MatchManager implements PlayerEventsListener {
-
+    
     private DatabaseMatch databaseMatch;
+    private final List<IPlayer> lobbyPlayers;
     
     private boolean migrationClosed = false;
 
@@ -61,7 +62,8 @@ public class MatchManager implements PlayerEventsListener {
      */
     private ScheduledFuture<?> moveTimerScheduledFuture;
     
-    @SuppressWarnings("squid:S1602") // Lamdbas containing only one statement should not nest this statement in a block
+    @SuppressWarnings({"squid:S1602", "FieldCanBeLocal"})
+    // Lamdbas containing only one statement should not nest this statement in a block
     private final FunctionalExceptionWrapper.UnsafeRunnable connectionTimerExecutorTask = () -> {
         // on expiration match starts:
         // the players that did not respond to migration request
@@ -99,6 +101,7 @@ public class MatchManager implements PlayerEventsListener {
     
     public MatchManager(int lobbyId) throws SQLException {
         this.databaseMatch = DatabaseMatch.insertMatchFromLobby(lobbyId);
+        this.lobbyPlayers = Arrays.asList(DatabaseLobby.getLobbyWithId(lobbyId).getPlayers());
 
         // creates the executor service
         this.matchExecutorService = Executors.newScheduledThreadPool(1);
@@ -112,27 +115,35 @@ public class MatchManager implements PlayerEventsListener {
     }
     
     public void addPlayer(DatabasePlayer databasePlayer, AuthenticatedClientHandler authenticatedClientHandler) throws SQLException {
-        if (!canAcceptPlayer(databasePlayer)) {
-            return;
+        if (canAcceptPlayer(databasePlayer)) {
+            this.socketPlayersHandlers.put(databasePlayer, authenticatedClientHandler);
         }
-        
-        this.socketPlayersHandlers.put(databasePlayer, authenticatedClientHandler);
     }
     
     public void addPlayer(DatabasePlayer databasePlayer, MatchRMIProxyController matchController) throws SQLException {
-        if (!canAcceptPlayer(databasePlayer)) {
-            return;
-        }
-        
-        this.rmiPlayersHandlers.put(databasePlayer, matchController);
+        if (canAcceptPlayer(databasePlayer)) {
+            this.rmiPlayersHandlers.put(databasePlayer, matchController);
     
-        if (this.rmiHeartBeatScheduledFuture.isCancelled()) {
-            this.setUpHeartBeat();
+            if (this.rmiHeartBeatScheduledFuture.isCancelled()) {
+                this.setUpHeartBeat();
+            }
+        }
+    }
+    
+    public void addPlayerCommons(DatabasePlayer databasePlayer) throws SQLException {
+        this.databaseMatch = DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
+    
+        IPlayer[] players = Arrays.stream(this.databaseMatch.getPlayers())
+                .map(ILivePlayer::getPlayer)
+                .toArray(IPlayer[]::new);
+        
+        if (players.length == this.lobbyPlayers.size()) {
+            this.connectionTimerScheduledFuture.cancel(true);
         }
     }
     
     private boolean canAcceptPlayer(DatabasePlayer player) throws SQLException {
-        return !this.migrationClosed || this.databaseMatch.getLeftPlayers().contains(player);
+        return lobbyPlayers.contains(player) && !this.migrationClosed || this.databaseMatch.getLeftPlayers().contains(player);
     }
     
     /**
