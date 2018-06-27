@@ -277,8 +277,8 @@ public class LobbyManager implements PlayerEventsListener {
         synchronized (LockManager.getLockObject(Constants.LockTargets.LOBBY)) {
             this.timerScheduledFuture.cancel(false);
             this.timeRemaining = -1;
-            
-            DatabaseMatch databaseMatch = DatabaseMatch.insertMatchFromLobby(this.databaseLobby.getId());
+
+            MatchManager matchManager = new MatchManager(this.databaseLobby.getId());
             DatabaseLobby.closeLobby(this.databaseLobby.getId());
 
             EventDispatcher.dispatch(
@@ -289,10 +289,10 @@ public class LobbyManager implements PlayerEventsListener {
             EventDispatcher.dispatch(
                     EventType.MATCH_EVENTS,
                     MatchEventListeners.class,
-                    matchEventListeners -> matchEventListeners.onMatchCreated(databaseMatch)
+                    matchEventListeners -> matchEventListeners.onMatchCreated(matchManager.getDatabaseMatch())
             );
             
-            sendMatchMigrationRequest(databaseMatch);
+            sendMatchMigrationRequest(matchManager.getDatabaseMatch());
         }
     }
     

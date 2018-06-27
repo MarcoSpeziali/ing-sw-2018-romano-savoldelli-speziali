@@ -63,6 +63,7 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     public void respondToWindowRequest(IWindow window) throws RemoteException {
         if (this.windowRequestConsumer != null) {
             this.windowRequestConsumer.accept(window);
+            this.windowRequestConsumer = null;
         }
     }
     

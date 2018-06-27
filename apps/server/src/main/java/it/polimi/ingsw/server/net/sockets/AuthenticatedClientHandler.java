@@ -5,8 +5,7 @@ import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.EventType;
 import it.polimi.ingsw.server.events.PlayerEventsListener;
-import it.polimi.ingsw.server.utils.AuthenticationHelper;
-import it.polimi.ingsw.server.net.commands.Command;
+import it.polimi.ingsw.server.net.sockets.middlewares.Middleware;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -26,23 +25,6 @@ public class AuthenticatedClientHandler extends ClientHandler {
 
     private static Map<DatabasePlayer, AuthenticatedClientHandler> clientHandlers = new HashMap<>();
 
-    private Thread inputThread;
-    private boolean shouldStop = false;
-    private Request<? extends JSONSerializable> migrationRequest;
-    private DatabasePlayer player;
-
-    public AuthenticatedClientHandler(ClientHandler clientHandler, DatabasePlayer player) throws IOException {
-        this(clientHandler.client, player);
-    }
-
-    public AuthenticatedClientHandler(Socket client, DatabasePlayer player) throws IOException {
-        super(client);
-
-        this.player = player;
-
-        clientHandlers.put(player, this);
-    }
-
     public static AuthenticatedClientHandler getHandlerForPlayer(DatabasePlayer databasePlayer) {
         return clientHandlers.getOrDefault(databasePlayer, null);
     }
@@ -60,6 +42,24 @@ public class AuthenticatedClientHandler extends ClientHandler {
         return authenticatedClientHandler;
     }
 
+    private Thread inputThread;
+    private boolean shouldStop = false;
+    private Request<? extends JSONSerializable> migrationRequest;
+
+    private DatabasePlayer player;
+
+    public AuthenticatedClientHandler(ClientHandler clientHandler, DatabasePlayer player) throws IOException {
+        this(clientHandler.client, player);
+    }
+
+    public AuthenticatedClientHandler(Socket client, DatabasePlayer player) throws IOException {
+        super(client);
+
+        this.player = player;
+
+        clientHandlers.put(player, this);
+    }
+
     public DatabasePlayer getPlayer() {
         return player;
     }
@@ -68,7 +68,7 @@ public class AuthenticatedClientHandler extends ClientHandler {
     public void run() {
         try {
             this.inputThread = new Thread(() -> {
-                Command handler;
+                Middleware middleware;
 
                 SocketAddress socketAddress = this.client.getRemoteSocketAddress();
 
@@ -84,15 +84,15 @@ public class AuthenticatedClientHandler extends ClientHandler {
                 try {
                     do {
                         if (this.migrationRequest != null) {
-                            handler = handleMigrationRequest(this.migrationRequest, AuthenticationHelper::isAuthenticated);
+                            middleware = this.handleIncomingRequest(this.migrationRequest);
                             this.migrationRequest = null;
                         }
                         else {
-                            handler = handleIncomingRequest(AuthenticationHelper::isAuthenticated);
+                            middleware = handleIncomingData();
                         }
 
                         // if the handler needs the connection to be kept alive it wont be closed
-                    } while (handler != null && handler.shouldBeKeptAlive() && !shouldStop);
+                    } while (middleware != null && middleware.shouldBeKeptAlive() && !shouldStop);
                 }
                 catch (Exception e) {
                     ServerLogger.getLogger()
@@ -114,10 +114,6 @@ public class AuthenticatedClientHandler extends ClientHandler {
         catch (InterruptedException ignored) {
             Thread.currentThread().interrupt();
         }
-    }
-    
-    public void sendRequest(Request<? extends JSONSerializable> request) {
-    
     }
 
     @Override
@@ -144,7 +140,6 @@ public class AuthenticatedClientHandler extends ClientHandler {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(player);
     }
 }

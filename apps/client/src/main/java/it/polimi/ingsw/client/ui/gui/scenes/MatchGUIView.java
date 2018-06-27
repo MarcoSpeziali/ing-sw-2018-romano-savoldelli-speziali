@@ -1,37 +1,35 @@
 package it.polimi.ingsw.client.ui.gui.scenes;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
-import it.polimi.ingsw.client.ui.gui.*;
+import it.polimi.ingsw.client.ui.gui.GUIView;
+import it.polimi.ingsw.client.ui.gui.WindowGUIView;
+import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.net.mocks.ILivePlayer;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.utils.io.Resources;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
-public class MatchGUIView {
+public class MatchGUIView extends GUIView<MatchController> {
 
     @FXML
     public StackPane outerPane;
@@ -47,11 +45,7 @@ public class MatchGUIView {
 
     private MatchController matchController;
 
-    public void setController(MatchController matchController) {
-        this.matchController = matchController;
-        init();
-    }
-
+    @Override
     public void init() {
         chooseWindow();
         //loadElements();
@@ -148,39 +142,50 @@ public class MatchGUIView {
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
         CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForWindowRequest()))
-                .thenAccept(iWindows -> Platform.runLater(unsafe(() -> {
-                    for (int i = 0; i < iWindows.length; i++) {
-                            FXMLLoader loader = new FXMLLoader();
-                            loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+                .thenAccept(iWindows -> {
+                    ClientLogger.getLogger().info("Received windows to choose [thenAccept]");
 
-                            Node window = loader.load();
-                            WindowGUIView guiView = loader.getController();
-                            try {
-                                guiView.setController(new WindowMockController(iWindows[i]));
-                                int finalI = i;
-                                window.setOnMousePressed(event -> {anchorPane.getChildren().add(window);
-                                    AnchorPane.setBottomAnchor(window, 14.0);
-                                    AnchorPane.setLeftAnchor(window, 14.0);
-                                    try {
-                                        // TODO: is it correct, Mark?
-                                        this.matchController.respondToWindowRequest(iWindows[finalI]);
-                                    } catch (RemoteException e) {
-                                        e.printStackTrace();
-                                    }
-                                    dialog.close();
-                                });
-                                window.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
-                                gridPane.add(window, i/(iWindows.length/2), i%(iWindows.length/2));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                    Platform.runLater(unsafe(() -> {
+                        ClientLogger.getLogger().info("Received windows to choose [runLater]");
+
+                        for (int i = 0; i < iWindows.length; i++) {
+                                FXMLLoader loader = new FXMLLoader();
+                                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+
+                                Node window = loader.load();
+                                WindowGUIView guiView = loader.getController();
+                                try {
+                                    guiView.setController(new WindowMockController(iWindows[i]));
+                                    int finalI = i;
+                                    window.setOnMousePressed(event -> {anchorPane.getChildren().add(window);
+                                        AnchorPane.setBottomAnchor(window, 14.0);
+                                        AnchorPane.setLeftAnchor(window, 14.0);
+                                        try {
+                                            // TODO: is it correct, Mark?
+                                            this.matchController.respondToWindowRequest(iWindows[finalI]);
+                                        } catch (RemoteException e) {
+                                            e.printStackTrace();
+                                        }
+                                        dialog.close();
+                                    });
+                                    window.setCursor(new ImageCursor(new Image(
+                                            Resources.getResource(
+                                                    MatchGUIView.class.getClassLoader(),
+                                                    Constants.Resources.DICE_CURSOR.getRelativePath()).openStream()
+                                    )));
+                                    gridPane.add(window, i/(iWindows.length/2), i%(iWindows.length/2));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                        }
+                        content.setHeading(new Text("Choose your Window."));
+                        content.setBody(gridPane);
+                        content.setAlignment(Pos.CENTER);
+                        dialog.show();
+
                     }
-                    content.setHeading(new Text("Choose your Window."));
-                    content.setBody(gridPane);
-                    content.setAlignment(Pos.CENTER);
-                    dialog.show();
-
-                })));
+                ));
+                });
     }
     
    /* private void setOpponentsWindows(IMatch i) { //TODO change me

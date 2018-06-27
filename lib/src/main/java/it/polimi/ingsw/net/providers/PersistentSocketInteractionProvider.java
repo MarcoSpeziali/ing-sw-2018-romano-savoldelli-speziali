@@ -209,6 +209,16 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         }
     }
 
+    public void postResponse(Response<? extends JSONSerializable> response) throws IOException {
+        if (socket == null) {
+            throw new IllegalStateException("The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.");
+        }
+
+        this.out.write(response.toString());
+        this.out.newLine();
+        this.out.flush();
+    }
+
     @Override
     public void close() throws IOException {
         this.shouldStop = true;

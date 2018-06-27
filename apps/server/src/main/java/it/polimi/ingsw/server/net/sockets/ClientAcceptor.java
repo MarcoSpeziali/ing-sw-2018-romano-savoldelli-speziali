@@ -52,11 +52,11 @@ public class ClientAcceptor implements Runnable, AutoCloseable {
         try {
             this.close();
         }
-        catch (IOException e1) {
+        catch (IOException e) {
             ServerLogger.getLogger()
-                    .log(Level.SEVERE, "I/O error while closing the server socket and the executor service", e1);
+                    .log(Level.SEVERE, "I/O error while closing the server socket and the executor service", e);
 
-            throw new RuntimeException(e1);
+            throw new RuntimeException(e);
         }
     }
 

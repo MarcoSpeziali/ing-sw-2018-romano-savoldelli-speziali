@@ -1,5 +1,6 @@
 package it.polimi.ingsw.net;
 
+import it.polimi.ingsw.net.responses.NullResponse;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
@@ -14,6 +15,11 @@ import org.json.JSONObject;
 public class Response<T extends JSONSerializable> implements JSONSerializable {
 
     private static final long serialVersionUID = -3163357263339164222L;
+
+    public static final Response<NullResponse> NULL = new Response<>(
+            new Header(null, null),
+            new NullResponse()
+    );
 
     /**
      * The header of the response.

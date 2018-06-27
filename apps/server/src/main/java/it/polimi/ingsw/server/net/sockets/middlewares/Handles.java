@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.net.commands;
+package it.polimi.ingsw.server.net.sockets.middlewares;
 
 import it.polimi.ingsw.net.utils.EndPointFunction;
 

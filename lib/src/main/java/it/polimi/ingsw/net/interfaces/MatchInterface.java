@@ -2,7 +2,6 @@ package it.polimi.ingsw.net.interfaces;
 
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 
 import java.rmi.Remote;
@@ -14,5 +13,5 @@ public interface MatchInterface extends Remote {
     void confirmMatchJoin(Response<MatchInteraction> matchInteractionResponse) throws RemoteException;
 
     @RespondsTo(EndPointFunction.MATCH_MIGRATION_RMI)
-    MatchController confirmMatchJoin(IMatch migrationResponse) throws RemoteException;
+    MatchController confirmMatchJoinRMI(Response<MatchInteraction> matchInteractionResponse) throws RemoteException;
 }

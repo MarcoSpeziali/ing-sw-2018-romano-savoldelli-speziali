@@ -5,10 +5,20 @@ import com.jfoenix.controls.JFXListView;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.Settings;
+import it.polimi.ingsw.client.net.SignInManager;
 import it.polimi.ingsw.client.utils.text.LabeledLocalizationUpdater;
 import it.polimi.ingsw.controllers.LobbyController;
+import it.polimi.ingsw.controllers.MatchController;
+import it.polimi.ingsw.controllers.proxies.socket.LobbySocketProxyController;
+import it.polimi.ingsw.controllers.proxies.socket.MatchSocketProxyController;
+import it.polimi.ingsw.net.Header;
+import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.interfaces.MatchInterface;
 import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.net.providers.OneTimeRMIResponseProvider;
+import it.polimi.ingsw.net.responses.MigrationResponse;
+import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.utils.text.Localized;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -95,6 +105,36 @@ public class LobbyGUIView implements Initializable {
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
                     loader.setLocation(Constants.Resources.MATCH_FXML.getURL());
                     Parent parent = loader.load();
+
+                    MatchController matchController;
+
+                    if (Settings.getSettings().getProtocol() == Constants.Protocols.RMI) {
+                        OneTimeRMIResponseProvider<MatchInterface> oneTimeRMIResponseProvider = new OneTimeRMIResponseProvider<>(
+                                Settings.getSettings().getServerRMIAddress(),
+                                Settings.getSettings().getServerRMIPort(),
+                                MatchInterface.class
+                        );
+
+                        matchController = oneTimeRMIResponseProvider.getSyncRemoteObject(EndPointFunction.MATCH_MIGRATION_RMI, new Response<>(
+                                new Header(
+                                        SignInManager.getManager().getToken(),
+                                        EndPointFunction.MATCH_MIGRATION
+                                ),
+                                new MigrationResponse(iMatch.getId())
+                        ));
+                    }
+                    else {
+                        matchController = new MatchSocketProxyController(
+                                ((LobbySocketProxyController) this.proxyController).getPersistentSocketInteractionProvider(),
+                                SignInManager.getManager().getToken()
+                        );
+                    }
+
+                    matchController.init(iMatch.getId());
+
+                    MatchGUIView matchGUIView = loader.getController();
+                    matchGUIView.setController(matchController);
+
                     // MatchGUIView gameDashboardGUIController = loader.getController();
                     // gameDashboardGUIController...
                     SagradaGUI.showStage(parent, 1280, 720);

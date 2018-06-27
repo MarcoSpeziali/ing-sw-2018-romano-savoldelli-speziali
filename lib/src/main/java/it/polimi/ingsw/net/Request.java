@@ -1,5 +1,6 @@
 package it.polimi.ingsw.net;
 
+import it.polimi.ingsw.net.requests.NullRequest;
 import it.polimi.ingsw.net.utils.RequestFields;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
@@ -12,7 +13,13 @@ import org.json.JSONObject;
  */
 @JSONRootElement(value = "request", isOptional = true)
 public class Request<T extends JSONSerializable> implements JSONSerializable {
+
     private static final long serialVersionUID = 5889311626900785609L;
+
+    public static final Request<NullRequest> NULL = new Request<>(
+            new Header(null, null),
+            new NullRequest()
+    );
 
     /**
      * The request header.
