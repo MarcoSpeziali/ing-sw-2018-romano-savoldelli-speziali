@@ -10,41 +10,84 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class MatchRMIProxyController extends UnicastRemoteObject implements MatchController, HeartBeatListener {
-
+    
+    private static final long serialVersionUID = 5011425771999481032L;
+    
     protected IPlayer player;
+    private Boolean shouldBeKeptAlive;
 
     public MatchRMIProxyController(IPlayer player) throws RemoteException {
+        super();
+        
         this.player = player;
+        this.shouldBeKeptAlive = true;
     }
     
     @Override
+    public void init(Object... args) throws IOException {
+        // useless in rmi
+    }
+    
+    private final transient Object windowsToChooseSyncObject = new Object();
+    private IWindow[] windowsToChoose;
+    
     public void postWindowsToChoose(IWindow[] windows) {
+        synchronized (this.windowsToChooseSyncObject) {
+            this.windowsToChoose = windows;
     
+            this.windowsToChooseSyncObject.notifyAll();
+        }
     }
     
     @Override
-    public IWindow[] waitForWindowRequest() throws RemoteException {
-        return new IWindow[0];
+    public IWindow[] waitForWindowRequest() throws RemoteException, InterruptedException {
+        synchronized (this.windowsToChooseSyncObject) {
+            while (this.windowsToChoose == null) {
+                this.windowsToChooseSyncObject.wait();
+            }
+        
+            return this.windowsToChoose;
+        }
+    }
+    
+    private transient Consumer<IWindow> windowRequestConsumer;
+    
+    public void setWindowRequestConsumer(Consumer<IWindow> windowRequestConsumer) {
+        this.windowRequestConsumer = windowRequestConsumer;
     }
     
     @Override
     public void respondToWindowRequest(IWindow window) throws RemoteException {
-    
+        if (this.windowRequestConsumer != null) {
+            this.windowRequestConsumer.accept(window);
+        }
     }
     
-    @Override
+    private final transient Object windowControllerSyncObject = new Object();
+    private WindowController windowController;
+    
     public void postWindowController(WindowController windowController) throws RemoteException {
+        synchronized (this.windowControllerSyncObject) {
+            this.windowController = windowController;
     
+            this.windowControllerSyncObject.notifyAll();
+        }
     }
     
     @Override
-    public WindowController waitForWindowController() throws RemoteException {
-        return null;
+    public WindowController waitForWindowController() throws RemoteException, InterruptedException {
+        synchronized (this.windowControllerSyncObject) {
+            while (this.windowController == null) {
+                this.windowControllerSyncObject.wait();
+            }
+        
+            return this.windowController;
+        }
     }
     
-    @Override
     public void postToolCardControllers(ToolCardController[] toolCardControllers) throws RemoteException {
     
     }
@@ -54,7 +97,6 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         return new ToolCardController[0];
     }
     
-    @Override
     public void postPublicObjectiveCards(IObjectiveCard[] objectiveCards) throws RemoteException {
     
     }
@@ -64,7 +106,6 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         return new ObjectiveCardController[0];
     }
     
-    @Override
     public void postPrivateObjectiveCard(IObjectiveCard objectiveCard) throws RemoteException {
     
     }
@@ -74,7 +115,6 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         return null;
     }
     
-    @Override
     public void postDraftPoolController(DraftPoolController draftPoolController) throws RemoteException {
     
     }
@@ -84,7 +124,6 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         return null;
     }
     
-    @Override
     public void postRoundTrackController(RoundTrackController roundTrackController) throws RemoteException {
     
     }
@@ -101,20 +140,12 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     
     @Override
     public void close(Object... args) throws IOException {
-    
+        this.shouldBeKeptAlive = false;
     }
-    
-    @Override
-    public void init(Object... args) throws IOException {
-    
-    }
-    
-    /**
-     * @return false if the client wants to close the connection
-     */
+
     @Override
     public Boolean onHeartBeat() throws RemoteException {
-        return null;
+        return this.shouldBeKeptAlive;
     }
     
     @Override

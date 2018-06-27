@@ -62,6 +62,16 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
     public void sendResponse(Response<? extends JSONSerializable> response) throws IOException {
         this.out.writeJSON(response.serialize());
     }
+    
+    /**
+     * Sends a {@link Request} to the client.
+     *
+     * @param request sends a {@link Request} to the connected client
+     * @throws IOException if any IO error occurs
+     */
+    public void sendRequest(Request<? extends JSONSerializable> request) throws IOException {
+        this.out.writeJSON(request.serialize());
+    }
 
     protected Command handleIncomingRequest(CanContinueMiddleware<Request<? extends JSONSerializable>> shouldHandleRequestFunction) throws IOException, SQLException {
         return handleGenericRequest(shouldHandleRequestFunction, SocketRouter::getHandlerForRequest);
@@ -112,7 +122,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
         }
 
         // selects the handler for the request
-        Command handler = commandGetter.getHandler(request);
+        Command<JSONSerializable, JSONSerializable> handler = commandGetter.getHandler(request);
 
         // if the handler is null it means that the endpoint does not exists
         if (handler == null) {
@@ -123,7 +133,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
 
         // asks for a response
         @SuppressWarnings("unchecked")
-        Response<? extends JSONSerializable> response = handler.handle(request, this.client);
+        Response<? extends JSONSerializable> response = handler.handle((Request<JSONSerializable>) request, this.client);
 
         if (request.getBody() instanceof NullResponse) {
             // no response is sent back

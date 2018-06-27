@@ -14,7 +14,7 @@ public interface WindowController extends ProxyUpdateInterface<IWindow> {
 
     Die tryToPick(IDie die) throws RemoteException;
 
-    Die tryToPick(Integer integer) throws RemoteException;
+    Die tryToPick(Integer location) throws RemoteException;
 
     void tryToPut(IDie die, Integer location) throws RemoteException, DieInteractionException;
 }

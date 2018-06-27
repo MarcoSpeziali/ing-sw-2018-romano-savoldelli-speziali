@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.controllers;
 
 import it.polimi.ingsw.controllers.DieInteractionException;
+import it.polimi.ingsw.listeners.OnDiePickedListener;
+import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
@@ -8,9 +10,12 @@ import it.polimi.ingsw.models.Window;
 import java.util.Arrays;
 import java.util.function.Function;
 
-public class WindowControllerImpl {
+public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListener {
 
-    private final Window window;
+    private Window window;
+    private Window windowUpdate;
+    private final Object syncObject = new Object();
+    
     private final CellControllerImpl[][] cellControllers;
 
     public WindowControllerImpl(Window window, Function<Cell, CellControllerImpl> cellControllerFunction) {
@@ -27,6 +32,8 @@ public class WindowControllerImpl {
     public WindowControllerImpl(Window window, CellControllerImpl[][] cellControllers) {
         this.window = window;
         this.cellControllers = cellControllers;
+        this.window.addPickListener(this);
+        this.window.addPutListener(this);
     }
 
     public Window getWindow() {
@@ -68,5 +75,35 @@ public class WindowControllerImpl {
         }
 
         throw new DieInteractionException();
+    }
+    
+    public Window waitForUpdate() throws InterruptedException {
+        synchronized (syncObject) {
+            while (windowUpdate == null) {
+                syncObject.wait();
+            }
+        
+            Window update = windowUpdate;
+            this.window = update;
+            this.windowUpdate = null;
+        
+            return update;
+        }
+    }
+    
+    @Override
+    public void onDiePicked(Die die, Integer location) {
+        synchronized (syncObject) {
+            windowUpdate = this.getWindow();
+            syncObject.notifyAll();
+        }
+    }
+    
+    @Override
+    public void onDiePut(Die die, Integer location) {
+        synchronized (syncObject) {
+            windowUpdate = this.getWindow();
+            syncObject.notifyAll();
+        }
     }
 }

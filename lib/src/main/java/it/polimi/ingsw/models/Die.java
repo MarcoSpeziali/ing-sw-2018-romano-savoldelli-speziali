@@ -7,6 +7,7 @@ import it.polimi.ingsw.net.mocks.IDie;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.TreeMap;
 
 public class Die implements IDie {
 
@@ -16,12 +17,16 @@ public class Die implements IDie {
     private GlassColor color;
 
     private static int lastUUID;
-
     private static synchronized int getNextUUID() {
         return ++lastUUID;
     }
-
     private final int uuid;
+    
+    private static final TreeMap<Integer, Die> DIE_TREE_MAP = new TreeMap<>();
+    
+    public static Die getDieWithUUID(int uuid) {
+        return DIE_TREE_MAP.get(uuid);
+    }
 
     private transient List<DieInteractionListener> listeners = new LinkedList<>();
 
@@ -35,6 +40,8 @@ public class Die implements IDie {
         this.color = color;
         this.shade = shade;
         this.uuid = getNextUUID();
+        
+        DIE_TREE_MAP.put(this.uuid, this);
     }
 
     /**

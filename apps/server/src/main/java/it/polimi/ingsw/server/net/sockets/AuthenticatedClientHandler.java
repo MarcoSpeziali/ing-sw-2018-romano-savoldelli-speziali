@@ -115,6 +115,10 @@ public class AuthenticatedClientHandler extends ClientHandler {
             Thread.currentThread().interrupt();
         }
     }
+    
+    public void sendRequest(Request<? extends JSONSerializable> request) {
+    
+    }
 
     @Override
     public void close() throws IOException {

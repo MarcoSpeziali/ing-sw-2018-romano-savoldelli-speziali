@@ -23,7 +23,7 @@ public class AnonymousClientHandler extends ClientHandler {
 
     @Override
     public void run() {
-        Command handler;
+        Command<JSONSerializable, JSONSerializable> handler;
 
         SocketAddress socketAddress = this.client.getRemoteSocketAddress();
 
@@ -53,7 +53,7 @@ public class AnonymousClientHandler extends ClientHandler {
 
                 // asks for a response
                 @SuppressWarnings("unchecked")
-                Response<? extends JSONSerializable> response = handler.handle(request, this.client);
+                Response<? extends JSONSerializable> response = handler.handle((Request<JSONSerializable>) request, this.client);
 
                 ServerLogger.getLogger()
                         .fine(() -> String.format(

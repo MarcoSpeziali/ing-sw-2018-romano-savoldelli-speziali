@@ -114,11 +114,11 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
         return 1 - this.getFreeSpace();
     }
 
-    public void addListener(OnDiePutListener cellListener) {
+    public void addOnDiePutListener(OnDiePutListener cellListener) {
         this.onDiePutListeners.add(cellListener);
     }
 
-    public void addListener(OnDiePickedListener cellListener) {
+    public void addOnDiePickedListener(OnDiePickedListener cellListener) {
         this.onDiePickedListeners.add(cellListener);
     }
 }

@@ -95,6 +95,13 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     public void listerFor(EndPointFunction endPointTarget, Consumer<ResponseError> errorConsumer) {
         this.errorListeners.put(endPointTarget, errorConsumer);
     }
+    
+    public void listenForRequest(EndPointFunction endPointFunction, Consumer<Request<? extends JSONSerializable>> requestConsumer) {
+        this.requestListeners.put(endPointFunction, request -> {
+            requestConsumer.accept(request);
+            return null;
+        });
+    }
 
     @Override
     public void open(EndPointFunction unused) throws IOException {
@@ -226,7 +233,9 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
 
                 Response<? extends JSONSerializable> response = handleRequest(request);
 
-                responseHandler.accept(response);
+                if (response != null) {
+                    responseHandler.accept(response);
+                }
             }
         });
     }

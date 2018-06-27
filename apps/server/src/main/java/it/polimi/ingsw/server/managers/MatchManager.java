@@ -59,6 +59,35 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     // ------ FSM OBJECTS ------
     private MatchState matchState = MatchState.WAITING_FOR_PLAYERS;
     
+    // ------ TURN SETTINGS ------
+    private boolean shouldIgnoreColor = false;
+    private boolean shouldIgnoreShade = false;
+    private boolean shouldIgnoreAdjacency = false;
+    
+    public boolean shouldIgnoreColor() {
+        return shouldIgnoreColor;
+    }
+    
+    public void setShouldIgnoreColor(boolean shouldIgnoreColor) {
+        this.shouldIgnoreColor = shouldIgnoreColor;
+    }
+    
+    public boolean shouldIgnoreShade() {
+        return shouldIgnoreShade;
+    }
+    
+    public void setShouldIgnoreShade(boolean shouldIgnoreShade) {
+        this.shouldIgnoreShade = shouldIgnoreShade;
+    }
+    
+    public boolean shouldIgnoreAdjacency() {
+        return shouldIgnoreAdjacency;
+    }
+    
+    public void setShouldIgnoreAdjacency(boolean shouldIgnoreAdjacency) {
+        this.shouldIgnoreAdjacency = shouldIgnoreAdjacency;
+    }
+    
     public MatchMock getMatch() {
         return new MatchMock(
                 this.databaseMatch,
@@ -78,7 +107,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
         this.setUpConnectionTimer();
 
-        this.matchCommunicationsManager = new MatchCommunicationsManager(this.databaseMatch);
+        this.matchCommunicationsManager = new MatchCommunicationsManager(this.databaseMatch, this);
         this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch);
         this.matchPlayers = new ArrayList<>(this.lobbyPlayers.size());
         this.playerToLivePlayerMap = new HashMap<>();
@@ -88,7 +117,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
     public void addPlayer(DatabasePlayer databasePlayer, MatchSocketProxyController matchSocketProxyController) throws SQLException {
         if (canAcceptPlayer(databasePlayer)) {
-            this.matchCommunicationsManager.addPlayer(databasePlayer, matchSocketProxyController);
+            // this.matchCommunicationsManager.addPlayer(databasePlayer, matchSocketProxyController);
 
             this.addPlayerCommons(databasePlayer);
         }
@@ -323,6 +352,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     }
 
     @Override
+    @SuppressWarnings("squid:S00112")
     public void onWindowChosen(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, IWindow window) {
         if (matchCommunicationsManager != this.matchCommunicationsManager) {
             return;
@@ -336,8 +366,15 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         WindowControllerImpl windowController = new WindowControllerImpl(chosenWindow, CellControllerImpl::new);
 
         this.matchObjectsManager.setWindowControllerForPlayer(windowController, databasePlayer);
-        matchCommunicationsManager.sendWindowController(databasePlayer, windowController);
         
+        try {
+            matchCommunicationsManager.sendWindowController(databasePlayer, windowController);
+        }
+        catch (RemoteException e) {
+            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while sending windows:", e);
+            throw new RuntimeException(e);
+        }
+    
         if (this.matchObjectsManager.getPlayerWindowMap().size() == this.matchPlayers.size()) {
             this.matchState = MatchState.WAITING_FOR_CONTROLLERS_ACK;
     

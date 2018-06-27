@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 public interface MatchInterface extends Remote {
 
     @RespondsTo(EndPointFunction.MATCH_MIGRATION)
-    Response<IMatch> confirmMatchJoin(Response<IMatch> migrationResponse) throws RemoteException;
+    void confirmMatchJoin(Response<MatchInteraction> matchInteractionResponse) throws RemoteException;
 
     @RespondsTo(EndPointFunction.MATCH_MIGRATION_RMI)
     MatchController confirmMatchJoin(IMatch migrationResponse) throws RemoteException;

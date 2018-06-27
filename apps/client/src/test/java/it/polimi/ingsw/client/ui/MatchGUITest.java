@@ -44,12 +44,7 @@ public class MatchGUITest extends Application {
             public IMatch waitForUpdate() throws RemoteException, InterruptedException {
                 return null;
             }
-    
-            @Override
-            public void postWindowsToChoose(IWindow[] windows) {
-        
-            }
-    
+            
             @Override
             public IWindow[] waitForWindowRequest() throws RemoteException {
                 CellMock[] cells1 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
@@ -79,28 +74,13 @@ public class MatchGUITest extends Application {
             }
     
             @Override
-            public void postWindowController(WindowController windowController) throws RemoteException {
-        
-            }
-    
-            @Override
             public WindowController waitForWindowController() throws RemoteException {
                 return null;
             }
-    
-            @Override
-            public void postToolCardControllers(ToolCardController[] toolCardControllers) throws RemoteException {
-        
-            }
-    
+            
             @Override
             public ToolCardController[] waitForToolCardControllers() throws RemoteException {
                 return new ToolCardController[0];
-            }
-    
-            @Override
-            public void postPublicObjectiveCards(IObjectiveCard[] objectiveCards) throws RemoteException {
-        
             }
     
             @Override
@@ -109,28 +89,13 @@ public class MatchGUITest extends Application {
             }
     
             @Override
-            public void postPrivateObjectiveCard(IObjectiveCard objectiveCard) throws RemoteException {
-        
-            }
-    
-            @Override
             public ObjectiveCardController waitForPrivateObjectiveCardController() throws RemoteException {
                 return null;
             }
     
             @Override
-            public void postDraftPoolController(DraftPoolController draftPoolController) throws RemoteException {
-        
-            }
-    
-            @Override
             public DraftPoolController waitForDraftPoolController() throws RemoteException {
                 return null;
-            }
-    
-            @Override
-            public void postRoundTrackController(RoundTrackController roundTrackController) throws RemoteException {
-        
             }
     
             @Override
