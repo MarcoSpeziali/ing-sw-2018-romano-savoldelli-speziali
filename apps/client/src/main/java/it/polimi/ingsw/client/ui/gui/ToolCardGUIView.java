@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.controllers.ToolCardController;
-import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.net.mocks.IToolCard;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.fxml.FXML;
@@ -32,14 +31,13 @@ public class ToolCardGUIView extends GUIView<ToolCardController> {
     }
 
 
-    public void setController(ToolCardController toolCardController) throws IOException {
-        super.setController(toolCardController);
+    public void setModel(IToolCard iToolCard) throws IOException {
+        super.setModel(model);
 
-        IToolCard iToolCard = toolCardController.getToolCard();
         draft.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_DRAFT));
         bag.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_BAG_TEXT));
         title.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardTitle(iToolCard.getCardId())));
-        effect.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardEffect(iToolCard.getCardId())));
+        effect.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardEffect(iToolCard.getEffect().toString())));
         path = Constants.Resources.valueOf(String.format("TOOL_CARD_%s", iToolCard.getCardId().toUpperCase())).getRelativePath();
         try {
             imageView.setImage(new Image(Resources.getResource(ToolCardGUIView.class.getClassLoader(), path).openStream()));
