@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.controllers.DraftPoolController;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.core.Match;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.DraftPool;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.core.Move.build;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class DraftPoolGUIView extends GUIView<DraftPoolController> {
@@ -50,16 +52,14 @@ public class DraftPoolGUIView extends GUIView<DraftPoolController> {
         Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap(); // FIXME: why using it?
 
         locationsDieMap.keySet().stream()
-                .sorted().forEach(unsafe(key -> {
-                    AnchorPane placeholder = (AnchorPane) anchorPane.getChildren().get(key);
+                .sorted().forEach(unsafe(location -> {
+                    AnchorPane placeholder = (AnchorPane) anchorPane.getChildren().get(location);
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
-                    AnchorPane die = null;
 
-                    die = loader.load();
+                    Node die = loader.load();
                     die.setCursor(Cursor.OPEN_HAND);
 
-                    AnchorPane finalDie = die;
                     die.setOnMousePressed(event -> {
 
                         mouseX = event.getSceneX();
@@ -68,22 +68,26 @@ public class DraftPoolGUIView extends GUIView<DraftPoolController> {
                         FXMLLoader innerLoader = new FXMLLoader();
                         innerLoader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
                         DieGUIView innerController = innerLoader.getController();
-                        try {
-                            selected = innerLoader.load();
-                            innerController.setController(new DieMockController(locationsDieMap.get(key)));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
 
-                        selected.setLayoutX(finalDie.getLayoutX());
-                        selected.setLayoutY(finalDie.getLayoutY());
+                        selected.setLayoutX(die.getLayoutX());
+                        selected.setLayoutY(die.getLayoutY());
                         selected.setCursor(Cursor.CLOSED_HAND);
                         selected.getTransforms().add(scale);
                         selected.setStyle("-fx-opacity: 0.5");
+                        try {
+                            selected = innerLoader.load();
+                            innerController.setController(new DieMockController(locationsDieMap.get(location)));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         anchorPane.getChildren().add(selected);
 
-
-                        //Match.getMatchController().PICKKKKK
+                        Move move = Move.build();
+                        move.begin(location);
+                        /*
+                        Match.getMatchController().tryToPick(
+                            location: location
+                         */
                     });
 
                     die.setOnMouseDragged(event -> {
@@ -96,7 +100,7 @@ public class DraftPoolGUIView extends GUIView<DraftPoolController> {
 
                     DieGUIView dieGUIView = loader.getController();
 
-                    dieGUIView.setController(new DieMockController(locationsDieMap.get(key)));
+                    dieGUIView.setController(new DieMockController(locationsDieMap.get(location)));
 
                     placeholder.getChildren().add(die);
                 }

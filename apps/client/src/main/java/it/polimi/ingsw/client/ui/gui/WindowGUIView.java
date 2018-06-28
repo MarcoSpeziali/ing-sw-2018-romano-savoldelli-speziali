@@ -3,6 +3,8 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.controllers.DieInteractionException;
 import it.polimi.ingsw.controllers.WindowController;
+import it.polimi.ingsw.core.Match;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
@@ -54,8 +56,6 @@ public class WindowGUIView extends GUIView<WindowController> {
                 CellGUIView guiView = loader.getController();
                 guiView.setController(windowController.getCellController(i, j));
 
-                int finalI = i;
-                int finalJ = j;
                 cell.setOnDragDropped(event -> {
 
                     //TODO: opterei per una versione di questo tipo:
@@ -68,7 +68,8 @@ public class WindowGUIView extends GUIView<WindowController> {
 
                     try {
                         cell.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
-                        this.controller.tryToPut(heldDie, 2 * finalI + finalJ);
+
+                        this.controller.tryToPut(heldDie, Move.getCurrentMove().getDraftPoolPickPosition());
                     }
                     catch (DieInteractionException e) {
                         cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));

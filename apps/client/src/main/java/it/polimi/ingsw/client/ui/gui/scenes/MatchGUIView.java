@@ -1,16 +1,15 @@
 package it.polimi.ingsw.client.ui.gui.scenes;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
-import it.polimi.ingsw.client.ui.gui.GUIView;
-import it.polimi.ingsw.client.ui.gui.WindowGUIView;
+import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.net.mocks.ILivePlayer;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.models.ObjectiveCard;
+import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,6 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -50,14 +50,21 @@ public class MatchGUIView extends GUIView<MatchController> {
     @Override
     public void init() {
         chooseWindow();
-        // loadElements();
+        loadElements();
         setUpUpdateFuture();
     }
 
-    /*
+
     private void loadElements() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForToolCardControllers()))
-                .thenAccept(toolCardControllers -> Platform.runLater(unsafe(() -> {
+        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForUpdate()))
+                .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
+
+                    IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
+                    IDraftPool iDraftPool               = iMatch.getDraftPool();
+                    IToolCard[] iToolCards              = iMatch.getToolCards();
+                    IObjectiveCard[] iObjectiveCards    = iMatch.getObjectiveCards();
+                    IObjectiveCard iObjectiveCard       =
+
                     for (int i=0; i<toolCardControllers.length; i++) {
                         JFXDialogLayout content = new JFXDialogLayout();
                         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
@@ -162,7 +169,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                                         AnchorPane.setLeftAnchor(window, 14.0);
                                         try {
                                             this.controller.respondToWindowRequest(iWindows[finalI]);
-                                        } catch (RemoteException e) {
+                                        } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                         dialog.close();
