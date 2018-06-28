@@ -138,8 +138,8 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
 
     @Override
     public int getFreeSpace() {
-        int players = ((Match) Context.getSharedInstance().get(Context.MATCH)).getNumberOfPlayer();
-
+        //int players = ((Match) Context.getSharedInstance().get(Context.MATCH)).getNumberOfPlayer();
+        int players = 3;
         return (int) (2 * players + 1 - Arrays.stream(this.dice).filter(Objects::nonNull).count());
     }
 

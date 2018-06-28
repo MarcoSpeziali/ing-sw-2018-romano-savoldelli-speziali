@@ -47,7 +47,116 @@ public class MatchGUITest extends Application {
     
             @Override
             public IMatch waitForUpdate() throws RemoteException, InterruptedException {
-                return null;
+                return new IMatch() {
+                    @Override
+                    public int getId() {
+                        return 0;
+                    }
+
+                    @Override
+                    public long getStartingTime() {
+                        return 0;
+                    }
+
+                    @Override
+                    public long getEndingTime() {
+                        return 0;
+                    }
+
+                    @Override
+                    public ILobby getLobby() {
+                        return null;
+                    }
+
+                    @Override
+                    public ILivePlayer[] getPlayers() {
+                        return new ILivePlayer[0];
+                    }
+
+                    @Override
+                    public IDraftPool getDraftPool() {
+                        return null;
+                    }
+
+                    @Override
+                    public IRoundTrack getRoundTrack() {
+                        return null;
+                    }
+
+                    @Override
+                    public IObjectiveCard[] getObjectiveCards() {
+                        return new IObjectiveCard[0];
+                    }
+
+                    @Override
+                    public IToolCard[] getToolCards() {
+                        IToolCard[] toolCards = {
+                                new IToolCard() {
+                                    @Override
+                                    public String getCardId() {
+                                        return "cork_backed_strainghtedge";
+                                    }
+
+                                    @Override
+                                    public IEffect getEffect() {
+                                        return new EffectMock();
+                                    }
+
+                                    @Override
+                                    public String getTitle() {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public String getDescription() {
+                                        return null;
+                                    }
+                                },
+                                new IToolCard() {
+                                    @Override
+                                    public String getCardId() {
+                                        return "flux_brush";
+                                    }
+
+                                    @Override
+                                    public IEffect getEffect() {
+                                        return new EffectMock();
+                                    }
+
+                                    @Override
+                                    public String getTitle() {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public String getDescription() {
+                                        return null;
+                                    }
+                                }, new IToolCard() {
+                            @Override
+                            public String getCardId() {
+                                return "lathekin";
+                            }
+
+                            @Override
+                            public IEffect getEffect() {
+                                return new EffectMock();
+                            }
+
+                            @Override
+                            public String getTitle() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getDescription() {
+                                return null;
+                            }
+                                }};
+
+                        return new IToolCard[0];
+                    }
+                };
             }
             
             @Override
