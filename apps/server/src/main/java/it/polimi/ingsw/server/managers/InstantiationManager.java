@@ -66,7 +66,7 @@ public final class InstantiationManager {
 
     private static synchronized String getPathForResource(Constants.Resources resource) {
         return Paths.get(
-                Constants.Paths.COMPILATION_FOLDER.toString(),
+                Constants.Paths.COMPILATION_FOLDER.getAbsolutePath(),
                 String.valueOf(CompilationManager.lastCompilation()),
                 resource.toString().toLowerCase()
         ).toString();

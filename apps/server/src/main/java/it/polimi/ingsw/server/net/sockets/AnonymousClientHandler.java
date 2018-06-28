@@ -2,9 +2,9 @@ package it.polimi.ingsw.server.net.sockets;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.server.utils.AuthenticationHelper;
-import it.polimi.ingsw.server.net.commands.Command;
+import it.polimi.ingsw.server.net.sockets.middlewares.Middleware;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
+import it.polimi.ingsw.server.utils.AuthenticationHelper;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
@@ -23,15 +23,35 @@ public class AnonymousClientHandler extends ClientHandler {
 
     @Override
     public void run() {
-        Command<JSONSerializable, JSONSerializable> handler;
+        Middleware middleware;
 
         SocketAddress socketAddress = this.client.getRemoteSocketAddress();
 
         try {
             do {
-                // waits for a request
-                @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = waitForRequest();
+                ServerLogger.getLogger()
+                        .fine(() -> String.format(
+                                "Waiting for data from client: %s",
+                                socketAddress.toString()
+                        ));
 
+                JSONSerializable data = waitForData();
+
+                ServerLogger.getLogger()
+                        .fine(() -> String.format(
+                                "Got data: \"%s\", from client: %s",
+                                data.toString(),
+                                socketAddress.toString()
+                        ));
+
+                // an anonymous client handler only accepts requests
+                if (data instanceof Response) {
+                    return;
+                }
+
+                Request<? extends JSONSerializable> request = (Request<? extends JSONSerializable>) data;
+
+                // the first data received by an authenticated client handler is also a request
                 if (tryMigration(request)) {
                     return;
                 }
@@ -43,28 +63,15 @@ public class AnonymousClientHandler extends ClientHandler {
                                 socketAddress.toString()
                         ));
 
-                // selects the handler for the request
-                handler = SocketRouter.getHandlerForAnonymousRequest(request);
+                middleware = this.handleIncomingRequest(request);
 
-                // if the handler is null it means that the endpoint does not exists
-                if (handler == null) {
+                // if the middleware is null it means that the endpoint does not exists
+                if (middleware == null) {
                     return;
                 }
 
-                // asks for a response
-                @SuppressWarnings("unchecked")
-                Response<? extends JSONSerializable> response = handler.handle((Request<JSONSerializable>) request, this.client);
-
-                ServerLogger.getLogger()
-                        .fine(() -> String.format(
-                                "Sending response \"%s\", to client: %s", response.toString(), socketAddress.toString()
-                        ));
-
-                // and sends it
-                this.sendResponse(response);
-
-                // if the handler needs the connection to be kept alive it wont be closed
-            } while (handler.shouldBeKeptAlive());
+                // if the middleware needs the connection to be kept alive it wont be closed
+            } while (middleware.shouldBeKeptAlive());
         }
         catch (Exception e) {
             ServerLogger.getLogger()
@@ -72,9 +79,26 @@ public class AnonymousClientHandler extends ClientHandler {
         }
     }
 
-    // TODO: docs
-    private boolean tryMigration(Request<?> request) throws SQLException, TimeoutException, IOException, InterruptedException {
-        DatabasePlayer databasePlayer = AuthenticationHelper.getAuthenticatedPlayer(request);
+
+    /**
+     * Tries to migrate from an {@link AnonymousClientHandler} to an {@link AuthenticatedClientHandler}.
+     * It returns {@code true} if the migration was successful, {@code false} otherwise. If {@code true}
+     * is returned the current {@link AnonymousClientHandler} should terminate.
+     *
+     * @param request the {@link Request} received which could contain a valid authentication token
+     * @return {@code true} if the migration was successful, {@code false} otherwise
+     * @throws SQLException if any SQL exceptions occurs
+     * @throws IOException if any IO exceptions occurs
+     */
+    private boolean tryMigration(Request<?> request) throws SQLException, IOException {
+        DatabasePlayer databasePlayer;
+
+        try {
+            databasePlayer = AuthenticationHelper.getAuthenticatedPlayer(request);
+        }
+        catch (TimeoutException e) {
+            return false;
+        }
 
         if (databasePlayer != null) {
             try (AuthenticatedClientHandler clientHandler = AuthenticatedClientHandler.migrate(
@@ -82,7 +106,6 @@ public class AnonymousClientHandler extends ClientHandler {
                     databasePlayer,
                     request
             )) {
-
                 ServerLogger.getLogger()
                         .finer(() -> String.format(
                                 "Host %s migrated to AuthenticatedClientHandler, since it is authenticated as '%s'",

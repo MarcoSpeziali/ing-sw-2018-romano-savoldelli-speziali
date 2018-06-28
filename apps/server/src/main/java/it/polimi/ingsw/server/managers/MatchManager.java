@@ -1,12 +1,12 @@
 package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
-import it.polimi.ingsw.controllers.proxies.socket.MatchSocketProxyController;
 import it.polimi.ingsw.models.*;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.controllers.*;
 import it.polimi.ingsw.server.events.*;
+import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.sql.DatabaseLobby;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
@@ -30,9 +30,24 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
 public class MatchManager implements PlayerEventsListener, MatchCommunicationsListener {
 
+    private static Map<Integer, MatchManager> matchManagerMap = new HashMap<>();
+
+    public static MatchManager getManagerForMatch(int matchId) {
+        try {
+            final int lobbyId = DatabaseMatch.matchWithId(matchId).getLobby().getId();
+
+            return matchManagerMap.computeIfAbsent(matchId, wrap(id -> {
+                return new MatchManager(lobbyId);
+            }));
+        }
+        catch (SQLException | NullPointerException | FunctionalExceptionWrapper e) {
+            return null;
+        }
+    }
+
     // ------ MATCH OBJECTS ------
     private DatabaseMatch databaseMatch;
-    private final MatchCommunicationsManager matchCommunicationsManager;
+    private MatchCommunicationsManager matchCommunicationsManager;
     private final MatchObjectsManager matchObjectsManager;
 
     // ------ MATCH OBJECTS CACHE ------
@@ -87,6 +102,10 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     public void setShouldIgnoreAdjacency(boolean shouldIgnoreAdjacency) {
         this.shouldIgnoreAdjacency = shouldIgnoreAdjacency;
     }
+
+    public DatabaseMatch getDatabaseMatch() {
+        return this.databaseMatch;
+    }
     
     public MatchMock getMatch() {
         return new MatchMock(
@@ -99,7 +118,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     public MatchManager(int lobbyId) throws SQLException {
         this.databaseMatch = DatabaseMatch.insertMatchFromLobby(lobbyId);
         this.lobbyPlayers = Arrays.stream(DatabaseLobby.getLobbyWithId(lobbyId).getPlayers())
-                .map(player -> (DatabasePlayer) player)
+                .map(DatabasePlayer.class::cast)
                 .collect(Collectors.toList());
 
         // creates the executor service
@@ -111,13 +130,15 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch);
         this.matchPlayers = new ArrayList<>(this.lobbyPlayers.size());
         this.playerToLivePlayerMap = new HashMap<>();
+
+        matchManagerMap.putIfAbsent(this.databaseMatch.getId(), this);
     }
     
     // ------ LIFE CYCLE ------
     
-    public void addPlayer(DatabasePlayer databasePlayer, MatchSocketProxyController matchSocketProxyController) throws SQLException {
+    public void addPlayer(DatabasePlayer databasePlayer, AuthenticatedClientHandler authenticatedClientHandler) throws SQLException {
         if (canAcceptPlayer(databasePlayer)) {
-            // this.matchCommunicationsManager.addPlayer(databasePlayer, matchSocketProxyController);
+            this.matchCommunicationsManager.addPlayer(databasePlayer, authenticatedClientHandler);
 
             this.addPlayerCommons(databasePlayer);
         }
@@ -127,7 +148,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         if (canAcceptPlayer(databasePlayer)) {
             this.matchCommunicationsManager.addPlayer(databasePlayer, matchController);
     
-            if (this.rmiHeartBeatScheduledFuture.isCancelled()) {
+            if (this.rmiHeartBeatScheduledFuture == null || this.rmiHeartBeatScheduledFuture.isCancelled()) {
                 this.setUpHeartBeat();
             }
 
@@ -136,11 +157,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     }
     
     private boolean canAcceptPlayer(DatabasePlayer player) throws SQLException {
-        return lobbyPlayers.contains(player) && this.matchState != MatchState.WAITING_FOR_PLAYERS || this.databaseMatch.getLeftPlayers().contains(player);
+        return lobbyPlayers.contains(player) && this.matchState == MatchState.WAITING_FOR_PLAYERS || this.databaseMatch.getLeftPlayers().contains(player);
     }
-    
-    public void addPlayerCommons(DatabasePlayer databasePlayer) throws SQLException {
-        this.databaseMatch = DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
+
+    private void addPlayerCommons(DatabasePlayer databasePlayer) throws SQLException {
+        DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
         this.matchPlayers.add(databasePlayer);
     
         DatabasePlayer[] players = this.databaseMatch.getDatabasePlayers();
@@ -168,8 +189,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     }
     
     // ------ NETWORK COMMUNICATION ------
-    
-    public void sendWindowsToChoose(DatabasePlayer[] players) throws IOException, ClassNotFoundException {
+
+    private void sendWindowsToChoose(DatabasePlayer[] players) throws IOException, ClassNotFoundException {
         this.matchCommunicationsManager.sendWindowsToChoose(createWindows(players));
     }
     
@@ -276,7 +297,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         ILobby lobby = this.databaseMatch.getLobby();
     
         List<DatabasePlayer> playersInLobby = Arrays.stream(lobby.getPlayers())
-                .map(player -> (DatabasePlayer) player)
+                .map(DatabasePlayer.class::cast)
                 .collect(Collectors.toList());
         
         List<DatabasePlayer> playersInMatch = Arrays.asList(this.databaseMatch.getDatabasePlayers());
@@ -288,6 +309,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             timedOutPlayers.forEach(wrap(iPlayer -> {
                 DatabaseLobby.removePlayer(lobby.getId(), iPlayer.getId());
             }));
+
+            this.matchCommunicationsManager.closeConnectionToOtherPlayers();
     
             this.sendWindowsToChoose(playersInMatch.toArray(new DatabasePlayer[0]));
         }

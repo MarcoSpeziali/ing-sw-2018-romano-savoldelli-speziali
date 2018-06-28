@@ -20,7 +20,7 @@ public class CellMock implements ICell {
     }
 
     public CellMock(ICell iCell) {
-        this(iCell.getShade(), iCell.getColor(), new DieMock(iCell.getDie()));
+        this(iCell.getShade(), iCell.getColor(), iCell.getDie() == null ? null : new DieMock(iCell.getDie()));
     }
 
     @JSONDesignatedConstructor

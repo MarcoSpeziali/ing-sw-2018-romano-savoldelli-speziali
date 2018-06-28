@@ -30,6 +30,7 @@ public class JSONBufferedReader extends BufferedReader {
     }
     
     public JSONObject readJSON() throws IOException {
-        return new JSONObject(super.readLine());
+        String content = super.readLine();
+        return content == null ? null : new JSONObject(content);
     }
 }

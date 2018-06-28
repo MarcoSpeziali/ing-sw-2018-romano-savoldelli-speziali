@@ -3,10 +3,15 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.CompilationManager;
 import it.polimi.ingsw.server.net.endpoints.LobbyEndPoint;
+import it.polimi.ingsw.server.net.endpoints.MatchEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignInEndPoint;
 import it.polimi.ingsw.server.net.endpoints.SignUpEndPoint;
 import it.polimi.ingsw.server.net.sockets.ClientAcceptor;
-import it.polimi.ingsw.server.net.sockets.SocketRouter;
+import it.polimi.ingsw.server.net.sockets.ClientHandler;
+import it.polimi.ingsw.server.net.sockets.middlewares.LobbyMiddleware;
+import it.polimi.ingsw.server.net.sockets.middlewares.MatchMiddleware;
+import it.polimi.ingsw.server.net.sockets.middlewares.SignInMiddleware;
+import it.polimi.ingsw.server.net.sockets.middlewares.SignUpMiddleware;
 import it.polimi.ingsw.server.sql.SagradaDatabase;
 import it.polimi.ingsw.server.utils.LoggingLevelValueConverter;
 import it.polimi.ingsw.server.utils.ServerLogger;
@@ -23,6 +28,8 @@ import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Level;
+
+import static it.polimi.ingsw.server.net.sockets.middlewares.factories.PersistentMiddlewareFactory.persistentMiddleware;
 
 public class ServerApp {
 
@@ -47,9 +54,6 @@ public class ServerApp {
             // builds the settings
             Settings.getSettings().save();
 
-            // build the routing table for the socket router
-            SocketRouter.buildRoutingTables();
-
             // compiles the resources (if needed)
             compileResources(options.has(
                     Constants.ServerArguments.FORCE_COMPILATION.toString()
@@ -57,6 +61,9 @@ public class ServerApp {
 
             // checks if the database can be reached
             checkDatabaseConnection();
+
+            // registers the socket middleware
+            registerMiddleware();
 
             // starts the multiplayer server (sockets)
             startMultiplayerServer();
@@ -143,6 +150,28 @@ public class ServerApp {
     }
 
     /**
+     * Registers the socket middleware.
+     */
+    private static void registerMiddleware() {
+        ClientHandler.registerMiddleware(
+                SignInMiddleware.class,
+                persistentMiddleware(SignInMiddleware::new)
+        );
+        ClientHandler.registerMiddleware(
+                SignUpMiddleware.class,
+                persistentMiddleware(SignUpMiddleware::new)
+        );
+        ClientHandler.registerMiddleware(
+                LobbyMiddleware.class,
+                persistentMiddleware(LobbyMiddleware::new)
+        );
+        ClientHandler.registerMiddleware(
+                MatchMiddleware.class,
+                MatchMiddleware::new
+        );
+    }
+
+    /**
      * Starts the socket listener.
      *
      * @throws IOException if any IO errors occurs
@@ -178,8 +207,8 @@ public class ServerApp {
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_UP), new SignUpEndPoint());
-        registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_JOIN_REQUEST), LobbyEndPoint.getInstance());
         registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_JOIN_REQUEST_RMI), LobbyEndPoint.getInstance());
+        registry.rebind(getRMIEndPointName(EndPointFunction.MATCH_MIGRATION_RMI), new MatchEndPoint());
     }
 
     /**

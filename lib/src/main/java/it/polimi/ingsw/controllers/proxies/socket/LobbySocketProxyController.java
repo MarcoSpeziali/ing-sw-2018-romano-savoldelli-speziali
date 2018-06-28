@@ -27,6 +27,10 @@ public class LobbySocketProxyController implements LobbyController {
     private transient ILobby lobbyResult;
     private transient IMatch matchResult;
 
+    public PersistentSocketInteractionProvider getPersistentSocketInteractionProvider() {
+        return persistentSocketInteractionProvider;
+    }
+
     public LobbySocketProxyController(String remoteHost, int remotePort, String clientToken) {
         this.clientToken = clientToken;
 

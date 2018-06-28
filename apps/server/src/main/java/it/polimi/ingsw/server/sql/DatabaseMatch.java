@@ -118,7 +118,8 @@ public class DatabaseMatch implements IMatch {
         );
     
         try (SagradaDatabase database = new SagradaDatabase()) {
-            return database.executeQuery(query, resultSet -> {
+            //noinspection Duplicates
+            List<IPlayer> result = database.executeQuery(query, resultSet -> {
                 LinkedList<IPlayer> databasePlayers = new LinkedList<>();
             
                 do {
@@ -127,6 +128,8 @@ public class DatabaseMatch implements IMatch {
             
                 return databasePlayers;
             });
+
+            return result == null ? List.of() : result;
         }
         catch (SQLException e) {
             return null;
@@ -144,15 +147,15 @@ public class DatabaseMatch implements IMatch {
         }
     }
     
-    public static DatabaseMatch insertPlayer(int matchId, int playerId) throws SQLException {
+    public static void insertPlayer(int matchId, int playerId) throws SQLException {
         String query = String.format(
-                "INSERT INTO player_match (match, player) VALUES (%d, %d)",
+                "INSERT INTO match_player (match, player) VALUES (%d, %d)",
                 matchId,
                 playerId
         );
     
         try (SagradaDatabase database = new SagradaDatabase()) {
-            return database.executeQuery(query, DatabaseMatch::new);
+            database.executeVoidQuery(query);
         }
     }
     

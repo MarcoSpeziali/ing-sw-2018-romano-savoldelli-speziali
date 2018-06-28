@@ -16,10 +16,16 @@ import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.controllers.CellControllerImpl;
 import it.polimi.ingsw.server.controllers.WindowControllerImpl;
+import it.polimi.ingsw.server.events.EventDispatcher;
+import it.polimi.ingsw.server.events.EventType;
+import it.polimi.ingsw.server.events.MatchCommunicationsListener;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
+import it.polimi.ingsw.server.net.sockets.middlewares.MatchControllerMiddleware;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ControllersMapper;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,18 +64,37 @@ public class MatchCommunicationsManager {
         this.socketPlayersHandler.remove(databasePlayer);
     }
 
-    public void sendWindowsToChoose(Map<DatabasePlayer, IWindow[]> playerToWindowsMap) {
+    public void closeConnectionToOtherPlayers() {
+        this.forEachSocket((databasePlayer, authenticatedClientHandler) -> authenticatedClientHandler.addMiddleware(
+                MatchControllerMiddleware.class,
+                new MatchControllerMiddleware(this)
+        ));
+    }
+
+    public void sendWindowsToChoose(Map<DatabasePlayer, IWindow[]> playerToWindowsMap) throws IOException {
         this.forEachRmi((databasePlayer, matchRMIProxyController) -> matchRMIProxyController.postWindowsToChoose(playerToWindowsMap.get(databasePlayer)));
-        
-        this.forEachSocket((databasePlayer, authenticatedClientHandler) -> authenticatedClientHandler.sendRequest(new Request<>(
-                new Header(EndPointFunction.MATCH_WINDOW_REQUEST),
-                new WindowRequest(
-                        this.match.getId(),
-                        Arrays.stream(playerToWindowsMap.get(databasePlayer))
-                                .map(WindowMock::new)
-                                .toArray(WindowMock[]::new)
-                )
-        )));
+
+        try {
+            this.forEachSocket((databasePlayer, authenticatedClientHandler) -> {
+                try {
+                    authenticatedClientHandler.sendRequest(new Request<>(
+                            new Header(EndPointFunction.MATCH_WINDOW_REQUEST),
+                            new WindowRequest(
+                                    this.match.getId(),
+                                    Arrays.stream(playerToWindowsMap.get(databasePlayer))
+                                            .map(WindowMock::new)
+                                            .toArray(WindowMock[]::new)
+                            )
+                    ));
+                }
+                catch (IOException e) {
+                    FunctionalExceptionWrapper.wrap(e);
+                }
+            });
+        }
+        catch (FunctionalExceptionWrapper e) {
+            e.tryFinalUnwrap(IOException.class);
+        }
     }
 
     public void sendWindowController(DatabasePlayer databasePlayer, WindowControllerImpl windowController) throws RemoteException {
@@ -114,5 +139,13 @@ public class MatchCommunicationsManager {
 
     public void forEachSocket(BiConsumer<DatabasePlayer, AuthenticatedClientHandler> biConsumer) {
         this.socketPlayersHandler.forEach(biConsumer);
+    }
+
+    public void onWindowChosen(DatabasePlayer databasePlayer, IWindow chosenWindow) {
+        EventDispatcher.dispatch(
+                EventType.MATCH_COMMUNICATION_EVENTS,
+                MatchCommunicationsListener.class,
+                matchCommunicationsListener -> matchCommunicationsListener.onWindowChosen(this, databasePlayer, chosenWindow)
+        );
     }
 }

@@ -1,11 +1,14 @@
 package it.polimi.ingsw.controllers.proxies.socket;
 
 import it.polimi.ingsw.controllers.*;
+import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
+import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.WindowRequest;
+import it.polimi.ingsw.net.responses.MigrationResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 
 import java.io.IOException;
@@ -18,20 +21,18 @@ public class MatchSocketProxyController implements MatchController {
     private final String clientToken;
     private transient PersistentSocketInteractionProvider persistentSocketInteractionProvider;
     
-    public MatchSocketProxyController(String remoteHost, int remotePort, String clientToken) {
+    public MatchSocketProxyController(PersistentSocketInteractionProvider persistentSocketInteractionProvider, String clientToken) {
         this.clientToken = clientToken;
-    
-        this.persistentSocketInteractionProvider = new PersistentSocketInteractionProvider(
-                remoteHost,
-                remotePort
-        );
+        this.persistentSocketInteractionProvider = persistentSocketInteractionProvider;
     }
     
     @Override
     public void init(Object... args) throws IOException {
-        // TODO: create connection
-        this.persistentSocketInteractionProvider.open(EndPointFunction.MATCH_MIGRATION);
-        
+        this.persistentSocketInteractionProvider.postResponse(new Response<>(
+                new Header(this.clientToken, EndPointFunction.MATCH_MIGRATION),
+                new MigrationResponse((Integer) args[0])
+        ));
+
         this.persistentSocketInteractionProvider.listenForRequest(
                 EndPointFunction.MATCH_WINDOW_REQUEST,
                 request -> {
