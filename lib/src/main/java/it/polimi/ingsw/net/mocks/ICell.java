@@ -13,6 +13,8 @@ public interface ICell extends JSONSerializable {
     Integer getShade();
     @JSONElement("die")
     IDie getDie();
+    @JSONElement("uuid")
+    int getUUID();
 
     default boolean isOccupied() {
         return this.getDie() != null;

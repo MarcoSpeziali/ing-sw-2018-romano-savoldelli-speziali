@@ -1,13 +1,16 @@
 package it.polimi.ingsw.client.ui.gui.scenes;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
-import it.polimi.ingsw.client.ui.gui.GUIView;
-import it.polimi.ingsw.client.ui.gui.WindowGUIView;
+import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.MatchController;
+import it.polimi.ingsw.net.mocks.ILivePlayer;
+import it.polimi.ingsw.net.mocks.IMatch;
+import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,15 +18,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
@@ -163,11 +168,12 @@ public class MatchGUIView extends GUIView<MatchController> {
                                         try {
                                             // TODO: is it correct, Mark?
                                             this.matchController.respondToWindowRequest(iWindows[finalI]);
-                                        } catch (RemoteException e) {
+                                        } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                         dialog.close();
                                     });
+                                    // FIXME: not here
                                     window.setCursor(new ImageCursor(new Image(
                                             Resources.getResource(
                                                     MatchGUIView.class.getClassLoader(),

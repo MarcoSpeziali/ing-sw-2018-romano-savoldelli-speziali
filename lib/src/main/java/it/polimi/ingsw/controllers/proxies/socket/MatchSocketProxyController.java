@@ -9,6 +9,7 @@ import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.responses.MigrationResponse;
+import it.polimi.ingsw.net.responses.WindowResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class MatchSocketProxyController implements MatchController {
     
     private final String clientToken;
     private transient PersistentSocketInteractionProvider persistentSocketInteractionProvider;
+    private Integer matchId;
     
     public MatchSocketProxyController(PersistentSocketInteractionProvider persistentSocketInteractionProvider, String clientToken) {
         this.clientToken = clientToken;
@@ -28,9 +30,11 @@ public class MatchSocketProxyController implements MatchController {
     
     @Override
     public void init(Object... args) throws IOException {
+        this.matchId = (Integer) args[0];
+        
         this.persistentSocketInteractionProvider.postResponse(new Response<>(
                 new Header(this.clientToken, EndPointFunction.MATCH_MIGRATION),
-                new MigrationResponse((Integer) args[0])
+                new MigrationResponse(this.matchId)
         ));
 
         this.persistentSocketInteractionProvider.listenForRequest(
@@ -62,8 +66,19 @@ public class MatchSocketProxyController implements MatchController {
     }
     
     @Override
-    public void respondToWindowRequest(IWindow window) throws RemoteException {
-    
+    public void respondToWindowRequest(IWindow window) throws IOException {
+        this.persistentSocketInteractionProvider.postResponse(
+                new Response<>(
+                        new Header(
+                                this.clientToken,
+                                EndPointFunction.MATCH_WINDOW_RESPONSE
+                        ),
+                        new WindowResponse(
+                                this.matchId,
+                                window
+                        )
+                )
+        );
     }
     
     @Override

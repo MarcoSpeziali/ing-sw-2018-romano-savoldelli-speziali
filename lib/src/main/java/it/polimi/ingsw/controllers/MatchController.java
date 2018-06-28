@@ -6,13 +6,14 @@ import it.polimi.ingsw.controllers.proxies.RemotelyInitializable;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
     
     IWindow[] waitForWindowRequest() throws RemoteException, InterruptedException;
     
-    void respondToWindowRequest(IWindow window) throws RemoteException;
+    void respondToWindowRequest(IWindow window) throws IOException;
     
     WindowController waitForWindowController() throws RemoteException, InterruptedException;
     
