@@ -322,7 +322,7 @@ public class LobbyManager implements PlayerEventsListener {
     }
     
     private void sendMatchMigrationRequest(DatabaseMatch databaseMatch) {
-        MatchMock matchMock = new MatchMock(databaseMatch);
+        MatchMock matchMock = databaseMatch.toMatchMock();
         
         this.rmiPlayersHandlers.forEach(
                 (databasePlayer, lobbyRMIProxyController) -> {

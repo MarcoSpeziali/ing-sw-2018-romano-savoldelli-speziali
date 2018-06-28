@@ -1,32 +1,22 @@
 package it.polimi.ingsw.server.managers;
 
-import it.polimi.ingsw.controllers.CellController;
-import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.controllers.WindowController;
-import it.polimi.ingsw.controllers.proxies.rmi.CellRMIProxyController;
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
-import it.polimi.ingsw.controllers.proxies.rmi.WindowRMIProxyController;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
-import it.polimi.ingsw.net.mocks.CellMock;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.net.mocks.WindowMock;
 import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.server.controllers.CellControllerImpl;
-import it.polimi.ingsw.server.controllers.WindowControllerImpl;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.EventType;
 import it.polimi.ingsw.server.events.MatchCommunicationsListener;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.net.sockets.middlewares.MatchControllerMiddleware;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
-import it.polimi.ingsw.server.utils.ControllersMapper;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,8 +87,8 @@ public class MatchCommunicationsManager {
         }
     }
 
-    public void sendWindowController(DatabasePlayer databasePlayer, WindowControllerImpl windowController) throws RemoteException {
-        MatchController matchController = null;/*= this.playersHandler.get(databasePlayer)*/;
+    /*public void sendWindowController(DatabasePlayer databasePlayer, WindowControllerImpl windowController) throws RemoteException {
+        MatchController matchController = null;*//*= this.playersHandler.get(databasePlayer)*//*;
     
         final int rows = windowController.getWindow().getRows();
         final int columns = windowController.getWindow().getColumns();
@@ -131,7 +121,7 @@ public class MatchCommunicationsManager {
         else {
         
         }
-    }
+    }*/
 
     public void forEachRmi(BiConsumer<DatabasePlayer, MatchRMIProxyController> biConsumer) {
         this.rmiPlayersHandler.forEach(biConsumer);

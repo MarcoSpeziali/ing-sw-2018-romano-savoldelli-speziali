@@ -1,11 +1,11 @@
 package it.polimi.ingsw.client.ui.gui.scenes;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
-import it.polimi.ingsw.client.ui.gui.*;
+import it.polimi.ingsw.client.ui.gui.GUIView;
+import it.polimi.ingsw.client.ui.gui.WindowGUIView;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
@@ -50,10 +50,11 @@ public class MatchGUIView extends GUIView<MatchController> {
     @Override
     public void init() {
         chooseWindow();
-        loadElements();
+        // loadElements();
         setUpUpdateFuture();
     }
 
+    /*
     private void loadElements() {
         CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForToolCardControllers()))
                 .thenAccept(toolCardControllers -> Platform.runLater(unsafe(() -> {
@@ -135,6 +136,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     // TODO Luca: add layout position (use anchors)
                 })));
     }
+    */
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();

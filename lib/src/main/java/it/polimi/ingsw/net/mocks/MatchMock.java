@@ -83,4 +83,24 @@ public class MatchMock implements IMatch {
     public LivePlayerMock[] getPlayers() {
         return players;
     }
+    
+    @Override
+    public IDraftPool getDraftPool() {
+        return null;
+    }
+    
+    @Override
+    public IRoundTrack getRoundTrack() {
+        return null;
+    }
+    
+    @Override
+    public IObjectiveCard[] getObjectiveCards() {
+        return new IObjectiveCard[0];
+    }
+    
+    @Override
+    public IToolCard[] getToolCards() {
+        return new IToolCard[0];
+    }
 }

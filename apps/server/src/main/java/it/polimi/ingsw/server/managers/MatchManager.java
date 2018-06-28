@@ -109,9 +109,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
     public MatchMock getMatch() {
         return new MatchMock(
-                this.databaseMatch,
-                playerToLivePlayerMap.values()
-                        .toArray(new ILivePlayer[0])
+                this.databaseMatch.toMatchMock(),
+                null
         );
     }
     
@@ -126,8 +125,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
         this.setUpConnectionTimer();
 
-        this.matchCommunicationsManager = new MatchCommunicationsManager(this.databaseMatch, this);
-        this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch);
+        this.matchCommunicationsManager = new MatchCommunicationsManager(
+                this.databaseMatch.toMatchMock(),
+                this
+        );
+        this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch.toMatchMock());
         this.matchPlayers = new ArrayList<>(this.lobbyPlayers.size());
         this.playerToLivePlayerMap = new HashMap<>();
 
@@ -390,13 +392,13 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
         this.matchObjectsManager.setWindowControllerForPlayer(windowController, databasePlayer);
         
-        try {
+        /*try {
             matchCommunicationsManager.sendWindowController(databasePlayer, windowController);
         }
         catch (RemoteException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while sending windows:", e);
             throw new RuntimeException(e);
-        }
+        }*/
     
         if (this.matchObjectsManager.getPlayerWindowMap().size() == this.matchPlayers.size()) {
             this.matchState = MatchState.WAITING_FOR_CONTROLLERS_ACK;

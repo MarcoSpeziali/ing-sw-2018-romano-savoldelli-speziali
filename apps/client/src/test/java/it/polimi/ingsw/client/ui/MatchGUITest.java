@@ -2,9 +2,14 @@ package it.polimi.ingsw.client.ui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView;
-import it.polimi.ingsw.controllers.*;
+import it.polimi.ingsw.controllers.MatchController;
+import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.responses.MoveResponse;
+import it.polimi.ingsw.utils.Range;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Map;
+import java.util.Set;
 
 
 public class MatchGUITest extends Application {
@@ -74,33 +80,68 @@ public class MatchGUITest extends Application {
             }
     
             @Override
-            public WindowController waitForWindowController() throws RemoteException {
-                return null;
-            }
-            
-            @Override
-            public ToolCardController[] waitForToolCardControllers() throws RemoteException {
-                return new ToolCardController[0];
+            public void waitForTurnToBegin() throws IOException {
+        
             }
     
             @Override
-            public ObjectiveCardController[] waitForPublicObjectiveCardControllers() throws RemoteException {
-                return new ObjectiveCardController[0];
+            public void endTurn() throws IOException {
+        
             }
     
             @Override
-            public ObjectiveCardController waitForPrivateObjectiveCardController() throws RemoteException {
-                return null;
+            public void waitForTurnToEnd() throws IOException {
+        
             }
     
             @Override
-            public DraftPoolController waitForDraftPoolController() throws RemoteException {
+            public MoveResponse tryToMove(Move move) throws IOException {
                 return null;
             }
     
             @Override
-            public RoundTrackController waitForRoundTrackController() throws RemoteException {
+            public void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException {
+        
+            }
+    
+            @Override
+            public Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() {
                 return null;
+            }
+    
+            @Override
+            public void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) {
+        
+            }
+    
+            @Override
+            public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
+                return null;
+            }
+    
+            @Override
+            public void postChosenEffects(IEffect[] effects) {
+        
+            }
+    
+            @Override
+            public IEffect waitForContinueToRepeat() {
+                return null;
+            }
+    
+            @Override
+            public void postContinueToRepeatChoice(boolean continueToRepeat) {
+        
+            }
+    
+            @Override
+            public IDie waitForSetShade() {
+                return null;
+            }
+    
+            @Override
+            public void postSetShade(Integer shade) {
+        
             }
         });
         primaryStage.setFullScreen(false);

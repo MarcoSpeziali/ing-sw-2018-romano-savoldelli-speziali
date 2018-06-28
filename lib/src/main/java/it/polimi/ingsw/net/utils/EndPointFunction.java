@@ -19,9 +19,15 @@ public enum EndPointFunction {
         // ------ MATCH MIGRATION ------
         MATCH_MIGRATION("match/migration"),
         MATCH_MIGRATION_RMI("match/migration_rmi"),
-
-    MATCH_WINDOW_REQUEST("match/window_request"),
-    MATCH_WINDOW_RESPONSE("match/window_response"),
+    
+        // ------ WINDOW CHOOSE ------
+        MATCH_WINDOW_REQUEST("match/window_request"),
+        MATCH_WINDOW_RESPONSE("match/window_response"),
+    
+        // ------ PLAYER MOVE ------
+        MATCH_PLAYER_MOVE_REQUEST("match/player/move_request"),
+        MATCH_PLAYER_MOVE_RESPONSE("match/player/move_response"),
+    
     MATCH_UPDATE_RESPONSE("match/update_response");
 
     private final String endPointFunctionName;

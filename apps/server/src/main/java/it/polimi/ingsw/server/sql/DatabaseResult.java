@@ -49,7 +49,7 @@ public class DatabaseResult implements IResult {
     @JSONElement("match")
     public IMatch getMatch() {
         try {
-            return DatabaseMatch.matchWithId(this.matchId);
+            return DatabaseMatch.matchWithId(this.matchId).toMatchMock();
         }
         catch (SQLException e) {
             return null;

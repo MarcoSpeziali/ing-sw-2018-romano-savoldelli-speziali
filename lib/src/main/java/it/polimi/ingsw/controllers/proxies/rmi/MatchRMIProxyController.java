@@ -1,15 +1,19 @@
 package it.polimi.ingsw.controllers.proxies.rmi;
 
-import it.polimi.ingsw.controllers.*;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IObjectiveCard;
-import it.polimi.ingsw.net.mocks.IPlayer;
-import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.controllers.MatchController;
+import it.polimi.ingsw.controllers.NotEnoughTokensException;
+import it.polimi.ingsw.core.Move;
+import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.responses.MoveResponse;
+import it.polimi.ingsw.utils.Range;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class MatchRMIProxyController extends UnicastRemoteObject implements MatchController, HeartBeatListener {
@@ -53,91 +57,85 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         }
     }
     
-    private transient Consumer<IWindow> windowRequestConsumer;
+    private transient Consumer<IWindow> windowResponseConsumer;
     
-    public void setWindowRequestConsumer(Consumer<IWindow> windowRequestConsumer) {
-        this.windowRequestConsumer = windowRequestConsumer;
+    public void setWindowResponseConsumer(Consumer<IWindow> windowResponseConsumer) {
+        this.windowResponseConsumer = windowResponseConsumer;
     }
     
     @Override
     public void respondToWindowRequest(IWindow window) throws RemoteException {
-        if (this.windowRequestConsumer != null) {
-            this.windowRequestConsumer.accept(window);
-            this.windowRequestConsumer = null;
-        }
-    }
-    
-    private final transient Object windowControllerSyncObject = new Object();
-    private WindowController windowController;
-    
-    public void postWindowController(WindowController windowController) throws RemoteException {
-        synchronized (this.windowControllerSyncObject) {
-            this.windowController = windowController;
-    
-            this.windowControllerSyncObject.notifyAll();
+        if (this.windowResponseConsumer != null) {
+            this.windowResponseConsumer.accept(window);
+            this.windowResponseConsumer = null;
         }
     }
     
     @Override
-    public WindowController waitForWindowController() throws RemoteException, InterruptedException {
-        synchronized (this.windowControllerSyncObject) {
-            while (this.windowController == null) {
-                this.windowControllerSyncObject.wait();
-            }
-        
-            return this.windowController;
-        }
-    }
-    
-    public void postToolCardControllers(ToolCardController[] toolCardControllers) throws RemoteException {
+    public void waitForTurnToBegin() throws IOException {
     
     }
     
     @Override
-    public ToolCardController[] waitForToolCardControllers() throws RemoteException {
-        return new ToolCardController[0];
-    }
-    
-    public void postPublicObjectiveCards(IObjectiveCard[] objectiveCards) throws RemoteException {
+    public void endTurn() throws IOException {
     
     }
     
     @Override
-    public ObjectiveCardController[] waitForPublicObjectiveCardControllers() throws RemoteException {
-        return new ObjectiveCardController[0];
-    }
-    
-    public void postPrivateObjectiveCard(IObjectiveCard objectiveCard) throws RemoteException {
+    public void waitForTurnToEnd() throws IOException {
     
     }
     
     @Override
-    public ObjectiveCardController waitForPrivateObjectiveCardController() throws RemoteException {
-        return null;
-    }
-    
-    public void postDraftPoolController(DraftPoolController draftPoolController) throws RemoteException {
-    
-    }
-    
-    @Override
-    public DraftPoolController waitForDraftPoolController() throws RemoteException {
-        return null;
-    }
-    
-    public void postRoundTrackController(RoundTrackController roundTrackController) throws RemoteException {
-    
-    }
-    
-    @Override
-    public RoundTrackController waitForRoundTrackController() throws RemoteException {
+    public MoveResponse tryToMove(Move move) throws IOException {
         return null;
     }
     
     @Override
-    public IMatch waitForUpdate() throws RemoteException, InterruptedException {
+    public void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException {
+    
+    }
+    
+    @Override
+    public Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() {
         return null;
     }
+    
+    @Override
+    public void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) {
+    
+    }
+    
+    @Override
+    public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
+        return null;
+    }
+    
+    @Override
+    public void postChosenEffects(IEffect[] effects) {
+    
+    }
+    
+    @Override
+    public IEffect waitForContinueToRepeat() {
+        return null;
+    }
+    
+    @Override
+    public void postContinueToRepeatChoice(boolean continueToRepeat) {
+    
+    }
+    
+    @Override
+    public IDie waitForSetShade() {
+        return null;
+    }
+    
+    @Override
+    public void postSetShade(Integer shade) {
+    
+    }
+    
     
     @Override
     public void close(Object... args) throws IOException {
@@ -166,5 +164,10 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     @Override
     public int hashCode() {
         return this.player.hashCode();
+    }
+    
+    @Override
+    public IMatch waitForUpdate() throws RemoteException, InterruptedException {
+        return null;
     }
 }
