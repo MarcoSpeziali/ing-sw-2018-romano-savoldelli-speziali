@@ -6,24 +6,18 @@ import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.WindowMockController;
 import it.polimi.ingsw.client.ui.gui.*;
-import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.net.mocks.*;
-import it.polimi.ingsw.utils.io.Resources;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -56,7 +50,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
 
     private void loadElements() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForUpdate()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
 
                     IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
@@ -74,7 +68,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         Node node = loader.load();
                         node.setOnMousePressed(event -> dialog.show());
                         ToolCardGUIView toolCardGUIView = loader.getController();
-                        toolCardGUIView.setController(toolCardControllers[i]);
+                        toolCardGUIView.setModel(toolCardControllers[i]);
 
                         content.setBody(node);
                         JFXButton use = new JFXButton("Use");
@@ -86,7 +80,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         cardsPane.add(node, i, 0);
                     }
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForPrivateObjectiveCardController()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForPrivateObjectiveCardController()))
                 .thenAccept(objectiveCardController -> Platform.runLater(unsafe(() -> {
                     JFXDialogLayout content = new JFXDialogLayout();
                     JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
@@ -96,7 +90,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     Node node = loader.load();
                     node.setOnMousePressed(event -> dialog.show());
                     ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
-                    objectiveCardGUIView.setController(objectiveCardController);
+                    objectiveCardGUIView.setModel(objectiveCardController);
 
                     content.setBody(node);
                     JFXButton cancel = new JFXButton("Back");
@@ -104,7 +98,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     content.setActions(cancel);
                     cardsPane.add(node, 0, 1);
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForPublicObjectiveCardControllers()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForPublicObjectiveCardControllers()))
                 .thenAccept(objectiveCardControllers -> Platform.runLater(unsafe(() -> {
                         for (int i=0; i<objectiveCardControllers.length; i++) {
                             JFXDialogLayout content = new JFXDialogLayout();
@@ -115,7 +109,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                             Node node = loader.load();
                             node.setOnMousePressed(event -> dialog.show());
                             ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
-                            objectiveCardGUIView.setController(objectiveCardControllers[i]);
+                            objectiveCardGUIView.setModel(objectiveCardControllers[i]);
 
                             content.setBody(node);
                             JFXButton cancel = new JFXButton("Back");
@@ -124,22 +118,22 @@ public class MatchGUIView extends GUIView<MatchController> {
                             cardsPane.add(node, i+1, 1);
                         }
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForDraftPoolController()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForDraftPoolController()))
                 .thenAccept(draftPoolController -> Platform.runLater(unsafe(() -> {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
                     Node node = loader.load();
                     DraftPoolGUIView draftPoolGUIView = loader.getController();
-                    draftPoolGUIView.setController(draftPoolController);
+                    draftPoolGUIView.setModel(draftPoolController);
                     // TODO Luca: add layout position (use anchors)
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForRoundTrackController()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForRoundTrackController()))
                 .thenAccept(roundTrackController -> Platform.runLater(unsafe(() -> {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
                     Node node = loader.load();
                     RoundTrackGUIView roundTrackGUIView = loader.getController();
-                    //roundTrackGUIView.setController(roundTrackController); TODO Luca: fix all these lacks
+                    //roundTrackGUIView.setModel(roundTrackController); TODO Luca: fix all these lacks
                     // TODO Luca: add layout position (use anchors)
                 })));
     }
@@ -152,7 +146,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         JFXDialogLayout content = new JFXDialogLayout();
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForWindowRequest()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForWindowRequest()))
                 .thenAccept(iWindows -> {
                     Platform.runLater(unsafe(() -> {
                         for (int i = 0; i < iWindows.length; i++) {
@@ -162,13 +156,13 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 Node window = loader.load();
                                 WindowGUIView guiView = loader.getController();
                                 try {
-                                    guiView.setController(new WindowMockController(iWindows[i]));
+                                    guiView.setModel(iWindows[i]);
                                     int finalI = i;
                                     window.setOnMousePressed(event -> {anchorPane.getChildren().add(window);
                                         AnchorPane.setBottomAnchor(window, 14.0);
                                         AnchorPane.setLeftAnchor(window, 14.0);
                                         try {
-                                            this.controller.respondToWindowRequest(iWindows[finalI]);
+                                            this.model.respondToWindowRequest(iWindows[finalI]);
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
@@ -207,7 +201,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
                     vBox.getChildren().addAll(node, label);
                     WindowGUIView windowGUIView = loader.getController();
-                    windowGUIView.setController(new WindowMockController(iWindow));
+                    windowGUIView.setModel(iWindow);
                     windowsPane.add(node, index.get() / 2, index.get() / 2); // TODO check indexes
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -219,7 +213,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     }
 
     private void setUpUpdateFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForUpdate()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
                 .thenAccept(this::setUpOpponentsWindows);
     }
 }

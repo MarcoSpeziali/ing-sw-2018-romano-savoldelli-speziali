@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.controllers.DieMockController;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.controllers.CellController;
-import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.net.mocks.ICell;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.application.Platform;
@@ -23,7 +22,7 @@ import java.util.logging.Level;
 
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
-public class CellGUIView extends GUIView<CellController> {
+public class CellGUIView extends GUIView<ICell> {
 
     @FXML
     public AnchorPane colorAnchorPane;
@@ -39,26 +38,14 @@ public class CellGUIView extends GUIView<CellController> {
 
     public Pane unallowedPane;
 
-    private String path;
 
     public CellGUIView() {
     }
 
-    private void diePicked() {
-        // this.cellController.onDiePicked();
-        // TODO: 20/06/18 First: correct using new implementation
-        // TODO: 20/06/18 Second: pick die returns a die, where should we put it? In the player? This should not be done here
-    }
-
-    private void diePut() {
-        // this.cellController.onDiePut(Player.getCurrentPlayer().pickDie());
-        // TODO: 20/06/18 First: correct using new implementation
-    }
 
     @Override
-    public void setController(CellController controller) throws RemoteException {
-        super.controller = controller;
-        ICell iCell = controller.getCell();
+    public void setModel(ICell iCell) {
+        super.model = iCell;
         if (iCell.getShade() > 0) {
             String resourceName = String.format("CELL_%d", iCell.getShade());
             String relativePath = Constants.Resources.valueOf(resourceName).getRelativePath();
@@ -81,6 +68,7 @@ public class CellGUIView extends GUIView<CellController> {
 
     }
 
+    @Deprecated
     public void onUpdateReceived(ICell update) {
         Platform.runLater(() -> {
             if (!update.isOccupied()) {
@@ -90,7 +78,7 @@ public class CellGUIView extends GUIView<CellController> {
                 loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
                 DieGUIView dieGUIView = loader.getController();
                 try {
-                    dieGUIView.setController(new DieMockController(update.getDie()));
+                    dieGUIView.setModel(update.getDie());
                     defaultDieAnchorPane = dieAnchorPane;
                     dieAnchorPane = loader.load();
 
@@ -103,8 +91,8 @@ public class CellGUIView extends GUIView<CellController> {
     }
 
     private void setUpUpdateFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.controller.waitForUpdate()))
-                .thenAccept(this::onUpdateReceived);
+        //CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
+        //        .thenAccept(this::onUpdateReceived);
     }
 
     @Override

@@ -52,7 +52,7 @@ public class ToolCardDialogViewTest extends Application {
         root.getChildren().add(button1);
         content.setActions(button);
         DieGUIView controller = loader.getController();
-        //controller.setDie(new Die(5, GlassColor.BLUE));
+        //model.setDie(new Die(5, GlassColor.BLUE));
         content.setHeading(new Text("Die"));
         content.setBody(die);
         content.setAlignment(Pos.CENTER);

@@ -34,7 +34,7 @@ public class MatchGUITest extends Application {
         Scene scene = new Scene(root, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
         MatchGUIView matchGUIView = loader.getController();
 
-        matchGUIView.setController(new MatchController() {
+        matchGUIView.setModel(new MatchController() {
     
             @Override
             public void init(Object... args) throws IOException {

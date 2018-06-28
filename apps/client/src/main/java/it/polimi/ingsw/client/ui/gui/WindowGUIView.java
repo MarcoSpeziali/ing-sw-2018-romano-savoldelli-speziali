@@ -3,19 +3,16 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.controllers.DieInteractionException;
 import it.polimi.ingsw.controllers.WindowController;
-import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
@@ -24,7 +21,7 @@ import javafx.scene.shape.Circle;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
-public class WindowGUIView extends GUIView<WindowController> {
+public class WindowGUIView extends GUIView<IWindow> {
 
     @FXML
     public GridPane gridPane;
@@ -38,11 +35,9 @@ public class WindowGUIView extends GUIView<WindowController> {
     public WindowGUIView() {
     }
 
-    public void setController(WindowController windowController) throws IOException {
+    public void setModel(IWindow iWindow) throws IOException {
 
-        super.setController(windowController);
-
-        IWindow iWindow = windowController.getWindow();
+        super.setModel(iWindow);
 
         nameLabel.setText(iWindow.getId());
         gridPane.setVgap(10);
@@ -54,7 +49,7 @@ public class WindowGUIView extends GUIView<WindowController> {
                 loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
                 Node cell = loader.load();
                 CellGUIView guiView = loader.getController();
-                guiView.setController(windowController.getCellController(i, j));
+                guiView.setModel(model.getCells()[i][j]);
 
                 cell.setOnDragDropped(event -> {
 
@@ -66,18 +61,19 @@ public class WindowGUIView extends GUIView<WindowController> {
                         return; // do nothing
                     }
 
-                    try {
+                    //try
+                    {
                         cell.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
 
-                        this.controller.tryToPut(heldDie, Move.getCurrentMove().getDraftPoolPickPosition());
+                        //this.model.tryToPut(heldDie, Move.getCurrentMove().getDraftPoolPickPosition());
                     }
-                    catch (DieInteractionException e) {
+                    /*catch (DieInteractionException e) {
                         cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
                         cell.setDisable(true);
                     }
                     catch (RemoteException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 });
 
                 cell.setOnDragDetected(event -> {

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
-public class DieGUIView extends GUIView<DieController> {
+public class DieGUIView extends GUIView<IDie> {
 
     @FXML
     public ImageView imageView;
@@ -32,10 +32,8 @@ public class DieGUIView extends GUIView<DieController> {
     }
 
     @Override
-    public void setController(DieController dieController) throws IOException {
-        super.setController(dieController);
-
-        IDie iDie = dieController.getDie();
+    public void setModel(IDie iDie) throws IOException {
+        super.setModel(model);
 
         anchorPane.setStyle("-fx-background-radius: 10;"+
                 "-fx-background-color: #" + Integer.toHexString(iDie.getColor().getHex())

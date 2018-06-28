@@ -4,10 +4,10 @@ import java.io.IOException;
 
 public abstract class View<T> {
 
-    protected T controller;
+    protected T model;
 
-    public void setController(T controller) throws IOException {
-        this.controller = controller;
+    public void setModel(T model) throws IOException {
+        this.model = model;
         this.init();
     }
 

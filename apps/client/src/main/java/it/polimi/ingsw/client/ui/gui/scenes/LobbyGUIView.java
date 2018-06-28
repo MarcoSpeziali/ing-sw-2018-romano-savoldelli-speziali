@@ -133,7 +133,7 @@ public class LobbyGUIView implements Initializable {
                     matchController.init(iMatch.getId());
 
                     MatchGUIView matchGUIView = loader.getController();
-                    matchGUIView.setController(matchController);
+                    matchGUIView.setModel(matchController);
 
                     // MatchGUIView gameDashboardGUIController = loader.getController();
                     // gameDashboardGUIController...
