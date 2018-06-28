@@ -54,12 +54,12 @@ public class MatchGUIView {
 
     public void init() {
         chooseWindow();
-        //loadElements();
+        loadElements();
         setUpUpdateFuture();
     }
 
-  /*  private void loadElements() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForToolCards()))
+    private void loadElements() {
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForToolCardControllers()))
                 .thenAccept(toolCardControllers -> Platform.runLater(unsafe(() -> {
                     for (int i=0; i<toolCardControllers.length; i++) {
                         JFXDialogLayout content = new JFXDialogLayout();
@@ -82,7 +82,7 @@ public class MatchGUIView {
                         cardsPane.add(node, i, 0);
                     }
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForPrivateObjectiveCard()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForPrivateObjectiveCardController()))
                 .thenAccept(objectiveCardController -> Platform.runLater(unsafe(() -> {
                     JFXDialogLayout content = new JFXDialogLayout();
                     JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
@@ -100,7 +100,7 @@ public class MatchGUIView {
                     content.setActions(cancel);
                     cardsPane.add(node, 0, 1);
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForPublicObjectiveCards()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForPublicObjectiveCardControllers()))
                 .thenAccept(objectiveCardControllers -> Platform.runLater(unsafe(() -> {
                         for (int i=0; i<objectiveCardControllers.length; i++) {
                             JFXDialogLayout content = new JFXDialogLayout();
@@ -120,7 +120,7 @@ public class MatchGUIView {
                             cardsPane.add(node, i+1, 1);
                         }
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForDraftPool()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForDraftPoolController()))
                 .thenAccept(draftPoolController -> Platform.runLater(unsafe(() -> {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
@@ -129,7 +129,7 @@ public class MatchGUIView {
                     draftPoolGUIView.setController(draftPoolController);
                     // TODO Luca: add layout position (use anchors)
                 })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForRoundTrack()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForRoundTrackController()))
                 .thenAccept(roundTrackController -> Platform.runLater(unsafe(() -> {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
@@ -138,7 +138,7 @@ public class MatchGUIView {
                     //roundTrackGUIView.setController(roundTrackController); TODO Luca: fix all these lacks
                     // TODO Luca: add layout position (use anchors)
                 })));
-    }*/
+    }
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
@@ -183,34 +183,36 @@ public class MatchGUIView {
                 })));
     }
     
-   /* private void setOpponentsWindows(IMatch i) { //TODO change me
-                    Platform.runLater(() -> {
-                        AtomicInteger index = new AtomicInteger();
-                        map.forEach((ILivePlayer, IWindow) -> {
-                                    IWindow iWindow = map.get(ILivePlayer);
-                                    FXMLLoader loader = new FXMLLoader();
-                                    loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
-                                    try {
-                                        Node node = loader.load();
-                                        VBox vBox = new VBox();
-                                        Label label = new Label(ILivePlayer.getPlayer().getUsername());
-                                        label.setAlignment(Pos.CENTER);
-                                        label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
-                                        vBox.getChildren().addAll(node, label);
-                                        WindowGUIView windowGUIView = loader.getController();
-                                        windowGUIView.setController(new WindowMockController(iWindow));
-                                        windowsPane.add(node, index.get() / 2, index.get() / 2); // TODO check indexes
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    index.getAndIncrement();
-                        });
-                        setUpUpdateFuture();
-                    });
-    }*/
+    private void setUpOpponentsWindows(IMatch update) { //TODO change me
+        Platform.runLater(() -> {
+            AtomicInteger index = new AtomicInteger();
+
+            for (ILivePlayer player: update.getPlayers()) {
+
+                IWindow iWindow = player.getWindow();
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+                try {
+                    Node node = loader.load();
+                    VBox vBox = new VBox();
+                    Label label = new Label(player.getPlayer().getUsername());
+                    label.setAlignment(Pos.CENTER);
+                    label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
+                    vBox.getChildren().addAll(node, label);
+                    WindowGUIView windowGUIView = loader.getController();
+                    windowGUIView.setController(new WindowMockController(iWindow));
+                    windowsPane.add(node, index.get() / 2, index.get() / 2); // TODO check indexes
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    }
+                    index.getAndIncrement();
+                }
+            setUpUpdateFuture();
+        });
+    }
 
     private void setUpUpdateFuture() {
-        /*CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForUpdate()))
-                .thenAccept();*/
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForUpdate()))
+                .thenAccept(this::setUpOpponentsWindows);
     }
 }
