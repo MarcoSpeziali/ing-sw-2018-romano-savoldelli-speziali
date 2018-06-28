@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="outerPane" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView">
+<StackPane fx:id="outerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView">
    <children>
-      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="776.0" prefWidth="1241.0">
-         <children>
-            <GridPane fx:id="cardsPane" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-            </GridPane>
-            <GridPane fx:id="windowsPane" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
-            </GridPane>
-         </children>
-      </AnchorPane>
+      <BorderPane fx:id="borderPane" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0">
+         <top>
+            <HBox fx:id="hBoxWindows" prefHeight="180.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </HBox>
+         </top>
+         <left>
+            <VBox fx:id="vBoxToolCard" prefHeight="540.0" prefWidth="372.0" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <VBox fx:id="vBoxObjectiveCard" prefHeight="540.0" prefWidth="370.0" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
    </children>
 </StackPane>

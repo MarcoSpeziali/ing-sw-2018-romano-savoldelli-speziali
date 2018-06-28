@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class ObjectiveCardGUIView extends GUIView<ObjectiveCardController> {
+public class ObjectiveCardGUIView extends GUIView<IObjectiveCard> {
     @FXML
     public ImageView imageView;
     @FXML
@@ -23,9 +23,8 @@ public class ObjectiveCardGUIView extends GUIView<ObjectiveCardController> {
     }
 
 
-    public void setController(ObjectiveCardController objectiveCardController) throws IOException {
-        super.setController(objectiveCardController);
-        IObjectiveCard iObjectiveCard = objectiveCardController.getObjectiveCard();
+    public void setModel(IObjectiveCard iObjectiveCard) throws IOException {
+        super.setModel(model);
         title.setText(Constants.Strings.toLocalized(Constants.Strings.getObjectiveCardTitle(iObjectiveCard.getId())));
         description.setText(Constants.Strings.toLocalized(Constants.Strings.getObjectiveCardDescription(iObjectiveCard.getId())));
         String path = Constants.Resources.valueOf(String.format("OBJECTIVE_CARD_%s", iObjectiveCard.getId().toUpperCase())).getRelativePath();
