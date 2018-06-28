@@ -70,7 +70,7 @@ public class MatchGUITest extends Application {
     
             @Override
             public void respondToWindowRequest(IWindow window) throws RemoteException {
-        
+
             }
     
             @Override
@@ -103,7 +103,7 @@ public class MatchGUITest extends Application {
                 return null;
             }
         });
-        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
