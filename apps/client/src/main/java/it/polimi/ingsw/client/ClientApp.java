@@ -29,7 +29,7 @@ public class ClientApp {
             createProjectsFolders();
 
             // builds the settings
-            Settings.getSettings();
+            Settings.getSettings().save();
 
             // sets the rmi hostname
             System.setProperty("java.rmi.server.hostname", Settings.getSettings().getServerRMIAddress());

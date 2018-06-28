@@ -2,31 +2,27 @@ package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.models.Bag;
 import it.polimi.ingsw.models.ObjectiveCard;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.server.controllers.DraftPoolControllerImpl;
 import it.polimi.ingsw.server.controllers.RoundTrackControllerImpl;
 import it.polimi.ingsw.server.controllers.ToolCardControllerImpl;
 import it.polimi.ingsw.server.controllers.WindowControllerImpl;
+import it.polimi.ingsw.server.sql.DatabaseMatch;
+import it.polimi.ingsw.server.sql.DatabasePlayer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.sql.SQLException;
+import java.util.*;
 
 // TODO: docs
 public class MatchObjectsManager {
 
-    private static final Map<Integer, MatchObjectsManager> instances = new HashMap<>();
+    private static final Map<DatabaseMatch, MatchObjectsManager> instances = new HashMap<>();
 
-    public static MatchObjectsManager getManagerForMatch(IMatch match) {
-        return getManagerForMatch(match.getId());
+    public static MatchObjectsManager getManagerForMatch(DatabaseMatch match) {
+        return instances.computeIfAbsent(match, MatchObjectsManager::new);
     }
 
-    public static MatchObjectsManager getManagerForMatch(int matchId) {
-        return instances.computeIfAbsent(matchId, MatchObjectsManager::new);
-    }
-
-    private final int matchId;
+    private final DatabaseMatch match;
 
     private Bag bag;
     private DraftPoolControllerImpl draftPoolController;
@@ -37,8 +33,8 @@ public class MatchObjectsManager {
     private Map<IPlayer, WindowControllerImpl> playerWindowMap;
     private Map<IPlayer, ObjectiveCard> playerPrivateObjectiveCardMap;
 
-    private MatchObjectsManager(int matchId) {
-        this.matchId = matchId;
+    private MatchObjectsManager(DatabaseMatch match) {
+        this.match = match;
 
         playerWindowMap = new HashMap<>();
         playerPrivateObjectiveCardMap = new HashMap<>();
@@ -104,6 +100,30 @@ public class MatchObjectsManager {
         this.playerPrivateObjectiveCardMap.put(player, objectiveCard);
     }
 
+    public IMatch buildMatchMockForPlayer(IPlayer player) {
+        return new MatchMock(
+                this.match.getId(),
+                this.match.getStartingTime(),
+                this.match.getEndingTime(),
+                new LobbyMock(this.match.getLobby()),
+                
+        )
+    }
+    
+    public ILivePlayer[] getLivePlayersForPlayer(DatabasePlayer databasePlayer) throws SQLException {
+        IPlayer[] currentPlayers = this.match.getPlayers();
+        List<IPlayer> leftPlayers = this.match.getLeftPlayers();
+        
+        List<IPlayer> allPlayers = new ArrayList<>(currentPlayers.length + leftPlayers.size());
+        allPlayers.addAll(leftPlayers);
+        allPlayers.addAll(List.of(currentPlayers));
+        
+        return allPlayers.stream()
+                .map(player -> {
+                    
+                })
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -115,7 +135,7 @@ public class MatchObjectsManager {
         }
 
         MatchObjectsManager that = (MatchObjectsManager) o;
-        return matchId == that.matchId;
+        return match.getId() == that.match.getId();
     }
 
     @Override

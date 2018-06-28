@@ -13,9 +13,6 @@ import java.util.function.Function;
 public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListener {
 
     private Window window;
-    private Window windowUpdate;
-    private final Object syncObject = new Object();
-    
     private final CellControllerImpl[][] cellControllers;
 
     public WindowControllerImpl(Window window, Function<Cell, CellControllerImpl> cellControllerFunction) {
@@ -77,33 +74,11 @@ public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListen
         throw new DieInteractionException();
     }
     
-    public Window waitForUpdate() throws InterruptedException {
-        synchronized (syncObject) {
-            while (windowUpdate == null) {
-                syncObject.wait();
-            }
-        
-            Window update = windowUpdate;
-            this.window = update;
-            this.windowUpdate = null;
-        
-            return update;
-        }
-    }
-    
     @Override
     public void onDiePicked(Die die, Integer location) {
-        synchronized (syncObject) {
-            windowUpdate = this.getWindow();
-            syncObject.notifyAll();
-        }
     }
     
     @Override
     public void onDiePut(Die die, Integer location) {
-        synchronized (syncObject) {
-            windowUpdate = this.getWindow();
-            syncObject.notifyAll();
-        }
     }
 }

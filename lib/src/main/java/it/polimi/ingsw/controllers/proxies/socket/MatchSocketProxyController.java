@@ -1,19 +1,26 @@
 package it.polimi.ingsw.controllers.proxies.socket;
 
-import it.polimi.ingsw.controllers.*;
+import it.polimi.ingsw.controllers.MatchController;
+import it.polimi.ingsw.controllers.NotEnoughTokensException;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
+import it.polimi.ingsw.net.requests.MoveRequest;
 import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.responses.MigrationResponse;
+import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.net.responses.WindowResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
+import it.polimi.ingsw.utils.Range;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Map;
+import java.util.Set;
 
 public class MatchSocketProxyController implements MatchController {
     
@@ -82,47 +89,89 @@ public class MatchSocketProxyController implements MatchController {
     }
     
     @Override
-    public WindowController waitForWindowController() throws RemoteException, InterruptedException {
+    public void waitForTurnToBegin() throws IOException {
+    
+    }
+    
+    @Override
+    public void endTurn() throws IOException {
+    
+    }
+    
+    @Override
+    public void waitForTurnToEnd() throws IOException {
+    
+    }
+    
+    @Override
+    public MoveResponse tryToMove(Move move) throws IOException {
+        return (MoveResponse) this.persistentSocketInteractionProvider.getSyncResponseFor(
+                new Request<>(
+                        new Header(
+                                this.clientToken,
+                                EndPointFunction.MATCH_PLAYER_MOVE_REQUEST
+                        ),
+                        new MoveRequest(
+                                this.matchId,
+                                move
+                        )
+                )
+        ).getBody();
+    }
+    
+    @Override
+    public void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException {
+    
+    }
+    
+    @Override
+    public Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() {
         return null;
     }
     
     @Override
-    public ToolCardController[] waitForToolCardControllers() throws RemoteException {
-        return new ToolCardController[0];
+    public void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) {
+    
     }
     
     @Override
-    public ObjectiveCardController[] waitForPublicObjectiveCardControllers() throws RemoteException {
-        return new ObjectiveCardController[0];
-    }
-    
-    @Override
-    public ObjectiveCardController waitForPrivateObjectiveCardController() throws RemoteException {
+    public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
         return null;
     }
     
     @Override
-    public DraftPoolController waitForDraftPoolController() throws RemoteException {
+    public void postChosenEffects(IEffect[] effects) {
+    
+    }
+    
+    @Override
+    public IEffect waitForContinueToRepeat() {
         return null;
     }
     
     @Override
-    public RoundTrackController waitForRoundTrackController() throws RemoteException {
+    public void postContinueToRepeatChoice(boolean continueToRepeat) {
+    
+    }
+    
+    @Override
+    public IDie waitForSetShade() {
         return null;
     }
     
     @Override
-    public void onUpdateReceived(IMatch update) throws RemoteException {
+    public void postSetShade(Integer shade) {
     
+    }
+    
+    
+    @Override
+    public void close(Object... args) throws IOException {
+        this.persistentSocketInteractionProvider.close();
     }
     
     @Override
     public IMatch waitForUpdate() throws RemoteException, InterruptedException {
         return null;
-    }
-    
-    @Override
-    public void close(Object... args) throws IOException {
-        this.persistentSocketInteractionProvider.close();
     }
 }

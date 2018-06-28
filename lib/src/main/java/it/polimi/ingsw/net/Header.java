@@ -23,24 +23,34 @@ public class Header implements JSONSerializable {
     @JSONElement("endpoint")
     private EndPointFunction endPointFunction;
 
-    public Header() {
-    }
+    @JSONElement("uuid")
+    private final Integer uuid;
 
     public Header(String clientToken) {
-        this(clientToken, null);
+        this(clientToken, null, null);
     }
 
     public Header(EndPointFunction endPointFunction) {
-        this(null, endPointFunction);
+        this(null, endPointFunction, null);
+    }
+    
+    public Header(EndPointFunction endPointFunction, Integer uuid) {
+        this(null, endPointFunction, uuid);
+    }
+    
+    public Header(String clientToken, EndPointFunction endPointFunction) {
+        this(clientToken, endPointFunction, null);
     }
 
     @JSONDesignatedConstructor
     public Header(
             @JSONElement("client-token") String clientToken,
-            @JSONElement("endpoint") EndPointFunction endPointFunction
+            @JSONElement("endpoint") EndPointFunction endPointFunction,
+            @JSONElement("uuid") Integer uuid
     ) {
         this.clientToken = clientToken;
         this.endPointFunction = endPointFunction;
+        this.uuid = uuid;
     }
 
     /**

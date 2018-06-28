@@ -9,9 +9,9 @@
       <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="776.0" prefWidth="1241.0">
          <children>
             <GridPane fx:id="cardsPane" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-      </GridPane>
+            </GridPane>
             <GridPane fx:id="windowsPane" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
-      </GridPane>
+            </GridPane>
          </children>
       </AnchorPane>
    </children>

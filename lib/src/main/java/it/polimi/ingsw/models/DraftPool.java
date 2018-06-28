@@ -13,7 +13,6 @@ import it.polimi.ingsw.net.mocks.IDraftPool;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDraftPool {
 
@@ -101,8 +100,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
     
     @Override
     public Map<Integer, IDie> getLocationDieMap() {
-        return IntStream.range(0, this.maxNumberOfDice)
-                .boxed()
+        return this.getLocations().stream()
                 .collect(Collectors.toMap(o -> o, o -> new DieMock(this.dice[o])));
     }
     

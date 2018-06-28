@@ -19,4 +19,16 @@ public interface IMatch extends JSONSerializable {
 
     @JSONElement("players")
     ILivePlayer[] getPlayers();
+    
+    @JSONElement("draft-pool")
+    IDraftPool getDraftPool();
+    
+    @JSONElement("round-track")
+    IRoundTrack getRoundTrack();
+    
+    @JSONElement("objective-cards")
+    IObjectiveCard[] getObjectiveCards();
+    
+    @JSONElement("tool-cards")
+    IToolCard[] getToolCards();
 }

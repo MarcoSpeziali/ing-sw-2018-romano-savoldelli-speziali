@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class DatabaseMatch implements IMatch {
+public class DatabaseMatch {
 
     private static final long serialVersionUID = 6299805944235610022L;
 
@@ -40,22 +40,18 @@ public class DatabaseMatch implements IMatch {
         this.endingTime = endingDate == null ? -1L : endingDate.getTime();
     }
 
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public long getStartingTime() {
         return startingTime;
     }
 
-    @Override
     public long getEndingTime() {
         return endingTime;
     }
 
-    @Override
     public ILobby getLobby() {
         String query = String.format(
                 "SELECT l.* FROM match m JOIN lobby l ON m.from_lobby = l.id WHERE m.id = %d",
@@ -70,11 +66,22 @@ public class DatabaseMatch implements IMatch {
         }
     }
 
-    @Override
-    public ILivePlayer[] getPlayers() {
+    public IPlayer[] getPlayers() {
         return Arrays.stream(this.getDatabasePlayers())
-                .map(LivePlayerMock::new)
-                .toArray(ILivePlayer[]::new);
+                .map(PlayerMock::new)
+                .toArray(IPlayer[]::new);
+    }
+    
+    public MatchMock toMatchMock() {
+        return new MatchMock(
+                getId(),
+                getStartingTime(),
+                getEndingTime(),
+                new LobbyMock(getLobby()),
+                Arrays.stream(getPlayers())
+                        .map(LivePlayerMock::new)
+                        .toArray(LivePlayerMock[]::new)
+        );
     }
     
     public DatabasePlayer[] getDatabasePlayers() {

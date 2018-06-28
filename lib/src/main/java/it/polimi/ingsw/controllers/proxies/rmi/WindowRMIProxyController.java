@@ -40,12 +40,12 @@ public class WindowRMIProxyController extends UnicastRemoteObject implements Win
     
     @Override
     public Die tryToPick(IDie die) throws RemoteException {
-        return this.proxiedController.tryToPick(die);
+        return null;
     }
     
     @Override
     public Die tryToPick(Integer location) throws RemoteException {
-        return this.proxiedController.tryToPick(location);
+        return null;
     }
     
     @Override
