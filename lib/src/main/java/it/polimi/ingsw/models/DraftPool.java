@@ -20,6 +20,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
     
     private final byte maxNumberOfDice;
     private Die[] dice;
+    private int numberOfPlayers;
 
     private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
     private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
@@ -27,9 +28,10 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
     /**
      * Sets up a new {@link DraftPool}.
      */
-    public DraftPool(byte maxNumberOfDice) {
+    public DraftPool(byte maxNumberOfDice, int numberOfPlayers) {
         this.maxNumberOfDice = maxNumberOfDice;
         this.dice = new Die[maxNumberOfDice];
+        this.numberOfPlayers = numberOfPlayers;
     }
     
     /**
