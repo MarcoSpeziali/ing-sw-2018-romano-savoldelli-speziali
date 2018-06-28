@@ -8,7 +8,7 @@ import java.util.List;
 
 public class WindowMock implements IWindow {
 
-    private static final long serialVersionUID = -4356717552403331148L;
+    private static final long serialVersionUID = -1892439094035073607L;
 
     private final String id;
     private final int difficulty;
