@@ -24,7 +24,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 

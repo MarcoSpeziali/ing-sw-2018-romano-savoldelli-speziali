@@ -78,8 +78,7 @@ public class AnonymousClientHandler extends ClientHandler {
                     .log(Level.WARNING, "Error while handling client: " + socketAddress, e);
         }
     }
-
-
+    
     /**
      * Tries to migrate from an {@link AnonymousClientHandler} to an {@link AuthenticatedClientHandler}.
      * It returns {@code true} if the migration was successful, {@code false} otherwise. If {@code true}

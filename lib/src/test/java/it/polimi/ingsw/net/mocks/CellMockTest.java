@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class CellMockTest {
     private DieMock dieMock = new DieMock(3, GlassColor.PURPLE, 0);
-    private CellMock cellMock = new CellMock(0,GlassColor.PURPLE, dieMock);
+    private CellMock cellMock = new CellMock(0, GlassColor.PURPLE, dieMock, 0);
 
     @Test
     void testSerializationAndDeserialization(){
