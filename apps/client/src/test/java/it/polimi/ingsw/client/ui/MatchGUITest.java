@@ -14,7 +14,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class MatchGUITest extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Constants.Resources.MATCH_FXML.getURL());
         Parent root = loader.load();
-        Scene scene = new Scene(root, Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
+        Scene scene = new Scene(root, 1280, 720);
         MatchGUIView matchGUIView = loader.getController();
 
         matchGUIView.setModel(new MatchController() {

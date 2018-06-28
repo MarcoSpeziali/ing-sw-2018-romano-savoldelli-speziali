@@ -24,16 +24,19 @@ public class ObjectiveCardMock implements  IObjectiveCard{
     }
 
     @Override
+    @JSONElement("id")
     public String getId() {
         return this.id;
     }
 
     @Override
+    @JSONElement("visibility")
     public CardVisibility getVisibility() {
         return this.visibility;
     }
 
     @Override
+    @JSONElement("objective")
     public IObjective getObjective() {
         return this.objective;
     }

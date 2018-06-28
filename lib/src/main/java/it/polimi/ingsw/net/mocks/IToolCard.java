@@ -8,4 +8,5 @@ public interface IToolCard extends ICard {
 
     @JSONElement("effect")
     IEffect getEffect();
+
 }
