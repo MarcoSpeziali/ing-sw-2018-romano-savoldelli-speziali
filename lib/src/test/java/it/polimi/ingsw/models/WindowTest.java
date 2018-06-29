@@ -34,7 +34,7 @@ class WindowTest {
                 }
         };
 
-        this.window = new Window(22, 3, 4, null, cells);
+        this.window = new Window(22, 3, 4, "test", cells);
     }
 
     @Test

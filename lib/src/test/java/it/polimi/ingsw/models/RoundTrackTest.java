@@ -52,7 +52,7 @@ class RoundTrackTest {
     void pickDie() {
         roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
 
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> roundTrack.pickDie(die3));
+        Assertions.assertSame(die3, roundTrack.pickDie(die3));
     }
 
     @Test

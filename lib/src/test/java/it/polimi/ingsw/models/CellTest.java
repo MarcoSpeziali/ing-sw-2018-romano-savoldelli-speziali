@@ -1,6 +1,7 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.locations.EmptyLocationException;
 import it.polimi.ingsw.core.locations.FullLocationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,9 +56,7 @@ class CellTest {
 
     @Test
     void pickDieTest() {
-        Assertions.assertNull(blankCell.pickDie());
-        blankCell.putDie(this.die);
-        Assertions.assertEquals(this.die, blankCell.pickDie());
+        Assertions.assertThrows(EmptyLocationException.class, () -> blankCell.pickDie());
     }
 
     @Test

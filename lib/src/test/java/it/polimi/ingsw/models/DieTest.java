@@ -38,6 +38,7 @@ class DieTest {
         Assertions.assertEquals(GlassColor.GREEN, die.getColor());
     }
 
+    /*
     @Test
     void equalsTest() {
         Die d1 = new Die(5, GlassColor.RED);
@@ -50,18 +51,11 @@ class DieTest {
         Assertions.assertEquals(d1, d2);
         Assertions.assertNotEquals(d1, new Object());
     }
+    */
 
     @Test
     void toStringTest() {
         Assertions.assertEquals("Die(4, blue)", die.toString());
-    }
-
-
-    @Test
-    void hashCodeTest() {
-        Die d1 = new Die(5, GlassColor.RED);
-        Die d2 = new Die(5, GlassColor.RED);
-        Assertions.assertEquals(d1.hashCode(), d2.hashCode());
     }
 
     /*@Test
