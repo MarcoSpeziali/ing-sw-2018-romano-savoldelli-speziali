@@ -13,10 +13,10 @@ public class PlayerTurnList {
     private static final int NUMBER_OF_TURNS_PER_PLAYER = 2;
     private final int numberOfRounds;
     private final HashSet<IPlayer> removedPlayers;
-    private final BiHashMap<IPlayer, Integer, HashSet<Integer>> roundsToSkipForPlayer = new BiHashMap<>();
+    private final BiHashMap<IPlayer, Byte, HashSet<Byte>> roundsToSkipForPlayer = new BiHashMap<>();
     
-    private int currentRound;
-    private int currentTurn;
+    private byte currentRound;
+    private byte currentTurn;
     
     /**
      * Gets the current round.
@@ -62,7 +62,7 @@ public class PlayerTurnList {
             for (int j = isEvenRound ? 0 : (shuffledArray.length - 1);
                  (isEvenRound && j < shuffledArray.length) || (!isEvenRound && j > 0);
                  j += isEvenRound ? 1 : -1) {
-                this.turns.add(new PlayerTurn(shuffledArray[j], i));
+                this.turns.add(new PlayerTurn(shuffledArray[j], (byte) i));
             }
         }
         
@@ -117,14 +117,14 @@ public class PlayerTurnList {
      * @param turn the turn to skip in the {@code round}
      * @param round the round to skip
      */
-    public void skipPlayerTurn(IPlayer player, final int turn, final int round) {
+    public void skipPlayerTurn(IPlayer player, final byte turn, final byte round) {
         // if the round is future the player gets registered to skip the turn in the round
         if (round > currentRound) {
             // if the pair key(player, round) is absent a new HashSet is created and the turn is added
-            this.roundsToSkipForPlayer.computeIfAbsent(player, round, (p, r) -> new HashSet<>(Set.of(turn)));
+            this.roundsToSkipForPlayer.computeIfAbsent(player, round, (p, r) -> new HashSet<>(Set.of((byte) turn)));
             // if the pair key(player, round) is present the turn is added
             this.roundsToSkipForPlayer.computeIfPresent(player, round, (p, r, hashSet) -> {
-                hashSet.add(turn);
+                hashSet.add((byte) turn);
                 return hashSet;
             });
         }
@@ -243,18 +243,18 @@ public class PlayerTurnList {
      * @param turn the turn to test
      * @return if the should skip the turn for this round
      */
-    private boolean scheduledToSkip(IPlayer player, int turn) {
-        HashSet<Integer> turnToSkip = this.roundsToSkipForPlayer.getOrDefault(player, currentRound, null);
+    private boolean scheduledToSkip(IPlayer player, byte turn) {
+        HashSet<Byte> turnToSkip = this.roundsToSkipForPlayer.getOrDefault(player, currentRound, null);
         return turnToSkip != null && turnToSkip.contains(turn);
     }
     
     private static class PlayerTurn {
         
         private final IPlayer player;
-        private final int turn;
+        private final byte turn;
         private boolean shouldSkip;
         
-        private PlayerTurn(IPlayer player, int turn) {
+        private PlayerTurn(IPlayer player, byte turn) {
             this.player = player;
             this.turn = turn;
         }
@@ -263,7 +263,7 @@ public class PlayerTurnList {
             return player;
         }
     
-        public int getTurn() {
+        public byte getTurn() {
             return turn;
         }
     

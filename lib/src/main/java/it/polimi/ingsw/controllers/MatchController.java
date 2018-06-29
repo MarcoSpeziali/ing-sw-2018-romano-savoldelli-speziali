@@ -26,7 +26,7 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
     void waitForTurnToEnd() throws IOException;
     
     // ------ PLAYER MOVES ------
-    MoveResponse tryToMove(Move move) throws IOException;
+    MoveResponse tryToMove(Move move) throws IOException, InterruptedException;
     void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException;
     
         // ------ TOOL CARDS CALLBACK ------

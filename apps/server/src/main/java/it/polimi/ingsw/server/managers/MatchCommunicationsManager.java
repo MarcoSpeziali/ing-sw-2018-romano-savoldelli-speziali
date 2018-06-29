@@ -4,15 +4,10 @@ import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IWindow;
-import it.polimi.ingsw.net.mocks.MatchMock;
-import it.polimi.ingsw.net.mocks.WindowMock;
+import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.server.events.EventDispatcher;
-import it.polimi.ingsw.server.events.EventType;
 import it.polimi.ingsw.server.events.MatchCommunicationsListener;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.net.sockets.middlewares.MatchControllerMiddleware;
@@ -40,11 +35,13 @@ public class MatchCommunicationsManager {
      */
     private final Map<DatabasePlayer, AuthenticatedClientHandler> socketPlayersHandler = new HashMap<>();
     private final IMatch match;
-    private final MatchManager matchManager;
+    private final MatchCommunicationsListener matchCommunicationsListener;
     
-    public MatchCommunicationsManager(IMatch match, MatchManager matchManager) {
+    // ------ LYFE CYCLE ------
+    
+    public MatchCommunicationsManager(IMatch match, MatchCommunicationsListener matchCommunicationsListener) {
         this.match = match;
-        this.matchManager = matchManager;
+        this.matchCommunicationsListener = matchCommunicationsListener;
     }
 
     public void addPlayer(DatabasePlayer databasePlayer, MatchRMIProxyController matchController) {
@@ -66,7 +63,9 @@ public class MatchCommunicationsManager {
                 new MatchControllerMiddleware(this)
         ));
     }
-
+    
+    // ------ MODELS ------
+    
     public void sendWindowsToChoose(Map<DatabasePlayer, IWindow[]> playerToWindowsMap) throws IOException {
         this.forEachRmi((databasePlayer, matchRMIProxyController) -> {
             matchRMIProxyController.postWindowsToChoose(playerToWindowsMap.get(databasePlayer));
@@ -115,7 +114,19 @@ public class MatchCommunicationsManager {
             e.tryUnwrap(RemoteException.class).tryFinalUnwrap(IOException.class);
         }
     }
-
+    
+    // ------ TURNS ------
+    
+    public void notifyPlayerTurnBegin(IPlayer player) {
+    
+    }
+    
+    public void notifyPlayerTurnEnd(IPlayer player) {
+    
+    }
+    
+    // ------ MOVE ------
+    
     public void sendPositiveResponseForMoveToPlayer(DatabasePlayer databasePlayer) throws IOException {
         this.sendMoveResponse(databasePlayer, new MoveResponse(
                 this.match.getId(),
@@ -149,7 +160,9 @@ public class MatchCommunicationsManager {
             e.tryUnwrap(RemoteException.class).tryFinalUnwrap(IOException.class);
         }
     }
-
+    
+    // ------ UTILS ------
+    
     public void forEachRmi(BiConsumer<DatabasePlayer, MatchRMIProxyController> biConsumer) {
         this.rmiPlayersHandler.forEach(biConsumer);
     }
@@ -157,12 +170,10 @@ public class MatchCommunicationsManager {
     public void forEachSocket(BiConsumer<DatabasePlayer, AuthenticatedClientHandler> biConsumer) {
         this.socketPlayersHandler.forEach(biConsumer);
     }
+    
+    // ------ EXTERNAL EVENTS ------
 
     public void onWindowChosen(DatabasePlayer databasePlayer, IWindow chosenWindow) {
-        EventDispatcher.dispatch(
-                EventType.MATCH_COMMUNICATION_EVENTS,
-                MatchCommunicationsListener.class,
-                matchCommunicationsListener -> matchCommunicationsListener.onWindowChosen(this, databasePlayer, chosenWindow)
-        );
+        this.matchCommunicationsListener.onWindowChosen(this, databasePlayer, chosenWindow);
     }
 }

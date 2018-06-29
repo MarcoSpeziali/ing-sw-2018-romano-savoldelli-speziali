@@ -71,6 +71,32 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         }
     }
     
+    private final transient Object updateSyncObject = new Object();
+    private IMatch update;
+    
+    @Override
+    public IMatch waitForUpdate() throws RemoteException, InterruptedException {
+        //noinspection Duplicates
+        synchronized (this.updateSyncObject) {
+            while (this.update == null) {
+                this.updateSyncObject.wait();
+            }
+        
+            IMatch matchUpdate = this.update;
+            this.update = null;
+            return matchUpdate;
+        }
+    }
+    
+    @Override
+    public void onUpdateReceived(IMatch update) {
+        synchronized (this.updateSyncObject) {
+            this.update = update;
+        
+            this.updateSyncObject.notifyAll();
+        }
+    }
+    
     @Override
     public void waitForTurnToBegin() throws IOException {
     
@@ -85,14 +111,41 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     public void waitForTurnToEnd() throws IOException {
     
     }
-
+    
+    private transient Consumer<Move> moveConsumer;
+    private final transient Object moveResponseSyncObject = new Object();
+    private MoveResponse moveResponse;
+    
+    public void setMoveConsumer(Consumer<Move> moveConsumer) {
+        this.moveConsumer = move -> {
+            synchronized (moveResponseSyncObject) {
+                moveConsumer.accept(move);
+            }
+        };
+    }
+    
     public void postMoveResponse(MoveResponse moveResponse) {
-
+        synchronized (moveResponseSyncObject) {
+            this.moveResponse = moveResponse;
+            this.moveResponseSyncObject.notifyAll();
+        }
     }
     
     @Override
-    public MoveResponse tryToMove(Move move) throws IOException {
-        return null;
+    public MoveResponse tryToMove(Move move) throws IOException, InterruptedException {
+        if (this.moveConsumer != null) {
+            this.moveConsumer.accept(move);
+        }
+        
+        synchronized (moveResponseSyncObject) {
+            while (moveResponse == null) {
+                moveResponseSyncObject.wait();
+            }
+            
+            MoveResponse temp = moveResponse;
+            moveResponse = null;
+            return temp;
+        }
     }
     
     @Override
@@ -140,12 +193,11 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     
     }
     
-    
     @Override
     public void close(Object... args) throws IOException {
         this.shouldBeKeptAlive = false;
     }
-
+    
     @Override
     public Boolean onHeartBeat() throws RemoteException {
         return this.shouldBeKeptAlive;
@@ -168,10 +220,5 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     @Override
     public int hashCode() {
         return this.player.hashCode();
-    }
-    
-    @Override
-    public IMatch waitForUpdate() throws RemoteException, InterruptedException {
-        return null;
     }
 }

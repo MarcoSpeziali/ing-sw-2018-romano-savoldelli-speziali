@@ -139,14 +139,12 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
         return (int) (this.dice.length - Arrays.stream(this.dice).filter(Objects::nonNull).count());
     }
 
-    public OnDiePutListener addPutListener(OnDiePutListener onDiePutListener) {
+    public void addPutListener(OnDiePutListener onDiePutListener) {
         this.onDiePutListeners.add(onDiePutListener);
-        return onDiePutListener;
     }
 
-    public OnDiePickedListener addPickListener(OnDiePickedListener onDiePickedListener) {
+    public void addPickListener(OnDiePickedListener onDiePickedListener) {
         this.onDiePickedListeners.add(onDiePickedListener);
-        return onDiePickedListener;
     }
 
     private static Die getAndRemove(Die[] dice, int index) {

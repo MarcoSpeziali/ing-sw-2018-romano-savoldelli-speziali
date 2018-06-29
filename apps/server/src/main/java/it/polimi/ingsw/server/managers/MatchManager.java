@@ -16,6 +16,7 @@ import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.ArrayUtils;
+import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import it.polimi.ingsw.utils.streams.StreamUtils;
 
@@ -23,16 +24,14 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
-public class MatchManager implements PlayerEventsListener, MatchCommunicationsListener, ModelUpdateListener {
+public class MatchManager implements PlayerEventsListener, MatchCommunicationsListener {
 
     private static Map<Integer, MatchManager> matchManagerMap = new HashMap<>();
 
@@ -52,17 +51,16 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     // ------ MATCH OBJECTS ------
     private DatabaseMatch databaseMatch;
     private MatchCommunicationsManager matchCommunicationsManager;
-    private final MatchObjectsManager matchObjectsManager;
+    private MatchObjectsManager matchObjectsManager;
     private RoundManager roundManager;
 
     // ------ MATCH OBJECTS CACHE ------
     private final List<DatabasePlayer> lobbyPlayers;
     private List<Window> possibleChosenWindows;
     private List<DatabasePlayer> matchPlayers;
-    private Map<IPlayer, ILivePlayer> playerToLivePlayerMap;
 
     // ------ TIMERS AND FUTURES ------
-    private final ScheduledExecutorService matchExecutorService;
+    private ScheduledExecutorService matchExecutorService;
     /**
      * The {@link ScheduledFuture} that sends the rmi heartbeat.
      */
@@ -75,7 +73,15 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
      * The {@link ScheduledFuture} that handles the move timer.
      */
     private ScheduledFuture<?> moveTimerScheduledFuture;
-
+    /**
+     * The rounds' {@link ExecutorService}.
+     */
+    private ExecutorService roundsExecutorService;
+    /**
+     * The {@link Future} that handles the rounds.
+     */
+    private Future<?> roundsTaskFuture;
+    
     // ------ FSM OBJECTS ------
     private MatchState matchState = MatchState.WAITING_FOR_PLAYERS;
     
@@ -118,9 +124,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 .map(DatabasePlayer.class::cast)
                 .collect(Collectors.toList());
 
+        // creates the scheduled executor service
+        this.matchExecutorService = Executors.newScheduledThreadPool(2);
         // creates the executor service
-        this.matchExecutorService = Executors.newScheduledThreadPool(1);
-
+        this.roundsExecutorService = Executors.newSingleThreadExecutor();
+        
         this.setUpConnectionTimer();
 
         this.matchCommunicationsManager = new MatchCommunicationsManager(
@@ -129,7 +137,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         );
         this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch);
         this.matchPlayers = new ArrayList<>(this.lobbyPlayers.size());
-        this.playerToLivePlayerMap = new HashMap<>();
 
         matchManagerMap.putIfAbsent(this.databaseMatch.getId(), this);
     }
@@ -159,7 +166,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     private boolean canAcceptPlayer(DatabasePlayer player) throws SQLException {
         return lobbyPlayers.contains(player) && this.matchState == MatchState.WAITING_FOR_PLAYERS || this.databaseMatch.getLeftPlayers().contains(player);
     }
-
+    
+    @SuppressWarnings("squid:S1450")
     private void addPlayerCommons(DatabasePlayer databasePlayer) throws SQLException {
         DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
         this.matchPlayers.add(databasePlayer);
@@ -226,6 +234,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
     private void createRemainingModelsAndControllers() throws IOException, ClassNotFoundException {
         // ------ DO NOT NEED A CONTROLLER ------
+        // TODO: check models creation
         Bag bag = new Bag(Settings.getSettings().getNumberOfDicePerColorInBag());
         ObjectiveCard[] publicObjectiveCards = getPublicObjectiveCards();
         ObjectiveCard[] privateObjectiveCards = getPrivateObjectiveCards();
@@ -324,18 +333,68 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         }
     });
     
-    private final Runnable moveTimerExecutorTask = () -> {
-        // on expiration turn is over and the next player is awaken
+    // on expiration turn is over and the next player is awaken
+    private final Runnable moveTimerExecutorTask = () -> this.roundManager.current().end();
+    
+    private final Runnable roundsExecutorTask = () -> {
+        Turn turn = this.roundManager.next();
+        byte lastRound = turn.getRound();
+        
+        do {
+            try {
+                this.matchCommunicationsManager.notifyPlayerTurnBegin(turn.getPlayer());
+                this.moveTimerScheduledFuture = this.matchExecutorService.schedule(
+                        this.moveTimerExecutorTask,
+                        Settings.getSettings().getMatchMoveTimerDuration(),
+                        Settings.getSettings().getMatchMoveTimerTimeUnit()
+                );
+                
+                turn.waitUntilEnded();
+    
+                this.matchCommunicationsManager.notifyPlayerTurnEnd(turn.getPlayer());
+                
+                turn = this.roundManager.next();
+                
+                if (turn != null && lastRound != turn.getRound()) {
+                    Die[] diceLeft = this.matchObjectsManager.getDraftPoolController().pickAllDiceLeft();
+                    this.matchObjectsManager.getRoundTrackController().putAllInRound(lastRound, diceLeft);
+    
+                    this.matchObjectsManager.getDraftPoolController().putAll(
+                            new IterableRange<>(
+                                    0,
+                                    this.matchPlayers.size(),
+                                    IterableRange.INTEGER_INCREMENT_FUNCTION
+                            ).stream()
+                                    .map(integer -> this.matchObjectsManager.getBag().pickDie())
+                                    .toArray(Die[]::new)
+                    );
+    
+                    lastRound = turn.getRound();
+                }
+                
+                this.onModelsUpdated();
+            }
+            catch (InterruptedException e) {
+                ServerLogger.getLogger().log(Level.WARNING, "Error while waiting for turn to end", e);
+                Thread.currentThread().interrupt();
+            }
+            catch (SQLException e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while sending updates to players:", e);
+                throw new RuntimeException(e);
+            }
+            catch (IOException e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
+            }
+        } while (turn != null);
     };
     
     /**
      * Sets up the connection timer.
      */
     private void setUpConnectionTimer() {
-        this.connectionTimerScheduledFuture = matchExecutorService.scheduleWithFixedDelay(
+        this.connectionTimerScheduledFuture = matchExecutorService.schedule(
                 connectionTask,
                 Settings.getSettings().getMatchConnectionTimerDuration(),
-                Long.MAX_VALUE, // prevents the execution (gives time to cancel the timer)
                 Settings.getSettings().getMatchConnectionTimerTimeUnit()
         );
     }
@@ -426,27 +485,23 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     // ------ PLAYER EVENTS ------
     
     @Override
+    @SuppressWarnings("squid:S1450")
     public void onPlayerDisconnected(DatabasePlayer player) {
-
+        try {
+            DatabaseMatch.removePlayer(this.databaseMatch.getId(), player.getId());
+        }
+        catch (SQLException e) {
+            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
+            throw new RuntimeException(e);
+        }
     }
 
     // ------ MODELS EVENTS ------
 
-    @Override
-    public void onModelUpdated(Object sender, Object model) {
-        if (!this.matchObjectsManager.containsController(sender)) {
-            return;
-        }
-
-        try {
-            for (DatabasePlayer player : this.matchPlayers) {
-                IMatch match = this.matchObjectsManager.buildMatchMockForPlayer(player);
-                this.matchCommunicationsManager.sendMatchMockToPlayer(player, match);
-            }
-        }
-        catch (IOException | SQLException e) {
-            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers:", e);
-            throw new RuntimeException(e);
+    public void onModelsUpdated() throws SQLException, IOException {
+        for (DatabasePlayer player : this.matchPlayers) {
+            IMatch match = this.matchObjectsManager.buildMatchMockForPlayer(player);
+            this.matchCommunicationsManager.sendMatchMockToPlayer(player, match);
         }
     }
 
@@ -480,10 +535,15 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 }
 
                 this.roundManager = RoundManager.createRoundManager(this.databaseMatch);
+    
+                this.roundsTaskFuture = this.roundsExecutorService.submit(this.roundsExecutorTask);
             }
-            catch (IOException | ClassNotFoundException | SQLException e) {
-                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers and sending mocks:", e);
+            catch (ClassNotFoundException | SQLException e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers:", e);
                 throw new RuntimeException(e);
+            }
+            catch (IOException e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while sending mocks:", e);
             }
         }
     }
@@ -502,7 +562,10 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
             if (currentTurn.getPhase() == Turn.ENDED) {
                 currentTurn.end();
-                this.roundManager.next();
+                
+                if (!this.moveTimerScheduledFuture.isCancelled()) {
+                    this.moveTimerScheduledFuture.cancel(false);
+                }
             }
         }
         catch (IOException e) {
