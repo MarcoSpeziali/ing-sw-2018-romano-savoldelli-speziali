@@ -24,6 +24,18 @@ import java.util.Set;
 
 public class MatchGUITest extends Application {
 
+    CellMock[] cells1 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
+            new CellMock(null, 0), new CellMock(null, 4), new CellMock(GlassColor.PURPLE,0) };
+
+    CellMock[] cells2 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
+            new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+
+    CellMock[] cells3 = {new CellMock(GlassColor.GREEN, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
+            new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+
+    CellMock[] cells4 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.YELLOW, 0), new CellMock(null, 6),
+            new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
@@ -69,7 +81,56 @@ public class MatchGUITest extends Application {
 
                     @Override
                     public ILivePlayer[] getPlayers() {
-                        return new ILivePlayer[0];
+                        ILivePlayer[] iLivePlayers = {
+                                new ILivePlayer() {
+                                    @Override
+                                    public int getFavourTokens() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public IWindow getWindow() {
+                                        return new WindowMock("giocatore2", 1, 2, 3, cells2);
+
+                                    }
+
+                                    @Override
+                                    public IPlayer getPlayer() {
+                                        return null;
+                                    }
+                                }
+                        , new ILivePlayer() {
+                            @Override
+                            public int getFavourTokens() {
+                                return 0;
+                            }
+
+                            @Override
+                            public IWindow getWindow() {
+                                return new WindowMock("giocatore3", 1, 2, 3, cells3);
+                            }
+
+                            @Override
+                            public IPlayer getPlayer() {
+                                return null;
+                            }
+                        }, new ILivePlayer() {
+                            @Override
+                            public int getFavourTokens() {
+                                return 0;
+                            }
+
+                            @Override
+                            public IWindow getWindow() {
+                                return new WindowMock("giocatore4", 1, 2, 3, cells4);
+                            }
+
+                            @Override
+                            public IPlayer getPlayer() {
+                                return null;
+                            }
+                        }};
+                        return iLivePlayers;
                     }
 
                     @Override
@@ -83,9 +144,12 @@ public class MatchGUITest extends Application {
                     }
 
                     @Override
-                    public IObjectiveCard[] getObjectiveCards() {
+                    public IObjectiveCard[] getPublicObjectiveCards() {
                         return new IObjectiveCard[0];
                     }
+
+                    @Override
+                    public IObjectiveCard getPrivateObjectiveCard() {return null;}
 
                     @Override
                     public IToolCard[] getToolCards() {
@@ -98,7 +162,7 @@ public class MatchGUITest extends Application {
 
                                     @Override
                                     public IEffect getEffect() {
-                                        return new EffectMock();
+                                        return new EffectMock(3, "ciao");
                                     }
 
                                     @Override
@@ -119,7 +183,7 @@ public class MatchGUITest extends Application {
 
                                     @Override
                                     public IEffect getEffect() {
-                                        return new EffectMock();
+                                        return new EffectMock(4, "ciao1");
                                     }
 
                                     @Override
@@ -139,7 +203,7 @@ public class MatchGUITest extends Application {
 
                             @Override
                             public IEffect getEffect() {
-                                return new EffectMock();
+                                return new EffectMock(5, "ciao2");
                             }
 
                             @Override
@@ -153,7 +217,7 @@ public class MatchGUITest extends Application {
                             }
                                 }};
 
-                        return new IToolCard[0];
+                        return toolCards;
                     }
                 };
             }

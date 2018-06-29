@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.ui.gui.scenes;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
@@ -11,9 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -44,8 +47,8 @@ public class MatchGUIView extends GUIView<MatchController> {
     @Override
     public void init() {
         chooseWindow();
-        loadElements();
         setUpUpdateFuture();
+        loadElements();
     }
 
 
@@ -59,7 +62,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     IObjectiveCard[] iObjectiveCards    = iMatch.getPublicObjectiveCards();
                     //IObjectiveCard iObjectiveCard
 
-                    for (int i=0; i<iToolCards.length; i++) { //ToolCard
+                    for (IToolCard iToolCard : iToolCards) { //ToolCard
                         JFXDialogLayout content = new JFXDialogLayout();
                         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
@@ -68,18 +71,18 @@ public class MatchGUIView extends GUIView<MatchController> {
                         Node toolCardNode = toolCardLoader.load();
                         toolCardNode.setOnMousePressed(event -> dialog.show());
                         ToolCardGUIView toolCardGUIView = toolCardLoader.getController();
-                        toolCardGUIView.setModel(iToolCards[i]);
+                        toolCardGUIView.setModel(iToolCard);
                         vBoxToolCard.getChildren().add(toolCardNode);
 
-                        /*content.setBody(toolCardNode);
+                        content.setBody(toolCardNode);
                         JFXButton use = new JFXButton("Use");
                         //use.setOnMousePressed(event -> toolCardControllers[i].getToolCard(). TODO set actions on tc
                         JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
-                        content.setActions(use, cancel);*/
+                        content.setActions(use, cancel);
                     }
 
-                    for (int i = 0; i < iObjectiveCards.length ; i++) { //ObjectiveCard
+                    for (IObjectiveCard iObjectiveCard : iObjectiveCards) { //ObjectiveCard
                         JFXDialogLayout content = new JFXDialogLayout();
                         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
@@ -88,13 +91,13 @@ public class MatchGUIView extends GUIView<MatchController> {
                         Node objectiveCardNode = objectiveCardLoader.load();
                         objectiveCardNode.setOnMousePressed(event -> dialog.show());
                         ObjectiveCardGUIView objectiveCardGUIView = objectiveCardLoader.getController();
-                        objectiveCardGUIView.setModel(iObjectiveCards[i]);
+                        objectiveCardGUIView.setModel(iObjectiveCard);
                         vBoxObjectiveCard.getChildren().add(objectiveCardNode);
 
-                        /*content.setBody(objectiveCardNode);
+                        content.setBody(objectiveCardNode);
                         JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
-                        content.setActions(cancel);*/
+                        content.setActions(cancel);
                     }
                    /* FXMLLoader draftPoolLoader = new FXMLLoader();
                     draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
@@ -106,64 +109,6 @@ public class MatchGUIView extends GUIView<MatchController> {
 */
 
                 })));}
-        /*CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForPrivateObjectiveCardController()))
-                .thenAccept(objectiveCardController -> Platform.runLater(unsafe(() -> {
-                    JFXDialogLayout content = new JFXDialogLayout();
-                    JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
-                    Node node = loader.load();
-                    node.setOnMousePressed(event -> dialog.show());
-                    ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
-                    objectiveCardGUIView.setModel(objectiveCardController);
-
-                    content.setBody(node);
-                    JFXButton cancel = new JFXButton("Back");
-                    cancel.setOnMousePressed(event -> dialog.close());
-                    content.setActions(cancel);
-                    cardsPane.add(node, 0, 1);
-                })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForPublicObjectiveCardControllers()))
-                .thenAccept(objectiveCardControllers -> Platform.runLater(unsafe(() -> {
-                        for (int i=0; i<objectiveCardControllers.length; i++) {
-                            JFXDialogLayout content = new JFXDialogLayout();
-                            JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-
-                            FXMLLoader loader = new FXMLLoader();
-                            loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
-                            Node node = loader.load();
-                            node.setOnMousePressed(event -> dialog.show());
-                            ObjectiveCardGUIView objectiveCardGUIView = loader.getController();
-                            objectiveCardGUIView.setModel(objectiveCardControllers[i]);
-
-                            content.setBody(node);
-                            JFXButton cancel = new JFXButton("Back");
-                            cancel.setOnMousePressed(event -> dialog.close());
-                            content.setActions(cancel);
-                            cardsPane.add(node, i+1, 1);
-                        }
-                })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForDraftPoolController()))
-                .thenAccept(draftPoolController -> Platform.runLater(unsafe(() -> {
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
-                    Node node = loader.load();
-                    DraftPoolGUIView draftPoolGUIView = loader.getController();
-                    draftPoolGUIView.setModel(draftPoolController);
-                    // TODO Luca: add layout position (use anchors)
-                })));
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForRoundTrackController()))
-                .thenAccept(roundTrackController -> Platform.runLater(unsafe(() -> {
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
-                    Node node = loader.load();
-                    RoundTrackGUIView roundTrackGUIView = loader.getController();
-                    //roundTrackGUIView.setModel(roundTrackController); TODO Luca: fix all these lacks
-                    // TODO Luca: add layout position (use anchors)
-                })));
-    }
-    */
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
@@ -211,7 +156,6 @@ public class MatchGUIView extends GUIView<MatchController> {
     
     private void setUpOpponentsWindows(IMatch update) { //TODO change me
         Platform.runLater(() -> {
-            AtomicInteger index = new AtomicInteger();
 
             for (ILivePlayer player: update.getPlayers()) {
 
@@ -220,20 +164,23 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
                 try {
                     Node node = loader.load();
+                    node.setScaleX(0.5);
+                    node.setScaleY(0.5);
                     VBox vBox = new VBox();
-                    Label label = new Label(player.getPlayer().getUsername());
+                    Label label = new Label("ciao");
                     label.setAlignment(Pos.CENTER);
                     label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
                     vBox.getChildren().addAll(node, label);
                     WindowGUIView windowGUIView = loader.getController();
                     windowGUIView.setModel(iWindow);
-                    hBoxWindows.getChildren().add(vBox);
+                    hBoxWindows.setMaxHeight(20);
+                    hBoxWindows.setAlignment(Pos.CENTER);
+                    hBoxWindows.getChildren().add(node);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    }
-                    index.getAndIncrement();
                 }
-            setUpUpdateFuture();
+            }
+            //setUpUpdateFuture();
         });
     }
 
