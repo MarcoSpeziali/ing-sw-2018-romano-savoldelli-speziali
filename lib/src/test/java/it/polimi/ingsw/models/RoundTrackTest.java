@@ -21,7 +21,7 @@ class RoundTrackTest {
 
     @Test
     void getDiceForRound() {
-        roundTrack.setDieForRoundAtIndex(die1, 1, 0);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
 
         Assertions.assertEquals(roundTrack.getDiceForRound(1).get(0), die1);
         System.out.println(roundTrack.getNumberOfDice());
@@ -29,35 +29,35 @@ class RoundTrackTest {
 
     @Test
     void getDiceForRoundAtIndex() {
-        roundTrack.setDieForRoundAtIndex(die1, 2, 0);
-        roundTrack.setDieForRoundAtIndex(die3, 2, 1);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 2, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 1);
         Assertions.assertEquals(roundTrack.getDiceForRoundAtIndex(2, 1), die3);
     }
 
     @Test
     void setDieForRoundAtIndex() {
-        roundTrack.setDieForRoundAtIndex(die1, 1, 0);
-        roundTrack.setDieForRoundAtIndex(die3, 1, 1);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 1, (byte) 1);
         Assertions.assertEquals(die3, roundTrack.getDiceForRoundAtIndex(1, 1));
     }
 
     @Test
     void addDieForRound() {
-        roundTrack.setDieForRoundAtIndex(die2, 1, 0);
-        roundTrack.addDieForRound(die3, 1);
+        roundTrack.setDieForRoundAtIndex(die2, (byte) 1, (byte) 0);
+        roundTrack.addDieForRound(die3, (byte) 1);
         Assertions.assertEquals(die3, roundTrack.getDiceForRoundAtIndex(1, 1));
     }
 
     @Test
     void pickDie() {
-        roundTrack.setDieForRoundAtIndex(die3, 2, 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> roundTrack.pickDie(die3));
     }
 
     @Test
     void pickDie1() {
-        roundTrack.setDieForRoundAtIndex(die2, 1, 0);
+        roundTrack.setDieForRoundAtIndex(die2, (byte) 1, (byte) 0);
         System.out.println(roundTrack.getNumberOfDice());
         Die die = roundTrack.pickDie(0x00000100);
         Assertions.assertEquals(die2, die);
@@ -71,9 +71,9 @@ class RoundTrackTest {
 
     @Test
     void getLocations() {
-        roundTrack.setDieForRoundAtIndex(die1, 1, 0);
-        roundTrack.setDieForRoundAtIndex(die3, 2, 0);
-        roundTrack.setDieForRoundAtIndex(die2, 2, 1);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die2, (byte) 2, (byte) 1);
         Assertions.assertEquals(0x00000200, roundTrack.getLocations().get(1).intValue());
         Assertions.assertEquals(0x00000201, roundTrack.getLocations().get(2).intValue());
         Assertions.assertEquals(die3, roundTrack.pickDie(roundTrack.getLocations().get(1)));
@@ -81,11 +81,11 @@ class RoundTrackTest {
 
     @Test
     void getDice() {
-        roundTrack.setDieForRoundAtIndex(die1, 1, 0);
-        roundTrack.setDieForRoundAtIndex(die3, 2, 0);
-        roundTrack.setDieForRoundAtIndex(die2, 2, 1);
-        roundTrack.setDieForRoundAtIndex(die1, 9, 0);
-        roundTrack.setDieForRoundAtIndex(die3, 6, 0);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die2, (byte) 2, (byte) 1);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 9, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 6, (byte) 0);
         List<Die> list = roundTrack.getDice();
         Assertions.assertEquals(die3, list.get(3));
         Assertions.assertEquals(5, list.size());
@@ -94,18 +94,18 @@ class RoundTrackTest {
 
     @Test
     void getNumberOfDice() {
-        roundTrack.setDieForRoundAtIndex(die1, 1, 0);
-        roundTrack.setDieForRoundAtIndex(die3, 2, 0);
-        roundTrack.setDieForRoundAtIndex(die2, 2, 1);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die2, (byte) 2, (byte) 1);
         Assertions.assertEquals(3, roundTrack.getNumberOfDice());
     }
 
     @Test
     void getFreeSpace() {
-        roundTrack.setDieForRoundAtIndex(die1, 1, 0);
-        roundTrack.setDieForRoundAtIndex(die3, 2, 0);
-        roundTrack.setDieForRoundAtIndex(die2, 2, 1);
-        roundTrack.setDieForRoundAtIndex(die1, 5, 0);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die2, (byte) 2, (byte) 1);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 5, (byte) 0);
         Assertions.assertEquals(1266, roundTrack.getFreeSpace());
     }
 }
