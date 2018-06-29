@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
+import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
@@ -20,6 +21,8 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.Set;
+
+import static org.mockito.Mockito.mock;
 
 
 public class MatchGUITest extends Application {
@@ -145,11 +148,63 @@ public class MatchGUITest extends Application {
 
                     @Override
                     public IObjectiveCard[] getPublicObjectiveCards() {
-                        return new IObjectiveCard[0];
+                        IObjectiveCard[] objectiveCards = {
+                                new IObjectiveCard() {
+                                    @Override
+                                    public String getId() {
+                                        return "color_diagonals";
+                                    }
+
+                                    @Override
+                                    public CardVisibility getVisibility() {
+                                        return CardVisibility.PUBLIC;
+                                    }
+
+                                    @Override
+                                    public IObjective getObjective() {
+                                        return mock(IObjective.class);
+                                    }
+
+                                    @Override
+                                    public String getTitle() {
+                                        return "title1";
+                                    }
+
+                                    @Override
+                                    public String getDescription() {
+                                        return "description1";
+                                    }
+                                },
+                                new IObjectiveCard() {
+                                    @Override
+                                    public String getId() {
+                                        return "medium_shades";
+                                    }
+
+                                    @Override
+                                    public CardVisibility getVisibility() {
+                                        return CardVisibility.PUBLIC;
+                                    }
+
+                                    @Override
+                                    public IObjective getObjective() {
+                                        return mock(IObjective.class);
+                                    }
+
+                                    @Override
+                                    public String getTitle() {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public String getDescription() {
+                                        return "description2";
+                                    }
+                                }
+                        };
+                        return objectiveCards;
                     }
 
-                    @Override
-                    public IObjectiveCard getPrivateObjectiveCard() {return null;}
 
                     @Override
                     public IToolCard[] getToolCards() {
@@ -188,12 +243,12 @@ public class MatchGUITest extends Application {
 
                                     @Override
                                     public String getTitle() {
-                                        return null;
+                                        return "title2";
                                     }
 
                                     @Override
                                     public String getDescription() {
-                                        return null;
+                                        return "description2";
                                     }
                                 }, new IToolCard() {
                             @Override
@@ -218,6 +273,37 @@ public class MatchGUITest extends Application {
                                 }};
 
                         return toolCards;
+                    }
+
+                    @Override
+                    public IObjectiveCard getPrivateObjectiveCard() {
+                        IObjectiveCard privateObjectiveCard = new IObjectiveCard() {
+                            @Override
+                            public String getId() {
+                                return "red_shade";
+                            }
+
+                            @Override
+                            public CardVisibility getVisibility() {
+                                return CardVisibility.PRIVATE;
+                            }
+
+                            @Override
+                            public IObjective getObjective() {
+                                return mock(IObjective.class);
+                            }
+
+                            @Override
+                            public String getTitle() {
+                                return "titlePrivate";
+                            }
+
+                            @Override
+                            public String getDescription() {
+                                return "descriptionPrivate";
+                            }
+                        };
+                        return privateObjectiveCard;
                     }
                 };
             }

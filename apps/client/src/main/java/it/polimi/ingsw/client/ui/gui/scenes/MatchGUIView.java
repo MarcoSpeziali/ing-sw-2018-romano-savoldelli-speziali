@@ -56,11 +56,11 @@ public class MatchGUIView extends GUIView<MatchController> {
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
 
-                    IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
+                   // IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
                     IDraftPool iDraftPool               = iMatch.getDraftPool();
                     IToolCard[] iToolCards              = iMatch.getToolCards();
                     IObjectiveCard[] iObjectiveCards    = iMatch.getPublicObjectiveCards();
-                    //IObjectiveCard iObjectiveCard
+                    IObjectiveCard iPrivateObjectiveCard = iMatch.getPrivateObjectiveCard();
 
                     for (IToolCard iToolCard : iToolCards) { //ToolCard
                         JFXDialogLayout content = new JFXDialogLayout();
@@ -74,12 +74,12 @@ public class MatchGUIView extends GUIView<MatchController> {
                         toolCardGUIView.setModel(iToolCard);
                         vBoxToolCard.getChildren().add(toolCardNode);
 
-                        content.setBody(toolCardNode);
+                        /*content.setBody(toolCardNode);
                         JFXButton use = new JFXButton("Use");
                         //use.setOnMousePressed(event -> toolCardControllers[i].getToolCard(). TODO set actions on tc
                         JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
-                        content.setActions(use, cancel);
+                        content.setActions(use, cancel);*/
                     }
 
                     for (IObjectiveCard iObjectiveCard : iObjectiveCards) { //ObjectiveCard
@@ -94,19 +94,27 @@ public class MatchGUIView extends GUIView<MatchController> {
                         objectiveCardGUIView.setModel(iObjectiveCard);
                         vBoxObjectiveCard.getChildren().add(objectiveCardNode);
 
-                        content.setBody(objectiveCardNode);
+                        /*content.setBody(objectiveCardNode);
                         JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
-                        content.setActions(cancel);
+                        content.setActions(cancel);*/
                     }
-                   /* FXMLLoader draftPoolLoader = new FXMLLoader();
+                    FXMLLoader privateCardLoader = new FXMLLoader();
+                    privateCardLoader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
+                    Node privateCardNode = privateCardLoader.load();
+                    ObjectiveCardGUIView objectiveCardGUIView = privateCardLoader.getController();
+                    objectiveCardGUIView.setModel(iPrivateObjectiveCard);
+                    borderPane.setCenter(privateCardNode);
+
+
+                   FXMLLoader draftPoolLoader = new FXMLLoader();
                     draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
                     Node draftPoolNode = draftPoolLoader.load();
                     DraftPoolGUIView draftPoolGUIView = draftPoolLoader.getController();
                     draftPoolGUIView.setModel(iDraftPool);
                     borderPane.setCenter(draftPoolNode);
 
-*/
+
 
                 })));}
 
@@ -156,6 +164,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     
     private void setUpOpponentsWindows(IMatch update) { //TODO change me
         Platform.runLater(() -> {
+            AtomicInteger index = new AtomicInteger();
 
             for (ILivePlayer player: update.getPlayers()) {
 
