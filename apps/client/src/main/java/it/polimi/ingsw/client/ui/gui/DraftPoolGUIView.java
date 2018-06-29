@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
-import it.polimi.ingsw.client.controllers.DieMockController;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.core.Move;
-import it.polimi.ingsw.models.DraftPool;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IDraftPool;
 import javafx.fxml.FXML;

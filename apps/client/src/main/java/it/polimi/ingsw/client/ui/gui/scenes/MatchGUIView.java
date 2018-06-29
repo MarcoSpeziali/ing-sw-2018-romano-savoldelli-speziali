@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.ui.gui.scenes;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
@@ -57,7 +56,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
                     IDraftPool iDraftPool               = iMatch.getDraftPool();
                     IToolCard[] iToolCards              = iMatch.getToolCards();
-                    IObjectiveCard[] iObjectiveCards    = iMatch.getObjectiveCards();
+                    IObjectiveCard[] iObjectiveCards    = iMatch.getPublicObjectiveCards();
                     //IObjectiveCard iObjectiveCard
 
                     for (int i=0; i<iToolCards.length; i++) { //ToolCard

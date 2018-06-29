@@ -11,7 +11,7 @@ public class ObjectiveCardCLIView implements CLIView {
 
     @Override
     public void render() {
-        System.out.println("card id: " + this.objectiveCard.getCardId());
+        System.out.println("card id: " + this.objectiveCard.getId());
         System.out.println("titolo: " + this.objectiveCard.getTitle().toString());
         System.out.println("descrizione: " + this.objectiveCard.getDescription().toString());
         System.out.println("visibility: " + this.objectiveCard.getVisibility().toString());

@@ -100,17 +100,25 @@ public class MatchObjectsManager {
         this.playerPrivateObjectiveCardMap.put(player, objectiveCard);
     }
 
-    public IMatch buildMatchMockForPlayer(IPlayer player) {
+    public IMatch buildMatchMockForPlayer(DatabasePlayer player) throws SQLException {
         return new MatchMock(
                 this.match.getId(),
                 this.match.getStartingTime(),
                 this.match.getEndingTime(),
                 new LobbyMock(this.match.getLobby()),
-                
-        )
+                getLivePlayers(),
+                this.draftPoolController.getDraftPool(),
+                this.roundTrackController.getRoundTrack(),
+                this.publicObjectiveCards,
+                Arrays.stream(this.toolCardControllers)
+                        .map(ToolCardControllerImpl::getToolCard)
+                        .map(ToolCardMock::new)
+                        .toArray(ToolCardMock[]::new),
+                this.playerPrivateObjectiveCardMap.get(player)
+        );
     }
     
-    public ILivePlayer[] getLivePlayersForPlayer(DatabasePlayer databasePlayer) throws SQLException {
+    private LivePlayerMock[] getLivePlayers() throws SQLException {
         IPlayer[] currentPlayers = this.match.getPlayers();
         List<IPlayer> leftPlayers = this.match.getLeftPlayers();
         
@@ -119,9 +127,13 @@ public class MatchObjectsManager {
         allPlayers.addAll(List.of(currentPlayers));
         
         return allPlayers.stream()
-                .map(player -> {
-                    
-                })
+                .map(player -> new LivePlayerMock(
+                        0,
+                        new WindowMock(playerWindowMap.get(player).getWindow()),
+                        new PlayerMock(player),
+                        leftPlayers.contains(player)
+                ))
+                .toArray(LivePlayerMock[]::new);
     }
     
     @Override
@@ -140,6 +152,6 @@ public class MatchObjectsManager {
 
     @Override
     public int hashCode() {
-        return Objects.hash(matchId);
+        return Objects.hash(match.getId());
     }
 }

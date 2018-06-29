@@ -80,7 +80,12 @@ public class DatabaseMatch {
                 new LobbyMock(getLobby()),
                 Arrays.stream(getPlayers())
                         .map(LivePlayerMock::new)
-                        .toArray(LivePlayerMock[]::new)
+                        .toArray(LivePlayerMock[]::new),
+                null,
+                null,
+                null,
+                null,
+                null
         );
     }
     

@@ -26,9 +26,12 @@ public interface IMatch extends JSONSerializable {
     @JSONElement("round-track")
     IRoundTrack getRoundTrack();
     
-    @JSONElement("objective-cards")
-    IObjectiveCard[] getObjectiveCards();
+    @JSONElement("public-objective-cards")
+    IObjectiveCard[] getPublicObjectiveCards();
     
     @JSONElement("tool-cards")
     IToolCard[] getToolCards();
+    
+    @JSONElement("private-objective-card")
+    IObjectiveCard getPrivateObjectiveCard();
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.managers.turns;
 
 import it.polimi.ingsw.net.mocks.IPlayer;
-import it.polimi.ingsw.server.utils.collections.BiHashMap;
+import it.polimi.ingsw.utils.collections.BiHashMap;
 import it.polimi.ingsw.utils.ArrayUtils;
 
 import java.util.*;

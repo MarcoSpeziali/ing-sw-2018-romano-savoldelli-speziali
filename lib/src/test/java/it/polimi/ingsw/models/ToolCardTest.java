@@ -32,11 +32,11 @@ class ToolCardTest {
     @Test
     void activate() {
         // FIXME: 22/06/18 
-        //doNothing().when(this.effect).run(this.toolCard.getCardId());
+        //doNothing().when(this.effect).run(this.toolCard.getId());
 
         //toolCard.activate();
 
-        //verify(this.effect, times(1)).run(this.toolCard.getCardId());
+        //verify(this.effect, times(1)).run(this.toolCard.getId());
     }
 
     @Test

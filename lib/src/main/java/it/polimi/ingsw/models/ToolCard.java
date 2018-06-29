@@ -1,8 +1,9 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.net.mocks.IEffect;
+import it.polimi.ingsw.net.mocks.IToolCard;
 
-public class ToolCard extends Card {
+public class ToolCard extends Card implements IToolCard {
 
     private static final long serialVersionUID = 4573356302420625430L;
     
@@ -26,6 +27,7 @@ public class ToolCard extends Card {
     /**
      * @return the tool card's id
      */
+    @Override
     public String getCardId() {
         return this.cardId;
     }
@@ -40,6 +42,7 @@ public class ToolCard extends Card {
     /**
      * @return the tool card's effect
      */
+    @Override
     public IEffect getEffect() {
         return this.effect;
     }

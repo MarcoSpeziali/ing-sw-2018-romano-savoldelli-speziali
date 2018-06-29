@@ -10,7 +10,7 @@ public class ToolCardCLIView implements CLIView {
 
     /*@Override
     public void render() {
-        System.out.println("card id: " + this.toolCard.getCardId());
+        System.out.println("card id: " + this.toolCard.getId());
         System.out.println("titolo: " + this.toolCard.getTitle().toString());
         System.out.println("descrizione: " + this.toolCard.getDescription().toString());
         System.out.println("effetto: " + this.toolCard.getEffect());

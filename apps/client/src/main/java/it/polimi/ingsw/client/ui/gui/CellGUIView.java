@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.client.controllers.DieMockController;
 import it.polimi.ingsw.client.utils.ClientLogger;
-import it.polimi.ingsw.controllers.CellController;
 import it.polimi.ingsw.net.mocks.ICell;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.application.Platform;
@@ -16,11 +14,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
-
-import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class CellGUIView extends GUIView<ICell> {
 

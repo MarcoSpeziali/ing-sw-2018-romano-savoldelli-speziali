@@ -2,8 +2,9 @@ package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.net.mocks.IObjective;
+import it.polimi.ingsw.net.mocks.IObjectiveCard;
 
-public class ObjectiveCard extends Card {
+public class ObjectiveCard extends Card implements IObjectiveCard {
     private static final long serialVersionUID = -348932210289943581L;
     
     private String cardId;
@@ -29,7 +30,8 @@ public class ObjectiveCard extends Card {
     /**
      * @return the card's id
      */
-    public String getCardId() {
+    @Override
+    public String getId() {
         return this.cardId;
     }
 
@@ -43,6 +45,7 @@ public class ObjectiveCard extends Card {
     /**
      * @return the card's visibility
      */
+    @Override
     public CardVisibility getVisibility() {
         return this.visibility;
     }
@@ -57,6 +60,7 @@ public class ObjectiveCard extends Card {
     /**
      * @return the card's objective
      */
+    @Override
     public IObjective getObjective() {
         return this.objective;
     }

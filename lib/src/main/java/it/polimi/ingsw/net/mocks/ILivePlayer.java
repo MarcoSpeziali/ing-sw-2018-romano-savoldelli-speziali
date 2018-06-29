@@ -12,4 +12,9 @@ public interface ILivePlayer extends JSONSerializable {
 
     @JSONElement("player")
     IPlayer getPlayer();
+    
+    @JSONElement("left")
+    default boolean hasLeft() {
+        return false;
+    }
 }

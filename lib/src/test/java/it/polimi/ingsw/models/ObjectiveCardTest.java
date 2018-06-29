@@ -22,7 +22,7 @@ class ObjectiveCardTest {
 
     @Test
     void getCardId() {
-        Assertions.assertEquals("test", objectiveCard.getCardId());
+        Assertions.assertEquals("test", objectiveCard.getId());
     }
 
     @Test
@@ -38,7 +38,7 @@ class ObjectiveCardTest {
     @Test
     void setCardId() {
         this.objectiveCard.setCardId("testName");
-        Assertions.assertSame("testName", this.objectiveCard.getCardId());
+        Assertions.assertSame("testName", this.objectiveCard.getId());
     }
 
     @Test

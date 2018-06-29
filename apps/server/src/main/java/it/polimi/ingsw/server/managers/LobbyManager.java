@@ -78,7 +78,7 @@ public class LobbyManager implements PlayerEventsListener {
             }
         }
         else if (timeRemaining != -1) {
-            timeRemaining -= 100;
+            timeRemaining -= Settings.getSettings().getLobbyTimerDuration() / 100;
         }
     };
     
@@ -165,7 +165,9 @@ public class LobbyManager implements PlayerEventsListener {
             closeLobbyAndStartMatch();
         }
     
-        this.databaseLobby.setTimeRemaining(this.timeRemaining == -1 ? -1 : (this.timeRemaining / 1000));
+        this.databaseLobby.setTimeRemaining(this.timeRemaining == -1 ? -1 : (int) (
+                Settings.getSettings().getLobbyTimerTimeUnit().toSeconds(this.timeRemaining)
+        ));
     
         // notifies every listener
         final DatabaseLobby finalLobby = this.databaseLobby;

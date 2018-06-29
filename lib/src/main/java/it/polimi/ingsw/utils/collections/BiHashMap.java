@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.utils.collections;
+package it.polimi.ingsw.utils.collections;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;

@@ -10,20 +10,23 @@ public class LivePlayerMock implements ILivePlayer {
     private final int favourTokens;
     private final IWindow window;
     private final IPlayer player;
-
-    public LivePlayerMock(ILivePlayer iLivePlayer) {
-        this(
-                iLivePlayer.getFavourTokens(),
-                iLivePlayer.getWindow(),
-                new PlayerMock(iLivePlayer.getPlayer())
-        );
-    }
-
+    private final boolean left;
+    
     public LivePlayerMock(IPlayer iPlayer) {
         this(
                 0,
                 null,
-                new PlayerMock(iPlayer)
+                new PlayerMock(iPlayer),
+                false
+        );
+    }
+    
+    public LivePlayerMock(ILivePlayer iLivePlayer) {
+        this(
+                iLivePlayer.getFavourTokens(),
+                iLivePlayer.getWindow(),
+                new PlayerMock(iLivePlayer.getPlayer()),
+                iLivePlayer.hasLeft()
         );
     }
 
@@ -31,25 +34,36 @@ public class LivePlayerMock implements ILivePlayer {
     public LivePlayerMock(
             @JSONElement("favour-tokens") int favourTokens,
             @JSONElement("window") IWindow window,
-            @JSONElement("player") IPlayer player
+            @JSONElement("player") IPlayer player,
+            @JSONElement("left") boolean left
     ) {
         this.favourTokens = favourTokens;
         this.window = window;
         this.player = player;
+        this.left = left;
     }
 
     @Override
+    @JSONElement("favour-tokens")
     public int getFavourTokens() {
         return favourTokens;
     }
 
     @Override
+    @JSONElement("window")
     public IWindow getWindow() {
         return window;
     }
 
     @Override
+    @JSONElement("player")
     public IPlayer getPlayer() {
         return player;
+    }
+    
+    @Override
+    @JSONElement("left")
+    public boolean hasLeft() {
+        return left;
     }
 }

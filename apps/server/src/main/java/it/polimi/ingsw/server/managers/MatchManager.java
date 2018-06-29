@@ -107,13 +107,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         return this.databaseMatch;
     }
     
-    public MatchMock getMatch() {
-        return new MatchMock(
-                this.databaseMatch.toMatchMock(),
-                null
-        );
-    }
-    
     public MatchManager(int lobbyId) throws SQLException {
         this.databaseMatch = DatabaseMatch.insertMatchFromLobby(lobbyId);
         this.lobbyPlayers = Arrays.stream(DatabaseLobby.getLobbyWithId(lobbyId).getPlayers())
@@ -129,7 +122,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 this.databaseMatch.toMatchMock(),
                 this
         );
-        this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch.toMatchMock());
+        this.matchObjectsManager = MatchObjectsManager.getManagerForMatch(this.databaseMatch);
         this.matchPlayers = new ArrayList<>(this.lobbyPlayers.size());
         this.playerToLivePlayerMap = new HashMap<>();
 

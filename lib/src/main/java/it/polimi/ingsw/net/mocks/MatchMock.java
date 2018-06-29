@@ -14,7 +14,12 @@ public class MatchMock implements IMatch {
     private final long endingTime;
     private final LobbyMock lobby;
     private final LivePlayerMock[] players;
-
+    private final IDraftPool draftPool;
+    private final IRoundTrack roundTrack;
+    private final IObjectiveCard[] publicObjectiveCards;
+    private final IToolCard[] toolCards;
+    private final IObjectiveCard privateObjective;
+    
     public MatchMock(IMatch iMatch) {
         this(
                 iMatch.getId(),
@@ -23,7 +28,12 @@ public class MatchMock implements IMatch {
                 new LobbyMock(iMatch.getLobby()),
                 Arrays.stream(iMatch.getPlayers())
                         .map(LivePlayerMock::new)
-                        .toArray(LivePlayerMock[]::new)
+                        .toArray(LivePlayerMock[]::new),
+                iMatch.getDraftPool(),
+                iMatch.getRoundTrack(),
+                iMatch.getPublicObjectiveCards(),
+                iMatch.getToolCards(),
+                iMatch.getPrivateObjectiveCard()
         );
     }
 
@@ -33,25 +43,23 @@ public class MatchMock implements IMatch {
             @JSONElement("starting-time") long startingTime,
             @JSONElement("ending-time") long endingTime,
             @JSONElement("lobby") LobbyMock lobby,
-            @JSONElement("players") LivePlayerMock[] players
+            @JSONElement("players") LivePlayerMock[] players,
+            @JSONElement("draft-pool") IDraftPool draftPool,
+            @JSONElement("round-track") IRoundTrack roundTrack,
+            @JSONElement("public-objective-cards") IObjectiveCard[] publicObjectiveCards,
+            @JSONElement("tool-cards") IToolCard[] toolCards,
+            @JSONElement("private-objective-card") IObjectiveCard privateObjective
     ) {
         this.id = id;
         this.startingTime = startingTime;
         this.endingTime = endingTime;
         this.lobby = lobby;
         this.players = players;
-    }
-    
-    public MatchMock(IMatch iMatch, ILivePlayer[] players) {
-        this(
-                iMatch.getId(),
-                iMatch.getStartingTime(),
-                iMatch.getEndingTime(),
-                new LobbyMock(iMatch.getLobby()),
-                Arrays.stream(players)
-                        .map(LivePlayerMock::new)
-                        .toArray(LivePlayerMock[]::new)
-        );
+        this.draftPool = draftPool;
+        this.roundTrack = roundTrack;
+        this.publicObjectiveCards = publicObjectiveCards;
+        this.toolCards = toolCards;
+        this.privateObjective = privateObjective;
     }
 
     @Override
@@ -85,22 +93,32 @@ public class MatchMock implements IMatch {
     }
     
     @Override
+    @JSONElement("draft-pool")
     public IDraftPool getDraftPool() {
-        return null;
+        return draftPool;
     }
     
     @Override
+    @JSONElement("round-track")
     public IRoundTrack getRoundTrack() {
-        return null;
+        return roundTrack;
     }
     
     @Override
-    public IObjectiveCard[] getObjectiveCards() {
-        return new IObjectiveCard[0];
+    @JSONElement("public-objective-cards")
+    public IObjectiveCard[] getPublicObjectiveCards() {
+        return publicObjectiveCards;
     }
     
     @Override
+    @JSONElement("tool-cards")
     public IToolCard[] getToolCards() {
-        return new IToolCard[0];
+        return toolCards;
+    }
+    
+    @Override
+    @JSONElement("private-objective-card")
+    public IObjectiveCard getPrivateObjectiveCard() {
+        return privateObjective;
     }
 }

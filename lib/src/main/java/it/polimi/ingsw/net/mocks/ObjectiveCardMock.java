@@ -4,23 +4,39 @@ import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
-public class ObjectiveCardMock implements  IObjectiveCard{
+public class ObjectiveCardMock implements IObjectiveCard {
 
     private static final long serialVersionUID = 8882572023918644221L;
 
-    private String id;
-    private CardVisibility visibility;
-    private IObjective objective;
+    private final String id;
+    private final CardVisibility visibility;
+    private final ObjectiveMock objective;
+    private final String title;
+    private final String descriptionKey;
+    
+    public ObjectiveCardMock(IObjectiveCard iObjectiveCard) {
+        this(
+                iObjectiveCard.getId(),
+                iObjectiveCard.getVisibility(),
+                new ObjectiveMock(iObjectiveCard.getObjective()),
+                iObjectiveCard.getTitle(),
+                iObjectiveCard.getDescription()
+        );
+    }
 
     @JSONDesignatedConstructor
     public ObjectiveCardMock(
             @JSONElement("id") String id,
             @JSONElement("visibility") CardVisibility visibility,
-            @JSONElement("objective") IObjective objective
+            @JSONElement("objective") ObjectiveMock objective,
+            @JSONElement("title") String title,
+            @JSONElement("description") String descriptionKey
     ) {
         this.id = id;
         this.objective = objective;
         this.visibility = visibility;
+        this.title = title;
+        this.descriptionKey = descriptionKey;
     }
 
     @Override
@@ -42,12 +58,14 @@ public class ObjectiveCardMock implements  IObjectiveCard{
     }
 
     @Override
+    @JSONElement("title")
     public String getTitle() {
-        throw new UnsupportedOperationException();
+        return title;
     }
 
     @Override
+    @JSONElement("description")
     public String getDescription() {
-        throw new UnsupportedOperationException();
+        return descriptionKey;
     }
 }

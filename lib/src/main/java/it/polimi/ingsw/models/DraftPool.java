@@ -1,7 +1,5 @@
 package it.polimi.ingsw.models;
 
-import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.locations.ChoosablePickLocation;
 import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
@@ -20,7 +18,6 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
     
     private final byte maxNumberOfDice;
     private Die[] dice;
-    private int numberOfPlayers;
 
     private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
     private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
@@ -28,10 +25,9 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
     /**
      * Sets up a new {@link DraftPool}.
      */
-    public DraftPool(byte maxNumberOfDice, int numberOfPlayers) {
-        this.maxNumberOfDice = maxNumberOfDice;
-        this.dice = new Die[maxNumberOfDice];
-        this.numberOfPlayers = numberOfPlayers;
+    public DraftPool(byte numberOfPlayers) {
+        this.maxNumberOfDice = numberOfPlayers;
+        this.dice = new Die[2 * numberOfPlayers + 1];
     }
     
     /**
@@ -140,9 +136,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
 
     @Override
     public int getFreeSpace() {
-        //int players = ((Match) Context.getSharedInstance().get(Context.MATCH)).getNumberOfPlayer();
-        int players = 3;
-        return (int) (2 * players + 1 - Arrays.stream(this.dice).filter(Objects::nonNull).count());
+        return (int) (this.dice.length - Arrays.stream(this.dice).filter(Objects::nonNull).count());
     }
 
     public OnDiePutListener addPutListener(OnDiePutListener onDiePutListener) {

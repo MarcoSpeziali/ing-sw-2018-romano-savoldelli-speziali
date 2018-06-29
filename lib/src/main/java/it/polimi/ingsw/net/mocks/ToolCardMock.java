@@ -1,25 +1,37 @@
 package it.polimi.ingsw.net.mocks;
 
-import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
-import org.json.JSONObject;
 
-public class ToolCardMock implements IToolCard{
+public class ToolCardMock implements IToolCard {
 
     private static final long serialVersionUID = 6704695589465019734L;
 
-    private  String id;
-    private IEffect effect;
-
+    private final String id;
+    private final EffectMock effect;
+    private final String title;
+    private final String descriptionKey;
+    
+    public ToolCardMock(IToolCard iToolCard) {
+        this(
+                iToolCard.getCardId(),
+                new EffectMock(iToolCard.getEffect()),
+                iToolCard.getTitle(),
+                iToolCard.getDescription()
+        );
+    }
+    
     @JSONDesignatedConstructor
     public ToolCardMock(
             @JSONElement("id") String id,
-            @JSONElement("effect") IEffect effect
-
+            @JSONElement("effect") EffectMock effect,
+            @JSONElement("title") String title,
+            @JSONElement("description") String descriptionKey
     ) {
         this.id = id;
         this.effect = effect;
+        this.title = title;
+        this.descriptionKey = descriptionKey;
     }
 
     @Override
@@ -35,15 +47,14 @@ public class ToolCardMock implements IToolCard{
     }
 
     @Override
+    @JSONElement("title")
     public String getTitle() {
-        throw new UnsupportedOperationException();
-
+        return this.title;
     }
 
     @Override
+    @JSONElement("description")
     public String getDescription() {
-        throw new UnsupportedOperationException();
+        return this.descriptionKey;
     }
-
-
 }
