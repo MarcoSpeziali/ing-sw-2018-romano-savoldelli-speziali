@@ -4,10 +4,10 @@ import it.polimi.ingsw.net.mocks.IPlayer;
 
 public class Turn {
     
-    public static final int STARTED = 0b00;
-    public static final int DIE_PLACED = 0b01;
-    public static final int TOOL_CARD_USED = 0b10;
-    public static final int ENDED = DIE_PLACED | TOOL_CARD_USED;
+    public static final byte STARTED = 0b00;
+    public static final byte DIE_PLACED = 0b01;
+    public static final byte TOOL_CARD_USED = 0b10;
+    public static final byte ENDED = DIE_PLACED | TOOL_CARD_USED;
     
     private byte phase;
     private final IPlayer player;
@@ -37,10 +37,9 @@ public class Turn {
         
         this.phase = STARTED;
     }
-    
-    public Byte getAvailablePhases() {
-        byte availablePhases = (byte) ~this.phase;
-        return availablePhases == STARTED ? null : availablePhases;
+
+    public void appendPhase(byte toAppend) {
+        this.phase |= toAppend;
     }
     
     public void end() {

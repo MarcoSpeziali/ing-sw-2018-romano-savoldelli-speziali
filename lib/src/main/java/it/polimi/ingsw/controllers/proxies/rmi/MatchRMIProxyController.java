@@ -85,6 +85,10 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     public void waitForTurnToEnd() throws IOException {
     
     }
+
+    public void postMoveResponse(MoveResponse moveResponse) {
+
+    }
     
     @Override
     public MoveResponse tryToMove(Move move) throws IOException {

@@ -3,10 +3,13 @@ package it.polimi.ingsw.server.managers;
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
+import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.net.mocks.MatchMock;
 import it.polimi.ingsw.net.mocks.WindowMock;
 import it.polimi.ingsw.net.requests.WindowRequest;
+import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.EventType;
@@ -17,10 +20,13 @@ import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
 public class MatchCommunicationsManager {
 
@@ -62,7 +68,10 @@ public class MatchCommunicationsManager {
     }
 
     public void sendWindowsToChoose(Map<DatabasePlayer, IWindow[]> playerToWindowsMap) throws IOException {
-        this.forEachRmi((databasePlayer, matchRMIProxyController) -> matchRMIProxyController.postWindowsToChoose(playerToWindowsMap.get(databasePlayer)));
+        this.forEachRmi((databasePlayer, matchRMIProxyController) -> {
+            matchRMIProxyController.postWindowsToChoose(playerToWindowsMap.get(databasePlayer));
+            matchRMIProxyController.setWindowResponseConsumer(iWindow -> this.onWindowChosen(databasePlayer, iWindow));
+        });
 
         try {
             this.forEachSocket((databasePlayer, authenticatedClientHandler) -> {
@@ -78,7 +87,7 @@ public class MatchCommunicationsManager {
                     ));
                 }
                 catch (IOException e) {
-                    FunctionalExceptionWrapper.wrap(e);
+                    wrap(e);
                 }
             });
         }
@@ -87,41 +96,59 @@ public class MatchCommunicationsManager {
         }
     }
 
-    /*public void sendWindowController(DatabasePlayer databasePlayer, WindowControllerImpl windowController) throws RemoteException {
-        MatchController matchController = null;*//*= this.playersHandler.get(databasePlayer)*//*;
-    
-        final int rows = windowController.getWindow().getRows();
-        final int columns = windowController.getWindow().getColumns();
-    
-        CellController[][] cellControllers = new CellController[rows][columns];
-        WindowController controller;
-    
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                CellControllerImpl actualController = windowController.getCellController(i, j);
-                
-                if (matchController instanceof MatchRMIProxyController) {
-                    cellControllers[i][j] = new CellRMIProxyController(
-                            new CellMock(actualController.getCell()),
-                            ControllersMapper.map(actualController, matchManager)
-                    );
-                }
-                else {
-                
-                }
-            }
+    public void sendMatchMockToPlayer(DatabasePlayer databasePlayer, IMatch match) throws IOException {
+        try {
+            this.rmiPlayersHandler.computeIfPresent(databasePlayer, wrap((player, rmiProxyController) -> {
+                rmiProxyController.onUpdateReceived(match);
+                return rmiProxyController;
+            }));
+
+            this.socketPlayersHandler.computeIfPresent(databasePlayer, wrap((player, authenticatedClientHandler) -> {
+                authenticatedClientHandler.sendResponse(new Response<>(
+                        new Header(EndPointFunction.MATCH_UPDATE_RESPONSE),
+                        new MatchMock(match)
+                ));
+                return authenticatedClientHandler;
+            }));
         }
-        
-        if (matchController instanceof MatchRMIProxyController) {
-            controller = new WindowRMIProxyController(
-                    new WindowMock(windowController.getWindow()),
-                    ControllersMapper.map(windowController, cellControllers, matchManager)
-            );
+        catch (FunctionalExceptionWrapper e) {
+            e.tryUnwrap(RemoteException.class).tryFinalUnwrap(IOException.class);
         }
-        else {
-        
+    }
+
+    public void sendPositiveResponseForMoveToPlayer(DatabasePlayer databasePlayer) throws IOException {
+        this.sendMoveResponse(databasePlayer, new MoveResponse(
+                this.match.getId(),
+                true
+        ));
+    }
+
+    public void sendNegativeResponseForMoveToPlayer(DatabasePlayer databasePlayer) throws IOException {
+        this.sendMoveResponse(databasePlayer, new MoveResponse(
+                this.match.getId(),
+                false
+        ));
+    }
+
+    private void sendMoveResponse(DatabasePlayer databasePlayer, MoveResponse moveResponse) throws IOException {
+        try {
+            this.rmiPlayersHandler.computeIfPresent(databasePlayer, wrap((player, rmiProxyController) -> {
+                rmiProxyController.postMoveResponse(moveResponse);
+                return rmiProxyController;
+            }));
+
+            this.socketPlayersHandler.computeIfPresent(databasePlayer, wrap((player, authenticatedClientHandler) -> {
+                authenticatedClientHandler.sendResponse(new Response<>(
+                        new Header(EndPointFunction.MATCH_PLAYER_MOVE_RESPONSE),
+                        moveResponse
+                ));
+                return authenticatedClientHandler;
+            }));
         }
-    }*/
+        catch (FunctionalExceptionWrapper e) {
+            e.tryUnwrap(RemoteException.class).tryFinalUnwrap(IOException.class);
+        }
+    }
 
     public void forEachRmi(BiConsumer<DatabasePlayer, MatchRMIProxyController> biConsumer) {
         this.rmiPlayersHandler.forEach(biConsumer);

@@ -1,11 +1,15 @@
 package it.polimi.ingsw.server.managers;
 
+import it.polimi.ingsw.controllers.DieInteractionException;
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.models.*;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.controllers.*;
 import it.polimi.ingsw.server.events.*;
+import it.polimi.ingsw.server.managers.turns.RoundManager;
+import it.polimi.ingsw.server.managers.turns.Turn;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.sql.DatabaseLobby;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
@@ -28,7 +32,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
-public class MatchManager implements PlayerEventsListener, MatchCommunicationsListener {
+public class MatchManager implements PlayerEventsListener, MatchCommunicationsListener, ModelUpdateListener {
 
     private static Map<Integer, MatchManager> matchManagerMap = new HashMap<>();
 
@@ -49,6 +53,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     private DatabaseMatch databaseMatch;
     private MatchCommunicationsManager matchCommunicationsManager;
     private final MatchObjectsManager matchObjectsManager;
+    private RoundManager roundManager;
 
     // ------ MATCH OBJECTS CACHE ------
     private final List<DatabasePlayer> lobbyPlayers;
@@ -167,7 +172,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             this.connectionTimerScheduledFuture.cancel(true);
             
             try {
-                // the pre-processing is done by connectionTask, so it can be run manually instead of waiting for the
+                // the pre-processing is done by connectionTask, so it can be run
+                // manually instead of waiting for the timer to expire
                 connectionTask.run();
             }
             catch (Exception e) {
@@ -308,6 +314,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             this.matchCommunicationsManager.closeConnectionToOtherPlayers();
     
             this.sendWindowsToChoose(playersInMatch.toArray(new DatabasePlayer[0]));
+
+            this.matchState = MatchState.RUNNING_ROUNDS;
         }
         catch (FunctionalExceptionWrapper e) {
             e.tryUnwrap(SQLException.class)
@@ -361,13 +369,88 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 Settings.getSettings().getRmiHeartBeatMatchTimeUnit()
         );
     }
-    
-    // ------ EXTERNAL EVENTS ------
+
+    // ------ MOVE HANDLING ------
+
+    private void handleMove(Move move, DatabasePlayer databasePlayer, Turn currentTurn) throws IOException {
+        /*
+            started         = 0b00
+            die_placed      = 0b01
+            tool_card_used  = 0b10
+            ended           = 0b11
+
+            to proceed the phase must be or started or tool_card_used
+            so:
+                0b00
+                0b10
+                = 0b0-
+
+            since we are interested only in the first be the phase gets masked with 0b10
+            */
+        if ((currentTurn.getPhase() & 0b10) == 0b00) {
+            try {
+                IDie requested = this.matchObjectsManager.getDraftPoolController()
+                        .getDieAtLocation(move.getDraftPoolPickPosition());
+
+                if (requested == null) {
+                    throw new DieInteractionException();
+                }
+
+                WindowControllerImpl windowController = this.matchObjectsManager.getWindowControllerForPlayer(databasePlayer);
+
+                if (!windowController.canPutDieAtLocation(requested, move.getWindowPutPosition())) {
+                    throw new DieInteractionException();
+                }
+
+                Die die = this.matchObjectsManager.getDraftPoolController()
+                        .tryToPick(move.getDraftPoolPickPosition());
+                windowController.tryToPut(
+                        die,
+                        move.getWindowPutPosition(),
+                        this.shouldIgnoreColor,
+                        this.shouldIgnoreShade,
+                        this.shouldIgnoreAdjacency
+                );
+
+                this.matchCommunicationsManager.sendPositiveResponseForMoveToPlayer(databasePlayer);
+            }
+            catch (DieInteractionException e) {
+                this.matchCommunicationsManager.sendNegativeResponseForMoveToPlayer(databasePlayer);
+            }
+        }
+        else {
+            this.matchCommunicationsManager.sendNegativeResponseForMoveToPlayer(databasePlayer);
+        }
+    }
+
+    // ------ PLAYER EVENTS ------
     
     @Override
     public void onPlayerDisconnected(DatabasePlayer player) {
-    
+
     }
+
+    // ------ MODELS EVENTS ------
+
+    @Override
+    public void onModelUpdated(Object sender, Object model) {
+        if (!this.matchObjectsManager.containsController(sender)) {
+            return;
+        }
+
+        try {
+            for (DatabasePlayer player : this.matchPlayers) {
+                IMatch match = this.matchObjectsManager.buildMatchMockForPlayer(player);
+                this.matchCommunicationsManager.sendMatchMockToPlayer(player, match);
+            }
+        }
+        catch (IOException | SQLException e) {
+            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers:", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // ------ COMMUNICATIONS EVENTS ------
 
     @Override
     @SuppressWarnings("squid:S00112")
@@ -384,33 +467,52 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         WindowControllerImpl windowController = new WindowControllerImpl(chosenWindow, CellControllerImpl::new);
 
         this.matchObjectsManager.setWindowControllerForPlayer(windowController, databasePlayer);
-        
-        /*try {
-            matchCommunicationsManager.sendWindowController(databasePlayer, windowController);
-        }
-        catch (RemoteException e) {
-            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while sending windows:", e);
-            throw new RuntimeException(e);
-        }*/
-    
+
         if (this.matchObjectsManager.getPlayerWindowMap().size() == this.matchPlayers.size()) {
-            this.matchState = MatchState.WAITING_FOR_CONTROLLERS_ACK;
-    
+            this.matchState = MatchState.RUNNING_ROUNDS;
+
             try {
                 createRemainingModelsAndControllers();
-                // TODO: send models
+
+                for (DatabasePlayer player : this.matchPlayers) {
+                    IMatch match = this.matchObjectsManager.buildMatchMockForPlayer(player);
+                    this.matchCommunicationsManager.sendMatchMockToPlayer(player, match);
+                }
+
+                this.roundManager = RoundManager.createRoundManager(this.databaseMatch);
             }
-            catch (IOException | ClassNotFoundException e) {
-                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers:", e);
+            catch (IOException | ClassNotFoundException | SQLException e) {
+                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers and sending mocks:", e);
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    @Override
+    public void onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move) {
+        if (matchCommunicationsManager != this.matchCommunicationsManager) {
+            return;
+        }
+
+        Turn currentTurn = this.roundManager.current();
+
+        try {
+            this.handleMove(move, databasePlayer, currentTurn);
+            currentTurn.appendPhase(Turn.DIE_PLACED);
+
+            if (currentTurn.getPhase() == Turn.ENDED) {
+                currentTurn.end();
+                this.roundManager.next();
+            }
+        }
+        catch (IOException e) {
+            ServerLogger.getLogger().log(Level.SEVERE, "Error while sending move response to user: " + databasePlayer.toString(), e);
         }
     }
 
     private enum MatchState {
         WAITING_FOR_PLAYERS,
         WAITING_FOR_WINDOW_RESPONSES,
-        WAITING_FOR_CONTROLLERS_ACK,
         RUNNING_ROUNDS,
         CALCULATING_RESULTS,
         CLOSING_MATCH

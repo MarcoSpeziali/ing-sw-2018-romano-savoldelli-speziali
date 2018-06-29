@@ -6,6 +6,10 @@ import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
+import it.polimi.ingsw.net.mocks.IDie;
+import it.polimi.ingsw.server.events.EventDispatcher;
+import it.polimi.ingsw.server.events.EventType;
+import it.polimi.ingsw.server.events.ModelUpdateListener;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -41,18 +45,8 @@ public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListen
         return this.cellControllers[i][j];
     }
 
-    public Die tryToPick(Die die) {
-        for (CellControllerImpl[] controllers : this.cellControllers) {
-            for (CellControllerImpl cellController : controllers) {
-                Die cellDie = cellController.getCell().getDie();
-
-                if (cellDie != null && cellDie.equals(die)) {
-                    return cellController.tryToPick();
-                }
-            }
-        }
-
-        throw new IllegalArgumentException();
+    public boolean canPutDieAtLocation(IDie die, Integer location) {
+        return false;
     }
 
     public Die tryToPick(int location) {
@@ -76,9 +70,19 @@ public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListen
     
     @Override
     public void onDiePicked(Die die, Integer location) {
+        EventDispatcher.dispatch(
+                EventType.MODEL_UPDATES,
+                ModelUpdateListener.class,
+                modelUpdateListener -> modelUpdateListener.onModelUpdated(this, this.window)
+        );
     }
     
     @Override
     public void onDiePut(Die die, Integer location) {
+        EventDispatcher.dispatch(
+                EventType.MODEL_UPDATES,
+                ModelUpdateListener.class,
+                modelUpdateListener -> modelUpdateListener.onModelUpdated(this, this.window)
+        );
     }
 }

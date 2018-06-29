@@ -1,17 +1,16 @@
 package it.polimi.ingsw.server.managers.turns;
 
-import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.net.mocks.IMatch;
 import it.polimi.ingsw.net.mocks.IPlayer;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.PlayerEventsListener;
+import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RoundManager implements PlayerEventsListener, AutoCloseable {
     
@@ -22,13 +21,11 @@ public class RoundManager implements PlayerEventsListener, AutoCloseable {
     /**
      * Gets an instance of {@link RoundManager} which handles the specified {@link IMatch}.
      *
-     * @param iMatch the {@link IMatch} to handle
+     * @param match the {@link DatabaseMatch} to handle
      * @return an instance of {@link RoundManager} which handles the provided {@link IMatch}
      */
-    public static RoundManager createRoundManager(IMatch iMatch) {
-        RoundManager roundManager = new RoundManager(iMatch);
-        managers.put(iMatch.getId(), roundManager);
-        return roundManager;
+    public static RoundManager createRoundManager(DatabaseMatch match) {
+        return managers.computeIfAbsent(match.getId(), id -> new RoundManager(match));
     }
     
     /**
@@ -47,10 +44,8 @@ public class RoundManager implements PlayerEventsListener, AutoCloseable {
     private List<IPlayer> originalPlayers;
     private Turn currentTurn;
     
-    private RoundManager(IMatch iMatch) {
-        this.originalPlayers = Arrays.stream(iMatch.getPlayers())
-                .map(ILivePlayer::getPlayer)
-                .collect(Collectors.toList());
+    private RoundManager(DatabaseMatch match) {
+        this.originalPlayers = Arrays.asList(match.getPlayers());
     
         this.playerTurnList = new PlayerTurnList(
                 this.originalPlayers.toArray(new IPlayer[0]),

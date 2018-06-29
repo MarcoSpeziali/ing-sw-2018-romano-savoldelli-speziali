@@ -40,6 +40,13 @@ public class MatchObjectsManager {
         playerPrivateObjectiveCardMap = new HashMap<>();
     }
 
+    public boolean containsController(Object controller) {
+        return controller == this.draftPoolController ||
+                controller == this.roundTrackController ||
+                Arrays.stream(this.toolCardControllers).anyMatch(toolCardController -> controller == toolCardController) ||
+                this.playerWindowMap.values().stream().anyMatch(windowController -> controller == windowController);
+    }
+
     public Bag getBag() {
         return bag;
     }
