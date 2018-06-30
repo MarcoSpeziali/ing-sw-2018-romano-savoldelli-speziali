@@ -11,7 +11,6 @@ import it.polimi.ingsw.net.mocks.ICell;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
 
 public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
 
@@ -21,24 +20,8 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
     private Integer shade;
     private Die die;
     
-    private static int lastUUID;
-    private static synchronized int getNextUUID() {
-        return ++lastUUID;
-    }
-    private final int uuid;
-    
-    private static final TreeMap<Integer, Cell> CELL_TREE_MAP = new TreeMap<>();
-    
-    public static Cell getDieWithUUID(int uuid) {
-        return CELL_TREE_MAP.get(uuid);
-    }
-    
     private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
     private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
-
-    public Cell(Integer shade, GlassColor color) {
-        this(shade, color, -1);
-    }
     
     /**
      * Sets up a new {@link Cell}.
@@ -46,12 +29,9 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
      * @param shade the shade of that cell.
      * @param color the {@link GlassColor} of that cell.
      */
-    public Cell(Integer shade, GlassColor color, int uuid) {
+    public Cell(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
-        this.uuid = uuid;
-    
-        CELL_TREE_MAP.put(this.uuid, this);
     }
 
     /**
@@ -76,11 +56,6 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
     @Override
     public Integer getShade() {
         return this.shade;
-    }
-    
-    @Override
-    public int getUUID() {
-        return uuid;
     }
     
     /**

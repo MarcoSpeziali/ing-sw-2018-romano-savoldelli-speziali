@@ -7,7 +7,6 @@ import it.polimi.ingsw.net.mocks.IDie;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.TreeMap;
 
 public class Die implements IDie {
 
@@ -15,18 +14,6 @@ public class Die implements IDie {
 
     private Integer shade;
     private GlassColor color;
-
-    private static int lastUUID;
-    private static synchronized int getNextUUID() {
-        return ++lastUUID;
-    }
-    private final int uuid;
-    
-    private static final TreeMap<Integer, Die> DIE_TREE_MAP = new TreeMap<>();
-    
-    public static Die getDieWithUUID(int uuid) {
-        return DIE_TREE_MAP.get(uuid);
-    }
 
     private transient List<DieInteractionListener> listeners = new LinkedList<>();
 
@@ -39,9 +26,6 @@ public class Die implements IDie {
     public Die(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
-        this.uuid = getNextUUID();
-        
-        DIE_TREE_MAP.put(this.uuid, this);
     }
 
     /**
@@ -71,11 +55,6 @@ public class Die implements IDie {
         return this.color;
     }
 
-    @Override
-    public int getUUID() {
-        return uuid;
-    }
-
     /**
      * @param color assign the color to the die
      */
@@ -90,24 +69,26 @@ public class Die implements IDie {
     public String toString() {
         return String.format("Die(%d, %s)", this.shade, this.color);
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Die)) {
             return false;
         }
         Die die = (Die) o;
-        return uuid == die.uuid;
+        return Objects.equals(shade, die.shade) &&
+                color == die.color;
     }
-
+    
     @Override
     public int hashCode() {
-        return Objects.hash(this.uuid);
+        
+        return Objects.hash(shade, color);
     }
-
+    
     public void addListener(DieInteractionListener dieInteractionListener) {
         this.listeners.add(dieInteractionListener);
     }

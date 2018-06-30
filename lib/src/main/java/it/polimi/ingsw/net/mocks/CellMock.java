@@ -4,6 +4,8 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
+import java.util.Objects;
+
 public class CellMock implements ICell {
 
     private static final long serialVersionUID = -1796852775563049154L;
@@ -11,30 +13,30 @@ public class CellMock implements ICell {
     private GlassColor color;
     private Integer shade;
     private IDie die;
-    private int uuid;
     
-    // FIXME: we uagliò ci simme lamentàt ppe mis ro' fatto ca' o' costruttòr e' Die
-    // FIXME: avessè nu' ordinè divèrs ra chello e' Cell e mo' o' invèrt e' nuovò? <3
-    public CellMock(GlassColor color, Integer shade) {
-        this.color = color;
-        this.shade = shade;
-    }
-
     public CellMock(ICell iCell) {
-        this(iCell.getShade(), iCell.getColor(), iCell.getDie() == null ? null : new DieMock(iCell.getDie()), iCell.getUUID());
+        this(
+                iCell.getShade(),
+                iCell.getColor(),
+                iCell.getDie() == null ?
+                        null :
+                        new DieMock(iCell.getDie())
+        );
+    }
+    
+    public CellMock(Integer shade, GlassColor color) {
+        this(shade, color, null);
     }
 
     @JSONDesignatedConstructor
     public CellMock(
             @JSONElement("shade") int shade,
             @JSONElement("color") GlassColor color,
-            @JSONElement("die") DieMock die,
-            @JSONElement("uuid") int uuid
+            @JSONElement("die") DieMock die
     ) {
         this.shade = shade;
         this.color = color;
         this.die = die;
-        this.uuid = uuid;
     }
 
     @Override
@@ -56,7 +58,21 @@ public class CellMock implements ICell {
     }
     
     @Override
-    public int getUUID() {
-        return this.uuid;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof CellMock)) {
+            return false;
+        }
+        CellMock cellMock = (CellMock) o;
+        return color == cellMock.color &&
+                Objects.equals(shade, cellMock.shade) &&
+                Objects.equals(die, cellMock.die);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, shade, die);
     }
 }

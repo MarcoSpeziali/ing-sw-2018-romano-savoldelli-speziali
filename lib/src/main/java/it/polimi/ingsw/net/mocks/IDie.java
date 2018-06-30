@@ -5,9 +5,7 @@ import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 public interface IDie extends JSONSerializable {
-
-    @JSONElement("uuid")
-    int getUUID();
+    
     @JSONElement("color")
     GlassColor getColor();
     @JSONElement("shade")

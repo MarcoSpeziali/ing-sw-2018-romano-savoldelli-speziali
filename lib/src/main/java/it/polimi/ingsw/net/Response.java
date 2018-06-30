@@ -17,7 +17,7 @@ public class Response<T extends JSONSerializable> implements JSONSerializable {
     private static final long serialVersionUID = -3163357263339164222L;
 
     public static final Response<NullResponse> NULL = new Response<>(
-            new Header(null, null, null),
+            new Header(null, null),
             new NullResponse()
     );
 
