@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class WindowMockTest {
-    private DieMock dieMock = new DieMock(3, GlassColor.PURPLE, 0);
-    private CellMock cellMock1 = new CellMock(0,GlassColor.PURPLE, dieMock, 0);
-    private CellMock cellMock2 = new CellMock(3, GlassColor.RED, null, 0);
+    private DieMock dieMock = new DieMock(3, GlassColor.PURPLE);
+    private CellMock cellMock1 = new CellMock(0,GlassColor.PURPLE, dieMock);
+    private CellMock cellMock2 = new CellMock(3, GlassColor.RED, null);
     private CellMock[] cellMocks = new CellMock[]{cellMock1, cellMock2};
     private WindowMock windowMock = new WindowMock("prova", 3, 1, 2, cellMocks);
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class DieMockTest {
-    DieMock die = new DieMock(3, GlassColor.PURPLE, 0);
+    DieMock die = new DieMock(3, GlassColor.PURPLE);
 
     @Test
     void testSerializationAndDeserialization(){

@@ -4,27 +4,26 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
+import java.util.Objects;
+
 public class DieMock implements IDie {
 
     private static final long serialVersionUID = -6221553822460063755L;
 
     private GlassColor color;
     private Integer shade;
-    private final int uuid;
 
     public DieMock(IDie iDie) {
-        this(iDie.getShade(), iDie.getColor(), iDie.getUUID());
+        this(iDie.getShade(), iDie.getColor());
     }
 
     @JSONDesignatedConstructor
     public DieMock(
             @JSONElement("shade") Integer shade,
-            @JSONElement("color") GlassColor color,
-            @JSONElement("uuid") int uuid
+            @JSONElement("color") GlassColor color
     ) {
         this.color = color;
         this.shade = shade;
-        this.uuid = uuid;
     }
 
     @Override
@@ -38,10 +37,22 @@ public class DieMock implements IDie {
     public Integer getShade() {
         return this.shade;
     }
-
+    
     @Override
-    @JSONElement("uuid")
-    public int getUUID() {
-        return uuid;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof DieMock)) {
+            return false;
+        }
+        DieMock dieMock = (DieMock) o;
+        return color == dieMock.color &&
+                Objects.equals(shade, dieMock.shade);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, shade);
     }
 }

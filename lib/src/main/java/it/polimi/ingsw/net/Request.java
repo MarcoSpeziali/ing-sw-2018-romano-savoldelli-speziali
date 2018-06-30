@@ -17,7 +17,7 @@ public class Request<T extends JSONSerializable> implements JSONSerializable {
     private static final long serialVersionUID = 5889311626900785609L;
 
     public static final Request<NullRequest> NULL = new Request<>(
-            new Header(null, null, null),
+            new Header(null, null),
             new NullRequest()
     );
 

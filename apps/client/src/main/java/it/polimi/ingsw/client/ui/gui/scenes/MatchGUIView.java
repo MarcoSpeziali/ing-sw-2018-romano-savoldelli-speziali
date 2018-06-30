@@ -17,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Scale;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -248,14 +247,14 @@ public class MatchGUIView extends GUIView<MatchController> {
                 innerLoader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
                 Node cell = innerLoader.load();
                 CellGUIView cellGUIView = innerLoader.getController();
-                cellGUIView.setModel(new CellMock(null, i+1));
+                cellGUIView.setModel(new CellMock(i+1, null));
                 gridPane.add(cell, i%3, i/3);
                 gridPane.setVgap(10);
                 gridPane.setHgap(10);
                 int finalI = i+1;
                 cell.setOnMouseClicked(event -> {
                     try {
-                        dieGUIView.setModel(new DieMock(finalI, iDie.getColor(), 0));
+                        dieGUIView.setModel(new DieMock(finalI, iDie.getColor()));
                         shade.set(finalI);
                     } catch (IOException e) {
                         e.printStackTrace();

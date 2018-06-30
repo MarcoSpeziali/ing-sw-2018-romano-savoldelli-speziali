@@ -27,17 +27,17 @@ import static org.mockito.Mockito.mock;
 
 public class MatchGUITest extends Application {
 
-    CellMock[] cells1 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
-            new CellMock(null, 0), new CellMock(null, 4), new CellMock(GlassColor.PURPLE,0) };
+    CellMock[] cells1 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+            new CellMock(0, null), new CellMock(4, null), new CellMock(0, GlassColor.PURPLE) };
 
-    CellMock[] cells2 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
-            new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+    CellMock[] cells2 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+            new CellMock(0, null), new CellMock(4, null), new CellMock(0, null) };
 
-    CellMock[] cells3 = {new CellMock(GlassColor.GREEN, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
-            new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+    CellMock[] cells3 = {new CellMock(0, GlassColor.GREEN), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+            new CellMock(0, null), new CellMock(4, null), new CellMock(0, null) };
 
-    CellMock[] cells4 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.YELLOW, 0), new CellMock(null, 6),
-            new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+    CellMock[] cells4 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.YELLOW), new CellMock(6, null),
+            new CellMock(0, null), new CellMock(4, null), new CellMock(0, null) };
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,6 +48,8 @@ public class MatchGUITest extends Application {
         MatchGUIView matchGUIView = loader.getController();
 
         matchGUIView.setModel(new MatchController() {
+    
+            private static final long serialVersionUID = 5104576545583400399L;
     
             @Override
             public void init(Object... args) throws IOException {
@@ -62,6 +64,8 @@ public class MatchGUITest extends Application {
             @Override
             public IMatch waitForUpdate() throws RemoteException, InterruptedException {
                 return new IMatch() {
+                    private static final long serialVersionUID = 1516527336752132977L;
+    
                     @Override
                     public int getId() {
                         return 0;
@@ -84,8 +88,10 @@ public class MatchGUITest extends Application {
 
                     @Override
                     public ILivePlayer[] getPlayers() {
-                        ILivePlayer[] iLivePlayers = {
+                        return new ILivePlayer[]{
                                 new ILivePlayer() {
+                                    private static final long serialVersionUID = -4729773730451937954L;
+    
                                     @Override
                                     public int getFavourTokens() {
                                         return 0;
@@ -103,6 +109,8 @@ public class MatchGUITest extends Application {
                                     }
                                 }
                         , new ILivePlayer() {
+                            private static final long serialVersionUID = 4883402830129829725L;
+    
                             @Override
                             public int getFavourTokens() {
                                 return 0;
@@ -118,6 +126,8 @@ public class MatchGUITest extends Application {
                                 return null;
                             }
                         }, new ILivePlayer() {
+                            private static final long serialVersionUID = 8193853292111083995L;
+    
                             @Override
                             public int getFavourTokens() {
                                 return 0;
@@ -133,7 +143,6 @@ public class MatchGUITest extends Application {
                                 return null;
                             }
                         }};
-                        return iLivePlayers;
                     }
 
                     @Override
@@ -148,8 +157,10 @@ public class MatchGUITest extends Application {
 
                     @Override
                     public IObjectiveCard[] getPublicObjectiveCards() {
-                        IObjectiveCard[] objectiveCards = {
+                        return new IObjectiveCard[]{
                                 new IObjectiveCard() {
+                                    private static final long serialVersionUID = 7005937290370505338L;
+    
                                     @Override
                                     public String getId() {
                                         return "color_diagonals";
@@ -176,6 +187,8 @@ public class MatchGUITest extends Application {
                                     }
                                 },
                                 new IObjectiveCard() {
+                                    private static final long serialVersionUID = 552597124268545053L;
+    
                                     @Override
                                     public String getId() {
                                         return "medium_shades";
@@ -202,14 +215,16 @@ public class MatchGUITest extends Application {
                                     }
                                 }
                         };
-                        return objectiveCards;
                     }
 
 
                     @Override
                     public IToolCard[] getToolCards() {
-                        IToolCard[] toolCards = {
+    
+                        return new IToolCard[]{
                                 new IToolCard() {
+                                    private static final long serialVersionUID = 590822143671363988L;
+    
                                     @Override
                                     public String getCardId() {
                                         return "cork_backed_strainghtedge";
@@ -231,6 +246,8 @@ public class MatchGUITest extends Application {
                                     }
                                 },
                                 new IToolCard() {
+                                    private static final long serialVersionUID = -2166360354810458383L;
+    
                                     @Override
                                     public String getCardId() {
                                         return "flux_brush";
@@ -251,6 +268,8 @@ public class MatchGUITest extends Application {
                                         return "description2";
                                     }
                                 }, new IToolCard() {
+                            private static final long serialVersionUID = 8472747339099896345L;
+    
                             @Override
                             public String getCardId() {
                                 return "lathekin";
@@ -271,13 +290,13 @@ public class MatchGUITest extends Application {
                                 return null;
                             }
                                 }};
-
-                        return toolCards;
                     }
 
                     @Override
                     public IObjectiveCard getPrivateObjectiveCard() {
-                        IObjectiveCard privateObjectiveCard = new IObjectiveCard() {
+                        return new IObjectiveCard() {
+                            private static final long serialVersionUID = -8405330536339884826L;
+    
                             @Override
                             public String getId() {
                                 return "red_shade";
@@ -303,32 +322,29 @@ public class MatchGUITest extends Application {
                                 return "descriptionPrivate";
                             }
                         };
-                        return privateObjectiveCard;
                     }
                 };
             }
             
             @Override
             public IWindow[] waitForWindowRequest() throws RemoteException {
-                CellMock[] cells1 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
-                        new CellMock(null, 0), new CellMock(null, 4), new CellMock(GlassColor.PURPLE,0) };
+                CellMock[] cells1 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+                        new CellMock(0, null), new CellMock(4, null), new CellMock(0, GlassColor.PURPLE) };
     
-                CellMock[] cells2 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
-                        new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+                CellMock[] cells2 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+                        new CellMock(0, null), new CellMock(4, null), new CellMock(0, null) };
     
-                CellMock[] cells3 = {new CellMock(GlassColor.GREEN, 0), new CellMock(GlassColor.BLUE, 0), new CellMock(null, 6),
-                        new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+                CellMock[] cells3 = {new CellMock(0, GlassColor.GREEN), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+                        new CellMock(0, null), new CellMock(4, null), new CellMock(0, null) };
     
-                CellMock[] cells4 = {new CellMock(GlassColor.RED, 0), new CellMock(GlassColor.YELLOW, 0), new CellMock(null, 6),
-                        new CellMock(null, 0), new CellMock(null, 4), new CellMock(null,0) };
+                CellMock[] cells4 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.YELLOW), new CellMock(6, null),
+                        new CellMock(0, null), new CellMock(4, null), new CellMock(0, null) };
     
-                IWindow[] iWindows = {new WindowMock("window 1", 3, 2, 3, cells1),
+                return new IWindow[]{new WindowMock("window 1", 3, 2, 3, cells1),
                         new WindowMock("window 2", 1, 2, 3, cells2),
                         new WindowMock("window 3", 1, 2, 3, cells3),
                         new WindowMock("window 4", 1, 2, 3, cells4)
                 };
-    
-                return iWindows;
             }
     
             @Override
@@ -393,11 +409,9 @@ public class MatchGUITest extends Application {
             @Override
             public IDie waitForSetShade() {
                 return new IDie() {
-                    @Override
-                    public int getUUID() {
-                        return 0;
-                    }
-
+    
+                    private static final long serialVersionUID = -8144175517603151757L;
+    
                     @Override
                     public GlassColor getColor() {
                         return GlassColor.PURPLE;
