@@ -33,7 +33,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
     public void setModel(IDraftPool iDraftPool) throws IOException {
         super.setModel(iDraftPool);
 
-        Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap(); // FIXME: why using it?
+        Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap();
 
         locationsDieMap.keySet().stream()
                 .sorted().forEach(unsafe(location -> {

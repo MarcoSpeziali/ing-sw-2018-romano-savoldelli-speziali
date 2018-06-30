@@ -54,8 +54,8 @@ public class WindowGUIView extends GUIView<IWindow> {
         super.setModel(iWindow);
 
         nameLabel.setText(iWindow.getId());
-        gridPane.setVgap(10);
-        gridPane.setHgap(10);
+        gridPane.setVgap(5);
+        gridPane.setHgap(5);
 
         for (int i = 0; i < iWindow.getRows(); i++) {
             for (int j = 0; j < iWindow.getColumns(); j++) {

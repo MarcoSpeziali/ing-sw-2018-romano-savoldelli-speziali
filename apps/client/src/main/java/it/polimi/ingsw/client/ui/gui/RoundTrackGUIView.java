@@ -29,12 +29,7 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
             Parent dieView = loader.load();
             DieGUIView controller = loader.getController();
-            if (iRoundTrack.getNumberOfRounds() <= 1) {
-                //controller.setModel(iRoundTrack.getDiceForRoundAtIndex(1,0));
-            }
-            else {
-               // controller.setModel(iRoundTrack.getDiceForRoundAtIndex(i, 1));
-            }
+
             gridPane.add(dieView, i,0);
         }
         gridPane.setHgap(10);

@@ -12,6 +12,7 @@ import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -47,13 +48,16 @@ public class MatchGUIView extends GUIView<MatchController> {
     @FXML
     public BorderPane borderPane;
 
+    @FXML
+    public BorderPane centerPane;
+
 
     @Override
     public void init() {
         chooseWindow();
-        //setUpUpdateFuture();
-        setUpSetShadeFuture();
         loadElements();
+        //setUpUpdateFuture();
+        //setUpSetShadeFuture();
     }
 
 
@@ -76,8 +80,12 @@ public class MatchGUIView extends GUIView<MatchController> {
                         Node toolCardNode = toolCardLoader.load();
                         toolCardNode.setOnMousePressed(event -> dialog.show());
                         ToolCardGUIView toolCardGUIView = toolCardLoader.getController();
-                        //toolCardGUIView.setModel(iToolCard);
+                        toolCardGUIView.setModel(iToolCard);
                         vBoxToolCard.getChildren().add(toolCardNode);
+                        vBoxToolCard.setMinHeight(1000);
+                        vBoxToolCard.setMaxWidth(200);
+                        vBoxToolCard.setSpacing(20);
+                        vBoxToolCard.setAlignment(Pos.TOP_CENTER);
 
                         content.setBody(toolCardNode);
 
@@ -118,6 +126,11 @@ public class MatchGUIView extends GUIView<MatchController> {
                         ObjectiveCardGUIView objectiveCardGUIView = objectiveCardLoader.getController();
                         objectiveCardGUIView.setModel(iObjectiveCard);
                         vBoxObjectiveCard.getChildren().add(objectiveCardNode);
+                        vBoxObjectiveCard.setMaxWidth(200);
+                        vBoxObjectiveCard.setMinHeight(1000);
+                        vBoxObjectiveCard.setSpacing(20);
+                        vBoxObjectiveCard.setAlignment(Pos.TOP_CENTER);
+
                         content.setBody(objectiveCardNode);
                         JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
@@ -129,23 +142,29 @@ public class MatchGUIView extends GUIView<MatchController> {
                     Node privateCardNode = privateCardLoader.load();
                     ObjectiveCardGUIView objectiveCardGUIView = privateCardLoader.getController();
                     objectiveCardGUIView.setModel(iPrivateObjectiveCard);
-                    borderPane.setCenter(privateCardNode); // FIXME: non va messa con questo layout!
+                    centerPane.setRight(privateCardNode);
+                    centerPane.setAlignment(privateCardNode, Pos.CENTER);
+                    centerPane.setMargin(privateCardNode, new Insets(10));
 
-                    FXMLLoader draftPoolLoader = new FXMLLoader();
+                   FXMLLoader draftPoolLoader = new FXMLLoader();
                     draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
                     Node draftPoolNode = draftPoolLoader.load();
                     DraftPoolGUIView draftPoolGUIView = draftPoolLoader.getController();
                     draftPoolGUIView.setModel(iDraftPool);
-                    borderPane.setCenter(draftPoolNode);
+                    centerPane.setTop(draftPoolNode);
+                    //draftPoolNode.setScaleX(0.6);
+                    //draftPoolNode.setScaleY(0.6);
 
                 })));}
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
+        gridPane.setHgap(175);
+        gridPane.setVgap(140);
         JFXDialogLayout content = new JFXDialogLayout();
+        content.setMinSize(870, 750);
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+
 
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForWindowRequest()))
                 .thenAccept(iWindows -> {
@@ -155,8 +174,9 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
 
                                 Node window = loader.load();
+                                window.setScaleX(1.7);
+                                window.setScaleY(1.7);
                                 WindowGUIView windowGUIView = loader.getController();
-
                                 windowGUIView.setModel(iWindows[i]);
                                 windowGUIView.setProperty(Property.NONE);
 
@@ -165,7 +185,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 window.setOnMouseEntered(event -> window.setCursor(Cursor.HAND));
 
                                 window.setOnMousePressed(event -> {
-                                    borderPane.setCenter(window);
+                                    centerPane.setCenter(window);
                                     window.setOnMouseEntered(e -> window.setCursor(Cursor.DEFAULT));
                                     windowGUIView.setProperty(Property.OWNED);
 
@@ -184,6 +204,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         content.setHeading(new Text("Choose your Window."));
                         content.setBody(gridPane);
                         content.setAlignment(Pos.CENTER);
+                        gridPane.setAlignment(Pos.CENTER);
                         dialog.show();
 
                     }
@@ -193,7 +214,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     
     private void setUpOpponentsWindows(IMatch update) {
         Platform.runLater(() -> {
-
+            AtomicInteger index = new AtomicInteger();
             for (ILivePlayer player: update.getPlayers()) {
 
                 IWindow iWindow = player.getWindow();
@@ -201,7 +222,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
                 try {
                     Node node = loader.load();
-                    node.setScaleX(0.5); // FIXME come facciamo?
+                    node.setScaleX(0.5);
                     node.setScaleY(0.5);
                     VBox vBox = new VBox();
                     Label label = new Label("ciao");
@@ -211,11 +232,10 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                     WindowGUIView windowGUIView = loader.getController();
                     windowGUIView.setModel(iWindow);
-                    windowGUIView.setProperty(Property.OPPONENT);
-
-                    hBoxWindows.setMaxHeight(20);
-                    hBoxWindows.setAlignment(Pos.CENTER);
+                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
                     hBoxWindows.getChildren().add(node);
+                    hBoxWindows.setSpacing(30);
+                    hBoxWindows.setAlignment(Pos.CENTER);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

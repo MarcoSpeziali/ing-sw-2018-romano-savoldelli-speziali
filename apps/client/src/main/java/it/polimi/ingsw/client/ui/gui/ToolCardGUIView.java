@@ -37,7 +37,7 @@ public class ToolCardGUIView extends GUIView<ToolCardController> {
         draft.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_DRAFT));
         bag.setText(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_BAG_TEXT));
         title.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardTitle(iToolCard.getCardId())));
-        effect.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardEffect(iToolCard.getEffect().toString())));
+        effect.setText(Constants.Strings.toLocalized(Constants.Strings.getToolCardEffect(iToolCard.getCardId())));
         path = Constants.Resources.valueOf(String.format("TOOL_CARD_%s", iToolCard.getCardId().toUpperCase())).getRelativePath();
         try {
             imageView.setImage(new Image(Resources.getResource(ToolCardGUIView.class.getClassLoader(), path).openStream()));
