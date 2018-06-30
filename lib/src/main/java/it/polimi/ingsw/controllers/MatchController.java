@@ -30,15 +30,21 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
     void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException;
     
         // ------ TOOL CARDS CALLBACK ------
+            // set interi -> posizioni in cui non puo andare
+            // if JSONS instanceof()
+                // -- mostrare roundtrack
         Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation();
         void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition);
-    
+
+            // range interi 2:5
         Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect();
         void postChosenEffects(IEffect[] effects);
-        
+
+            // 0:n volte
         IEffect waitForContinueToRepeat();
         void postContinueToRepeatChoice(boolean continueToRepeat);
-        
+
+            //
         IDie waitForSetShade();
         void postSetShade(Integer shade);
 }

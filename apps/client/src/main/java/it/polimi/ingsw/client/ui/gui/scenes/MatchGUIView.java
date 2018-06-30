@@ -8,6 +8,7 @@ import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -252,15 +255,17 @@ public class MatchGUIView extends GUIView<MatchController> {
                 gridPane.setVgap(10);
                 gridPane.setHgap(10);
                 int finalI = i+1;
-                cell.setOnMouseClicked(event -> {
+                cell.setOnMouseEntered(event -> {
                     try {
+                        cell.setCursor(Cursor.HAND);
                         dieGUIView.setModel(new DieMock(finalI, iDie.getColor()));
-                        shade.set(finalI);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
-                cell.setOnMouseEntered(event-> cell.setCursor(Cursor.HAND));
+                cell.setOnMouseClicked(event -> {
+                    shade.set(finalI);
+                });
             }
             confirm.setOnMousePressed(event -> {
                 this.model.postSetShade(shade.get());
@@ -285,10 +290,86 @@ public class MatchGUIView extends GUIView<MatchController> {
                 .thenAccept(this::setDieShade);
     }
 
-    /*private void setUpEffecFuture() {
+    /*private void setUpEffectFuture() {
         CompletableFuture.supplyAsync(unsafe(() ->
             this.model.waitForChooseBetweenEffect())).thenAccept();
     }*/
 
-    private void setEffect(){}
+    private void setUpEffect(){}
+
+    private void setUpContinueToRepeatFuture() {
+        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForContinueToRepeat()))
+                .thenAccept(this::setUpContinueToRepeat);
+    }
+
+    private void setUpContinueToRepeat(IEffect iEffect) {
+        Platform.runLater(unsafe(()-> {
+            JFXButton again = new JFXButton("Run Again");
+            JFXButton stop = new JFXButton("Stop");
+            JFXDialogLayout content = new JFXDialogLayout();
+            JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+            content.setHeading(new Text("Please choose action for this effect"));
+            content.setBody(new Text("Effect: "+iEffect.getDescriptionKey()));
+            again.setOnMouseClicked(event -> {
+                this.model.postContinueToRepeatChoice(true);
+                dialog.close();
+            });
+            stop.setOnMouseClicked(event -> {
+                this.model.postContinueToRepeatChoice(false);
+                dialog.close();
+            });
+            dialog.show();
+            setUpContinueToRepeatFuture();
+        }));
+    }
+
+    private void setUpChoosePositionFuture() {
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForChooseDiePositionFromLocation()))
+                .thenAccept(this::setUpChoosePosition);
+    }
+
+    private void setUpChoosePosition(Map.Entry<JSONSerializable,Set<Integer>> jsonSerializableSetEntry) {
+        JFXDialog dialog = new JFXDialog();
+        JFXDialogLayout content = new JFXDialogLayout();
+        JFXButton button = new JFXButton("OK");
+        FXMLLoader loader = new FXMLLoader();
+        Node node = null;
+        JSONSerializable object = jsonSerializableSetEntry.getKey();
+        if (object instanceof IWindow) {
+            loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+            try {
+                node = loader.load();
+                WindowGUIView windowGUIView = loader.getController();
+                windowGUIView.setModel((IWindow) object);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        if (object instanceof IDraftPool) {
+            loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
+            try {
+                node = loader.load();
+                DraftPoolGUIView draftPoolGUIView = loader.getController();
+                draftPoolGUIView.setModel((IDraftPool) object);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        if (object instanceof IRoundTrack) {
+            loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
+            try {
+                node = loader.load();
+                RoundTrackGUIView roundTrackGUIView = loader.getController();
+                roundTrackGUIView.setModel((IRoundTrack) object);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        content.setBody(node);
+        content.setHeading(new Text("Choose a location: "));
+        dialog.show();
+    }
 }
