@@ -371,7 +371,6 @@ public class MatchGUITest extends Application {
         
             }
     
-            @Override
             public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
                 return null;
             }
@@ -393,12 +392,31 @@ public class MatchGUITest extends Application {
     
             @Override
             public IDie waitForSetShade() {
-                return null;
+                return new IDie() {
+                    @Override
+                    public int getUUID() {
+                        return 0;
+                    }
+
+                    @Override
+                    public GlassColor getColor() {
+                        return GlassColor.PURPLE;
+                    }
+
+                    @Override
+                    public Integer getShade() {
+                        return 5;
+                    }
+                };
             }
     
             @Override
             public void postSetShade(Integer shade) {
         
+            }
+            @Override
+            public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(){
+                return null;
             }
         });
         primaryStage.setFullScreen(false);

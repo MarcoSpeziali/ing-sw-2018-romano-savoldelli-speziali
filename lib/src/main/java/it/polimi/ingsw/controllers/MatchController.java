@@ -33,7 +33,7 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
         Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation();
         void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition);
     
-        Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween);
+        Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect();
         void postChosenEffects(IEffect[] effects);
         
         IEffect waitForContinueToRepeat();

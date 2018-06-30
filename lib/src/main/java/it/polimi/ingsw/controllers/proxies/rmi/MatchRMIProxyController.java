@@ -109,8 +109,12 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     public void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) {
     
     }
-    
+
     @Override
+    public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() {
+        return null;
+    }
+
     public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
         return null;
     }

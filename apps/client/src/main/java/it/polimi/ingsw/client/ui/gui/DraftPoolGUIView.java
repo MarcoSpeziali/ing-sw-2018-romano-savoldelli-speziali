@@ -75,6 +75,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                     });
 
                     die.setOnMouseDragged(event -> {
+                        selected.setCursor(Cursor.CLOSED_HAND);
                         selected.relocate(event.getSceneX() - mouseX, event.getScreenY() - mouseY);
                     });
                     die.setOnMouseReleased(event -> {

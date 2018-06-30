@@ -1,14 +1,13 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.controllers.DieInteractionException;
-import it.polimi.ingsw.controllers.WindowController;
-import it.polimi.ingsw.core.Move;
+
 import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -19,9 +18,24 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
+
+import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property.*;
 
 public class WindowGUIView extends GUIView<IWindow> {
+
+    public Property getProperty() {
+        return property;
+    }
+
+    public enum Property {
+        OWNED, OPPONENT, NONE, SELECTION
+    }
+
+    public void setProperty(Property property) {
+        this.property = property;
+    }
+
+    private Property property;
 
     @FXML
     public GridPane gridPane;
@@ -53,31 +67,44 @@ public class WindowGUIView extends GUIView<IWindow> {
 
                 cell.setOnDragDropped(event -> {
 
-                    //TODO: opterei per una versione di questo tipo:
+                    if (this.property == OWNED) {
+                        IDie heldDie = Player.getCurrentPlayer().getHeldDie();
 
-                    IDie heldDie = Player.getCurrentPlayer().getHeldDie();
+                        if (heldDie == null) {
+                            return; // do nothing
+                        }
 
-                    if (heldDie == null) {
-                        return; // do nothing
-                    }
+                        //try
+                        {
+                            cell.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
 
-                    //try
-                    {
-                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
-
-                        //this.model.tryToPut(heldDie, Move.getCurrentMove().getDraftPoolPickPosition());
-                    }
-                    /*catch (DieInteractionException e) {
+                            //this.model.tryToPut(heldDie, Move.getCurrentMove().getDraftPoolPickPosition());
+                        }
+                        /*catch (DieInteractionException e) {
                         cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
                         cell.setDisable(true);
+                        }
+                        catch (RemoteException e) {
+                            e.printStackTrace();
+                        }*/
                     }
-                    catch (RemoteException e) {
-                        e.printStackTrace();
-                    }*/
+                    else {
+                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
+                    }
                 });
 
-                cell.setOnDragDetected(event -> {
 
+                cell.setOnMouseEntered(event -> {
+
+                    if (property == OWNED) {
+                        cell.setCursor(Cursor.CLOSED_HAND);
+                    }
+                    if (property == OPPONENT) {
+                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
+                    }
+                    if (property == SELECTION) {
+                        cell.setCursor(Cursor.HAND);
+                    }
                 });
 
                 gridPane.add(cell, j, i);
@@ -92,6 +119,5 @@ public class WindowGUIView extends GUIView<IWindow> {
 
     @Override
     public void init() {
-
     }
 }
