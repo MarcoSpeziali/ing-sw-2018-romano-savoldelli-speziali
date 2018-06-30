@@ -49,7 +49,7 @@ public final class Settings extends SettingsBase {
     private TimeUnit rmiHeartBeatMatchTimeUnit;
     
     // --------------- MATCH LOGIC ---------------
-    @Setting(id = "match-connection-timer-duration-ms", defaultValue = "30", type = Integer.class)
+    @Setting(id = "match-connection-timer-duration", defaultValue = "30", type = Integer.class)
     private int matchConnectionTimerDuration;
     @Setting(id = "match-connection-timer-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
     private TimeUnit matchConnectionTimerTimeUnit;
@@ -65,6 +65,11 @@ public final class Settings extends SettingsBase {
         private int numberOfPublicObjectiveCards;
         @Setting(id = "number-of-tool-cards", defaultValue = "3", type = Integer.class)
         private int numberOfToolCards;
+    
+    @Setting(id = "match-move-timer-duration", defaultValue = "90", type = Integer.class)
+    private int matchMoveTimerDuration;
+    @Setting(id = "match-move-timer-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
+    private TimeUnit matchMoveTimerTimeUnit;
     
     private Settings(String path) throws IllegalAccessException {
         super(path);
@@ -176,4 +181,12 @@ public final class Settings extends SettingsBase {
         public int getNumberOfToolCards() {
             return numberOfToolCards;
         }
+    
+    public int getMatchMoveTimerDuration() {
+        return matchMoveTimerDuration;
+    }
+    
+    public TimeUnit getMatchMoveTimerTimeUnit() {
+        return matchMoveTimerTimeUnit;
+    }
 }

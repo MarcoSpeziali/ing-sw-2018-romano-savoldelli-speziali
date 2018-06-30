@@ -7,34 +7,34 @@ class GlassColorTest {
 
     @Test
     void testRGBGetters() {
-        Assertions.assertEquals(255, GlassColor.RED.getRed());
-        Assertions.assertEquals(0, GlassColor.RED.getGreen());
-        Assertions.assertEquals(0, GlassColor.RED.getBlue());
+        Assertions.assertEquals(231, GlassColor.RED.getRed());
+        Assertions.assertEquals(76, GlassColor.RED.getGreen());
+        Assertions.assertEquals(60, GlassColor.RED.getBlue());
 
-        Assertions.assertEquals(0, GlassColor.GREEN.getRed());
-        Assertions.assertEquals(255, GlassColor.GREEN.getGreen());
-        Assertions.assertEquals(0, GlassColor.GREEN.getBlue());
+        Assertions.assertEquals(241, GlassColor.YELLOW.getRed());
+        Assertions.assertEquals(196, GlassColor.YELLOW.getGreen());
+        Assertions.assertEquals(15, GlassColor.YELLOW.getBlue());
 
-        Assertions.assertEquals(0, GlassColor.BLUE.getRed());
-        Assertions.assertEquals(0, GlassColor.BLUE.getGreen());
-        Assertions.assertEquals(255, GlassColor.BLUE.getBlue());
+        Assertions.assertEquals(46, GlassColor.GREEN.getRed());
+        Assertions.assertEquals(204, GlassColor.GREEN.getGreen());
+        Assertions.assertEquals(113, GlassColor.GREEN.getBlue());
 
-        Assertions.assertEquals(255, GlassColor.YELLOW.getRed());
-        Assertions.assertEquals(255, GlassColor.YELLOW.getGreen());
-        Assertions.assertEquals(0, GlassColor.YELLOW.getBlue());
+        Assertions.assertEquals(52, GlassColor.BLUE.getRed());
+        Assertions.assertEquals(152, GlassColor.BLUE.getGreen());
+        Assertions.assertEquals(219, GlassColor.BLUE.getBlue());
 
-        Assertions.assertEquals(128, GlassColor.PURPLE.getRed());
-        Assertions.assertEquals(0, GlassColor.PURPLE.getGreen());
-        Assertions.assertEquals(128, GlassColor.PURPLE.getBlue());
+        Assertions.assertEquals(155, GlassColor.PURPLE.getRed());
+        Assertions.assertEquals(89, GlassColor.PURPLE.getGreen());
+        Assertions.assertEquals(182, GlassColor.PURPLE.getBlue());
     }
 
     @Test
     void testHexGetters() {
-        Assertions.assertEquals(0xff0000, GlassColor.RED.getHex());
-        Assertions.assertEquals(0x00ff00, GlassColor.GREEN.getHex());
-        Assertions.assertEquals(0x0000ff, GlassColor.BLUE.getHex());
-        Assertions.assertEquals(0xffff00, GlassColor.YELLOW.getHex());
-        Assertions.assertEquals(0x800080, GlassColor.PURPLE.getHex());
+        Assertions.assertEquals(0xe74c3c, GlassColor.RED.getHex());
+        Assertions.assertEquals(0xf1c40f, GlassColor.YELLOW.getHex());
+        Assertions.assertEquals(0x2ecc71, GlassColor.GREEN.getHex());
+        Assertions.assertEquals(0x3498db, GlassColor.BLUE.getHex());
+        Assertions.assertEquals(0x9b59b6, GlassColor.PURPLE.getHex());
     }
 
     @Test

@@ -109,7 +109,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
      * @param round the round of the discarded die
      * @param index the index of the discarded die of the provided round
      */
-    public void setDieForRoundAtIndex(Die die, int round, int index) {
+    public void setDieForRoundAtIndex(Die die, byte round, byte index) {
         // if the index does not exists then the die is added
         if (this.rounds.get(round).size() <= index) {
             this.rounds.get(round).add(die);
@@ -128,7 +128,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
      * @param die   the die to add at the provided round
      * @param round the round index
      */
-    public void addDieForRound(Die die, int round) {
+    public void addDieForRound(Die die, byte round) {
         this.setDieForRoundAtIndex(die, round, MAX_NUMBER_OF_DICE_PER_ROUND);
     }
 
@@ -166,8 +166,8 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
 
     @Override
     public void putDie(Die die, Integer location) {
-        int roundIndex = (location & 0x0000FF00) >> 8;
-        int dieIndex = location & 0x000000FF;
+        byte roundIndex = (byte) ((location & 0x0000FF00) >> 8);
+        byte dieIndex = (byte) (location & 0x000000FF);
 
         this.setDieForRoundAtIndex(die, roundIndex, dieIndex);
     }

@@ -11,8 +11,8 @@ public class Turn {
     
     private byte phase;
     private final IPlayer player;
-    private final int round;
-    private final int turnIndex;
+    private final byte round;
+    private final byte turnIndex;
     
     public byte getPhase() {
         return phase;
@@ -22,15 +22,15 @@ public class Turn {
         return player;
     }
     
-    public int getRound() {
+    public byte getRound() {
         return round;
     }
     
-    public int getTurnIndex() {
+    public byte getTurnIndex() {
         return turnIndex;
     }
     
-    public Turn(IPlayer player, int round, int turnIndex) {
+    public Turn(IPlayer player, byte round, byte turnIndex) {
         this.player = player;
         this.round = round;
         this.turnIndex = turnIndex;
@@ -43,6 +43,19 @@ public class Turn {
     }
     
     public void end() {
-        this.phase = ENDED;
+        synchronized (waitObject) {
+            this.phase = ENDED;
+            waitObject.notifyAll();
+        }
+    }
+    
+    private final Object waitObject = new Object();
+    
+    public void waitUntilEnded() throws InterruptedException {
+        synchronized (waitObject) {
+            while (this.phase != ENDED) {
+                waitObject.wait();
+            }
+        }
     }
 }

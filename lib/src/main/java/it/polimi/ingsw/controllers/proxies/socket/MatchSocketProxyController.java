@@ -18,7 +18,6 @@ import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,13 +55,26 @@ public class MatchSocketProxyController implements MatchController {
                     }
                 }
         );
+        
+        this.persistentSocketInteractionProvider.listenForRequest(
+                EndPointFunction.MATCH_UPDATE_RESPONSE,
+                request -> {
+                    synchronized (this.updateSyncObject) {
+                        @SuppressWarnings("unchecked")
+                        Request<IMatch> windowRequest = (Request<IMatch>) request;
+                        this.update = windowRequest.getBody();
+                        
+                        this.updateSyncObject.notifyAll();
+                    }
+                }
+        );
     }
     
     private final transient Object windowsToChooseSyncObject = new Object();
     private IWindow[] windowsToChoose;
     
     @Override
-    public IWindow[] waitForWindowRequest() throws RemoteException, InterruptedException {
+    public IWindow[] waitForWindowRequest() throws InterruptedException {
         synchronized (this.windowsToChooseSyncObject) {
             while (this.windowsToChoose == null) {
                 this.windowsToChooseSyncObject.wait();
@@ -86,6 +98,23 @@ public class MatchSocketProxyController implements MatchController {
                         )
                 )
         );
+    }
+    
+    private final transient Object updateSyncObject = new Object();
+    private IMatch update;
+    
+    @Override
+    public IMatch waitForUpdate() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (this.updateSyncObject) {
+            while (this.update == null) {
+                this.updateSyncObject.wait();
+            }
+        
+            IMatch matchUpdate = this.update;
+            this.update = null;
+            return matchUpdate;
+        }
     }
     
     @Override
@@ -168,14 +197,8 @@ public class MatchSocketProxyController implements MatchController {
     
     }
     
-    
     @Override
     public void close(Object... args) throws IOException {
         this.persistentSocketInteractionProvider.close();
-    }
-    
-    @Override
-    public IMatch waitForUpdate() throws RemoteException, InterruptedException {
-        return null;
     }
 }

@@ -9,11 +9,11 @@ public class SkipTurnAction extends Action {
     
     private static final long serialVersionUID = -7395997444394564125L;
     
-    private final VariableSupplier<Integer> round;
-    private final VariableSupplier<Integer> turn;
+    private final VariableSupplier<Byte> round;
+    private final VariableSupplier<Byte> turn;
     private final VariableSupplier<IPlayer> playerVariableSupplier;
     
-    public SkipTurnAction(ActionData data, VariableSupplier<Integer> round, VariableSupplier<Integer> turn, VariableSupplier<IPlayer> playerVariableSupplier) {
+    public SkipTurnAction(ActionData data, VariableSupplier<Byte> round, VariableSupplier<Byte> turn, VariableSupplier<IPlayer> playerVariableSupplier) {
         super(data);
     
         this.round = round;
