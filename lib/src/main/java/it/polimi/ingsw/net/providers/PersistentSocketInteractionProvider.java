@@ -147,7 +147,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                 newValue -> receivedResponse.set((Response<T>) newValue)
         );
 
-        this.out.write(request.toString());
+        this.out.write(request.serialize().toString());
         this.out.newLine();
         this.out.flush();
 
@@ -198,7 +198,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                     }
             );
 
-            this.out.write(request.toString());
+            this.out.write(request.serialize().toString());
             this.out.newLine();
             this.out.flush();
         }
@@ -210,11 +210,19 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     }
 
     public void postResponse(Response<? extends JSONSerializable> response) throws IOException {
+        this.postJSONSerializable(response);
+    }
+    
+    public void postRequest(Request<? extends JSONSerializable> request) throws IOException {
+        this.postJSONSerializable(request);
+    }
+    
+    private void postJSONSerializable(JSONSerializable jsonSerializable) throws IOException {
         if (socket == null) {
             throw new IllegalStateException("The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.");
         }
-
-        this.out.write(response.toString());
+    
+        this.out.write(jsonSerializable.serialize().toString());
         this.out.newLine();
         this.out.flush();
     }

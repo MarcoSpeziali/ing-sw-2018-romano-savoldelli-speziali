@@ -24,6 +24,11 @@ public enum EndPointFunction {
         MATCH_WINDOW_REQUEST("match/window_request"),
         MATCH_WINDOW_RESPONSE("match/window_response"),
     
+        // ------ PLAYER TURN ------
+        MATCH_PLAYER_TURN_BEGIN_RESPONSE("match/player/turn/begin_response"),
+        MATCH_PLAYER_TURN_END_REQUEST("match/player/turn/end_request"),
+        MATCH_PLAYER_TURN_END_RESPONSE("match/player/turn/end_response"),
+    
         // ------ PLAYER MOVE ------
         MATCH_PLAYER_MOVE_REQUEST("match/player/move_request"),
         MATCH_PLAYER_MOVE_RESPONSE("match/player/move_response"),

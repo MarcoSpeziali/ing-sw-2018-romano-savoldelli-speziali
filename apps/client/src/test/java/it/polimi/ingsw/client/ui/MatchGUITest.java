@@ -353,8 +353,8 @@ public class MatchGUITest extends Application {
             }
     
             @Override
-            public void waitForTurnToBegin() throws IOException {
-        
+            public int waitForTurnToBegin() throws IOException {
+                return 0;
             }
     
             @Override
@@ -428,6 +428,12 @@ public class MatchGUITest extends Application {
             public void postSetShade(Integer shade) {
         
             }
+    
+            @Override
+            public Map<IPlayer, IResult> waitForMatchToEnd() {
+                return null;
+            }
+    
             @Override
             public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(){
                 return null;

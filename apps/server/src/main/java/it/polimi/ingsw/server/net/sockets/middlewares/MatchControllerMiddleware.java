@@ -1,7 +1,10 @@
 package it.polimi.ingsw.server.net.sockets.middlewares;
 
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.requests.MatchEndRequest;
+import it.polimi.ingsw.net.requests.MoveRequest;
 import it.polimi.ingsw.net.responses.WindowResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.MatchCommunicationsManager;
@@ -9,7 +12,14 @@ import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.net.sockets.ClientHandler;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
-@Handles(EndPointFunction.MATCH_WINDOW_RESPONSE)
+@Handles({
+        // ------ RESPONSES ------
+        EndPointFunction.MATCH_WINDOW_RESPONSE,
+        
+        // ------ REQUESTS ------
+        EndPointFunction.MATCH_PLAYER_MOVE_REQUEST,
+        EndPointFunction.MATCH_PLAYER_TURN_END_REQUEST
+})
 public class MatchControllerMiddleware implements Middleware {
 
     private final MatchCommunicationsManager matchCommunicationsManager;
@@ -19,7 +29,21 @@ public class MatchControllerMiddleware implements Middleware {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Response handleRequest(Request<? extends JSONSerializable> request, EndPointFunction endPointFunction, ClientHandler clientHandler) {
+        if (endPointFunction == EndPointFunction.MATCH_PLAYER_MOVE_REQUEST && request.getBody() instanceof MoveRequest) {
+            Request<MoveRequest> moveRequest = (Request<MoveRequest>) request;
+            this.matchCommunicationsManager.onMoveRequested(
+                    ((AuthenticatedClientHandler) clientHandler).getPlayer(),
+                    Move.of(moveRequest.getBody().getFrom(), moveRequest.getBody().getTo())
+            );
+        }
+        else if (endPointFunction == EndPointFunction.MATCH_PLAYER_TURN_END_REQUEST && request.getBody() instanceof MatchEndRequest) {
+            this.matchCommunicationsManager.onEndRequested(
+                    ((AuthenticatedClientHandler) clientHandler).getPlayer()
+            );
+        }
+        
         return null;
     }
 

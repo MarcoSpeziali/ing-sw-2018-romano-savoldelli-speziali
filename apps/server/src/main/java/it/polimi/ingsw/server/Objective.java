@@ -66,11 +66,11 @@ public class Objective implements IObjective {
         return instructions;
     }
 
-    public synchronized int calculatePoints(Context context) {
-        Context.Snapshot snapshot = Context.getSharedInstance()
+    public int calculatePoints(Context context) {
+        Context.Snapshot snapshot = context
                 .snapshot("Objective(" + this.description.getLocalizationKey() + ")");
 
-        Integer result = this.instructions.stream()
+        Integer result = this.instructions.parallelStream()
                 .mapToInt(instruction -> instruction.run(snapshot))
                 .sum() * this.pointsPerCompletion;
 

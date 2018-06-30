@@ -9,9 +9,11 @@ import it.polimi.ingsw.server.utils.GlobalContext;
 public class ToolCardControllerImpl {
     
     private final ToolCard toolCard;
+    private final int matchId;
     
-    public ToolCardControllerImpl(ToolCard toolCard) {
+    public ToolCardControllerImpl(ToolCard toolCard, int matchId) {
         this.toolCard = toolCard;
+        this.matchId = matchId;
     }
     
     public synchronized ToolCard getToolCard() {
@@ -26,7 +28,7 @@ public class ToolCardControllerImpl {
         Effect effect = (Effect) this.toolCard.getEffect();
         effect.run(
                 toolCard.getCardId(),
-                GlobalContext.getGlobalContext().getContextForPlayer(livePlayer.getPlayer())
+                GlobalContext.getGlobalContext().getContextForPlayer(livePlayer.getPlayer(), matchId)
         );
     }
     

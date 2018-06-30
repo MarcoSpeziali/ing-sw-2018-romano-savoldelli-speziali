@@ -30,8 +30,8 @@ public class MatchObjectsManager {
     private ObjectiveCard[] publicObjectiveCards;
     private ToolCardControllerImpl[] toolCardControllers;
 
-    private Map<IPlayer, WindowControllerImpl> playerWindowMap;
-    private Map<IPlayer, ObjectiveCard> playerPrivateObjectiveCardMap;
+    private Map<DatabasePlayer, WindowControllerImpl> playerWindowMap;
+    private Map<DatabasePlayer, ObjectiveCard> playerPrivateObjectiveCardMap;
 
     private MatchObjectsManager(DatabaseMatch match) {
         this.match = match;
@@ -87,24 +87,28 @@ public class MatchObjectsManager {
         this.toolCardControllers = toolCardControllers;
     }
 
-    public WindowControllerImpl getWindowControllerForPlayer(IPlayer player) {
+    public WindowControllerImpl getWindowControllerForPlayer(DatabasePlayer player) {
         return playerWindowMap.get(player);
     }
     
-    public Map<IPlayer, WindowControllerImpl> getPlayerWindowMap() {
+    public Map<DatabasePlayer, WindowControllerImpl> getPlayerWindowMap() {
         return playerWindowMap;
     }
     
-    public void setWindowControllerForPlayer(WindowControllerImpl windowController, IPlayer player) {
+    public void setWindowControllerForPlayer(WindowControllerImpl windowController, DatabasePlayer player) {
         this.playerWindowMap.put(player, windowController);
     }
 
-    public ObjectiveCard getObjectiveCardForPlayer(IPlayer player) {
+    public ObjectiveCard getObjectiveCardForPlayer(DatabasePlayer player) {
         return playerPrivateObjectiveCardMap.get(player);
     }
 
-    public void setPrivateObjectiveCardForPlayer(ObjectiveCard objectiveCard, IPlayer player) {
+    public void setPrivateObjectiveCardForPlayer(ObjectiveCard objectiveCard, DatabasePlayer player) {
         this.playerPrivateObjectiveCardMap.put(player, objectiveCard);
+    }
+    
+    public Map<DatabasePlayer, ObjectiveCard> getPrivateObjectiveCards() {
+        return playerPrivateObjectiveCardMap;
     }
 
     public IMatch buildMatchMockForPlayer(DatabasePlayer player) throws SQLException {

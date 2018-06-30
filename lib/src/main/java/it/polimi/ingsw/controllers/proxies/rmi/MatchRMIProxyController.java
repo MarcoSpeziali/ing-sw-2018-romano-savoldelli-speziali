@@ -97,19 +97,62 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         }
     }
     
-    @Override
-    public void waitForTurnToBegin() throws IOException {
+    private final transient Object beginTurnSyncObject = new Object();
+    private Integer timeInSeconds;
     
+    public void postTurnBegin(int timeInSeconds) throws RemoteException {
+        synchronized (beginTurnSyncObject) {
+            this.timeInSeconds = timeInSeconds;
+            beginTurnSyncObject.notifyAll();
+        }
+    }
+    
+    @Override
+    public int waitForTurnToBegin() throws IOException, InterruptedException {
+        //noinspection Duplicates
+        synchronized (beginTurnSyncObject) {
+            while (this.timeInSeconds == null) {
+                beginTurnSyncObject.wait();
+            }
+            
+            int temp = this.timeInSeconds;
+            this.timeInSeconds = null;
+            return temp;
+        }
+    }
+    
+    private transient Runnable endTurnRunnable;
+    
+    public void setEndTurnRunnable(Runnable endTurnRunnable) {
+        this.endTurnRunnable = endTurnRunnable;
     }
     
     @Override
     public void endTurn() throws IOException {
+        if (this.endTurnRunnable != null) {
+            this.endTurnRunnable.run();
+        }
+    }
     
+    private final transient Object endTurnSyncObject = new Object();
+    private boolean turnEnded = false;
+    
+    public void postTurnEnd() {
+        synchronized (endTurnSyncObject) {
+            this.turnEnded = true;
+            endTurnSyncObject.notifyAll();
+        }
     }
     
     @Override
-    public void waitForTurnToEnd() throws IOException {
+    public void waitForTurnToEnd() throws IOException, InterruptedException {
+        synchronized (endTurnSyncObject) {
+            while (!this.turnEnded) {
+                endTurnSyncObject.wait();
+            }
     
+            this.turnEnded = false;
+        }
     }
     
     private transient Consumer<Move> moveConsumer;
@@ -167,10 +210,6 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() {
         return null;
     }
-
-    public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
-        return null;
-    }
     
     @Override
     public void postChosenEffects(IEffect[] effects) {
@@ -195,6 +234,11 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     @Override
     public void postSetShade(Integer shade) {
     
+    }
+    
+    @Override
+    public Map<IPlayer, IResult> waitForMatchToEnd() {
+        return null;
     }
     
     @Override

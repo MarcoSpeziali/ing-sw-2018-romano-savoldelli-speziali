@@ -8,11 +8,10 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
+import it.polimi.ingsw.net.requests.MatchEndRequest;
 import it.polimi.ingsw.net.requests.MoveRequest;
 import it.polimi.ingsw.net.requests.WindowRequest;
-import it.polimi.ingsw.net.responses.MigrationResponse;
-import it.polimi.ingsw.net.responses.MoveResponse;
-import it.polimi.ingsw.net.responses.WindowResponse;
+import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -68,6 +67,28 @@ public class MatchSocketProxyController implements MatchController {
                     }
                 }
         );
+        
+        this.persistentSocketInteractionProvider.listenFor(
+                EndPointFunction.MATCH_PLAYER_TURN_BEGIN_RESPONSE,
+                response -> {
+                    @SuppressWarnings("unchecked")
+                    Response<MatchBeginResponse> matchBeginResponse = (Response<MatchBeginResponse>) response;
+                    synchronized (beginTurnSyncObject) {
+                        this.timeInSeconds = matchBeginResponse.getBody().getTimeRemaining();
+                        beginTurnSyncObject.notifyAll();
+                    }
+                }
+        );
+        
+        this.persistentSocketInteractionProvider.listenFor(
+                EndPointFunction.MATCH_PLAYER_TURN_END_RESPONSE,
+                response -> {
+                    synchronized (endTurnSyncObject) {
+                        this.isEnded = true;
+                        endTurnSyncObject.notifyAll();
+                    }
+                }
+        );
     }
     
     private final transient Object windowsToChooseSyncObject = new Object();
@@ -117,19 +138,44 @@ public class MatchSocketProxyController implements MatchController {
         }
     }
     
-    @Override
-    public void waitForTurnToBegin() throws IOException {
+    private final transient Object beginTurnSyncObject = new Object();
+    private Integer timeInSeconds;
     
+    @Override
+    public int waitForTurnToBegin() throws IOException, InterruptedException {
+        //noinspection Duplicates
+        synchronized (beginTurnSyncObject) {
+            while (this.timeInSeconds == null) {
+                beginTurnSyncObject.wait();
+            }
+        
+            int temp = this.timeInSeconds;
+            this.timeInSeconds = null;
+            return temp;
+        }
     }
     
     @Override
     public void endTurn() throws IOException {
-    
+        this.persistentSocketInteractionProvider.postRequest(new Request<>(
+                new Header(this.clientToken, EndPointFunction.MATCH_PLAYER_TURN_END_REQUEST),
+                new MatchEndRequest(this.matchId)
+        ));
     }
     
-    @Override
-    public void waitForTurnToEnd() throws IOException {
+    private final transient Object endTurnSyncObject = new Object();
+    private boolean isEnded = false;
     
+    @Override
+    public void waitForTurnToEnd() throws IOException, InterruptedException {
+        //noinspection Duplicates
+        synchronized (endTurnSyncObject) {
+            while (!isEnded) {
+                endTurnSyncObject.wait();
+            }
+            
+            this.isEnded = false;
+        }
     }
     
     @Override
@@ -167,10 +213,6 @@ public class MatchSocketProxyController implements MatchController {
     public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() {
         return null;
     }
-
-    public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
-        return null;
-    }
     
     @Override
     public void postChosenEffects(IEffect[] effects) {
@@ -195,6 +237,11 @@ public class MatchSocketProxyController implements MatchController {
     @Override
     public void postSetShade(Integer shade) {
     
+    }
+    
+    @Override
+    public Map<IPlayer, IResult> waitForMatchToEnd() {
+        return null;
     }
     
     @Override

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.managers.turns;
 
-import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.server.sql.DatabasePlayer;
 
 public class Turn {
     
@@ -10,7 +10,7 @@ public class Turn {
     public static final byte ENDED = DIE_PLACED | TOOL_CARD_USED;
     
     private byte phase;
-    private final IPlayer player;
+    private final DatabasePlayer player;
     private final byte round;
     private final byte turnIndex;
     
@@ -18,7 +18,7 @@ public class Turn {
         return phase;
     }
     
-    public IPlayer getPlayer() {
+    public DatabasePlayer getPlayer() {
         return player;
     }
     
@@ -30,7 +30,7 @@ public class Turn {
         return turnIndex;
     }
     
-    public Turn(IPlayer player, byte round, byte turnIndex) {
+    public Turn(DatabasePlayer player, byte round, byte turnIndex) {
         this.player = player;
         this.round = round;
         this.turnIndex = turnIndex;

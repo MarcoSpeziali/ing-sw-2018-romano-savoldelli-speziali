@@ -5,6 +5,7 @@ import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.compilers.cards.CompiledObjectiveCard;
+import it.polimi.ingsw.server.compilers.cards.CompiledToolCard;
 import it.polimi.ingsw.server.instantiators.CardInstantiator;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
@@ -58,10 +59,19 @@ public final class InstantiationManager {
     }
     
     public static synchronized ToolCard[] instantiateToolCards() throws IOException, ClassNotFoundException {
-        return deserializeObjects(
+        CompiledToolCard[] compiledToolCards = deserializeObjects(
                 getPathForResource(Constants.Resources.TOOL_CARDS),
-                ToolCard[].class
+                CompiledToolCard[].class
         );
+        
+        try {
+            return Arrays.stream(compiledToolCards)
+                    .map(wrap((FunctionalExceptionWrapper.UnsafeFunction<CompiledToolCard, ToolCard>) CardInstantiator::instantiate))
+                    .toArray(ToolCard[]::new);
+        }
+        catch (FunctionalExceptionWrapper e) {
+            return e.tryUnwrap(IOException.class).tryFinalUnwrap(ClassNotFoundException.class);
+        }
     }
 
     private static synchronized String getPathForResource(Constants.Resources resource) {

@@ -1,10 +1,13 @@
 package it.polimi.ingsw.server.managers.turns;
 
 import it.polimi.ingsw.net.mocks.IPlayer;
-import it.polimi.ingsw.utils.collections.BiHashMap;
+import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.utils.ArrayUtils;
+import it.polimi.ingsw.utils.collections.BiHashMap;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
 // TODO: test
 public class PlayerTurnList {
@@ -43,11 +46,11 @@ public class PlayerTurnList {
      * @param numberOfRounds the number of rounds of the match
      */
     @SuppressWarnings("squid:CommentedOutCodeLine")
-    public PlayerTurnList(IPlayer[] players, int numberOfRounds) {
+    public PlayerTurnList(DatabasePlayer[] players, int numberOfRounds) {
         this.numberOfRounds = numberOfRounds;
         
         // shuffling the array to avoid having any non-random order in the turns
-        final IPlayer[] shuffledArray = ArrayUtils.shuffleArray(players);
+        final DatabasePlayer[] shuffledArray = ArrayUtils.shuffleArray(players);
         
         // the turn list holds NUMBER_OF_TURNS_PER_PLAYER * players.length items, the order is
         // shuffledArray -> inverted(shuffledArray) -> shuffledArray -> inverted(shuffledArray) -> ...
@@ -74,7 +77,7 @@ public class PlayerTurnList {
      *
      * @param player the player to remove
      */
-    public void removePlayer(IPlayer player) {
+    public void removePlayer(DatabasePlayer player) {
         this.removedPlayers.add(player);
         
         this.turns.stream()
@@ -87,7 +90,7 @@ public class PlayerTurnList {
      *
      * @param player the player to re-add
      */
-    public void addPlayer(IPlayer player) {
+    public void addPlayer(DatabasePlayer player) {
         this.removedPlayers.remove(player);
     
         this.turns.stream()
@@ -121,10 +124,10 @@ public class PlayerTurnList {
         // if the round is future the player gets registered to skip the turn in the round
         if (round > currentRound) {
             // if the pair key(player, round) is absent a new HashSet is created and the turn is added
-            this.roundsToSkipForPlayer.computeIfAbsent(player, round, (p, r) -> new HashSet<>(Set.of((byte) turn)));
+            this.roundsToSkipForPlayer.computeIfAbsent(player, round, (p, r) -> new HashSet<>(Set.of(turn)));
             // if the pair key(player, round) is present the turn is added
             this.roundsToSkipForPlayer.computeIfPresent(player, round, (p, r, hashSet) -> {
-                hashSet.add((byte) turn);
+                hashSet.add(turn);
                 return hashSet;
             });
         }
@@ -178,9 +181,9 @@ public class PlayerTurnList {
     }
     
     /**
-     * Gets the {@link IPlayer} that should play the next round.
+     * Gets the {@link DatabasePlayer} that should play the next round.
      *
-     * @return the {@link IPlayer} that should play the next round or {@code null} if no more turns are available
+     * @return the {@link DatabasePlayer} that should play the next round or {@code null} if no more turns are available
      */
     private PlayerTurn nextTurn() {
         // if no more turns are available null is returned
@@ -234,7 +237,7 @@ public class PlayerTurnList {
      * @param player the player to test
      * @return if the player has been removed
      */
-    private boolean hasBeenRemoved(IPlayer player) {
+    private boolean hasBeenRemoved(DatabasePlayer player) {
         return this.removedPlayers.contains(player);
     }
     
@@ -243,23 +246,23 @@ public class PlayerTurnList {
      * @param turn the turn to test
      * @return if the should skip the turn for this round
      */
-    private boolean scheduledToSkip(IPlayer player, byte turn) {
+    private boolean scheduledToSkip(DatabasePlayer player, byte turn) {
         HashSet<Byte> turnToSkip = this.roundsToSkipForPlayer.getOrDefault(player, currentRound, null);
         return turnToSkip != null && turnToSkip.contains(turn);
     }
     
     private static class PlayerTurn {
         
-        private final IPlayer player;
+        private final DatabasePlayer player;
         private final byte turn;
         private boolean shouldSkip;
         
-        private PlayerTurn(IPlayer player, byte turn) {
+        private PlayerTurn(DatabasePlayer player, byte turn) {
             this.player = player;
             this.turn = turn;
         }
     
-        public IPlayer getPlayer() {
+        public DatabasePlayer getPlayer() {
             return player;
         }
     

@@ -37,7 +37,7 @@ public abstract class Instruction {
      * @param context The context that holds the variables needed by the instruction.
      * @return The number of times that the objective has been achieved.
      */
-    public Integer run(Context context) {
+    public synchronized Integer run(Context context) {
         if (this.instructions != null) {
             if (this.instructions.isEmpty()) {
                 return 0;
@@ -47,7 +47,7 @@ public abstract class Instruction {
             return 0;
         }
 
-        return this.instructions.stream()
+        return this.instructions.parallelStream()
                 .mapToInt(instruction -> instruction.run(context))
                 .sum();
     }

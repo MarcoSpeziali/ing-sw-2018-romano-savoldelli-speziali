@@ -49,6 +49,9 @@ public @interface Setting {
                     else if (settingAnnotation.type().equals(Boolean.class)) {
                         field.set(targetObject, Boolean.parseBoolean(value));
                     }
+                    else if (settingAnnotation.type().equals(Byte.class)) {
+                        field.set(targetObject, Byte.parseByte(value));
+                    }
                 }
 
                 field.setAccessible(false);

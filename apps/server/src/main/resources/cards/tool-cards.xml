@@ -2,7 +2,8 @@
 <cards>
     <card id="grozing_pliers" name="cards.tool_cards.grozing_pliers.name">
         <effect description="cards.tool_cards.grozing_pliers.description" initialCost="1">
-            <action effect="choose_die $draft_pool$" result="DIE"/>
+            <action effect="choose_position $draft_pool$" result="POS"/>
+            <action effect="pick_at $draft_pool$ $POS$" result="DIE"/>
             <action-group chooseBetween="1">
                 <action effect="increment $DIE$" constraint="not-6"/>
                 <action effect="decrement $DIE$" constraint="not-1"/>
@@ -41,14 +42,17 @@
     </card>
     <card id="lens_cutter" name="cards.tool_cards.lens_cutter.name">
         <effect description="cards.tool_cards.lens_cutter.description" initialCost="1">
-            <action effect="choose_die $draft_pool$" result="DIE_1"/>
-            <action effect="choose_die $round_track$" result="DIE_2"/>
+            <action effect="choose_position $draft_pool$" result="POS_1"/>
+            <action effect="pick_at $draft_pool$ $POS_1$" result="DIE_1"/>
+            <action effect="choose_position $round_track$" result="POS_2"/>
+            <action effect="pick_at $round_track$ $POS_2$" result="DIE_2"/>
             <action effect="swap $DIE_1$ $DIE_2$"/>
         </effect>
     </card>
     <card id="flux_brush" name="cards.tool_cards.flux_brush.name">
         <effect description="cards.tool_cards.flux_brush.description" initialCost="1">
-            <action effect="choose_die $draft_pool$" result="DIE"/>
+            <action effect="choose_position $draft_pool$" result="POS"/>
+            <action effect="pick_at $draft_pool$ $POS$" result="DIE"/>
             <action effect="redraw $DIE$"/>
         </effect>
     </card>
@@ -81,7 +85,7 @@
     <card id="cork_backed_strainghtedge" name="cards.tool_cards.cork_backed_strainghtedge.name">
         <effect constraint="die_already_picked" description="cards.tool_cards.cork_backed_strainghtedge.description"
                 initialCost="1">
-            <action effect="choose_position_for_die $window$ $player_die$ [ignore_adjacency=true]" result="POS"/>
+            <action effect="choose_position_for_die $window$ $CURRENT_PLAYER::getHeldDie()$ [ignore_adjacency=true]" result="POS"/>
             <action effect="place $DIE$ $window$ $POS$"/>
         </effect>
         <constraints>
@@ -90,7 +94,8 @@
     </card>
     <card id="grinding_stone" name="cards.tool_cards.grinding_stone.name">
         <effect description="cards.tool_cards.grinding_stone.description" initialCost="1">
-            <action effect="choose_die $draft_pool$" result="DIE"/>
+            <action effect="choose_position $draft_pool$" result="POS"/>
+            <action effect="pick_at $draft_pool$ $POS$" result="DIE"/>
             <action effect="flip $DIE$"/>
         </effect>
     </card>
@@ -107,9 +112,10 @@
     </card>
     <card id="tap_wheel" name="cards.tool_cards.tap_wheel.name">
         <effect description="cards.tool_cards.tap_wheel.description" initialCost="1">
-            <action effect="choose_color $round_track$" result="DIE_COLOR"/>
+            <action effect="choose_position $round_track$" result="POS_FOR_DIE"/>
+            <action effect="get_at $round_track$ $POS_FOR_DIE$" result="DIE_FOR_COLOR"/>
             <action-group repetitions="1..2">
-                <action effect="choose_die $window$ [color=$DIE_COLOR$]" result="DIE"/>
+                <action effect="choose_position $window$ [color=$DIE_FOR_COLOR::getColor()$]" result="DIE"/>
                 <action effect="pick_die $window$ $DIE$" result="DIE"/>
                 <action effect="choose_position_for_die $window$ $DIE$" result="POS"/>
                 <action effect="place $DIE$ $window$ $POS$"/>

@@ -21,9 +21,9 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
     void respondToWindowRequest(IWindow window) throws IOException;
     
     // ------ TURNS ------
-    void waitForTurnToBegin() throws IOException;
+    int waitForTurnToBegin() throws IOException, InterruptedException;
     void endTurn() throws IOException;
-    void waitForTurnToEnd() throws IOException;
+    void waitForTurnToEnd() throws IOException, InterruptedException;
     
     // ------ PLAYER MOVES ------
     MoveResponse tryToMove(Move move) throws IOException, InterruptedException;
@@ -47,4 +47,7 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
             //
         IDie waitForSetShade();
         void postSetShade(Integer shade);
+    
+    // ------ MATCH END ------
+    Map<IPlayer, IResult> waitForMatchToEnd();
 }

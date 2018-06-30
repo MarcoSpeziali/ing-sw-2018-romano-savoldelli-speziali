@@ -1,11 +1,17 @@
 package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.mocks.IMatch;
+import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.net.mocks.MatchMock;
+import it.polimi.ingsw.net.mocks.WindowMock;
 import it.polimi.ingsw.net.requests.WindowRequest;
+import it.polimi.ingsw.net.responses.MatchBeginResponse;
+import it.polimi.ingsw.net.responses.MatchEndResponse;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.events.MatchCommunicationsListener;
@@ -37,7 +43,7 @@ public class MatchCommunicationsManager {
     private final IMatch match;
     private final MatchCommunicationsListener matchCommunicationsListener;
     
-    // ------ LYFE CYCLE ------
+    // ------ LIFE CYCLE ------
     
     public MatchCommunicationsManager(IMatch match, MatchCommunicationsListener matchCommunicationsListener) {
         this.match = match;
@@ -62,6 +68,11 @@ public class MatchCommunicationsManager {
                 MatchControllerMiddleware.class,
                 new MatchControllerMiddleware(this)
         ));
+        this.forEachRmi((databasePlayer, matchRMIProxyController) -> {
+            matchRMIProxyController.setWindowResponseConsumer(window -> this.onWindowChosen(databasePlayer, window));
+            matchRMIProxyController.setMoveConsumer(move -> this.onMoveRequested(databasePlayer, move));
+            matchRMIProxyController.setEndTurnRunnable(() -> this.onEndRequested(databasePlayer));
+        });
     }
     
     // ------ MODELS ------
@@ -117,12 +128,53 @@ public class MatchCommunicationsManager {
     
     // ------ TURNS ------
     
-    public void notifyPlayerTurnBegin(IPlayer player) {
-    
+    public void notifyPlayerTurnBegin(DatabasePlayer player, int timeToCompleteInSeconds) throws IOException {
+        try {
+            this.rmiPlayersHandler.computeIfPresent(player, wrap((databasePlayer, matchRMIProxyController) -> {
+                matchRMIProxyController.postTurnBegin(timeToCompleteInSeconds);
+                return matchRMIProxyController;
+            }));
+            
+            this.socketPlayersHandler.computeIfPresent(player, wrap((databasePlayer, authenticatedClientHandler) -> {
+                authenticatedClientHandler.sendResponse(new Response<>(
+                        new Header(EndPointFunction.MATCH_PLAYER_TURN_BEGIN_RESPONSE),
+                        new MatchBeginResponse(
+                                this.match.getId(),
+                                timeToCompleteInSeconds
+                        )
+                ));
+                
+                return authenticatedClientHandler;
+            }));
+        }
+        catch (FunctionalExceptionWrapper e) {
+            e.tryUnwrap(RemoteException.class)
+                    .tryFinalUnwrap(IOException.class);
+        }
     }
     
-    public void notifyPlayerTurnEnd(IPlayer player) {
-    
+    public void notifyPlayerTurnEnd(DatabasePlayer player) throws IOException {
+        try {
+            this.rmiPlayersHandler.computeIfPresent(player, wrap((databasePlayer, matchRMIProxyController) -> {
+                matchRMIProxyController.postTurnEnd();
+                return matchRMIProxyController;
+            }));
+        
+            this.socketPlayersHandler.computeIfPresent(player, wrap((databasePlayer, authenticatedClientHandler) -> {
+                authenticatedClientHandler.sendResponse(new Response<>(
+                        new Header(EndPointFunction.MATCH_PLAYER_TURN_END_RESPONSE),
+                        new MatchEndResponse(
+                                this.match.getId()
+                        )
+                ));
+            
+                return authenticatedClientHandler;
+            }));
+        }
+        catch (FunctionalExceptionWrapper e) {
+            e.tryUnwrap(RemoteException.class)
+                    .tryFinalUnwrap(IOException.class);
+        }
     }
     
     // ------ MOVE ------
@@ -133,14 +185,14 @@ public class MatchCommunicationsManager {
                 true
         ));
     }
-
+    
     public void sendNegativeResponseForMoveToPlayer(DatabasePlayer databasePlayer) throws IOException {
         this.sendMoveResponse(databasePlayer, new MoveResponse(
                 this.match.getId(),
                 false
         ));
     }
-
+    
     private void sendMoveResponse(DatabasePlayer databasePlayer, MoveResponse moveResponse) throws IOException {
         try {
             this.rmiPlayersHandler.computeIfPresent(databasePlayer, wrap((player, rmiProxyController) -> {
@@ -175,5 +227,13 @@ public class MatchCommunicationsManager {
 
     public void onWindowChosen(DatabasePlayer databasePlayer, IWindow chosenWindow) {
         this.matchCommunicationsListener.onWindowChosen(this, databasePlayer, chosenWindow);
+    }
+    
+    public void onMoveRequested(DatabasePlayer databasePlayer, Move requestedMove) {
+        this.matchCommunicationsListener.onPlayerTriedToMove(this, databasePlayer, requestedMove);
+    }
+    
+    public void onEndRequested(DatabasePlayer databasePlayer) {
+        this.matchCommunicationsListener.onPlayerEndRequest(this, databasePlayer);
     }
 }

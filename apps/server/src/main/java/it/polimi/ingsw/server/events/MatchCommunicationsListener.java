@@ -11,4 +11,7 @@ public interface MatchCommunicationsListener extends IEvent {
 
     default void onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move) {
     }
+    
+    default void onPlayerEndRequest(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer) {
+    }
 }

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.managers.turns;
 
 import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IPlayer;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.PlayerEventsListener;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
@@ -41,14 +40,14 @@ public class RoundManager implements PlayerEventsListener, AutoCloseable {
     }
     
     private PlayerTurnList playerTurnList;
-    private List<IPlayer> originalPlayers;
+    private List<DatabasePlayer> originalPlayers;
     private Turn currentTurn;
     
     private RoundManager(DatabaseMatch match) {
-        this.originalPlayers = Arrays.asList(match.getPlayers());
+        this.originalPlayers = Arrays.asList(match.getDatabasePlayers());
     
         this.playerTurnList = new PlayerTurnList(
-                this.originalPlayers.toArray(new IPlayer[0]),
+                this.originalPlayers.toArray(new DatabasePlayer[0]),
                 NUMBER_OF_ROUNDS
         );
     

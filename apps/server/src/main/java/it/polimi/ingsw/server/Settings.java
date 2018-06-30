@@ -55,6 +55,10 @@ public final class Settings extends SettingsBase {
     private TimeUnit matchConnectionTimerTimeUnit;
     @Setting(id = "number-of-windows-per-player-to-choose", defaultValue = "4", type = Integer.class)
     private int numberOfWindowsPerPlayerToChoose;
+    @Setting(id = "match-move-timer-duration", defaultValue = "90", type = Integer.class)
+    private int matchMoveTimerDuration;
+    @Setting(id = "match-move-timer-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
+    private TimeUnit matchMoveTimerTimeUnit;
     
         // --------------- MODELS CONSTANTS ---------------
         @Setting(id = "number-of-dice-per-color-in-bag", defaultValue = "18", type = Integer.class)
@@ -65,11 +69,9 @@ public final class Settings extends SettingsBase {
         private int numberOfPublicObjectiveCards;
         @Setting(id = "number-of-tool-cards", defaultValue = "3", type = Integer.class)
         private int numberOfToolCards;
+        @Setting(id = "number-of-rounds", defaultValue = "10", type = Byte.class)
+        private byte numberOfRounds;
     
-    @Setting(id = "match-move-timer-duration", defaultValue = "90", type = Integer.class)
-    private int matchMoveTimerDuration;
-    @Setting(id = "match-move-timer-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
-    private TimeUnit matchMoveTimerTimeUnit;
     
     private Settings(String path) throws IllegalAccessException {
         super(path);
@@ -164,6 +166,18 @@ public final class Settings extends SettingsBase {
         return numberOfWindowsPerPlayerToChoose;
     }
     
+    public int getMatchMoveTimerDuration() {
+        return matchMoveTimerDuration;
+    }
+    
+    public TimeUnit getMatchMoveTimerTimeUnit() {
+        return matchMoveTimerTimeUnit;
+    }
+    
+    public byte getNumberOfRounds() {
+        return numberOfRounds;
+    }
+    
         // --------------- MODELS CONSTANTS ---------------
         
         public int getNumberOfDicePerColorInBag() {
@@ -181,12 +195,4 @@ public final class Settings extends SettingsBase {
         public int getNumberOfToolCards() {
             return numberOfToolCards;
         }
-    
-    public int getMatchMoveTimerDuration() {
-        return matchMoveTimerDuration;
-    }
-    
-    public TimeUnit getMatchMoveTimerTimeUnit() {
-        return matchMoveTimerTimeUnit;
-    }
 }
