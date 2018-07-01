@@ -26,6 +26,8 @@ import static org.mockito.Mockito.mock;
 
 
 public class MatchGUITest extends Application {
+    DieMock dieMock1 = new DieMock(3, GlassColor.RED);
+    DieMock dieMock2 = new DieMock(1, GlassColor.BLUE);
 
     CellMock[] cells1 = {new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE),new CellMock(6,null),
             new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
@@ -389,7 +391,7 @@ public class MatchGUITest extends Application {
             @Override
             public IWindow[] waitForWindowRequest() throws RemoteException {
                 CellMock[] cells1 = {new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE),new CellMock(6,null),
-                        new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+                        new CellMock(1,GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
                         new CellMock(5,null), new CellMock(4, null), new CellMock(0, GlassColor.PURPLE),
                         new CellMock(0,null), new CellMock(4, null), new CellMock(0, null),
                         new CellMock(1, GlassColor.GREEN), new CellMock(0, GlassColor.BLUE), new CellMock(0,null),

@@ -145,8 +145,9 @@ public class MatchGUIView extends GUIView<MatchController> {
                     ObjectiveCardGUIView objectiveCardGUIView = privateCardLoader.getController();
                     objectiveCardGUIView.setModel(iPrivateObjectiveCard);
                     centerPane.setRight(privateCardNode);
-                    centerPane.setAlignment(privateCardNode, Pos.CENTER);
-                    centerPane.setMargin(privateCardNode, new Insets(10));
+                    centerPane.setAlignment(privateCardNode, Pos.BOTTOM_CENTER);
+                    centerPane.setMargin(privateCardNode, new Insets(0,10,220,10));
+                    //centerPane.setMargin(privateCardNode, new Insets(10));
 
                    FXMLLoader draftPoolLoader = new FXMLLoader();
                     draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
@@ -188,6 +189,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                                 window.setOnMousePressed(event -> {
                                     centerPane.setCenter(window);
+                                    centerPane.setMargin(window, new Insets(0, 0, 180, 0));
                                     window.setOnMouseEntered(e -> window.setCursor(Cursor.DEFAULT));
                                     windowGUIView.setProperty(Property.OWNED);
 
