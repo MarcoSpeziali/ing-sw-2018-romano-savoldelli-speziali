@@ -5,10 +5,7 @@ import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.mocks.IWindow;
-import it.polimi.ingsw.net.mocks.MatchMock;
-import it.polimi.ingsw.net.mocks.WindowMock;
+import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.responses.MatchBeginResponse;
 import it.polimi.ingsw.net.responses.MatchEndResponse;
@@ -72,16 +69,14 @@ public class MatchCommunicationsManager {
             matchRMIProxyController.setWindowResponseConsumer(window -> this.onWindowChosen(databasePlayer, window));
             matchRMIProxyController.setMoveConsumer(move -> this.onMoveRequested(databasePlayer, move));
             matchRMIProxyController.setEndTurnRunnable(() -> this.onEndRequested(databasePlayer));
+            matchRMIProxyController.setToolCardConsumer(toolCard -> this.onToolCardRequested(databasePlayer, toolCard));
         });
     }
     
     // ------ MODELS ------
     
     public void sendWindowsToChoose(Map<DatabasePlayer, IWindow[]> playerToWindowsMap) throws IOException {
-        this.forEachRmi((databasePlayer, matchRMIProxyController) -> {
-            matchRMIProxyController.postWindowsToChoose(playerToWindowsMap.get(databasePlayer));
-            matchRMIProxyController.setWindowResponseConsumer(iWindow -> this.onWindowChosen(databasePlayer, iWindow));
-        });
+        this.forEachRmi((databasePlayer, matchRMIProxyController) -> matchRMIProxyController.postWindowsToChoose(playerToWindowsMap.get(databasePlayer)));
 
         try {
             this.forEachSocket((databasePlayer, authenticatedClientHandler) -> {
@@ -202,7 +197,7 @@ public class MatchCommunicationsManager {
 
             this.socketPlayersHandler.computeIfPresent(databasePlayer, wrap((player, authenticatedClientHandler) -> {
                 authenticatedClientHandler.sendResponse(new Response<>(
-                        new Header(EndPointFunction.MATCH_PLAYER_MOVE_RESPONSE),
+                        new Header(EndPointFunction.MATCH_PLAYER_MOVE_REQUEST),
                         moveResponse
                 ));
                 return authenticatedClientHandler;
@@ -218,7 +213,7 @@ public class MatchCommunicationsManager {
     // ------ RESULTS ------
 
     public void sendResults(Map<DatabasePlayer, Integer> results) {
-
+        // TODO: send results
     }
     
     // ------ UTILS ------
@@ -243,5 +238,9 @@ public class MatchCommunicationsManager {
     
     public void onEndRequested(DatabasePlayer databasePlayer) {
         this.matchCommunicationsListener.onPlayerEndRequest(this, databasePlayer);
+    }
+    
+    public void onToolCardRequested(DatabasePlayer databasePlayer, IToolCard toolCard) {
+        this.matchCommunicationsListener.onPlayerRequestedToolCard(this, databasePlayer, toolCard);
     }
 }

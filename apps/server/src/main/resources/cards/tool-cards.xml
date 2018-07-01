@@ -62,8 +62,8 @@
         </effect>
         <constraints>
             <constraint-group id="player_turn">
-                <constraint>$PLAYER_TURN$ == 2</constraint>
-                <constraint>$PLAYER_TURN_PHASE$ == 0b10</constraint>
+                <constraint>$CURRENT_TURN::getTurnIndex()$ == 1</constraint>
+                <constraint>$CURRENT_TURN::getPhase() == 0b10</constraint>
             </constraint-group>
         </constraints>
     </card>
@@ -77,8 +77,8 @@
         </effect>
         <constraints>
             <constraint-group id="player_turn">
-                <constraint>$PLAYER_TURN$ == 1</constraint>
-                <constraint>$PLAYER_TURN_PHASE$ == 0b11</constraint>
+                <constraint>$CURRENT_TURN::getTurnIndex()$ == 1</constraint>
+                <constraint>$CURRENT_TURN::getPhase() == 0b11</constraint>
             </constraint-group>
         </constraints>
     </card>

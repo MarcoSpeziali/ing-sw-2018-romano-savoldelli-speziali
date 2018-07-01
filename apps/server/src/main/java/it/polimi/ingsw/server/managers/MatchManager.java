@@ -1,8 +1,11 @@
 package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.DieInteractionException;
+import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
+import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Move;
+import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.models.*;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.server.Objective;
@@ -351,6 +354,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         byte lastRound = turn.getRound();
     
         try {
+            MatchContextHelper.getContextForPlayer(
+                    GlobalContext.getGlobalContext().getContextForMatch(this.databaseMatch.getId()),
+                    turn.getPlayer()
+            ).put(Context.CURRENT_TURN, turn);
+            
             do {
                 this.matchCommunicationsManager.notifyPlayerTurnBegin(
                         turn.getPlayer(),
@@ -550,10 +558,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     @Override
     @SuppressWarnings("squid:S00112")
     public void onWindowChosen(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, IWindow window) {
-        if (matchCommunicationsManager != this.matchCommunicationsManager) {
-            return;
-        }
-
         Window chosenWindow = this.possibleChosenWindows.stream()
                 .filter(w -> w.equals(window))
                 .findFirst()
@@ -590,7 +594,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
     @Override
     public void onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move) {
-        if (matchCommunicationsManager != this.matchCommunicationsManager) {
+        if (this.roundManager.current().getPlayer().getId() != databasePlayer.getId()) {
             return;
         }
 
@@ -618,6 +622,38 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         if (this.roundManager.current().getPlayer().getId() == databasePlayer.getId()) {
             this.roundManager.current().end();
         }
+    }
+    
+    @Override
+    public void onPlayerRequestedToolCard(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, IToolCard toolCard) {
+        if (this.roundManager.current().getPlayer().getId() != databasePlayer.getId()) {
+            return;
+        }
+    
+        Optional<ToolCardControllerImpl> optionalController = Arrays.stream(this.matchObjectsManager.getToolCardControllers())
+                .filter(toolCardController -> toolCardController.getToolCard().getCardId().equals(toolCard.getCardId()))
+                .findFirst();
+        
+        if (!optionalController.isPresent()) {
+            return;
+        }
+        
+        ToolCardControllerImpl controller = optionalController.get();
+        
+        Player currentPlayer = this.matchObjectsManager.getDatabasePlayerToLivePlayer().get(databasePlayer);
+        
+        if (!controller.canUse(currentPlayer)) {
+            throw new NotEnoughTokensException(
+                    controller.getToolCard().getEffect().getCost(),
+                    currentPlayer.getFavourTokens()
+            );
+        }
+        
+        // TODO: set callback (HOW??)
+        
+        controller.requestUsage(
+                currentPlayer
+        );
     }
     
     private enum MatchState {

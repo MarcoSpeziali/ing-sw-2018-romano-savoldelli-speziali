@@ -29,9 +29,12 @@ public enum EndPointFunction {
         MATCH_PLAYER_TURN_END_REQUEST("match/player/turn/end_request"),
         MATCH_PLAYER_TURN_END_RESPONSE("match/player/turn/end_response"),
     
+        // ------ TOOL CARDS ------
+        MATCH_PLAYER_TOOL_CARD_REQUEST("match/player/tool_card_request"),
+        MATCH_PLAYER_TOOL_CARD_RESPONSE("match/player/tool_card_response"),
+    
         // ------ PLAYER MOVE ------
         MATCH_PLAYER_MOVE_REQUEST("match/player/move_request"),
-        MATCH_PLAYER_MOVE_RESPONSE("match/player/move_response"),
     
     MATCH_UPDATE_RESPONSE("match/update_response"),
     MATCH_RESULTS_RESPONSE("match/results_response");

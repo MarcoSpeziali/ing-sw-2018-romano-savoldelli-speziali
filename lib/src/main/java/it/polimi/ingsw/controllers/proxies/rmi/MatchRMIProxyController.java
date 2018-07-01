@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controllers.proxies.rmi;
 
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.responses.MoveResponse;
@@ -191,9 +190,15 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         }
     }
     
-    @Override
-    public void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException {
+    private transient Consumer<IToolCard> toolCardConsumer;
     
+    public void setToolCardConsumer(Consumer<IToolCard> toolCardConsumer) {
+        this.toolCardConsumer = toolCardConsumer;
+    }
+    
+    @Override
+    public void requestToolCardUsage(IToolCard toolCard) throws IOException {
+        toolCardConsumer.accept(toolCard);
     }
     
     @Override

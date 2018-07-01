@@ -17,6 +17,7 @@ public class Context implements Serializable {
     public static final String ROUND_TRACK = "round_track";
     public static final String CURRENT_PLAYER = "current_player";
     public static final String TURN_LIST = "turn_list";
+    public static final String CURRENT_TURN = "current_turn";
     
     private static final long serialVersionUID = -3619852381252122217L;
     

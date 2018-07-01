@@ -15,8 +15,8 @@ import java.util.Arrays;
 
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
-// TODO: docs and optimize for multiple matches (InMemoryCache)
-public final class InstantiationManager {
+// TODO: docs
+public class InstantiationManager {
     private InstantiationManager() {}
 
     public static synchronized Window[] instantiateWindows() throws IOException, ClassNotFoundException {

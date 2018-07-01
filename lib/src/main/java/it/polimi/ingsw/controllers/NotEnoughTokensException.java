@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controllers;
 
-public class NotEnoughTokensException extends Exception {
+public class NotEnoughTokensException extends RuntimeException {
 
     private static final long serialVersionUID = 1738462148316785801L;
 

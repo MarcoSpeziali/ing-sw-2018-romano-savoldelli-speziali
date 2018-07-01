@@ -19,12 +19,10 @@ public class ActionGroup implements ExecutableAction {
      */
     private ActionData data;
 
-
     /**
      * A range of repetitions.
      */
     private IterableRange<Integer> repetitionNumber;
-
 
     /**
      * The number of actions to be chosen.

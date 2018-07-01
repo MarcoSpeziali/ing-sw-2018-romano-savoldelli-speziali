@@ -3,16 +3,20 @@ package it.polimi.ingsw.controllers.proxies.socket;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.Move;
+import it.polimi.ingsw.core.ToolCardConditionException;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.MatchEndRequest;
 import it.polimi.ingsw.net.requests.MoveRequest;
+import it.polimi.ingsw.net.requests.ToolCardUsageRequest;
 import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
+import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
@@ -210,7 +214,27 @@ public class MatchSocketProxyController implements MatchController {
     
     @Override
     public void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException {
-    
+        ResponseError responseError = this.persistentSocketInteractionProvider.getSyncResponseFor(
+                new Request<>(
+                        new Header(
+                                this.clientToken,
+                                EndPointFunction.MATCH_PLAYER_TOOL_CARD_REQUEST
+                        ),
+                        new ToolCardUsageRequest(
+                                this.matchId,
+                                new ToolCardMock(toolCard)
+                        )
+                )
+        ).getError();
+        
+        if (responseError != null) {
+            if (responseError.getErrorCode() == ResponseFields.Error.NOT_ENOUGH_TOKENS.getCode()) {
+                throw new NotEnoughTokensException(-1, -1);
+            }
+            else if (responseError.getErrorCode() == ResponseFields.Error.CONSTRAINT_EVALUATION.getCode()) {
+                throw new ToolCardConditionException();
+            }
+        }
     }
     
     @Override

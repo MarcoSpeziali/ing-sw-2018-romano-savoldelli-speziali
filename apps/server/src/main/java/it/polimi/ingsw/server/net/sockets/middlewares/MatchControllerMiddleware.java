@@ -5,6 +5,7 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.requests.MatchEndRequest;
 import it.polimi.ingsw.net.requests.MoveRequest;
+import it.polimi.ingsw.net.requests.ToolCardUsageRequest;
 import it.polimi.ingsw.net.responses.WindowResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.managers.MatchCommunicationsManager;
@@ -18,7 +19,8 @@ import it.polimi.ingsw.utils.io.json.JSONSerializable;
         
         // ------ REQUESTS ------
         EndPointFunction.MATCH_PLAYER_MOVE_REQUEST,
-        EndPointFunction.MATCH_PLAYER_TURN_END_REQUEST
+        EndPointFunction.MATCH_PLAYER_TURN_END_REQUEST,
+        EndPointFunction.MATCH_PLAYER_TOOL_CARD_REQUEST
 })
 public class MatchControllerMiddleware implements Middleware {
 
@@ -33,6 +35,7 @@ public class MatchControllerMiddleware implements Middleware {
     public Response handleRequest(Request<? extends JSONSerializable> request, EndPointFunction endPointFunction, ClientHandler clientHandler) {
         if (endPointFunction == EndPointFunction.MATCH_PLAYER_MOVE_REQUEST && request.getBody() instanceof MoveRequest) {
             Request<MoveRequest> moveRequest = (Request<MoveRequest>) request;
+            
             this.matchCommunicationsManager.onMoveRequested(
                     ((AuthenticatedClientHandler) clientHandler).getPlayer(),
                     Move.of(moveRequest.getBody().getFrom(), moveRequest.getBody().getTo())
@@ -43,6 +46,14 @@ public class MatchControllerMiddleware implements Middleware {
                     ((AuthenticatedClientHandler) clientHandler).getPlayer()
             );
         }
+        else if (endPointFunction == EndPointFunction.MATCH_PLAYER_TOOL_CARD_REQUEST && request.getBody() instanceof ToolCardUsageRequest) {
+            Request<ToolCardUsageRequest> toolCardUsageRequest = (Request<ToolCardUsageRequest>) request;
+            
+            this.matchCommunicationsManager.onToolCardRequested(
+                    ((AuthenticatedClientHandler) clientHandler).getPlayer(),
+                    toolCardUsageRequest.getBody().getToolCard()
+            );
+        }
         
         return null;
     }
@@ -50,8 +61,9 @@ public class MatchControllerMiddleware implements Middleware {
     @Override
     @SuppressWarnings("unchecked")
     public Request handleResponse(Response<? extends JSONSerializable> response, EndPointFunction endPointFunction, ClientHandler clientHandler) {
-        if (response.getBody() instanceof WindowResponse) {
+        if (endPointFunction == EndPointFunction.MATCH_WINDOW_RESPONSE && response.getBody() instanceof WindowResponse) {
             Response<WindowResponse> windowResponse = (Response<WindowResponse>) response;
+            
             this.matchCommunicationsManager.onWindowChosen(
                     ((AuthenticatedClientHandler) clientHandler).getPlayer(),
                     windowResponse.getBody().getChosenWindow()

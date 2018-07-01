@@ -54,10 +54,12 @@ public enum ResponseFields {
 
     public enum Error {
         ERROR(-1, "error"),
-        UNAUTHORIZED(401, "unauthorized"),
-        INTERNAL_SERVER_ERROR(500, "internal-server-error"),
-        TIMEOUT(408, "request-timeout"),
-        ALREADY_EXISTS(409, "already-exists");
+        UNAUTHORIZED(1, "unauthorized"),
+        INTERNAL_SERVER_ERROR(2, "internal-server-error"),
+        TIMEOUT(3, "request-timeout"),
+        ALREADY_EXISTS(4, "already-exists"),
+        NOT_ENOUGH_TOKENS(5, "not-enough-tokens"),
+        CONSTRAINT_EVALUATION(6, "constraint-evaluation");
 
         private final int code;
         private final String name;
