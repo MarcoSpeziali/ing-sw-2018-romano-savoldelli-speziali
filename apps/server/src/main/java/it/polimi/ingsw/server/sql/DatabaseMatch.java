@@ -97,30 +97,13 @@ public class DatabaseMatch {
                         "WHERE m.id = '%d' AND mb.leaving_time IS NULL",
                 this.id
         );
-    
-        try (SagradaDatabase database = new SagradaDatabase()) {
-            List<DatabasePlayer> players = database.executeQuery(query, resultSet -> {
-                LinkedList<DatabasePlayer> databasePlayers = new LinkedList<>();
-            
-                do {
-                    databasePlayers.add(new DatabasePlayer(resultSet));
-                } while (resultSet.next());
-            
-                return databasePlayers;
-            });
-        
-            if (players == null || players.isEmpty()) {
-                return new DatabasePlayer[0];
-            }
-        
-            return players.toArray(new DatabasePlayer[0]);
-        }
-        catch (SQLException e) {
-            return null;
-        }
+
+        List<DatabasePlayer> databasePlayers = getPlayerFromQuery(query);
+
+        return databasePlayers == null ? null : databasePlayers.toArray(new DatabasePlayer[0]);
     }
     
-    public List<IPlayer> getLeftPlayers() throws SQLException {
+    public List<DatabasePlayer> getLeftPlayers() {
         String query = String.format(
                 "SELECT p.* FROM match m " +
                         "JOIN match_player mb ON mb.match = m.id " +
@@ -129,15 +112,18 @@ public class DatabaseMatch {
                 this.id
         );
     
+        return getPlayerFromQuery(query);
+    }
+
+    private List<DatabasePlayer> getPlayerFromQuery(String query) {
         try (SagradaDatabase database = new SagradaDatabase()) {
-            //noinspection Duplicates
-            List<IPlayer> result = database.executeQuery(query, resultSet -> {
-                LinkedList<IPlayer> databasePlayers = new LinkedList<>();
-            
+            List<DatabasePlayer> result = database.executeQuery(query, resultSet -> {
+                LinkedList<DatabasePlayer> databasePlayers = new LinkedList<>();
+
                 do {
                     databasePlayers.add(new DatabasePlayer(resultSet));
                 } while (resultSet.next());
-            
+
                 return databasePlayers;
             });
 

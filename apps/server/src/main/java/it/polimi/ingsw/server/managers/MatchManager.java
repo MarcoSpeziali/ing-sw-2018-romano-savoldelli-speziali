@@ -15,6 +15,8 @@ import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.sql.DatabaseLobby;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
+import it.polimi.ingsw.server.utils.GlobalContext;
+import it.polimi.ingsw.server.utils.MatchContextHelper;
 import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.ArrayUtils;
 import it.polimi.ingsw.utils.IterableRange;
@@ -338,6 +340,13 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     private final Runnable moveTimerExecutorTask = () -> this.roundManager.current().end();
     
     private final Runnable roundsExecutorTask = () -> {
+        MatchContextHelper.init(
+                GlobalContext.getGlobalContext().getContextForMatch(this.databaseMatch.getId()),
+                this.databaseMatch,
+                this.matchObjectsManager,
+                this.roundManager.getPlayerTurnList()
+        );
+
         Turn turn = this.roundManager.next();
         byte lastRound = turn.getRound();
     
@@ -384,7 +393,9 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 
                 this.onModelsUpdated();
             } while (turn != null);
-            
+
+            this.matchState = MatchState.CALCULATING_RESULTS;
+
             Map<DatabasePlayer, Integer> partialResults = ResultsManager.getPartialPointsForPlayers(
                     this.databaseMatch.getId(),
                     this.matchPlayers.toArray(new DatabasePlayer[0]),
@@ -404,14 +415,12 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                     this.databaseMatch.getId(),
                     partialResults
             );
+
+            this.matchState = MatchState.CLOSING_MATCH;
         }
         catch (InterruptedException e) {
             ServerLogger.getLogger().log(Level.WARNING, "Error while waiting for turn to end", e);
             Thread.currentThread().interrupt();
-        }
-        catch (SQLException e) {
-            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while sending updates to players:", e);
-            throw new RuntimeException(e);
         }
         catch (IOException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
@@ -519,6 +528,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     public void onPlayerDisconnected(DatabasePlayer player) {
         try {
             DatabaseMatch.removePlayer(this.databaseMatch.getId(), player.getId());
+            this.matchCommunicationsManager.removePlayer(player);
         }
         catch (SQLException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
@@ -528,7 +538,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
     // ------ MODELS EVENTS ------
 
-    public void onModelsUpdated() throws SQLException, IOException {
+    public void onModelsUpdated() throws IOException {
         for (DatabasePlayer player : this.matchPlayers) {
             IMatch match = this.matchObjectsManager.buildMatchMockForPlayer(player);
             this.matchCommunicationsManager.sendMatchMockToPlayer(player, match);
@@ -568,7 +578,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
                 this.roundsTaskFuture = this.roundsExecutorService.submit(this.roundsExecutorTask);
             }
-            catch (ClassNotFoundException | SQLException e) {
+            catch (ClassNotFoundException e) {
                 ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while creating models and controllers:", e);
                 throw new RuntimeException(e);
             }

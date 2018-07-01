@@ -165,6 +165,14 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
     }
 
     @Override
+    public Die getDie(Integer location) {
+        int roundIndex = (location & 0x0000FF00) >> 8;
+        int dieIndex = location & 0x000000FF;
+
+        return this.rounds.get(roundIndex).remove(dieIndex);
+    }
+
+    @Override
     public void putDie(Die die, Integer location) {
         byte roundIndex = (byte) ((location & 0x0000FF00) >> 8);
         byte dieIndex = (byte) (location & 0x000000FF);

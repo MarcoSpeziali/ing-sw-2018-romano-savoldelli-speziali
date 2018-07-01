@@ -1,8 +1,10 @@
 package it.polimi.ingsw.server.managers;
 
+import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.models.Bag;
 import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.controllers.DraftPoolControllerImpl;
 import it.polimi.ingsw.server.controllers.RoundTrackControllerImpl;
 import it.polimi.ingsw.server.controllers.ToolCardControllerImpl;
@@ -10,8 +12,8 @@ import it.polimi.ingsw.server.controllers.WindowControllerImpl;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 
-import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 // TODO: docs
 public class MatchObjectsManager {
@@ -33,6 +35,8 @@ public class MatchObjectsManager {
     private Map<DatabasePlayer, WindowControllerImpl> playerWindowMap;
     private Map<DatabasePlayer, ObjectiveCard> playerPrivateObjectiveCardMap;
 
+    private Map<DatabasePlayer, Player> databasePlayerToLivePlayer;
+
     private MatchObjectsManager(DatabaseMatch match) {
         this.match = match;
 
@@ -40,11 +44,22 @@ public class MatchObjectsManager {
         playerPrivateObjectiveCardMap = new HashMap<>();
     }
 
-    public boolean containsController(Object controller) {
-        return controller == this.draftPoolController ||
-                controller == this.roundTrackController ||
-                Arrays.stream(this.toolCardControllers).anyMatch(toolCardController -> controller == toolCardController) ||
-                this.playerWindowMap.values().stream().anyMatch(windowController -> controller == windowController);
+    private void createPlayers() {
+        DatabasePlayer[] currentPlayers = this.match.getDatabasePlayers();
+        List<DatabasePlayer> leftPlayers = this.match.getLeftPlayers();
+
+        List<DatabasePlayer> allPlayers = new ArrayList<>(currentPlayers.length + leftPlayers.size());
+        allPlayers.addAll(leftPlayers);
+        allPlayers.addAll(List.of(currentPlayers));
+
+        databasePlayerToLivePlayer = allPlayers.stream()
+                .map(player -> Map.entry(player, new Player(
+                        player.getId(),
+                        player.getUsername(),
+                        Settings.getSettings().getMatchNumberOfFavourTokens(),
+                        this.playerWindowMap.get(player).getWindow(),
+                        null
+                ))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public Bag getBag() {
@@ -111,13 +126,23 @@ public class MatchObjectsManager {
         return playerPrivateObjectiveCardMap;
     }
 
-    public IMatch buildMatchMockForPlayer(DatabasePlayer player) throws SQLException {
+    public Map<DatabasePlayer, Player> getDatabasePlayerToLivePlayer() {
+        return databasePlayerToLivePlayer;
+    }
+
+    public IMatch buildMatchMockForPlayer(DatabasePlayer player) {
+        if (this.databasePlayerToLivePlayer == null) {
+            this.createPlayers();
+        }
+
         return new MatchMock(
                 this.match.getId(),
                 this.match.getStartingTime(),
                 this.match.getEndingTime(),
                 new LobbyMock(this.match.getLobby()),
-                getLivePlayers(),
+                this.databasePlayerToLivePlayer.values().stream()
+                        .map(LivePlayerMock::new)
+                        .toArray(LivePlayerMock[]::new),
                 this.draftPoolController.getDraftPool(),
                 this.roundTrackController.getRoundTrack(),
                 this.publicObjectiveCards,
@@ -127,24 +152,6 @@ public class MatchObjectsManager {
                         .toArray(ToolCardMock[]::new),
                 this.playerPrivateObjectiveCardMap.get(player)
         );
-    }
-    
-    private LivePlayerMock[] getLivePlayers() throws SQLException {
-        IPlayer[] currentPlayers = this.match.getPlayers();
-        List<IPlayer> leftPlayers = this.match.getLeftPlayers();
-        
-        List<IPlayer> allPlayers = new ArrayList<>(currentPlayers.length + leftPlayers.size());
-        allPlayers.addAll(leftPlayers);
-        allPlayers.addAll(List.of(currentPlayers));
-        
-        return allPlayers.stream()
-                .map(player -> new LivePlayerMock(
-                        0,
-                        new WindowMock(playerWindowMap.get(player).getWindow()),
-                        new PlayerMock(player),
-                        leftPlayers.contains(player)
-                ))
-                .toArray(LivePlayerMock[]::new);
     }
     
     @Override

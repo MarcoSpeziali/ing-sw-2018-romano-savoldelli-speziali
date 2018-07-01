@@ -77,6 +77,15 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
         return d;
     }
 
+    @Override
+    public Die getDie(Integer location) {
+        if (location < 0 || location > getNumberOfDice()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return dice[location];
+    }
+
     /**
      * @return a {@link LinkedList} of locations of dice.
      */

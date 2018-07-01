@@ -235,10 +235,30 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     public void postSetShade(Integer shade) {
     
     }
+
+    private final transient Object resultsSyncObject = new Object();
+    private Map<IPlayer, IResult> resultMap;
+
+    public void postResults(Map<IPlayer, IResult> resultMap) {
+        synchronized (resultsSyncObject) {
+            this.resultMap = resultMap;
+
+            resultsSyncObject.notifyAll();
+        }
+    }
     
     @Override
-    public Map<IPlayer, IResult> waitForMatchToEnd() {
-        return null;
+    public Map<IPlayer, IResult> waitForMatchToEnd() throws IOException, InterruptedException {
+        //noinspection Duplicates
+        synchronized (resultsSyncObject) {
+            while (this.resultMap == null) {
+                this.resultsSyncObject.wait();
+            }
+
+            Map<IPlayer, IResult> temp = this.resultMap;
+            this.resultMap = null;
+            return temp;
+        }
     }
     
     @Override

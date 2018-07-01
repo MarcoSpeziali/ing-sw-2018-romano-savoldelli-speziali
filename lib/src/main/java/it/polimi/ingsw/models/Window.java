@@ -170,6 +170,11 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         return die;
     }
 
+    @Override
+    public Die getDie(Integer location) {
+        return this.cells[location / this.columns][location % this.columns].getDie();
+    }
+
     /**
      * @return the size of the occupied space in cells.
      */

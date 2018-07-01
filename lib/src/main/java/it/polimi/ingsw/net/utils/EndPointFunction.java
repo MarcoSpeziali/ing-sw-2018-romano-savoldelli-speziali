@@ -33,7 +33,8 @@ public enum EndPointFunction {
         MATCH_PLAYER_MOVE_REQUEST("match/player/move_request"),
         MATCH_PLAYER_MOVE_RESPONSE("match/player/move_response"),
     
-    MATCH_UPDATE_RESPONSE("match/update_response");
+    MATCH_UPDATE_RESPONSE("match/update_response"),
+    MATCH_RESULTS_RESPONSE("match/results_response");
 
     private final String endPointFunctionName;
 

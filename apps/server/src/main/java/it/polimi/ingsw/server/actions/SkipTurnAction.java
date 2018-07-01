@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.actions;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.server.managers.turns.PlayerTurnList;
 import it.polimi.ingsw.server.utils.VariableSupplier;
 
@@ -11,9 +11,9 @@ public class SkipTurnAction extends Action {
     
     private final VariableSupplier<Byte> round;
     private final VariableSupplier<Byte> turn;
-    private final VariableSupplier<IPlayer> playerVariableSupplier;
+    private final VariableSupplier<Player> playerVariableSupplier;
     
-    public SkipTurnAction(ActionData data, VariableSupplier<Byte> round, VariableSupplier<Byte> turn, VariableSupplier<IPlayer> playerVariableSupplier) {
+    public SkipTurnAction(ActionData data, VariableSupplier<Byte> round, VariableSupplier<Byte> turn, VariableSupplier<Player> playerVariableSupplier) {
         super(data);
     
         this.round = round;
@@ -25,7 +25,7 @@ public class SkipTurnAction extends Action {
     public Object run(Context context) {
         PlayerTurnList playerTurnList = (PlayerTurnList) context.get(Context.TURN_LIST);
         playerTurnList.skipPlayerTurn(
-                this.playerVariableSupplier.get(context),
+                this.playerVariableSupplier.get(context).getPlayer(),
                 round.get(context),
                 turn.get(context)
         );

@@ -30,7 +30,7 @@ public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocatio
 
     @SuppressWarnings("squid:S3010")
     @JSONDesignatedConstructor
-    Player(
+    public Player(
             @JSONElement("id") int id,
             @JSONElement("username") String username,
             @JSONElement("favour-tokens") int tokenCount,

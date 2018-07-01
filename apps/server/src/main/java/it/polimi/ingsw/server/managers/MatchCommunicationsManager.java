@@ -212,6 +212,14 @@ public class MatchCommunicationsManager {
             e.tryUnwrap(RemoteException.class).tryFinalUnwrap(IOException.class);
         }
     }
+
+    // ------ TOOL CARDS ------
+
+    // ------ RESULTS ------
+
+    public void sendResults(Map<DatabasePlayer, Integer> results) {
+
+    }
     
     // ------ UTILS ------
     

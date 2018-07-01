@@ -40,6 +40,7 @@ public class CellGUIView extends GUIView<ICell> {
     @Override
     public void setModel(ICell iCell) {
         super.model = iCell;
+
         if (iCell.getShade() > 0) {
             String resourceName = String.format("CELL_%d", iCell.getShade());
             String relativePath = Constants.Resources.valueOf(resourceName).getRelativePath();

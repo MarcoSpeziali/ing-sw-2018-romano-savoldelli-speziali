@@ -57,4 +57,8 @@ public abstract class Action implements ExecutableAction {
 
         return null;
     }
+
+    public boolean canRun(Context context) {
+        return this.data.getConstraint() == null || this.data.getConstraint().evaluate(context);
+    }
 }

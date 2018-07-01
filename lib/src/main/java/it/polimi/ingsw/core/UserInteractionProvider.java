@@ -11,6 +11,8 @@ public interface UserInteractionProvider extends Serializable {
 
     Integer choosePosition(ChooseLocation location);
 
+    Integer choosePosition(ChooseLocation location, GlassColor color, Integer shade);
+
     Integer choosePosition(RestrictedChoosablePutLocation location, Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency);
 
     Die pickDie(Die die, GlassColor glassColor, Integer shade);

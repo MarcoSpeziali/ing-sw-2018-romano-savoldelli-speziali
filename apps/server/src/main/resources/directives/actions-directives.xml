@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions-directives>
+    <!--
     <action-directives id="choose_die" class="it.polimi.ingsw.server.actions.ChooseDieAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" position="0" supplied="true"/>
@@ -21,9 +22,13 @@
                                   supplied="true"/>
         </parameters-directives>
     </action-directives>
+    -->
     <action-directives id="choose_position" class="it.polimi.ingsw.server.actions.ChoosePositionAction">
         <parameters-directives>
-            <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" supplied="true"/>
+            <parameter-directives class="it.polimi.ingsw.core.locations.ChooseLocation" position="0" supplied="true"/>
+            <parameter-directives class="it.polimi.ingsw.core.GlassColor" position="1" name="color" default="null"
+                                  supplied="true"/>
+            <parameter-directives class="java.lang.Integer" position="2" name="shade" default="0" supplied="true"/>
         </parameters-directives>
     </action-directives>
     <action-directives id="choose_position_for_die" class="it.polimi.ingsw.server.actions.ChoosePositionForDieAction">
@@ -53,15 +58,23 @@
             <parameter-directives class="it.polimi.ingsw.core.locations.PickLocation" position="0" supplied="true"/>
         </parameters-directives>
     </action-directives>
+    <!--
     <action-directives id="pick_die" class="it.polimi.ingsw.server.actions.PickDieAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.PickLocation" position="0" supplied="true"/>
             <parameter-directives class="it.polimi.ingsw.models.Die" position="1" supplied="true"/>
         </parameters-directives>
     </action-directives>
+    -->
     <action-directives id="pick_at" class="it.polimi.ingsw.server.actions.PickAtAction">
         <parameters-directives>
             <parameter-directives class="it.polimi.ingsw.core.locations.PickLocation" position="0" supplied="true"/>
+            <parameter-directives class="java.lang.Integer" position="1" supplied="true"/>
+        </parameters-directives>
+    </action-directives>
+    <action-directives id="get_at" class="it.polimi.ingsw.server.actions.GetAtAction">
+        <parameters-directives>
+            <parameter-directives class="it.polimi.ingsw.core.locations.ChoosablePickLocation" position="0" supplied="true"/>
             <parameter-directives class="java.lang.Integer" position="1" supplied="true"/>
         </parameters-directives>
     </action-directives>

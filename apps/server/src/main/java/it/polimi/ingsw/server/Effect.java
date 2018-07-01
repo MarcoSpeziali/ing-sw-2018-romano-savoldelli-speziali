@@ -122,7 +122,7 @@ public class Effect implements IEffect {
     public void run(String cardId, Context playerContext) {
         this.usedOnce = true;
 
-        if (this.effectConstraint != null && this.effectConstraint.evaluate(Context.getSharedInstance())) {
+        if (!canRun(playerContext)) {
             throw new ConstraintEvaluationException();
         }
     
@@ -137,6 +137,10 @@ public class Effect implements IEffect {
                     }
                 })
         );
+    }
+
+    public boolean canRun(Context playerContext) {
+        return this.effectConstraint == null || this.effectConstraint.evaluate(playerContext);
     }
     
     /**

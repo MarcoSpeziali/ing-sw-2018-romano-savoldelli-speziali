@@ -32,21 +32,30 @@ public class GlobalContext extends Context {
     /**
      * If the context exists it gets returned, otherwise it gets created.
      *
-     * @param player the player owning the context
      * @param matchId the id of the match the player is in
-     * @return the {@link Context} for the provided {@code player}
+     * @return the {@link Context} for the provided {@link it.polimi.ingsw.net.mocks.IMatch}
      */
-    public Context getContextForPlayer(IPlayer player, int matchId) {
-        String key = String.format("%d/%s", matchId, player.getUsername());
+    public Context getContextForMatch(int matchId) {
+        String key = String.valueOf(matchId);
         
         if (this.containsKey(key)) {
             return (Context) this.get(key);
         }
         else {
-            Context playerContext = (Context) this.put(key, this.snapshot(key));
-            playerContext.put(Context.CURRENT_PLAYER, player);
+            return (Context) this.put(key, this.snapshot(key));
+        }
+    }
 
-            return playerContext;
+    public Context getContextForPlayer(IPlayer player, int matchId) {
+        String key = player.getUsername();
+
+        Context matchContext = getContextForMatch(matchId);
+
+        if (matchContext.containsKey(key)) {
+            return (Context) matchContext.get(key);
+        }
+        else {
+            return (Context) matchContext.put(key, this.snapshot(key));
         }
     }
 }

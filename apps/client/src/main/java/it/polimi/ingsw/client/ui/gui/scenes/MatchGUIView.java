@@ -10,6 +10,7 @@ import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -290,10 +291,20 @@ public class MatchGUIView extends GUIView<MatchController> {
                     shade.set(finalI);
                 });
             }
-            confirm.setOnMousePressed(event -> {
-                this.model.postSetShade(shade.get());
-                dialog.close();
-            });
+            try {
+                confirm.setOnMousePressed(event -> {
+                    try {
+                        this.model.postSetShade(shade.get());
+                    }
+                    catch (IOException e) {
+                        FunctionalExceptionWrapper.wrap(e);
+                    }
+                    dialog.close();
+                });
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
             hBox.getChildren().addAll(die, gridPane);
             hBox.setAlignment(Pos.CENTER_LEFT);
             hBox.setSpacing(10);
@@ -341,11 +352,21 @@ public class MatchGUIView extends GUIView<MatchController> {
             content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT)));
             content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": "+iEffect.getDescriptionKey()));
             again.setOnMouseClicked(event -> {
-                this.model.postContinueToRepeatChoice(true);
+                try {
+                    this.model.postContinueToRepeatChoice(true);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
                 dialog.close();
             });
             stop.setOnMouseClicked(event -> {
-                this.model.postContinueToRepeatChoice(false);
+                try {
+                    this.model.postContinueToRepeatChoice(false);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
                 dialog.close();
             });
             dialog.show();

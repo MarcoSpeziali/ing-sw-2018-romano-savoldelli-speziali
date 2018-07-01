@@ -24,6 +24,8 @@ import java.util.function.Function;
 // TODO: docs
 public class PersistentSocketInteractionProvider extends PersistentNetworkInteractionProvider {
 
+    private static final String CLOSED_CONNECTION_EXCEPTION_MESSAGE = "The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.";
+
     private boolean shouldStop = false;
 
     private Socket socket;
@@ -131,7 +133,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     @Override
     public <T extends JSONSerializable, K extends JSONSerializable> Response<T> getSyncResponseFor(Request<K> request) throws IOException {
         if (socket == null) {
-            throw new IllegalStateException("The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.");
+            throw new IllegalStateException(CLOSED_CONNECTION_EXCEPTION_MESSAGE);
         }
 
         AtomicReference<Response<T>> receivedResponse = new AtomicReference<>();
@@ -172,7 +174,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     @Override
     public <T extends JSONSerializable, K extends JSONSerializable> void getAsyncResponseFor(Request<K> request, Consumer<Response<T>> responseConsumer, Consumer<Exception> onError) {
         if (socket == null) {
-            throw new IllegalStateException("The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.");
+            throw new IllegalStateException(CLOSED_CONNECTION_EXCEPTION_MESSAGE);
         }
 
         try {
@@ -219,7 +221,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     
     private void postJSONSerializable(JSONSerializable jsonSerializable) throws IOException {
         if (socket == null) {
-            throw new IllegalStateException("The connection hasn't been opened yet, or it has been closed. Call the method open() to open the connection.");
+            throw new IllegalStateException(CLOSED_CONNECTION_EXCEPTION_MESSAGE);
         }
     
         this.out.write(jsonSerializable.serialize().toString());

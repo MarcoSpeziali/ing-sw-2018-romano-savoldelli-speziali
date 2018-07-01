@@ -89,6 +89,20 @@ public class MatchSocketProxyController implements MatchController {
                     }
                 }
         );
+
+        this.persistentSocketInteractionProvider.listenFor(
+                EndPointFunction.MATCH_RESULTS_RESPONSE,
+                response -> {
+                    @SuppressWarnings("unchecked")
+                    Response<ResultsResponse> matchResultsResponse = (Response<ResultsResponse>) response;
+
+                    synchronized (resultsSyncObject) {
+                        this.resultMap = matchResultsResponse.getBody().getResultsMap();
+
+                        resultsSyncObject.notifyAll();
+                    }
+                }
+        );
     }
     
     private final transient Object windowsToChooseSyncObject = new Object();
@@ -238,10 +252,22 @@ public class MatchSocketProxyController implements MatchController {
     public void postSetShade(Integer shade) {
     
     }
+
+    private final transient Object resultsSyncObject = new Object();
+    private Map<IPlayer, IResult> resultMap;
     
     @Override
-    public Map<IPlayer, IResult> waitForMatchToEnd() {
-        return null;
+    public Map<IPlayer, IResult> waitForMatchToEnd() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (resultsSyncObject) {
+            while (this.resultMap == null) {
+                this.resultsSyncObject.wait();
+            }
+
+            Map<IPlayer, IResult> temp = this.resultMap;
+            this.resultMap = null;
+            return temp;
+        }
     }
     
     @Override

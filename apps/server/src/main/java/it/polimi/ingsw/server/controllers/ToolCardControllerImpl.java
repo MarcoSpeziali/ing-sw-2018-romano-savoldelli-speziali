@@ -28,7 +28,7 @@ public class ToolCardControllerImpl {
         Effect effect = (Effect) this.toolCard.getEffect();
         effect.run(
                 toolCard.getCardId(),
-                GlobalContext.getGlobalContext().getContextForPlayer(livePlayer.getPlayer(), matchId)
+                GlobalContext.getGlobalContext().getContextForPlayer(livePlayer.getPlayer(), this.matchId)
         );
     }
     

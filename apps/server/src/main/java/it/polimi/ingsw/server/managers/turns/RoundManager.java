@@ -86,7 +86,11 @@ public class RoundManager implements PlayerEventsListener, AutoCloseable {
     public boolean hasNext() {
         return this.playerTurnList.hasNext();
     }
-    
+
+    public PlayerTurnList getPlayerTurnList() {
+        return playerTurnList;
+    }
+
     @Override
     public void onPlayerConnected(DatabasePlayer player) {
         // if the connected player was in this match then it is re-added in the turn list

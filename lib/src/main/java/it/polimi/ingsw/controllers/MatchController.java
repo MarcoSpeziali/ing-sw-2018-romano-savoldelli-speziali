@@ -10,14 +10,13 @@ import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.Set;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
     
     // ------ MATCH INITIALIZATION ------
-    IWindow[] waitForWindowRequest() throws RemoteException, InterruptedException;
+    IWindow[] waitForWindowRequest() throws IOException, InterruptedException;
     void respondToWindowRequest(IWindow window) throws IOException;
     
     // ------ TURNS ------
@@ -33,21 +32,21 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
             // set interi -> posizioni in cui non puo andare
             // if JSONS instanceof()
                 // -- mostrare roundtrack
-        Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation();
-        void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition);
+        Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() throws IOException;
+        void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) throws IOException;
 
             // range interi 2:5
-        Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect();
-        void postChosenEffects(IEffect[] effects);
+        Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() throws IOException;
+        void postChosenEffects(IEffect[] effects) throws IOException;
 
             // 0:n volte
-        IEffect waitForContinueToRepeat();
-        void postContinueToRepeatChoice(boolean continueToRepeat);
+        IEffect waitForContinueToRepeat() throws IOException;
+        void postContinueToRepeatChoice(boolean continueToRepeat) throws IOException;
 
             //
-        IDie waitForSetShade();
-        void postSetShade(Integer shade);
+        IDie waitForSetShade() throws IOException;
+        void postSetShade(Integer shade) throws IOException;
     
     // ------ MATCH END ------
-    Map<IPlayer, IResult> waitForMatchToEnd();
+    Map<IPlayer, IResult> waitForMatchToEnd() throws IOException, InterruptedException;
 }
