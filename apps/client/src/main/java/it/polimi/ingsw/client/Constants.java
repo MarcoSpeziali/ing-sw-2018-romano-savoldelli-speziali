@@ -274,7 +274,18 @@ public class Constants {
         public static final String OBJECTIVE_CARD_YELLOW_SHADE_TITLE = "objective_card.yellow_shade.title";
         public static final String OBJECTIVE_CARD_YELLOW_SHADE_DESCRIPTION = "objective_card.yellow_shade.description";
 
+        public static final String MATCH_GUI_NOT_ENOUGH_TOKEN = "match_gui.not_enough_token.text";
+        public static final String MATCH_GUI_USE_BUTTON = "match_gui.use_button.text";
+        public static final String MATCH_GUI_BACK_BUTTON = "match_gui.back_button.text";
+        public static final String MATCH_GUI_CHOOSE_YOUR_WINDOW = "match_gui.choose_your_window.text";
+        public static final String MATCH_GUI_CHOOSE_SHADE_FOR_DIE = "match_gui.choose_shade_for_die.text";
+        public static final String MATCH_GUI_RUN_AGAIN = "match_gui.run_again.text";
+        public static final String MATCH_GUI_STOP = "match_gui.stop.text";
+        public static final String MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT = "match_gui.choose_action_for_effect.text";
+        public static final String MATCH_GUI_EFFECT = "match_gui.effect.text";
+        public static final String MATCH_GUI_CHOOSE_LOCATION = "match_gui.choose_location.text";
 
+        
         private Strings() {
         }
 

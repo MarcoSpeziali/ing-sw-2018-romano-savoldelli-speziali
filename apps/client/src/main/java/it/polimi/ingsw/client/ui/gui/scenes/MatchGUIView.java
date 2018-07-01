@@ -89,8 +89,8 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                         content.setBody(toolCardNode);
 
-                        JFXButton use = new JFXButton("Use");
-                        JFXButton cancel = new JFXButton("Back");
+                        JFXButton use = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
+                        JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
 
                         use.setOnMousePressed(event -> {
 
@@ -101,9 +101,9 @@ public class MatchGUIView extends GUIView<MatchController> {
                             } catch (NotEnoughTokensException e) {
                                 JFXDialogLayout content2 = new JFXDialogLayout();
                                 JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
-                                JFXButton cancel2 = new JFXButton("Use");
+                                JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
                                 cancel2.setOnMousePressed(e1 -> dialog2.close());
-                                content2.setHeading(new Text("Non possiedi abbastanza token per attivare l'effetto")); // TODO: settare con costanti
+                                content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
                                 content2.setActions(cancel2);
                                 dialog2.show();
                             }
@@ -131,10 +131,10 @@ public class MatchGUIView extends GUIView<MatchController> {
                         vBoxObjectiveCard.setSpacing(20);
                         vBoxObjectiveCard.setAlignment(Pos.TOP_CENTER);
 
-                        content.setBody(objectiveCardNode);
+                        /*content.setBody(objectiveCardNode);
                         JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
-                        content.setActions(cancel);
+                        content.setActions(cancel);*/
                     }
 
                     FXMLLoader privateCardLoader = new FXMLLoader();
@@ -201,7 +201,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 gridPane.add(window, i/(iWindows.length/2), i%(iWindows.length/2));
 
                         }
-                        content.setHeading(new Text("Choose your Window."));
+                        content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_YOUR_WINDOW)));
                         content.setBody(gridPane);
                         content.setAlignment(Pos.CENTER);
                         gridPane.setAlignment(Pos.CENTER);
@@ -222,14 +222,11 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
                 try {
                     Node node = loader.load();
-                    node.setScaleX(0.5);
-                    node.setScaleY(0.5);
                     VBox vBox = new VBox();
                     Label label = new Label("ciao");
                     label.setAlignment(Pos.CENTER);
                     label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
                     vBox.getChildren().addAll(node, label);
-
                     WindowGUIView windowGUIView = loader.getController();
                     windowGUIView.setModel(iWindow);
                     hBoxWindows.setAlignment(Pos.TOP_CENTER);
@@ -295,7 +292,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             hBox.setAlignment(Pos.CENTER_LEFT);
             hBox.setSpacing(10);
             content.setActions();
-            content.setHeading(new Text("Choose shade for your die, then press OK to confirm")); // TODO set with language
+            content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_SHADE_FOR_DIE)));
             content.setBody(hBox);
             content.setActions(confirm);
             gridPane.setScaleX(0.75);
@@ -324,12 +321,12 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpContinueToRepeat(IEffect iEffect) {
         Platform.runLater(unsafe(()-> {
-            JFXButton again = new JFXButton("Run Again");
-            JFXButton stop = new JFXButton("Stop");
+            JFXButton again = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_RUN_AGAIN));
+            JFXButton stop = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_STOP));
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-            content.setHeading(new Text("Please choose action for this effect"));
-            content.setBody(new Text("Effect: "+iEffect.getDescriptionKey()));
+            content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT)));
+            content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": "+iEffect.getDescriptionKey()));
             again.setOnMouseClicked(event -> {
                 this.model.postContinueToRepeatChoice(true);
                 dialog.close();
@@ -389,7 +386,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
         }
         content.setBody(node);
-        content.setHeading(new Text("Choose a location: "));
+        content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_LOCATION)+": "));
         dialog.show();
     }
 }
