@@ -2,16 +2,16 @@
 
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="262.0" maxWidth="717.0" prefHeight="184.0" prefWidth="717.0" style="-fx-background-color: YELLOW;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.DraftPoolGUIView">
+<AnchorPane fx:id="anchorPane" maxHeight="262.0" maxWidth="717.0" prefHeight="164.0" prefWidth="687.0" style="-fx-background-color: YELLOW;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.DraftPoolGUIView">
    <children>
-      <AnchorPane fx:id="dice_1" layoutX="32.0" layoutY="22.0" prefHeight="74.0" prefWidth="74.0" rotate="-38.7" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_2" layoutX="468.0" layoutY="86.0" prefHeight="74.0" prefWidth="74.0" rotate="166.0" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_3" layoutX="388.0" layoutY="15.0" prefHeight="74.0" prefWidth="74.0" rotate="11.9" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_4" layoutX="268.0" layoutY="15.0" prefHeight="74.0" prefWidth="74.0" rotate="-20.6" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_5" layoutX="149.0" layoutY="15.0" prefHeight="74.0" prefWidth="74.0" rotate="81.3" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_6" layoutX="306.0" layoutY="91.0" prefHeight="74.0" prefWidth="74.0" rotate="56.3" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_7" layoutX="623.0" layoutY="64.0" prefHeight="74.0" prefWidth="74.0" rotate="16.7" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_8" layoutX="149.0" layoutY="101.0" prefHeight="74.0" prefWidth="74.0" rotate="103.0" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
-      <AnchorPane fx:id="dice_9" layoutX="545.0" layoutY="15.0" prefHeight="74.0" prefWidth="74.0" rotate="35.0" scaleX="0.8" scaleY="0.8" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_1" layoutX="25.0" layoutY="33.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="-38.7" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_2" layoutX="461.0" layoutY="86.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="166.0" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_3" layoutX="381.0" layoutY="15.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="11.9" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_4" layoutX="261.0" layoutY="15.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="-20.6" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_5" layoutX="142.0" layoutY="15.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="81.3" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_6" layoutX="299.0" layoutY="91.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="56.3" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_7" layoutX="616.0" layoutY="64.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="16.7" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_8" layoutX="142.0" layoutY="101.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="103.0" style="-fx-background-color: BLUE;" />
+      <AnchorPane fx:id="dice_9" layoutX="538.0" layoutY="15.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="35.0" style="-fx-background-color: BLUE;" />
    </children>
 </AnchorPane>

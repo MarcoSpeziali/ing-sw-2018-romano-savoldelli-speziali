@@ -89,7 +89,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         vBoxToolCard.setSpacing(20);
                         vBoxToolCard.setAlignment(Pos.TOP_CENTER);
 
-                        content.setBody(toolCardNode);
+                        /*content.setBody(toolCardNode);
 
                         JFXButton use = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
                         JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
@@ -114,7 +114,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         cancel.setOnMousePressed(event ->
                                 dialog.close()
                         );
-                        content.setActions(use, cancel);
+                        content.setActions(use, cancel);*/
                     }
 
                     for (IObjectiveCard iObjectiveCard : iObjectiveCards) { //ObjectiveCard
@@ -133,7 +133,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         vBoxObjectiveCard.setSpacing(20);
                         vBoxObjectiveCard.setAlignment(Pos.TOP_CENTER);
 
-                        /*content.setBody(objectiveCardNode);
+                       /* content.setBody(objectiveCardNode);
                         JFXButton cancel = new JFXButton("Back");
                         cancel.setOnMousePressed(event -> dialog.close());
                         content.setActions(cancel);*/
@@ -268,11 +268,13 @@ public class MatchGUIView extends GUIView<MatchController> {
                 FXMLLoader innerLoader = new FXMLLoader();
                 innerLoader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
                 Node cell = innerLoader.load();
+                cell.setScaleY(1.7);
+                cell.setScaleX(1.7);
                 CellGUIView cellGUIView = innerLoader.getController();
                 cellGUIView.setModel(new CellMock(i+1, null));
                 gridPane.add(cell, i%3, i/3);
-                gridPane.setVgap(10);
-                gridPane.setHgap(10);
+                gridPane.setVgap(35);
+                gridPane.setHgap(35);
                 int finalI = i+1;
                 cell.setOnMouseEntered(event -> {
                     try {

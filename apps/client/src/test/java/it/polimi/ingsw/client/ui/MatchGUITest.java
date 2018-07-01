@@ -29,23 +29,35 @@ public class MatchGUITest extends Application {
 
     CellMock[] cells1 = {new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE),new CellMock(6,null),
             new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
-            new CellMock(0,null), new CellMock(4, null), new CellMock(0, GlassColor.PURPLE),
-            new CellMock(0,null), new CellMock(4, null), new CellMock(0, null) };
+            new CellMock(5,null), new CellMock(4, null), new CellMock(0, GlassColor.PURPLE),
+            new CellMock(0,null), new CellMock(4, null), new CellMock(0, null),
+            new CellMock(1, GlassColor.GREEN), new CellMock(0, GlassColor.BLUE), new CellMock(0,null),
+            new CellMock(2,null), new CellMock(4,null), new CellMock(0,null),
+            new CellMock(0,GlassColor.BLUE), new CellMock(4,null)};
 
     CellMock[] cells2 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6,null),
             new CellMock(0, GlassColor.GREEN), new CellMock(0, GlassColor.BLUE), new CellMock(0,null),
             new CellMock(0,null), new CellMock(4,null), new CellMock(0,null),
-            new CellMock(0,null), new CellMock(4,null), new CellMock(0,null) };
+            new CellMock(0,null), new CellMock(4,null), new CellMock(0,null),
+            new CellMock(0, GlassColor.GREEN), new CellMock(1, GlassColor.BLUE), new CellMock(6,null),
+            new CellMock(0,null), new CellMock(4,null), new CellMock(0, null),
+            new CellMock(0, GlassColor.RED), new CellMock(4, GlassColor.GREEN)};
 
     CellMock[] cells3 = {new CellMock(0, GlassColor.GREEN), new CellMock(1, GlassColor.BLUE), new CellMock(6,null),
             new CellMock(0,null), new CellMock(4,null), new CellMock(0, null),
             new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.YELLOW), new CellMock(6,null),
-            new CellMock(0,null), new CellMock(4,null), new CellMock(0, null)};
+            new CellMock(0,null), new CellMock(4,null), new CellMock(0, null),
+            new CellMock(0, GlassColor.RED), new CellMock(3, GlassColor.YELLOW), new CellMock(6, null),
+            new CellMock(2,null), new CellMock(4, null), new CellMock(0,null), new CellMock(0, GlassColor.GREEN),
+            new CellMock(0, GlassColor.BLUE)};
 
     CellMock[] cells4 = {new CellMock(0, GlassColor.RED), new CellMock(3, GlassColor.YELLOW), new CellMock(6, null),
             new CellMock(2,null), new CellMock(4, null), new CellMock(0,null), new CellMock(0, GlassColor.GREEN),
             new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
-            new CellMock(0,null), new CellMock(4,null), new CellMock(5,null) };
+            new CellMock(0,null), new CellMock(4,null), new CellMock(5,null),
+            new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE),new CellMock(6,null),
+            new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+            new CellMock(5,null), new CellMock(4, null)};
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -107,7 +119,7 @@ public class MatchGUITest extends Application {
 
                                     @Override
                                     public IWindow getWindow() {
-                                        return new WindowMock("giocatore2", 4, 3, 4, cells2);
+                                        return new WindowMock("giocatore2", 4, 4, 5, cells2);
 
                                     }
 
@@ -126,7 +138,7 @@ public class MatchGUITest extends Application {
 
                             @Override
                             public IWindow getWindow() {
-                                return new WindowMock("giocatore3", 2, 3, 4, cells3);
+                                return new WindowMock("giocatore3", 2, 4, 5, cells3);
                             }
 
                             @Override
@@ -143,7 +155,7 @@ public class MatchGUITest extends Application {
 
                             @Override
                             public IWindow getWindow() {
-                                return new WindowMock("giocatore4", 1, 3, 4, cells4);
+                                return new WindowMock("giocatore4", 1, 4, 5, cells4);
                             }
 
                             @Override
@@ -378,28 +390,39 @@ public class MatchGUITest extends Application {
             public IWindow[] waitForWindowRequest() throws RemoteException {
                 CellMock[] cells1 = {new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE),new CellMock(6,null),
                         new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
-                        new CellMock(0,null), new CellMock(4, null), new CellMock(0, GlassColor.PURPLE),
-                        new CellMock(0,null), new CellMock(4, null), new CellMock(0, null) };
+                        new CellMock(5,null), new CellMock(4, null), new CellMock(0, GlassColor.PURPLE),
+                        new CellMock(0,null), new CellMock(4, null), new CellMock(0, null),
+                        new CellMock(1, GlassColor.GREEN), new CellMock(0, GlassColor.BLUE), new CellMock(0,null),
+                        new CellMock(2,null), new CellMock(4,null), new CellMock(0,null),
+                        new CellMock(0,GlassColor.BLUE), new CellMock(4,null)};
 
                 CellMock[] cells2 = {new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6,null),
                         new CellMock(0, GlassColor.GREEN), new CellMock(0, GlassColor.BLUE), new CellMock(0,null),
                         new CellMock(0,null), new CellMock(4,null), new CellMock(0,null),
-                        new CellMock(0,null), new CellMock(4,null), new CellMock(0,null) };
+                        new CellMock(0,null), new CellMock(4,null), new CellMock(0,null),
+                        new CellMock(0, GlassColor.GREEN), new CellMock(1, GlassColor.BLUE), new CellMock(6,null),
+                        new CellMock(0,null), new CellMock(4,null), new CellMock(0, null),
+                        new CellMock(0, GlassColor.RED), new CellMock(4, GlassColor.GREEN)};
 
                 CellMock[] cells3 = {new CellMock(0, GlassColor.GREEN), new CellMock(1, GlassColor.BLUE), new CellMock(6,null),
                         new CellMock(0,null), new CellMock(4,null), new CellMock(0, null),
                         new CellMock(0, GlassColor.RED), new CellMock(0, GlassColor.YELLOW), new CellMock(6,null),
-                        new CellMock(0,null), new CellMock(4,null), new CellMock(0, null)};
+                        new CellMock(0,null), new CellMock(4,null), new CellMock(0, null),
+                        new CellMock(0, GlassColor.RED), new CellMock(3, GlassColor.YELLOW), new CellMock(6, null),
+                        new CellMock(2,null), new CellMock(4, null), new CellMock(0,null), new CellMock(0, GlassColor.GREEN),
+                        new CellMock(0, GlassColor.BLUE)};
 
                 CellMock[] cells4 = {new CellMock(0, GlassColor.RED), new CellMock(3, GlassColor.YELLOW), new CellMock(6, null),
                         new CellMock(2,null), new CellMock(4, null), new CellMock(0,null), new CellMock(0, GlassColor.GREEN),
                         new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
-                        new CellMock(0,null), new CellMock(4,null), new CellMock(5,null) };
-
-                return  new IWindow[] {new WindowMock("window 1", 3, 3, 4, cells1),
-                        new WindowMock("window 2", 3, 3, 4, cells2),
-                        new WindowMock("window 3", 1, 3, 4, cells3),
-                        new WindowMock("window 4", 1, 3, 4, cells4)
+                        new CellMock(0,null), new CellMock(4,null), new CellMock(5,null),
+                        new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE),new CellMock(6,null),
+                        new CellMock(0,GlassColor.RED), new CellMock(0, GlassColor.BLUE), new CellMock(6, null),
+                        new CellMock(5,null), new CellMock(4, null)};
+                return  new IWindow[] {new WindowMock("window 1", 3, 4, 5, cells1),
+                        new WindowMock("window 2", 3, 4, 5, cells2),
+                        new WindowMock("window 3", 1, 4, 5, cells3),
+                        new WindowMock("window 4", 1, 4, 5, cells4)
                 };
 
             }
