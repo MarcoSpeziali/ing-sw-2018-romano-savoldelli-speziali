@@ -8,6 +8,7 @@ import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -55,9 +57,9 @@ public class MatchGUIView extends GUIView<MatchController> {
     @Override
     public void init() {
         chooseWindow();
+        setUpOpponentsWindowsFuture();
+        setUpShadeFuture();
         loadElements();
-        //setUpUpdateFuture();
-        //setUpSetShadeFuture();
     }
 
 
@@ -237,16 +239,16 @@ public class MatchGUIView extends GUIView<MatchController> {
                     e.printStackTrace();
                 }
             }
-            //setUpUpdateFuture();
+            //setUpOpponentWindowsFuture();
         });
     }
 
-    private void setUpUpdateFuture() {
+    private void setUpOpponentsWindowsFuture() {
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
                 .thenAccept(this::setUpOpponentsWindows);
     }
 
-    private void setDieShade(IDie iDie) {
+    private void setUpShade(IDie iDie) {
         Platform.runLater(unsafe(() -> {
             AtomicInteger shade = new AtomicInteger();
             JFXDialogLayout content = new JFXDialogLayout();
@@ -302,15 +304,22 @@ public class MatchGUIView extends GUIView<MatchController> {
             }));
     }
 
-    private void setUpSetShadeFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForSetShade()))
-                .thenAccept(this::setDieShade);
+    private void setUpEffect(Map.Entry<IEffect[], Range<Integer>> map){
+        Platform.runLater(unsafe(()-> {
+
+        }));
     }
 
-    /*private void setUpEffectFuture() {
+
+    private void setUpShadeFuture() {
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForSetShade()))
+                .thenAccept(this::setUpShade);
+    }
+
+    private void setUpEffectFuture() {
         CompletableFuture.supplyAsync(unsafe(() ->
-            this.model.waitForChooseBetweenEffect())).thenAccept();
-    }*/
+            this.model.waitForChooseBetweenEffect())).thenAccept(this::setUpEffect);
+    }
 
     private void setUpEffect(){}
 
@@ -346,47 +355,59 @@ public class MatchGUIView extends GUIView<MatchController> {
     }
 
     private void setUpChoosePosition(Map.Entry<JSONSerializable,Set<Integer>> jsonSerializableSetEntry) {
-        JFXDialog dialog = new JFXDialog();
-        JFXDialogLayout content = new JFXDialogLayout();
-        JFXButton button = new JFXButton("OK");
-        FXMLLoader loader = new FXMLLoader();
-        Node node = null;
-        JSONSerializable object = jsonSerializableSetEntry.getKey();
-        if (object instanceof IWindow) {
-            loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
-            try {
-                node = loader.load();
-                WindowGUIView windowGUIView = loader.getController();
-                windowGUIView.setModel((IWindow) object);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        Platform.runLater(unsafe(() -> {
+            JFXDialog dialog = new JFXDialog();
+            JFXDialogLayout content = new JFXDialogLayout();
+            JFXButton button = new JFXButton("OK");
+            FXMLLoader loader = new FXMLLoader();
+            GridPane node = null;
+            JSONSerializable object = jsonSerializableSetEntry.getKey();
+            Set<Integer> set = jsonSerializableSetEntry.getValue();
 
-        }
-        if (object instanceof IDraftPool) {
-            loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
-            try {
-                node = loader.load();
-                DraftPoolGUIView draftPoolGUIView = loader.getController();
-                draftPoolGUIView.setModel((IDraftPool) object);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            if (object instanceof IWindow) {
+                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+                try {
+                    node = loader.load();
+                    WindowGUIView windowGUIView = loader.getController();
+                    windowGUIView.setModel((IWindow) object);
+                    windowGUIView.setProperty(Property.SELECTION);
+                    for (Integer location : set) {
+                        Node cell = windowGUIView.gridPane.getChildren().get(location);
+                        cell.setDisable(true);
+                    }
+                    this.model.postChosenDiePosition(new AbstractMap.SimpleEntry<>(null, windowGUIView.getSelectedLocation()));
 
-        }
-        if (object instanceof IRoundTrack) {
-            loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
-            try {
-                node = loader.load();
-                RoundTrackGUIView roundTrackGUIView = loader.getController();
-                roundTrackGUIView.setModel((IRoundTrack) object);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-        }
-        content.setBody(node);
-        content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_LOCATION)+": "));
-        dialog.show();
+            }
+            if (object instanceof IDraftPool) {
+                loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
+                try {
+                    node = loader.load();
+                    DraftPoolGUIView draftPoolGUIView = loader.getController();
+                    draftPoolGUIView.setModel((IDraftPool) object);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            if (object instanceof IRoundTrack) {
+                loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
+                try {
+                    node = loader.load();
+                    RoundTrackGUIView roundTrackGUIView = loader.getController();
+                    roundTrackGUIView.setModel((IRoundTrack) object);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            content.setBody(node);
+            content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_LOCATION)+": "));
+            dialog.show();
+        }));
     }
 }
+

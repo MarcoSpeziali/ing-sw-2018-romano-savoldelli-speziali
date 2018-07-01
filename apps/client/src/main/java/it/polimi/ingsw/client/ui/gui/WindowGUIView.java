@@ -46,6 +46,12 @@ public class WindowGUIView extends GUIView<IWindow> {
     @FXML
     public HBox difficultyHbox;
 
+    public int getSelectedLocation() {
+        return selectedLocation;
+    }
+
+    private int selectedLocation;
+
     public WindowGUIView() {
     }
 
@@ -107,6 +113,12 @@ public class WindowGUIView extends GUIView<IWindow> {
                     }
                 });
 
+                int finalI = i, finalJ = j;
+                cell.setOnMouseClicked(event -> {
+                    if (property == SELECTION) {
+                        selectedLocation = finalI*iWindow.getColumns() + finalJ;
+                    }
+                });
                 gridPane.add(cell, j, i);
             }
         }

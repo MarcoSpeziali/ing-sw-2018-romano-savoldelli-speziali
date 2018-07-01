@@ -23,7 +23,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
     public DraftPoolGUIView() {
     }
 
-    private Node selected;
+    private Node selected = null;
 
     @FXML
     public AnchorPane anchorPane;
