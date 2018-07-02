@@ -39,6 +39,9 @@ public final class Settings extends SettingsBase {
         }
     }
 
+    /**
+     * @return
+     */
     public String getServerSocketAddress() {
         return serverSocketAddress;
     }

@@ -70,7 +70,6 @@ public class MatchGUIView extends GUIView<MatchController> {
         setUpOpponentsWindowsFuture();
         setUpShadeFuture();
         loadElements();
-
     }
 
 
@@ -78,7 +77,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
                     //if(this.draftPoolGUIView == null)
-                   // IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
+                    IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
                     IDraftPool iDraftPool               = iMatch.getDraftPool();
                     IToolCard[] iToolCards              = iMatch.getToolCards();
                     IObjectiveCard[] iObjectiveCards    = iMatch.getPublicObjectiveCards();
@@ -193,8 +192,15 @@ public class MatchGUIView extends GUIView<MatchController> {
                     DraftPoolGUIView draftPoolGUIView = draftPoolLoader.getController();
                     draftPoolGUIView.setModel(iDraftPool);
                     centerPane.setTop(draftPoolNode);
-                    //draftPoolNode.setScaleX(0.6);
-                    //draftPoolNode.setScaleY(0.6);
+
+                    FXMLLoader roundTrackLoader = new FXMLLoader();
+                    roundTrackLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
+                    Node roundTrackNode = roundTrackLoader.load();
+                    RoundTrackGUIView roundTrackGUIView = roundTrackLoader.getController();
+                    roundTrackGUIView.setModel(iRoundTrack);
+                    centerPane.setBottom(roundTrackNode);
+                    centerPane.setAlignment(roundTrackNode, Pos.CENTER);
+                    centerPane.setMargin(roundTrackNode, new Insets(0,30,50,30));
 
                 })));}
 
@@ -483,7 +489,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         Platform.runLater(unsafe(() -> {
             this.remainingTime = remainingTime;
             startTimer();
-            
+
                 }
         ));
     }

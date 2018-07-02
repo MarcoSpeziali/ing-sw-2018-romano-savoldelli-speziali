@@ -6,6 +6,7 @@ import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.CardVisibility;
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.responses.MoveResponse;
@@ -233,7 +234,26 @@ public class MatchGUITest extends Application {
 
                     @Override
                     public IRoundTrack getRoundTrack() {
-                        return null;
+                        IRoundTrack iRoundTrack = new IRoundTrack() {
+                            DieMock dieMock1 = new DieMock(3, GlassColor.PURPLE);
+                            DieMock dieMock2 = new DieMock(1, GlassColor.YELLOW);
+                            DieMock dieMock3 = new DieMock(5, GlassColor.GREEN);
+                            DieMock dieMock4 = new DieMock(6, GlassColor.BLUE);
+                            DieMock dieMock5 = new DieMock(2, GlassColor.RED);
+                            DieMock dieMock6 = new DieMock(4, GlassColor.YELLOW);
+                            DieMock dieMock7 = new DieMock(1, GlassColor.PURPLE);
+                            DieMock dieMock8 = new DieMock(2, GlassColor.RED);
+                            @Override
+                            public byte getNumberOfRounds() {
+                                return 0;
+                            }
+
+                            @Override
+                            public Map<Integer, IDie> getLocationDieMap() {
+                                return Map.of(0x00000000, dieMock1, 0x00000100, dieMock2, 0x00000101, dieMock1, 0x00000200, dieMock3, 0x00000300, dieMock5, 0x00000400, dieMock6, 0x00000401, dieMock5);
+                            }
+                        };
+                        return iRoundTrack;
                     }
 
                     @Override
