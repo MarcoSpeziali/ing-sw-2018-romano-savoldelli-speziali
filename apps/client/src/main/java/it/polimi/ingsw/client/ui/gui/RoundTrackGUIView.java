@@ -1,20 +1,26 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.models.RoundTrack;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IRoundTrack;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+
 
 public class RoundTrackGUIView extends GUIView<IRoundTrack> {
 
@@ -27,23 +33,22 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
 
     @Override
     public void setModel(IRoundTrack iRoundTrack) throws IOException {
+        int round=0;
         Map<Integer, IDie> locationDieMap = iRoundTrack.getLocationDieMap();
 
-        HashMap<Byte, Byte> roundToDieIndexMap = iRoundTrack.getLocationDieMap().keySet().stream()
+        HashMap<Byte, Byte> roundToDieIndexMap = locationDieMap.keySet().stream()
                 .map(location -> Map.entry(
                         (byte) ((location & 0x0000FF00) >> 8),
                         (byte) (location & 0x000000FF))
                 ).collect(Collector.of(
                         (Supplier<HashMap<Byte, Byte>>) HashMap::new,
                         (map, entry) -> {
-                            map.compute(
+                            map.computeIfPresent(
                                     entry.getKey(),
-                                    (key, lastValue) -> {
-                                        return lastValue != null && lastValue < entry.getValue() ?
-                                                entry.getValue() :
-                                                lastValue;
-                                    }
+                                    (key, value) -> value < entry.getValue() ? entry.getValue() : value
                             );
+
+                            map.computeIfAbsent(entry.getKey(), key -> entry.getValue());
                         },
                         (map1, map2) -> {
                             map1.putAll(map2);
@@ -54,7 +59,7 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
                 ));
 
         for(Map.Entry<Byte, Byte> entry : roundToDieIndexMap.entrySet()){
-            byte roundIndex = (byte) ((entry.getKey()) & 0x0000FF00);
+            byte roundIndex = (byte) ((entry.getKey()) & 0x000000FF);
             byte dieIndex = (byte) (entry.getValue() & 0x000000FF);
             int location = (roundIndex << 8 & 0x0000FF00) | (dieIndex & 0x000000FF);
             FXMLLoader loader = new FXMLLoader();
@@ -66,8 +71,23 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
             Label label = new Label("Round " + (roundIndex+1));
             vBox.getChildren().add(label);
             vBox.getChildren().add(die);
+            vBox.setSpacing(5);
+            vBox.setAlignment(Pos.CENTER);
             gridPane.add(vBox, roundIndex, 0);
+            round++;
         }
+
+        for (int i = round; i < 10; i++) {
+            VBox vBox = new VBox();
+            Label label = new Label("Round " + (i+1));
+            vBox.getChildren().add(label);
+            vBox.setSpacing(5);
+            vBox.setAlignment(Pos.CENTER);
+            gridPane.add(vBox, i, 0);
+
+        }
+
+
     }
 
 
