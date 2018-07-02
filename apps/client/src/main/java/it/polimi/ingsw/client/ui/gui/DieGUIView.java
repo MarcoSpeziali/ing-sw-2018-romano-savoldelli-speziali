@@ -35,7 +35,7 @@ public class DieGUIView extends GUIView<IDie> {
     public void setModel(IDie iDie) throws IOException {
         super.setModel(model);
 
-        anchorPane.setStyle("-fx-background-radius: 10;"+
+        anchorPane.setStyle("-fx-background-radius: 7;"+
                 "-fx-background-color: #" + Integer.toHexString(iDie.getColor().getHex())
         );
         DropShadow dropShadow = new DropShadow();
@@ -60,5 +60,10 @@ public class DieGUIView extends GUIView<IDie> {
         else {
             ClientLogger.getLogger().log(Level.WARNING, "Could not retrieve image for resource {0}", resourceName);
         }
+    }
+
+    public void setScale(double width, double height) {
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
     }
 }

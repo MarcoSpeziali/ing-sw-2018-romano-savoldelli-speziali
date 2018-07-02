@@ -14,7 +14,7 @@
             <Font name="System Bold" size="9.0" />
          </font>
       </Label>
-      <HBox fx:id="difficultyHbox" alignment="CENTER_RIGHT" prefHeight="10.0" prefWidth="60.0" spacing="1.2" AnchorPane.bottomAnchor="1.8" AnchorPane.rightAnchor="3.3">
+      <HBox fx:id="difficultyHbox" alignment="CENTER_RIGHT" prefHeight="10.0" prefWidth="60.0" spacing="1.2" AnchorPane.bottomAnchor="5" AnchorPane.rightAnchor="5">
          <children>
             <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
             <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
@@ -24,7 +24,7 @@
             <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
          </children>
       </HBox>
-      <GridPane fx:id="gridPane" layoutX="12.0" layoutY="12.0" maxHeight="180.0" maxWidth="230.0" AnchorPane.bottomAnchor="13.3" AnchorPane.leftAnchor="3.3" AnchorPane.rightAnchor="3.3" AnchorPane.topAnchor="3.3">
+      <GridPane fx:id="gridPane" layoutX="12.0" layoutY="12.0" maxHeight="180.0" maxWidth="230.0" AnchorPane.bottomAnchor="13.3" AnchorPane.leftAnchor="5" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="5">
       </GridPane>
    </children>
 </AnchorPane>

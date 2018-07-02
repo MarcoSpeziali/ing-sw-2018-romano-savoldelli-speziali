@@ -50,6 +50,11 @@ public class DieMock implements IDie {
         return color == dieMock.color &&
                 Objects.equals(shade, dieMock.shade);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Die(%d, %s)", this.shade, this.color);
+    }
     
     @Override
     public int hashCode() {

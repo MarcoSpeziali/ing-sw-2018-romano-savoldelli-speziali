@@ -3,10 +3,12 @@ package it.polimi.ingsw.client.ui.gui;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.net.mocks.ICell;
+import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.utils.io.Resources;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -14,7 +16,10 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
+
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class CellGUIView extends GUIView<ICell> {
 
@@ -63,32 +68,27 @@ public class CellGUIView extends GUIView<ICell> {
 
     }
 
-    @Deprecated
-    public void onUpdateReceived(ICell update) {
+    public void onUpdateReceived(IDie update) {
         Platform.runLater(() -> {
-            if (!update.isOccupied()) {
+            if (this.model.isOccupied()) {
                 dieAnchorPane = defaultDieAnchorPane;
             } else {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
-                DieGUIView dieGUIView = loader.getController();
                 try {
-                    dieGUIView.setModel(update.getDie());
-                    defaultDieAnchorPane = dieAnchorPane;
-                    dieAnchorPane = loader.load();
+                    Node die = loader.load();
+                    DieGUIView dieGUIView = loader.getController();
+                    dieGUIView.setModel(update);
+                    dieGUIView.setScale(20, 20);
+                    dieAnchorPane.getChildren().add(die);
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            setUpUpdateFuture();
         });
     }
 
-    private void setUpUpdateFuture() {
-        //CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
-        //        .thenAccept(this::onUpdateReceived);
-    }
 
     @Override
     public void init() {

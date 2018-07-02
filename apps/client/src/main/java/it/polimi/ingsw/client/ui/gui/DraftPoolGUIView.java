@@ -1,15 +1,18 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IDraftPool;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.transform.Scale;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.Map;
@@ -18,16 +21,12 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
-    private double mouseX, mouseY;
 
     public DraftPoolGUIView() {
     }
 
-    private Node selected = null;
-
     @FXML
-    public AnchorPane anchorPane;
-
+    public Pane pane;
 
     @Override
     public void setModel(IDraftPool iDraftPool) throws IOException {
@@ -37,57 +36,38 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
         locationsDieMap.keySet().stream()
                 .sorted().forEach(unsafe(location -> {
-                    AnchorPane placeholder = (AnchorPane) anchorPane.getChildren().get(location);
+                    AnchorPane placeholder = (AnchorPane) pane.getChildren().get(location);
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
 
-                    Node die = loader.load();
-                    die.setCursor(Cursor.OPEN_HAND);
+                    Node source = loader.load();
+                    source.setCursor(Cursor.OPEN_HAND);
 
-                    die.setOnMousePressed(event -> {
-
-                        mouseX = event.getSceneX();
-                        mouseY = event.getSceneY();
-                        Scale scale = new Scale(1.5, 1.5);
-                        FXMLLoader innerLoader = new FXMLLoader();
-                        innerLoader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
-                        DieGUIView innerController = innerLoader.getController();
-
-                        selected.setLayoutX(die.getLayoutX());
-                        selected.setLayoutY(die.getLayoutY());
-                        selected.setCursor(Cursor.CLOSED_HAND);
-                        selected.getTransforms().add(scale);
-                        selected.setStyle("-fx-opacity: 0.5");
-                        try {
-                            selected = innerLoader.load();
-                            innerController.setModel(locationsDieMap.get(location));
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    source.setOnDragDetected(new EventHandler <MouseEvent>() {
+                        public void handle(MouseEvent event) {
+                            Move move = Move.build();
+                            move.begin(location);
+                            try {
+                                Match.getMatchController().tryToMove(move);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Dragboard db = source.startDragAndDrop(TransferMode.ANY);
+                            ClipboardContent content = new ClipboardContent();
+                            content.put(Constants.iDieFormat, locationsDieMap.get(location));
+                            db.setContent(content);
+                            event.consume();
                         }
-                        anchorPane.getChildren().add(selected);
-
-                        Move move = Move.build();
-                        move.begin(location);
-                        /*
-                        Match.getMatchController().tryToPick(
-                            location: location
-                         */
                     });
 
-                    die.setOnMouseDragged(event -> {
-                        selected.setCursor(Cursor.CLOSED_HAND);
-                        selected.relocate(event.getSceneX() - mouseX, event.getScreenY() - mouseY);
-                    });
-                    die.setOnMouseReleased(event -> {
-                        selected.setCursor(Cursor.OPEN_HAND);
-                        anchorPane.getChildren().remove(selected);
-                    });
 
                     DieGUIView dieGUIView = loader.getController();
 
                     dieGUIView.setModel(locationsDieMap.get(location));
 
-                    placeholder.getChildren().add(die);
+                    placeholder.getChildren().add(source);
                 }
         ));
     }

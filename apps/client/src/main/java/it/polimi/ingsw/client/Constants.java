@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.utils.text.LocalizedString;
+import javafx.scene.input.DataFormat;
 
 import java.net.URL;
 import java.util.*;
@@ -8,6 +9,8 @@ import java.util.*;
 public class Constants {
     private Constants() {
     }
+
+    public static DataFormat iDieFormat = new DataFormat("IDIE");
 
     public enum Paths {
         PROJECT_FOLDER(java.nio.file.Paths.get(

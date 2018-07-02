@@ -2,7 +2,8 @@
 
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="262.0" maxWidth="717.0" prefHeight="164.0" prefWidth="687.0" style="-fx-background-color: YELLOW;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.DraftPoolGUIView">
+<?import javafx.scene.layout.Pane?>
+<Pane fx:id="pane" maxHeight="262.0" maxWidth="717.0" prefHeight="164.0" prefWidth="687.0" style="-fx-background-color: YELLOW;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.DraftPoolGUIView">
    <children>
       <AnchorPane fx:id="dice_1" layoutX="25.0" layoutY="33.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="-38.7" style="-fx-background-color: BLUE;" />
       <AnchorPane fx:id="dice_2" layoutX="461.0" layoutY="86.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="166.0" style="-fx-background-color: BLUE;" />
@@ -14,4 +15,4 @@
       <AnchorPane fx:id="dice_8" layoutX="142.0" layoutY="101.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="103.0" style="-fx-background-color: BLUE;" />
       <AnchorPane fx:id="dice_9" layoutX="538.0" layoutY="15.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" rotate="35.0" style="-fx-background-color: BLUE;" />
    </children>
-</AnchorPane>
+</Pane>

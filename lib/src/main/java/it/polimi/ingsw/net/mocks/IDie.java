@@ -10,4 +10,5 @@ public interface IDie extends JSONSerializable {
     GlassColor getColor();
     @JSONElement("shade")
     Integer getShade();
+
 }

@@ -169,9 +169,9 @@ public class MatchGUITest extends Application {
 
                     @Override
                     public IDraftPool getDraftPool() {
-                        IDraftPool iDraftPool = new IDraftPool() {
-                            DieMock dieMock1 = new DieMock(3, GlassColor.PURPLE);
-                            DieMock dieMock2 = new DieMock(1, GlassColor.YELLOW);
+                        return new IDraftPool() {
+                            DieMock dieMock11 = new DieMock(3, GlassColor.PURPLE);
+                            DieMock dieMock21 = new DieMock(1, GlassColor.YELLOW);
                             DieMock dieMock3 = new DieMock(5, GlassColor.GREEN);
                             DieMock dieMock4 = new DieMock(6, GlassColor.BLUE);
                             DieMock dieMock5 = new DieMock(2, GlassColor.RED);
@@ -186,11 +186,10 @@ public class MatchGUITest extends Application {
 
                             @Override
                             public Map<Integer, IDie> getLocationDieMap() {
-                                return Map.of(0, dieMock1, 1, dieMock2, 2, dieMock3, 3, dieMock4, 4, dieMock5,
+                                return Map.of(0, dieMock11, 1, dieMock21, 2, dieMock3, 3, dieMock4, 4, dieMock5,
                                         5, dieMock6, 6, dieMock7, 7, dieMock8, 8, dieMock9);
                             }
                         };
-                        return iDraftPool;
                     }
 
                     @Override
@@ -521,7 +520,7 @@ public class MatchGUITest extends Application {
                 return null;
             }
         });
-        primaryStage.setFullScreen(true);
+       // primaryStage.setFullScreen(true);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

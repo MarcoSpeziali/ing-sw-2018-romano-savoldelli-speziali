@@ -2,16 +2,17 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 
-import it.polimi.ingsw.core.Player;
+import it.polimi.ingsw.core.Match;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
+import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
@@ -19,13 +20,8 @@ import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 
-import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property.*;
-
 public class WindowGUIView extends GUIView<IWindow> {
 
-    public Property getProperty() {
-        return property;
-    }
 
     public enum Property {
         OWNED, OPPONENT, NONE, SELECTION
@@ -55,6 +51,7 @@ public class WindowGUIView extends GUIView<IWindow> {
     public WindowGUIView() {
     }
 
+
     public void setModel(IWindow iWindow) throws IOException {
 
         super.setModel(iWindow);
@@ -67,59 +64,50 @@ public class WindowGUIView extends GUIView<IWindow> {
             for (int j = 0; j < iWindow.getColumns(); j++) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
-                Node cell = loader.load();
-                CellGUIView guiView = loader.getController();
-                guiView.setModel(model.getCells()[i][j]);
+                Node target = loader.load();
+                CellGUIView cellGUIView = loader.getController();
+                cellGUIView.setModel(model.getCells()[i][j]);
 
-                cell.setOnDragDropped(event -> {
-
-                    if (this.property == OWNED) {
-                        IDie heldDie = Player.getCurrentPlayer().getHeldDie();
-
-                        if (heldDie == null) {
-                            return; // do nothing
+                target.setOnDragOver(new EventHandler<DragEvent>() {
+                    public void handle(DragEvent event) {
+                        if (property == Property.OWNED) {
+                            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
+                        event.consume();
+                    }
+                });
 
-                        //try
-                        {
-                            cell.setCursor(new ImageCursor(new Image(Constants.Resources.DICE_CURSOR.getRelativePath())));
+                int finalJ = j, finalI = i;
+                target.setOnDragDropped(new EventHandler <DragEvent>() {
+                    public void handle(DragEvent event) {
+                        Dragboard db = event.getDragboard();
 
-                            //this.model.tryToPut(heldDie, Move.getCurrentMove().getDraftPoolPickPosition());
-                        }
-                        /*catch (DieInteractionException e) {
-                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
-                        cell.setDisable(true);
-                        }
-                        catch (RemoteException e) {
+                        try {
+                            Match.getMatchController().tryToMove(Move.getCurrentMove()
+                                    .end(finalI *iWindow.getColumns()+ finalJ));
+                        } catch (IOException e) {
                             e.printStackTrace();
-                        }*/
-                    }
-                    else {
-                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        target.setCursor(Cursor.CROSSHAIR);
+                        System.out.println();
+                        cellGUIView.onUpdateReceived((IDie) db.getContent(Constants.iDieFormat));
+
+                        event.setDropCompleted(true);
+
+                        event.consume();
                     }
                 });
 
+                if (property == Property.SELECTION) {
+                    target.setOnMousePressed(event -> {
+                        selectedLocation = finalI*iWindow.getColumns()+finalJ;
+                    });
+                }
 
-                cell.setOnMouseEntered(event -> {
 
-                    if (property == OWNED) {
-                        cell.setCursor(Cursor.CLOSED_HAND);
-                    }
-                    if (property == OPPONENT) {
-                        cell.setCursor(new ImageCursor(new Image(Constants.Resources.STOP_CURSOR.getRelativePath())));
-                    }
-                    if (property == SELECTION) {
-                        cell.setCursor(Cursor.HAND);
-                    }
-                });
-
-                int finalI = i, finalJ = j;
-                cell.setOnMouseClicked(event -> {
-                    if (property == SELECTION) {
-                        selectedLocation = finalI*iWindow.getColumns() + finalJ;
-                    }
-                });
-                gridPane.add(cell, j, i);
+                gridPane.add(target, j, i);
             }
         }
 
