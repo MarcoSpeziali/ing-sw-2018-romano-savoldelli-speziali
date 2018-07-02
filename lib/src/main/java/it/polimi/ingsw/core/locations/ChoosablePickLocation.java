@@ -6,6 +6,4 @@ public interface ChoosablePickLocation extends ChooseLocation, PickLocation {
     Die pickDie(Die die);
 
     Die pickDie(Integer location);
-
-    Die getDie(Integer location);
 }

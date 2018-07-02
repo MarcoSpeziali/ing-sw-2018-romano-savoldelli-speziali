@@ -828,7 +828,7 @@ public class BiHashMap<K1, K2, V> {
         return this.internalMap.merge(biKey(key1, key2), value, remappingFunction);
     }
     
-    private static <K1, K2> BiKey<K1, K2> biKey(K1 k1, K2 k2) {
+    public static <K1, K2> BiKey<K1, K2> biKey(K1 k1, K2 k2) {
         return new BiKey<>(k1, k2);
     }
     

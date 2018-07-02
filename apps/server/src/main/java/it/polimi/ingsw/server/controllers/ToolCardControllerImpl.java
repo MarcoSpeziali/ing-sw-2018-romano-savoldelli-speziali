@@ -1,9 +1,13 @@
 package it.polimi.ingsw.server.controllers;
 
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
+import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.server.Effect;
+import it.polimi.ingsw.server.actions.Action;
+import it.polimi.ingsw.server.actions.ActionGroup;
+import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.utils.GlobalContext;
 
 public class ToolCardControllerImpl {
@@ -16,11 +20,11 @@ public class ToolCardControllerImpl {
         this.matchId = matchId;
     }
     
-    public synchronized ToolCard getToolCard() {
+    public ToolCard getToolCard() {
         return this.toolCard;
     }
     
-    public synchronized void requestUsage(ILivePlayer livePlayer) throws NotEnoughTokensException {
+    public void requestUsage(ILivePlayer livePlayer) {
         if (!canUse(livePlayer)) {
             throw new NotEnoughTokensException(this.toolCard.getEffect().getCost(), livePlayer.getFavourTokens());
         }
@@ -32,7 +36,20 @@ public class ToolCardControllerImpl {
         );
     }
     
-    public synchronized boolean canUse(ILivePlayer livePlayer) {
+    public boolean canUse(ILivePlayer livePlayer) {
         return this.toolCard.getEffect().getCost() <= livePlayer.getFavourTokens();
+    }
+
+    public void setUserInteractionProvider(UserInteractionProvider userInteractionProvider) {
+        ((Effect) this.toolCard.getEffect()).getActions().forEach(ea -> this.setUserInteractionProvider(userInteractionProvider, ea));
+    }
+
+    private void setUserInteractionProvider(UserInteractionProvider userInteractionProvider, ExecutableAction executableAction) {
+        if (executableAction instanceof Action) {
+            ((Action) executableAction).setUserInteractionProvider(userInteractionProvider);
+        }
+        else if (executableAction instanceof ActionGroup) {
+            ((ActionGroup) executableAction).getActions().forEach(ea -> this.setUserInteractionProvider(userInteractionProvider, ea));
+        }
     }
 }

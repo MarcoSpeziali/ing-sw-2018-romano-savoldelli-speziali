@@ -202,12 +202,12 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     }
     
     @Override
-    public Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() {
+    public Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() {
         return null;
     }
     
     @Override
-    public void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) {
+    public void postChosenPosition(Integer chosenPosition) {
     
     }
 
@@ -242,26 +242,26 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     }
 
     private final transient Object resultsSyncObject = new Object();
-    private Map<IPlayer, IResult> resultMap;
+    private IResult[] results;
 
-    public void postResults(Map<IPlayer, IResult> resultMap) {
+    public void postResults(IResult[] results) {
         synchronized (resultsSyncObject) {
-            this.resultMap = resultMap;
+            this.results = results;
 
             resultsSyncObject.notifyAll();
         }
     }
     
     @Override
-    public Map<IPlayer, IResult> waitForMatchToEnd() throws IOException, InterruptedException {
+    public IResult[] waitForMatchToEnd() throws IOException, InterruptedException {
         //noinspection Duplicates
         synchronized (resultsSyncObject) {
-            while (this.resultMap == null) {
+            while (this.results == null) {
                 this.resultsSyncObject.wait();
             }
 
-            Map<IPlayer, IResult> temp = this.resultMap;
-            this.resultMap = null;
+            IResult[] temp = this.results;
+            this.results = null;
             return temp;
         }
     }

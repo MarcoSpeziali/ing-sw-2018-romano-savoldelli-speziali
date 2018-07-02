@@ -32,8 +32,8 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
             // set interi -> posizioni in cui non puo andare
             // if JSONS instanceof()
                 // -- mostrare roundtrack
-        Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() throws IOException;
-        void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) throws IOException;
+        Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() throws IOException;
+        void postChosenPosition(Integer chosenPosition) throws IOException;
 
             // range interi 2:5
         Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() throws IOException;
@@ -48,5 +48,5 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
         void postSetShade(Integer shade) throws IOException;
     
     // ------ MATCH END ------
-    Map<IPlayer, IResult> waitForMatchToEnd() throws IOException, InterruptedException;
+    IResult[] waitForMatchToEnd() throws IOException, InterruptedException;
 }

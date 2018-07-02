@@ -460,12 +460,12 @@ public class MatchGUITest extends Application {
             }
     
             @Override
-            public Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() {
+            public Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() {
                 return null;
             }
     
             @Override
-            public void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) {
+            public void postChosenPosition(Integer chosenPosition) {
         
             }
 
@@ -512,7 +512,7 @@ public class MatchGUITest extends Application {
             }
 
             @Override
-            public Map<IPlayer, IResult> waitForMatchToEnd() {
+            public IResult[] waitForMatchToEnd() {
                 return null;
             }
     

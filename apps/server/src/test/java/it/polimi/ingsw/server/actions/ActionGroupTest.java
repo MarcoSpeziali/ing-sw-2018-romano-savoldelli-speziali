@@ -112,7 +112,7 @@ class ActionGroupTest {
                 new Die(6, GlassColor.PURPLE)
         ));
 
-        when(this.choosablePickLocation.pickDie(any(Die.class)))
+        when(this.choosablePickLocation.pickDie(0))
                 .thenReturn(new Die(2, GlassColor.BLUE));
 
         doAnswer(invocationOnMock -> {
@@ -124,44 +124,32 @@ class ActionGroupTest {
             return null;
         }).when(this.randomPutLocation).putDie(any(Die.class));
 
-        ChooseColorAction chooseColorAction = new ChooseColorAction(
+        ChoosePositionAction choosePositionAction = new ChoosePositionAction(
                 new ActionData(
                         null,
                         null,
-                        "COLOR"
+                        "POS"
                 ),
                 context -> this.chooseLocation,
+                context -> GlassColor.BLUE,
                 context -> 0
         );
-        chooseColorAction.setUserInteractionProvider(interactionProvider);
-
-        ChooseDieAction chooseDieAction = new ChooseDieAction(
-                new ActionData(
-                        null,
-                        null,
-                        "DIE"
-                ),
-                context -> this.chooseLocation,
-                context -> (GlassColor) context.get("COLOR"),
-                context -> 0
-        );
-        chooseDieAction.setUserInteractionProvider(interactionProvider);
+        choosePositionAction.setUserInteractionProvider(interactionProvider);
 
         this.actionGroup = new ActionGroup(
                 this.actionData,
                 new IterableRange<>(1, 1, num -> ++num),
                 null,
                 List.of(
-                        chooseColorAction,
-                        chooseDieAction,
-                        new PickDieAction(
+                        choosePositionAction,
+                        new PickAtAction(
                                 new ActionData(
                                         null,
                                         null,
                                         "DIE"
                                 ),
                                 context -> this.choosablePickLocation,
-                                context -> (Die) context.get("DIE")
+                                context -> (Integer) context.get("POS")
                         ),
                         new FlipAction(
                                 new ActionData(

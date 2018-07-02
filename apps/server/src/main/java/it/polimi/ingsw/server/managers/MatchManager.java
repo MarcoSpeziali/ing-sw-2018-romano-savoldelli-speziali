@@ -649,11 +649,19 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             );
         }
         
-        // TODO: set callback (HOW??)
+        controller.setUserInteractionProvider(
+                new UserInteractionAndCallbacksManager(
+                        databasePlayer,
+                        this.matchObjectsManager,
+                        this.matchCommunicationsManager
+                )
+        );
         
         controller.requestUsage(
                 currentPlayer
         );
+
+        controller.setUserInteractionProvider(null);
     }
     
     private enum MatchState {

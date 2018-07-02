@@ -101,7 +101,7 @@ public class MatchSocketProxyController implements MatchController {
                     Response<ResultsResponse> matchResultsResponse = (Response<ResultsResponse>) response;
 
                     synchronized (resultsSyncObject) {
-                        this.resultMap = matchResultsResponse.getBody().getResultsMap();
+                        this.results = matchResultsResponse.getBody().getResults();
 
                         resultsSyncObject.notifyAll();
                     }
@@ -238,12 +238,12 @@ public class MatchSocketProxyController implements MatchController {
     }
     
     @Override
-    public Map.Entry<JSONSerializable, Set<Integer>> waitForChooseDiePositionFromLocation() {
+    public Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() {
         return null;
     }
     
     @Override
-    public void postChosenDiePosition(Map.Entry<IDie, Integer> chosenPosition) {
+    public void postChosenPosition(Integer chosenPosition) {
     
     }
 
@@ -278,18 +278,18 @@ public class MatchSocketProxyController implements MatchController {
     }
 
     private final transient Object resultsSyncObject = new Object();
-    private Map<IPlayer, IResult> resultMap;
+    private IResult[] results;
     
     @Override
-    public Map<IPlayer, IResult> waitForMatchToEnd() throws InterruptedException {
+    public IResult[] waitForMatchToEnd() throws InterruptedException {
         //noinspection Duplicates
         synchronized (resultsSyncObject) {
-            while (this.resultMap == null) {
+            while (this.results == null) {
                 this.resultsSyncObject.wait();
             }
 
-            Map<IPlayer, IResult> temp = this.resultMap;
-            this.resultMap = null;
+            IResult[] temp = this.results;
+            this.results = null;
             return temp;
         }
     }

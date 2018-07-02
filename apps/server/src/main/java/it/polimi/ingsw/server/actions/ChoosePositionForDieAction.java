@@ -30,7 +30,7 @@ public class ChoosePositionForDieAction extends Action {
     public Object run(Context context) {
         super.run(context);
 
-        return this.userInteractionProvider.choosePosition(
+        return this.userInteractionProvider.choosePositionForDie(
                 this.from.get(context),
                 this.die.get(context),
                 this.ignoreColor,

@@ -24,7 +24,7 @@ class ChoosePositionForDieActionTest {
         Die die = new Die(1, GlassColor.YELLOW);
 
         UserInteractionProvider interactionProvider = mock(UserInteractionProvider.class);
-        when(interactionProvider.choosePosition(location, die, false, false, false)).thenReturn(6);
+        when(interactionProvider.choosePositionForDie(location, die, false, false, false)).thenReturn(6);
 
         action = new ChoosePositionForDieAction(this.testData, context -> location, context -> die, false, false, false);
         action.setUserInteractionProvider(interactionProvider);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.core.Move;
+import it.polimi.ingsw.core.ToolCardConditionException;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.net.responses.MatchBeginResponse;
 import it.polimi.ingsw.net.responses.MatchEndResponse;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
+import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.server.events.MatchCommunicationsListener;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.net.sockets.middlewares.MatchControllerMiddleware;
@@ -212,7 +214,13 @@ public class MatchCommunicationsManager {
 
     // ------ RESULTS ------
 
-    public void sendResults(Map<DatabasePlayer, Integer> results) {
+    public void sendResults(Map<DatabasePlayer, Integer> resultMap) {
+        IResult[] results = resultMap.entrySet().stream()
+                .map(entry -> new ResultMock(this.match.getId(), new PlayerMock(entry.getKey()), entry.getValue()))
+                .toArray(IResult[]::new);
+
+        this.forEachRmi((databasePlayer, rmiProxyController) -> rmiProxyController.postResults(results));
+
         // TODO: send results
     }
     
@@ -241,6 +249,11 @@ public class MatchCommunicationsManager {
     }
     
     public void onToolCardRequested(DatabasePlayer databasePlayer, IToolCard toolCard) {
-        this.matchCommunicationsListener.onPlayerRequestedToolCard(this, databasePlayer, toolCard);
+        try {
+            this.matchCommunicationsListener.onPlayerRequestedToolCard(this, databasePlayer, toolCard);
+        }
+        catch (ConstraintEvaluationException e) {
+            throw new ToolCardConditionException();
+        }
     }
 }

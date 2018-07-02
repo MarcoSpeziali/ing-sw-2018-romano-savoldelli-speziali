@@ -8,38 +8,38 @@ public class ResultMock implements IResult {
     private static final long serialVersionUID = -7189132562359713097L;
 
     private final PlayerMock player;
-    private final MatchMock match;
+    private final int match;
     private final int points;
 
     public ResultMock(IResult iResult) {
         this(
+                iResult.getMatchId(),
                 new PlayerMock(iResult.getPlayer()),
-                new MatchMock(iResult.getMatch()),
                 iResult.getPoints()
         );
     }
 
     @JSONDesignatedConstructor
     public ResultMock(
+            @JSONElement("match-id") int matchId,
             @JSONElement("player") PlayerMock player,
-            @JSONElement("match") MatchMock match,
             @JSONElement("points") int points
     ) {
         this.player = player;
-        this.match = match;
+        this.match = matchId;
         this.points = points;
+    }
+
+    @Override
+    @JSONElement("match")
+    public int getMatchId() {
+        return match;
     }
 
     @Override
     @JSONElement("player")
     public IPlayer getPlayer() {
         return player;
-    }
-
-    @Override
-    @JSONElement("match")
-    public IMatch getMatch() {
-        return match;
     }
 
     @Override

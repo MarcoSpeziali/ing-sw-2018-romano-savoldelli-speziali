@@ -147,7 +147,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     public Die pickDie(Die die) {
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
-                if (die.equals(this.cells[i][j].getDie())) {
+                if (die == this.cells[i][j].getDie()) {
                     return this.cells[i][j].pickDie();
                 }
             }

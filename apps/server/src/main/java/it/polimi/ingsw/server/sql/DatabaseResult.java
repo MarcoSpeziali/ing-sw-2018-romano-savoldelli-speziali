@@ -46,14 +46,9 @@ public class DatabaseResult implements IResult {
     }
 
     @Override
-    @JSONElement("match")
-    public IMatch getMatch() {
-        try {
-            return DatabaseMatch.matchWithId(this.matchId).toMatchMock();
-        }
-        catch (SQLException e) {
-            return null;
-        }
+    @JSONElement("match-id")
+    public int getMatchId() {
+        return this.matchId;
     }
 
     @Override

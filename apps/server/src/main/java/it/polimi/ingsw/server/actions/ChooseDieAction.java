@@ -26,6 +26,8 @@ public class ChooseDieAction extends Action {
     public Object run(Context context) {
         super.run(context);
 
-        return this.userInteractionProvider.chooseDie(this.from.get(context), this.color.get(context), this.shade.get(context));
+        // return this.userInteractionProvider.chooseDie(this.from.get(context), this.color.get(context), this.shade.get(context));
+
+        return null;
     }
 }

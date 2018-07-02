@@ -21,7 +21,7 @@ class ChoosePositionActionTest {
         ChooseLocation location = mock(ChooseLocation.class);
 
         UserInteractionProvider interactionProvider = mock(UserInteractionProvider.class);
-        when(interactionProvider.choosePosition(location)).thenReturn(6);
+        when(interactionProvider.choosePosition(location, null, 0)).thenReturn(6);
 
         action = new ChoosePositionAction(this.testData, context -> location, context -> null, context -> 0);
         action.setUserInteractionProvider(interactionProvider);

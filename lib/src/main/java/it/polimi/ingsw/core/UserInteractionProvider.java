@@ -7,15 +7,15 @@ import it.polimi.ingsw.models.Die;
 import java.io.Serializable;
 
 public interface UserInteractionProvider extends Serializable {
-    Die chooseDie(ChooseLocation location, GlassColor glassColor, Integer shade);
 
-    Integer choosePosition(ChooseLocation location);
+    default Die chooseDie(ChooseLocation location, GlassColor glassColor, Integer shade) {
+        Integer position = choosePosition(location, glassColor, shade);
+        return location.getDie(position);
+    }
 
     Integer choosePosition(ChooseLocation location, GlassColor color, Integer shade);
 
-    Integer choosePosition(RestrictedChoosablePutLocation location, Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency);
-
-    Die pickDie(Die die, GlassColor glassColor, Integer shade);
+    Integer choosePositionForDie(RestrictedChoosablePutLocation location, Die die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency);
 
     Integer chooseShade(Die die);
 }

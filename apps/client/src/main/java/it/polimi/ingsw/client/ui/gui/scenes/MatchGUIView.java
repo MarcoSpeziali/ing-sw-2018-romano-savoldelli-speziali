@@ -6,7 +6,6 @@ import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -23,15 +22,14 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
-import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property;
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
 public class MatchGUIView extends GUIView<MatchController> {
@@ -375,7 +373,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     }
 
     private void setUpChoosePositionFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForChooseDiePositionFromLocation()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForChoosePositionFromLocation()))
                 .thenAccept(this::setUpChoosePosition);
     }
 
@@ -400,7 +398,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         Node cell = windowGUIView.gridPane.getChildren().get(location);
                         cell.setDisable(true);
                     }
-                    this.model.postChosenDiePosition(new AbstractMap.SimpleEntry<>(null, windowGUIView.getSelectedLocation()));
+                    this.model.postChosenPosition(windowGUIView.getSelectedLocation());
 
                 } catch (IOException e) {
                     e.printStackTrace();

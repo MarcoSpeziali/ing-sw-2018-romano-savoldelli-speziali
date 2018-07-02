@@ -9,4 +9,6 @@ public interface ChooseLocation extends Serializable {
     List<Integer> getLocations();
 
     List<Die> getDice();
+
+    Die getDie(Integer location);
 }
