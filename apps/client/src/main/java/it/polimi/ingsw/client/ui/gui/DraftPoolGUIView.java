@@ -47,13 +47,13 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                         public void handle(MouseEvent event) {
                             Move move = Move.build();
                             move.begin(location);
-                            try {
+                            /*try {
                                 Match.getMatchController().tryToMove(move);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
                             Dragboard db = source.startDragAndDrop(TransferMode.ANY);
                             ClipboardContent content = new ClipboardContent();
                             content.put(Constants.iDieFormat, locationsDieMap.get(location));

@@ -26,6 +26,8 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,6 +37,9 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
 public class MatchGUIView extends GUIView<MatchController> {
+
+    private Timer timer = new Timer();
+    private int remainingTime = -1;
 
     @FXML
     public StackPane outerPane;
@@ -55,6 +60,9 @@ public class MatchGUIView extends GUIView<MatchController> {
     public BorderPane centerPane;
 
     public DraftPoolGUIView draftPoolGUIView;
+
+    @FXML
+    public Label secondsLabel;
 
     @Override
     public void init() {
@@ -257,7 +265,8 @@ public class MatchGUIView extends GUIView<MatchController> {
                 try {
                     Node node = loader.load();
                     VBox vBox = new VBox();
-                    Label label = new Label("ciao");
+                    Label label = new Label(player.hasLeft()? player.getPlayer().getUsername()+" (Offline)":
+                            player.getPlayer().getUsername());
                     label.setAlignment(Pos.CENTER);
                     label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
                     vBox.getChildren().addAll(node, label);
@@ -265,7 +274,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     windowGUIView.setModel(iWindow);
                     windowGUIView.setProperty(Property.OPPONENT);
                     hBoxWindows.setAlignment(Pos.TOP_CENTER);
-                    hBoxWindows.getChildren().add(node);
+                    hBoxWindows.getChildren().add(vBox);
                     hBoxWindows.setSpacing(30);
                     hBoxWindows.setAlignment(Pos.CENTER);
                 } catch (IOException e) {
@@ -463,6 +472,34 @@ public class MatchGUIView extends GUIView<MatchController> {
             content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_LOCATION)+": "));
             dialog.show();
         }));
+    }
+
+    private void setUpWaitForTurnToBeginFuture() {
+        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForTurnToBegin()))
+                .thenAccept(this::setUpWaitForTurnToBegin);
+    }
+
+    private void setUpWaitForTurnToBegin(int remainingTime) {
+        Platform.runLater(unsafe(() -> {
+            this.remainingTime = remainingTime;
+            startTimer();
+            
+                }
+        ));
+    }
+
+
+    public void startTimer() {
+        this.timer = new Timer();
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    MatchGUIView.this.secondsLabel.setText(String.valueOf(remainingTime));
+                    remainingTime--;
+                });
+            }
+        }, 0, 1000);
     }
 }
 

@@ -6,6 +6,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <StackPane fx:id="outerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView">
    <children>
       <BorderPane fx:id="borderPane" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0">
@@ -23,7 +25,15 @@
             <VBox fx:id="vBoxObjectiveCard" prefHeight="540.0" prefWidth="370.0" style="-fx-background-color: green" BorderPane.alignment="CENTER" />
          </right>
          <center>
-            <BorderPane fx:id="centerPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLUE;" BorderPane.alignment="CENTER" />
+            <BorderPane fx:id="centerPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLUE;" BorderPane.alignment="CENTER">
+             <left>
+                 <Label id="seconds" fx:id="secondsLabel" layoutX="140.0" layoutY="306.0" textFill="#c7ffde">
+                    <font>
+                        <Font size="75.0"/>
+                    </font>
+                 </Label>
+             </left>
+            </BorderPane>
          </center>
       </BorderPane>
    </children>

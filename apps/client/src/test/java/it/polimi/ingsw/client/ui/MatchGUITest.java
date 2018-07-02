@@ -121,13 +121,25 @@ public class MatchGUITest extends Application {
 
                                     @Override
                                     public IWindow getWindow() {
-                                        return new WindowMock("giocatore2", 4, 4, 5, cells2);
+                                        return new WindowMock("finestra 2", 4, 4, 5, cells2);
 
                                     }
 
                                     @Override
                                     public IPlayer getPlayer() {
-                                        return null;
+                                        return new IPlayer() {
+                                            private static final long serialVersionUID = -5607492780014638998L;
+
+                                            @Override
+                                            public int getId() {
+                                                return 0;
+                                            }
+
+                                            @Override
+                                            public String getUsername() {
+                                                return "Davide";
+                                            }
+                                        };
                                     }
                                 }
                         , new ILivePlayer() {
@@ -140,12 +152,24 @@ public class MatchGUITest extends Application {
 
                             @Override
                             public IWindow getWindow() {
-                                return new WindowMock("giocatore3", 2, 4, 5, cells3);
+                                return new WindowMock("finestra 3", 2, 4, 5, cells3);
                             }
 
                             @Override
                             public IPlayer getPlayer() {
-                                return null;
+                                return new IPlayer() {
+                                    private static final long serialVersionUID = -8821379905717868921L;
+
+                                    @Override
+                                    public int getId() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public String getUsername() {
+                                        return "Marco";
+                                    }
+                                };
                             }
                         }, new ILivePlayer() {
                             private static final long serialVersionUID = 8193853292111083995L;
@@ -157,12 +181,27 @@ public class MatchGUITest extends Application {
 
                             @Override
                             public IWindow getWindow() {
-                                return new WindowMock("giocatore4", 1, 4, 5, cells4);
+                                return new WindowMock("finestra 4", 1, 4, 5, cells4);
                             }
 
                             @Override
+                            public boolean hasLeft() {
+                                return true;
+                            }
+                            @Override
                             public IPlayer getPlayer() {
-                                return null;
+                                return new IPlayer() {
+                                    @Override
+                                    public int getId() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public String getUsername() {
+                                        return "Luca";
+                                    }
+
+                                };
                             }
                         }};
                     }

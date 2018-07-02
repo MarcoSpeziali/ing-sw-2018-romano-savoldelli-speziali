@@ -82,14 +82,14 @@ public class WindowGUIView extends GUIView<IWindow> {
                     public void handle(DragEvent event) {
                         Dragboard db = event.getDragboard();
 
-                        try {
+                       /* try {
                             Match.getMatchController().tryToMove(Move.getCurrentMove()
                                     .end(finalI *iWindow.getColumns()+ finalJ));
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                         target.setCursor(Cursor.CROSSHAIR);
                         System.out.println();
                         cellGUIView.onUpdateReceived((IDie) db.getContent(Constants.iDieFormat));
