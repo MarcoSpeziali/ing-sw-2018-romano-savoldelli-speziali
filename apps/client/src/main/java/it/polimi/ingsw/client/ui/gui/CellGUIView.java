@@ -70,9 +70,7 @@ public class CellGUIView extends GUIView<ICell> {
 
     public void onUpdateReceived(IDie update) {
         Platform.runLater(() -> {
-            if (this.model.isOccupied()) {
-                dieAnchorPane = defaultDieAnchorPane;
-            } else {
+            if (dieAnchorPane.getChildren().isEmpty()) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
                 try {

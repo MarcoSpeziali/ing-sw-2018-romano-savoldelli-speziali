@@ -59,7 +59,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }*/
-                                Dragboard db = source.startDragAndDrop(TransferMode.MOVE);
+                                Dragboard db = source.startDragAndDrop(TransferMode.ANY);
                                 ClipboardContent content = new ClipboardContent();
                                 content.put(Constants.iDieFormat, locationsDieMap.get(location));
                                 db.setContent(content);
@@ -71,7 +71,9 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                     source.setOnDragDone(new EventHandler<DragEvent>() {
                         @Override
                         public void handle(DragEvent event) {
-                            placeholder.getChildren().remove(source);
+                            if (event.getTransferMode() == TransferMode.MOVE) {
+                                placeholder.getChildren().remove(source);
+                            }
                         }
                     });
 

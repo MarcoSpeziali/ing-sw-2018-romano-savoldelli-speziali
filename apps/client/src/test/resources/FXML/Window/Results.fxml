@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="720.0" xmlns="http://javafx.com/javafx/9.0.1"
+            fx:controller="it.polimi.ingsw.client.ui.gui.scenes.ResultsGUIView">
+    <center>
+        <Pane prefHeight="720.0" prefWidth="550.0" BorderPane.alignment="CENTER">
+            <children>
+                <JFXListView fx:id="resultsListView" depth="4" fixedCellSize="180.0" prefHeight="720.0" prefWidth="550.0"/>
+            </children>
+        </Pane>
+    </center>
+    <left>
+        <Pane prefHeight="720.0" prefWidth="360.0" style="-fx-background-color: #2ecc71;" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="titleLabel" layoutX="141.0" layoutY="86.0" text="RESULTS" textFill="#c7ffde">
+                    <font>
+                        <Font name="System Bold" size="25.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="winningMessage" disable="true" layoutX="56.0" layoutY="129.0" text="Congratulations! You won!" textFill="#c7ffde">
+                    <font>
+                        <Font size="17.0"/>
+                    </font>
+                </Label>
+                <JFXButton fx:id="backButton" cancelButton="true" layoutX="55.0" layoutY="642.0" onAction="#onBackClicked"
+                           prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #27ae60;" text="BACK"
+                           textFill="#c8ffdf">
+                    <font>
+                        <Font name="System Bold" size="15.0"/>
+                    </font>
+                </JFXButton>
+            </children>
+        </Pane>
+    </left>
+</BorderPane>
