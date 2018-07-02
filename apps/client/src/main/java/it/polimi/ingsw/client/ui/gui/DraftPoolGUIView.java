@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IDraftPool;
@@ -52,18 +53,18 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                             if (property == Constants.Property.OWNED) {
                                 Move move = Move.build();
                                 move.begin(location);
-                                /*try {
+                                try {
                                     Match.getMatchController().tryToMove(move);
+                                    Dragboard db = source.startDragAndDrop(TransferMode.ANY);
+                                    ClipboardContent content = new ClipboardContent();
+                                    content.put(Constants.iDieFormat, locationsDieMap.get(location));
+                                    db.setContent(content);
+                                    event.consume();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
-                                }*/
-                                Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-                                ClipboardContent content = new ClipboardContent();
-                                content.put(Constants.iDieFormat, locationsDieMap.get(location));
-                                db.setContent(content);
-                                event.consume();
+                                }
                             }
                         }
                     });

@@ -2,6 +2,8 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 
+import it.polimi.ingsw.core.Match;
+import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.event.EventHandler;
@@ -72,25 +74,25 @@ public class WindowGUIView extends GUIView<IWindow> {
                 });
 
                 int finalJ = j, finalI = i;
+
                 target.setOnDragDropped(new EventHandler <DragEvent>() {
                     public void handle(DragEvent event) {
                         Dragboard db = event.getDragboard();
 
-                       /* try {
+                        try {
                             Match.getMatchController().tryToMove(Move.getCurrentMove()
                                     .end(finalI *iWindow.getColumns()+ finalJ));
+
+                            target.setCursor(Cursor.CROSSHAIR);
+                            System.out.println();
+                            cellGUIView.onUpdateReceived((IDie) db.getContent(Constants.iDieFormat));
+                            event.setDropCompleted(true);
+                            event.consume();
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }*/
-                        target.setCursor(Cursor.CROSSHAIR);
-                        System.out.println();
-                        cellGUIView.onUpdateReceived((IDie) db.getContent(Constants.iDieFormat));
-
-                        event.setDropCompleted(true);
-
-                        event.consume();
+                        }
                     }
                 });
 

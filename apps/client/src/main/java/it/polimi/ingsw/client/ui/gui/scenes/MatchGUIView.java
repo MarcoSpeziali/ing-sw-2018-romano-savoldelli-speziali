@@ -78,14 +78,14 @@ public class MatchGUIView extends GUIView<MatchController> {
     public void init() {
         chooseWindow();
         setUpOpponentsWindowsFuture();
-        setUpShadeFuture();
         loadElements();
+        MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
+        helper.init();
+        setUpWaitForTurnToBeginFuture();
+        setUpWaitForTurnToEndFuture();
+        setUpWaitForMatchToEnd();
     }
 
-    public void onEndTurnClicked() throws IOException {
-        this.model.endTurn();
-        this.timer.cancel();
-    }
     private void loadElements() {
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
@@ -211,7 +211,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                     centerPane.setRight(privateCardNode);
                     BorderPane.setAlignment(privateCardNode, Pos.BOTTOM_CENTER);
                     BorderPane.setMargin(privateCardNode, new Insets(0,10,220,10));
-                    //centerPane.setMargin(privateCardNode, new Insets(10));
 
                    FXMLLoader draftPoolLoader = new FXMLLoader();
                     draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
@@ -221,7 +220,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                     draftPoolGUIView.setProperty(Constants.Property.OWNED);
                     centerPane.setTop(draftPoolNode);
                     BorderPane.setAlignment(draftPoolNode, Pos.CENTER);
-                    //BorderPane.setMargin(draftPoolNode, new Insets(0, 0, 0, 0));
 
                     FXMLLoader roundTrackLoader = new FXMLLoader();
                     roundTrackLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
@@ -230,7 +228,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                     roundTrackGUIView.setModel(iRoundTrack);
                     bottomBar.getChildren().add(roundTrackNode);
                 })));}
-
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(175);
@@ -286,7 +283,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 ));
                 });
     }
-    
+
     private void setUpOpponentsWindows(IMatch update) {
         Platform.runLater(() -> {
             for (ILivePlayer player: update.getPlayers()) {
@@ -314,7 +311,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     e.printStackTrace();
                 }
             }
-            //setUpOpponentWindowsFuture();
+            setUpOpponentsWindowsFuture();
         });
     }
 
@@ -323,173 +320,9 @@ public class MatchGUIView extends GUIView<MatchController> {
                 .thenAccept(this::setUpOpponentsWindows);
     }
 
-    private void setUpShade(IDie iDie) {
-        Platform.runLater(unsafe(() -> {
-            JFXDialogLayout content = new JFXDialogLayout();
-            JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-            HBox hBox = new HBox();
-            GridPane gridPane = new GridPane();
-
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
-            Node die = loader.load();
-
-            DieGUIView dieGUIView = loader.getController();
-            dieGUIView.setModel(iDie);
-
-            for (int i = 0; i < 6; i++) {
-                FXMLLoader innerLoader = new FXMLLoader();
-                innerLoader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
-                Node cell = innerLoader.load();
-                cell.setScaleY(1.7);
-                cell.setScaleX(1.7);
-                CellGUIView cellGUIView = innerLoader.getController();
-                cellGUIView.setModel(new CellMock(i+1, null));
-                gridPane.add(cell, i%3, i/3);
-                gridPane.setVgap(35);
-                gridPane.setHgap(35);
-                int finalI = i+1;
-                cell.setOnMouseEntered(event -> {
-                    try {
-                        cell.setCursor(Cursor.HAND);
-                        dieGUIView.setModel(new DieMock(finalI, iDie.getColor()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-                cell.setOnMouseClicked(event -> {
-                    try {
-                        this.model.postSetShade(finalI);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    dialog.close();
-                });
-            }
-            hBox.getChildren().addAll(die, gridPane);
-            hBox.setAlignment(Pos.CENTER);
-            hBox.setSpacing(10);
-            content.setActions();
-            content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_SHADE_FOR_DIE)));
-            content.setBody(hBox);
-            gridPane.setScaleX(0.75);
-            gridPane.setScaleY(0.75);
-            dialog.show();
-            //setUpSetShadeFuture();
-            }));
-    }
-
-
-    private void setUpShadeFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForSetShade()))
-                .thenAccept(this::setUpShade);
-    }
-
-    private void setUpEffectFuture() {
-        CompletableFuture.supplyAsync(unsafe(() ->
-            this.model.waitForChooseBetweenActions())).thenAccept(this::setUpEffect);
-    }
-
-    private void setUpEffect(Map.Entry<IAction[], Range<Integer>> m) {
-        //TODO: implement
-    }
-
-    private void setUpContinueToRepeatFuture() {
-        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForContinueToRepeat()))
-                .thenAccept(this::setUpContinueToRepeat);
-    }
-
-    private void setUpContinueToRepeat(IAction iEffect) {
-        Platform.runLater(unsafe(()-> {
-            JFXButton again = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_RUN_AGAIN));
-            JFXButton stop = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_STOP));
-            JFXDialogLayout content = new JFXDialogLayout();
-            JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-            content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT)));
-            content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": "+iEffect.getDescription()));
-            again.setOnMouseClicked(event -> {
-                try {
-                    this.model.postContinueToRepeatChoice(true);
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-                dialog.close();
-            });
-            stop.setOnMouseClicked(event -> {
-                try {
-                    this.model.postContinueToRepeatChoice(false);
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-                dialog.close();
-            });
-            dialog.show();
-            setUpContinueToRepeatFuture();
-        }));
-    }
-
-    private void setUpChoosePositionFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForChoosePositionFromLocation()))
-                .thenAccept(this::setUpChoosePosition);
-    }
-
-    private void setUpChoosePosition(ChoosePositionForLocationRequest choosePosition) {
-        //TODO: finish
-        Platform.runLater(unsafe(() -> {
-            JFXDialog dialog = new JFXDialog();
-            JFXDialogLayout content = new JFXDialogLayout();
-            JFXButton button = new JFXButton("OK");
-            FXMLLoader loader = new FXMLLoader();
-            GridPane node = null;
-            JSONSerializable object = choosePosition.getLocation();
-            Set<Integer> set = choosePosition.getUnavailableLocations();
-
-            if (object instanceof IWindow) {
-                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
-                try {
-                    node = loader.load();
-                    WindowGUIView windowGUIView = loader.getController();
-                    windowGUIView.setModel((IWindow) object);
-                    windowGUIView.setProperty(Constants.Property.SELECTION);
-                    for (Integer location : set) {
-                        Node cell = windowGUIView.gridPane.getChildren().get(location);
-                        cell.setDisable(true);
-                    }
-                    this.model.postChosenPosition(windowGUIView.getSelectedLocation());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            if (object instanceof IDraftPool) {
-                loader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
-                try {
-                    node = loader.load();
-                    DraftPoolGUIView draftPoolGUIView = loader.getController();
-                    draftPoolGUIView.setModel((IDraftPool) object);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            if (object instanceof IRoundTrack) {
-                loader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
-                try {
-                    node = loader.load();
-                    RoundTrackGUIView roundTrackGUIView = loader.getController();
-                    roundTrackGUIView.setModel((IRoundTrack) object);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            content.setBody(node);
-            content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_LOCATION)+": "));
-            dialog.show();
-        }));
+    public void onEndTurnClicked() throws IOException {
+        this.model.endTurn();
+        this.timer.cancel();
     }
 
     private void setUpWaitForTurnToBeginFuture() {
@@ -512,7 +345,6 @@ public class MatchGUIView extends GUIView<MatchController> {
         ));
 
     }
-
 
     private void startTimer() {
         this.timer = new Timer();
