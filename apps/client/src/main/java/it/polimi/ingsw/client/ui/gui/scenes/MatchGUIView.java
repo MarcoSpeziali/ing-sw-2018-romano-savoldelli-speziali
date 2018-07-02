@@ -7,6 +7,7 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
@@ -16,9 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -364,12 +363,6 @@ public class MatchGUIView extends GUIView<MatchController> {
             }));
     }
 
-    private void setUpEffect(Map.Entry<IEffect[], Range<Integer>> map){
-        Platform.runLater(unsafe(()-> {
-
-        }));
-    }
-
 
     private void setUpShadeFuture() {
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForSetShade()))
@@ -378,24 +371,24 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpEffectFuture() {
         CompletableFuture.supplyAsync(unsafe(() ->
-            this.model.waitForChooseBetweenEffect())).thenAccept(this::setUpEffect);
+            this.model.waitForChooseBetweenActions())).thenAccept(this::setUpEffect);
     }
 
-    private void setUpEffect(){}
+    private void setUpEffect(Map.Entry<IAction[], Range<Integer>> m) {}
 
     private void setUpContinueToRepeatFuture() {
         CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForContinueToRepeat()))
                 .thenAccept(this::setUpContinueToRepeat);
     }
 
-    private void setUpContinueToRepeat(IEffect iEffect) {
+    private void setUpContinueToRepeat(IAction iEffect) {
         Platform.runLater(unsafe(()-> {
             JFXButton again = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_RUN_AGAIN));
             JFXButton stop = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_STOP));
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
             content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT)));
-            content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": "+iEffect.getDescriptionKey()));
+            content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": "+iEffect.getDescription()));
             again.setOnMouseClicked(event -> {
                 try {
                     this.model.postContinueToRepeatChoice(true);
@@ -424,15 +417,15 @@ public class MatchGUIView extends GUIView<MatchController> {
                 .thenAccept(this::setUpChoosePosition);
     }
 
-    private void setUpChoosePosition(Map.Entry<JSONSerializable,Set<Integer>> jsonSerializableSetEntry) {
+    private void setUpChoosePosition(ChoosePositionForLocationRequest choosePosition) {
         Platform.runLater(unsafe(() -> {
             JFXDialog dialog = new JFXDialog();
             JFXDialogLayout content = new JFXDialogLayout();
             JFXButton button = new JFXButton("OK");
             FXMLLoader loader = new FXMLLoader();
             GridPane node = null;
-            JSONSerializable object = jsonSerializableSetEntry.getKey();
-            Set<Integer> set = jsonSerializableSetEntry.getValue();
+            JSONSerializable object = choosePosition.getLocation();
+            Set<Integer> set = choosePosition.getUnavailableLocations();
 
             if (object instanceof IWindow) {
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());

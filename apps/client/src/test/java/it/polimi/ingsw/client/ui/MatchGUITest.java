@@ -9,6 +9,7 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -518,7 +519,7 @@ public class MatchGUITest extends Application {
             }
     
             @Override
-            public Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() {
+            public ChoosePositionForLocationRequest waitForChoosePositionFromLocation() throws IOException, InterruptedException {
                 return null;
             }
     
@@ -526,18 +527,23 @@ public class MatchGUITest extends Application {
             public void postChosenPosition(Integer chosenPosition) {
         
             }
-
-            public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
+    
+            @Override
+            public Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() throws IOException {
                 return null;
             }
     
             @Override
-            public void postChosenEffects(IEffect[] effects) {
+            public void postChosenActions(IAction[] actions) throws IOException {
         
             }
     
             @Override
-            public IEffect waitForContinueToRepeat() {
+            public IAction waitForContinueToRepeat() throws IOException {
+                return null;
+            }
+    
+            public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
                 return null;
             }
     
@@ -571,11 +577,6 @@ public class MatchGUITest extends Application {
 
             @Override
             public IResult[] waitForMatchToEnd() {
-                return null;
-            }
-    
-            @Override
-            public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(){
                 return null;
             }
         });
