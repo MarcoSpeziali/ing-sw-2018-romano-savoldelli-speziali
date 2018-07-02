@@ -24,19 +24,19 @@ public class ActionMock implements IAction {
 
     @Override
     @JSONElement("id")
-    public String getActionId() {
+    public String getId() {
         return id;
     }
 
     @Override
     @JSONElement("name")
-    public String getActionName() {
+    public String getName() {
         return name;
     }
 
     @Override
     @JSONElement("description")
-    public String getActionDescription() {
+    public String getDescription() {
         return description;
     }
 }

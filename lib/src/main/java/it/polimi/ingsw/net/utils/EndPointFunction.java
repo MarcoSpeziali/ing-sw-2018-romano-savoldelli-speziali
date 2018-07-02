@@ -32,6 +32,8 @@ public enum EndPointFunction {
         // ------ TOOL CARDS ------
         MATCH_PLAYER_TOOL_CARD_REQUEST("match/player/tool_card_request"),
         MATCH_PLAYER_TOOL_CARD_RESPONSE("match/player/tool_card_response"),
+        MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_REQUEST("match/player/tool_card/choose_position_request"),
+        MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_RESPONSE("match/player/tool_card/choose_position_response"),
     
         // ------ PLAYER MOVE ------
         MATCH_PLAYER_MOVE_REQUEST("match/player/move_request"),

@@ -149,6 +149,7 @@ public class ActionGroup implements ExecutableAction {
         for (int index = this.repetitionNumber.getStart(); index < this.repetitionNumber.getEnd(); index++) {
             // Whenever shouldRepeat returns false the process stops
             if (!this.callbacks.shouldRepeat(
+                    this,
                     index,
                     this.repetitionNumber.getEnd())) {
                 break;

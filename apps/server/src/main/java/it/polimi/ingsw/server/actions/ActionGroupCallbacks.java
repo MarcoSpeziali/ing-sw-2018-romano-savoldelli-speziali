@@ -11,11 +11,12 @@ import java.util.List;
 public interface ActionGroupCallbacks extends Serializable {
 
     /**
+     * @param actionGroup the {@link ActionGroup} that should repeated
      * @param alreadyRepeatedFor The number of repetition already done.
      * @param maximumRepetitions The maximum number of repetitions.
      * @return If the action group should continue to iterate.
      */
-    boolean shouldRepeat(int alreadyRepeatedFor, int maximumRepetitions);
+    boolean shouldRepeat(ActionGroup actionGroup, int alreadyRepeatedFor, int maximumRepetitions);
 
     /**
      * @param actions       The possible actions.

@@ -10,19 +10,14 @@ import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
-import it.polimi.ingsw.net.requests.MatchEndRequest;
-import it.polimi.ingsw.net.requests.MoveRequest;
-import it.polimi.ingsw.net.requests.ToolCardUsageRequest;
-import it.polimi.ingsw.net.requests.WindowRequest;
+import it.polimi.ingsw.net.requests.*;
 import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.utils.Range;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 
 public class MatchSocketProxyController implements MatchController {
     
@@ -104,6 +99,20 @@ public class MatchSocketProxyController implements MatchController {
                         this.results = matchResultsResponse.getBody().getResults();
 
                         resultsSyncObject.notifyAll();
+                    }
+                }
+        );
+        
+        this.persistentSocketInteractionProvider.listenForRequest(
+                EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_REQUEST,
+                request -> {
+                    @SuppressWarnings("unchecked")
+                    Request<ChoosePositionForLocationRequest> choosePositionForLocationRequest = (Request<ChoosePositionForLocationRequest>) request;
+                    
+                    synchronized (choosePositionSyncObject) {
+                        this.choosePositionRequest = choosePositionForLocationRequest.getBody();
+                        
+                        this.choosePositionSyncObject.notifyAll();
                     }
                 }
         );
@@ -213,7 +222,7 @@ public class MatchSocketProxyController implements MatchController {
     }
     
     @Override
-    public void requestToolCardUsage(IToolCard toolCard) throws IOException, NotEnoughTokensException {
+    public void requestToolCardUsage(IToolCard toolCard) throws IOException {
         ResponseError responseError = this.persistentSocketInteractionProvider.getSyncResponseFor(
                 new Request<>(
                         new Header(
@@ -237,28 +246,51 @@ public class MatchSocketProxyController implements MatchController {
         }
     }
     
+    private final transient Object choosePositionSyncObject = new Object();
+    private ChoosePositionForLocationRequest choosePositionRequest;
+    
     @Override
-    public Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() {
-        return null;
+    public ChoosePositionForLocationRequest waitForChoosePositionFromLocation() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (choosePositionSyncObject) {
+            while (choosePositionRequest == null) {
+                choosePositionSyncObject.wait();
+            }
+        
+            ChoosePositionForLocationRequest temp = this.choosePositionRequest;
+            this.choosePositionRequest = null;
+            return temp;
+        }
     }
     
     @Override
-    public void postChosenPosition(Integer chosenPosition) {
-    
+    public void postChosenPosition(Integer chosenPosition) throws IOException {
+        this.persistentSocketInteractionProvider.postResponse(
+                new Response<>(
+                        new Header(
+                                this.clientToken,
+                                EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_RESPONSE
+                        ),
+                        new ChoosePositionForLocationResponse(
+                                this.matchId,
+                                chosenPosition
+                        )
+                )
+        );
     }
 
     @Override
-    public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() {
+    public Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() {
         return null;
     }
     
     @Override
-    public void postChosenEffects(IEffect[] effects) {
+    public void postChosenActions(IAction[] actions) {
     
     }
     
     @Override
-    public IEffect waitForContinueToRepeat() {
+    public IAction waitForContinueToRepeat() {
         return null;
     }
     

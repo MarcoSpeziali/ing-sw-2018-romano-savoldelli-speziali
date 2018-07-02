@@ -1,16 +1,13 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.models.RoundTrack;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IRoundTrack;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -38,12 +35,16 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
                         (byte) (location & 0x000000FF))
                 ).collect(Collector.of(
                         (Supplier<HashMap<Byte, Byte>>) HashMap::new,
-                        (map, entry) -> map.compute(
-                                entry.getKey(),
-                                (key, lastValue) -> lastValue != null && lastValue < entry.getValue() ?
-                                        entry.getValue() :
-                                        lastValue
-                        ),
+                        (map, entry) -> {
+                            map.compute(
+                                    entry.getKey(),
+                                    (key, lastValue) -> {
+                                        return lastValue != null && lastValue < entry.getValue() ?
+                                                entry.getValue() :
+                                                lastValue;
+                                    }
+                            );
+                        },
                         (map1, map2) -> {
                             map1.putAll(map2);
                             return map1;

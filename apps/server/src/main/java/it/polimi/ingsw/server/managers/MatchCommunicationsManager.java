@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
+import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.core.ToolCardConditionException;
 import it.polimi.ingsw.net.Header;
@@ -11,18 +12,22 @@ import it.polimi.ingsw.net.requests.WindowRequest;
 import it.polimi.ingsw.net.responses.MatchBeginResponse;
 import it.polimi.ingsw.net.responses.MatchEndResponse;
 import it.polimi.ingsw.net.responses.MoveResponse;
+import it.polimi.ingsw.net.responses.ResultsResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.server.events.MatchCommunicationsListener;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.net.sockets.middlewares.MatchControllerMiddleware;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
+import it.polimi.ingsw.utils.Range;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -104,35 +109,24 @@ public class MatchCommunicationsManager {
     }
 
     public void sendMatchMockToPlayer(DatabasePlayer databasePlayer, IMatch match) throws IOException {
-        try {
-            this.rmiPlayersHandler.computeIfPresent(databasePlayer, wrap((player, rmiProxyController) -> {
-                rmiProxyController.onUpdateReceived(match);
-                return rmiProxyController;
-            }));
-
-            this.socketPlayersHandler.computeIfPresent(databasePlayer, wrap((player, authenticatedClientHandler) -> {
+        this.sendToPlayer(databasePlayer, (authenticatedClientHandler, matchRMIProxyController) -> {
+            if (authenticatedClientHandler != null) {
                 authenticatedClientHandler.sendResponse(new Response<>(
                         new Header(EndPointFunction.MATCH_UPDATE_RESPONSE),
                         new MatchMock(match)
                 ));
-                return authenticatedClientHandler;
-            }));
-        }
-        catch (FunctionalExceptionWrapper e) {
-            e.tryUnwrap(RemoteException.class).tryFinalUnwrap(IOException.class);
-        }
+            }
+            else {
+                matchRMIProxyController.onUpdateReceived(match);
+            }
+        });
     }
     
     // ------ TURNS ------
     
     public void notifyPlayerTurnBegin(DatabasePlayer player, int timeToCompleteInSeconds) throws IOException {
-        try {
-            this.rmiPlayersHandler.computeIfPresent(player, wrap((databasePlayer, matchRMIProxyController) -> {
-                matchRMIProxyController.postTurnBegin(timeToCompleteInSeconds);
-                return matchRMIProxyController;
-            }));
-            
-            this.socketPlayersHandler.computeIfPresent(player, wrap((databasePlayer, authenticatedClientHandler) -> {
+        this.sendToPlayer(player, (authenticatedClientHandler, matchRMIProxyController) -> {
+            if (authenticatedClientHandler != null) {
                 authenticatedClientHandler.sendResponse(new Response<>(
                         new Header(EndPointFunction.MATCH_PLAYER_TURN_BEGIN_RESPONSE),
                         new MatchBeginResponse(
@@ -140,38 +134,27 @@ public class MatchCommunicationsManager {
                                 timeToCompleteInSeconds
                         )
                 ));
-                
-                return authenticatedClientHandler;
-            }));
-        }
-        catch (FunctionalExceptionWrapper e) {
-            e.tryUnwrap(RemoteException.class)
-                    .tryFinalUnwrap(IOException.class);
-        }
+            }
+            else {
+                matchRMIProxyController.postTurnBegin(timeToCompleteInSeconds);
+            }
+        });
     }
     
     public void notifyPlayerTurnEnd(DatabasePlayer player) throws IOException {
-        try {
-            this.rmiPlayersHandler.computeIfPresent(player, wrap((databasePlayer, matchRMIProxyController) -> {
-                matchRMIProxyController.postTurnEnd();
-                return matchRMIProxyController;
-            }));
-        
-            this.socketPlayersHandler.computeIfPresent(player, wrap((databasePlayer, authenticatedClientHandler) -> {
+        this.sendToPlayer(player, (authenticatedClientHandler, matchRMIProxyController) -> {
+            if (authenticatedClientHandler != null) {
                 authenticatedClientHandler.sendResponse(new Response<>(
                         new Header(EndPointFunction.MATCH_PLAYER_TURN_END_RESPONSE),
                         new MatchEndResponse(
                                 this.match.getId()
                         )
                 ));
-            
-                return authenticatedClientHandler;
-            }));
-        }
-        catch (FunctionalExceptionWrapper e) {
-            e.tryUnwrap(RemoteException.class)
-                    .tryFinalUnwrap(IOException.class);
-        }
+            }
+            else {
+                matchRMIProxyController.postTurnEnd();
+            }
+        });
     }
     
     // ------ MOVE ------
@@ -191,37 +174,74 @@ public class MatchCommunicationsManager {
     }
     
     private void sendMoveResponse(DatabasePlayer databasePlayer, MoveResponse moveResponse) throws IOException {
-        try {
-            this.rmiPlayersHandler.computeIfPresent(databasePlayer, wrap((player, rmiProxyController) -> {
-                rmiProxyController.postMoveResponse(moveResponse);
-                return rmiProxyController;
-            }));
-
-            this.socketPlayersHandler.computeIfPresent(databasePlayer, wrap((player, authenticatedClientHandler) -> {
+        this.sendToPlayer(databasePlayer, (authenticatedClientHandler, matchRMIProxyController) -> {
+            if (authenticatedClientHandler != null) {
                 authenticatedClientHandler.sendResponse(new Response<>(
                         new Header(EndPointFunction.MATCH_PLAYER_MOVE_REQUEST),
                         moveResponse
                 ));
-                return authenticatedClientHandler;
+            }
+            else {
+                matchRMIProxyController.postMoveResponse(moveResponse);
+            }
+        });
+    }
+
+    // ------ TOOL CARDS ------
+    
+    public Integer sendChoosePosition(DatabasePlayer databasePlayer, JSONSerializable jsonSerializable, GlassColor color, Integer shade) throws IOException {
+        return 0;
+    }
+    
+    public Integer sendChoosePositionForDie(DatabasePlayer databasePlayer, JSONSerializable jsonSerializable, IDie die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency)  throws IOException {
+        return 0;
+    }
+
+    public Integer sendChooseShade(DatabasePlayer databasePlayer, IDie die) {
+        return 0;
+    }
+    
+    public boolean sendShouldRepeat(IAction action, int alreadyRepeatedFor, int maximumRepetitions) {
+        return false;
+    }
+    
+    public List<IAction> getChosenActions(List<IAction> actions, Range<Integer> chooseBetween) {
+        return null;
+    }
+    
+    // ------ RESULTS ------
+
+    public void sendResults(Map<DatabasePlayer, Integer> resultMap) throws IOException {
+        IResult[] results = resultMap.entrySet().stream()
+                .map(entry -> new ResultMock(this.match.getId(), new PlayerMock(entry.getKey()), entry.getValue()))
+                .toArray(IResult[]::new);
+    
+        try {
+            this.forEachRmi(wrap((databasePlayer, rmiProxyController) -> {
+                rmiProxyController.postResults(results);
+            }));
+            this.forEachSocket(wrap((databasePlayer, authenticatedClientHandler) -> {
+                authenticatedClientHandler.sendResponse(
+                        new Response<>(
+                                new Header(EndPointFunction.MATCH_RESULTS_RESPONSE),
+                                new ResultsResponse(
+                                        this.match.getId(),
+                                        resultMap.entrySet().stream()
+                                                .map(entry ->
+                                                        new ResultMock(
+                                                                this.match.getId(),
+                                                                new PlayerMock(entry.getKey()),
+                                                                entry.getValue()
+                                                        )
+                                                ).toArray(ResultMock[]::new)
+                                )
+                        )
+                );
             }));
         }
         catch (FunctionalExceptionWrapper e) {
             e.tryUnwrap(RemoteException.class).tryFinalUnwrap(IOException.class);
         }
-    }
-
-    // ------ TOOL CARDS ------
-
-    // ------ RESULTS ------
-
-    public void sendResults(Map<DatabasePlayer, Integer> resultMap) {
-        IResult[] results = resultMap.entrySet().stream()
-                .map(entry -> new ResultMock(this.match.getId(), new PlayerMock(entry.getKey()), entry.getValue()))
-                .toArray(IResult[]::new);
-
-        this.forEachRmi((databasePlayer, rmiProxyController) -> rmiProxyController.postResults(results));
-
-        // TODO: send results
     }
     
     // ------ UTILS ------
@@ -232,6 +252,24 @@ public class MatchCommunicationsManager {
 
     public void forEachSocket(BiConsumer<DatabasePlayer, AuthenticatedClientHandler> biConsumer) {
         this.socketPlayersHandler.forEach(biConsumer);
+    }
+    
+    public void sendToPlayer(DatabasePlayer databasePlayer, FunctionalExceptionWrapper.UnsafeBiConsumer<AuthenticatedClientHandler, MatchRMIProxyController> biConsumer) throws IOException {
+        try {
+            this.rmiPlayersHandler.computeIfPresent(databasePlayer, wrap((player, rmiProxyController) -> {
+                biConsumer.accept(null, rmiProxyController);
+                return rmiProxyController;
+            }));
+        
+            this.socketPlayersHandler.computeIfPresent(databasePlayer, wrap((player, authenticatedClientHandler) -> {
+                biConsumer.accept(authenticatedClientHandler, null);
+                return authenticatedClientHandler;
+            }));
+        }
+        catch (FunctionalExceptionWrapper e) {
+            e.tryUnwrap(RemoteException.class)
+                    .tryFinalUnwrap(IOException.class);
+        }
     }
     
     // ------ EXTERNAL EVENTS ------

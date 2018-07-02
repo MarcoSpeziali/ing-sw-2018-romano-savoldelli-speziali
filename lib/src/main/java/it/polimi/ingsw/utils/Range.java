@@ -1,5 +1,9 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
+import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
@@ -11,13 +15,16 @@ import java.util.regex.Pattern;
  *
  * @param <T> The values type that must implement Comparable.
  */
-public class Range<T extends Comparable<? super T> & Serializable> implements Serializable {
+public class Range<T extends Comparable<? super T> & Serializable> implements JSONSerializable {
+    
     private static final long serialVersionUID = 3306661517507071620L;
+    
     /**
      * The stating value of the range.
      */
     @SuppressWarnings("squid:S1948")
     protected final T start;
+    
     /**
      * The ending value of the range.
      */
@@ -38,7 +45,11 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
      * @param start The stating value of the range.
      * @param end   The ending value of the range.
      */
-    public Range(T start, T end) {
+    @JSONDesignatedConstructor
+    public Range(
+            @JSONElement("start") T start,
+            @JSONElement("end") T end
+    ) {
         Objects.requireNonNull(start);
         Objects.requireNonNull(end);
 
@@ -152,6 +163,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
     /**
      * @return The stating value of the range.
      */
+    @JSONElement("start")
     public T getStart() {
         return start;
     }
@@ -159,6 +171,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements Se
     /**
      * @return The ending value of the range.
      */
+    @JSONElement("end")
     public T getEnd() {
         return end;
     }

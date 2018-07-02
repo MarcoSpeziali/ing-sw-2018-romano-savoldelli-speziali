@@ -5,13 +5,12 @@ import it.polimi.ingsw.controllers.proxies.RemotelyClosable;
 import it.polimi.ingsw.controllers.proxies.RemotelyInitializable;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.utils.Range;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
     
@@ -32,15 +31,15 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
             // set interi -> posizioni in cui non puo andare
             // if JSONS instanceof()
                 // -- mostrare roundtrack
-        Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() throws IOException;
+        ChoosePositionForLocationRequest waitForChoosePositionFromLocation() throws IOException, InterruptedException;
         void postChosenPosition(Integer chosenPosition) throws IOException;
 
             // range interi 2:5
-        Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() throws IOException;
-        void postChosenEffects(IEffect[] effects) throws IOException;
+        Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() throws IOException;
+        void postChosenActions(IAction[] actions) throws IOException;
 
             // 0:n volte
-        IEffect waitForContinueToRepeat() throws IOException;
+        IAction waitForContinueToRepeat() throws IOException;
         void postContinueToRepeatChoice(boolean continueToRepeat) throws IOException;
 
             //

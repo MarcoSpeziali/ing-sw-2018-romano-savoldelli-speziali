@@ -3,16 +3,15 @@ package it.polimi.ingsw.controllers.proxies.rmi;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.utils.Range;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class MatchRMIProxyController extends UnicastRemoteObject implements MatchController, HeartBeatListener {
@@ -201,28 +200,53 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         toolCardConsumer.accept(toolCard);
     }
     
+    private final transient Object choosePositionSyncObject = new Object();
+    private ChoosePositionForLocationRequest choosePositionRequest;
+    private transient Consumer<Integer> choosePositionConsumer;
+    
+    public void setChoosePositionConsumer(Consumer<Integer> choosePositionConsumer) {
+        this.choosePositionConsumer = choosePositionConsumer;
+    }
+    
+    public void postChoosePositionForLocation(ChoosePositionForLocationRequest choosePositionRequest) {
+        synchronized (choosePositionSyncObject) {
+            this.choosePositionRequest = choosePositionRequest;
+            
+            choosePositionSyncObject.notifyAll();
+        }
+    }
+    
     @Override
-    public Map.Entry<JSONSerializable, Set<Integer>> waitForChoosePositionFromLocation() {
-        return null;
+    public ChoosePositionForLocationRequest waitForChoosePositionFromLocation() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (choosePositionSyncObject) {
+            while (choosePositionRequest == null) {
+                choosePositionSyncObject.wait();
+            }
+    
+            ChoosePositionForLocationRequest temp = this.choosePositionRequest;
+            this.choosePositionRequest = null;
+            return temp;
+        }
     }
     
     @Override
     public void postChosenPosition(Integer chosenPosition) {
-    
+        choosePositionConsumer.accept(chosenPosition);
     }
 
     @Override
-    public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect() {
+    public Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() {
         return null;
     }
     
     @Override
-    public void postChosenEffects(IEffect[] effects) {
+    public void postChosenActions(IAction[] actions) {
     
     }
     
     @Override
-    public IEffect waitForContinueToRepeat() {
+    public IAction waitForContinueToRepeat() {
         return null;
     }
     

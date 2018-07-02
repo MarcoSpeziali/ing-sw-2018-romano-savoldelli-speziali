@@ -419,10 +419,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                             .map(entry -> Map.entry(entry.getKey(), ((Objective) entry.getValue().getObjective())))
                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
             );
-            partialResults = ResultsManager.finalizeWithPenaltiesAndBonus(
+            
+            this.matchCommunicationsManager.sendResults(ResultsManager.finalizeWithPenaltiesAndBonus(
                     this.databaseMatch.getId(),
                     partialResults
-            );
+            ));
 
             this.matchState = MatchState.CLOSING_MATCH;
         }
