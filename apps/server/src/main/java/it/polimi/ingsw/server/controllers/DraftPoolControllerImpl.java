@@ -25,7 +25,7 @@ public class DraftPoolControllerImpl /*implements OnDiePickedListener, OnDiePutL
     }
     
     public Die[] pickAllDiceLeft() {
-        return this.draftPool.getLocations().stream()
+        return this.draftPool.getFullLocations().stream()
                 .map(this.draftPool::pickDie)
                 .toArray(Die[]::new);
     }

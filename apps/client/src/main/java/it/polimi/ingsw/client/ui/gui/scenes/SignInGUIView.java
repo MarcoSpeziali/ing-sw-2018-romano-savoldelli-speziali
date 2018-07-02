@@ -74,14 +74,14 @@ public class SignInGUIView extends SignInController {
 
                     if (Settings.getSettings().getProtocol() == Constants.Protocols.SOCKETS) {
                         lobbyController = new LobbySocketProxyController(
-                                Settings.getSettings().getServerSocketAddress(),
+                                Settings.getSettings().getServerAddress(),
                                 Settings.getSettings().getServerSocketPort(),
                                 SignInManager.getManager().getToken()
                         );
                     }
                     else {
                         OneTimeRMIResponseProvider<LobbyInterface> oneTimeRMIResponseProvider = new OneTimeRMIResponseProvider<>(
-                                Settings.getSettings().getServerRMIAddress(),
+                                Settings.getSettings().getServerAddress(),
                                 Settings.getSettings().getServerRMIPort(),
                                 LobbyInterface.class
                         );

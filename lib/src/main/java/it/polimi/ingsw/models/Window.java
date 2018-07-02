@@ -103,8 +103,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
      * @return an instance of {@link List} of occupied locations.
      */
     @Override
-    public List<Integer> getLocations() {
+    public List<Integer> getFullLocations() {
         List<Integer> locations = new LinkedList<>();
+
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
                 if (this.cells[i][j].isOccupied()) {
@@ -112,6 +113,22 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
                 }
             }
         }
+
+        return locations;
+    }
+
+    @Override
+    public List<Integer> getEmptyLocations() {
+        List<Integer> locations = new LinkedList<>();
+
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.columns; j++) {
+                if (!this.cells[i][j].isOccupied()) {
+                    locations.add(i * this.columns + j);
+                }
+            }
+        }
+
         return locations;
     }
 
@@ -320,7 +337,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
             throw new IllegalArgumentException("Die's shade and color must both be set!");
         }
 
-        if (this.getLocations().isEmpty()) {
+        if (this.getFullLocations().isEmpty()) {
             return this.getEdgesPositions(die, ignoreColor, ignoreShade, ignoreAdjacency);
         }
 
@@ -333,7 +350,7 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         }
 
         else {
-            for (int location : this.getLocations()) {
+            for (int location : this.getFullLocations()) {
                 availablePositions.addAll(cellsAround(die, location, ignoreColor, ignoreShade));
             }
         }

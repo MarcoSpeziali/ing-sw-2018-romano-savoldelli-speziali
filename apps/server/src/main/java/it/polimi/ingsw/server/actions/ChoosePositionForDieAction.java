@@ -30,12 +30,20 @@ public class ChoosePositionForDieAction extends Action {
     public Object run(Context context) {
         super.run(context);
 
-        return this.userInteractionProvider.choosePositionForDie(
+        Die dieInContext = this.die.get(context);
+
+        Integer position = this.userInteractionProvider.choosePositionForDie(
                 this.from.get(context),
-                this.die.get(context),
+                dieInContext,
                 this.ignoreColor,
                 this.ignoreShade,
                 this.ignoreAdjacency
         );
+
+        if (position == null) {
+            throw new UnCompletableActionException(dieInContext);
+        }
+
+        return position;
     }
 }

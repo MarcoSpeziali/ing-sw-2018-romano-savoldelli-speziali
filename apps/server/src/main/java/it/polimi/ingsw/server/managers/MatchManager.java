@@ -263,7 +263,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         RoundTrackControllerImpl roundTrackController = new RoundTrackControllerImpl(roundTrack);
         DraftPoolControllerImpl draftPoolController = new DraftPoolControllerImpl(draftPool);
         ToolCardControllerImpl[] toolCardControllers = Arrays.stream(toolCards)
-                .map((ToolCard toolCard) -> new ToolCardControllerImpl(toolCard, this.databaseMatch.getId()))
+                .map((ToolCard toolCard) -> new ToolCardControllerImpl(toolCard, this.databaseMatch.getId(), this.matchObjectsManager))
                 .toArray(ToolCardControllerImpl[]::new);
         
         this.matchObjectsManager.setRoundTrackController(roundTrackController);

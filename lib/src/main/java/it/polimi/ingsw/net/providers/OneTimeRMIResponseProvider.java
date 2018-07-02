@@ -113,8 +113,7 @@ public class OneTimeRMIResponseProvider<R extends Remote> implements OneTimeNetw
      */
     private String getRMIEndPointName(EndPointFunction endPointFunction) {
         return String.format(
-                "//%s:%d/%s",
-                getServerAddress(),
+                "//%d/%s",
                 getServerPort(),
                 endPointFunction.toString()
         );

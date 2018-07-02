@@ -45,13 +45,13 @@ public class SignUpManager {
         
         if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
             oneTimeNetworkResponseProvider = new OneTimeSocketResponseProvider(
-                    Settings.getSettings().getServerSocketAddress(),
+                    Settings.getSettings().getServerAddress(),
                     Settings.getSettings().getServerSocketPort()
             );
         }
         else {
             oneTimeNetworkResponseProvider = new OneTimeRMIResponseProvider<>(
-                    Settings.getSettings().getServerRMIAddress(),
+                    Settings.getSettings().getServerAddress(),
                     Settings.getSettings().getServerRMIPort(),
                     SignUpInterface.class
             );

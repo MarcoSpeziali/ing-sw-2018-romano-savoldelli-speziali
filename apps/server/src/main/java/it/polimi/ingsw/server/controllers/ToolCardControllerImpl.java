@@ -8,16 +8,20 @@ import it.polimi.ingsw.server.Effect;
 import it.polimi.ingsw.server.actions.Action;
 import it.polimi.ingsw.server.actions.ActionGroup;
 import it.polimi.ingsw.server.actions.ExecutableAction;
+import it.polimi.ingsw.server.actions.UnCompletableActionException;
+import it.polimi.ingsw.server.managers.MatchObjectsManager;
 import it.polimi.ingsw.server.utils.GlobalContext;
 
 public class ToolCardControllerImpl {
     
     private final ToolCard toolCard;
     private final int matchId;
-    
-    public ToolCardControllerImpl(ToolCard toolCard, int matchId) {
+    private final MatchObjectsManager matchObjectsManager;
+
+    public ToolCardControllerImpl(ToolCard toolCard, int matchId, MatchObjectsManager matchObjectsManager) {
         this.toolCard = toolCard;
         this.matchId = matchId;
+        this.matchObjectsManager = matchObjectsManager;
     }
     
     public ToolCard getToolCard() {
@@ -30,10 +34,15 @@ public class ToolCardControllerImpl {
         }
         
         Effect effect = (Effect) this.toolCard.getEffect();
-        effect.run(
-                toolCard.getCardId(),
-                GlobalContext.getGlobalContext().getContextForPlayer(livePlayer.getPlayer(), this.matchId)
-        );
+        try {
+            effect.run(
+                    toolCard.getCardId(),
+                    GlobalContext.getGlobalContext().getContextForPlayer(livePlayer.getPlayer(), this.matchId)
+            );
+        }
+        catch (UnCompletableActionException e) {
+            this.matchObjectsManager.getDraftPoolController().getDraftPool().putDie(e.getDie());
+        }
     }
     
     public boolean canUse(ILivePlayer livePlayer) {

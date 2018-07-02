@@ -204,23 +204,22 @@ public class ServerApp {
 
         Registry registry = LocateRegistry.createRegistry(Settings.getSettings().getRmiPort());
 
-        registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_REQUEST_AUTHENTICATION), new SignInEndPoint());
+        registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_IN_FULFILL_CHALLENGE), new SignInEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.SIGN_UP), new SignUpEndPoint());
         registry.rebind(getRMIEndPointName(EndPointFunction.LOBBY_JOIN_REQUEST_RMI), LobbyEndPoint.getInstance());
         registry.rebind(getRMIEndPointName(EndPointFunction.MATCH_MIGRATION_RMI), new MatchEndPoint());
     }
 
     /**
-     * Returns the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
+     * Returns the name for the specified {@link EndPointFunction}. (//$port/$endpoint)
      *
      * @param endPointFunction the {@link EndPointFunction}
-     * @return the name for the specified {@link EndPointFunction}. (//$host:$port/$endpoint)
+     * @return the name for the specified {@link EndPointFunction}. (//$port/$endpoint)
      */
     private static String getRMIEndPointName(EndPointFunction endPointFunction) {
         return String.format(
-                "//%s:%d/%s",
-                Settings.getSettings().getRmiHost(),
+                "//%d/%s",
                 Settings.getSettings().getRmiPort(),
                 endPointFunction.toString()
         );

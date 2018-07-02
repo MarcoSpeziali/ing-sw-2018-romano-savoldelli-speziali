@@ -4,11 +4,11 @@ import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 
 public interface IAction extends JSONSerializable {
-    @JSONElement("id")
+    /*@JSONElement("id")
     String getId();
 
     @JSONElement("name")
-    String getName();
+    String getName();*/
 
     @JSONElement("description")
     String getDescription();

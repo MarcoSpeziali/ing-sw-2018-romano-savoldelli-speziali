@@ -90,16 +90,31 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
      * @return a {@link LinkedList} of locations of dice.
      */
     @Override
-    public List<Integer> getLocations() {
+    public List<Integer> getFullLocations() {
         LinkedList<Integer> locations = new LinkedList<>();
 
         for (int i = 0; i < dice.length; i++) {
-            locations.add(i);
+            if (dice[i] != null) {
+                locations.add(i);
+            }
         }
 
         return locations;
     }
-    
+
+    @Override
+    public List<Integer> getEmptyLocations() {
+        LinkedList<Integer> locations = new LinkedList<>();
+
+        for (int i = 0; i < dice.length; i++) {
+            if (dice[i] == null) {
+                locations.add(i);
+            }
+        }
+
+        return locations;
+    }
+
     @Override
     public byte getMaxNumberOfDice() {
         return maxNumberOfDice;
@@ -107,7 +122,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
     
     @Override
     public Map<Integer, IDie> getLocationDieMap() {
-        return this.getLocations().stream()
+        return this.getFullLocations().stream()
                 .collect(Collectors.toMap(o -> o, o -> new DieMock(this.dice[o])));
     }
     
@@ -124,7 +139,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
      */
     @Override
     public int getNumberOfDice() {
-        return this.dice.length;
+        return (int) Arrays.stream(this.dice).filter(Objects::nonNull).count();
     }
 
     @Override
@@ -145,7 +160,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
 
     @Override
     public int getFreeSpace() {
-        return (int) (this.dice.length - Arrays.stream(this.dice).filter(Objects::nonNull).count());
+        return (int) Arrays.stream(this.dice).filter(Objects::isNull).count();
     }
 
     public void addPutListener(OnDiePutListener onDiePutListener) {

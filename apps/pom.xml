@@ -6,6 +6,7 @@
         <artifactId>LM37</artifactId>
         <groupId>it.polimi.ing-sw-2018-romano-savoldelli-speziali</groupId>
         <version>0.1</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>apps</artifactId>
@@ -22,12 +23,6 @@
             <groupId>net.sf.jopt-simple</groupId>
             <artifactId>jopt-simple</artifactId>
             <version>5.0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>it.polimi.ing-sw-2018-romano-savoldelli-speziali</groupId>
-            <artifactId>lib</artifactId>
-            <version>0.1</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

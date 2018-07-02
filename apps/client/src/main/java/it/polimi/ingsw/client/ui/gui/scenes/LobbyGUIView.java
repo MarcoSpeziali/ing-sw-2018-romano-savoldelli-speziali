@@ -110,7 +110,7 @@ public class LobbyGUIView implements Initializable {
 
                     if (Settings.getSettings().getProtocol() == Constants.Protocols.RMI) {
                         OneTimeRMIResponseProvider<MatchInterface> oneTimeRMIResponseProvider = new OneTimeRMIResponseProvider<>(
-                                Settings.getSettings().getServerRMIAddress(),
+                                Settings.getSettings().getServerAddress(),
                                 Settings.getSettings().getServerRMIPort(),
                                 MatchInterface.class
                         );
@@ -135,9 +135,10 @@ public class LobbyGUIView implements Initializable {
                     MatchGUIView matchGUIView = loader.getController();
                     matchGUIView.setModel(matchController);
 
-                    // MatchGUIView gameDashboardGUIController = loader.getController();
-                    // gameDashboardGUIController...
                     SagradaGUI.showStage(parent, 1280, 720);
+                    SagradaGUI.primaryStage.setFullScreen(
+                            Settings.getSettings().isFullScreenMode()
+                    );
                 })));
     }
     

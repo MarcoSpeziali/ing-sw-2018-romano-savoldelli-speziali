@@ -12,7 +12,7 @@
         <module name="server" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="9">
       <module name="apps" target="9" />
       <module name="client" target="9" />
       <module name="lib" target="9" />

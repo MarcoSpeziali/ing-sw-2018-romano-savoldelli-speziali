@@ -7,12 +7,10 @@ import it.polimi.ingsw.utils.SettingsBase;
 public final class Settings extends SettingsBase {
 
     private static Settings sharedInstance;
-    @Setting(id = "server-socket-address", defaultValue = "idra.weblink.it")
-    private String serverSocketAddress;
+    @Setting(id = "server-address", defaultValue = "idra.weblink.it")
+    private String serverAddress;
     @Setting(id = "server-socket-port", defaultValue = "9000", type = Integer.class)
     private int serverSocketPort;
-    @Setting(id = "server-rmi-address", defaultValue = "idra.weblink.it")
-    private String serverRMIAddress;
     @Setting(id = "server-rmi-port", defaultValue = "1099", type = Integer.class)
     private int serverRMIPort;
     @Setting(id = "connection-protocol", defaultValue = "SOCKETS", type = Constants.Protocols.class)
@@ -39,15 +37,12 @@ public final class Settings extends SettingsBase {
         }
     }
 
-    /**
-     * @return
-     */
-    public String getServerSocketAddress() {
-        return serverSocketAddress;
+    public String getServerAddress() {
+        return serverAddress;
     }
 
-    public void setServerSocketAddress(String serverSocketAddress) {
-        this.serverSocketAddress = serverSocketAddress;
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
     }
 
     public int getServerSocketPort() {
@@ -56,14 +51,6 @@ public final class Settings extends SettingsBase {
 
     public void setServerSocketPort(int serverSocketPort) {
         this.serverSocketPort = serverSocketPort;
-    }
-
-    public String getServerRMIAddress() {
-        return serverRMIAddress;
-    }
-
-    public void setServerRMIAddress(String serverRMIAddress) {
-        this.serverRMIAddress = serverRMIAddress;
     }
 
     public int getServerRMIPort() {

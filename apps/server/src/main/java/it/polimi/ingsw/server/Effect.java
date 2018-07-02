@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.net.mocks.IEffect;
 import it.polimi.ingsw.models.ToolCard;
+import it.polimi.ingsw.net.mocks.IEffect;
 import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.server.constraints.EvaluableConstraint;
@@ -125,7 +125,7 @@ public class Effect implements IEffect {
         if (!canRun(playerContext)) {
             throw new ConstraintEvaluationException();
         }
-    
+
         playerContext.snapshot(
                 "Effect(" + cardId + ")",
                 snapshot -> this.actions.forEach(action -> {

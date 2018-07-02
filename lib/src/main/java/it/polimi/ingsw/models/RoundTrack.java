@@ -136,7 +136,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
     public Die pickDie(Die die) {
         AtomicInteger pickLocation = new AtomicInteger(-1);
         
-        this.getLocations().forEach(location -> {
+        this.getFullLocations().forEach(location -> {
             int roundIndex = (location & 0x0000FF00) >> 8;
             int dieIndex = location & 0x000000FF;
             
@@ -181,7 +181,7 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
     }
 
     @Override
-    public List<Integer> getLocations() {
+    public List<Integer> getFullLocations() {
         // an integer is a 4 byte number, the first two are set to 0
         // the third byte identifies the round index
         // the fourth one identifies the index of a die in a round
@@ -191,6 +191,23 @@ public class RoundTrack implements ChoosablePutLocation, ChoosablePickLocation, 
         for (int i = 0; i < this.rounds.size(); i++) {
             for (int j = 0; j < this.rounds.get(i).size(); j++) {
                 positions.add(computeLocation(i, j));
+            }
+        }
+
+        return positions;
+    }
+
+    @Override
+    public List<Integer> getEmptyLocations() {
+        // an integer is a 4 byte number, the first two are set to 0
+        // the third byte identifies the round index
+        // the fourth one identifies the index of a die in a round
+
+        List<Integer> positions = new LinkedList<>();
+
+        for (byte i = 0; i < this.numberOfRounds; i++) {
+            if (this.rounds.get(i).isEmpty()) {
+                positions.add(computeLocation(i, 0));
             }
         }
 

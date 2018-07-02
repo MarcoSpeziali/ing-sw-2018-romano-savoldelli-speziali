@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
-import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.core.ToolCardConditionException;
 import it.polimi.ingsw.net.Header;
@@ -25,10 +24,7 @@ import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
@@ -189,23 +185,19 @@ public class MatchCommunicationsManager {
 
     // ------ TOOL CARDS ------
     
-    public Integer sendChoosePosition(DatabasePlayer databasePlayer, JSONSerializable jsonSerializable, GlassColor color, Integer shade) throws IOException {
-        return 0;
-    }
-    
-    public Integer sendChoosePositionForDie(DatabasePlayer databasePlayer, JSONSerializable jsonSerializable, IDie die, Boolean ignoreColor, Boolean ignoreShade, Boolean ignoreAdjacency)  throws IOException {
+    public Integer sendChoosePosition(DatabasePlayer databasePlayer, JSONSerializable jsonSerializable, Set<Integer> unavailableLocations) throws IOException {
         return 0;
     }
 
-    public Integer sendChooseShade(DatabasePlayer databasePlayer, IDie die) {
+    public Integer sendChooseShade(DatabasePlayer databasePlayer, IDie die) throws IOException {
         return 0;
     }
     
-    public boolean sendShouldRepeat(IAction action, int alreadyRepeatedFor, int maximumRepetitions) {
+    public boolean sendShouldRepeat(IAction action, int alreadyRepeatedFor, int maximumRepetitions) throws IOException {
         return false;
     }
     
-    public List<IAction> getChosenActions(List<IAction> actions, Range<Integer> chooseBetween) {
+    public List<IAction> sendChooseActions(List<IAction> actions, Range<Integer> chooseBetween) throws IOException {
         return null;
     }
     

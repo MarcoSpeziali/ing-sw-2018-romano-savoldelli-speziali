@@ -26,13 +26,13 @@ public class LobbyManager {
     private LobbyManager() {
         if (Settings.getSettings().getProtocol().equals(Constants.Protocols.SOCKETS)) {
             persistentNetworkInteractionProvider = new PersistentSocketInteractionProvider(
-                    Settings.getSettings().getServerSocketAddress(),
+                    Settings.getSettings().getServerAddress(),
                     Settings.getSettings().getServerSocketPort()
             );
         }
         else {
             persistentNetworkInteractionProvider = new PersistentRMIInteractionProvider<>(
-                    Settings.getSettings().getServerRMIAddress(),
+                    Settings.getSettings().getServerAddress(),
                     Settings.getSettings().getServerRMIPort(),
                     LobbyInterface.class
             );

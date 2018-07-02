@@ -71,8 +71,7 @@ public class PersistentRMIInteractionProvider<R extends Remote> extends Persiste
      */
     private String getRMIEndPointName(EndPointFunction endPointFunction) {
         return String.format(
-                "//%s:%d/%s",
-                this.remoteAddress,
+                "//%d/%s",
                 this.remotePort,
                 endPointFunction.toString()
         );

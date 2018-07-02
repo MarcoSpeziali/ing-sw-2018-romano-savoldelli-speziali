@@ -32,7 +32,7 @@ class DraftPoolTest {
 
     @Test
     void getLocationsTest() {
-        Assertions.assertEquals(draftPool.getNumberOfDice(), draftPool.getLocations().size());
+        Assertions.assertEquals(draftPool.getNumberOfDice(), draftPool.getFullLocations().size());
     }
 
     @Test
@@ -42,7 +42,7 @@ class DraftPoolTest {
 
     @Test
     void getNumberOfDiceTest() {
-        Assertions.assertEquals(draftPool.getNumberOfDice(), draftPool.getDice().size());
+        Assertions.assertEquals(0, draftPool.getNumberOfDice());
     }
 
     @Test

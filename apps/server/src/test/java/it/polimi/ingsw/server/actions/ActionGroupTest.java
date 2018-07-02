@@ -205,7 +205,7 @@ class ActionGroupTest {
     @Test
     void testOptionalRepetitions() {
         doNothing().when(this.choosablePutLocation).putDie(any(Die.class), eq(15));
-        when(this.actionGroupCallbacks.shouldRepeat(this.actionGroup, anyInt(), eq(5))).thenReturn(false);
+        when(this.actionGroupCallbacks.shouldRepeat(same(this.actionGroup), anyInt(), eq(5))).thenReturn(false);
 
         this.actionGroup = new ActionGroup(
                 this.actionData,
@@ -234,7 +234,6 @@ class ActionGroupTest {
     @Test
     void testOptionalRepetitionsWithChooseBetween() {
         doNothing().when(this.choosablePutLocation).putDie(any(Die.class), eq(15));
-        when(this.actionGroupCallbacks.shouldRepeat(this.actionGroup,anyInt(), eq(5))).thenReturn(true);
         when(this.actionGroupCallbacks.getChosenActions(any(), any())).thenAnswer(invocationOnMock -> {
             @SuppressWarnings("unchecked")
             List<ExecutableAction> actions = (List<ExecutableAction>) invocationOnMock.getArguments()[0];
@@ -244,7 +243,7 @@ class ActionGroupTest {
         this.actionGroup = new ActionGroup(
                 this.actionData,
                 new IterableRange<>(0, 5, num -> ++num),
-                IterableRange.singleValued(4),
+                null,
                 List.of(
                         new PlaceAction(
                                 new ActionData(
@@ -258,6 +257,9 @@ class ActionGroupTest {
                         )
                 )
         );
+
+        when(this.actionGroupCallbacks.shouldRepeat(same(this.actionGroup), anyInt(), eq(5))).thenReturn(true);
+
         this.actionGroup.setCallbacks(this.actionGroupCallbacks);
 
         this.actionGroup.run(this.context);
@@ -268,11 +270,6 @@ class ActionGroupTest {
     @Test
     void testOptionalRepetitionsWithMandatoryRepetitions() {
         doNothing().when(this.choosablePutLocation).putDie(any(Die.class), eq(15));
-        when(this.actionGroupCallbacks.shouldRepeat(this.actionGroup, anyInt(), eq(7))).thenAnswer(invocationOnMock -> {
-            Integer alreadyRepeatedFor = invocationOnMock.getArgumentAt(0, Integer.class);
-
-            return alreadyRepeatedFor <= 5;
-        });
 
         this.actionGroup = new ActionGroup(
                 this.actionData,
@@ -291,6 +288,13 @@ class ActionGroupTest {
                         )
                 )
         );
+
+        when(this.actionGroupCallbacks.shouldRepeat(same(this.actionGroup), anyInt(), eq(7))).thenAnswer(invocationOnMock -> {
+            Integer alreadyRepeatedFor = invocationOnMock.getArgumentAt(1, Integer.class);
+
+            return alreadyRepeatedFor <= 5;
+        });
+
         this.actionGroup.setCallbacks(this.actionGroupCallbacks);
 
         this.actionGroup.run(this.context);

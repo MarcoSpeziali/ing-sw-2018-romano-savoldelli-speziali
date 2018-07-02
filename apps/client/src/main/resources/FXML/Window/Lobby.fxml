@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.scenes.LobbyGUIView">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.scenes.LobbyGUIView">
     <left>
         <Pane prefHeight="538.0" prefWidth="360.0" style="-fx-background-color: #2ecc71;" BorderPane.alignment="CENTER">
             <children>
@@ -27,12 +27,12 @@
                     </font>
                 </JFXButton>
                 <JFXListView fx:id="playersListView" depth="4" fixedCellSize="50.0" focusTraversable="false" layoutX="81.0" layoutY="131.0" prefHeight="203.0" prefWidth="198.0" style="-fx-background-color: #00000000;" />
-                <Label id="seconds" fx:id="secondsLabel" layoutX="140.0" layoutY="337.0" text="30" textFill="#c7ffde">
+                <Label id="seconds" fx:id="secondsLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="334.0" prefHeight="91.0" prefWidth="353.0" text="30" textAlignment="CENTER" textFill="#c7ffde">
                     <font>
                         <Font size="75.0" />
                     </font>
                 </Label>
-                <Label fx:id="secondsTextLabel" alignment="CENTER" layoutY="428.0" prefHeight="16.0" prefWidth="360.0" text="second(s) left" textFill="#c7ffde" />
+                <Label fx:id="secondsTextLabel" alignment="CENTER" layoutY="428.0" prefHeight="16.0" prefWidth="360.0" text="second(s) left" textAlignment="CENTER" textFill="#c7ffde" />
             </children>
         </Pane>
     </left>

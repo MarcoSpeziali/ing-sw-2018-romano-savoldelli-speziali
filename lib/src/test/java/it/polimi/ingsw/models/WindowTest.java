@@ -119,11 +119,11 @@ class WindowTest {
 
     @Test
     void getLocations() {
-        Assertions.assertTrue(window.getLocations().isEmpty());
+        Assertions.assertTrue(window.getFullLocations().isEmpty());
         window.putDie(die, 1);
-        Assertions.assertFalse(window.getLocations().isEmpty());
-        Assertions.assertTrue(window.getLocations().contains(1));
-        Assertions.assertFalse(window.getLocations().contains(0));
+        Assertions.assertFalse(window.getFullLocations().isEmpty());
+        Assertions.assertTrue(window.getFullLocations().contains(1));
+        Assertions.assertFalse(window.getFullLocations().contains(0));
     }
 
     @Test

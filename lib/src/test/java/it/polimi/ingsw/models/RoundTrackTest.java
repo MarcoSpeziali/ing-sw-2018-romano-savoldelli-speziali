@@ -74,9 +74,9 @@ class RoundTrackTest {
         roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
         roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
         roundTrack.setDieForRoundAtIndex(die2, (byte) 2, (byte) 1);
-        Assertions.assertEquals(0x00000200, roundTrack.getLocations().get(1).intValue());
-        Assertions.assertEquals(0x00000201, roundTrack.getLocations().get(2).intValue());
-        Assertions.assertEquals(die3, roundTrack.pickDie(roundTrack.getLocations().get(1)));
+        Assertions.assertEquals(0x00000200, roundTrack.getFullLocations().get(1).intValue());
+        Assertions.assertEquals(0x00000201, roundTrack.getFullLocations().get(2).intValue());
+        Assertions.assertEquals(die3, roundTrack.pickDie(roundTrack.getFullLocations().get(1)));
     }
 
     @Test
