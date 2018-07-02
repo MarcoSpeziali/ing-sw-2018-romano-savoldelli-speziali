@@ -230,8 +230,8 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                                 window.setOnMousePressed(event -> {
                                     centerPane.setCenter(window);
-                                    window.setScaleY(2.5);
-                                    window.setScaleX(2.5);
+                                    window.setScaleY(1.7);
+                                    window.setScaleX(1.7);
                                     BorderPane.setMargin(window, new Insets(0, 0, 100, 0));
                                     windowGUIView.setProperty(Constants.Property.NONE);
 

@@ -580,7 +580,7 @@ public class MatchGUITest extends Application {
                 return null;
             }
         });
-       // primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(true);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
