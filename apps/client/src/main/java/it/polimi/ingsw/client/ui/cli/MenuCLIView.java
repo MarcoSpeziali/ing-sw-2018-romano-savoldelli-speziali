@@ -4,7 +4,7 @@ import it.polimi.ingsw.controllers.MenuController;
 
 import java.util.Scanner;
 
-public class MenuCLIView implements CLIView {
+public class MenuCLIView {
 
     private int command;
     private MenuController menuController;

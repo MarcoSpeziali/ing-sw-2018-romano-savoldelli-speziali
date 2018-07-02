@@ -2,27 +2,28 @@ package it.polimi.ingsw.client.ui.cli;
 
 
 import it.polimi.ingsw.models.Window;
+import it.polimi.ingsw.net.mocks.IWindow;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class WindowCLIView implements CLIView {
+public class WindowCLIView extends CLIView<IWindow> {
 
     private CellCLIView[][] cellViews;
-    private Scanner scanner = new Scanner(System.in); // FIXME usage?
 
     public WindowCLIView() {
     }
-/*
+
     @Override
-    public void setWindow(Window window) throws IOException {
-        super.setWindow(window);
+    public void setModel(IWindow iWindow) throws IOException {
+        super.setModel(iWindow);
 
-        this.cellViews = new CellCLIView[window.getRows()][window.getColumns()];
+        this.cellViews = new CellCLIView[iWindow.getRows()][iWindow.getColumns()];
 
-        for (int i = 0; i < window.getRows(); i++) {
-            for (int j = 0; j < window.getColumns(); j++) {
-                cellViews[i][j] = new CellCLIView(window.getCells()[i][j]);
+        for (int i = 0; i < iWindow.getRows(); i++) {
+            for (int j = 0; j < iWindow.getColumns(); j++) {
+                cellViews[i][j] = new CellCLIView();
+                cellViews[i][j].setModel(iWindow.getCells()[i][j]);
             }
         }
     }
@@ -31,11 +32,11 @@ public class WindowCLIView implements CLIView {
     public void render() {
 
         char c = 'A';
-        System.out.println("Window name:\t" + this.window.getId());
-        System.out.println("Difficulty:\t\t" + this.window.getDifficulty() + "\n");
+        System.out.println("Window name:\t" + this.model.getId());
+        System.out.println("Difficulty:\t\t" + this.model.getDifficulty() + "\n");
 
-        for (int i = -1; i < window.getRows(); i++) {
-            for (int j = -1; j < window.getColumns(); j++) {
+        for (int i = -1; i < model.getRows(); i++) {
+            for (int j = -1; j < model.getColumns(); j++) {
                 if (i == -1 && j == -1) {
                     System.out.print("  ");
                 }
@@ -55,6 +56,10 @@ public class WindowCLIView implements CLIView {
         System.out.println();
 
 
-    }*/
+    }
 
+    @Override
+    public void init() {
+
+    }
 }

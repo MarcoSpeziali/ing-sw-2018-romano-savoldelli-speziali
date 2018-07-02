@@ -1,21 +1,27 @@
 package it.polimi.ingsw.client.ui.cli;
 
-import it.polimi.ingsw.models.ObjectiveCard;
+import it.polimi.ingsw.net.mocks.IObjectiveCard;
 
-public class ObjectiveCardCLIView implements CLIView {
+import java.io.IOException;
 
- /*   public ObjectiveCardCLIView(ObjectiveCard objectiveCard) {
-        super(objectiveCard);
+public class ObjectiveCardCLIView extends CLIView<IObjectiveCard> {
 
+    public void setModel(IObjectiveCard iObjectiveCard) throws IOException {
+        super.setModel(iObjectiveCard);
     }
 
     @Override
     public void render() {
-        System.out.println("card id: " + this.objectiveCard.getId());
-        System.out.println("titolo: " + this.objectiveCard.getTitle().toString());
-        System.out.println("descrizione: " + this.objectiveCard.getDescription().toString());
-        System.out.println("visibility: " + this.objectiveCard.getVisibility().toString());
-        System.out.println("obiettivo :" + this.objectiveCard.getObjective());
+        System.out.println("card id: " + this.model.getId());
+        System.out.println("titolo: " + this.model.getTitle());
+        System.out.println("descrizione: " + this.model.getDescription());
+        System.out.println("visibility: " + this.model.getVisibility().toString());
+        System.out.println("obiettivo :" + this.model.getObjective());
 
-    }*/
+    }
+
+    @Override
+    public void init() {
+
+    }
 }
