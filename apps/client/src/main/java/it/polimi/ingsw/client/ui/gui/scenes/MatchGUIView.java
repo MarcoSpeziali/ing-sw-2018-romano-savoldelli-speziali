@@ -23,15 +23,11 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
-import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
@@ -59,6 +55,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     public BorderPane centerPane;
 
     public DraftPoolGUIView draftPoolGUIView;
+    public WindowGUIView windowGUIView;
 
     @FXML
     public Label secondsLabel;
@@ -190,6 +187,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     Node draftPoolNode = draftPoolLoader.load();
                     DraftPoolGUIView draftPoolGUIView = draftPoolLoader.getController();
                     draftPoolGUIView.setModel(iDraftPool);
+                    draftPoolGUIView.setProperty(Constants.Property.NONE);
                     centerPane.setTop(draftPoolNode);
 
                     FXMLLoader roundTrackLoader = new FXMLLoader();
@@ -222,9 +220,9 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 Node window = loader.load();
                                 window.setScaleX(1.2);
                                 window.setScaleY(1.2);
-                                WindowGUIView windowGUIView = loader.getController();
+                                windowGUIView = loader.getController();
                                 windowGUIView.setModel(iWindows[i]);
-                                windowGUIView.setProperty(Property.NONE);
+                                windowGUIView.setProperty(Constants.Property.NONE);
 
                                 int finalI = i;
 
@@ -235,7 +233,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                                     window.setScaleY(2.5);
                                     window.setScaleX(2.5);
                                     BorderPane.setMargin(window, new Insets(0, 0, 100, 0));
-                                    windowGUIView.setProperty(Property.OWNED);
+                                    windowGUIView.setProperty(Constants.Property.NONE);
 
                                     try {
                                         this.model.respondToWindowRequest(iWindows[finalI]);
@@ -277,7 +275,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     vBox.getChildren().addAll(node, label);
                     WindowGUIView windowGUIView = loader.getController();
                     windowGUIView.setModel(iWindow);
-                    windowGUIView.setProperty(Property.OPPONENT);
+                    windowGUIView.setProperty(Constants.Property.OPPONENT);
                     hBoxWindows.setAlignment(Pos.TOP_CENTER);
                     hBoxWindows.getChildren().add(vBox);
                     hBoxWindows.setSpacing(30);
@@ -433,7 +431,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     node = loader.load();
                     WindowGUIView windowGUIView = loader.getController();
                     windowGUIView.setModel((IWindow) object);
-                    windowGUIView.setProperty(Property.SELECTION);
+                    windowGUIView.setProperty(Constants.Property.SELECTION);
                     for (Integer location : set) {
                         Node cell = windowGUIView.gridPane.getChildren().get(location);
                         cell.setDisable(true);
@@ -482,13 +480,16 @@ public class MatchGUIView extends GUIView<MatchController> {
         Platform.runLater(unsafe(() -> {
             this.remainingTime = remainingTime;
             startTimer();
-
-                }
+            windowGUIView.setProperty(Constants.Property.OWNED);
+            draftPoolGUIView.setProperty(Constants.Property.OWNED);
+            setUpWaitForTurnToBeginFuture();
+            }
         ));
+
     }
 
 
-    public void startTimer() {
+    private void startTimer() {
         this.timer = new Timer();
         this.timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -499,6 +500,31 @@ public class MatchGUIView extends GUIView<MatchController> {
                 });
             }
         }, 0, 1000);
+    }
+
+    private void setUpWaitForTurnToEndFuture() {
+        CompletableFuture.runAsync(unsafe(() -> this.model.waitForTurnToEnd()))
+                .thenAccept(this::setUpWaitForTurnToEnd);
+    }
+
+    private void setUpWaitForTurnToEnd(Void aVoid) {
+        Platform.runLater(unsafe(() -> {
+            this.timer.cancel();
+            windowGUIView.setProperty(Constants.Property.NONE);
+            draftPoolGUIView.setProperty(Constants.Property.NONE);
+        }));
+    }
+
+    private void setUpWaitForMatchToEndFuture() {
+        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForMatchToEnd()))
+                .thenAccept(this::setUpWaitForMatchToEnd);
+    }
+
+    private void setUpWaitForMatchToEnd(IResult[] iResults) {
+        IResult[] sortedResults = Arrays.stream(iResults)
+                .sorted(Comparator.comparing(IResult::getPoints))
+                .toArray(IResult[]::new);
+
     }
 }
 

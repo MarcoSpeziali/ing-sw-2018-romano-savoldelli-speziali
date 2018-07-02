@@ -327,6 +327,11 @@ public class Constants {
             }
         }
 
+
+        }
+
+        public enum Property {
+        OWNED, OPPONENT, NONE, SELECTION
         }
     }
 

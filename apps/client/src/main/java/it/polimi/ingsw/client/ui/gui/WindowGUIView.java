@@ -2,8 +2,6 @@ package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
 
-import it.polimi.ingsw.core.Match;
-import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
 import javafx.event.EventHandler;
@@ -23,15 +21,11 @@ import java.io.IOException;
 public class WindowGUIView extends GUIView<IWindow> {
 
 
-    public enum Property {
-        OWNED, OPPONENT, NONE, SELECTION
-    }
-
-    public void setProperty(Property property) {
+    public void setProperty(Constants.Property property) {
         this.property = property;
     }
 
-    private Property property;
+    private Constants.Property property;
 
     @FXML
     public GridPane gridPane;
@@ -70,7 +64,7 @@ public class WindowGUIView extends GUIView<IWindow> {
 
                 target.setOnDragOver(new EventHandler<DragEvent>() {
                     public void handle(DragEvent event) {
-                        if (property == Property.OWNED) {
+                        if (property == Constants.Property.OWNED) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                         event.consume();
@@ -100,7 +94,7 @@ public class WindowGUIView extends GUIView<IWindow> {
                     }
                 });
 
-                if (property == Property.SELECTION) {
+                if (property == Constants.Property.SELECTION) {
                     target.setOnMousePressed(event -> {
                         selectedLocation = finalI*iWindow.getColumns()+finalJ;
                     });

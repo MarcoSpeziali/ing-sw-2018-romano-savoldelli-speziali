@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IDraftPool;
@@ -21,6 +20,11 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
+    public Constants.Property property;
+
+    public void setProperty(Constants.Property property) {
+        this.property = property;
+    }
 
     public DraftPoolGUIView() {
     }
@@ -45,20 +49,29 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
                     source.setOnDragDetected(new EventHandler <MouseEvent>() {
                         public void handle(MouseEvent event) {
-                            Move move = Move.build();
-                            move.begin(location);
-                            /*try {
-                                Match.getMatchController().tryToMove(move);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }*/
-                            Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-                            ClipboardContent content = new ClipboardContent();
-                            content.put(Constants.iDieFormat, locationsDieMap.get(location));
-                            db.setContent(content);
-                            event.consume();
+                            if (property == Constants.Property.OWNED) {
+                                Move move = Move.build();
+                                move.begin(location);
+                                /*try {
+                                    Match.getMatchController().tryToMove(move);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }*/
+                                Dragboard db = source.startDragAndDrop(TransferMode.MOVE);
+                                ClipboardContent content = new ClipboardContent();
+                                content.put(Constants.iDieFormat, locationsDieMap.get(location));
+                                db.setContent(content);
+                                event.consume();
+                            }
+                        }
+                    });
+
+                    source.setOnDragDone(new EventHandler<DragEvent>() {
+                        @Override
+                        public void handle(DragEvent event) {
+                            placeholder.getChildren().remove(source);
                         }
                     });
 
@@ -71,6 +84,8 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                 }
         ));
     }
+
+
 
     @Override
     public void init() {
