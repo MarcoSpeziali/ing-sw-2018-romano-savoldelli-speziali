@@ -21,7 +21,13 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
-    public Constants.Property property;
+    public boolean isChosen() {
+        return chosen;
+    }
+
+    private boolean chosen = false;
+
+    private Constants.Property property;
 
     public void setProperty(Constants.Property property) {
         this.property = property;
@@ -77,6 +83,17 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                             }
                         }
                     });
+
+                    if (property == Constants.Property.SELECTION) {
+                        source.setOnMousePressed(event -> {
+                            try {
+                                Match.getMatchController().postChosenPosition(location);
+                                chosen = true;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
 
 
                     DieGUIView dieGUIView = loader.getController();

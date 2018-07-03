@@ -22,6 +22,12 @@ import java.io.IOException;
 
 public class WindowGUIView extends GUIView<IWindow> {
 
+    public boolean isChosen() {
+        return chosen;
+    }
+
+    private boolean chosen = false;
+
 
     public void setProperty(Constants.Property property) {
         this.property = property;
@@ -38,11 +44,6 @@ public class WindowGUIView extends GUIView<IWindow> {
     @FXML
     public HBox difficultyHbox;
 
-    public int getSelectedLocation() {
-        return selectedLocation;
-    }
-
-    private int selectedLocation;
 
     public WindowGUIView() {
     }
@@ -98,7 +99,12 @@ public class WindowGUIView extends GUIView<IWindow> {
 
                 if (property == Constants.Property.SELECTION) {
                     target.setOnMousePressed(event -> {
-                        selectedLocation = finalI*iWindow.getColumns()+finalJ;
+                        try {
+                            Match.getMatchController().postChosenPosition(finalI*iWindow.getColumns()+finalJ);
+                            chosen = true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     });
                 }
 

@@ -13,4 +13,7 @@ public class Match {
 
     private static MatchController matchController;
 
+    public static void setMatchController(MatchController matchController) {
+        Match.matchController = matchController;
+    }
 }

@@ -66,10 +66,13 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     public DraftPoolGUIView draftPoolGUIView;
     public WindowGUIView windowGUIView;
+
     public List<Node> toolCardNodes = new LinkedList<>();
+    private Node currentWindow;
 
     @FXML
     public Label secondsLabel;
+
 
     @Override
     public void init() {
@@ -91,12 +94,19 @@ public class MatchGUIView extends GUIView<MatchController> {
                     IToolCard[] iToolCards              = iMatch.getToolCards();
                     IObjectiveCard[] iObjectiveCards    = iMatch.getPublicObjectiveCards();
                     IObjectiveCard iPrivateObjectiveCard = iMatch.getPrivateObjectiveCard();
+                    IWindow iWindow = iMatch.getCurrentPlayer().getWindow();
 
                     DropShadow dropShadow = new DropShadow();
                     dropShadow.setRadius(5.0);
                     dropShadow.setOffsetX(3.0);
                     dropShadow.setOffsetY(3.0);
                     dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+
+                    windowGUIView.setModel(iWindow);
+                    centerPane.setCenter(currentWindow);
+                    windowGUIView.setProperty(Constants.Property.OWNED);
+                    currentWindow.setScaleY(1.7);
+                    currentWindow.setScaleX(1.7);
 
                     for (IToolCard iToolCard : iToolCards) { //ToolCard
                         JFXDialogLayout content = new JFXDialogLayout();
@@ -260,6 +270,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                                 window.setOnMousePressed(event -> {
                                     centerPane.setCenter(window);
+                                    currentWindow = window;
                                     window.setScaleY(1.7);
                                     window.setScaleX(1.7);
                                     windowGUIView.setProperty(Constants.Property.OWNED);

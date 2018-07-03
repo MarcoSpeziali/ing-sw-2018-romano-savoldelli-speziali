@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.ui.gui.scenes;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXListView;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
@@ -15,12 +16,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -122,8 +126,19 @@ public class MatchGUIViewToolcardHelper {
         }));
     }
 
-    private void setUpEffect(Map.Entry<IAction[], Range<Integer>> m) {
-        //TODO: implement
+    private void setUpEffect(Map.Entry<IAction[], Range<Integer>> entry) {
+        JFXDialogLayout content = new JFXDialogLayout();
+        JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+        IAction[] iActions = entry.getKey();
+        Range<Integer> range = entry.getValue();
+
+/*        JFXListView<<Label>> list = new JFXListView<>();
+        list.setDepth(10);
+        Arrays.stream(iActions).forEach(iAction -> {
+            list.getItems().add(new Label(iAction.getDescription()));
+        });
+        list.setCellFactory(CheckBoxListCell.forListView(item -> item.getSelected()));*/
+
     }
 
     private void setUpContinueToRepeat(IAction iEffect) {
@@ -158,15 +173,17 @@ public class MatchGUIViewToolcardHelper {
     }
 
     private void setUpChoosePosition(ChoosePositionForLocationRequest choosePosition) {
-        //TODO: finish
         Platform.runLater(unsafe(() -> {
             JFXDialog dialog = new JFXDialog();
+            boolean chosen = false;
             JFXDialogLayout content = new JFXDialogLayout();
             JFXButton button = new JFXButton("OK");
+            button.setOnMouseClicked(event -> dialog.close());
             FXMLLoader loader = new FXMLLoader();
             GridPane node = null;
             JSONSerializable object = choosePosition.getLocation();
             Set<Integer> set = choosePosition.getUnavailableLocations();
+
 
             if (object instanceof IWindow) {
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
@@ -179,7 +196,7 @@ public class MatchGUIViewToolcardHelper {
                         Node cell = windowGUIView.gridPane.getChildren().get(location);
                         cell.setDisable(true);
                     }
-                    this.model.postChosenPosition(windowGUIView.getSelectedLocation());
+                    chosen = windowGUIView.isChosen();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -192,6 +209,12 @@ public class MatchGUIViewToolcardHelper {
                     node = loader.load();
                     DraftPoolGUIView draftPoolGUIView = loader.getController();
                     draftPoolGUIView.setModel((IDraftPool) object);
+                    draftPoolGUIView.setProperty(Constants.Property.SELECTION);
+                    for (Integer location : set) {
+                        Node die = draftPoolGUIView.pane.getChildren().get(location);
+                        die.setDisable(true);
+                    }
+                    chosen = draftPoolGUIView.isChosen();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -203,12 +226,27 @@ public class MatchGUIViewToolcardHelper {
                     node = loader.load();
                     RoundTrackGUIView roundTrackGUIView = loader.getController();
                     roundTrackGUIView.setModel((IRoundTrack) object);
+                    roundTrackGUIView.setProperty(Constants.Property.SELECTION);
+                    for (Integer location : set) {
+                        Node die = roundTrackGUIView.gridPane.getChildren().get(location); // TODO check
+                        die.setDisable(true);
+                    }
+                    chosen = roundTrackGUIView.isChosen();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
             }
+            boolean finalChosen = chosen;
+
+            button.setOnMouseClicked(event-> {
+                if(finalChosen) {
+                    dialog.close();
+                }
+            });
+
             content.setBody(node);
+            content.setActions(button);
             content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_LOCATION)+": "));
             dialog.show();
             setUpChoosePositionFuture();

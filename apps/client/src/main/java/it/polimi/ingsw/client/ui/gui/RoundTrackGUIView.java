@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.models.RoundTrack;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IRoundTrack;
@@ -25,12 +26,25 @@ import java.util.stream.Collector;
 
 public class RoundTrackGUIView extends GUIView<IRoundTrack> {
 
+    public boolean isChosen() {
+        return chosen;
+    }
+
+    private boolean chosen = false;
+
     @FXML
     public GridPane gridPane;
 
+    private Constants.Property property;
+
+    public void setProperty(Constants.Property property) {
+        this.property = property;
+    }
 
     public RoundTrackGUIView(){
     }
+
+
 
     @Override
     public void setModel(IRoundTrack iRoundTrack) throws IOException {
@@ -66,6 +80,17 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
             Node die = loader.load();
+
+            if (property == Constants.Property.SELECTION) {
+                die.setOnMousePressed(event -> {
+                    try {
+                        chosen = true;
+                        Match.getMatchController().postChosenPosition(location);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
             DieGUIView dieGUIView = loader.getController();
             dieGUIView.setModel(locationDieMap.get(location));
             VBox vBox = new VBox();
@@ -75,7 +100,7 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
             vBox.setSpacing(5);
             //vBox.setAlignment(Pos.CENTER);
             vBox.setAlignment(Pos.TOP_CENTER);
-            vBox.setMargin(die, new Insets(0,0,7,0));
+            VBox.setMargin(die, new Insets(0,0,7,0));
             gridPane.add(vBox, roundIndex, 0);
             round++;
         }
