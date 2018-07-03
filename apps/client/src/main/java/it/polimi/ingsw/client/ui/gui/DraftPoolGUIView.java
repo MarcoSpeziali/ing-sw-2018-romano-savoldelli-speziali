@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.core.Match;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IDraftPool;
@@ -27,10 +27,10 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
     private boolean chosen = false;
 
-    private Constants.Property property;
+    private Constants.Status Status;
 
-    public void setProperty(Constants.Property property) {
-        this.property = property;
+    public void setStatus(Constants.Status status) {
+        this.Status = status;
     }
 
     public DraftPoolGUIView() {
@@ -45,58 +45,81 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
         Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap();
 
-        locationsDieMap.keySet().stream()
-                .sorted().forEach(unsafe(location -> {
-                    AnchorPane placeholder = (AnchorPane) pane.getChildren().get(location);
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
+        for (int i = 0; i < pane.getChildren().size(); i++) {
 
-                    Node source = loader.load();
-                    source.setCursor(Cursor.OPEN_HAND);
+            int finalI = i;
 
-                    source.setOnDragDetected(event -> {
-                        if (property == Constants.Property.OWNED) {
-                            System.out.println("Drag detected");
+            locationsDieMap.keySet().stream()
+                    .sorted().forEach(location -> {
 
-                            Move move = Move.build();
-                            move.begin(location);
+                        if (location == finalI && pane.getChildren().get(location) == null) {
 
-                            Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-                            ClipboardContent content = new ClipboardContent();
-                            content.put(Constants.iDieFormat, locationsDieMap.get(location));
-                            db.setContent(content);
-                            event.consume();
-                        }
-                    });
+                            AnchorPane placeholder = (AnchorPane) pane.getChildren().get(location);
+                            FXMLLoader loader = new FXMLLoader();
+                            loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
 
-                    source.setOnDragDone(new EventHandler<DragEvent>() {
-                        @Override
-                        public void handle(DragEvent event) {
-                            if (event.getTransferMode() == TransferMode.MOVE) {
-                                placeholder.getChildren().remove(source);
-                            }
-                        }
-                    });
-
-                    if (property == Constants.Property.SELECTION) {
-                        source.setOnMousePressed(event -> {
+                            Node source = null;
                             try {
-                                Match.getMatchController().postChosenPosition(location);
-                                chosen = true;
+                                source = loader.load();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        });
+                            source.setCursor(Cursor.OPEN_HAND);
+
+                            Node finalSource = source;
+                            source.setOnDragDetected(event -> {
+                                if (Status == Constants.Status.OWNER_UNLOCKED) {
+                                    System.out.println("Drag detected");
+
+                                    Move move = Move.build();
+                                    move.begin(location);
+
+                                    Dragboard db = finalSource.startDragAndDrop(TransferMode.ANY);
+                                    ClipboardContent content = new ClipboardContent();
+                                    content.put(Constants.iDieFormat, locationsDieMap.get(location));
+                                    db.setContent(content);
+                                    event.consume();
+                                }
+                            });
+
+                            source.setOnDragDone(new EventHandler<DragEvent>() {
+                                @Override
+                                public void handle(DragEvent event) {
+                                    if (event.getTransferMode() == TransferMode.MOVE) {
+                                        placeholder.getChildren().remove(finalSource);
+                                    }
+                                }
+                            });
+
+                            if (Status == Constants.Status.SELECTION_UNLOCKED) {
+                                source.setOnMousePressed(event -> {
+                                    try {
+                                        Match.getMatchController().postChosenPosition(location);
+                                        chosen = true;
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+                            }
+
+
+                            DieGUIView dieGUIView = loader.getController();
+
+                            try {
+                                dieGUIView.setModel(locationsDieMap.get(location));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            placeholder.getChildren().add(source);
+                        }
+                        if (finalI != location) {
+                            pane.getChildren().remove(finalI);
+                        }
+
                     }
-
-
-                    DieGUIView dieGUIView = loader.getController();
-
-                    dieGUIView.setModel(locationsDieMap.get(location));
-
-                    placeholder.getChildren().add(source);
-                }
-        ));
+            );
+        }
     }
 
 

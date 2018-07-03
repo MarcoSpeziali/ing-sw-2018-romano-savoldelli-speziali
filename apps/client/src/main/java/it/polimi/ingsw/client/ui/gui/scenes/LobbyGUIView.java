@@ -11,7 +11,7 @@ import it.polimi.ingsw.controllers.LobbyController;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.proxies.socket.LobbySocketProxyController;
 import it.polimi.ingsw.controllers.proxies.socket.MatchSocketProxyController;
-import it.polimi.ingsw.core.Match;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.MatchInterface;

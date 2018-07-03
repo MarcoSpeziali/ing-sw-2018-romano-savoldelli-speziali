@@ -336,8 +336,8 @@ public class Constants {
 
         }
 
-        public enum Property {
-        OWNED, OPPONENT, NONE, SELECTION
+        public enum Status {
+            OWNER_UNLOCKED, OPPONENT_LOCKED, GAME_LOCKED, SELECTION_UNLOCKED
         }
     }
 

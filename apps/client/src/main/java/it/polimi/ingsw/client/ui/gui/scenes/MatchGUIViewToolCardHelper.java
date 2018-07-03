@@ -3,8 +3,8 @@ package it.polimi.ingsw.client.ui.gui.scenes;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXListView;
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.net.mocks.*;
@@ -16,15 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -32,41 +29,42 @@ import java.util.concurrent.CompletableFuture;
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
-public class MatchGUIViewToolcardHelper {
+public class MatchGUIViewToolCardHelper extends GUIView{
 
-    private MatchController model;
+    private MatchController matchController;
     private StackPane outerPane;
 
-    public MatchGUIViewToolcardHelper(MatchController matchController, StackPane outerpane) {
-        this.model = matchController;
-        this.outerPane = outerpane;
+    public MatchGUIViewToolCardHelper() {
+        this.outerPane = Match.getOuterPane();
+        this.matchController = Match.getMatchController();
     }
 
+    @Override
     public void init() {
         setUpChoosePositionFuture();
         setUpContinueToRepeatFuture();
-        setUpEffectFuture();
+        //setUpEffectFuture();
         setUpShadeFuture();
     }
 
 
     private void setUpShadeFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForSetShade()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForSetShade()))
                 .thenAccept(this::setUpShade);
     }
 
     private void setUpChoosePositionFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForChoosePositionFromLocation()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForChoosePositionFromLocation()))
                 .thenAccept(this::setUpChoosePosition);
     }
 
-    private void setUpEffectFuture() {
+    /*private void setUpEffectFuture() {
         CompletableFuture.supplyAsync(unsafe(() ->
-                this.model.waitForChooseBetweenActions())).thenAccept(this::setUpEffect);
-    }
+                this.matchController.waitForChooseBetweenActions())).thenAccept(this::setUpEffect);
+    }*/
 
     private void setUpContinueToRepeatFuture() {
-        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForContinueToRepeat()))
+        CompletableFuture.supplyAsync(unsafe(()-> this.matchController.waitForContinueToRepeat()))
                 .thenAccept(this::setUpContinueToRepeat);
     }
 
@@ -106,7 +104,7 @@ public class MatchGUIViewToolcardHelper {
                 });
                 cell.setOnMouseClicked(event -> {
                     try {
-                        this.model.postSetShade(finalI);
+                        this.matchController.postSetShade(finalI);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -151,7 +149,7 @@ public class MatchGUIViewToolcardHelper {
             content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": " + iEffect.getDescription()));
             again.setOnMouseClicked(event -> {
                 try {
-                    this.model.postContinueToRepeatChoice(true);
+                    this.matchController.postContinueToRepeatChoice(true);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -160,7 +158,7 @@ public class MatchGUIViewToolcardHelper {
             });
             stop.setOnMouseClicked(event -> {
                 try {
-                    this.model.postContinueToRepeatChoice(false);
+                    this.matchController.postContinueToRepeatChoice(false);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -191,7 +189,7 @@ public class MatchGUIViewToolcardHelper {
                     node = loader.load();
                     WindowGUIView windowGUIView = loader.getController();
                     windowGUIView.setModel((IWindow) object);
-                    windowGUIView.setProperty(Constants.Property.SELECTION);
+                    windowGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
                     for (Integer location : set) {
                         Node cell = windowGUIView.gridPane.getChildren().get(location);
                         cell.setDisable(true);
@@ -209,7 +207,7 @@ public class MatchGUIViewToolcardHelper {
                     node = loader.load();
                     DraftPoolGUIView draftPoolGUIView = loader.getController();
                     draftPoolGUIView.setModel((IDraftPool) object);
-                    draftPoolGUIView.setProperty(Constants.Property.SELECTION);
+                    draftPoolGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
                     for (Integer location : set) {
                         Node die = draftPoolGUIView.pane.getChildren().get(location);
                         die.setDisable(true);
@@ -226,7 +224,7 @@ public class MatchGUIViewToolcardHelper {
                     node = loader.load();
                     RoundTrackGUIView roundTrackGUIView = loader.getController();
                     roundTrackGUIView.setModel((IRoundTrack) object);
-                    roundTrackGUIView.setProperty(Constants.Property.SELECTION);
+                    roundTrackGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
                     for (Integer location : set) {
                         Node die = roundTrackGUIView.gridPane.getChildren().get(location); // TODO check
                         die.setDisable(true);

@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.core.Match;
-import it.polimi.ingsw.models.RoundTrack;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IRoundTrack;
 import javafx.fxml.FXML;
@@ -10,12 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,10 +31,10 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
     @FXML
     public GridPane gridPane;
 
-    private Constants.Property property;
+    private Constants.Status Status;
 
-    public void setProperty(Constants.Property property) {
-        this.property = property;
+    public void setStatus(Constants.Status status) {
+        this.Status = status;
     }
 
     public RoundTrackGUIView(){
@@ -81,7 +77,7 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
             Node die = loader.load();
 
-            if (property == Constants.Property.SELECTION) {
+            if (Status == Constants.Status.SELECTION_UNLOCKED) {
                 die.setOnMousePressed(event -> {
                     try {
                         chosen = true;

@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
@@ -31,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
-//import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property;
+//import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Status;
 
 
 public class MatchGUIView extends GUIView<MatchController> {
@@ -41,12 +42,6 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     @FXML
     public HBox bottomBar;
-
-    //@FXML
-    //public JFXButton endTurnButton;
-
-    //@FXML
-    //public VBox turnBox;
 
     @FXML
     public StackPane outerPane;
@@ -68,10 +63,10 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private DraftPoolGUIView draftPoolGUIView;
     private WindowGUIView ownedWindowGUIView;
-    private WindowGUIView[] opponentsWindowsGUIViews;
+    private WindowGUIView[] opponentsWindowsGUIViews = new WindowGUIView[3];
     private RoundTrackGUIView roundTrackGUIView;
-    private ToolCardGUIView[] toolCardGUIViews;
-    private ObjectiveCardGUIView[] publicObjectiveCardGUIViews;
+    private ToolCardGUIView[] toolCardGUIViews = new ToolCardGUIView[3];
+    private ObjectiveCardGUIView[] publicObjectiveCardGUIViews = new ObjectiveCardGUIView[3];
     private ObjectiveCardGUIView privateObjectiveCardGUIView;
 
     public List<Node> toolCardNodes = new LinkedList<>();
@@ -80,13 +75,14 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     @Override
     public void init() {
+        Match.setOuterPane(outerPane);
         chooseWindow();
         loadElementsFuture();
-        MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
-        helper.init();
-        setUpWaitForTurnToBeginFuture();
-        setUpWaitForTurnToEndFuture();
-        setUpWaitForMatchToEnd();
+        MatchGUIViewToolCardHelper helper = new MatchGUIViewToolCardHelper();
+        //helper.init();
+        //setUpWaitForTurnToBeginFuture();
+        //setUpWaitForTurnToEndFuture();
+        //setUpWaitForMatchToEnd();
     }
 
     private void loadElements(IMatch iMatch) {
@@ -101,6 +97,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             loadOpponentsWindows(iMatch.getPlayers());
             loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
 
+            loadElementsFuture();
         }));
     }
 
@@ -130,7 +127,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 window.setScaleY(1.2);
                                 WindowGUIView windowGUIView = loader.getController();
                                 windowGUIView.setModel(iWindows[i]);
-                                windowGUIView.setProperty(Constants.Property.OWNED);
+                                windowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
 
                                 int finalI = i;
 
@@ -176,7 +173,6 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpWaitForTurnToBegin(int remainingTime) {
         Platform.runLater(unsafe(() -> {
-            setUpWaitForTurnToEnd(null);
 
             VBox turnBox = new VBox();
             JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
@@ -190,8 +186,8 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             this.remainingTime = remainingTime;
             startTimer();
-            ownedWindowGUIView.setProperty(Constants.Property.OWNED);
-            draftPoolGUIView.setProperty(Constants.Property.OWNED);
+            ownedWindowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
+            draftPoolGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
 
             for(Node node: toolCardNodes) {
                 node.setDisable(false);
@@ -233,8 +229,8 @@ public class MatchGUIView extends GUIView<MatchController> {
     private void setUpWaitForTurnToEnd(Void aVoid) {
         Platform.runLater(unsafe(() -> {
             this.timer.cancel();
-            ownedWindowGUIView.setProperty(Constants.Property.NONE);
-            draftPoolGUIView.setProperty(Constants.Property.NONE);
+            ownedWindowGUIView.setStatus(Constants.Status.GAME_LOCKED);
+            draftPoolGUIView.setStatus(Constants.Status.GAME_LOCKED);
             for(Node node: toolCardNodes) {
                 node.setDisable(true);
             }
@@ -279,7 +275,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             Node draftPoolNode = draftPoolLoader.load();
             draftPoolGUIView = draftPoolLoader.getController();
 
-            draftPoolGUIView.setProperty(Constants.Property.OWNED);
+            draftPoolGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
             centerPane.setTop(draftPoolNode);
             BorderPane.setAlignment(draftPoolNode, Pos.BOTTOM_CENTER);
             BorderPane.setMargin(draftPoolNode, new Insets(300, 100, 0, 100));
@@ -321,7 +317,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     label.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
                     vBox.getChildren().addAll(node, label);
                     opponentsWindowsGUIViews[i] = loader.getController();
-                    opponentsWindowsGUIViews[i].setProperty(Constants.Property.OPPONENT);
+                    opponentsWindowsGUIViews[i].setStatus(Constants.Status.OPPONENT_LOCKED);
                     hBoxWindows.setAlignment(Pos.TOP_CENTER);
                     hBoxWindows.getChildren().add(vBox);
 
@@ -346,7 +342,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             Node window = loader.load();
             ownedWindowGUIView = loader.getController();
 
-            ownedWindowGUIView.setProperty(Constants.Property.OWNED);
+            ownedWindowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
             centerPane.setCenter(window);
             window.setScaleY(1.7);
             window.setScaleX(1.7);
@@ -365,6 +361,8 @@ public class MatchGUIView extends GUIView<MatchController> {
         dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
 
         for (int i = 0; i < iToolCards.length; i++) {
+
+
 
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);

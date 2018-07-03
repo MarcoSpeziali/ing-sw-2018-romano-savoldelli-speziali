@@ -1,7 +1,10 @@
 package it.polimi.ingsw.client.ui.gui;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.core.Match;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.net.responses.MoveResponse;
@@ -18,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
@@ -29,12 +33,11 @@ public class WindowGUIView extends GUIView<IWindow> {
 
     private boolean chosen = false;
 
-
-    public void setProperty(Constants.Property property) {
-        this.property = property;
+    public void setStatus(Constants.Status status) {
+        this.Status = status;
     }
 
-    private Constants.Property property;
+    private Constants.Status Status;
 
     @FXML
     public GridPane gridPane;
@@ -68,7 +71,7 @@ public class WindowGUIView extends GUIView<IWindow> {
 
                 target.setOnDragOver(new EventHandler<DragEvent>() {
                     public void handle(DragEvent event) {
-                        if (property == Constants.Property.OWNED) {
+                        if (Status == Constants.Status.OWNER_UNLOCKED) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                         event.consume();
@@ -88,7 +91,14 @@ public class WindowGUIView extends GUIView<IWindow> {
                             );
 
                             if (!moveResponse.isValid()) {
-                                // TODO: 03/07/18 @savdav96: show error message
+                                JFXButton button = new JFXButton("OK");
+                                JFXDialogLayout content = new JFXDialogLayout();
+                                JFXDialog dialog = new JFXDialog(Match.getOuterPane(), content, JFXDialog.DialogTransition.CENTER);
+                                content.setHeading(new Text("Invalid move!"));
+                                content.setBody(new Text("The move you performed was not accepted due to positioning rules"));
+                                content.setActions(button);
+                                button.setOnMousePressed(event1 -> dialog.close());
+                                dialog.show();
                             }
 
                             target.setCursor(Cursor.CROSSHAIR);
@@ -102,7 +112,7 @@ public class WindowGUIView extends GUIView<IWindow> {
                     }
                 });
 
-                if (property == Constants.Property.SELECTION) {
+                if (Status == Constants.Status.SELECTION_UNLOCKED) {
                     target.setOnMousePressed(event -> {
                         try {
                             Match.getMatchController().postChosenPosition(finalI*iWindow.getColumns()+finalJ);
