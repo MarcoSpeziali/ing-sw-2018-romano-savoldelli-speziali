@@ -4,6 +4,7 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.server.actions.*;
 import it.polimi.ingsw.utils.IterableRange;
+import it.polimi.ingsw.utils.text.LocalizedString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,7 @@ class EffectTest {
                 actions
         );
 
-        Assertions.assertEquals("Example", effect.getDescription());
+        Assertions.assertEquals("Example", new LocalizedString(effect.getDescriptionKey()).toString());
         Assertions.assertNull(effect.getEffectConstraint());
         Assertions.assertArrayEquals(actions.toArray(), effect.getActions().toArray());
     }

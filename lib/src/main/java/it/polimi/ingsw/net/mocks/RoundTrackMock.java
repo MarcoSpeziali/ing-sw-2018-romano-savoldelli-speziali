@@ -53,7 +53,7 @@ public class RoundTrackMock implements IRoundTrack {
     public Map<Integer, IDie> getLocationDieMap() {
         Map<Integer, IDie> integerDieMap = new HashMap<>();
     
-        for (int i = 0; i < this.numberOfRounds; i++) {
+        for (int i = 0; i < this.rounds.size(); i++) {
             List<IDie> roundDice = this.getDiceForRound(i);
         
             for (int j = 0; j < roundDice.size(); j++) {

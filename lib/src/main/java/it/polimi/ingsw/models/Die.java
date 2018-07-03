@@ -15,7 +15,7 @@ public class Die implements IDie {
     private Integer shade;
     private GlassColor color;
 
-    private transient List<DieInteractionListener> listeners = new LinkedList<>();
+    private transient List<DieInteractionListener> listeners;
 
     /**
      * Sets up a new die
@@ -26,6 +26,8 @@ public class Die implements IDie {
     public Die(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
+
+        listeners = new LinkedList<>();
     }
 
     /**

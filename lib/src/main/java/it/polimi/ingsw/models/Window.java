@@ -21,8 +21,8 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     // A multi-dimensional array cannot be serialized
     private Cell[][] cells;
 
-    private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
-    private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+    private transient List<OnDiePutListener> onDiePutListeners;
+    private transient List<OnDiePickedListener> onDiePickedListeners;
 
     /**
      * Sets up a new {@link Window} with specified parameters.
@@ -39,6 +39,9 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
         this.columns = columns;
         this.id = id;
         this.cells = cells;
+
+        onDiePutListeners = new LinkedList<>();
+        onDiePickedListeners = new LinkedList<>();
     }
 
     /**
@@ -363,10 +366,18 @@ public class Window implements RestrictedChoosablePutLocation, ChoosablePickLoca
     }
     
     public void addPutListener(OnDiePutListener onDiePutListener) {
+        if (this.onDiePutListeners == null) {
+            this.onDiePutListeners = new LinkedList<>();
+        }
+
         this.onDiePutListeners.add(onDiePutListener);
     }
     
     public void addPickListener(OnDiePickedListener onDiePickedListener) {
+        if (this.onDiePickedListeners == null) {
+            this.onDiePickedListeners = new LinkedList<>();
+        }
+
         this.onDiePickedListeners.add(onDiePickedListener);
     }
 

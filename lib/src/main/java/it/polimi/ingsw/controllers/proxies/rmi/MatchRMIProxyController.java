@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class MatchRMIProxyController extends UnicastRemoteObject implements MatchController, HeartBeatListener {
@@ -64,8 +65,11 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     @Override
     public void respondToWindowRequest(IWindow window) throws RemoteException {
         if (this.windowResponseConsumer != null) {
-            this.windowResponseConsumer.accept(window);
-            this.windowResponseConsumer = null;
+
+            CompletableFuture.runAsync(() -> {
+                this.windowResponseConsumer.accept(window);
+                this.windowResponseConsumer = null;
+            });
         }
     }
     

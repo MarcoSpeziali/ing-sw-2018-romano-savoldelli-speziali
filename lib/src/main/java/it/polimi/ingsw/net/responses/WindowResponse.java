@@ -2,6 +2,7 @@ package it.polimi.ingsw.net.responses;
 
 import it.polimi.ingsw.net.interfaces.MatchInteraction;
 import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.net.mocks.WindowMock;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
@@ -15,7 +16,7 @@ public class WindowResponse implements MatchInteraction {
     @JSONDesignatedConstructor
     public WindowResponse(
             @JSONElement("match-id") int matchId,
-            @JSONElement("chosen-window") IWindow chosenWindow
+            @JSONElement("chosen-window") WindowMock chosenWindow
     ) {
         this.matchId = matchId;
         this.chosenWindow = chosenWindow;

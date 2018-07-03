@@ -45,6 +45,8 @@ public class DraftPoolMock implements IDraftPool {
     public Map<Integer, IDie> getLocationDieMap() {
         return IntStream.range(0, this.maxNumberOfDice)
                 .boxed()
-                .collect(Collectors.toMap(o -> o, o -> new DieMock(this.dice[o])));
+                .filter(index -> this.dice[index] != null)
+                .map(index -> Map.entry(index, new DieMock(this.dice[index])))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -91,35 +91,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
     // ------ FSM OBJECTS ------
     private MatchState matchState = MatchState.WAITING_FOR_PLAYERS;
-    
-    // ------ TURN SETTINGS ------
-    private boolean shouldIgnoreColor = false;
-    private boolean shouldIgnoreShade = false;
-    private boolean shouldIgnoreAdjacency = false;
-    
-    public boolean shouldIgnoreColor() {
-        return shouldIgnoreColor;
-    }
-    
-    public void setShouldIgnoreColor(boolean shouldIgnoreColor) {
-        this.shouldIgnoreColor = shouldIgnoreColor;
-    }
-    
-    public boolean shouldIgnoreShade() {
-        return shouldIgnoreShade;
-    }
-    
-    public void setShouldIgnoreShade(boolean shouldIgnoreShade) {
-        this.shouldIgnoreShade = shouldIgnoreShade;
-    }
-    
-    public boolean shouldIgnoreAdjacency() {
-        return shouldIgnoreAdjacency;
-    }
-    
-    public void setShouldIgnoreAdjacency(boolean shouldIgnoreAdjacency) {
-        this.shouldIgnoreAdjacency = shouldIgnoreAdjacency;
-    }
 
     public DatabaseMatch getDatabaseMatch() {
         return this.databaseMatch;
@@ -170,7 +141,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         }
     }
     
-    private boolean canAcceptPlayer(DatabasePlayer player) throws SQLException {
+    private boolean canAcceptPlayer(DatabasePlayer player) {
         return lobbyPlayers.contains(player) && this.matchState == MatchState.WAITING_FOR_PLAYERS || this.databaseMatch.getLeftPlayers().contains(player);
     }
     
@@ -514,9 +485,9 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 windowController.tryToPut(
                         die,
                         move.getWindowPutPosition(),
-                        this.shouldIgnoreColor,
-                        this.shouldIgnoreShade,
-                        this.shouldIgnoreAdjacency
+                        false,
+                        false,
+                        false
                 );
 
                 this.matchCommunicationsManager.sendPositiveResponseForMoveToPlayer(databasePlayer);
@@ -560,7 +531,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     @SuppressWarnings("squid:S00112")
     public void onWindowChosen(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, IWindow window) {
         Window chosenWindow = this.possibleChosenWindows.stream()
-                .filter(w -> w.equals(window))
+                .filter(w -> w.getId().equals(window.getId()))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
 

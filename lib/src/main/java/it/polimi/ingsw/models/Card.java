@@ -1,7 +1,6 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.net.mocks.ICard;
-import it.polimi.ingsw.utils.text.LocalizedString;
 
 public abstract class Card implements ICard {
 
@@ -24,7 +23,7 @@ public abstract class Card implements ICard {
      */
     @Override
     public String getTitle() {
-        return new LocalizedString(this.title).toString();
+        return this.title;
     }
 
     /**
@@ -39,7 +38,7 @@ public abstract class Card implements ICard {
      */
     @Override
     public String getDescription() {
-        return new LocalizedString(this.description).toString();
+        return this.description;
     }
 
     /**

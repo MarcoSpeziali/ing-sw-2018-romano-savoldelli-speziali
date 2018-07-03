@@ -32,7 +32,7 @@ public class MatchEndPoint extends UnicastRemoteObject implements MatchInterface
     }
 
     @SuppressWarnings("squid:S1602")
-    public static MatchEndPoint getEndPointForMatch(int matchId) throws RemoteException {
+    public synchronized static MatchEndPoint getEndPointForMatch(int matchId) throws RemoteException {
         try {
             return endPointMap.computeIfAbsent(matchId, wrap(integer -> {
                 return new MatchEndPoint(matchId);

@@ -4,10 +4,7 @@ import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.core.locations.RandomPickLocation;
 import it.polimi.ingsw.core.locations.RandomPutLocation;
 import it.polimi.ingsw.models.Die;
-import it.polimi.ingsw.models.Window;
-import it.polimi.ingsw.net.mocks.ILivePlayer;
-import it.polimi.ingsw.net.mocks.IPlayer;
-import it.polimi.ingsw.net.mocks.PlayerMock;
+import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
@@ -24,7 +21,7 @@ public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocatio
     private final int id;
     private final String username;
     private final int tokenCount;
-    private final Window window;
+    private final IWindow window;
 
     private Die heldDie;
 
@@ -34,7 +31,7 @@ public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocatio
             @JSONElement("id") int id,
             @JSONElement("username") String username,
             @JSONElement("favour-tokens") int tokenCount,
-            @JSONElement("window") Window window,
+            @JSONElement("window") WindowMock window,
             @JSONElement("held-die") Die heldDie
     ) {
         this.id = id;
@@ -62,7 +59,7 @@ public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocatio
     }
 
     @JSONElement("window")
-    public Window getWindow() {
+    public IWindow getWindow() {
         return window;
     }
 

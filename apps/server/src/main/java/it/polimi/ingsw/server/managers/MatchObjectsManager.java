@@ -57,7 +57,7 @@ public class MatchObjectsManager {
                         player.getId(),
                         player.getUsername(),
                         Settings.getSettings().getMatchNumberOfFavourTokens(),
-                        this.playerWindowMap.get(player).getWindow(),
+                        new WindowMock(this.playerWindowMap.get(player).getWindow()),
                         null
                 ))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -141,16 +141,20 @@ public class MatchObjectsManager {
                 this.match.getEndingTime(),
                 new LobbyMock(this.match.getLobby()),
                 this.databasePlayerToLivePlayer.values().stream()
+                        .filter(p -> p.getId() != player.getId())
                         .map(LivePlayerMock::new)
                         .toArray(LivePlayerMock[]::new),
-                this.draftPoolController.getDraftPool(),
-                this.roundTrackController.getRoundTrack(),
-                this.publicObjectiveCards,
+                new DraftPoolMock(this.draftPoolController.getDraftPool()),
+                new RoundTrackMock(this.roundTrackController.getRoundTrack()),
+                Arrays.stream(this.publicObjectiveCards)
+                        .map(ObjectiveCardMock::new)
+                        .toArray(ObjectiveCardMock[]::new),
                 Arrays.stream(this.toolCardControllers)
                         .map(ToolCardControllerImpl::getToolCard)
                         .map(ToolCardMock::new)
                         .toArray(ToolCardMock[]::new),
-                this.playerPrivateObjectiveCardMap.get(player)
+                new ObjectiveCardMock(this.playerPrivateObjectiveCardMap.get(player)),
+                this.databasePlayerToLivePlayer.get(player)
         );
     }
     

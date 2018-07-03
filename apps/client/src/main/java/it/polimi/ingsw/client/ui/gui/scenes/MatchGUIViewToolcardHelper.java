@@ -133,7 +133,7 @@ public class MatchGUIViewToolcardHelper {
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
             content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT)));
-            content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": "+iEffect.getDescription()));
+            content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": " + iEffect.getDescription()));
             again.setOnMouseClicked(event -> {
                 try {
                     this.model.postContinueToRepeatChoice(true);

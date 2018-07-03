@@ -16,6 +16,8 @@ import java.util.function.Function;
 
 public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListener {
 
+    private static final long serialVersionUID = 6828316836970334881L;
+
     private Window window;
     private final CellControllerImpl[][] cellControllers;
 

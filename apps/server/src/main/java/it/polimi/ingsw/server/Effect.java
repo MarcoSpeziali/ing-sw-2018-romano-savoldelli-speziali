@@ -6,7 +6,6 @@ import it.polimi.ingsw.net.mocks.IEffect;
 import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.server.constraints.EvaluableConstraint;
-import it.polimi.ingsw.utils.text.LocalizedString;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class Effect implements IEffect {
     /**
      * The localized description of the effect.
      */
-    private LocalizedString description;
+    private String description;
 
     /**
      * The initial cost of the effect.
@@ -48,7 +47,7 @@ public class Effect implements IEffect {
      * @param initialCost      the initial cost of the effect
      */
     public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions, int initialCost) {
-        this.description = new LocalizedString(descriptionKey);
+        this.description = descriptionKey;
         this.effectConstraint = effectConstraint;
         this.actions = actions;
         this.initialCost = initialCost;
@@ -62,22 +61,15 @@ public class Effect implements IEffect {
      * @param actions          The actions to be run.
      */
     public Effect(String descriptionKey, EvaluableConstraint effectConstraint, List<ExecutableAction> actions) {
-        this.description = new LocalizedString(descriptionKey);
+        this.description = descriptionKey;
         this.effectConstraint = effectConstraint;
         this.actions = actions;
         this.initialCost = 1;
     }
 
-    /**
-     * @return The localized description of the effect.
-     */
-    public String getDescription() {
-        return description.toString();
-    }
-
     @Override
     public String getDescriptionKey() {
-        return this.description.getLocalizationKey();
+        return this.description;
     }
 
     /**

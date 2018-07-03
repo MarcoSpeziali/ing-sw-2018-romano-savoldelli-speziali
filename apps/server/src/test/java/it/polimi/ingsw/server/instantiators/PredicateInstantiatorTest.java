@@ -43,6 +43,7 @@ class PredicateInstantiatorTest {
     void testDistinctColorPredicate() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         CompiledPredicate compiledPredicate = PredicateCompiler.compile(
                 "distinct_color $row$",
+                "name",
                 this.predicateDirectives
         );
 
@@ -56,6 +57,7 @@ class PredicateInstantiatorTest {
     void testDistinctShadePredicate() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         CompiledPredicate compiledPredicate = PredicateCompiler.compile(
                 "distinct_shade $row$",
+                "name",
                 this.predicateDirectives
         );
 

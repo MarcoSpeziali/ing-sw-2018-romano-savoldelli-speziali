@@ -4,10 +4,7 @@ import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
-import it.polimi.ingsw.core.CardVisibility;
-import it.polimi.ingsw.core.GlassColor;
-import it.polimi.ingsw.core.Match;
-import it.polimi.ingsw.core.Move;
+import it.polimi.ingsw.core.*;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
@@ -443,6 +440,11 @@ public class MatchGUITest extends Application {
                                 return "descriptionPrivate";
                             }
                         };
+                    }
+
+                    @Override
+                    public Player getCurrentPlayer() {
+                        return null;
                     }
                 };
             }

@@ -2,11 +2,11 @@ package it.polimi.ingsw.core;
 
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.models.Window;
+import it.polimi.ingsw.net.mocks.WindowMock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class PlayerTest {
@@ -17,7 +17,7 @@ private Die die = new Die(3, GlassColor.PURPLE);
     @BeforeEach
     public void setUP(){
 
-        player = new Player(1, "prova", 3, mock(Window.class), die );
+        player = new Player(1, "prova", 3, mock(WindowMock.class), die );
     }
 
 

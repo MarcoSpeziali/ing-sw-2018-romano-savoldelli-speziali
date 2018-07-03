@@ -1,5 +1,6 @@
 package it.polimi.ingsw.net.mocks;
 
+import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
@@ -19,7 +20,8 @@ public class MatchMock implements IMatch {
     private final IObjectiveCard[] publicObjectiveCards;
     private final IToolCard[] toolCards;
     private final IObjectiveCard privateObjective;
-    
+    private final Player currentPlayer;
+
     public MatchMock(IMatch iMatch) {
         this(
                 iMatch.getId(),
@@ -29,11 +31,16 @@ public class MatchMock implements IMatch {
                 Arrays.stream(iMatch.getPlayers())
                         .map(LivePlayerMock::new)
                         .toArray(LivePlayerMock[]::new),
-                iMatch.getDraftPool(),
-                iMatch.getRoundTrack(),
-                iMatch.getPublicObjectiveCards(),
-                iMatch.getToolCards(),
-                iMatch.getPrivateObjectiveCard()
+                new DraftPoolMock(iMatch.getDraftPool()),
+                new RoundTrackMock(iMatch.getRoundTrack()),
+                Arrays.stream(iMatch.getPublicObjectiveCards())
+                        .map(ObjectiveCardMock::new)
+                        .toArray(ObjectiveCardMock[]::new),
+                Arrays.stream(iMatch.getToolCards())
+                        .map(ToolCardMock::new)
+                        .toArray(ToolCardMock[]::new),
+                new ObjectiveCardMock(iMatch.getPrivateObjectiveCard()),
+                iMatch.getCurrentPlayer()
         );
     }
 
@@ -44,11 +51,12 @@ public class MatchMock implements IMatch {
             @JSONElement("ending-time") long endingTime,
             @JSONElement("lobby") LobbyMock lobby,
             @JSONElement("players") LivePlayerMock[] players,
-            @JSONElement("draft-pool") IDraftPool draftPool,
-            @JSONElement("round-track") IRoundTrack roundTrack,
-            @JSONElement("public-objective-cards") IObjectiveCard[] publicObjectiveCards,
-            @JSONElement("tool-cards") IToolCard[] toolCards,
-            @JSONElement("private-objective-card") IObjectiveCard privateObjective
+            @JSONElement("draft-pool") DraftPoolMock draftPool,
+            @JSONElement("round-track") RoundTrackMock roundTrack,
+            @JSONElement("public-objective-cards") ObjectiveCardMock[] publicObjectiveCards,
+            @JSONElement("tool-cards") ToolCardMock[] toolCards,
+            @JSONElement("private-objective-card") ObjectiveCardMock privateObjective,
+            @JSONElement("current-player") Player currentPlayer
     ) {
         this.id = id;
         this.startingTime = startingTime;
@@ -60,6 +68,7 @@ public class MatchMock implements IMatch {
         this.publicObjectiveCards = publicObjectiveCards;
         this.toolCards = toolCards;
         this.privateObjective = privateObjective;
+        this.currentPlayer = currentPlayer;
     }
 
     @Override
@@ -120,5 +129,11 @@ public class MatchMock implements IMatch {
     @JSONElement("private-objective-card")
     public IObjectiveCard getPrivateObjectiveCard() {
         return privateObjective;
+    }
+
+    @Override
+    @JSONElement("current-player")
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 }

@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.compilers.instructions.directives.InstructionParam
 import it.polimi.ingsw.server.compilers.instructions.predicates.CompiledPredicate;
 import it.polimi.ingsw.server.compilers.instructions.predicates.PredicateCompiler;
 import it.polimi.ingsw.server.compilers.instructions.predicates.directives.PredicateDirective;
+import it.polimi.ingsw.server.utils.ServerLogger;
 import it.polimi.ingsw.utils.io.XMLUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,6 +17,7 @@ import org.w3c.dom.NodeList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.streams.StreamUtils.not;
@@ -195,8 +197,7 @@ public class InstructionCompiler {
                 subInstructions.add(compile(child, instructionDirectives, predicateDirectives));
             }
             catch (UnrecognizedInstructionException e) {
-                // TODO: proper logging
-                e.printStackTrace();
+                ServerLogger.getLogger().log(Level.SEVERE, String.format("Could not compile instruction %s, its directives could not be found", child.getNodeName()), e);
             }
         }
 
@@ -229,7 +230,10 @@ public class InstructionCompiler {
                     // the predicate value
                     String item = (String) stringObjectEntry.getValue();
 
-                    return PredicateCompiler.compile(item, predicateDirectives);
+                    return PredicateCompiler.compile(
+                            item,
+                            stringObjectEntry.getKey().replace("@", ""),
+                            predicateDirectives);
                 }).collect(Collectors.toList());
     }
 }

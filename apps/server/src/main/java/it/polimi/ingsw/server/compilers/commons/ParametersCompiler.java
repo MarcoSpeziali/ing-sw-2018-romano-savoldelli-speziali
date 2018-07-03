@@ -139,7 +139,7 @@ public class ParametersCompiler {
                 parameterDirective.getParameterType(),
                 position,
                 // the raw value gets compiled since it could be an expression
-                rawParameter == null ? null : ExpressionCompiler.compile(rawParameter),
+                rawParameter == null ? (context) -> parameterDirective.getDefaultValue() : ExpressionCompiler.compile(rawParameter),
                 parameterDirective.getName(),
                 parameterDirective.getDefaultValue()
         );

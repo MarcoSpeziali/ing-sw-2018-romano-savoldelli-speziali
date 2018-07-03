@@ -24,7 +24,7 @@ public class LivePlayerMock implements ILivePlayer {
     public LivePlayerMock(ILivePlayer iLivePlayer) {
         this(
                 iLivePlayer.getFavourTokens(),
-                iLivePlayer.getWindow(),
+                new WindowMock(iLivePlayer.getWindow()),
                 new PlayerMock(iLivePlayer.getPlayer()),
                 iLivePlayer.hasLeft()
         );
@@ -33,8 +33,8 @@ public class LivePlayerMock implements ILivePlayer {
     @JSONDesignatedConstructor
     public LivePlayerMock(
             @JSONElement("favour-tokens") int favourTokens,
-            @JSONElement("window") IWindow window,
-            @JSONElement("player") IPlayer player,
+            @JSONElement("window") WindowMock window,
+            @JSONElement("player") PlayerMock player,
             @JSONElement("left") boolean left
     ) {
         this.favourTokens = favourTokens;

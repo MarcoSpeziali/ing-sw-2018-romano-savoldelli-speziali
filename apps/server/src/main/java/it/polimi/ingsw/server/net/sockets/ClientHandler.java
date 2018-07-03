@@ -189,11 +189,19 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
 
         MiddlewareFactory<?> middlewareFactory = endPointFunctionMiddlewareFactoryEnumMap.getOrDefault(endPointFunction, null);
 
+        Middleware middleware;
+
         if (middlewareFactory == null) {
+            middleware = this.dynamicMiddlewares.getOrDefault(endPointFunction, null);
+        }
+        else {
+            middleware = middlewareFactory.instantiateMiddleware();
+        }
+
+        if (middleware == null) {
             return null;
         }
 
-        Middleware middleware = middlewareFactory.instantiateMiddleware();
         middleware.prepare();
 
         Request request = middleware.handleResponse(response, endPointFunction, this);

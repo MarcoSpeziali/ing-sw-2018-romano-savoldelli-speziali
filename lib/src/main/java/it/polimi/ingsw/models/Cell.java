@@ -20,8 +20,8 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
     private Integer shade;
     private Die die;
     
-    private transient List<OnDiePutListener> onDiePutListeners = new LinkedList<>();
-    private transient List<OnDiePickedListener> onDiePickedListeners = new LinkedList<>();
+    private transient List<OnDiePutListener> onDiePutListeners;
+    private transient List<OnDiePickedListener> onDiePickedListeners;
     
     /**
      * Sets up a new {@link Cell}.
@@ -32,6 +32,9 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
     public Cell(Integer shade, GlassColor color) {
         this.color = color;
         this.shade = shade;
+
+        onDiePutListeners = new LinkedList<>();
+        onDiePickedListeners = new LinkedList<>();
     }
 
     /**
@@ -115,10 +118,18 @@ public class Cell implements RandomPutLocation, RandomPickLocation, ICell {
     }
 
     public void addOnDiePutListener(OnDiePutListener cellListener) {
+        if (onDiePutListeners == null) {
+            onDiePutListeners = new LinkedList<>();
+        }
+
         this.onDiePutListeners.add(cellListener);
     }
 
     public void addOnDiePickedListener(OnDiePickedListener cellListener) {
+        if (onDiePickedListeners == null) {
+            onDiePickedListeners = new LinkedList<>();
+        }
+
         this.onDiePickedListeners.add(cellListener);
     }
 }

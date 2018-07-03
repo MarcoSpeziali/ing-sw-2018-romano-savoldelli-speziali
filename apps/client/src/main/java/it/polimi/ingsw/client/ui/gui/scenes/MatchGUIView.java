@@ -9,10 +9,6 @@ import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.*;
-import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
-import it.polimi.ingsw.utils.Range;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
-import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +26,6 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 //import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property;
@@ -79,7 +74,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     @Override
     public void init() {
         chooseWindow();
-        setUpOpponentsWindowsFuture();
+        // setUpOpponentsWindowsFuture();
         loadElements();
         MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
         //helper.init();
@@ -91,7 +86,6 @@ public class MatchGUIView extends GUIView<MatchController> {
     private void loadElements() {
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
                 .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
-                    //if(this.draftPoolGUIView == null)
                     IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
                     IDraftPool iDraftPool               = iMatch.getDraftPool();
                     IToolCard[] iToolCards              = iMatch.getToolCards();
@@ -217,7 +211,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     BorderPane.setAlignment(privateCardNode, Pos.BOTTOM_CENTER);
                     BorderPane.setMargin(privateCardNode, new Insets(0,10,220,10));
 
-                   FXMLLoader draftPoolLoader = new FXMLLoader();
+                    FXMLLoader draftPoolLoader = new FXMLLoader();
                     draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
                     Node draftPoolNode = draftPoolLoader.load();
                     DraftPoolGUIView draftPoolGUIView = draftPoolLoader.getController();
@@ -232,8 +226,11 @@ public class MatchGUIView extends GUIView<MatchController> {
                     RoundTrackGUIView roundTrackGUIView = roundTrackLoader.getController();
                     roundTrackGUIView.setModel(iRoundTrack);
                     bottomBar.getChildren().add(roundTrackNode);
-                    BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
-                })));}
+
+                    this.setUpOpponentsWindows(iMatch);
+                })));
+    }
+
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(75);
@@ -324,7 +321,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     e.printStackTrace();
                 }
             }
-            setUpOpponentsWindowsFuture();
+            // setUpOpponentsWindowsFuture();
         });
     }
 

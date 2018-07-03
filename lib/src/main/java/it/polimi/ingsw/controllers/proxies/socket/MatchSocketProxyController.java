@@ -142,7 +142,7 @@ public class MatchSocketProxyController implements MatchController {
                         ),
                         new WindowResponse(
                                 this.matchId,
-                                window
+                                new WindowMock(window)
                         )
                 )
         );

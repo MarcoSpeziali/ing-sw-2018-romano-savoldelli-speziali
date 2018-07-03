@@ -21,7 +21,7 @@ public class PredicateCompiler {
      * @param directives    the {@link List} of {@link PredicateCompiler}
      * @return the compiled predicate as {@link CompiledPredicate}
      */
-    public static CompiledPredicate compile(String predicateCall, List<PredicateDirective> directives) {
+    public static CompiledPredicate compile(String predicateCall, String predicateName, List<PredicateDirective> directives) {
         String predicateId = getPredicateId(predicateCall);
 
         PredicateDirective directive = directives.stream()
@@ -31,6 +31,7 @@ public class PredicateCompiler {
 
         return new CompiledPredicate(
                 predicateId,
+                predicateName,
                 directive.getTargetClass(),
                 ParametersCompiler.parseParameters(predicateCall, directive, PREDICATE_CALL_REGEX)
         );

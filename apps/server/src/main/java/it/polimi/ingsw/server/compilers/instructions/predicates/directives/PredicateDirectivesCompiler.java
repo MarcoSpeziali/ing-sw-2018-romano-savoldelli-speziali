@@ -105,6 +105,7 @@ public class PredicateDirectivesCompiler {
         //noinspection unchecked
         return new PredicateDirective(
                 id,
+
                 (Class<Predicate>) Class.forName(predicateClass),
                 parametersDirectives
         );

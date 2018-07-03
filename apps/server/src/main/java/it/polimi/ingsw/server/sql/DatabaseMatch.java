@@ -85,6 +85,7 @@ public class DatabaseMatch {
                 null,
                 null,
                 null,
+                null,
                 null
         );
     }
@@ -108,7 +109,7 @@ public class DatabaseMatch {
                 "SELECT p.* FROM match m " +
                         "JOIN match_player mb ON mb.match = m.id " +
                         "JOIN player p ON mb.player = p.id " +
-                        "WHERE m.id = %d",
+                        "WHERE m.id = %d AND mb.leaving_time IS NOT NULL",
                 this.id
         );
     

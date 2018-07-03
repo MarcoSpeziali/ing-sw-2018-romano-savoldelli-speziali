@@ -171,6 +171,8 @@ public class CompilationManager {
 
         logger.log(Level.INFO, "Done compiling resources, took: {0}ms", System.currentTimeMillis() - compilationTime);
 
+        lastCompilation = () -> compilationTime;
+
         return compilationTime;
     }
 
