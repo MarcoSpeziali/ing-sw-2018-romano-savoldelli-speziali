@@ -287,6 +287,7 @@ public class Constants {
         public static final String MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT = "match_gui.choose_action_for_effect.text";
         public static final String MATCH_GUI_EFFECT = "match_gui.effect.text";
         public static final String MATCH_GUI_CHOOSE_LOCATION = "match_gui.choose_location.text";
+        public static final String MATCH_GUI_END_TURN="match_gui.end_turn.text";
 
 
         private Strings() {

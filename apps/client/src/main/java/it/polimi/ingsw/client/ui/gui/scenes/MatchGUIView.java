@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -21,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -40,11 +42,11 @@ public class MatchGUIView extends GUIView<MatchController> {
     @FXML
     public HBox bottomBar;
 
-    @FXML
-    public JFXButton endTurnButton;
+    //@FXML
+    //public JFXButton endTurnButton;
 
-    @FXML
-    public VBox turnBox;
+    //@FXML
+    //public VBox turnBox;
 
     @FXML
     public StackPane outerPane;
@@ -68,16 +70,13 @@ public class MatchGUIView extends GUIView<MatchController> {
     public WindowGUIView windowGUIView;
 
     public List<Node> toolCardNodes = new LinkedList<>();
+    private Label timerLabel = new Label("00");
     private Node currentWindow;
-
-    @FXML
-    public Label secondsLabel;
-
 
     @Override
     public void init() {
         chooseWindow();
-        // setUpOpponentsWindowsFuture();
+        setUpOpponentsWindowsFuture();
         loadElements();
         MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
         //helper.init();
@@ -137,7 +136,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         ToolCardGUIView controller = loader.getController();
                         controller.setModel(iToolCard);
                         content.setBody(tc);
-                        tc.setScaleX(1.6); //FIXME io le ingrandirei, sia queste che le obj card
+                        tc.setScaleX(1.6);
                         tc.setScaleY(1.6);
                         StackPane.setAlignment(tc, Pos.CENTER);
                         cancel.setOnMousePressed(event -> dialog.close());
@@ -184,14 +183,17 @@ public class MatchGUIView extends GUIView<MatchController> {
                         vBoxObjectiveCard.setMinHeight(1000);
                         vBoxObjectiveCard.setSpacing(20);
                         vBoxObjectiveCard.setAlignment(Pos.TOP_CENTER);
+
                         FXMLLoader loader =  new FXMLLoader();
                         loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
                         Node oc = loader.load();
-
                         ObjectiveCardGUIView controller = loader.getController();
                         controller.setModel(iObjectiveCard);content.setBody(oc);
                         StackPane.setAlignment(oc, Pos.CENTER);
-                        JFXButton cancel = new JFXButton("Back");
+                        oc.setScaleY(1.6);
+                        oc.setScaleX(1.6);
+                        content.setMinSize(350, 500);
+                        JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
                         cancel.setOnMousePressed(event -> dialog.close());
                         content.setActions(cancel);
                     }
@@ -229,6 +231,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     draftPoolGUIView.setProperty(Constants.Property.OWNED);
                     centerPane.setTop(draftPoolNode);
                     BorderPane.setAlignment(draftPoolNode, Pos.BOTTOM_CENTER);
+                    BorderPane.setMargin(draftPoolNode, new Insets(300, 100, 0, 100));
 
                     FXMLLoader roundTrackLoader = new FXMLLoader();
                     roundTrackLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
@@ -236,10 +239,10 @@ public class MatchGUIView extends GUIView<MatchController> {
                     RoundTrackGUIView roundTrackGUIView = roundTrackLoader.getController();
                     roundTrackGUIView.setModel(iRoundTrack);
                     bottomBar.getChildren().add(roundTrackNode);
-
+                    BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
+                    bottomBar.setMargin(roundTrackNode, new Insets(0,0,300,0));
                     this.setUpOpponentsWindows(iMatch);
-                })));
-    }
+                })));}
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
@@ -274,6 +277,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                                     window.setScaleY(1.7);
                                     window.setScaleX(1.7);
                                     windowGUIView.setProperty(Constants.Property.OWNED);
+                                    BorderPane.setMargin(window, new Insets(10, 300,5, 200));
 
                                     try {
                                         this.model.respondToWindowRequest(iWindows[finalI]);
@@ -353,6 +357,16 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpWaitForTurnToBegin(int remainingTime) {
         Platform.runLater(unsafe(() -> {
+            VBox turnBox = new VBox();
+            JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
+            timerLabel.setPrefSize(182, 109);
+            timerLabel.setFont(new Font(50));
+            endTurnButton.setPrefSize(182, 37);
+            turnBox.getChildren().add(timerLabel);
+            turnBox.getChildren().add(endTurnButton);
+            bottomBar.getChildren().add(turnBox);
+            HBox.setMargin(turnBox, new Insets(0, 0, 320, 0));
+
             this.remainingTime = remainingTime;
             startTimer();
             windowGUIView.setProperty(Constants.Property.OWNED);
@@ -360,8 +374,11 @@ public class MatchGUIView extends GUIView<MatchController> {
             for(Node node: toolCardNodes) {
                 node.setDisable(false);
             }
-            endTurnButton.setDisable(false);
-            //endTurnButton.setOnMouseClicked();
+            endTurnButton.setOnMouseClicked(e->{
+                setUpWaitForTurnToEnd(null);
+                bottomBar.getChildren().remove(turnBox);
+
+            });
             setUpWaitForTurnToBeginFuture();
             }
         ));
@@ -374,7 +391,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    MatchGUIView.this.secondsLabel.setText(String.valueOf(remainingTime));
+                    MatchGUIView.this.timerLabel.setText(String.valueOf(remainingTime));
                     remainingTime--;
                 });
             }
