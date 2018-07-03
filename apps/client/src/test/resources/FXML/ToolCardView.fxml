@@ -14,7 +14,7 @@
          </image></ImageView>
         <Text fx:id="title" layoutX="50.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cork Backed Strainghtedge" textAlignment="CENTER" wrappingWidth="130.0">
             <font>
-                <Font size="8.0" />
+                <Font name="Copperplate Gothic Bold" size="8.0" />
             </font>
         </Text>
         <Text fx:id="effect" layoutX="10.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="160.0">

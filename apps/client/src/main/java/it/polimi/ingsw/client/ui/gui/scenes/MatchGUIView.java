@@ -33,10 +33,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
+//import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 
 public class MatchGUIView extends GUIView<MatchController> {
+
     private Timer timer = new Timer();
     private int remainingTime = -1;
 
@@ -80,7 +82,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         setUpOpponentsWindowsFuture();
         loadElements();
         MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
-        helper.init();
+        //helper.init();
         setUpWaitForTurnToBeginFuture();
         setUpWaitForTurnToEndFuture();
         setUpWaitForMatchToEnd();
@@ -118,18 +120,21 @@ public class MatchGUIView extends GUIView<MatchController> {
                         vBoxToolCard.setAlignment(Pos.TOP_CENTER);
                         toolCardNode.setOnMousePressed(event -> dialog.show());
                         toolCardNode.setCursor(Cursor.HAND);
-                        toolCardNode.setDisable(true);
+                        //toolCardNode.setDisable(true);
                         toolCardNode.setEffect(dropShadow);
                         toolCardNodes.add(toolCardNode);
 
                         JFXButton use = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
                         JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
+                        content.setMinSize(350, 500);
                         FXMLLoader loader =  new FXMLLoader();
                         loader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
                         Node tc = loader.load();
                         ToolCardGUIView controller = loader.getController();
                         controller.setModel(iToolCard);
                         content.setBody(tc);
+                        tc.setScaleX(1.6); //FIXME io le ingrandirei, sia queste che le obj card
+                        tc.setScaleY(1.6);
                         StackPane.setAlignment(tc, Pos.CENTER);
                         cancel.setOnMousePressed(event -> dialog.close());
                         content.setActions(cancel);
@@ -219,7 +224,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     draftPoolGUIView.setModel(iDraftPool);
                     draftPoolGUIView.setProperty(Constants.Property.OWNED);
                     centerPane.setTop(draftPoolNode);
-                    BorderPane.setAlignment(draftPoolNode, Pos.CENTER);
+                    BorderPane.setAlignment(draftPoolNode, Pos.BOTTOM_CENTER);
 
                     FXMLLoader roundTrackLoader = new FXMLLoader();
                     roundTrackLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
@@ -227,13 +232,14 @@ public class MatchGUIView extends GUIView<MatchController> {
                     RoundTrackGUIView roundTrackGUIView = roundTrackLoader.getController();
                     roundTrackGUIView.setModel(iRoundTrack);
                     bottomBar.getChildren().add(roundTrackNode);
+                    BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
                 })));}
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
-        gridPane.setHgap(175);
-        gridPane.setVgap(140);
+        gridPane.setHgap(75);
+        gridPane.setVgap(65);
         JFXDialogLayout content = new JFXDialogLayout();
-        content.setMinSize(870, 750);
+        content.setMinSize(650, 420);
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
 
@@ -286,6 +292,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpOpponentsWindows(IMatch update) {
         Platform.runLater(() -> {
+            int i = 0;
             for (ILivePlayer player: update.getPlayers()) {
 
                 IWindow iWindow = player.getWindow();
@@ -297,16 +304,22 @@ public class MatchGUIView extends GUIView<MatchController> {
                     Label label = new Label(player.hasLeft()? player.getPlayer().getUsername()+" (Offline)":
                             player.getPlayer().getUsername());
                     label.setAlignment(Pos.CENTER);
-                    label.setStyle("-fx-font-size: 14; -fx-font-weight: bold");
+                    label.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
                     vBox.getChildren().addAll(node, label);
                     WindowGUIView windowGUIView = loader.getController();
                     windowGUIView.setModel(iWindow);
                     windowGUIView.setProperty(Constants.Property.OPPONENT);
                     hBoxWindows.setAlignment(Pos.TOP_CENTER);
-                    hBoxWindows.getChildren().add(vBox);
+                    hBoxWindows.getChildren().add(vBox); //TODO check
+                    if(hBoxWindows.getChildren().get(i)!=null){
+                        hBoxWindows.getChildren().remove(i);
+                        hBoxWindows.getChildren().add(vBox);
+                    }
+
                     hBoxWindows.setSpacing(100);
-                    hBoxWindows.setAlignment(Pos.CENTER);
-                    HBox.setMargin(vBox, new Insets(30, 0, 30, 0));
+                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
+                    HBox.setMargin(vBox, new Insets(0, 0, 0, 0));
+                    i++;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -340,6 +353,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 node.setDisable(false);
             }
             endTurnButton.setDisable(false);
+            //endTurnButton.setOnMouseClicked();
             setUpWaitForTurnToBeginFuture();
             }
         ));
@@ -372,7 +386,6 @@ public class MatchGUIView extends GUIView<MatchController> {
             for(Node node: toolCardNodes) {
                 node.setDisable(true);
             }
-            endTurnButton.setDisable(true);
             setUpWaitForTurnToEndFuture();
         }));
     }

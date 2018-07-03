@@ -7,24 +7,24 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #2c3e50; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.WindowGUIView">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #2c3e50; -fx-background-radius: 8;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.WindowGUIView">
    <children>
-      <Label fx:id="nameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="188.0" textAlignment="CENTER" textFill="#ebeff0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+      <Label fx:id="nameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="10.0" prefWidth="60.0" textAlignment="CENTER" textFill="#ebeff0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <font>
-            <Font name="System Bold" size="20.0" />
+            <Font name="System Bold" size="9.0" />
          </font>
       </Label>
-      <HBox fx:id="difficultyHbox" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="178.0" spacing="4.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="10.0">
+      <HBox fx:id="difficultyHbox" alignment="CENTER_RIGHT" prefHeight="10.0" prefWidth="60.0" spacing="1.2" AnchorPane.bottomAnchor="5" AnchorPane.rightAnchor="5">
          <children>
-            <Circle fill="#ebeff0" radius="7.0" stroke="#ecf0f1" strokeType="INSIDE" />
-            <Circle fill="#ebeff0" radius="7.0" stroke="#ecf0f1" strokeType="INSIDE" />
-            <Circle fill="#ebeff0" radius="7.0" stroke="#ecf0f1" strokeType="INSIDE" />
-            <Circle fill="#ebeff0" radius="7.0" stroke="#ecf0f1" strokeType="INSIDE" />
-            <Circle fill="#ebeff0" radius="7.0" stroke="#ecf0f1" strokeType="INSIDE" />
-            <Circle fill="#ebeff0" radius="7.0" stroke="#ecf0f1" strokeType="INSIDE" />
+            <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
+            <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
+            <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
+            <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
+            <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
+            <Circle fill="#ebeff0" radius="2.2" stroke="#ecf0f1" strokeType="INSIDE" />
          </children>
       </HBox>
-       <GridPane fx:id="gridPane" layoutX="12.0" layoutY="12.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-       </GridPane>
+      <GridPane fx:id="gridPane" layoutX="12.0" layoutY="12.0" maxHeight="180.0" maxWidth="230.0" AnchorPane.bottomAnchor="13.3" AnchorPane.leftAnchor="5" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="5">
+      </GridPane>
    </children>
 </AnchorPane>

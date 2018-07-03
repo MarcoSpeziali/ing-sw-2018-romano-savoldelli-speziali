@@ -6,6 +6,7 @@ import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IRoundTrack;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -72,7 +73,9 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
             vBox.getChildren().add(label);
             vBox.getChildren().add(die);
             vBox.setSpacing(5);
-            vBox.setAlignment(Pos.CENTER);
+            //vBox.setAlignment(Pos.CENTER);
+            vBox.setAlignment(Pos.TOP_CENTER);
+            vBox.setMargin(die, new Insets(0,0,7,0));
             gridPane.add(vBox, roundIndex, 0);
             round++;
         }

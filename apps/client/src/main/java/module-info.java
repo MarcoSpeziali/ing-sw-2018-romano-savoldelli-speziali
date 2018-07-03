@@ -11,6 +11,7 @@ module it.polimi.ingsw.client {
     requires com.jfoenix;
     requires java.logging;
     requires jopt.simple;
+    //requires jfoenix;
 
     exports it.polimi.ingsw.client.utils.text;
     exports it.polimi.ingsw.client.ui.gui;

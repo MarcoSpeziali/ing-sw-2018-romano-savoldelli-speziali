@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            style="-fx-background-color: #2c3e50;" xmlns="http://javafx.com/javafx/9.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.RoundTrackGUIView">
-  <GridPane fx:id="gridPane" gridLinesVisible="true">
-  </GridPane>
+
+<AnchorPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.RoundTrackGUIView">
+  <children>
+    <GridPane fx:id="gridPane" gridLinesVisible="true" layoutX="0.5" layoutY="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="800.0" style="-fx-background-color: BLACK;">
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </children>
 </AnchorPane>
