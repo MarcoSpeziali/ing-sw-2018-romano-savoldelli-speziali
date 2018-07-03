@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controllers;
 
 import it.polimi.ingsw.controllers.DieInteractionException;
+import it.polimi.ingsw.core.locations.FullLocationException;
 import it.polimi.ingsw.listeners.OnDiePickedListener;
 import it.polimi.ingsw.listeners.OnDiePutListener;
 import it.polimi.ingsw.models.Cell;
@@ -30,7 +31,14 @@ public class CellControllerImpl implements OnDiePickedListener, OnDiePutListener
 
     public void tryToPut(Die die, boolean ignoreColor, boolean ignoreShade) throws DieInteractionException {
         if (this.cell.matchesOrBlank(die, ignoreColor, ignoreShade)) {
-            this.cell.putDie(die);
+            try {
+                this.cell.putDie(die);
+            }
+            catch (FullLocationException e) {
+                throw new DieInteractionException();
+            }
+
+            return;
         }
 
         throw new DieInteractionException();

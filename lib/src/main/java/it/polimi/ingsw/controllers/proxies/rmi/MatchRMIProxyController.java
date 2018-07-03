@@ -3,17 +3,17 @@ package it.polimi.ingsw.controllers.proxies.rmi;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChooseBetweenActionsRequest;
 import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
-import it.polimi.ingsw.utils.Range;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class MatchRMIProxyController extends UnicastRemoteObject implements MatchController, HeartBeatListener {
     
@@ -161,19 +161,13 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     private final transient Object moveResponseSyncObject = new Object();
     private MoveResponse moveResponse;
     
-    public void setMoveConsumer(Consumer<Move> moveConsumer) {
+    public void setMoveFunction(Function<Move, MoveResponse> moveConsumer) {
         this.moveConsumer = move -> {
             synchronized (moveResponseSyncObject) {
-                moveConsumer.accept(move);
+                this.moveResponse = moveConsumer.apply(move);
+                this.moveResponseSyncObject.notifyAll();
             }
         };
-    }
-    
-    public void postMoveResponse(MoveResponse moveResponse) {
-        synchronized (moveResponseSyncObject) {
-            this.moveResponse = moveResponse;
-            this.moveResponseSyncObject.notifyAll();
-        }
     }
     
     @Override
@@ -240,7 +234,7 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
     }
 
     @Override
-    public Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() {
+    public ChooseBetweenActionsRequest waitForChooseBetweenActions() {
         return null;
     }
     

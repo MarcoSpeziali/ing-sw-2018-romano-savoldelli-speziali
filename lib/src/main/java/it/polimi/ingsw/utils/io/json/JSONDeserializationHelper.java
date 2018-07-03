@@ -186,25 +186,25 @@ class JSONDeserializationHelper {
             return getOrNull(jsonObject, elementInfo.value());
         }
         else if (targetClass.equals(Integer.class) || targetClass.equals(int.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? jsonObject.getInt(elementInfo.value()) : 0;
         }
         else if (targetClass.equals(Byte.class) || targetClass.equals(byte.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? (byte) jsonObject.getInt(elementInfo.value()) : (byte) 0;
         }
         else if (targetClass.equals(Long.class) || targetClass.equals(long.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? jsonObject.getLong(elementInfo.value()) : 0L;
         }
         else if (targetClass.equals(Float.class) || targetClass.equals(float.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? jsonObject.getFloat(elementInfo.value()) : 0F;
         }
         else if (targetClass.equals(Double.class) || targetClass.equals(double.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? jsonObject.getDouble(elementInfo.value()) : 0D;
         }
         else if (targetClass.equals(BigDecimal.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? jsonObject.getBigDecimal(elementInfo.value()) : BigDecimal.ZERO;
         }
         else if (targetClass.equals(BigInteger.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? jsonObject.getBigInteger(elementInfo.value()) : BigInteger.ZERO;
         }
         else if (targetClass.equals(Boolean.class) || targetClass.equals(boolean.class)) {
             return getOrFalse(jsonObject, elementInfo.value());
@@ -213,7 +213,7 @@ class JSONDeserializationHelper {
             return getEnumOrNull(jsonObject, elementInfo.value(), targetClass.asSubclass(Enum.class));
         }
         else if (targetClass.equals(Number.class)) {
-            return getOrZero(jsonObject, elementInfo.value());
+            return jsonObject.has(elementInfo.value()) ? jsonObject.getNumber(elementInfo.value()) : 0;
         }
 
         return null;
@@ -261,8 +261,17 @@ class JSONDeserializationHelper {
         if (!jsonObject.has(elementInfo.value())) {
             return null;
         }
-        
-        return (Map) jsonObject.get(elementInfo.value());
+
+        Object obj = jsonObject.get(elementInfo.value());
+
+        if (obj instanceof Map) {
+            return ((Map) obj);
+        }
+        else if (obj instanceof JSONObject) {
+            return Map.of();
+        }
+
+        return null;
     }
 
     private static <T extends JSONSerializable> Object[] getJSONSerializableObjects(Class<?> targetClass, JSONObject[] jsonObjects) {
@@ -282,10 +291,6 @@ class JSONDeserializationHelper {
 
     private static boolean getOrFalse(JSONObject jsonObject, String key) {
         return jsonObject.has(key) && jsonObject.getBoolean(key);
-    }
-
-    private static Object getOrZero(JSONObject jsonObject, String key) {
-        return jsonObject.has(key) ? jsonObject.get(key) : 0;
     }
 
     private static <E extends Enum<E>> E getEnumOrNull(JSONObject jsonObject, String key, Class<E> enumClass) {

@@ -14,10 +14,8 @@ import it.polimi.ingsw.net.requests.*;
 import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import it.polimi.ingsw.utils.Range;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class MatchSocketProxyController implements MatchController {
     
@@ -54,12 +52,12 @@ public class MatchSocketProxyController implements MatchController {
                 }
         );
         
-        this.persistentSocketInteractionProvider.listenForRequest(
+        this.persistentSocketInteractionProvider.listenFor(
                 EndPointFunction.MATCH_UPDATE_RESPONSE,
                 request -> {
                     synchronized (this.updateSyncObject) {
                         @SuppressWarnings("unchecked")
-                        Request<IMatch> windowRequest = (Request<IMatch>) request;
+                        Response<IMatch> windowRequest = (Response<IMatch>) request;
                         this.update = windowRequest.getBody();
                         
                         this.updateSyncObject.notifyAll();
@@ -72,6 +70,7 @@ public class MatchSocketProxyController implements MatchController {
                 response -> {
                     @SuppressWarnings("unchecked")
                     Response<MatchBeginResponse> matchBeginResponse = (Response<MatchBeginResponse>) response;
+
                     synchronized (beginTurnSyncObject) {
                         this.timeInSeconds = matchBeginResponse.getBody().getTimeRemaining();
                         beginTurnSyncObject.notifyAll();
@@ -280,7 +279,7 @@ public class MatchSocketProxyController implements MatchController {
     }
 
     @Override
-    public Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() {
+    public ChooseBetweenActionsRequest waitForChooseBetweenActions() {
         return null;
     }
     

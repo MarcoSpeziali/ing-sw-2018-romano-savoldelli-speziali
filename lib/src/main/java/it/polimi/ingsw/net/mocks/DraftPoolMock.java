@@ -2,6 +2,8 @@ package it.polimi.ingsw.net.mocks;
 
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
+import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,12 +24,26 @@ public class DraftPoolMock implements IDraftPool {
         this.maxNumberOfDice = maxNumberOfDice;
         this.dice = dice;
     }
-    
+
     @JSONDesignatedConstructor
-    public DraftPoolMock(
+    DraftPoolMock(
             @JSONElement("max-number-of-dice") byte maxNumberOfDice,
-            @JSONElement("location-die-map") Map<Integer, IDie> locationDieMap
+            @JSONElement(value = "location-die-map", keepRaw = true) JSONObject jsonObject
     ) {
+        this.maxNumberOfDice = maxNumberOfDice;
+        this.dice = new IDie[maxNumberOfDice];
+
+        jsonObject.keySet().stream()
+                .map(s -> Map.entry(
+                        Integer.parseInt(s),
+                        JSONSerializable.deserialize(
+                                DieMock.class,
+                                jsonObject.getJSONObject(s)
+                        )
+                )).forEach(entry -> this.dice[entry.getKey()] = entry.getValue());
+    }
+    
+    public DraftPoolMock(byte maxNumberOfDice, Map<Integer, IDie> locationDieMap) {
         this.maxNumberOfDice = maxNumberOfDice;
         this.dice = new IDie[maxNumberOfDice];
         

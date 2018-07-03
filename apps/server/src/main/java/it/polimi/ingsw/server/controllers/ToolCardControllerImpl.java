@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.actions.ActionGroup;
 import it.polimi.ingsw.server.actions.ExecutableAction;
 import it.polimi.ingsw.server.actions.UnCompletableActionException;
 import it.polimi.ingsw.server.managers.MatchObjectsManager;
+import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.GlobalContext;
 
 public class ToolCardControllerImpl {
@@ -28,25 +29,29 @@ public class ToolCardControllerImpl {
         return this.toolCard;
     }
     
-    public void requestUsage(ILivePlayer livePlayer) {
-        if (!canUse(livePlayer)) {
-            throw new NotEnoughTokensException(this.toolCard.getEffect().getCost(), livePlayer.getFavourTokens());
+    public void requestUsage(DatabasePlayer databasePlayer, int tokens) {
+        if (!canUse(tokens)) {
+            throw new NotEnoughTokensException(this.toolCard.getEffect().getCost(), tokens);
         }
         
         Effect effect = (Effect) this.toolCard.getEffect();
         try {
             effect.run(
                     toolCard.getCardId(),
-                    GlobalContext.getGlobalContext().getContextForPlayer(livePlayer.getPlayer(), this.matchId)
+                    GlobalContext.getGlobalContext().getContextForPlayer(databasePlayer, this.matchId)
             );
         }
         catch (UnCompletableActionException e) {
             this.matchObjectsManager.getDraftPoolController().getDraftPool().putDie(e.getDie());
         }
     }
-    
+
+    public boolean canUse(int tokensCount) {
+        return this.toolCard.getEffect().getCost() <= tokensCount;
+    }
+
     public boolean canUse(ILivePlayer livePlayer) {
-        return this.toolCard.getEffect().getCost() <= livePlayer.getFavourTokens();
+        return canUse(livePlayer.getFavourTokens());
     }
 
     public void setUserInteractionProvider(UserInteractionProvider userInteractionProvider) {

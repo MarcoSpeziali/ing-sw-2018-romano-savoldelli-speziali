@@ -26,7 +26,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
      * Sets up a new {@link DraftPool}.
      */
     public DraftPool(byte numberOfPlayers) {
-        this.maxNumberOfDice = numberOfPlayers;
+        this.maxNumberOfDice = (byte) (2 * numberOfPlayers + 1);
         this.dice = new Die[2 * numberOfPlayers + 1];
     }
     

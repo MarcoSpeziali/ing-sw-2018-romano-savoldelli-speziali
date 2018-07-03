@@ -1,6 +1,9 @@
 package it.polimi.ingsw.models;
 
 import it.polimi.ingsw.core.GlassColor;
+import it.polimi.ingsw.net.mocks.RoundTrackMock;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -107,5 +110,18 @@ class RoundTrackTest {
         roundTrack.setDieForRoundAtIndex(die2, (byte) 2, (byte) 1);
         roundTrack.setDieForRoundAtIndex(die1, (byte) 5, (byte) 0);
         Assertions.assertEquals(1266, roundTrack.getFreeSpace());
+    }
+
+    @Test
+    void testSerDeser() {
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die3, (byte) 2, (byte) 0);
+        roundTrack.setDieForRoundAtIndex(die2, (byte) 2, (byte) 1);
+        roundTrack.setDieForRoundAtIndex(die1, (byte) 5, (byte) 0);
+
+        JSONObject jsonObject = new RoundTrackMock(roundTrack).serialize();
+
+        RoundTrackMock roundTrackMock = JSONSerializable.deserialize(RoundTrackMock.class, jsonObject);
+
     }
 }

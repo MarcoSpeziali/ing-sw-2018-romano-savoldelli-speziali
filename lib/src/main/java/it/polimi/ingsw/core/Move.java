@@ -1,7 +1,11 @@
 package it.polimi.ingsw.core;
 
-public final class Move {
-    
+import java.io.Serializable;
+
+public final class Move implements Serializable {
+
+    private static final long serialVersionUID = 7920960164352637453L;
+
     private Move() {}
     
     /**

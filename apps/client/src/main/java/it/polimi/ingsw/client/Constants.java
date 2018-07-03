@@ -92,20 +92,25 @@ public class Constants {
         TOOL_CARD_TAP_WHEEL("images/toolCards/tap_wheel.jpg"),
 
         OBJECTIVE_CARD_BLUE_SHADE("images/objectiveCards/blue_shade.jpg"),
-        OBJECTIVE_CARD_COLOR_DIAGONALS("images/objectiveCards/color_diagonals.jpg"),
-        OBJECTIVE_CARD_COLOR_VARIETY("images/objectiveCards/color_variety.jpg"),
-        OBJECTIVE_CARD_COLUMN_COLOR_VARIETY("images/objectiveCards/column_color_variety.jpg"),
-        OBJECTIVE_CARD_COLUMN_SHADE_VARIETY("images/objectiveCards/column_shade_variety.jpg"),
-        OBJECTIVE_CARD_DEEP_SHADES("images/objectiveCards/deep_shades.jpg"),
         OBJECTIVE_CARD_GREEN_SHADE("images/objectiveCards/green_shade.jpg"),
+        OBJECTIVE_CARD_PURPLE_SHADE("images/objectiveCards/purple_shade.jpg"),
+        OBJECTIVE_CARD_RED_SHADE("images/objectiveCards/red_shade.jpg"),
+        OBJECTIVE_CARD_YELLOW_SHADE("images/objectiveCards/yellow_shade.jpg"),
+
+        OBJECTIVE_CARD_COLOR_DIAGONALS("images/objectiveCards/color_diagonals.jpg"),
+
+        OBJECTIVE_CARD_COLOR_VARIETY("images/objectiveCards/color_variety.jpg"),
+        OBJECTIVE_CARD_SHADE_VARIETY("images/objectiveCards/shade_variety.jpg"),
+
+        OBJECTIVE_CARD_ROW_COLOR_VARIETY("images/objectiveCards/row_color_variety.jpg"),
+        OBJECTIVE_CARD_COLUMN_COLOR_VARIETY("images/objectiveCards/column_color_variety.jpg"),
+
+        OBJECTIVE_CARD_ROW_SHADE_VARIETY("images/objectiveCards/row_shade_variety.jpg"),
+        OBJECTIVE_CARD_COLUMN_SHADE_VARIETY("images/objectiveCards/column_shade_variety.jpg"),
+
         OBJECTIVE_CARD_LIGHT_SHADES("images/objectiveCards/light_shades.jpg"),
         OBJECTIVE_CARD_MEDIUM_SHADES("images/objectiveCards/medium_shades.jpg"),
-        OBJECTIVE_CARD_PURPLE_SHADES("images/objectiveCards/purple_shade.jpg"),
-        OBJECTIVE_CARD_RED_SHADE("images/objectiveCards/red_shade.jpg"),
-        OBJECTIVE_CARD_ROW_COLOR_VARIETY("images/objectiveCards/row_color_variety.jpg"),
-        OBJECTIVE_CARD_ROW_SHADE_VARIETY("images/objectiveCards/row_shade_variety.jpg"),
-        OBJECTIVE_CARD_SHADE_VARIETY("images/objectiveCards/shade_variety.jpg"),
-        OBJECTIVE_CARD_YELLOW_SHADE("images/objectiveCards/yellow_shade.jpg");
+        OBJECTIVE_CARD_DEEP_SHADES("images/objectiveCards/deep_shades.jpg");
 
         public static final Set<Resources> ALL = Collections.unmodifiableSet(EnumSet.allOf(Resources.class));
         private final String relativePath;

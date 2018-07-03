@@ -112,7 +112,7 @@
         <parameters-directives>
             <parameter-directives class="java.lang.Byte" position="0" supplied="true"/>
             <parameter-directives class="java.lang.Byte" position="1" supplied="true"/>
-            <parameter-directives class="it.polimi.ingsw.core.Player" position="2" supplied="true"/>
+            <parameter-directives class="it.polimi.ingsw.net.mocks.PlayerMock" position="2" supplied="true"/>
         </parameters-directives>
     </action-directives>
     <action-directives id="flip" class="it.polimi.ingsw.server.actions.FlipAction">

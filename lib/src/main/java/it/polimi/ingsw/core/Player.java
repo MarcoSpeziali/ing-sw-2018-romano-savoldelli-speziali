@@ -1,14 +1,10 @@
 package it.polimi.ingsw.core;
 
-import it.polimi.ingsw.core.locations.FullLocationException;
-import it.polimi.ingsw.core.locations.RandomPickLocation;
-import it.polimi.ingsw.core.locations.RandomPutLocation;
-import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
-public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocation {
+public class Player implements ILivePlayer {
 
     private static final long serialVersionUID = 513182840776549527L;
 
@@ -23,7 +19,7 @@ public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocatio
     private final int tokenCount;
     private final IWindow window;
 
-    private Die heldDie;
+    private DieMock heldDie;
 
     @SuppressWarnings("squid:S3010")
     @JSONDesignatedConstructor
@@ -32,7 +28,7 @@ public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocatio
             @JSONElement("username") String username,
             @JSONElement("favour-tokens") int tokenCount,
             @JSONElement("window") WindowMock window,
-            @JSONElement("held-die") Die heldDie
+            @JSONElement("held-die") DieMock heldDie
     ) {
         this.id = id;
         this.username = username;
@@ -69,36 +65,5 @@ public class Player implements ILivePlayer, RandomPutLocation, RandomPickLocatio
                 this.id,
                 this.username
         );
-    }
-
-    @Override
-    public int getNumberOfDice() {
-        return this.heldDie == null ? 0 : 1;
-    }
-
-    @Override
-    public int getFreeSpace() {
-        return 1 - this.getNumberOfDice();
-    }
-
-    @Override
-    public Die pickDie() {
-        Die die = this.heldDie;
-        this.heldDie = null;
-        return die;
-    }
-
-    @Override
-    public void putDie(Die die) {
-        if (this.heldDie != null) {
-            throw new FullLocationException(this);
-        }
-
-        this.heldDie = die;
-    }
-
-    @JSONElement("held-die")
-    public Die getHeldDie() {
-        return heldDie;
     }
 }

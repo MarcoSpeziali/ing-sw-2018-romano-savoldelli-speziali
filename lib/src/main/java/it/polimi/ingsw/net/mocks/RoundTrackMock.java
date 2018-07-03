@@ -38,6 +38,10 @@ public class RoundTrackMock implements IRoundTrack {
             @JSONElement("location-die-map") Map<Integer, DieMock> locationDieMap
     ) {
         this(numberOfRounds, new LinkedList<>());
+
+        for (int i = 0; i < numberOfRounds; i++) {
+            this.rounds.add(new LinkedList<>());
+        }
         
         locationDieMap.forEach(invertBiConsumer(this::putDie));
     }

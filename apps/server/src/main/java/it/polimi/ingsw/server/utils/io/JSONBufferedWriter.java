@@ -1,10 +1,12 @@
 package it.polimi.ingsw.server.utils.io;
 
+import it.polimi.ingsw.server.utils.ServerLogger;
 import org.json.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Level;
 
 public class JSONBufferedWriter extends BufferedWriter {
     
@@ -39,7 +41,11 @@ public class JSONBufferedWriter extends BufferedWriter {
     }
     
     public void writeJSON(JSONObject json) throws IOException {
-        super.write(json.toString());
+        String content = json.toString();
+
+        ServerLogger.getLogger().log(Level.FINEST, "Sending data: {0}", content);
+
+        super.write(content);
         super.newLine();
         
         if (this.autoFlush) {

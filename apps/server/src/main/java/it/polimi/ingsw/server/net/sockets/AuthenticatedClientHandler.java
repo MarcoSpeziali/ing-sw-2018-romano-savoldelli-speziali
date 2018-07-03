@@ -93,6 +93,8 @@ public class AuthenticatedClientHandler extends ClientHandler {
 
                         // if the handler needs the connection to be kept alive it wont be closed
                     } while (middleware != null && middleware.shouldBeKeptAlive() && !shouldStop);
+
+                    shouldStop = false;
                 }
                 catch (Exception e) {
                     ServerLogger.getLogger()

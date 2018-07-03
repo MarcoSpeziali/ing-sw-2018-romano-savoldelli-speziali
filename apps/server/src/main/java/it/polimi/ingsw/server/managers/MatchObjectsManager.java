@@ -1,10 +1,8 @@
 package it.polimi.ingsw.server.managers;
 
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.models.Bag;
 import it.polimi.ingsw.models.ObjectiveCard;
 import it.polimi.ingsw.net.mocks.*;
-import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.controllers.DraftPoolControllerImpl;
 import it.polimi.ingsw.server.controllers.RoundTrackControllerImpl;
 import it.polimi.ingsw.server.controllers.ToolCardControllerImpl;
@@ -35,13 +33,19 @@ public class MatchObjectsManager {
     private Map<DatabasePlayer, WindowControllerImpl> playerWindowMap;
     private Map<DatabasePlayer, ObjectiveCard> playerPrivateObjectiveCardMap;
 
-    private Map<DatabasePlayer, Player> databasePlayerToLivePlayer;
+    private Map<DatabasePlayer, Integer> playerToTokensMap;
+    private Set<DatabasePlayer> playersLeft;
 
     private MatchObjectsManager(DatabaseMatch match) {
         this.match = match;
 
         playerWindowMap = new HashMap<>();
         playerPrivateObjectiveCardMap = new HashMap<>();
+        playersLeft = new HashSet<>(match.getLeftPlayers());
+    }
+
+    public void setPlayersLeft(Set<DatabasePlayer> playersLeft) {
+        this.playersLeft = playersLeft;
     }
 
     private void createPlayers() {
@@ -52,14 +56,14 @@ public class MatchObjectsManager {
         allPlayers.addAll(leftPlayers);
         allPlayers.addAll(List.of(currentPlayers));
 
-        databasePlayerToLivePlayer = allPlayers.stream()
-                .map(player -> Map.entry(player, new Player(
-                        player.getId(),
-                        player.getUsername(),
-                        Settings.getSettings().getMatchNumberOfFavourTokens(),
-                        new WindowMock(this.playerWindowMap.get(player).getWindow()),
-                        null
-                ))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        playerToTokensMap = allPlayers.stream()
+                .map(player -> Map.entry(
+                        player,
+                        this.playerWindowMap.get(player).getWindow().getDifficulty())
+                ).collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
     }
 
     public Bag getBag() {
@@ -126,12 +130,12 @@ public class MatchObjectsManager {
         return playerPrivateObjectiveCardMap;
     }
 
-    public Map<DatabasePlayer, Player> getDatabasePlayerToLivePlayer() {
-        return databasePlayerToLivePlayer;
+    public Map<DatabasePlayer, Integer> getFavourTokensMap() {
+        return playerToTokensMap;
     }
 
     public IMatch buildMatchMockForPlayer(DatabasePlayer player) {
-        if (this.databasePlayerToLivePlayer == null) {
+        if (this.playerToTokensMap == null) {
             this.createPlayers();
         }
 
@@ -140,10 +144,14 @@ public class MatchObjectsManager {
                 this.match.getStartingTime(),
                 this.match.getEndingTime(),
                 new LobbyMock(this.match.getLobby()),
-                this.databasePlayerToLivePlayer.values().stream()
-                        .filter(p -> p.getId() != player.getId())
-                        .map(LivePlayerMock::new)
-                        .toArray(LivePlayerMock[]::new),
+                this.playerToTokensMap.entrySet().stream()
+                        .filter(entry -> entry.getKey().getId() != player.getId())
+                        .map(entry -> new LivePlayerMock(
+                                entry.getValue(),
+                                new WindowMock(this.playerWindowMap.get(entry.getKey()).getWindow()),
+                                new PlayerMock(entry.getKey()),
+                                this.playersLeft.contains(entry.getKey())
+                        )).toArray(LivePlayerMock[]::new),
                 new DraftPoolMock(this.draftPoolController.getDraftPool()),
                 new RoundTrackMock(this.roundTrackController.getRoundTrack()),
                 Arrays.stream(this.publicObjectiveCards)
@@ -154,7 +162,12 @@ public class MatchObjectsManager {
                         .map(ToolCardMock::new)
                         .toArray(ToolCardMock[]::new),
                 new ObjectiveCardMock(this.playerPrivateObjectiveCardMap.get(player)),
-                this.databasePlayerToLivePlayer.get(player)
+                new LivePlayerMock(
+                        this.playerToTokensMap.get(player),
+                        new WindowMock(this.playerWindowMap.get(player).getWindow()),
+                        new PlayerMock(player),
+                        false
+                )
         );
     }
     

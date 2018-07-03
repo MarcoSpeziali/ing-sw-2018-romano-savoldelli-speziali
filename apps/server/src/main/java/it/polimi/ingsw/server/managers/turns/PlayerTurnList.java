@@ -63,7 +63,7 @@ public class PlayerTurnList {
             // continues while (j < shuffledArray.length) if even (j > 0) otherwise
             // after each loop j++ if even j-- otherwise
             for (int j = isEvenRound ? 0 : (shuffledArray.length - 1);
-                 (isEvenRound && j < shuffledArray.length) || (!isEvenRound && j > 0);
+                 (isEvenRound && j < shuffledArray.length) || (!isEvenRound && j >= 0);
                  j += isEvenRound ? 1 : -1) {
                 this.turns.add(new PlayerTurn(shuffledArray[j], (byte) i));
             }
@@ -187,7 +187,7 @@ public class PlayerTurnList {
      */
     private PlayerTurn nextTurn() {
         // if no more turns are available null is returned
-        if (hasNext()) {
+        if (!hasNext()) {
             return null;
         }
         

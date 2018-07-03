@@ -6,10 +6,10 @@ import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.*;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChooseBetweenActionsRequest;
 import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.utils.Range;
-import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +19,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Map;
-import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 
@@ -531,7 +530,7 @@ public class MatchGUITest extends Application {
             }
     
             @Override
-            public Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() throws IOException {
+            public ChooseBetweenActionsRequest waitForChooseBetweenActions() throws IOException {
                 return null;
             }
     

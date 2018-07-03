@@ -60,7 +60,7 @@ public class Bag implements RandomPutLocation, RandomPickLocation, JSONSerializa
             throw new EmptyLocationException(this);
         }
 
-        int shade = randomProvider.nextInt(7) + 1;
+        int shade = randomProvider.nextInt(6) + 1;
         GlassColor randColor = colors.get(randomProvider.nextInt(colors.size()));
 
         dice.merge(randColor, -1, Integer::sum);

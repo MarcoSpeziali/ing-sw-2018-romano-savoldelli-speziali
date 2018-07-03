@@ -37,12 +37,15 @@ public class GlobalContext extends Context {
      */
     public Context getContextForMatch(int matchId) {
         String key = String.valueOf(matchId);
-        
+
         if (this.containsKey(key)) {
             return (Context) this.get(key);
         }
         else {
-            return (Context) this.put(key, this.snapshot(key));
+            Context context = this.snapshot(key);
+            this.put(key, context);
+
+            return context;
         }
     }
 
@@ -51,11 +54,6 @@ public class GlobalContext extends Context {
 
         Context matchContext = getContextForMatch(matchId);
 
-        if (matchContext.containsKey(key)) {
-            return (Context) matchContext.get(key);
-        }
-        else {
-            return (Context) matchContext.put(key, this.snapshot(key));
-        }
+        return (Context) matchContext.getOrDefault(key, null);
     }
 }

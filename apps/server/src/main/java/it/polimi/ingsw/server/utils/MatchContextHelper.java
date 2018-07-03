@@ -1,14 +1,12 @@
 package it.polimi.ingsw.server.utils;
 
 import it.polimi.ingsw.core.Context;
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.IPlayer;
+import it.polimi.ingsw.net.mocks.PlayerMock;
 import it.polimi.ingsw.server.managers.MatchObjectsManager;
 import it.polimi.ingsw.server.managers.turns.PlayerTurnList;
 import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
-
-import java.util.Map;
 
 public class MatchContextHelper {
 
@@ -20,12 +18,10 @@ public class MatchContextHelper {
         matchContext.put(Context.BAG, matchObjectsManager.getBag());
         matchContext.put(Context.TURN_LIST, playerTurnList);
 
-        Map<DatabasePlayer, Player> databasePlayerToLivePlayerMap = matchObjectsManager.getDatabasePlayerToLivePlayer();
-
         for (DatabasePlayer player : databaseMatch.getDatabasePlayers()) {
             Context playerContext = getContextForPlayer(matchContext, player);
             playerContext.put(Context.WINDOW, matchObjectsManager.getWindowControllerForPlayer(player).getWindow());
-            playerContext.put(Context.CURRENT_PLAYER, databasePlayerToLivePlayerMap.get(player));
+            playerContext.put(Context.CURRENT_PLAYER, new PlayerMock(player));
         }
     }
 
@@ -36,7 +32,10 @@ public class MatchContextHelper {
             return (Context) matchContext.get(key);
         }
         else {
-            return (Context) matchContext.put(key, matchContext.snapshot(key));
+            Context context = matchContext.snapshot(key);
+            matchContext.put(key, context);
+
+            return context;
         }
     }
 }

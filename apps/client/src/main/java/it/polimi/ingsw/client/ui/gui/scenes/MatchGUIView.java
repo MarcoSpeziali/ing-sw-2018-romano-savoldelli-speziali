@@ -14,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -30,8 +29,9 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
-//import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
+
+//import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Property;
 
 
 public class MatchGUIView extends GUIView<MatchController> {
@@ -76,7 +76,6 @@ public class MatchGUIView extends GUIView<MatchController> {
     @Override
     public void init() {
         chooseWindow();
-        setUpOpponentsWindowsFuture();
         loadElements();
         MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
         //helper.init();
@@ -226,7 +225,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     FXMLLoader draftPoolLoader = new FXMLLoader();
                     draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
                     Node draftPoolNode = draftPoolLoader.load();
-                    DraftPoolGUIView draftPoolGUIView = draftPoolLoader.getController();
+                    draftPoolGUIView = draftPoolLoader.getController();
                     draftPoolGUIView.setModel(iDraftPool);
                     draftPoolGUIView.setProperty(Constants.Property.OWNED);
                     centerPane.setTop(draftPoolNode);
@@ -241,6 +240,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     bottomBar.getChildren().add(roundTrackNode);
                     BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
                     bottomBar.setMargin(roundTrackNode, new Insets(0,0,300,0));
+
                     this.setUpOpponentsWindows(iMatch);
                 })));}
 
@@ -340,11 +340,6 @@ public class MatchGUIView extends GUIView<MatchController> {
         });
     }
 
-    private void setUpOpponentsWindowsFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
-                .thenAccept(this::setUpOpponentsWindows);
-    }
-
     public void onEndTurnClicked() throws IOException {
         this.model.endTurn();
         this.timer.cancel();
@@ -357,6 +352,8 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpWaitForTurnToBegin(int remainingTime) {
         Platform.runLater(unsafe(() -> {
+            setUpWaitForTurnToEnd(null);
+
             VBox turnBox = new VBox();
             JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
             timerLabel.setPrefSize(182, 109);
@@ -374,11 +371,18 @@ public class MatchGUIView extends GUIView<MatchController> {
             for(Node node: toolCardNodes) {
                 node.setDisable(false);
             }
-            endTurnButton.setOnMouseClicked(e->{
-                setUpWaitForTurnToEnd(null);
+            endTurnButton.setOnMouseClicked(e -> {
+                try {
+                    onEndTurnClicked();
+                }
+                catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
                 bottomBar.getChildren().remove(turnBox);
 
             });
+
             setUpWaitForTurnToBeginFuture();
             }
         ));

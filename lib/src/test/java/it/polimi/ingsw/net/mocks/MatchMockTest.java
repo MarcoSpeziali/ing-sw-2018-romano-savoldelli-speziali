@@ -1,56 +1,16 @@
 package it.polimi.ingsw.net.mocks;
 
+import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/*
 class MatchMockTest {
-    
-    private Long opening = 2123L;
-    private Long closing = 3123531L;
-    private PlayerMock playerMock1 = new PlayerMock(1, "prova1");
-    private PlayerMock playerMock2 = new PlayerMock(2, "prova2");
-    private PlayerMock[] playerMocks = new PlayerMock[] { playerMock1, playerMock2 };
-    private LivePlayerMock livePlayerMock1 = new LivePlayerMock(playerMock1);
-    private LivePlayerMock livePlayerMock2 = new LivePlayerMock(playerMock2);
-    private LivePlayerMock[] livePlayerMocks = new LivePlayerMock[] {livePlayerMock1, livePlayerMock2};
-    private LobbyMock lobbyMock = new LobbyMock(32,opening, closing, 15, playerMocks);
-    private MatchMock matchMock = new MatchMock(21, opening, closing, lobbyMock, new LivePlayerMock[0]);
 
     @Test
     void testSerializationAndDeserialization() {
-        JSONObject jsonObject = matchMock.serialize();
-        MatchMock deserializeMatchMock = JSONSerializable.deserialize(MatchMock.class, jsonObject);
-        Assertions.assertEquals(3123531L, deserializeMatchMock.getEndingTime());
-    }
+        JSONObject jsonObject = new JSONObject("{\"response\":{\"header\":{\"endpoint\":\"MATCH_UPDATE_RESPONSE\"},\"body\":{\"draft-pool\":{\"location-die-map\":{},\"max-number-of-dice\":2},\"ending-time\":-1,\"lobby\":{\"opening-time\":1530568800000,\"closing-time\":1530568800000,\"players\":[{\"id\":1,\"username\":\"1\"},{\"id\":2,\"username\":\"2\"}],\"time-remaining\":-1,\"id\":65},\"public-objective-cards\":[{\"visibility\":\"PUBLIC\",\"description\":\"cards.public_cards.light_shades.description\",\"id\":\"light_shades\",\"title\":\"cards.public_cards.light_shades.name\",\"objective\":{\"points-per-completion\":2}},{\"visibility\":\"PUBLIC\",\"description\":\"cards.public_cards.row_color_variety.description\",\"id\":\"row_color_variety\",\"title\":\"cards.public_cards.row_color_variety.name\",\"objective\":{\"points-per-completion\":6}},{\"visibility\":\"PUBLIC\",\"description\":\"cards.public_cards.color_variety.description\",\"id\":\"color_variety\",\"title\":\"cards.public_cards.color_variety.name\",\"objective\":{\"points-per-completion\":4}}],\"round-track\":{\"round-number\":10,\"location-die-map\":{}},\"private-objective-card\":{\"visibility\":\"PRIVATE\",\"description\":\"cards.private_cards.blue_shade.description\",\"id\":\"blue_shade\",\"title\":\"cards.private_cards.blue_shade.name\",\"objective\":{\"points-per-completion\":1}},\"players\":[{\"left\":false,\"favour-tokens\":24,\"window\":{\"difficulty\":5,\"cells\":[{\"shade\":6},{\"color\":\"PURPLE\",\"shade\":0},{\"shade\":0},{\"shade\":0},{\"shade\":5},{\"shade\":5},{\"shade\":0},{\"color\":\"PURPLE\",\"shade\":0},{\"shade\":0},{\"shade\":0},{\"color\":\"RED\",\"shade\":0},{\"shade\":6},{\"shade\":0},{\"color\":\"PURPLE\",\"shade\":0},{\"shade\":0},{\"color\":\"YELLOW\",\"shade\":0},{\"color\":\"RED\",\"shade\":0},{\"shade\":5},{\"shade\":4},{\"shade\":3}],\"columns\":5,\"id\":\"shadow_thief\",\"rows\":4},\"player\":{\"id\":1,\"username\":\"1\"}}],\"id\":64,\"class-type\":\"it.polimi.ingsw.net.mocks.MatchMock\",\"starting-time\":1530568800000,\"tool-cards\":[{\"effect\":{\"cost\":1,\"description-key\":\"cards.tool_cards.eglomise_brush.description\"},\"description\":\"cards.tool_cards.eglomise_brush.description\",\"id\":\"eglomise_brush\",\"title\":\"cards.tool_cards.eglomise_brush.name\"},{\"effect\":{\"cost\":1,\"description-key\":\"cards.tool_cards.lens_cutter.description\"},\"description\":\"cards.tool_cards.lens_cutter.description\",\"id\":\"lens_cutter\",\"title\":\"cards.tool_cards.lens_cutter.name\"},{\"effect\":{\"cost\":1,\"description-key\":\"cards.tool_cards.lathekin.description\"},\"description\":\"cards.tool_cards.lathekin.description\",\"id\":\"lathekin\",\"title\":\"cards.tool_cards.lathekin.name\"}],\"current-player\":{\"left\":false,\"favour-tokens\":24,\"window\":{\"difficulty\":6,\"cells\":[{\"shade\":1},{\"color\":\"PURPLE\",\"shade\":0},{\"color\":\"YELLOW\",\"shade\":0},{\"shade\":0},{\"shade\":4},{\"color\":\"PURPLE\",\"shade\":0},{\"color\":\"YELLOW\",\"shade\":0},{\"shade\":0},{\"shade\":0},{\"shade\":6},{\"color\":\"YELLOW\",\"shade\":0},{\"shade\":0},{\"shade\":0},{\"shade\":5},{\"shade\":3},{\"shade\":0},{\"shade\":5},{\"shade\":4},{\"shade\":2},{\"shade\":1}],\"columns\":5,\"id\":\"suns_glory\",\"rows\":4},\"player\":{\"id\":2,\"username\":\"2\"}}}}}");
 
-    @Test
-    void getId() {
-        Assertions.assertEquals(21, matchMock.getId());
-    }
-
-    @Test
-    void getStartingTime() {
-        Assertions.assertEquals(2123L, matchMock.getStartingTime());
-    }
-
-    @Test
-    void getEndingTime() {
-        Assertions.assertEquals(3123531L, matchMock.getEndingTime());
-    }
-
-    @Test
-    void getLobby() {
-        Assertions.assertEquals(32, matchMock.getLobby().getId());
-    }
-    
-    @Test
-    void getPlayers() {
-        for (int i = 0; i < playerMocks.length; i++) {
-            Assertions.assertEquals(livePlayerMock1.getPlayer().getUsername(), matchMock.getPlayers()[0].getPlayer().getUsername());
-        }
+        Response<MatchMock> matchMockResponse = JSONSerializable.deserialize(Response.class, jsonObject);
     }
 }
-*/

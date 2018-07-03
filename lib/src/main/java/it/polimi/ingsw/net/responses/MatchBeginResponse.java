@@ -1,6 +1,7 @@
 package it.polimi.ingsw.net.responses;
 
 import it.polimi.ingsw.net.interfaces.MatchInteraction;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
 public class MatchBeginResponse implements MatchInteraction {
@@ -9,7 +10,8 @@ public class MatchBeginResponse implements MatchInteraction {
     
     private final int matchId;
     private final int timeRemaining;
-    
+
+    @JSONDesignatedConstructor
     public MatchBeginResponse(
             @JSONElement("match-id") int matchId,
             @JSONElement("time-remaining") int timeRemaining

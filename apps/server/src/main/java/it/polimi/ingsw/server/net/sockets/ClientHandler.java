@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.net.sockets;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
+import it.polimi.ingsw.net.requests.NullRequest;
 import it.polimi.ingsw.net.responses.NullResponse;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.RequestFields;
@@ -210,7 +211,7 @@ public abstract class ClientHandler implements Runnable, AutoCloseable {
             return null;
         }
 
-        if (request.getBody() instanceof NullResponse) {
+        if (request.getBody() instanceof NullRequest) {
             return middleware;
         }
 

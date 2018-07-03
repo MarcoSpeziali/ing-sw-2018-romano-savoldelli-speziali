@@ -54,24 +54,18 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                     Node source = loader.load();
                     source.setCursor(Cursor.OPEN_HAND);
 
-                    source.setOnDragDetected(new EventHandler <MouseEvent>() {
-                        public void handle(MouseEvent event) {
-                            if (property == Constants.Property.OWNED) {
-                                Move move = Move.build();
-                                move.begin(location);
-                                try {
-                                    Match.getMatchController().tryToMove(move);
-                                    Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-                                    ClipboardContent content = new ClipboardContent();
-                                    content.put(Constants.iDieFormat, locationsDieMap.get(location));
-                                    db.setContent(content);
-                                    event.consume();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                    source.setOnDragDetected(event -> {
+                        if (property == Constants.Property.OWNED) {
+                            System.out.println("Drag detected");
+
+                            Move move = Move.build();
+                            move.begin(location);
+
+                            Dragboard db = source.startDragAndDrop(TransferMode.ANY);
+                            ClipboardContent content = new ClipboardContent();
+                            content.put(Constants.iDieFormat, locationsDieMap.get(location));
+                            db.setContent(content);
+                            event.consume();
                         }
                     });
 

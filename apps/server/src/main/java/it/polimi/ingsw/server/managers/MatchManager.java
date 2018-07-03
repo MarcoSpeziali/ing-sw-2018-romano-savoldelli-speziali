@@ -5,9 +5,9 @@ import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.Move;
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.models.*;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.server.Objective;
 import it.polimi.ingsw.server.Settings;
 import it.polimi.ingsw.server.controllers.*;
@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
@@ -240,6 +241,12 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         this.matchObjectsManager.setRoundTrackController(roundTrackController);
         this.matchObjectsManager.setDraftPoolController(draftPoolController);
         this.matchObjectsManager.setToolCardControllers(toolCardControllers);
+
+        draftPoolController.putAll(
+                IntStream.range(0, 2 * this.matchPlayers.size() + 1)
+                        .mapToObj(i -> bag.pickDie())
+                        .toArray(Die[]::new)
+        );
     }
     
     private ObjectiveCard[] getPublicObjectiveCards() throws IOException, ClassNotFoundException {
@@ -450,7 +457,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
     // ------ MOVE HANDLING ------
 
-    private void handleMove(Move move, DatabasePlayer databasePlayer, Turn currentTurn) throws IOException {
+    private MoveResponse handleMove(Move move, DatabasePlayer databasePlayer, Turn currentTurn) throws IOException {
         /*
             started         = 0b00
             die_placed      = 0b01
@@ -490,14 +497,16 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                         false
                 );
 
-                this.matchCommunicationsManager.sendPositiveResponseForMoveToPlayer(databasePlayer);
+                this.onModelsUpdated();
+
+                return new MoveResponse(this.databaseMatch.getId(), false);
             }
             catch (DieInteractionException e) {
-                this.matchCommunicationsManager.sendNegativeResponseForMoveToPlayer(databasePlayer);
+                return new MoveResponse(this.databaseMatch.getId(), false);
             }
         }
         else {
-            this.matchCommunicationsManager.sendNegativeResponseForMoveToPlayer(databasePlayer);
+            return new MoveResponse(this.databaseMatch.getId(), false);
         }
     }
 
@@ -509,6 +518,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         try {
             DatabaseMatch.removePlayer(this.databaseMatch.getId(), player.getId());
             this.matchCommunicationsManager.removePlayer(player);
+            this.matchObjectsManager.setPlayersLeft(new HashSet<>(this.databaseMatch.getLeftPlayers()));
         }
         catch (SQLException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
@@ -551,7 +561,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 }
 
                 this.roundManager = RoundManager.createRoundManager(this.databaseMatch);
-    
+
                 this.roundsTaskFuture = this.roundsExecutorService.submit(this.roundsExecutorTask);
             }
             catch (ClassNotFoundException e) {
@@ -565,15 +575,15 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     }
 
     @Override
-    public void onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move) {
+    public MoveResponse onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move) {
         if (this.roundManager.current().getPlayer().getId() != databasePlayer.getId()) {
-            return;
+            return new MoveResponse(databaseMatch.getId(), false);
         }
 
         Turn currentTurn = this.roundManager.current();
 
         try {
-            this.handleMove(move, databasePlayer, currentTurn);
+            MoveResponse moveResponse = this.handleMove(move, databasePlayer, currentTurn);
             currentTurn.appendPhase(Turn.DIE_PLACED);
 
             if (currentTurn.getPhase() == Turn.ENDED) {
@@ -583,9 +593,12 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                     this.moveTimerScheduledFuture.cancel(false);
                 }
             }
+
+            return moveResponse;
         }
         catch (IOException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error while sending move response to user: " + databasePlayer.toString(), e);
+            return null;
         }
     }
     
@@ -612,12 +625,12 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         
         ToolCardControllerImpl controller = optionalController.get();
         
-        Player currentPlayer = this.matchObjectsManager.getDatabasePlayerToLivePlayer().get(databasePlayer);
+        Integer tokens = this.matchObjectsManager.getFavourTokensMap().get(databasePlayer);
         
-        if (!controller.canUse(currentPlayer)) {
+        if (!controller.canUse(tokens)) {
             throw new NotEnoughTokensException(
                     controller.getToolCard().getEffect().getCost(),
-                    currentPlayer.getFavourTokens()
+                    tokens
             );
         }
         
@@ -630,7 +643,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         );
         
         controller.requestUsage(
-                currentPlayer
+                databasePlayer, tokens
         );
 
         controller.setUserInteractionProvider(null);

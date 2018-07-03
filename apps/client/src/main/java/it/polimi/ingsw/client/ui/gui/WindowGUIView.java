@@ -1,18 +1,19 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
-
 import it.polimi.ingsw.core.Match;
 import it.polimi.ingsw.core.Move;
-import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
+import it.polimi.ingsw.net.responses.MoveResponse;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
@@ -81,12 +82,16 @@ public class WindowGUIView extends GUIView<IWindow> {
                         Dragboard db = event.getDragboard();
 
                         try {
-                            Match.getMatchController().tryToMove(Move.getCurrentMove()
-                                    .end(finalI *iWindow.getColumns()+ finalJ));
+                            MoveResponse moveResponse = Match.getMatchController().tryToMove(
+                                    Move.getCurrentMove()
+                                            .end(finalI *iWindow.getColumns()+ finalJ)
+                            );
+
+                            if (!moveResponse.isValid()) {
+                                // TODO: 03/07/18 @savdav96: show error message
+                            }
 
                             target.setCursor(Cursor.CROSSHAIR);
-                            System.out.println();
-                            cellGUIView.onUpdateReceived((IDie) db.getContent(Constants.iDieFormat));
                             event.setDropCompleted(true);
                             event.consume();
                         } catch (IOException e) {

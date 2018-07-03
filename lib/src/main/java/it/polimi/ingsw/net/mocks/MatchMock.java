@@ -1,6 +1,5 @@
 package it.polimi.ingsw.net.mocks;
 
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
@@ -20,7 +19,7 @@ public class MatchMock implements IMatch {
     private final IObjectiveCard[] publicObjectiveCards;
     private final IToolCard[] toolCards;
     private final IObjectiveCard privateObjective;
-    private final Player currentPlayer;
+    private final ILivePlayer currentPlayer;
 
     public MatchMock(IMatch iMatch) {
         this(
@@ -40,7 +39,7 @@ public class MatchMock implements IMatch {
                         .map(ToolCardMock::new)
                         .toArray(ToolCardMock[]::new),
                 new ObjectiveCardMock(iMatch.getPrivateObjectiveCard()),
-                iMatch.getCurrentPlayer()
+                new LivePlayerMock(iMatch.getCurrentPlayer())
         );
     }
 
@@ -56,7 +55,7 @@ public class MatchMock implements IMatch {
             @JSONElement("public-objective-cards") ObjectiveCardMock[] publicObjectiveCards,
             @JSONElement("tool-cards") ToolCardMock[] toolCards,
             @JSONElement("private-objective-card") ObjectiveCardMock privateObjective,
-            @JSONElement("current-player") Player currentPlayer
+            @JSONElement("current-player") LivePlayerMock currentPlayer
     ) {
         this.id = id;
         this.startingTime = startingTime;
@@ -133,7 +132,7 @@ public class MatchMock implements IMatch {
 
     @Override
     @JSONElement("current-player")
-    public Player getCurrentPlayer() {
+    public ILivePlayer getCurrentPlayer() {
         return currentPlayer;
     }
 }

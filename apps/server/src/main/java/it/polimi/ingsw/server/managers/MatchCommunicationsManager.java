@@ -70,7 +70,7 @@ public class MatchCommunicationsManager {
         ));
         this.forEachRmi((databasePlayer, matchRMIProxyController) -> {
             matchRMIProxyController.setWindowResponseConsumer(window -> this.onWindowChosen(databasePlayer, window));
-            matchRMIProxyController.setMoveConsumer(move -> this.onMoveRequested(databasePlayer, move));
+            matchRMIProxyController.setMoveFunction(move -> this.onMoveRequested(databasePlayer, move));
             matchRMIProxyController.setEndTurnRunnable(() -> this.onEndRequested(databasePlayer));
             matchRMIProxyController.setToolCardConsumer(toolCard -> this.onToolCardRequested(databasePlayer, toolCard));
         });
@@ -178,7 +178,7 @@ public class MatchCommunicationsManager {
                 ));
             }
             else {
-                matchRMIProxyController.postMoveResponse(moveResponse);
+                // matchRMIProxyController.postMoveResponse(moveResponse);
             }
         });
     }
@@ -270,8 +270,8 @@ public class MatchCommunicationsManager {
         this.matchCommunicationsListener.onWindowChosen(this, databasePlayer, chosenWindow);
     }
     
-    public void onMoveRequested(DatabasePlayer databasePlayer, Move requestedMove) {
-        this.matchCommunicationsListener.onPlayerTriedToMove(this, databasePlayer, requestedMove);
+    public MoveResponse onMoveRequested(DatabasePlayer databasePlayer, Move requestedMove) {
+        return this.matchCommunicationsListener.onPlayerTriedToMove(this, databasePlayer, requestedMove);
     }
     
     public void onEndRequested(DatabasePlayer databasePlayer) {

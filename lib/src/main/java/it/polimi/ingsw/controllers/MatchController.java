@@ -5,12 +5,11 @@ import it.polimi.ingsw.controllers.proxies.RemotelyClosable;
 import it.polimi.ingsw.controllers.proxies.RemotelyInitializable;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChooseBetweenActionsRequest;
 import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
-import it.polimi.ingsw.utils.Range;
 
 import java.io.IOException;
-import java.util.Map;
 
 public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyInitializable, RemotelyClosable {
     
@@ -35,7 +34,7 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
         void postChosenPosition(Integer chosenPosition) throws IOException;
 
             // range interi 2:5
-        Map.Entry<IAction[], Range<Integer>> waitForChooseBetweenActions() throws IOException;
+        ChooseBetweenActionsRequest waitForChooseBetweenActions() throws IOException;
         void postChosenActions(IAction[] actions) throws IOException;
 
             // 0:n volte

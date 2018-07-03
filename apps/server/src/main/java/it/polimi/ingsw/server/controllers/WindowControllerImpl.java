@@ -22,14 +22,20 @@ public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListen
     private final CellControllerImpl[][] cellControllers;
 
     public WindowControllerImpl(Window window, Function<Cell, CellControllerImpl> cellControllerFunction) {
-        this(
-                window,
-                Arrays.stream(window.getCells())
-                        .flatMap(Arrays::stream)
-                        .map(cellControllerFunction)
-                        .map(cellController -> new CellControllerImpl[] { cellController })
-                        .toArray(CellControllerImpl[][]::new)
-        );
+        this.window = window;
+        this.cellControllers = new CellControllerImpl[window.getRows()][window.getColumns()];
+
+        CellControllerImpl[] controllers = Arrays.stream(window.getCells())
+                .flatMap(Arrays::stream)
+                .map(cellControllerFunction)
+                .toArray(CellControllerImpl[]::new);
+
+        for (int i = 0; i < window.getRows(); i++) {
+            System.arraycopy(controllers, i * window.getColumns(), this.cellControllers[i], 0, window.getColumns());
+        }
+
+        this.window.addPickListener(this);
+        this.window.addPutListener(this);
     }
 
     public WindowControllerImpl(Window window, CellControllerImpl[][] cellControllers) {
@@ -48,7 +54,12 @@ public class WindowControllerImpl implements OnDiePutListener, OnDiePickedListen
     }
 
     public boolean canPutDieAtLocation(IDie die, Integer location) {
-        return false;
+        return this.window.getPossiblePositionsForDie(
+                new Die(die.getShade(), die.getColor()),
+                false,
+                false,
+                false
+        ).contains(location);
     }
 
     public Die tryToPick(int location) {
