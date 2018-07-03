@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.ui.cli;
+package it.polimi.ingsw.client.ui.cli.scenes;
 
 public class InGameCLIView  {
 

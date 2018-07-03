@@ -66,24 +66,31 @@ public class CellGUIView extends GUIView<ICell> {
             colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", iCell.getColor().getHex()));
         }
 
+        onUpdateReceived(iCell.getDie());
+
     }
 
     public void onUpdateReceived(IDie update) {
         Platform.runLater(() -> {
-            if (dieAnchorPane.getChildren().isEmpty()) {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
-                try {
-                    Node die = loader.load();
-                    DieGUIView dieGUIView = loader.getController();
-                    dieGUIView.setModel(update);
-                    dieGUIView.setScale(20, 20);
-                    dieAnchorPane.getChildren().add(die);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if (update != null) {
+                if (dieAnchorPane.getChildren().isEmpty()) {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
+                    try {
+                        Node die = loader.load();
+                        DieGUIView dieGUIView = loader.getController();
+                        dieGUIView.setModel(update);
+                        dieGUIView.setScale(20, 20);
+                        dieAnchorPane.getChildren().add(die);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+            else if (!dieAnchorPane.getChildren().isEmpty())
+                dieAnchorPane.getChildren().removeAll();
         });
     }
 

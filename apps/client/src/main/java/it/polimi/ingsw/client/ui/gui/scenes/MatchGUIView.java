@@ -66,183 +66,48 @@ public class MatchGUIView extends GUIView<MatchController> {
     @FXML
     public BorderPane centerPane;
 
-    public DraftPoolGUIView draftPoolGUIView;
-    public WindowGUIView windowGUIView;
+    private DraftPoolGUIView draftPoolGUIView;
+    private WindowGUIView ownedWindowGUIView;
+    private WindowGUIView[] opponentsWindowsGUIViews;
+    private RoundTrackGUIView roundTrackGUIView;
+    private ToolCardGUIView[] toolCardGUIViews;
+    private ObjectiveCardGUIView[] publicObjectiveCardGUIViews;
+    private ObjectiveCardGUIView privateObjectiveCardGUIView;
 
     public List<Node> toolCardNodes = new LinkedList<>();
     private Label timerLabel = new Label("00");
-    private Node currentWindow;
+
 
     @Override
     public void init() {
         chooseWindow();
-        loadElements();
+        loadElementsFuture();
         MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
-        //helper.init();
+        helper.init();
         setUpWaitForTurnToBeginFuture();
         setUpWaitForTurnToEndFuture();
         setUpWaitForMatchToEnd();
     }
 
-    private void loadElements() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForUpdate()))
-                .thenAccept(iMatch -> Platform.runLater(unsafe(() -> {
-                    IRoundTrack iRoundTrack             = iMatch.getRoundTrack();
-                    IDraftPool iDraftPool               = iMatch.getDraftPool();
-                    IToolCard[] iToolCards              = iMatch.getToolCards();
-                    IObjectiveCard[] iObjectiveCards    = iMatch.getPublicObjectiveCards();
-                    IObjectiveCard iPrivateObjectiveCard = iMatch.getPrivateObjectiveCard();
-                    IWindow iWindow = iMatch.getCurrentPlayer().getWindow();
+    private void loadElements(IMatch iMatch) {
 
-                    DropShadow dropShadow = new DropShadow();
-                    dropShadow.setRadius(5.0);
-                    dropShadow.setOffsetX(3.0);
-                    dropShadow.setOffsetY(3.0);
-                    dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+        Platform.runLater(unsafe(() -> {
 
-                    windowGUIView.setModel(iWindow);
-                    centerPane.setCenter(currentWindow);
-                    windowGUIView.setProperty(Constants.Property.OWNED);
-                    currentWindow.setScaleY(1.7);
-                    currentWindow.setScaleX(1.7);
+            loadRoundTrack(iMatch.getRoundTrack());
+            loadDraftPool(iMatch.getDraftPool());
+            loadToolCards(iMatch.getToolCards());
+            loadPrivateObjectiveCard(iMatch.getPrivateObjectiveCard());
+            loadPublicObjectiveCards(iMatch.getPublicObjectiveCards());
+            loadOpponentsWindows(iMatch.getPlayers());
+            loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
 
-                    for (IToolCard iToolCard : iToolCards) { //ToolCard
-                        JFXDialogLayout content = new JFXDialogLayout();
-                        JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+        }));
+    }
 
-                        FXMLLoader toolCardLoader = new FXMLLoader();
-                        toolCardLoader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
-                        Node toolCardNode = toolCardLoader.load();
-                        ToolCardGUIView toolCardGUIView = toolCardLoader.getController();
-                        toolCardGUIView.setModel(iToolCard);
-                        vBoxToolCard.getChildren().add(toolCardNode);
-                        vBoxToolCard.setMinHeight(1000);
-                        vBoxToolCard.setMaxWidth(200);
-                        vBoxToolCard.setSpacing(20);
-                        vBoxToolCard.setAlignment(Pos.TOP_CENTER);
-                        toolCardNode.setOnMousePressed(event -> dialog.show());
-                        toolCardNode.setCursor(Cursor.HAND);
-                        //toolCardNode.setDisable(true);
-                        toolCardNode.setEffect(dropShadow);
-                        toolCardNodes.add(toolCardNode);
-
-                        JFXButton use = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
-                        JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
-                        content.setMinSize(350, 500);
-                        FXMLLoader loader =  new FXMLLoader();
-                        loader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
-                        Node tc = loader.load();
-                        ToolCardGUIView controller = loader.getController();
-                        controller.setModel(iToolCard);
-                        content.setBody(tc);
-                        tc.setScaleX(1.6);
-                        tc.setScaleY(1.6);
-                        StackPane.setAlignment(tc, Pos.CENTER);
-                        cancel.setOnMousePressed(event -> dialog.close());
-                        content.setActions(cancel);
-
-                        use.setOnMousePressed(event -> {
-
-                            try {
-                                this.model.requestToolCardUsage(iToolCard);
-                                dialog.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (RuntimeException e) {
-                                JFXDialogLayout content2 = new JFXDialogLayout();
-                                JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
-                                JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
-                                cancel2.setOnMousePressed(e1 -> dialog2.close());
-                                content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
-                                content2.setActions(cancel2);
-                                dialog2.show();
-                            }
-                        });
-
-                        cancel.setOnMousePressed(event ->
-                                dialog.close()
-                        );
-                        content.setActions(use, cancel);
-                    }
-
-                    for (IObjectiveCard iObjectiveCard : iObjectiveCards) { //ObjectiveCard
-                        JFXDialogLayout content = new JFXDialogLayout();
-                        JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-
-                        FXMLLoader objectiveCardLoader = new FXMLLoader();
-                        objectiveCardLoader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
-                        Node objectiveCardNode = objectiveCardLoader.load();
-                        objectiveCardNode.setOnMousePressed(event -> dialog.show());
-                        ObjectiveCardGUIView objectiveCardGUIView = objectiveCardLoader.getController();
-                        objectiveCardGUIView.setModel(iObjectiveCard);
-                        objectiveCardNode.setCursor(Cursor.HAND);
-                        objectiveCardNode.setEffect(dropShadow);
-                        vBoxObjectiveCard.getChildren().add(objectiveCardNode);
-                        vBoxObjectiveCard.setMaxWidth(200);
-                        vBoxObjectiveCard.setMinHeight(1000);
-                        vBoxObjectiveCard.setSpacing(20);
-                        vBoxObjectiveCard.setAlignment(Pos.TOP_CENTER);
-
-                        FXMLLoader loader =  new FXMLLoader();
-                        loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
-                        Node oc = loader.load();
-                        ObjectiveCardGUIView controller = loader.getController();
-                        controller.setModel(iObjectiveCard);content.setBody(oc);
-                        StackPane.setAlignment(oc, Pos.CENTER);
-                        oc.setScaleY(1.6);
-                        oc.setScaleX(1.6);
-                        content.setMinSize(350, 500);
-                        JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
-                        cancel.setOnMousePressed(event -> dialog.close());
-                        content.setActions(cancel);
-                    }
-
-                    JFXDialogLayout content = new JFXDialogLayout();
-                    JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-                    FXMLLoader privateCardLoader = new FXMLLoader();
-                    privateCardLoader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
-                    Node privateCardNode = privateCardLoader.load();
-                    privateCardNode.setOnMousePressed(event -> dialog.show());
-                    privateCardNode.setCursor(Cursor.HAND);
-                    privateCardNode.setEffect(dropShadow);
-                    ObjectiveCardGUIView objectiveCardGUIView = privateCardLoader.getController();
-                    objectiveCardGUIView.setModel(iPrivateObjectiveCard);
-                    FXMLLoader loader =  new FXMLLoader();
-                    loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
-                    Node oc = loader.load();
-                    ObjectiveCardGUIView controller = loader.getController();
-                    controller.setModel(iPrivateObjectiveCard);
-                    content.setBody(oc);
-                    StackPane.setAlignment(oc, Pos.CENTER);
-                    JFXButton cancel = new JFXButton("Back");
-                    cancel.setOnMousePressed(event -> dialog.close());
-                    content.setActions(cancel);
-
-                    centerPane.setRight(privateCardNode);
-                    BorderPane.setAlignment(privateCardNode, Pos.BOTTOM_CENTER);
-                    BorderPane.setMargin(privateCardNode, new Insets(0,10,220,10));
-
-                    FXMLLoader draftPoolLoader = new FXMLLoader();
-                    draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
-                    Node draftPoolNode = draftPoolLoader.load();
-                    draftPoolGUIView = draftPoolLoader.getController();
-                    draftPoolGUIView.setModel(iDraftPool);
-                    draftPoolGUIView.setProperty(Constants.Property.OWNED);
-                    centerPane.setTop(draftPoolNode);
-                    BorderPane.setAlignment(draftPoolNode, Pos.BOTTOM_CENTER);
-                    BorderPane.setMargin(draftPoolNode, new Insets(300, 100, 0, 100));
-
-                    FXMLLoader roundTrackLoader = new FXMLLoader();
-                    roundTrackLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
-                    Node roundTrackNode = roundTrackLoader.load();
-                    RoundTrackGUIView roundTrackGUIView = roundTrackLoader.getController();
-                    roundTrackGUIView.setModel(iRoundTrack);
-                    bottomBar.getChildren().add(roundTrackNode);
-                    BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
-                    bottomBar.setMargin(roundTrackNode, new Insets(0,0,300,0));
-
-                    this.setUpOpponentsWindows(iMatch);
-                })));}
+    private void loadElementsFuture() {
+        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForUpdate()))
+                .thenAccept(this::loadElements);
+    }
 
     public void chooseWindow() {
         GridPane gridPane = new GridPane();
@@ -263,7 +128,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 Node window = loader.load();
                                 window.setScaleX(1.2);
                                 window.setScaleY(1.2);
-                                windowGUIView = loader.getController();
+                                WindowGUIView windowGUIView = loader.getController();
                                 windowGUIView.setModel(iWindows[i]);
                                 windowGUIView.setProperty(Constants.Property.OWNED);
 
@@ -272,14 +137,10 @@ public class MatchGUIView extends GUIView<MatchController> {
                                 window.setOnMouseEntered(event -> window.setCursor(Cursor.HAND));
 
                                 window.setOnMousePressed(event -> {
-                                    centerPane.setCenter(window);
-                                    currentWindow = window;
-                                    window.setScaleY(1.7);
-                                    window.setScaleX(1.7);
-                                    windowGUIView.setProperty(Constants.Property.OWNED);
-                                    BorderPane.setMargin(window, new Insets(10, 300,5, 200));
 
                                     try {
+
+                                        this.loadOwnedWindow(iWindows[finalI]);
                                         this.model.respondToWindowRequest(iWindows[finalI]);
                                     }
                                     catch (IOException e) {
@@ -302,43 +163,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                 });
     }
 
-    private void setUpOpponentsWindows(IMatch update) {
-        Platform.runLater(() -> {
-            int i = 0;
-            for (ILivePlayer player: update.getPlayers()) {
-
-                IWindow iWindow = player.getWindow();
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
-                try {
-                    Node node = loader.load();
-                    VBox vBox = new VBox();
-                    Label label = new Label(player.hasLeft()? player.getPlayer().getUsername()+" (Offline)":
-                            player.getPlayer().getUsername());
-                    label.setAlignment(Pos.CENTER);
-                    label.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
-                    vBox.getChildren().addAll(node, label);
-                    WindowGUIView windowGUIView = loader.getController();
-                    windowGUIView.setModel(iWindow);
-                    windowGUIView.setProperty(Constants.Property.OPPONENT);
-                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
-                    hBoxWindows.getChildren().add(vBox); //TODO check
-                    if(hBoxWindows.getChildren().get(i)!=null){
-                        hBoxWindows.getChildren().remove(i);
-                        hBoxWindows.getChildren().add(vBox);
-                    }
-
-                    hBoxWindows.setSpacing(100);
-                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
-                    HBox.setMargin(vBox, new Insets(0, 0, 0, 0));
-                    i++;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            // setUpOpponentsWindowsFuture();
-        });
-    }
 
     public void onEndTurnClicked() throws IOException {
         this.model.endTurn();
@@ -366,19 +190,19 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             this.remainingTime = remainingTime;
             startTimer();
-            windowGUIView.setProperty(Constants.Property.OWNED);
+            ownedWindowGUIView.setProperty(Constants.Property.OWNED);
             draftPoolGUIView.setProperty(Constants.Property.OWNED);
+
             for(Node node: toolCardNodes) {
                 node.setDisable(false);
             }
-            endTurnButton.setOnMouseClicked(e -> {
+
+            endTurnButton.setOnMouseClicked(event ->{
                 try {
                     onEndTurnClicked();
-                }
-                catch (IOException e1) {
+                } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-
                 bottomBar.getChildren().remove(turnBox);
 
             });
@@ -386,7 +210,6 @@ public class MatchGUIView extends GUIView<MatchController> {
             setUpWaitForTurnToBeginFuture();
             }
         ));
-
     }
 
     private void startTimer() {
@@ -410,7 +233,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     private void setUpWaitForTurnToEnd(Void aVoid) {
         Platform.runLater(unsafe(() -> {
             this.timer.cancel();
-            windowGUIView.setProperty(Constants.Property.NONE);
+            ownedWindowGUIView.setProperty(Constants.Property.NONE);
             draftPoolGUIView.setProperty(Constants.Property.NONE);
             for(Node node: toolCardNodes) {
                 node.setDisable(true);
@@ -446,5 +269,242 @@ public class MatchGUIView extends GUIView<MatchController> {
                     SagradaGUI.showStage(root, 353, 546);
                 })));
     }
-}
+
+
+    private void loadDraftPool(IDraftPool iDraftPool) throws IOException {
+
+        if (draftPoolGUIView == null) {
+            FXMLLoader draftPoolLoader = new FXMLLoader();
+            draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
+            Node draftPoolNode = draftPoolLoader.load();
+            draftPoolGUIView = draftPoolLoader.getController();
+
+            draftPoolGUIView.setProperty(Constants.Property.OWNED);
+            centerPane.setTop(draftPoolNode);
+            BorderPane.setAlignment(draftPoolNode, Pos.BOTTOM_CENTER);
+            BorderPane.setMargin(draftPoolNode, new Insets(300, 100, 0, 100));
+        }
+        draftPoolGUIView.setModel(iDraftPool);
+    }
+
+    private void loadRoundTrack(IRoundTrack iRoundTrack) throws IOException {
+
+        if (roundTrackGUIView == null) {
+            FXMLLoader roundTrackLoader = new FXMLLoader();
+            roundTrackLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
+            Node roundTrackNode = roundTrackLoader.load();
+            roundTrackGUIView = roundTrackLoader.getController();
+
+            bottomBar.getChildren().add(roundTrackNode);
+            BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
+            HBox.setMargin(roundTrackNode, new Insets(0,0,300,0));
+        }
+        roundTrackGUIView.setModel(iRoundTrack);
+    }
+
+    private void loadOpponentsWindows(ILivePlayer[] players) throws IOException {
+
+        for (int i = 0; i < players.length; i++) {
+
+            ILivePlayer player = players[i];
+
+            if (opponentsWindowsGUIViews == null) {
+
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+                try {
+                    Node node = loader.load();
+                    VBox vBox = new VBox();
+                    Label label = new Label(player.hasLeft() ? player.getPlayer().getUsername() + " (Offline)" :
+                            player.getPlayer().getUsername());
+                    label.setAlignment(Pos.CENTER);
+                    label.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
+                    vBox.getChildren().addAll(node, label);
+                    opponentsWindowsGUIViews[i] = loader.getController();
+                    opponentsWindowsGUIViews[i].setProperty(Constants.Property.OPPONENT);
+                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
+                    hBoxWindows.getChildren().add(vBox);
+
+                    hBoxWindows.setSpacing(100);
+                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
+                    HBox.setMargin(vBox, new Insets(0, 0, 0, 0));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            opponentsWindowsGUIViews[i].setModel(player.getWindow());
+        }
+    }
+
+    private void loadOwnedWindow(IWindow iWindow) throws IOException {
+
+        if (ownedWindowGUIView == null) {
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+            Node window = loader.load();
+            ownedWindowGUIView = loader.getController();
+
+            ownedWindowGUIView.setProperty(Constants.Property.OWNED);
+            centerPane.setCenter(window);
+            window.setScaleY(1.7);
+            window.setScaleX(1.7);
+            BorderPane.setMargin(window, new Insets(10, 300,5, 200));
+        }
+        ownedWindowGUIView.setModel(iWindow);
+
+    }
+
+    private void loadToolCards(IToolCard[] iToolCards) throws IOException {
+
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(5.0);
+        dropShadow.setOffsetX(3.0);
+        dropShadow.setOffsetY(3.0);
+        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+
+        for (int i = 0; i < iToolCards.length; i++) {
+
+            JFXDialogLayout content = new JFXDialogLayout();
+            JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+
+            FXMLLoader toolCardLoader = new FXMLLoader();
+            toolCardLoader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
+            Node toolCardNode = toolCardLoader.load();
+            toolCardGUIViews[i] = toolCardLoader.getController();
+            toolCardGUIViews[i].setModel(iToolCards[i]);
+            vBoxToolCard.getChildren().add(toolCardNode);
+            vBoxToolCard.setMinHeight(1000);
+            vBoxToolCard.setMaxWidth(200);
+            vBoxToolCard.setSpacing(20);
+            vBoxToolCard.setAlignment(Pos.TOP_CENTER);
+            toolCardNode.setOnMousePressed(event -> dialog.show());
+            toolCardNode.setCursor(Cursor.HAND);
+            toolCardNode.setDisable(true);
+            toolCardNode.setEffect(dropShadow);
+            toolCardNodes.add(toolCardNode);
+
+            JFXButton use = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
+            JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
+            content.setMinSize(350, 500);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
+            Node tc = loader.load();
+            ToolCardGUIView controller = loader.getController();
+            controller.setModel(iToolCards[i]);
+            content.setBody(tc);
+            tc.setScaleX(1.6);
+            tc.setScaleY(1.6);
+            StackPane.setAlignment(tc, Pos.CENTER);
+            cancel.setOnMousePressed(event -> dialog.close());
+            content.setActions(cancel);
+
+            int finalI = i;
+            use.setOnMousePressed(event -> {
+
+                try {
+                    this.model.requestToolCardUsage(iToolCards[finalI]);
+                    dialog.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (RuntimeException e) {
+                    JFXDialogLayout content2 = new JFXDialogLayout();
+                    JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
+                    JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
+                    cancel2.setOnMousePressed(e1 -> dialog2.close());
+                    content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
+                    content2.setActions(cancel2);
+                    dialog2.show();
+                }
+            });
+
+            cancel.setOnMousePressed(event ->
+                    dialog.close()
+            );
+            content.setActions(use, cancel);
+        }
+        }
+
+    private void loadPublicObjectiveCards(IObjectiveCard[] iObjectiveCards) throws IOException {
+
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(5.0);
+        dropShadow.setOffsetX(3.0);
+        dropShadow.setOffsetY(3.0);
+        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+
+        for (int i = 0; i < iObjectiveCards.length; i++) {
+            if (publicObjectiveCardGUIViews[i] == null){
+                JFXDialogLayout content = new JFXDialogLayout();
+                JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+
+                FXMLLoader objectiveCardLoader = new FXMLLoader();
+                objectiveCardLoader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
+                Node objectiveCardNode = objectiveCardLoader.load();
+                objectiveCardNode.setOnMousePressed(event -> dialog.show());
+                publicObjectiveCardGUIViews[i] = objectiveCardLoader.getController();
+                publicObjectiveCardGUIViews[i].setModel(iObjectiveCards[i]);
+                objectiveCardNode.setCursor(Cursor.HAND);
+                objectiveCardNode.setEffect(dropShadow);
+                vBoxObjectiveCard.getChildren().add(objectiveCardNode);
+                vBoxObjectiveCard.setMaxWidth(200);
+                vBoxObjectiveCard.setMinHeight(1000);
+                vBoxObjectiveCard.setSpacing(20);
+                vBoxObjectiveCard.setAlignment(Pos.TOP_CENTER);
+
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
+                Node oc = loader.load();
+                ObjectiveCardGUIView controller = loader.getController();
+                controller.setModel(iObjectiveCards[i]);
+                content.setBody(oc);
+                StackPane.setAlignment(oc, Pos.CENTER);
+                oc.setScaleY(1.6);
+                oc.setScaleX(1.6);
+                content.setMinSize(350, 500);
+                JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
+                cancel.setOnMousePressed(event -> dialog.close());
+                content.setActions(cancel);
+            }
+        }
+    }
+
+    private void loadPrivateObjectiveCard(IObjectiveCard objectiveCard) throws IOException {
+
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(5.0);
+        dropShadow.setOffsetX(3.0);
+        dropShadow.setOffsetY(3.0);
+        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+
+        if (privateObjectiveCardGUIView == null) {
+
+            JFXDialogLayout content = new JFXDialogLayout();
+            JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+            FXMLLoader privateCardLoader = new FXMLLoader();
+            privateCardLoader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
+            Node privateCardNode = privateCardLoader.load();
+            privateCardNode.setOnMousePressed(event -> dialog.show());
+            privateCardNode.setCursor(Cursor.HAND);
+            privateCardNode.setEffect(dropShadow);
+            privateObjectiveCardGUIView = privateCardLoader.getController();
+            privateObjectiveCardGUIView.setModel(objectiveCard);
+            FXMLLoader loader =  new FXMLLoader();
+            loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
+            Node oc = loader.load();
+            ObjectiveCardGUIView controller = loader.getController();
+            controller.setModel(objectiveCard);
+            content.setBody(oc);
+            StackPane.setAlignment(oc, Pos.CENTER);
+            JFXButton cancel = new JFXButton("Back");
+            cancel.setOnMousePressed(event -> dialog.close());
+            content.setActions(cancel);
+            centerPane.setRight(privateCardNode);
+            BorderPane.setAlignment(privateCardNode, Pos.BOTTOM_CENTER);
+            BorderPane.setMargin(privateCardNode, new Insets(0,10,220,10));
+        }
+    }
+ }
+
 
