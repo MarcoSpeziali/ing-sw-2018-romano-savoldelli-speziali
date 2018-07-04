@@ -1,29 +1,34 @@
 package it.polimi.ingsw.client.ui.cli;
 
 
-import it.polimi.ingsw.models.Window;
 import it.polimi.ingsw.net.mocks.IWindow;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class WindowCLIView extends CLIView<IWindow> {
 
-    private CellCLIView[][] cellViews;
+    private CellCLIView[][] cellCLIViews;
 
-    public WindowCLIView() {
-    }
 
     @Override
     public void setModel(IWindow iWindow) throws IOException {
         super.setModel(iWindow);
 
-        this.cellViews = new CellCLIView[iWindow.getRows()][iWindow.getColumns()];
+        if (cellCLIViews != null) {
+            for (int i = 0; i < iWindow.getRows(); i++) {
+                for (int j = 0; j < iWindow.getColumns(); j++) {
+                    cellCLIViews[i][j].onUpdateReceived(this.model.getCells()[i][j].getDie());
+                }
+            }
+            return;
+        }
+
+        this.cellCLIViews = new CellCLIView[iWindow.getRows()][iWindow.getColumns()];
 
         for (int i = 0; i < iWindow.getRows(); i++) {
             for (int j = 0; j < iWindow.getColumns(); j++) {
-                cellViews[i][j] = new CellCLIView();
-                cellViews[i][j].setModel(iWindow.getCells()[i][j]);
+                cellCLIViews[i][j] = new CellCLIView();
+                cellCLIViews[i][j].setModel(iWindow.getCells()[i][j]);
             }
         }
     }
@@ -48,7 +53,7 @@ public class WindowCLIView extends CLIView<IWindow> {
                     System.out.print(" " + (j + 1) + " ");
                 }
                 else {
-                    cellViews[i][j].render();
+                    cellCLIViews[i][j].render();
                 }
             }
             System.out.println();
@@ -57,6 +62,7 @@ public class WindowCLIView extends CLIView<IWindow> {
 
 
     }
+
 
     @Override
     public void init() {

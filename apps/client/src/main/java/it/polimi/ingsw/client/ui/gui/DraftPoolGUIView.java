@@ -50,13 +50,6 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
         super.setModel(iDraftPool);
 
 
-        //Sembra che se venga rimosso non possa essere più aggiunto
-
-        for (Node child : pane.getChildren()) {
-            AnchorPane anchorPane = (AnchorPane) child;
-            anchorPane.getChildren().removeAll();
-        }
-
         Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap();
 
         Map<Integer, IDie> dice = IntStream.range(0, iDraftPool.getMaxNumberOfDice())
@@ -93,12 +86,17 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                 });
 
 
-                if (status == Constants.Status.SELECTION_UNLOCKED) {
-                    source.setOnMousePressed(event -> {
-                        Move.build().begin(location);
-                        chosen = true;
-                    });
-                }
+                source.setOnMousePressed(event -> {
+                    if (status == Constants.Status.SELECTION_UNLOCKED) {
+                        try {
+                            source.setCursor(Cursor.HAND);
+                            Match.getMatchController().postChosenPosition(location);
+                            chosen = true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
                 DieGUIView dieGUIView = loader.getController();
 
@@ -123,83 +121,6 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                 ClientLogger.getLogger().log(Level.SEVERE, String.format("Could not load resource for die (%s): ", die.toString()), e);
             }
         });
-
-        /*
-        for (int i = 0; i < pane.getChildren().size(); i++) {
-
-            int finalI = i;
-
-            locationsDieMap.keySet().stream()
-                    .sorted().forEach(location -> {
-
-                        if (location == finalI && pane.getChildren().get(location) == null) {
-
-                            AnchorPane placeholder = (AnchorPane) pane.getChildren().get(location);
-                            FXMLLoader loader = new FXMLLoader();
-                            loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
-
-                            Node source = null;
-                            try {
-                                source = loader.load();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            source.setCursor(Cursor.OPEN_HAND);
-
-                            Node finalSource = source;
-                            source.setOnDragDetected(event -> {
-
-                                if (Status == Constants.Status.OWNER_UNLOCKED &
-                                        (Match.performedAction & 1) != 1) {
-
-                                    Move move = Move.build();
-                                    move.begin(location);
-
-                                    Dragboard db = finalSource.startDragAndDrop(TransferMode.ANY);
-                                    ClipboardContent content = new ClipboardContent();
-                                    content.put(Constants.iDieFormat, locationsDieMap.get(location));
-                                    db.setContent(content);
-                                    event.consume();
-                                }
-                            });
-
-                            source.setOnDragDone(new EventHandler<DragEvent>() {
-                                @Override
-                                public void handle(DragEvent event) {
-                                    if (event.getTransferMode() == TransferMode.MOVE) {
-                                        placeholder.getChildren().remove(finalSource);
-                                        Match.performedAction = (byte) (1 | Match.performedAction);
-                                    }
-                                }
-                            });
-
-                            if (status == Constants.status.SELECTION_UNLOCKED) {
-                                source.setOnMousePressed(event -> {
-                                    // Match.getMatchController().postChosenPosition(location);
-                                    Move.build().begin(location);
-                                    chosen = true;
-                                });
-                            }
-
-
-                            DieGUIView dieGUIView = loader.getController();
-
-                            try {
-                                dieGUIView.setModel(locationsDieMap.get(location));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            placeholder.getChildren().add(source);
-                        }
-                        if (finalI != location) {
-                            pane.getChildren().remove(finalI);
-                        }
-
-                    }
-            );
-        }
-        */
     }
 }
 

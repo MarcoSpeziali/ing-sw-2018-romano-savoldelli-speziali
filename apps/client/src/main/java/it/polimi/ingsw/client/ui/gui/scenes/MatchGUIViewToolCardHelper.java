@@ -14,9 +14,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.Parent;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -212,14 +211,14 @@ public class MatchGUIViewToolCardHelper {
             ChoosePositionForLocationRequest choosePosition = this.model.waitForChoosePositionFromLocation();
 
             Platform.runLater(unsafe(() -> {
-                JFXDialog dialog = new JFXDialog();
                 boolean chosen = false;
                 JFXDialogLayout content = new JFXDialogLayout();
+                JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
                 dialog.setOverlayClose(false);
                 JFXButton button = new JFXButton("OK");
                 button.setOnMouseClicked(event -> dialog.close());
                 FXMLLoader loader = new FXMLLoader();
-                GridPane node = null;
+                Parent node = null;
                 JSONSerializable object = choosePosition.getLocation();
                 Set<Integer> set = choosePosition.getUnavailableLocations();
 
@@ -232,8 +231,7 @@ public class MatchGUIViewToolCardHelper {
                         windowGUIView.setModel((IWindow) object);
                         windowGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
                         for (Integer location : set) {
-                            Node cell = windowGUIView.gridPane.getChildren().get(location);
-                            cell.setDisable(true);
+                            windowGUIView.gridPane.getChildren().get(location).setDisable(true);
                         }
                         chosen = windowGUIView.isChosen();
 
@@ -251,8 +249,8 @@ public class MatchGUIViewToolCardHelper {
                         draftPoolGUIView.setModel((IDraftPool) object);
                         draftPoolGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
                         for (Integer location : set) {
-                            Node die = draftPoolGUIView.pane.getChildren().get(location);
-                            die.setDisable(true);
+                            AnchorPane anchorPane = (AnchorPane) draftPoolGUIView.pane.getChildren().get(location);
+                            anchorPane.getChildren().get(0).setDisable(true);
                         }
                         chosen = draftPoolGUIView.isChosen();
                     }
@@ -269,8 +267,8 @@ public class MatchGUIViewToolCardHelper {
                         roundTrackGUIView.setModel((IRoundTrack) object);
                         roundTrackGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
                         for (Integer location : set) {
-                            Node die = roundTrackGUIView.gridPane.getChildren().get(location); // TODO check
-                            die.setDisable(true);
+                            VBox vBox = (VBox) roundTrackGUIView.gridPane.getChildren().get(location);
+                            vBox.getChildren().get(1).setDisable(true);
                         }
                         chosen = roundTrackGUIView.isChosen();
                     }

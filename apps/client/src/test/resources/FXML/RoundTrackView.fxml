@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.RoundTrackGUIView">
+<AnchorPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.ui.gui.RoundTrackGUIView" style="-fx-background-color: #2c3e50; -fx-background-radius: 8;">
    <children>
-      <GridPane fx:id="gridPane" gridLinesVisible="true" layoutX="0.5" layoutY="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="800.0" style="-fx-background-color: BLACK;">
+      <GridPane fx:id="gridPane" gridLinesVisible="true" layoutX="0.5" layoutY="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="800.0" AnchorPane.leftAnchor="7" AnchorPane.rightAnchor="7" AnchorPane.topAnchor="7" AnchorPane.bottomAnchor="7">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="80.0" />

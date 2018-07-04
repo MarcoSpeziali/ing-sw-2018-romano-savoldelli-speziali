@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -77,33 +78,40 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
             loader.setLocation(Constants.Resources.DIE_VIEW_FXML.getURL());
             Node die = loader.load();
 
-            if (Status == Constants.Status.SELECTION_UNLOCKED) {
-                die.setOnMousePressed(event -> {
+
+            die.setOnMousePressed(event -> {
+                if (Status == Constants.Status.SELECTION_UNLOCKED) {
                     try {
+                        die.setCursor(Cursor.HAND);
                         chosen = true;
                         Match.getMatchController().postChosenPosition(location);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                });
-            }
+                }
+            });
+
             DieGUIView dieGUIView = loader.getController();
             dieGUIView.setModel(locationDieMap.get(location));
             VBox vBox = new VBox();
+            vBox.setStyle("-fx-background-color: white;"+"-fx-text-fill: #2c3e50;"+"-fx-font-size: 10");
             Label label = new Label("Round " + (roundIndex+1));
             vBox.getChildren().add(label);
             vBox.getChildren().add(die);
             vBox.setSpacing(5);
-            //vBox.setAlignment(Pos.CENTER);
             vBox.setAlignment(Pos.TOP_CENTER);
-            VBox.setMargin(die, new Insets(0,0,7,0));
             gridPane.add(vBox, roundIndex, 0);
             round++;
         }
 
+        gridPane.setVgap(7);
+        gridPane.setHgap(7);
+        gridPane.setGridLinesVisible(false);
+
         for (int i = round; i < 10; i++) {
             VBox vBox = new VBox();
-            Label label = new Label("Round " + (i+1));
+            Label label = new Label("" + (i+1));
+            label.setStyle("-fx-text-fill: white;"+"-fx-font-size: 40");
             vBox.getChildren().add(label);
             vBox.setSpacing(5);
             vBox.setAlignment(Pos.CENTER);

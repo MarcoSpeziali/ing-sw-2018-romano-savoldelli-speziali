@@ -89,6 +89,8 @@ public class MatchGUIView extends GUIView<MatchController> {
         loadElementsFuture();
 
         helper = new MatchGUIViewToolCardHelper(this.model, outerPane);
+        helper.init();
+
 
         setUpWaitForTurnToBegin();
         setUpWaitForMatchToEnd();
@@ -105,7 +107,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loadPrivateObjectiveCard(iMatch.getPrivateObjectiveCard());
                 loadPublicObjectiveCards(iMatch.getPublicObjectiveCards());
                 loadOpponentsWindows(iMatch.getPlayers());
-                loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
+                //loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
 
                 updateSyncObject.notifyAll();
             }
@@ -353,7 +355,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 HBox.setMargin(vBox, new Insets(10, 0, 0, 0));
             }
 
-            opponentsWindowsGUIViews[i].setModel(player.getWindow());
+            //opponentsWindowsGUIViews[i].setModel(player.getWindow());
         }
     }
 

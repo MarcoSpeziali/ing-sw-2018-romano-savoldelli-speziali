@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui.cli;
 
 import it.polimi.ingsw.net.mocks.ICell;
+import it.polimi.ingsw.net.mocks.IDie;
 import org.fusesource.jansi.Ansi;
 
 import java.io.IOException;
@@ -18,13 +19,7 @@ public class CellCLIView extends CLIView<ICell> {
 
     @Override
     public void render() {
-        if (this.model.isOccupied()) {
-            ansiColor = Ansi.Color.valueOf(this.model.getDie().getColor().toAnsiColor());
-            shade = (char) (this.model.getDie().getShade() + 48);
-        }
-
         System.out.print(ansi().eraseScreen().bg(ansiColor).a(" " + shade + " ").fg(BLACK).reset());
-
     }
 
     @Override
@@ -38,6 +33,15 @@ public class CellCLIView extends CLIView<ICell> {
         }
 
         shade = iCell.getShade() == 0 ? ' ' : iCell.getShade().toString().charAt(0);
+
+        onUpdateReceived(model.getDie());
+    }
+
+    public void onUpdateReceived(IDie update) {
+        if (update != null) {
+            ansiColor = Ansi.Color.valueOf(update.getColor().toAnsiColor());
+            shade = (char) (update.getShade() +48);
+        }
     }
 
     @Override

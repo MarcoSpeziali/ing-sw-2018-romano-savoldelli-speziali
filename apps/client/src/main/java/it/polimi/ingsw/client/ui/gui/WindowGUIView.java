@@ -120,26 +120,24 @@ public class WindowGUIView extends GUIView<IWindow> {
                         event.setDropCompleted(true);
                         event.consume();
                     }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    catch (InterruptedException e) {
+                    catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                     event.consume();
                 });
 
-                if (Status == Constants.Status.SELECTION_UNLOCKED) {
-                    target.setOnMousePressed(event -> {
+
+                target.setOnMousePressed(event -> {
+                    if (Status == Constants.Status.SELECTION_UNLOCKED) {
                         try {
+                            target.setCursor(Cursor.HAND);
                             Match.getMatchController().postChosenPosition(finalI * iWindow.getColumns() + finalJ);
-                            chosen = true;
-                        }
-                        catch (IOException e) {
+                            chosen = true; }
+                            catch (IOException e) {
                             e.printStackTrace();
+                            }
                         }
-                    });
-                }
+                });
 
 
                 gridPane.add(target, j, i);

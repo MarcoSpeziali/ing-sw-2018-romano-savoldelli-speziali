@@ -66,7 +66,7 @@ public class CellGUIView extends GUIView<ICell> {
             colorAnchorPane.setStyle(String.format("-fx-background-color: #%06X;", iCell.getColor().getHex()));
         }
 
-        onUpdateReceived(iCell.getDie());
+        onUpdateReceived(model.getDie());
 
     }
 
