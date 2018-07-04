@@ -228,6 +228,9 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpWaitForTurnToEnd(Void aVoid) {
         Platform.runLater(unsafe(() -> {
+
+            Match.performedAction = 0;
+
             this.timer.cancel();
             ownedWindowGUIView.setStatus(Constants.Status.GAME_LOCKED);
             draftPoolGUIView.setStatus(Constants.Status.GAME_LOCKED);

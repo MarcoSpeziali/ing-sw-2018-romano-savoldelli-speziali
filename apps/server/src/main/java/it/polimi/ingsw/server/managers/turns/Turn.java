@@ -39,7 +39,13 @@ public class Turn {
     }
 
     public void appendPhase(byte toAppend) {
-        this.phase |= toAppend;
+        synchronized (waitObject) {
+            this.phase |= toAppend;
+
+            if (this.phase == ENDED) {
+                waitObject.notifyAll();
+            }
+        }
     }
     
     public void end() {

@@ -586,14 +586,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             MoveResponse moveResponse = this.handleMove(move, databasePlayer, currentTurn);
             currentTurn.appendPhase(Turn.DIE_PLACED);
 
-            if (currentTurn.getPhase() == Turn.ENDED) {
-                currentTurn.end();
-                
-                if (!this.moveTimerScheduledFuture.isCancelled()) {
-                    this.moveTimerScheduledFuture.cancel(false);
-                }
-            }
-
             return moveResponse;
         }
         catch (IOException e) {

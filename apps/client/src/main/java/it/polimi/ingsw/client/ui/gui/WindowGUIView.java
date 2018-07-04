@@ -82,29 +82,33 @@ public class WindowGUIView extends GUIView<IWindow> {
                     try {
                         MoveResponse moveResponse = Match.getMatchController().tryToMove(
                                 Move.getCurrentMove()
-                                        .end(finalI *iWindow.getColumns()+ finalJ)
+                                        .end(finalI * iWindow.getColumns() + finalJ)
                         );
-                        Match.performedAction = (byte) (1 | Match.performedAction);
 
                         if (!moveResponse.isValid()) {
-                                JFXButton button = new JFXButton("OK");
-                                JFXDialogLayout content = new JFXDialogLayout();
-                                JFXDialog dialog = new JFXDialog(Match.getOuterPane(), content, JFXDialog.DialogTransition.CENTER);
-                                content.setHeading(new Text("Invalid move!"));
-                                content.setBody(new Text("The move you performed was not accepted due to positioning rules"));
-                                content.setActions(button);
-                                button.setOnMousePressed(event1 -> dialog.close());
-                                dialog.show();
-                            }
-
-                            target.setCursor(Cursor.CROSSHAIR);
-                            event.setDropCompleted(true);
-                            event.consume();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            JFXButton button = new JFXButton("OK");
+                            JFXDialogLayout content = new JFXDialogLayout();
+                            JFXDialog dialog = new JFXDialog(Match.getOuterPane(), content, JFXDialog.DialogTransition.CENTER);
+                            content.setHeading(new Text("Invalid move!"));
+                            content.setBody(new Text("The move you performed was not accepted due to positioning rules"));
+                            content.setActions(button);
+                            button.setOnMousePressed(event1 -> dialog.close());
+                            dialog.show();
                         }
+                        else {
+                            Match.performedAction |= 0b01;
+                        }
+
+                        target.setCursor(Cursor.CROSSHAIR);
+                        event.setDropCompleted(true);
+                        event.consume();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
 
                 if (Status == Constants.Status.SELECTION_UNLOCKED) {
