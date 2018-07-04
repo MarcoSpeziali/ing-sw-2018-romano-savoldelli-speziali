@@ -11,5 +11,7 @@ public abstract class View<T> {
         this.init();
     }
 
-    public abstract void init();
+    public void init() {
+
+    }
 }

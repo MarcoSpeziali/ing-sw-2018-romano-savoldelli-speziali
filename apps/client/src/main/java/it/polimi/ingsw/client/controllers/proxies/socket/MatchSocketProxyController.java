@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controllers.proxies.socket;
+package it.polimi.ingsw.client.controllers.proxies.socket;
 
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
@@ -9,7 +9,7 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.mocks.*;
-import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
+import it.polimi.ingsw.client.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.*;
 import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;

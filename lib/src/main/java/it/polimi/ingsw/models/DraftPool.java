@@ -61,7 +61,7 @@ public class DraftPool implements ChoosablePickLocation, RandomPutLocation, IDra
      */
     @Override
     public Die pickDie(Integer location) {
-        if (location < 0 || location > getNumberOfDice()) {
+        if (location < 0 || location > this.dice.length) {
             throw new IndexOutOfBoundsException();
         }
 

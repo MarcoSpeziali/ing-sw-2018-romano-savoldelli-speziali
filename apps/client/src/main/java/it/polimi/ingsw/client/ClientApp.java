@@ -86,5 +86,6 @@ public class ClientApp {
 
     private static void logError(Thread t, Throwable e) {
         ClientLogger.getLogger().log(Level.SEVERE, "Exception in thread " + t.getName(), e);
+        System.exit(-1);
     }
 }

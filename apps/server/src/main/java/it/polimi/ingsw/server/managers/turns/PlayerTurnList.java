@@ -18,8 +18,8 @@ public class PlayerTurnList {
     private final HashSet<IPlayer> removedPlayers;
     private final BiHashMap<IPlayer, Byte, HashSet<Byte>> roundsToSkipForPlayer = new BiHashMap<>();
     
-    private byte currentRound;
-    private byte currentTurn;
+    private byte currentRound = 0;
+    private byte currentTurn = -1;
     
     /**
      * Gets the current round.
@@ -157,7 +157,7 @@ public class PlayerTurnList {
      * @return whether there is at least a player that must play in the current round
      */
     public boolean hasNext() {
-        return this.currentTurn != this.turns.size() - 1 && this.currentRound != this.numberOfRounds - 1;
+        return this.currentTurn >= this.turns.size() - 1 || this.currentRound != this.numberOfRounds - 1;
     }
     
     /**
@@ -198,6 +198,9 @@ public class PlayerTurnList {
             
             // the turn list is reset
             resetTurns();
+        }
+        else {
+            this.currentTurn++;
         }
     
         // gets the next player

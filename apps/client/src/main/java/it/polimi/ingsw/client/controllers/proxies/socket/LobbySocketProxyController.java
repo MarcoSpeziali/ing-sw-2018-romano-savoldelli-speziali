@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controllers.proxies.socket;
+package it.polimi.ingsw.client.controllers.proxies.socket;
 
 import it.polimi.ingsw.controllers.LobbyController;
 import it.polimi.ingsw.net.Header;
@@ -6,7 +6,7 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.mocks.ILobby;
 import it.polimi.ingsw.net.mocks.IMatch;
-import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
+import it.polimi.ingsw.client.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;

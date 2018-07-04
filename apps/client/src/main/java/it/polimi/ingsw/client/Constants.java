@@ -334,12 +334,9 @@ public class Constants {
         }
 
 
-        }
-
-        public enum Status {
-            OWNER_UNLOCKED, OPPONENT_LOCKED, GAME_LOCKED, SELECTION_UNLOCKED
-        }
     }
 
-
-
+    public enum Status {
+            OWNER_UNLOCKED, OPPONENT_LOCKED, GAME_LOCKED, SELECTION_UNLOCKED
+    }
+}

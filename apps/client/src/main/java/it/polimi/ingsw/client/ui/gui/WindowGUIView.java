@@ -8,13 +8,11 @@ import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.net.responses.MoveResponse;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
@@ -69,26 +67,23 @@ public class WindowGUIView extends GUIView<IWindow> {
                 CellGUIView cellGUIView = loader.getController();
                 cellGUIView.setModel(model.getCells()[i][j]);
 
-                target.setOnDragOver(new EventHandler<DragEvent>() {
-                    public void handle(DragEvent event) {
-                        if (Status == Constants.Status.OWNER_UNLOCKED) {
-                            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                        }
-                        event.consume();
+                target.setOnDragOver(event -> {
+                    if (Status == Constants.Status.OWNER_UNLOCKED) {
+                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                     }
+                    event.consume();
                 });
 
                 int finalJ = j, finalI = i;
 
-                target.setOnDragDropped(new EventHandler <DragEvent>() {
-                    public void handle(DragEvent event) {
-                        Dragboard db = event.getDragboard();
+                target.setOnDragDropped(event -> {
+                    Dragboard db = event.getDragboard();
 
-                        try {
-                            MoveResponse moveResponse = Match.getMatchController().tryToMove(
-                                    Move.getCurrentMove()
-                                            .end(finalI *iWindow.getColumns()+ finalJ)
-                            );
+                    try {
+                        MoveResponse moveResponse = Match.getMatchController().tryToMove(
+                                Move.getCurrentMove()
+                                        .end(finalI *iWindow.getColumns()+ finalJ)
+                        );
 
                             if (!moveResponse.isValid()) {
                                 JFXButton button = new JFXButton("OK");
@@ -109,7 +104,6 @@ public class WindowGUIView extends GUIView<IWindow> {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
                 });
 
                 if (Status == Constants.Status.SELECTION_UNLOCKED) {

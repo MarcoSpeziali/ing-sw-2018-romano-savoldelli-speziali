@@ -366,8 +366,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
                     this.matchObjectsManager.getDraftPoolController().putAll(
                             new IterableRange<>(
-                                    0,
-                                    this.matchPlayers.size(),
+                                    1,
+                                    2 * this.matchPlayers.size() + 1,
                                     IterableRange.INTEGER_INCREMENT_FUNCTION
                             ).stream()
                                     .map(integer -> this.matchObjectsManager.getBag().pickDie())
@@ -499,7 +499,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
                 this.onModelsUpdated();
 
-                return new MoveResponse(this.databaseMatch.getId(), false);
+                return new MoveResponse(this.databaseMatch.getId(), true);
             }
             catch (DieInteractionException e) {
                 return new MoveResponse(this.databaseMatch.getId(), false);

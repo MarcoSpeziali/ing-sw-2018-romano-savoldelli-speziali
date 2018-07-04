@@ -3,6 +3,8 @@ package it.polimi.ingsw.net.mocks;
 import it.polimi.ingsw.models.Die;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
+import it.polimi.ingsw.utils.io.json.JSONSerializable;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,19 +33,36 @@ public class RoundTrackMock implements IRoundTrack {
                         new DieMock(integerIDieEntry.getValue()))
                 ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
+
+    public RoundTrackMock(byte numberOfRounds, Map<Integer, DieMock> locationDieMap) {
+        this(numberOfRounds, new LinkedList<>());
+
+        for (int i = 0; i < numberOfRounds; i++) {
+            this.rounds.add(new LinkedList<>());
+        }
+
+        locationDieMap.forEach(invertBiConsumer(this::putDie));
+    }
     
     @JSONDesignatedConstructor
     RoundTrackMock(
             @JSONElement("round-number") byte numberOfRounds,
-            @JSONElement("location-die-map") Map<Integer, DieMock> locationDieMap
+            @JSONElement(value = "location-die-map", keepRaw = true) JSONObject jsonObject
     ) {
         this(numberOfRounds, new LinkedList<>());
 
         for (int i = 0; i < numberOfRounds; i++) {
             this.rounds.add(new LinkedList<>());
         }
-        
-        locationDieMap.forEach(invertBiConsumer(this::putDie));
+
+        jsonObject.keySet().stream()
+                .map(s -> Map.entry(
+                        Integer.parseInt(s),
+                        JSONSerializable.deserialize(
+                                DieMock.class,
+                                jsonObject.getJSONObject(s)
+                        )
+                )).forEach(entry -> this.putDie(entry.getValue(), entry.getKey()));
     }
     
     @Override

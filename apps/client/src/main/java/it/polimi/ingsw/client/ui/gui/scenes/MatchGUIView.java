@@ -63,10 +63,10 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private DraftPoolGUIView draftPoolGUIView;
     private WindowGUIView ownedWindowGUIView;
-    private WindowGUIView[] opponentsWindowsGUIViews = new WindowGUIView[3];
+    private WindowGUIView[] opponentsWindowsGUIViews;
     private RoundTrackGUIView roundTrackGUIView;
-    private ToolCardGUIView[] toolCardGUIViews = new ToolCardGUIView[3];
-    private ObjectiveCardGUIView[] publicObjectiveCardGUIViews = new ObjectiveCardGUIView[3];
+    private ToolCardGUIView[] toolCardGUIViews;
+    private ObjectiveCardGUIView[] publicObjectiveCardGUIViews;
     private ObjectiveCardGUIView privateObjectiveCardGUIView;
 
     public List<Node> toolCardNodes = new LinkedList<>();
@@ -78,11 +78,11 @@ public class MatchGUIView extends GUIView<MatchController> {
         Match.setOuterPane(outerPane);
         chooseWindow();
         loadElementsFuture();
-        MatchGUIViewToolCardHelper helper = new MatchGUIViewToolCardHelper();
-        //helper.init();
-        //setUpWaitForTurnToBeginFuture();
-        //setUpWaitForTurnToEndFuture();
-        //setUpWaitForMatchToEnd();
+        MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
+        // helper.init();
+        setUpWaitForTurnToBeginFuture();
+        setUpWaitForTurnToEndFuture();
+        setUpWaitForMatchToEnd();
     }
 
     private void loadElements(IMatch iMatch) {
@@ -173,6 +173,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     private void setUpWaitForTurnToBegin(int remainingTime) {
         Platform.runLater(unsafe(() -> {
+            setUpWaitForTurnToEndFuture();
 
             VBox turnBox = new VBox();
             JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
@@ -214,8 +215,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    MatchGUIView.this.timerLabel.setText(String.valueOf(remainingTime));
-                    remainingTime--;
+                    MatchGUIView.this.timerLabel.setText(String.valueOf(remainingTime--));
                 });
             }
         }, 0, 1000);
@@ -306,6 +306,8 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             if (opponentsWindowsGUIViews == null) {
 
+                opponentsWindowsGUIViews = new WindowGUIView[players.length];
+
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
                 try {
@@ -329,6 +331,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     e.printStackTrace();
                 }
             }
+
             opponentsWindowsGUIViews[i].setModel(player.getWindow());
         }
     }
@@ -360,68 +363,70 @@ public class MatchGUIView extends GUIView<MatchController> {
         dropShadow.setOffsetY(3.0);
         dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
 
-        for (int i = 0; i < iToolCards.length; i++) {
+        if (toolCardGUIViews == null) {
+            toolCardGUIViews = new ToolCardGUIView[iToolCards.length];
+            for (int i = 0; i < iToolCards.length; i++) {
 
+                JFXDialogLayout content = new JFXDialogLayout();
+                JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
 
+                FXMLLoader toolCardLoader = new FXMLLoader();
+                toolCardLoader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
+                Node toolCardNode = toolCardLoader.load();
+                toolCardGUIViews[i] = toolCardLoader.getController();
+                toolCardGUIViews[i].setModel(iToolCards[i]);
+                vBoxToolCard.getChildren().add(toolCardNode);
+                vBoxToolCard.setMinHeight(1000);
+                vBoxToolCard.setMaxWidth(200);
+                vBoxToolCard.setSpacing(20);
+                vBoxToolCard.setAlignment(Pos.TOP_CENTER);
+                toolCardNode.setOnMousePressed(event -> dialog.show());
+                toolCardNode.setCursor(Cursor.HAND);
+                toolCardNode.setDisable(true);
+                toolCardNode.setEffect(dropShadow);
+                toolCardNodes.add(toolCardNode);
 
-            JFXDialogLayout content = new JFXDialogLayout();
-            JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+                JFXButton use = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
+                JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
+                content.setMinSize(350, 500);
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
+                Node tc = loader.load();
+                ToolCardGUIView controller = loader.getController();
+                controller.setModel(iToolCards[i]);
+                content.setBody(tc);
+                tc.setScaleX(1.6);
+                tc.setScaleY(1.6);
+                StackPane.setAlignment(tc, Pos.CENTER);
+                cancel.setOnMousePressed(event -> dialog.close());
+                content.setActions(cancel);
 
-            FXMLLoader toolCardLoader = new FXMLLoader();
-            toolCardLoader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
-            Node toolCardNode = toolCardLoader.load();
-            toolCardGUIViews[i] = toolCardLoader.getController();
-            toolCardGUIViews[i].setModel(iToolCards[i]);
-            vBoxToolCard.getChildren().add(toolCardNode);
-            vBoxToolCard.setMinHeight(1000);
-            vBoxToolCard.setMaxWidth(200);
-            vBoxToolCard.setSpacing(20);
-            vBoxToolCard.setAlignment(Pos.TOP_CENTER);
-            toolCardNode.setOnMousePressed(event -> dialog.show());
-            toolCardNode.setCursor(Cursor.HAND);
-            toolCardNode.setDisable(true);
-            toolCardNode.setEffect(dropShadow);
-            toolCardNodes.add(toolCardNode);
+                int finalI = i;
+                use.setOnMousePressed(event -> {
 
-            JFXButton use = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
-            JFXButton cancel = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_BACK_BUTTON));
-            content.setMinSize(350, 500);
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
-            Node tc = loader.load();
-            ToolCardGUIView controller = loader.getController();
-            controller.setModel(iToolCards[i]);
-            content.setBody(tc);
-            tc.setScaleX(1.6);
-            tc.setScaleY(1.6);
-            StackPane.setAlignment(tc, Pos.CENTER);
-            cancel.setOnMousePressed(event -> dialog.close());
-            content.setActions(cancel);
+                    try {
+                        this.model.requestToolCardUsage(iToolCards[finalI]);
+                        dialog.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (RuntimeException e) {
+                        JFXDialogLayout content2 = new JFXDialogLayout();
+                        JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
+                        JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
+                        cancel2.setOnMousePressed(e1 -> dialog2.close());
+                        content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
+                        content2.setActions(cancel2);
+                        dialog2.show();
+                    }
+                });
 
-            int finalI = i;
-            use.setOnMousePressed(event -> {
-
-                try {
-                    this.model.requestToolCardUsage(iToolCards[finalI]);
-                    dialog.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (RuntimeException e) {
-                    JFXDialogLayout content2 = new JFXDialogLayout();
-                    JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
-                    JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
-                    cancel2.setOnMousePressed(e1 -> dialog2.close());
-                    content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
-                    content2.setActions(cancel2);
-                    dialog2.show();
-                }
-            });
-
-            cancel.setOnMousePressed(event ->
-                    dialog.close()
-            );
-            content.setActions(use, cancel);
+                cancel.setOnMousePressed(event ->
+                        dialog.close()
+                );
+                content.setActions(use, cancel);
+            }
         }
+
         }
 
     private void loadPublicObjectiveCards(IObjectiveCard[] iObjectiveCards) throws IOException {
@@ -431,6 +436,10 @@ public class MatchGUIView extends GUIView<MatchController> {
         dropShadow.setOffsetX(3.0);
         dropShadow.setOffsetY(3.0);
         dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+
+        if (publicObjectiveCardGUIViews == null) {
+            publicObjectiveCardGUIViews = new ObjectiveCardGUIView[iObjectiveCards.length];
+        }
 
         for (int i = 0; i < iObjectiveCards.length; i++) {
             if (publicObjectiveCardGUIViews[i] == null){

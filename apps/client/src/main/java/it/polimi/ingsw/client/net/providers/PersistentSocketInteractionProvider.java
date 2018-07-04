@@ -1,5 +1,6 @@
-package it.polimi.ingsw.net.providers;
+package it.polimi.ingsw.client.net.providers;
 
+import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
@@ -16,10 +17,12 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 // TODO: docs
 public class PersistentSocketInteractionProvider extends PersistentNetworkInteractionProvider {
@@ -31,6 +34,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     /**
      * A {@link Map} of {@link Response}s listeners.
@@ -50,6 +54,8 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         while (!shouldStop) {
             try {
                 String content = this.in.readLine();
+
+                ClientLogger.getLogger().log(Level.FINER, "Got data: {0}", content);
 
                 this.handleData(content, response -> {
                     try {
@@ -239,25 +245,37 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         this.socket.close();
     }
 
+    private final Object dataSyncObject = new Object();
+
     private void handleData(String jsonData, Consumer<Response<? extends JSONSerializable>> responseHandler) {
-        CompletableFuture.runAsync(() -> {
-            JSONObject jsonObject = new JSONObject(jsonData);
+        //executorService.submit(() -> {
+            synchronized (dataSyncObject) {
+                ClientLogger.getLogger().log(Level.FINEST, "Lock acquired");
 
-            if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
-                @SuppressWarnings("unchecked") Response<? extends JSONSerializable> response = JSONSerializable.deserialize(Response.class, jsonData);
+                JSONObject jsonObject = new JSONObject(jsonData);
 
-                this.handleResponse(response);
-            }
-            else if (jsonObject.has(RequestFields.REQUEST.toString())) {
-                @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = JSONSerializable.deserialize(Request.class, jsonData);
+                ClientLogger.getLogger().log(Level.FINEST, "Data successfully deserialized in a JSONObject");
 
-                Response<? extends JSONSerializable> response = handleRequest(request);
+                if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
+                    @SuppressWarnings("unchecked") Response<? extends JSONSerializable> response = JSONSerializable.deserialize(Response.class, jsonData);
 
-                if (response != null) {
-                    responseHandler.accept(response);
+                    ClientLogger.getLogger().log(Level.FINER, "Data is response: {0}", response);
+
+                    this.handleResponse(response);
+                }
+                else if (jsonObject.has(RequestFields.REQUEST.toString())) {
+                    @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = JSONSerializable.deserialize(Request.class, jsonData);
+
+                    ClientLogger.getLogger().log(Level.FINER, "Data is request: {0}", request);
+
+                    Response<? extends JSONSerializable> response = handleRequest(request);
+
+                    if (response != null) {
+                        responseHandler.accept(response);
+                    }
                 }
             }
-        });
+        //});
     }
 
     private <T extends JSONSerializable> void handleResponse(Response<T> response) {

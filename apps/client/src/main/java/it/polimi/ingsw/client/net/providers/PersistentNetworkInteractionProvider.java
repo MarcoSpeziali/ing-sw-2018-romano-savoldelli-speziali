@@ -1,4 +1,4 @@
-package it.polimi.ingsw.net.providers;
+package it.polimi.ingsw.client.net.providers;
 
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;

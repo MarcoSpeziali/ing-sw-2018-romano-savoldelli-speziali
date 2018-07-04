@@ -8,9 +8,9 @@ import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.interfaces.updates.UpdateInterface;
 import it.polimi.ingsw.net.mocks.ILobby;
-import it.polimi.ingsw.net.providers.PersistentNetworkInteractionProvider;
-import it.polimi.ingsw.net.providers.PersistentRMIInteractionProvider;
-import it.polimi.ingsw.net.providers.PersistentSocketInteractionProvider;
+import it.polimi.ingsw.client.net.providers.PersistentNetworkInteractionProvider;
+import it.polimi.ingsw.client.net.providers.PersistentRMIInteractionProvider;
+import it.polimi.ingsw.client.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 
