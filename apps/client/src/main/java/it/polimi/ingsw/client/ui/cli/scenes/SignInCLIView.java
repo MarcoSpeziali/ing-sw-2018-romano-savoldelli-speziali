@@ -22,25 +22,17 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 public class SignInCLIView {
 
     static Scanner reader = new Scanner(System.in);
-    private static String username;
-    private static String password;
 
     public static void render() {
 
-        String selection;
-        System.out.println("SignIn screen. Type --back to go back");
+        System.out.println("Signin screen");
 
-        do {
 
             System.out.print("username: ");
-            selection = reader.nextLine();
-            username = selection;
-            if (username.equals("--back")) break;
+            String username = reader.nextLine();
 
             System.out.print("password: ");
-            selection = reader.nextLine();
-            password = selection;
-            if (password.equals("--back")) break;
+            String password = reader.nextLine();
 
                SignInController signInController = new SignInController();
                signInController.onSignInRequested(username, password, () -> {
@@ -62,6 +54,9 @@ public class SignInCLIView {
                            );
 
                            lobbyController = oneTimeRMIResponseProvider.getSyncRemoteObject(EndPointFunction.LOBBY_JOIN_REQUEST_RMI, SignInManager.getManager().getToken());
+
+                           LobbyCLIView.setProxy(lobbyController);
+
                        }
 
 
@@ -83,10 +78,6 @@ public class SignInCLIView {
 
                });
 
-
-
-        } while (true);
-
-        System.out.println("Back to main menu");
+        System.out.println("Back to main menu...");
     }
 }

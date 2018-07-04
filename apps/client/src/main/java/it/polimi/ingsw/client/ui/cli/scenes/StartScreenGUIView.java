@@ -9,33 +9,38 @@ public class StartScreenGUIView {
 
     public static void render() {
 
-        System.out.println("Welcome to Sagrada Game. (type --help for a list of commands).");
+        System.out.println("Welcome to Sagrada Game.");
 
         String selection;
         do {
+            System.out.println("Type help for a list of commands.");
             selection = reader.nextLine();
 
             switch (selection) {
-                case ("--help"):
-                    System.out.println("--signin --signup --settings --quit");
+                case ("help"):
+                    System.out.println("signin signup settings quit");
                     break;
 
-                case ("--signup"):
+                case ("signup"):
                     SignUpCLIVIew.render();
                     break;
 
-                case ("--signin"):
+                case ("signin"):
                     SignInCLIView.render();
                     break;
 
-                case ("--settting"):
+                case ("settings"):
                     SettingsCLIView.render();
                     break;
 
+                case ("quit"):
+                    System.out.println("Quitting...");
+                    break;
+
                 default:
-                    System.out.println("Invalid command. Type --help for a list of commands.");
+                    System.out.println("Invalid command.");
             }
-        } while (!selection.equals("--quit"));
+        } while (!selection.equals("quit"));
     }
 }
 
