@@ -105,8 +105,8 @@ public class WindowGUIView extends GUIView<IWindow> {
                             JFXButton button = new JFXButton("OK");
                             JFXDialogLayout content = new JFXDialogLayout();
                             JFXDialog dialog = new JFXDialog(Match.getOuterPane(), content, JFXDialog.DialogTransition.CENTER);
-                            content.setHeading(new Text("Invalid move!"));
-                            content.setBody(new Text("The move you performed was not accepted due to positioning rules"));
+                            content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.WINDOW_GUI_INVALID_MOVE)));
+                            content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.WINDOW_GUI_MOVE_NOT_MATCHES_RULES)));
                             content.setActions(button);
                             button.setOnMousePressed(event1 -> dialog.close());
                             dialog.show();

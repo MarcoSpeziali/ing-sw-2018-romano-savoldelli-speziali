@@ -294,6 +294,12 @@ public class Constants {
         public static final String MATCH_GUI_CHOOSE_LOCATION = "match_gui.choose_location.text";
         public static final String MATCH_GUI_END_TURN="match_gui.end_turn.text";
 
+        public static final String WINDOW_GUI_INVALID_MOVE = "window_gui.invalid_move.text";
+        public static final String WINDOW_GUI_MOVE_NOT_MATCHES_RULES= "window_gui.move_not_matches_rules.text";
+
+        public static final String TOOL_CARD_HELPER_CHOOSE = "tool_card_helper.choose.text";
+        public static final String TOOL_CARD_HELPER_ACTION_PERFORM = "tool_card_helper.actions_perform.text";
+        public static final String TOOL_CARD_HELPER_CORRECT_NUMBER = "tool_card_helper.correct_number.text";
 
         private Strings() {
         }

@@ -71,6 +71,7 @@ public class MatchGUIViewToolCardHelper {
         Platform.runLater(unsafe(() -> {
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+            dialog.setOverlayClose(false);
             HBox hBox = new HBox();
             GridPane gridPane = new GridPane();
 
@@ -126,6 +127,7 @@ public class MatchGUIViewToolCardHelper {
     private void setUpEffect(ChooseBetweenActionsRequest actionsRequest) {
         JFXDialogLayout content = new JFXDialogLayout();
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+        dialog.setOverlayClose(false);
         IAction[] iActions = actionsRequest.getActions();
         JFXButton button = new JFXButton("OK");
         Range<Integer> range = actionsRequest.getActionsRange();
@@ -158,12 +160,13 @@ public class MatchGUIViewToolCardHelper {
             else {
                 JFXDialogLayout layout = new JFXDialogLayout();
                 JFXDialog error = new JFXDialog(outerPane, layout, CENTER);
-                content.setHeading(new Text("Please choose a correct number of actions!"));
+                content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_HELPER_CORRECT_NUMBER)));
                 error.show();
             }
         });
 
-        content.setHeading(new Text(("Choose " + range.getStart()+ " to "+range.getEnd()+" actions to perform")));
+        content.setHeading(new Text((Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_HELPER_CHOOSE) + range.getStart()+ " to "+range.getEnd()+
+                Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_HELPER_ACTION_PERFORM))));
         content.setBody(list);
         dialog.show();
 
@@ -175,6 +178,7 @@ public class MatchGUIViewToolCardHelper {
             JFXButton stop = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_STOP));
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+            dialog.setOverlayClose(false);
             content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_ACTION_FOR_EFFECT)));
             content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": " + iEffect.getDescription()));
             again.setOnMouseClicked(event -> {
@@ -205,6 +209,7 @@ public class MatchGUIViewToolCardHelper {
             JFXDialog dialog = new JFXDialog();
             boolean chosen = false;
             JFXDialogLayout content = new JFXDialogLayout();
+            dialog.setOverlayClose(false);
             JFXButton button = new JFXButton("OK");
             button.setOnMouseClicked(event -> dialog.close());
             FXMLLoader loader = new FXMLLoader();

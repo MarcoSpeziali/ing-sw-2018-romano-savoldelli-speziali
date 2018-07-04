@@ -113,6 +113,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         JFXDialogLayout content = new JFXDialogLayout();
         content.setMinSize(650, 420);
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+        dialog.setOverlayClose(false);
 
 
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForWindowRequest()))
@@ -372,6 +373,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                 JFXDialogLayout content = new JFXDialogLayout();
                 JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+                dialog.setOverlayClose(false);
 
                 FXMLLoader toolCardLoader = new FXMLLoader();
                 toolCardLoader.setLocation(Constants.Resources.TOOL_CARD_VIEW_FXML.getURL());
@@ -453,6 +455,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             if (publicObjectiveCardGUIViews[i] == null){
                 JFXDialogLayout content = new JFXDialogLayout();
                 JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+                dialog.setOverlayClose(false);
 
                 FXMLLoader objectiveCardLoader = new FXMLLoader();
                 objectiveCardLoader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
@@ -497,6 +500,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
+            dialog.setOverlayClose(false);
             FXMLLoader privateCardLoader = new FXMLLoader();
             privateCardLoader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
             Node privateCardNode = privateCardLoader.load();
