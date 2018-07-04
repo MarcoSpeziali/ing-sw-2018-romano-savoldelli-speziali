@@ -1,13 +1,11 @@
 package it.polimi.ingsw.client.ui.gui.scenes;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.*;
 import it.polimi.ingsw.client.Constants;
-import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.net.requests.ChooseBetweenActionsRequest;
 import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
@@ -16,55 +14,56 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
-public class MatchGUIViewToolCardHelper extends GUIView{
+public class MatchGUIViewToolCardHelper {
 
-    private MatchController matchController;
+    private MatchController model;
     private StackPane outerPane;
 
-    public MatchGUIViewToolCardHelper() {
-        this.outerPane = Match.getOuterPane();
-        this.matchController = Match.getMatchController();
+    public MatchGUIViewToolCardHelper(MatchController matchController, StackPane outerpane) {
+        this.model = matchController;
+        this.outerPane = outerpane;
     }
 
-    @Override
     public void init() {
         setUpChoosePositionFuture();
         setUpContinueToRepeatFuture();
-        //setUpEffectFuture();
+        setUpEffectFuture();
         setUpShadeFuture();
     }
 
 
     private void setUpShadeFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForSetShade()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForSetShade()))
                 .thenAccept(this::setUpShade);
     }
 
     private void setUpChoosePositionFuture() {
-        CompletableFuture.supplyAsync(unsafe(() -> this.matchController.waitForChoosePositionFromLocation()))
+        CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForChoosePositionFromLocation()))
                 .thenAccept(this::setUpChoosePosition);
     }
 
-    /*private void setUpEffectFuture() {
+    private void setUpEffectFuture() {
         CompletableFuture.supplyAsync(unsafe(() ->
-                this.matchController.waitForChooseBetweenActions())).thenAccept(this::setUpEffect);
-    }*/
+                this.model.waitForChooseBetweenActions()))
+                .thenAccept(this::setUpEffect);
+    }
 
     private void setUpContinueToRepeatFuture() {
-        CompletableFuture.supplyAsync(unsafe(()-> this.matchController.waitForContinueToRepeat()))
+        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForContinueToRepeat()))
                 .thenAccept(this::setUpContinueToRepeat);
     }
 
@@ -104,7 +103,7 @@ public class MatchGUIViewToolCardHelper extends GUIView{
                 });
                 cell.setOnMouseClicked(event -> {
                     try {
-                        this.matchController.postSetShade(finalI);
+                        this.model.postSetShade(finalI);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -124,18 +123,49 @@ public class MatchGUIViewToolCardHelper extends GUIView{
         }));
     }
 
-    private void setUpEffect(Map.Entry<IAction[], Range<Integer>> entry) {
+    private void setUpEffect(ChooseBetweenActionsRequest actionsRequest) {
         JFXDialogLayout content = new JFXDialogLayout();
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-        IAction[] iActions = entry.getKey();
-        Range<Integer> range = entry.getValue();
+        IAction[] iActions = actionsRequest.getActions();
+        JFXButton button = new JFXButton("OK");
+        Range<Integer> range = actionsRequest.getActionsRange();
 
-/*        JFXListView<<Label>> list = new JFXListView<>();
+        List<IAction> chosenActions = new ArrayList<>();
+
+        JFXListView<JFXCheckBox> list = new JFXListView<>();
         list.setDepth(10);
         Arrays.stream(iActions).forEach(iAction -> {
-            list.getItems().add(new Label(iAction.getDescription()));
+            JFXCheckBox checkBox = new JFXCheckBox(iAction.getDescription());
+
+            if (checkBox.isSelected()){
+                chosenActions.add(iAction);
+            }
+            if (!checkBox.isSelected()) {
+                chosenActions.remove(iAction);
+            }
+            list.getItems().add(checkBox);
         });
-        list.setCellFactory(CheckBoxListCell.forListView(item -> item.getSelected()));*/
+
+        button.setOnMouseClicked(event-> {
+            if (range.containsValue(chosenActions.size())) {
+                try {
+                    this.model.postChosenActions((IAction[]) chosenActions.toArray());
+                    dialog.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                JFXDialogLayout layout = new JFXDialogLayout();
+                JFXDialog error = new JFXDialog(outerPane, layout, CENTER);
+                content.setHeading(new Text("Please choose a correct number of actions!"));
+                error.show();
+            }
+        });
+
+        content.setHeading(new Text(("Choose " + range.getStart()+ " to "+range.getEnd()+" actions to perform")));
+        content.setBody(list);
+        dialog.show();
 
     }
 
@@ -149,7 +179,7 @@ public class MatchGUIViewToolCardHelper extends GUIView{
             content.setBody(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_EFFECT)+": " + iEffect.getDescription()));
             again.setOnMouseClicked(event -> {
                 try {
-                    this.matchController.postContinueToRepeatChoice(true);
+                    this.model.postContinueToRepeatChoice(true);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -158,7 +188,7 @@ public class MatchGUIViewToolCardHelper extends GUIView{
             });
             stop.setOnMouseClicked(event -> {
                 try {
-                    this.matchController.postContinueToRepeatChoice(false);
+                    this.model.postContinueToRepeatChoice(false);
                 }
                 catch (IOException e) {
                     e.printStackTrace();

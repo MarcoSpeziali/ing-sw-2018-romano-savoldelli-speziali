@@ -7,7 +7,8 @@ public final class Match {
 
     private static MatchController matchController;
     private static StackPane outerPane;
-    private static byte performedAction;
+
+    public static byte performedAction = 0;
 
     public static MatchController getMatchController() {
         return matchController;
@@ -25,11 +26,4 @@ public final class Match {
         Match.outerPane = outerPane;
     }
 
-    public static byte getPerformedAction() {
-        return performedAction;
-    }
-
-    public static void setPerformedAction(byte performedAction) {
-        Match.performedAction = performedAction;
-    }
 }

@@ -1,17 +1,20 @@
 package it.polimi.ingsw.client.ui.gui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.DieMock;
 import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IDraftPool;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -48,14 +51,14 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
     public void setModel(IDraftPool iDraftPool) throws IOException {
         super.setModel(iDraftPool);
 
-        /*
-        Sembra che se venga rimosso non possa essere più aggiunto
 
+        //Sembra che se venga rimosso non possa essere più aggiunto
+        /*
         for (Node child : pane.getChildren()) {
             AnchorPane anchorPane = (AnchorPane) child;
             anchorPane.getChildren().clear();
-        }
-        */
+        }*/
+
 
         Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap();
 
@@ -81,7 +84,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
                 Node finalSource = source;
                 source.setOnDragDetected(event -> {
-                    if (status == Constants.Status.OWNER_UNLOCKED) {
+                    if (status == Constants.Status.OWNER_UNLOCKED & (Match.performedAction & 1) != 1) {
                         Move.build().begin(location);
 
                         Dragboard db = finalSource.startDragAndDrop(TransferMode.ANY);
@@ -91,6 +94,15 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                         event.consume();
                     }
                 });
+
+
+                if (status == Constants.Status.SELECTION_UNLOCKED) {
+                    source.setOnMousePressed(event -> {
+                        // Match.getMatchController().postChosenPosition(location);
+                        Move.build().begin(location);
+                        chosen = true;
+                    });
+                }
 
                 dieGUIViewList.add(loader.getController());
                 placeholder.getChildren().add(source);
@@ -133,8 +145,12 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
                             Node finalSource = source;
                             source.setOnDragDetected(event -> {
-                                if (status == Constants.Status.OWNER_UNLOCKED) {
-                                    Move.build().begin(location);
+
+                                if (Status == Constants.Status.OWNER_UNLOCKED &
+                                        (Match.performedAction & 1) != 1) {
+
+                                    Move move = Move.build();
+                                    move.begin(location);
 
                                     Dragboard db = finalSource.startDragAndDrop(TransferMode.ANY);
                                     ClipboardContent content = new ClipboardContent();
@@ -149,6 +165,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                                 public void handle(DragEvent event) {
                                     if (event.getTransferMode() == TransferMode.MOVE) {
                                         placeholder.getChildren().remove(finalSource);
+                                        Match.performedAction = (byte) (1 | Match.performedAction);
                                     }
                                 }
                             });

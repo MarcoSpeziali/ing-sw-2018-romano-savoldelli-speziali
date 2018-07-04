@@ -84,8 +84,9 @@ public class WindowGUIView extends GUIView<IWindow> {
                                 Move.getCurrentMove()
                                         .end(finalI *iWindow.getColumns()+ finalJ)
                         );
+                        Match.performedAction = (byte) (1 | Match.performedAction);
 
-                            if (!moveResponse.isValid()) {
+                        if (!moveResponse.isValid()) {
                                 JFXButton button = new JFXButton("OK");
                                 JFXDialogLayout content = new JFXDialogLayout();
                                 JFXDialog dialog = new JFXDialog(Match.getOuterPane(), content, JFXDialog.DialogTransition.CENTER);

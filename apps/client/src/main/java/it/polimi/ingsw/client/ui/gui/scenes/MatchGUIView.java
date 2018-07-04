@@ -78,7 +78,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         Match.setOuterPane(outerPane);
         chooseWindow();
         loadElementsFuture();
-        MatchGUIViewToolcardHelper helper = new MatchGUIViewToolcardHelper(this.model, outerPane);
+        MatchGUIViewToolCardHelper helper = new MatchGUIViewToolCardHelper(this.model, outerPane);
         // helper.init();
         setUpWaitForTurnToBeginFuture();
         setUpWaitForTurnToEndFuture();
@@ -404,21 +404,26 @@ public class MatchGUIView extends GUIView<MatchController> {
                 int finalI = i;
                 use.setOnMousePressed(event -> {
 
-                    try {
-                        this.model.requestToolCardUsage(iToolCards[finalI]);
-                        dialog.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (RuntimeException e) {
-                        JFXDialogLayout content2 = new JFXDialogLayout();
-                        JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
-                        JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
-                        cancel2.setOnMousePressed(e1 -> dialog2.close());
-                        content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
-                        content2.setActions(cancel2);
-                        dialog2.show();
-                    }
-                });
+                JFXDialogLayout content2 = new JFXDialogLayout();
+                JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
+
+                if ((Match.performedAction & 2) != 2) {try {
+                    this.model.requestToolCardUsage(iToolCards[finalI]);
+                    dialog.close();Match.performedAction = (byte) (2 | Match.performedAction);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (RuntimeException e) {
+
+                    JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
+                    cancel2.setOnMousePressed(e1 -> dialog2.close());
+                    content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
+                    content2.setActions(cancel2);
+                    dialog2.show();
+                }
+            }else {
+                    content2.setHeading(new Text("You cannot perform the same action twice."));
+                }
+            });
 
                 cancel.setOnMousePressed(event ->
                         dialog.close()
