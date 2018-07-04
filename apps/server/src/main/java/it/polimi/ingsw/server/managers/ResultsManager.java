@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.managers;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.models.Window;
-import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.server.Objective;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.GlobalContext;
@@ -17,14 +16,14 @@ public class ResultsManager {
     
     @SuppressWarnings("squid:S1602")
     public static Map<DatabasePlayer, Integer> getPartialPointsForPlayers(int matchId, DatabasePlayer[] players, Objective[] publicObjectives) {
-        return Arrays.stream(players).parallel()
+        return Arrays.stream(players)
                 .map(databasePlayer -> {
                     Context playerContext = GlobalContext.getGlobalContext()
                     .getContextForPlayer(databasePlayer, matchId);
             
                     return Map.entry(
                             databasePlayer,
-                            Arrays.stream(publicObjectives).parallel()
+                            Arrays.stream(publicObjectives)
                                     .mapToInt(objective -> objective.calculatePoints(playerContext))
                                     .sum()
                     );
@@ -32,7 +31,7 @@ public class ResultsManager {
     }
     
     public static Map<DatabasePlayer, Integer> integratePartialResultsWithPrivateObjectives(int matchId, Map<DatabasePlayer, Integer> partialResults, Map<DatabasePlayer, Objective> privateCards) {
-        return partialResults.entrySet().parallelStream()
+        return partialResults.entrySet().stream()
                 .peek(entry -> {
                     Context playerContext = GlobalContext.getGlobalContext()
                             .getContextForPlayer(entry.getKey(), matchId);
@@ -43,14 +42,13 @@ public class ResultsManager {
                 }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
     
-    public static Map<DatabasePlayer, Integer> finalizeWithPenaltiesAndBonus(int matchId, Map<DatabasePlayer, Integer> partialResults) {
-        return partialResults.entrySet().parallelStream()
+    public static Map<DatabasePlayer, Integer> finalizeWithPenaltiesAndBonus(int matchId, Map<DatabasePlayer, Integer> partialResults, MatchObjectsManager matchObjectsManager) {
+        return partialResults.entrySet().stream()
                 .peek(entry -> {
                     Context playerContext = GlobalContext.getGlobalContext()
                             .getContextForPlayer(entry.getKey(), matchId);
                     
-                    int remainingFavourTokens = ((ILivePlayer) playerContext.get(Context.CURRENT_PLAYER))
-                            .getFavourTokens();
+                    int remainingFavourTokens = matchObjectsManager.getFavourTokensMap().get(entry.getKey());
                     
                     int blankCellsInWindow = ((Window) playerContext.get(Context.WINDOW)).getFreeSpace();
     

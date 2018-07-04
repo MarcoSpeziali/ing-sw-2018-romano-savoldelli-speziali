@@ -59,8 +59,6 @@ public final class Settings extends SettingsBase {
     private int matchMoveTimerDuration;
     @Setting(id = "match-move-timer-time-unit", defaultValue = "SECONDS", type = TimeUnit.class)
     private TimeUnit matchMoveTimerTimeUnit;
-    @Setting(id = "match-number-of-favour-tokens", defaultValue = "24", type = Integer.class)
-    private int matchNumberOfFavourTokens;
     
         // --------------- MODELS CONSTANTS ---------------
         @Setting(id = "number-of-dice-per-color-in-bag", defaultValue = "18", type = Integer.class)
@@ -178,10 +176,6 @@ public final class Settings extends SettingsBase {
     
     public byte getNumberOfRounds() {
         return numberOfRounds;
-    }
-
-    public int getMatchNumberOfFavourTokens() {
-        return matchNumberOfFavourTokens;
     }
 
     // --------------- MODELS CONSTANTS ---------------

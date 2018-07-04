@@ -185,6 +185,15 @@ public class Range<T extends Comparable<? super T> & Serializable> implements JS
         return start.compareTo(end) <= 0;
     }
 
+
+    public boolean isSingleValued() {
+        return this.start.equals(this.end);
+    }
+
+    public boolean isSingleValued(T wantedValue) {
+        return isSingleValued() && this.start.equals(wantedValue);
+    }
+
     /**
      * Determines if the provided value is inside the range.
      *

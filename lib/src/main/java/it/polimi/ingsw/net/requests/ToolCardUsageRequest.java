@@ -3,6 +3,7 @@ package it.polimi.ingsw.net.requests;
 import it.polimi.ingsw.net.interfaces.MatchInteraction;
 import it.polimi.ingsw.net.mocks.IToolCard;
 import it.polimi.ingsw.net.mocks.ToolCardMock;
+import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 
 public class ToolCardUsageRequest implements MatchInteraction {
@@ -11,7 +12,8 @@ public class ToolCardUsageRequest implements MatchInteraction {
     
     private final int matchId;
     private final IToolCard toolCard;
-    
+
+    @JSONDesignatedConstructor
     public ToolCardUsageRequest(
             @JSONElement("match-id") int matchId,
             @JSONElement("tool-card") ToolCardMock toolCard

@@ -34,15 +34,15 @@ public interface MatchController extends ProxyUpdateInterface<IMatch>, RemotelyI
         void postChosenPosition(Integer chosenPosition) throws IOException;
 
             // range interi 2:5
-        ChooseBetweenActionsRequest waitForChooseBetweenActions() throws IOException;
+        ChooseBetweenActionsRequest waitForChooseBetweenActions() throws IOException, InterruptedException;
         void postChosenActions(IAction[] actions) throws IOException;
 
             // 0:n volte
-        IAction waitForContinueToRepeat() throws IOException;
+        IAction waitForContinueToRepeat() throws IOException, InterruptedException;
         void postContinueToRepeatChoice(boolean continueToRepeat) throws IOException;
 
             //
-        IDie waitForSetShade() throws IOException;
+        IDie waitForSetShade() throws IOException, InterruptedException;
         void postSetShade(Integer shade) throws IOException;
     
     // ------ MATCH END ------

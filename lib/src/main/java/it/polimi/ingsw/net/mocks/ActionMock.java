@@ -11,6 +11,10 @@ public class ActionMock implements IAction {
     //private final String name;
     private final String description;
 
+    public ActionMock(IAction action) {
+        this(action.getDescription());
+    }
+
     @JSONDesignatedConstructor
     public ActionMock(
             //@JSONElement("id") String id,

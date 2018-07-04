@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.utils.VariableSupplier;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class DistinctShadePredicate extends Predicate {
 
@@ -28,8 +29,16 @@ public class DistinctShadePredicate extends Predicate {
      */
     @Override
     public boolean evaluate(Context context) {
-        return Arrays.stream(this.dice.get(context))
+        Die[] contextDice = this.dice.get(context);
+
+        if (Arrays.stream(contextDice).anyMatch(Objects::isNull)) {
+            return false;
+        }
+
+        HashSet<Integer> distinctShades = new HashSet<>();
+
+        return Arrays.stream(contextDice)
                 .map(Die::getShade)
-                .allMatch(new HashSet<>()::add);
+                .allMatch(distinctShades::add);
     }
 }

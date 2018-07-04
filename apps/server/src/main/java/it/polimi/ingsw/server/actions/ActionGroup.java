@@ -7,6 +7,7 @@ import it.polimi.ingsw.utils.Range;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Represents a group of actions.
@@ -49,7 +50,8 @@ public class ActionGroup implements ExecutableAction {
             ActionData data,
             IterableRange<Integer> repetitionNumber,
             Range<Integer> chooseBetween,
-            List<ExecutableAction> actions) {
+            List<ExecutableAction> actions
+    ) {
         this.data = data;
         this.repetitionNumber = repetitionNumber;
         this.chooseBetween = chooseBetween;
@@ -125,17 +127,7 @@ public class ActionGroup implements ExecutableAction {
     private void executeMandatoryRepetitions(Context.Snapshot snapshot) {
         // If the range is 3..7 the first 3 iterations are mandatory
         for (int i = 0; i < this.repetitionNumber.getStart(); i++) {
-            // If chooseBetween is null every actions needs to be executed
-            if (this.chooseBetween == null) {
-                //noinspection SimplifyStreamApiCallChains
-                this.actions.forEach(getActionConsumer(snapshot));
-            }
-            // Otherwise only a subset of them get executed
-            else {
-                //noinspection SimplifyStreamApiCallChains
-                callbacks.getChosenActions(this.actions, this.chooseBetween)
-                        .forEach(getActionConsumer(snapshot));
-            }
+            executeCommons(snapshot);
         }
     }
 
@@ -155,14 +147,34 @@ public class ActionGroup implements ExecutableAction {
                 break;
             }
 
-            // If chooseBetween is null every actions needs to be executed
-            if (this.chooseBetween == null) {
-                //noinspection SimplifyStreamApiCallChains
-                this.actions.forEach(getActionConsumer(snapshot));
+            executeCommons(snapshot);
+        }
+    }
+
+    private void executeCommons(Context.Snapshot snapshot) {
+        // If chooseBetween is null every actions needs to be executed
+        if (this.chooseBetween == null) {
+            this.actions.forEach(getActionConsumer(snapshot));
+        }
+        // Otherwise only a subset of them get executed
+        else {
+            List<ExecutableAction> constraintsMetActions = this.actions.stream()
+                    .filter(executableAction -> {
+                        try {
+                            executableAction.getActionData().getConstraint().evaluate(snapshot);
+                            return true;
+                        }
+                        catch (ConstraintEvaluationException e) {
+                            return false;
+                        }
+                    }).collect(Collectors.toList());
+
+            // if the number of constraints is the same as range::start and range::end then
+            // there is no need for calling the callbacks
+            if (chooseBetween.isSingleValued(constraintsMetActions.size())) {
+                constraintsMetActions.forEach(getActionConsumer(snapshot));
             }
-            // Otherwise only a subset of them get executed
             else {
-                //noinspection SimplifyStreamApiCallChains
                 callbacks.getChosenActions(this.actions, this.chooseBetween)
                         .forEach(getActionConsumer(snapshot));
             }

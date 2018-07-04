@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.controllers.proxies.socket;
 
+import it.polimi.ingsw.client.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.Move;
@@ -9,13 +10,13 @@ import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.mocks.*;
-import it.polimi.ingsw.client.net.providers.PersistentSocketInteractionProvider;
 import it.polimi.ingsw.net.requests.*;
 import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MatchSocketProxyController implements MatchController {
     
@@ -111,6 +112,20 @@ public class MatchSocketProxyController implements MatchController {
                     synchronized (choosePositionSyncObject) {
                         this.choosePositionRequest = choosePositionForLocationRequest.getBody();
                         
+                        this.choosePositionSyncObject.notifyAll();
+                    }
+                }
+        );
+
+        this.persistentSocketInteractionProvider.listenForRequest(
+                EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_REQUEST,
+                request -> {
+                    @SuppressWarnings("unchecked")
+                    Request<ChoosePositionForLocationRequest> choosePositionForLocationRequest = (Request<ChoosePositionForLocationRequest>) request;
+
+                    synchronized (choosePositionSyncObject) {
+                        this.choosePositionRequest = choosePositionForLocationRequest.getBody();
+
                         this.choosePositionSyncObject.notifyAll();
                     }
                 }
@@ -234,7 +249,7 @@ public class MatchSocketProxyController implements MatchController {
                         )
                 )
         ).getError();
-        
+
         if (responseError != null) {
             if (responseError.getErrorCode() == ResponseFields.Error.NOT_ENOUGH_TOKENS.getCode()) {
                 throw new NotEnoughTokensException(-1, -1);
@@ -278,34 +293,88 @@ public class MatchSocketProxyController implements MatchController {
         );
     }
 
+    private final transient Object chooseBetweenActionsSyncObject = new Object();
+    private ChooseBetweenActionsRequest chooseBetweenActionsRequest;
+
     @Override
-    public ChooseBetweenActionsRequest waitForChooseBetweenActions() {
-        return null;
+    public ChooseBetweenActionsRequest waitForChooseBetweenActions() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (chooseBetweenActionsSyncObject) {
+            while (chooseBetweenActionsRequest == null) {
+                chooseBetweenActionsSyncObject.wait();
+            }
+
+            ChooseBetweenActionsRequest temp = this.chooseBetweenActionsRequest;
+            this.chooseBetweenActionsRequest = null;
+            return temp;
+        }
     }
-    
+
     @Override
-    public void postChosenActions(IAction[] actions) {
-    
+    public void postChosenActions(IAction[] actions) throws IOException {
+        this.persistentSocketInteractionProvider.postResponse(new Response<>(
+                new Header(this.clientToken, EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_RESPONSE),
+                new ChooseBetweenActionsResponse(
+                        this.matchId,
+                        Arrays.stream(actions).map(ActionMock::new).toArray(ActionMock[]::new)
+                )
+        ));
     }
-    
+
+    private final transient Object shouldRepeatSyncObject = new Object();
+    private ShouldRepeatRequest shouldRepeatRequest;
+
     @Override
-    public IAction waitForContinueToRepeat() {
-        return null;
+    public IAction waitForContinueToRepeat() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (shouldRepeatSyncObject) {
+            while (shouldRepeatRequest == null) {
+                shouldRepeatSyncObject.wait();
+            }
+
+            ShouldRepeatRequest temp = this.shouldRepeatRequest;
+            this.shouldRepeatRequest = null;
+            return temp.getAction();
+        }
     }
-    
+
     @Override
-    public void postContinueToRepeatChoice(boolean continueToRepeat) {
-    
+    public void postContinueToRepeatChoice(boolean continueToRepeat) throws IOException {
+        this.persistentSocketInteractionProvider.postResponse(new Response<>(
+                new Header(this.clientToken, EndPointFunction.MATCH_PLAYER_TOOL_CARD_SHOULD_CONTINUE_TO_REPEAT_RESPONSE),
+                new ShouldRepeatResponse(
+                        this.matchId,
+                        continueToRepeat
+                )
+        ));
     }
-    
+
+    private final transient Object setShadeSyncObject = new Object();
+    private SetShadeRequest setShadeRequest;
+
     @Override
-    public IDie waitForSetShade() {
-        return null;
+    public IDie waitForSetShade() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (setShadeSyncObject) {
+            while (setShadeRequest == null) {
+                setShadeSyncObject.wait();
+            }
+
+            SetShadeRequest temp = this.setShadeRequest;
+            this.setShadeRequest = null;
+            return temp.getDie();
+        }
     }
-    
+
     @Override
-    public void postSetShade(Integer shade) {
-    
+    public void postSetShade(Integer shade) throws IOException {
+        this.persistentSocketInteractionProvider.postResponse(new Response<>(
+                new Header(this.clientToken, EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_SHADE_RESPONSE),
+                new SetShadeResponse(
+                        this.matchId,
+                        shade
+                )
+        ));
     }
 
     private final transient Object resultsSyncObject = new Object();

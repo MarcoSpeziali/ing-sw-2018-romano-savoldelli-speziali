@@ -69,7 +69,7 @@ public class Objective implements IObjective {
         Context.Snapshot snapshot = context
                 .snapshot("Objective(" + this.description + ")");
 
-        Integer result = this.instructions.parallelStream()
+        Integer result = this.instructions.stream()
                 .mapToInt(instruction -> instruction.run(snapshot))
                 .sum() * this.pointsPerCompletion;
 

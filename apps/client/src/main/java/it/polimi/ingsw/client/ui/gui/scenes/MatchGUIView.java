@@ -10,6 +10,7 @@ import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.*;
+import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,10 +28,14 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
+import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
 //import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Status;
 
@@ -69,6 +74,10 @@ public class MatchGUIView extends GUIView<MatchController> {
     private ObjectiveCardGUIView[] publicObjectiveCardGUIViews;
     private ObjectiveCardGUIView privateObjectiveCardGUIView;
 
+    private MatchGUIViewToolCardHelper helper;
+
+    private ExecutorService matchExecutorService = Executors.newFixedThreadPool(10);
+
     public List<Node> toolCardNodes = new LinkedList<>();
     private Label timerLabel = new Label("00");
 
@@ -78,32 +87,42 @@ public class MatchGUIView extends GUIView<MatchController> {
         Match.setOuterPane(outerPane);
         chooseWindow();
         loadElementsFuture();
-        MatchGUIViewToolCardHelper helper = new MatchGUIViewToolCardHelper(this.model, outerPane);
-        // helper.init();
-        setUpWaitForTurnToBeginFuture();
-        setUpWaitForTurnToEndFuture();
+
+        helper = new MatchGUIViewToolCardHelper(this.model, outerPane);
+
+        setUpWaitForTurnToBegin();
         setUpWaitForMatchToEnd();
     }
 
+    private final Object updateSyncObject = new Object();
+
     private void loadElements(IMatch iMatch) {
-
         Platform.runLater(unsafe(() -> {
+            synchronized (updateSyncObject) {
+                loadRoundTrack(iMatch.getRoundTrack());
+                loadDraftPool(iMatch.getDraftPool());
+                loadToolCards(iMatch.getToolCards());
+                loadPrivateObjectiveCard(iMatch.getPrivateObjectiveCard());
+                loadPublicObjectiveCards(iMatch.getPublicObjectiveCards());
+                loadOpponentsWindows(iMatch.getPlayers());
+                loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
 
-            loadRoundTrack(iMatch.getRoundTrack());
-            loadDraftPool(iMatch.getDraftPool());
-            loadToolCards(iMatch.getToolCards());
-            loadPrivateObjectiveCard(iMatch.getPrivateObjectiveCard());
-            loadPublicObjectiveCards(iMatch.getPublicObjectiveCards());
-            loadOpponentsWindows(iMatch.getPlayers());
-            loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
-
-            loadElementsFuture();
+                updateSyncObject.notifyAll();
+            }
         }));
     }
 
     private void loadElementsFuture() {
-        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForUpdate()))
-                .thenAccept(this::loadElements);
+        matchExecutorService.submit(() -> {
+            synchronized (updateSyncObject) {
+                while (true) {
+                    IMatch match = this.model.waitForUpdate();
+                    loadElements(match);
+
+                    updateSyncObject.wait();
+                }
+            }
+        });
     }
 
     public void chooseWindow() {
@@ -115,99 +134,97 @@ public class MatchGUIView extends GUIView<MatchController> {
         JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
         dialog.setOverlayClose(false);
 
-
         CompletableFuture.supplyAsync(unsafe(() -> this.model.waitForWindowRequest()))
                 .thenAccept(iWindows -> {
                     Platform.runLater(unsafe(() -> {
-                        for (int i = 0; i < iWindows.length; i++) {
-                                FXMLLoader loader = new FXMLLoader();
-                                loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
+                                for (int i = 0; i < iWindows.length; i++) {
+                                    FXMLLoader loader = new FXMLLoader();
+                                    loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
 
-                                Node window = loader.load();
-                                window.setScaleX(1.2);
-                                window.setScaleY(1.2);
-                                WindowGUIView windowGUIView = loader.getController();
-                                windowGUIView.setModel(iWindows[i]);
-                                windowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
+                                    Node window = loader.load();
+                                    window.setScaleX(1.2);
+                                    window.setScaleY(1.2);
+                                    WindowGUIView windowGUIView = loader.getController();
+                                    windowGUIView.setModel(iWindows[i]);
+                                    windowGUIView.setStatus(Constants.Status.GAME_LOCKED);
 
-                                int finalI = i;
+                                    int finalI = i;
 
-                                window.setOnMouseEntered(event -> window.setCursor(Cursor.HAND));
+                                    window.setOnMouseEntered(event -> window.setCursor(Cursor.HAND));
 
-                                window.setOnMousePressed(event -> {
+                                    window.setOnMousePressed(event -> {
 
-                                    try {
+                                        try {
 
-                                        this.loadOwnedWindow(iWindows[finalI]);
-                                        this.model.respondToWindowRequest(iWindows[finalI]);
-                                    }
-                                    catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    dialog.close();
-                                });
+                                            this.loadOwnedWindow(iWindows[finalI]);
+                                            this.model.respondToWindowRequest(iWindows[finalI]);
+                                        }
+                                        catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        dialog.close();
+                                    });
 
-                                gridPane.add(window, i/(iWindows.length/2), i%(iWindows.length/2));
+                                    gridPane.add(window, i / (iWindows.length / 2), i % (iWindows.length / 2));
 
-                        }
-                        content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_YOUR_WINDOW)));
-                        content.setBody(gridPane);
-                        content.setAlignment(Pos.CENTER);
-                        gridPane.setAlignment(Pos.CENTER);
-                        dialog.show();
+                                }
+                                content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_YOUR_WINDOW)));
+                                content.setBody(gridPane);
+                                content.setAlignment(Pos.CENTER);
+                                gridPane.setAlignment(Pos.CENTER);
+                                dialog.show();
 
-                    }
-                ));
+                            }
+                    ));
                 });
     }
-
 
     public void onEndTurnClicked() throws IOException {
         this.model.endTurn();
         this.timer.cancel();
     }
 
-    private void setUpWaitForTurnToBeginFuture() {
-        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForTurnToBegin()))
-                .thenAccept(this::setUpWaitForTurnToBegin);
-    }
+    private void setUpWaitForTurnToBegin() {
+        this.matchExecutorService.submit((Callable<Void>) () -> {
+            this.remainingTime = this.model.waitForTurnToBegin();
 
-    private void setUpWaitForTurnToBegin(int remainingTime) {
-        Platform.runLater(unsafe(() -> {
-            setUpWaitForTurnToEndFuture();
+            Platform.runLater(unsafe(() -> {
+                        VBox turnBox = new VBox();
+                        JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
+                        timerLabel.setPrefSize(182, 109);
+                        timerLabel.setFont(new Font(50));
+                        endTurnButton.setPrefSize(182, 37);
+                        turnBox.getChildren().add(timerLabel);
+                        turnBox.getChildren().add(endTurnButton);
+                        bottomBar.getChildren().add(turnBox);
+                        HBox.setMargin(turnBox, new Insets(0, 0, 320, 0));
 
-            VBox turnBox = new VBox();
-            JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
-            timerLabel.setPrefSize(182, 109);
-            timerLabel.setFont(new Font(50));
-            endTurnButton.setPrefSize(182, 37);
-            turnBox.getChildren().add(timerLabel);
-            turnBox.getChildren().add(endTurnButton);
-            bottomBar.getChildren().add(turnBox);
-            HBox.setMargin(turnBox, new Insets(0, 0, 320, 0));
+                        this.remainingTime = remainingTime;
+                        startTimer();
+                        ownedWindowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
+                        draftPoolGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
 
-            this.remainingTime = remainingTime;
-            startTimer();
-            ownedWindowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
-            draftPoolGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
+                        for (Node node : toolCardNodes) {
+                            node.setDisable(false);
+                        }
 
-            for(Node node: toolCardNodes) {
-                node.setDisable(false);
-            }
+                        endTurnButton.setOnMouseClicked(event -> {
+                            try {
+                                onEndTurnClicked();
+                            }
+                            catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            bottomBar.getChildren().remove(turnBox);
 
-            endTurnButton.setOnMouseClicked(event ->{
-                try {
-                    onEndTurnClicked();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                bottomBar.getChildren().remove(turnBox);
+                        });
+                    }
+            ));
 
-            });
+            setUpWaitForTurnToEnd();
 
-            setUpWaitForTurnToBeginFuture();
-            }
-        ));
+            return null;
+        });
     }
 
     private void startTimer() {
@@ -215,80 +232,87 @@ public class MatchGUIView extends GUIView<MatchController> {
         this.timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> {
-                    MatchGUIView.this.timerLabel.setText(String.valueOf(remainingTime--));
-                });
+                Platform.runLater(() -> MatchGUIView.this.timerLabel.setText(String.valueOf(remainingTime--)));
             }
         }, 0, 1000);
     }
 
-    private void setUpWaitForTurnToEndFuture() {
-        CompletableFuture.runAsync(unsafe(() -> this.model.waitForTurnToEnd()))
-                .thenAccept(this::setUpWaitForTurnToEnd);
-    }
+    private void setUpWaitForTurnToEnd() {
+        this.matchExecutorService.submit((Callable<Void>) () -> {
+            this.model.waitForTurnToEnd();
 
-    private void setUpWaitForTurnToEnd(Void aVoid) {
-        Platform.runLater(unsafe(() -> {
+            setUpWaitForTurnToBegin();
 
             Match.performedAction = 0;
 
             this.timer.cancel();
             ownedWindowGUIView.setStatus(Constants.Status.GAME_LOCKED);
             draftPoolGUIView.setStatus(Constants.Status.GAME_LOCKED);
-            for(Node node: toolCardNodes) {
+
+            for (Node node : toolCardNodes) {
                 node.setDisable(true);
             }
-            setUpWaitForTurnToEndFuture();
-        }));
+
+
+            return null;
+        });
     }
 
     private void setUpWaitForMatchToEnd() {
-        CompletableFuture.supplyAsync(unsafe(()-> this.model.waitForMatchToEnd()))
-                .thenAccept(iResults -> Platform.runLater(unsafe(() -> {
-                    IResult[] sortedResults = Arrays.stream(iResults)
-                            .sorted(Comparator.comparing(IResult::getPoints))
-                            .toArray(IResult[]::new);
+        this.matchExecutorService.submit((Callable<Void>) () -> {
+            IResult[] results = Arrays.stream(this.model.waitForMatchToEnd())
+                    .sorted(Comparator.comparing(IResult::getPoints))
+                    .toArray(IResult[]::new);
 
+            try {
+                Platform.runLater(wrap(() -> {
                     FXMLLoader loader = new FXMLLoader();
                     Parent root = loader.load();
                     ResultsGUIView resultsGUIView = loader.getController();
                     String currentPlayerName = Player.getCurrentPlayer().getUsername();
 
-                    for (IResult result : sortedResults) {
+                    for (IResult result : results) {
                         Label label = new Label(result.getPlayer().getUsername() + " " + result.getPoints());
                         label.setStyle("-fx-alignment: CENTER; " +
                                 "-fx-font-size: 14+" +
-                                (result.getPlayer().getUsername().equals(currentPlayerName)?
-                                        "-fx-font-weight: bold;":";"));
+                                (result.getPlayer().getUsername().equals(currentPlayerName) ?
+                                        "-fx-font-weight: bold;" : ";"));
                         resultsGUIView.resultsListView.getItems().add(label);
                     }
-                    if (sortedResults[0].getPlayer().getUsername().equals(currentPlayerName)) {
+
+                    if (results[0].getPlayer().getUsername().equals(currentPlayerName)) {
                         resultsGUIView.winningMessage.setDisable(false);
                     }
 
                     SagradaGUI.showStage(root, 353, 546);
-                })));
+                }));
+            }
+            catch (FunctionalExceptionWrapper e) {
+                e.tryFinalUnwrap(IOException.class);
+            }
+
+            return null;
+        });
     }
 
 
     private void loadDraftPool(IDraftPool iDraftPool) throws IOException {
-
         if (draftPoolGUIView == null) {
             FXMLLoader draftPoolLoader = new FXMLLoader();
             draftPoolLoader.setLocation(Constants.Resources.DRAFTPOOL_VIEW_FXML.getURL());
             Node draftPoolNode = draftPoolLoader.load();
             draftPoolGUIView = draftPoolLoader.getController();
 
-            draftPoolGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
+            draftPoolGUIView.setStatus(Constants.Status.GAME_LOCKED);
             centerPane.setTop(draftPoolNode);
             BorderPane.setAlignment(draftPoolNode, Pos.BOTTOM_CENTER);
             BorderPane.setMargin(draftPoolNode, new Insets(300, 100, 0, 100));
         }
+
         draftPoolGUIView.setModel(iDraftPool);
     }
 
     private void loadRoundTrack(IRoundTrack iRoundTrack) throws IOException {
-
         if (roundTrackGUIView == null) {
             FXMLLoader roundTrackLoader = new FXMLLoader();
             roundTrackLoader.setLocation(Constants.Resources.ROUNDTRACK_VIEW_FXML.getURL());
@@ -297,43 +321,36 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             bottomBar.getChildren().add(roundTrackNode);
             BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
-            HBox.setMargin(roundTrackNode, new Insets(0,0,300,0));
+            HBox.setMargin(roundTrackNode, new Insets(0, 0, 300, 0));
         }
+
         roundTrackGUIView.setModel(iRoundTrack);
     }
 
     private void loadOpponentsWindows(ILivePlayer[] players) throws IOException {
-
         for (int i = 0; i < players.length; i++) {
-
             ILivePlayer player = players[i];
 
             if (opponentsWindowsGUIViews == null) {
-
                 opponentsWindowsGUIViews = new WindowGUIView[players.length];
 
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
-                try {
-                    Node node = loader.load();
-                    VBox vBox = new VBox();
-                    Label label = new Label(player.hasLeft() ? player.getPlayer().getUsername() + " (Offline)" :
-                            player.getPlayer().getUsername());
-                    label.setAlignment(Pos.CENTER);
-                    label.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
-                    vBox.getChildren().addAll(node, label);
-                    opponentsWindowsGUIViews[i] = loader.getController();
-                    opponentsWindowsGUIViews[i].setStatus(Constants.Status.OPPONENT_LOCKED);
-                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
-                    hBoxWindows.getChildren().add(vBox);
+                Node node = loader.load();
+                VBox vBox = new VBox();
+                Label label = new Label(player.hasLeft() ? player.getPlayer().getUsername() + " (Offline)" :
+                        player.getPlayer().getUsername());
+                label.setAlignment(Pos.CENTER);
+                label.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
+                vBox.getChildren().addAll(node, label);
+                opponentsWindowsGUIViews[i] = loader.getController();
+                opponentsWindowsGUIViews[i].setStatus(Constants.Status.OPPONENT_LOCKED);
+                hBoxWindows.setAlignment(Pos.TOP_CENTER);
+                hBoxWindows.getChildren().add(vBox);
 
-                    hBoxWindows.setSpacing(100);
-                    hBoxWindows.setAlignment(Pos.TOP_CENTER);
-                    HBox.setMargin(vBox, new Insets(10, 0, 0, 0));
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                hBoxWindows.setSpacing(100);
+                hBoxWindows.setAlignment(Pos.TOP_CENTER);
+                HBox.setMargin(vBox, new Insets(10, 0, 0, 0));
             }
 
             opponentsWindowsGUIViews[i].setModel(player.getWindow());
@@ -341,26 +358,23 @@ public class MatchGUIView extends GUIView<MatchController> {
     }
 
     private void loadOwnedWindow(IWindow iWindow) throws IOException {
-
         if (ownedWindowGUIView == null) {
-
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
             Node window = loader.load();
             ownedWindowGUIView = loader.getController();
 
-            ownedWindowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
+            ownedWindowGUIView.setStatus(Constants.Status.GAME_LOCKED);
             centerPane.setCenter(window);
             window.setScaleY(1.7);
             window.setScaleX(1.7);
-            BorderPane.setMargin(window, new Insets(10, 300,5, 200));
+            BorderPane.setMargin(window, new Insets(10, 300, 5, 200));
         }
-        ownedWindowGUIView.setModel(iWindow);
 
+        ownedWindowGUIView.setModel(iWindow);
     }
 
     private void loadToolCards(IToolCard[] iToolCards) throws IOException {
-
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(5.0);
         dropShadow.setOffsetX(3.0);
@@ -369,8 +383,8 @@ public class MatchGUIView extends GUIView<MatchController> {
 
         if (toolCardGUIViews == null) {
             toolCardGUIViews = new ToolCardGUIView[iToolCards.length];
-            for (int i = 0; i < iToolCards.length; i++) {
 
+            for (int i = 0; i < iToolCards.length; i++) {
                 JFXDialogLayout content = new JFXDialogLayout();
                 JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
                 dialog.setOverlayClose(false);
@@ -407,28 +421,44 @@ public class MatchGUIView extends GUIView<MatchController> {
                 content.setActions(cancel);
 
                 int finalI = i;
-                use.setOnMousePressed(event -> {
+                try {
+                    use.setOnMousePressed(event -> {
 
-                JFXDialogLayout content2 = new JFXDialogLayout();
-                JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
+                        JFXDialogLayout content2 = new JFXDialogLayout();
+                        JFXDialog dialog2 = new JFXDialog(outerPane, content2, CENTER);
 
-                if ((Match.performedAction & 2) != 2) {try {
-                    this.model.requestToolCardUsage(iToolCards[finalI]);
-                    dialog.close();Match.performedAction = (byte) (2 | Match.performedAction);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (RuntimeException e) {
+                        if ((Match.performedAction & 0b10) != 0b10) {
+                            helper.init();
+                            this.matchExecutorService.submit(() -> {
+                                try {
+                                    this.model.requestToolCardUsage(iToolCards[finalI]);
 
-                    JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
-                    cancel2.setOnMousePressed(e1 -> dialog2.close());
-                    content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
-                    content2.setActions(cancel2);
-                    dialog2.show();
+                                    dialog.close();
+
+                                    Match.performedAction |= 0b10;
+                                }
+                                catch (IOException e) {
+                                    FunctionalExceptionWrapper.wrap(e);
+                                }
+                                catch (RuntimeException e) {
+                                    Platform.runLater(() -> {
+                                        JFXButton cancel2 = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_USE_BUTTON));
+                                        cancel2.setOnMousePressed(e1 -> dialog2.close());
+                                        content2.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_NOT_ENOUGH_TOKEN)));
+                                        content2.setActions(cancel2);
+                                        dialog2.show();
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            content2.setHeading(new Text("You cannot perform the same action twice."));
+                        }
+                    });
                 }
-            }else {
-                    content2.setHeading(new Text("You cannot perform the same action twice."));
+                catch (FunctionalExceptionWrapper e) {
+                    e.tryFinalUnwrap(IOException.class);
                 }
-            });
 
                 cancel.setOnMousePressed(event ->
                         dialog.close()
@@ -436,11 +466,9 @@ public class MatchGUIView extends GUIView<MatchController> {
                 content.setActions(use, cancel);
             }
         }
-
-        }
+    }
 
     private void loadPublicObjectiveCards(IObjectiveCard[] iObjectiveCards) throws IOException {
-
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(5.0);
         dropShadow.setOffsetX(3.0);
@@ -452,7 +480,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         }
 
         for (int i = 0; i < iObjectiveCards.length; i++) {
-            if (publicObjectiveCardGUIViews[i] == null){
+            if (publicObjectiveCardGUIViews[i] == null) {
                 JFXDialogLayout content = new JFXDialogLayout();
                 JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
                 dialog.setOverlayClose(false);
@@ -489,7 +517,6 @@ public class MatchGUIView extends GUIView<MatchController> {
     }
 
     private void loadPrivateObjectiveCard(IObjectiveCard objectiveCard) throws IOException {
-
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(5.0);
         dropShadow.setOffsetX(3.0);
@@ -497,7 +524,6 @@ public class MatchGUIView extends GUIView<MatchController> {
         dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
 
         if (privateObjectiveCardGUIView == null) {
-
             JFXDialogLayout content = new JFXDialogLayout();
             JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
             dialog.setOverlayClose(false);
@@ -509,7 +535,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             privateCardNode.setEffect(dropShadow);
             privateObjectiveCardGUIView = privateCardLoader.getController();
             privateObjectiveCardGUIView.setModel(objectiveCard);
-            FXMLLoader loader =  new FXMLLoader();
+            FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Constants.Resources.OBJECTIVE_CARD_VIEW_FXML.getURL());
             Node oc = loader.load();
             ObjectiveCardGUIView controller = loader.getController();
@@ -521,9 +547,9 @@ public class MatchGUIView extends GUIView<MatchController> {
             content.setActions(cancel);
             centerPane.setRight(privateCardNode);
             BorderPane.setAlignment(privateCardNode, Pos.BOTTOM_CENTER);
-            BorderPane.setMargin(privateCardNode, new Insets(0,10,220,10));
+            BorderPane.setMargin(privateCardNode, new Insets(0, 10, 220, 10));
         }
     }
- }
+}
 
 

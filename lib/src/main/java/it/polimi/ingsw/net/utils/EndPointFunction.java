@@ -34,6 +34,12 @@ public enum EndPointFunction {
         MATCH_PLAYER_TOOL_CARD_RESPONSE("match/player/tool_card_response"),
         MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_REQUEST("match/player/tool_card/choose_position_request"),
         MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_RESPONSE("match/player/tool_card/choose_position_response"),
+        MATCH_PLAYER_TOOL_CARD_CHOOSE_SHADE_REQUEST("match/player/tool_card/choose_shade_request"),
+        MATCH_PLAYER_TOOL_CARD_CHOOSE_SHADE_RESPONSE("match/player/tool_card/choose_shade_response"),
+        MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_REQUEST("match/player/tool_card/choose_between_actions_request"),
+        MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_RESPONSE("match/player/tool_card/choose_between_actions_response"),
+        MATCH_PLAYER_TOOL_CARD_SHOULD_CONTINUE_TO_REPEAT_REQUEST("match/player/tool_card/should_continue_to_repeat_request"),
+        MATCH_PLAYER_TOOL_CARD_SHOULD_CONTINUE_TO_REPEAT_RESPONSE("match/player/tool_card/should_continue_to_repeat_response"),
     
         // ------ PLAYER MOVE ------
         MATCH_PLAYER_MOVE_REQUEST("match/player/move_request"),

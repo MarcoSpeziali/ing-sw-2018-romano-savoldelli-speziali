@@ -5,6 +5,8 @@ import it.polimi.ingsw.core.Move;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.requests.ChooseBetweenActionsRequest;
 import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
+import it.polimi.ingsw.net.requests.SetShadeRequest;
+import it.polimi.ingsw.net.requests.ShouldRepeatRequest;
 import it.polimi.ingsw.net.responses.MoveResponse;
 
 import java.io.IOException;
@@ -233,34 +235,115 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
         choosePositionConsumer.accept(chosenPosition);
     }
 
+    private final transient Object chooseBetweenActionsSyncObject = new Object();
+    private ChooseBetweenActionsRequest chooseBetweenActionsRequest;
+    private transient Consumer<IAction[]> chooseBetweenActionsConsumer;
+
+    public void setChooseBetweenActionsConsumer(Consumer<IAction[]> chooseBetweenActionsConsumer) {
+        this.chooseBetweenActionsConsumer = chooseBetweenActionsConsumer;
+    }
+
+    public void postChooseBetweenActions(ChooseBetweenActionsRequest chooseBetweenActionsRequest) {
+        synchronized (chooseBetweenActionsSyncObject) {
+            this.chooseBetweenActionsRequest = chooseBetweenActionsRequest;
+
+            chooseBetweenActionsSyncObject.notifyAll();
+        }
+    }
+
     @Override
-    public ChooseBetweenActionsRequest waitForChooseBetweenActions() {
-        return null;
+    public ChooseBetweenActionsRequest waitForChooseBetweenActions() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (chooseBetweenActionsSyncObject) {
+            while (chooseBetweenActionsRequest == null) {
+                chooseBetweenActionsSyncObject.wait();
+            }
+
+            ChooseBetweenActionsRequest temp = this.chooseBetweenActionsRequest;
+            this.chooseBetweenActionsRequest = null;
+            return temp;
+        }
     }
     
     @Override
     public void postChosenActions(IAction[] actions) {
-    
+        if (chooseBetweenActionsConsumer != null) {
+            chooseBetweenActionsConsumer.accept(actions);
+        }
+    }
+
+    private final transient Object shouldRepeatSyncObject = new Object();
+    private ShouldRepeatRequest shouldRepeatRequest;
+    private transient Consumer<Boolean> shouldRepeatConsumer;
+
+    public void setShouldRepeatConsumer(Consumer<Boolean> shouldRepeatConsumer) {
+        this.shouldRepeatConsumer = shouldRepeatConsumer;
+    }
+
+    public void postShouldRepeat(ShouldRepeatRequest shouldRepeatRequest) {
+        synchronized (shouldRepeatSyncObject) {
+            this.shouldRepeatRequest = shouldRepeatRequest;
+
+            shouldRepeatSyncObject.notifyAll();
+        }
     }
     
     @Override
-    public IAction waitForContinueToRepeat() {
-        return null;
+    public IAction waitForContinueToRepeat() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (shouldRepeatSyncObject) {
+            while (shouldRepeatRequest == null) {
+                shouldRepeatSyncObject.wait();
+            }
+
+            ShouldRepeatRequest temp = this.shouldRepeatRequest;
+            this.shouldRepeatRequest = null;
+            return temp.getAction();
+        }
     }
     
     @Override
     public void postContinueToRepeatChoice(boolean continueToRepeat) {
-    
+        if (this.shouldRepeatConsumer != null) {
+            this.shouldRepeatConsumer.accept(continueToRepeat);
+        }
+    }
+
+    private final transient Object setShadeSyncObject = new Object();
+    private SetShadeRequest setShadeRequest;
+    private transient Consumer<Integer> setShadeConsumer;
+
+    public void setSetShadeConsumer(Consumer<Integer> setShadeConsumer) {
+        this.setShadeConsumer = setShadeConsumer;
+    }
+
+    public void postSetShade(SetShadeRequest setShadeRequest) {
+        synchronized (setShadeSyncObject) {
+            this.setShadeRequest = setShadeRequest;
+
+            setShadeSyncObject.notifyAll();
+        }
     }
     
     @Override
-    public IDie waitForSetShade() {
-        return null;
+    public IDie waitForSetShade() throws InterruptedException {
+        //noinspection Duplicates
+        synchronized (setShadeSyncObject) {
+            while (setShadeRequest == null) {
+                setShadeSyncObject.wait();
+            }
+
+            SetShadeRequest temp = this.setShadeRequest;
+            this.setShadeRequest = null;
+            return temp.getDie();
+        }
     }
     
     @Override
     public void postSetShade(Integer shade) {
-    
+        if (this.setShadeConsumer != null) {
+            this.setShadeConsumer.accept(shade);
+        }
     }
 
     private final transient Object resultsSyncObject = new Object();

@@ -7,11 +7,8 @@ import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.mocks.*;
-import it.polimi.ingsw.net.requests.WindowRequest;
-import it.polimi.ingsw.net.responses.MatchBeginResponse;
-import it.polimi.ingsw.net.responses.MatchEndResponse;
-import it.polimi.ingsw.net.responses.MoveResponse;
-import it.polimi.ingsw.net.responses.ResultsResponse;
+import it.polimi.ingsw.net.requests.*;
+import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.server.events.MatchCommunicationsListener;
@@ -42,7 +39,21 @@ public class MatchCommunicationsManager {
     private final Map<DatabasePlayer, AuthenticatedClientHandler> socketPlayersHandler = new HashMap<>();
     private final IMatch match;
     private final MatchCommunicationsListener matchCommunicationsListener;
-    
+
+    // ------ LOCK OBJECTS ------
+
+    private final Object choosePositionSyncObject = new Object();
+    private Integer choosePositionForLocationResponse;
+
+    private final Object chooseShadeSyncObject = new Object();
+    private Integer chooseShadeResponse;
+
+    private final Object chooseBetweenActionsSyncObject = new Object();
+    private IAction[] chooseBetweenActionsResponse;
+
+    private final Object shouldRepeatSyncObject = new Object();
+    private Boolean shouldRepeatResponse;
+
     // ------ LIFE CYCLE ------
     
     public MatchCommunicationsManager(IMatch match, MatchCommunicationsListener matchCommunicationsListener) {
@@ -70,9 +81,16 @@ public class MatchCommunicationsManager {
         ));
         this.forEachRmi((databasePlayer, matchRMIProxyController) -> {
             matchRMIProxyController.setWindowResponseConsumer(window -> this.onWindowChosen(databasePlayer, window));
+
             matchRMIProxyController.setMoveFunction(move -> this.onMoveRequested(databasePlayer, move));
+
             matchRMIProxyController.setEndTurnRunnable(() -> this.onEndRequested(databasePlayer));
+
             matchRMIProxyController.setToolCardConsumer(toolCard -> this.onToolCardRequested(databasePlayer, toolCard));
+            matchRMIProxyController.setChoosePositionConsumer(this::onPositionChosen);
+            matchRMIProxyController.setChooseBetweenActionsConsumer(this::onActionsChosen);
+            matchRMIProxyController.setSetShadeConsumer(this::onShadeChosen);
+            matchRMIProxyController.setShouldRepeatConsumer(this::onShouldRepeatResponse);
         });
     }
     
@@ -152,53 +170,127 @@ public class MatchCommunicationsManager {
             }
         });
     }
-    
-    // ------ MOVE ------
-    
-    public void sendPositiveResponseForMoveToPlayer(DatabasePlayer databasePlayer) throws IOException {
-        this.sendMoveResponse(databasePlayer, new MoveResponse(
-                this.match.getId(),
-                true
-        ));
-    }
-    
-    public void sendNegativeResponseForMoveToPlayer(DatabasePlayer databasePlayer) throws IOException {
-        this.sendMoveResponse(databasePlayer, new MoveResponse(
-                this.match.getId(),
-                false
-        ));
-    }
-    
-    private void sendMoveResponse(DatabasePlayer databasePlayer, MoveResponse moveResponse) throws IOException {
-        this.sendToPlayer(databasePlayer, (authenticatedClientHandler, matchRMIProxyController) -> {
-            if (authenticatedClientHandler != null) {
-                authenticatedClientHandler.sendResponse(new Response<>(
-                        new Header(EndPointFunction.MATCH_PLAYER_MOVE_REQUEST),
-                        moveResponse
-                ));
-            }
-            else {
-                // matchRMIProxyController.postMoveResponse(moveResponse);
-            }
-        });
-    }
 
     // ------ TOOL CARDS ------
     
-    public Integer sendChoosePosition(DatabasePlayer databasePlayer, JSONSerializable jsonSerializable, Set<Integer> unavailableLocations) throws IOException {
-        return 0;
+    public Integer sendChoosePosition(DatabasePlayer databasePlayer, JSONSerializable jsonSerializable, Set<Integer> unavailableLocations) throws IOException, InterruptedException {
+        synchronized (choosePositionSyncObject) {
+            this.sendToPlayer(databasePlayer, (authenticatedClientHandler, rmiProxyController) -> {
+                ChoosePositionForLocationRequest choosePositionForLocationRequest = new ChoosePositionForLocationRequest(
+                        this.match.getId(),
+                        jsonSerializable,
+                        unavailableLocations
+                );
+
+                if (authenticatedClientHandler != null) {
+                    authenticatedClientHandler.sendRequest(new Request<>(
+                            new Header(EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_REQUEST),
+                            choosePositionForLocationRequest
+                    ));
+                }
+                else {
+                    rmiProxyController.postChoosePositionForLocation(choosePositionForLocationRequest);
+                }
+            });
+
+            while (choosePositionForLocationResponse == null) {
+                choosePositionSyncObject.wait();
+            }
+
+            Integer temp = choosePositionForLocationResponse;
+            choosePositionForLocationResponse = null;
+            return temp;
+        }
     }
 
-    public Integer sendChooseShade(DatabasePlayer databasePlayer, IDie die) throws IOException {
-        return 0;
+    public Integer sendChooseShade(DatabasePlayer databasePlayer, IDie die) throws IOException, InterruptedException {
+        synchronized (chooseShadeSyncObject) {
+
+            this.sendToPlayer(databasePlayer, (authenticatedClientHandler, rmiProxyController) -> {
+                SetShadeRequest setShadeRequest = new SetShadeRequest(
+                        this.match.getId(),
+                        new DieMock(die)
+                );
+
+                if (authenticatedClientHandler != null) {
+                    authenticatedClientHandler.sendRequest(new Request<>(
+                            new Header(EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_SHADE_REQUEST),
+                            setShadeRequest
+                    ));
+                }
+                else {
+                    rmiProxyController.postSetShade(setShadeRequest);
+                }
+            });
+
+            while (chooseShadeResponse == null) {
+                chooseShadeSyncObject.wait();
+            }
+
+            Integer temp = chooseShadeResponse;
+            chooseShadeResponse = null;
+            return temp;
+        }
     }
     
-    public boolean sendShouldRepeat(IAction action, int alreadyRepeatedFor, int maximumRepetitions) throws IOException {
-        return false;
+    public boolean sendShouldRepeat(DatabasePlayer databasePlayer, IAction action) throws IOException, InterruptedException {
+        synchronized (shouldRepeatSyncObject) {
+
+            this.sendToPlayer(databasePlayer, (authenticatedClientHandler, rmiProxyController) -> {
+                ShouldRepeatRequest shouldRepeatRequest = new ShouldRepeatRequest(
+                        this.match.getId(),
+                        new ActionMock(action)
+                );
+
+                if (authenticatedClientHandler != null) {
+                    authenticatedClientHandler.sendRequest(new Request<>(
+                            new Header(EndPointFunction.MATCH_PLAYER_TOOL_CARD_SHOULD_CONTINUE_TO_REPEAT_REQUEST),
+                            shouldRepeatRequest
+                    ));
+                }
+                else {
+                    rmiProxyController.postShouldRepeat(shouldRepeatRequest);
+                }
+            });
+
+            while (shouldRepeatResponse == null) {
+                shouldRepeatSyncObject.wait();
+            }
+
+            Boolean temp = shouldRepeatResponse;
+            shouldRepeatResponse = null;
+            return temp;
+        }
     }
     
-    public List<IAction> sendChooseActions(List<IAction> actions, Range<Integer> chooseBetween) throws IOException {
-        return null;
+    public List<IAction> sendChooseActions(DatabasePlayer databasePlayer, ActionMock[] actions, Range<Integer> chooseBetween) throws IOException, InterruptedException {
+        synchronized (chooseBetweenActionsSyncObject) {
+            this.sendToPlayer(databasePlayer, (authenticatedClientHandler, rmiProxyController) -> {
+                ChooseBetweenActionsRequest chooseBetweenActionsRequest = new ChooseBetweenActionsRequest(
+                        this.match.getId(),
+                        actions,
+                        chooseBetween
+                );
+
+                if (authenticatedClientHandler != null) {
+                    authenticatedClientHandler.sendRequest(new Request<>(
+                            new Header(EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_REQUEST),
+                            chooseBetweenActionsRequest
+                    ));
+                }
+                else {
+                    rmiProxyController.postChooseBetweenActions(chooseBetweenActionsRequest);
+                }
+            });
+
+            while (chooseBetweenActionsResponse == null) {
+                chooseBetweenActionsSyncObject.wait();
+            }
+
+            IAction[] temp = chooseBetweenActionsResponse;
+            chooseBetweenActionsResponse = null;
+            return Arrays.asList(temp);
+        }
     }
     
     // ------ RESULTS ------
@@ -284,6 +376,34 @@ public class MatchCommunicationsManager {
         }
         catch (ConstraintEvaluationException e) {
             throw new ToolCardConditionException();
+        }
+    }
+
+    public void onPositionChosen(Integer position) {
+        synchronized (choosePositionSyncObject) {
+            this.choosePositionForLocationResponse = position;
+            choosePositionSyncObject.notifyAll();
+        }
+    }
+
+    public void onShadeChosen(Integer shade) {
+        synchronized (chooseShadeSyncObject) {
+            this.chooseShadeResponse = shade;
+            chooseShadeSyncObject.notifyAll();
+        }
+    }
+
+    public void onActionsChosen(IAction[] actions) {
+        synchronized (chooseBetweenActionsSyncObject) {
+            this.chooseBetweenActionsResponse = actions;
+            chooseBetweenActionsSyncObject.notifyAll();
+        }
+    }
+
+    public void onShouldRepeatResponse(Boolean shouldRepeat) {
+        synchronized (shouldRepeatSyncObject) {
+            this.shouldRepeatResponse = shouldRepeat;
+            shouldRepeatSyncObject.notifyAll();
         }
     }
 }

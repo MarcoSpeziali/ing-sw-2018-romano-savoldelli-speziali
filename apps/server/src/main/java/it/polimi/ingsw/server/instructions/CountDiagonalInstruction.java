@@ -211,7 +211,8 @@ public class CountDiagonalInstruction extends Instruction {
 
         for (int i = 0; i < diceMatrix.length; i++) {
             for (int j = 0; j < diceMatrix[i].length; j++) {
-                if (this.alreadyCountedDice[i][j]) {
+                if (diceMatrix[i][j] == null || this.alreadyCountedDice[i][j]) {
+                    this.alreadyCountedDice[i][j] = true;
                     continue;
                 }
 
@@ -263,7 +264,7 @@ public class CountDiagonalInstruction extends Instruction {
      * @return
      */
     private Integer countDiagonallyRecursivelyByColor(Die[][] diceMatrix, int i, int j, GlassColor glassColor, int rowCount, int columnCount) {
-        if (!diceMatrix[i][j].getColor().equals(glassColor) || this.alreadyCountedDice[i][j]) {
+        if (diceMatrix[i][j] == null || !diceMatrix[i][j].getColor().equals(glassColor) || this.alreadyCountedDice[i][j]) {
             return 0;
         }
 
@@ -323,7 +324,7 @@ public class CountDiagonalInstruction extends Instruction {
      * @return
      */
     private Integer countDiagonallyRecursivelyByShade(Die[][] diceMatrix, int i, int j, Integer shade, int rowCount, int columnCount) {
-        if (!diceMatrix[i][j].getShade().equals(shade) || this.alreadyCountedDice[i][j]) {
+        if (diceMatrix[i][j] == null || !diceMatrix[i][j].getShade().equals(shade) || this.alreadyCountedDice[i][j]) {
             return 0;
         }
 

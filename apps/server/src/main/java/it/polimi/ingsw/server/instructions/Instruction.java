@@ -47,7 +47,7 @@ public abstract class Instruction {
             return 0;
         }
 
-        return this.instructions.parallelStream()
+        return this.instructions.stream()
                 .mapToInt(instruction -> instruction.run(context))
                 .sum();
     }

@@ -57,7 +57,7 @@ public class DatabaseResult implements IResult {
         return this.points;
     }
 
-    public DatabaseResult resultForPlayerInMatch(int playerId, int matchId) throws SQLException {
+    public static DatabaseResult resultForPlayerInMatch(int playerId, int matchId) throws SQLException {
         String query = String.format(
                 "SELECT * FROM result WHERE player = %d AND match = %d",
                 playerId,
@@ -69,7 +69,7 @@ public class DatabaseResult implements IResult {
         }
     }
 
-    public DatabaseResult insertResultForPlayerInMatch(int playerId, int matchId, int points) throws SQLException {
+    public static DatabaseResult insertResultForPlayerInMatch(int playerId, int matchId, int points) throws SQLException {
         String query = String.format(
                 "INSERT INTO result (player, match, points) VALUES (%d, %d, %d) RETURNING *",
                 playerId,

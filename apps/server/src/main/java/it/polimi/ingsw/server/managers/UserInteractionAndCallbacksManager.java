@@ -71,7 +71,7 @@ public class UserInteractionAndCallbacksManager implements UserInteractionProvid
 
             return this.matchCommunicationsManager.sendChoosePosition(databasePlayer, jsonSerializable, unavailableLocations);
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             return null;
         }
     }
@@ -127,7 +127,7 @@ public class UserInteractionAndCallbacksManager implements UserInteractionProvid
                 return null;
             }
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             return null;
         }
     }
@@ -137,7 +137,7 @@ public class UserInteractionAndCallbacksManager implements UserInteractionProvid
         try {
             return this.matchCommunicationsManager.sendChooseShade(databasePlayer, new DieMock(die));
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             return null;
         }
     }
@@ -148,14 +148,13 @@ public class UserInteractionAndCallbacksManager implements UserInteractionProvid
     public boolean shouldRepeat(ActionGroup actionGroup, int alreadyRepeatedFor, int maximumRepetitions) {
         try {
             return this.matchCommunicationsManager.sendShouldRepeat(
+                    databasePlayer,
                     new ActionMock(
                             actionGroup.getActionData().getDescriptionKey()
-                    ),
-                    alreadyRepeatedFor,
-                    maximumRepetitions
+                    )
             );
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             return false;
         }
     }
@@ -164,9 +163,10 @@ public class UserInteractionAndCallbacksManager implements UserInteractionProvid
     public List<ExecutableAction> getChosenActions(List<ExecutableAction> actions, Range<Integer> chooseBetween) {
         try {
             List<String> chosenDescriptionKeys = this.matchCommunicationsManager.sendChooseActions(
+                    databasePlayer,
                     actions.stream().map(executableAction -> new ActionMock(
                             executableAction.getActionData().getDescriptionKey()
-                    )).collect(Collectors.toList()),
+                    )).toArray(ActionMock[]::new),
                     chooseBetween
             ).stream()
                     .map(IAction::getDescription)
@@ -178,7 +178,7 @@ public class UserInteractionAndCallbacksManager implements UserInteractionProvid
                     ))
                     .collect(Collectors.toList());
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             return List.of();
         }
     }

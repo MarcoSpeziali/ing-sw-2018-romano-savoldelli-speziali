@@ -7,13 +7,8 @@ import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.ResponseError;
-import it.polimi.ingsw.net.requests.MatchEndRequest;
-import it.polimi.ingsw.net.requests.MoveRequest;
-import it.polimi.ingsw.net.requests.NullRequest;
-import it.polimi.ingsw.net.requests.ToolCardUsageRequest;
-import it.polimi.ingsw.net.responses.MoveResponse;
-import it.polimi.ingsw.net.responses.NullResponse;
-import it.polimi.ingsw.net.responses.WindowResponse;
+import it.polimi.ingsw.net.requests.*;
+import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.server.managers.MatchCommunicationsManager;
@@ -24,6 +19,10 @@ import it.polimi.ingsw.utils.io.json.JSONSerializable;
 @Handles({
         // ------ RESPONSES ------
         EndPointFunction.MATCH_WINDOW_RESPONSE,
+        EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_RESPONSE,
+        EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_RESPONSE,
+        EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_SHADE_RESPONSE,
+        EndPointFunction.MATCH_PLAYER_TOOL_CARD_SHOULD_CONTINUE_TO_REPEAT_RESPONSE,
         
         // ------ REQUESTS ------
         EndPointFunction.MATCH_PLAYER_MOVE_REQUEST,
@@ -105,6 +104,54 @@ public class MatchControllerMiddleware implements Middleware {
             this.matchCommunicationsManager.onWindowChosen(
                     ((AuthenticatedClientHandler) clientHandler).getPlayer(),
                     windowResponse.getBody().getChosenWindow()
+            );
+
+            return new Request(
+                    response.getHeader(),
+                    new NullRequest()
+            );
+        }
+        else if (endPointFunction == EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_POSITION_RESPONSE && response.getBody() instanceof ChoosePositionForLocationResponse) {
+            Response<ChoosePositionForLocationResponse> r = (Response<ChoosePositionForLocationResponse>) response;
+
+            this.matchCommunicationsManager.onPositionChosen(
+                    r.getBody().getLocation()
+            );
+
+            return new Request(
+                    response.getHeader(),
+                    new NullRequest()
+            );
+        }
+        else if (endPointFunction == EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_RESPONSE && response.getBody() instanceof ChooseBetweenActionsResponse) {
+            Response<ChooseBetweenActionsResponse> r = (Response<ChooseBetweenActionsResponse>) response;
+
+            this.matchCommunicationsManager.onActionsChosen(
+                    r.getBody().getChosenActions()
+            );
+
+            return new Request(
+                    response.getHeader(),
+                    new NullRequest()
+            );
+        }
+        else if (endPointFunction == EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_SHADE_RESPONSE && response.getBody() instanceof SetShadeResponse) {
+            Response<SetShadeResponse> r = (Response<SetShadeResponse>) response;
+
+            this.matchCommunicationsManager.onShadeChosen(
+                    r.getBody().getChosenShade()
+            );
+
+            return new Request(
+                    response.getHeader(),
+                    new NullRequest()
+            );
+        }
+        else if (endPointFunction == EndPointFunction.MATCH_PLAYER_TOOL_CARD_SHOULD_CONTINUE_TO_REPEAT_RESPONSE && response.getBody() instanceof ShouldRepeatResponse) {
+            Response<ShouldRepeatResponse> r = (Response<ShouldRepeatResponse>) response;
+
+            this.matchCommunicationsManager.onShouldRepeatResponse(
+                    r.getBody().shouldRepeat()
             );
 
             return new Request(

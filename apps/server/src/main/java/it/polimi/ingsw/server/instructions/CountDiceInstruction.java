@@ -4,6 +4,8 @@ import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Window;
 
+import java.util.Objects;
+
 public class CountDiceInstruction extends Instruction {
 
     /**
@@ -30,6 +32,7 @@ public class CountDiceInstruction extends Instruction {
         // Math.toIntExact because count returns a long
         return Math.toIntExact(
                 window.getDice().stream()
+                        .filter(Objects::nonNull)
                         .filter(die ->
                                 (this.filterShade == 0 || die.getShade().equals(this.filterShade)) &&
                                         (this.filterColor == null || die.getColor().equals(this.filterColor))

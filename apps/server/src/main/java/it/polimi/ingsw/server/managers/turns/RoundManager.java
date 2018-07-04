@@ -15,16 +15,14 @@ public class RoundManager implements PlayerEventsListener, AutoCloseable {
     
     private static final Map<Integer, RoundManager> managers = new HashMap<>();
     
-    public static final byte NUMBER_OF_ROUNDS = 10;
-    
     /**
      * Gets an instance of {@link RoundManager} which handles the specified {@link IMatch}.
      *
      * @param match the {@link DatabaseMatch} to handle
      * @return an instance of {@link RoundManager} which handles the provided {@link IMatch}
      */
-    public static RoundManager createRoundManager(DatabaseMatch match) {
-        return managers.computeIfAbsent(match.getId(), id -> new RoundManager(match));
+    public static RoundManager createRoundManager(DatabaseMatch match, byte numberOfRounds) {
+        return managers.computeIfAbsent(match.getId(), id -> new RoundManager(match, numberOfRounds));
     }
     
     /**
@@ -43,12 +41,12 @@ public class RoundManager implements PlayerEventsListener, AutoCloseable {
     private List<DatabasePlayer> originalPlayers;
     private Turn currentTurn;
     
-    private RoundManager(DatabaseMatch match) {
+    private RoundManager(DatabaseMatch match, byte numberOfRounds) {
         this.originalPlayers = Arrays.asList(match.getDatabasePlayers());
     
         this.playerTurnList = new PlayerTurnList(
                 this.originalPlayers.toArray(new DatabasePlayer[0]),
-                NUMBER_OF_ROUNDS
+                numberOfRounds
         );
     
         EventDispatcher.register(this);

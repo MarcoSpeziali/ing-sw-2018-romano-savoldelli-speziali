@@ -5,6 +5,7 @@ import it.polimi.ingsw.core.GlassColor;
 import it.polimi.ingsw.models.Window;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class ForDieInstruction extends Instruction {
     /**
@@ -45,6 +46,7 @@ public class ForDieInstruction extends Instruction {
 
         // The results is the sum of each result of the iteration over each die
         Integer result = window.getDice().stream()
+                .filter(Objects::nonNull)
                 // The dice collection gets filtered with the provided filters
                 .filter(die -> (
                         this.filterShade == 0 || die.getShade().equals(this.filterShade)) &&

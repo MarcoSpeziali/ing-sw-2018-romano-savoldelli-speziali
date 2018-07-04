@@ -157,7 +157,7 @@ public class PlayerTurnList {
      * @return whether there is at least a player that must play in the current round
      */
     public boolean hasNext() {
-        return this.currentTurn >= this.turns.size() - 1 || this.currentRound != this.numberOfRounds - 1;
+        return this.currentTurn != this.turns.size() - 1 || this.currentRound != this.numberOfRounds - 1;
     }
     
     /**

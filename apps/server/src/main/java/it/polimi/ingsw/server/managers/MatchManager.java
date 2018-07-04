@@ -382,26 +382,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
             this.matchState = MatchState.CALCULATING_RESULTS;
 
-            Map<DatabasePlayer, Integer> partialResults = ResultsManager.getPartialPointsForPlayers(
-                    this.databaseMatch.getId(),
-                    this.matchPlayers.toArray(new DatabasePlayer[0]),
-                    Arrays.stream(this.matchObjectsManager.getPublicObjectiveCards())
-                            .map(ObjectiveCard::getObjective)
-                            .toArray(Objective[]::new)
-            );
-            partialResults = ResultsManager.integratePartialResultsWithPrivateObjectives(
-                    this.databaseMatch.getId(),
-                    partialResults,
-                    this.matchObjectsManager.getPrivateObjectiveCards()
-                            .entrySet().stream()
-                            .map(entry -> Map.entry(entry.getKey(), ((Objective) entry.getValue().getObjective())))
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-            );
-            
-            this.matchCommunicationsManager.sendResults(ResultsManager.finalizeWithPenaltiesAndBonus(
-                    this.databaseMatch.getId(),
-                    partialResults
-            ));
+            calculateAndSendResults();
 
             this.matchState = MatchState.CLOSING_MATCH;
         }
@@ -497,7 +478,16 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                         false
                 );
 
-                this.onModelsUpdated();
+                this.matchExecutorService.schedule(() -> {
+                    try {
+                        onModelsUpdated();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }, 150, TimeUnit.MILLISECONDS);
+
+                onModelsUpdated();
 
                 return new MoveResponse(this.databaseMatch.getId(), true);
             }
@@ -508,6 +498,34 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         else {
             return new MoveResponse(this.databaseMatch.getId(), false);
         }
+    }
+
+    // ------ RESULTS HANDLING ------
+
+    private void calculateAndSendResults() throws IOException {
+        Map<DatabasePlayer, Integer> partialResults = ResultsManager.getPartialPointsForPlayers(
+                this.databaseMatch.getId(),
+                this.matchPlayers.toArray(new DatabasePlayer[0]),
+                Arrays.stream(this.matchObjectsManager.getPublicObjectiveCards())
+                        .map(ObjectiveCard::getObjective)
+                        .toArray(Objective[]::new)
+        );
+        partialResults = ResultsManager.integratePartialResultsWithPrivateObjectives(
+                this.databaseMatch.getId(),
+                partialResults,
+                this.matchObjectsManager.getPrivateObjectiveCards()
+                        .entrySet().stream()
+                        .map(entry -> Map.entry(entry.getKey(), ((Objective) entry.getValue().getObjective())))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+        );
+        partialResults = ResultsManager.finalizeWithPenaltiesAndBonus(
+                this.databaseMatch.getId(),
+                partialResults,
+                this.matchObjectsManager
+        );
+
+
+        this.matchCommunicationsManager.sendResults(partialResults);
     }
 
     // ------ PLAYER EVENTS ------
@@ -560,7 +578,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                     this.matchCommunicationsManager.sendMatchMockToPlayer(player, match);
                 }
 
-                this.roundManager = RoundManager.createRoundManager(this.databaseMatch);
+                this.roundManager = RoundManager.createRoundManager(this.databaseMatch, Settings.getSettings().getNumberOfRounds());
 
                 this.roundsTaskFuture = this.roundsExecutorService.submit(this.roundsExecutorTask);
             }
@@ -576,7 +594,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
     @Override
     public MoveResponse onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move) {
-        if (this.roundManager.current().getPlayer().getId() != databasePlayer.getId()) {
+         if (this.roundManager.current().getPlayer().getId() != databasePlayer.getId()) {
             return new MoveResponse(databaseMatch.getId(), false);
         }
 

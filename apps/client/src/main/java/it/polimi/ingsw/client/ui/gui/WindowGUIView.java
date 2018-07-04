@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXDialogLayout;
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.core.Move;
+import it.polimi.ingsw.net.mocks.ICell;
+import it.polimi.ingsw.net.mocks.IDie;
 import it.polimi.ingsw.net.mocks.IWindow;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import javafx.fxml.FXML;
@@ -61,47 +63,49 @@ public class WindowGUIView extends GUIView<IWindow> {
         gridPane.setVgap(5);
         gridPane.setHgap(5);
 
-
         if (cellGUIViews != null) {
             for (int i = 0; i < iWindow.getRows(); i++) {
                 for (int j = 0; j < iWindow.getColumns(); j++) {
-                    cellGUIViews[i][j].onUpdateReceived(model.getCells()[i][j].getDie());
+                    ICell[][] cells = model.getCells();
+                    IDie die = cells[i][j].getDie();
+
+                    cellGUIViews[i][j].onUpdateReceived(die);
                 }
             }
             return;
         }
 
+        cellGUIViews = new CellGUIView[iWindow.getRows()][iWindow.getColumns()];
+
         for (int i = 0; i < iWindow.getRows(); i++) {
-                for (int j = 0; j < iWindow.getColumns(); j++) {
+            for (int j = 0; j < iWindow.getColumns(); j++) {
 
-                    cellGUIViews = new CellGUIView[iWindow.getRows()][iWindow.getColumns()];
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
+                Node target = loader.load();
+                cellGUIViews[i][j] = loader.getController();
+                cellGUIViews[i][j].setModel(model.getCells()[i][j]);
 
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Constants.Resources.CELL_VIEW_FXML.getURL());
-                    Node target = loader.load();
-                    cellGUIViews[i][j] = loader.getController();
-                    cellGUIViews[i][j].setModel(model.getCells()[i][j]);
+                target.setOnDragOver(event -> {
+                    if (Status == Constants.Status.OWNER_UNLOCKED) {
+                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                    }
+                    event.consume();
+                });
 
-                    target.setOnDragOver(event -> {
-                        if (Status == Constants.Status.OWNER_UNLOCKED) {
-                            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                        }
-                        event.consume();
-                    });
+                int finalJ = j, finalI = i;
 
-                    int finalJ = j, finalI = i;
-
-                    target.setOnDragDropped(event -> {
-                        Dragboard db = event.getDragboard();
+                target.setOnDragDropped(event -> {
+                    Dragboard db = event.getDragboard();
 
                     try {
                         MoveResponse moveResponse = Match.getMatchController().tryToMove(
                                 Move.getCurrentMove()
-                                        .end(finalI *iWindow.getColumns()+ finalJ)
+                                        .end(finalI * iWindow.getColumns() + finalJ)
                         );
 
 
-                            if (!moveResponse.isValid()) {
+                        if (!moveResponse.isValid()) {
                             JFXButton button = new JFXButton("OK");
                             JFXDialogLayout content = new JFXDialogLayout();
                             JFXDialog dialog = new JFXDialog(Match.getOuterPane(), content, JFXDialog.DialogTransition.CENTER);
@@ -110,9 +114,6 @@ public class WindowGUIView extends GUIView<IWindow> {
                             content.setActions(button);
                             button.setOnMousePressed(event1 -> dialog.close());
                             dialog.show();
-                        }
-                        else {
-                            Match.performedAction |= 0b01;
                         }
 
                         target.setCursor(Cursor.CROSSHAIR);
@@ -125,30 +126,31 @@ public class WindowGUIView extends GUIView<IWindow> {
                     catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                        event.consume();
+                    event.consume();
+                });
+
+                if (Status == Constants.Status.SELECTION_UNLOCKED) {
+                    target.setOnMousePressed(event -> {
+                        try {
+                            Match.getMatchController().postChosenPosition(finalI * iWindow.getColumns() + finalJ);
+                            chosen = true;
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     });
-
-                    if (Status == Constants.Status.SELECTION_UNLOCKED) {
-                        target.setOnMousePressed(event -> {
-                            try {
-                                Match.getMatchController().postChosenPosition(finalI * iWindow.getColumns() + finalJ);
-                                chosen = true;
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
-
-
-                    gridPane.add(target, j, i);
                 }
-            }
 
-            for (int i = 0; i < 6 - iWindow.getDifficulty(); i++) {
-                Circle circle = (Circle) difficultyHbox.getChildren().get(i);
-                circle.setFill(Paint.valueOf("#2c3e50"));
+
+                gridPane.add(target, j, i);
             }
         }
+
+        for (int i = 0; i < 6 - iWindow.getDifficulty(); i++) {
+            Circle circle = (Circle) difficultyHbox.getChildren().get(i);
+            circle.setFill(Paint.valueOf("#2c3e50"));
+        }
+    }
 
 
     @Override

@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.utils.VariableSupplier;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class DistinctColorPredicate extends Predicate {
     private static final long serialVersionUID = 2423828840048012309L;
@@ -28,6 +29,7 @@ public class DistinctColorPredicate extends Predicate {
     @Override
     public boolean evaluate(Context context) {
         return Arrays.stream(this.dice.get(context))
+                .filter(Objects::nonNull)
                 .map(Die::getColor)
                 .allMatch(new HashSet<>()::add);
     }

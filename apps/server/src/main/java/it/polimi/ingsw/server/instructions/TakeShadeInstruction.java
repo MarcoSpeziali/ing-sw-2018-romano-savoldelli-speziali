@@ -14,7 +14,13 @@ public class TakeShadeInstruction extends Instruction {
 
     @Override
     public Integer run(Context context) {
+        Die contextDie = this.die.get(context);
+
+        if (contextDie == null) {
+            return 0;
+        }
+
         // Selects the shade of the provided die as result
-        return this.die.get(context).getShade();
+        return contextDie.getShade();
     }
 }

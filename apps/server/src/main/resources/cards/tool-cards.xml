@@ -99,7 +99,7 @@
     </card>
     <card id="flux_remover" name="cards.tool_cards.flux_remover.name">
         <effect description="cards.tool_cards.flux_remover.description" initialCost="1">
-            <action effect="choose_position $window$" result="POS"/>
+            <action effect="choose_position $draft_pool$" result="POS"/>
             <action effect="pick_at $draft_pool$ $POS$" result="DIE"/>
             <action effect="put $DIE$ $bag$"/>
             <action effect="pick $bag$" result="DIE"/>

@@ -653,11 +653,11 @@ public class CompilationManager {
      * @throws IOException if any IO exception occurs
      */
     private static <T extends Serializable> void serializeObjects(T[] objects, File compilationFolder, String resourceName) throws IOException {
-        FileOutputStream fos = new FileOutputStream(new File(compilationFolder, resourceName));
-
-        try (ObjectOutputStream out = new ObjectOutputStream(fos)) {
-            out.writeObject(objects);
-            out.flush();
+        try (FileOutputStream fos = new FileOutputStream(new File(compilationFolder, resourceName))) {
+            try (ObjectOutputStream out = new ObjectOutputStream(fos)) {
+                out.writeObject(objects);
+                out.flush();
+            }
         }
     }
 

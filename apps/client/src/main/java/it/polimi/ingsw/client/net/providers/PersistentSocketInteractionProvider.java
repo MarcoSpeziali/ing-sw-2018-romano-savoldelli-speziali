@@ -60,7 +60,11 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                 this.handleData(content, response -> {
                     try {
                         if (response != null) {
-                            this.out.write(response.toString());
+                            String dataToSend = response.serialize().toString();
+
+                            ClientLogger.getLogger().log(Level.FINER, "Sending data: {0}", dataToSend);
+
+                            this.out.write(dataToSend);
                             this.out.newLine();
                             this.out.flush();
                         }
@@ -155,9 +159,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                 newValue -> receivedResponse.set((Response<T>) newValue)
         );
 
-        this.out.write(request.serialize().toString());
-        this.out.newLine();
-        this.out.flush();
+        postRequest(request);
 
         //noinspection StatementWithEmptyBody
         while (receivedResponse.get() == null) {
@@ -206,9 +208,7 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
                     }
             );
 
-            this.out.write(request.serialize().toString());
-            this.out.newLine();
-            this.out.flush();
+            postRequest(request);
         }
         catch (IOException e) {
             if (onError != null) {
@@ -229,8 +229,12 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
         if (socket == null) {
             throw new IllegalStateException(CLOSED_CONNECTION_EXCEPTION_MESSAGE);
         }
+
+        String dataToSend = jsonSerializable.serialize().toString();
+
+        ClientLogger.getLogger().log(Level.FINER, "Sending data: {0}", dataToSend);
     
-        this.out.write(jsonSerializable.serialize().toString());
+        this.out.write(dataToSend);
         this.out.newLine();
         this.out.flush();
     }
