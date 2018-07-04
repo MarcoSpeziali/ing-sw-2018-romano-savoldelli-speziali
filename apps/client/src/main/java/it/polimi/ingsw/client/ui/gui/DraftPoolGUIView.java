@@ -51,11 +51,11 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
 
         //Sembra che se venga rimosso non possa essere più aggiunto
-        /*
+
         for (Node child : pane.getChildren()) {
             AnchorPane anchorPane = (AnchorPane) child;
-            anchorPane.getChildren().clear();
-        }*/
+            anchorPane.getChildren().removeAll();
+        }
 
         Map<Integer, IDie> locationsDieMap = iDraftPool.getLocationDieMap();
 
@@ -113,7 +113,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
             try {
                 if (die.getShade() == 0) {
-                    ((AnchorPane) pane.getChildren().get(location)).getChildren().clear();
+                    ((AnchorPane) pane.getChildren().get(location)).getChildren().remove(0);
                 }
                 else {
                     dieGUIViewList.get(location).setModel(die);

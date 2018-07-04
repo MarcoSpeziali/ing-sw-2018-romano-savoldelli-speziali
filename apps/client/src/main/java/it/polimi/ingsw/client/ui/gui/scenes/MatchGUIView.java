@@ -328,7 +328,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                     hBoxWindows.setSpacing(100);
                     hBoxWindows.setAlignment(Pos.TOP_CENTER);
-                    HBox.setMargin(vBox, new Insets(0, 0, 0, 0));
+                    HBox.setMargin(vBox, new Insets(10, 0, 0, 0));
 
                 } catch (IOException e) {
                     e.printStackTrace();

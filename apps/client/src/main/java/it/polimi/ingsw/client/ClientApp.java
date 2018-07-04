@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.ui.cli.scenes.StartScreenGUIView;
 import it.polimi.ingsw.client.utils.ClientLogger;
 import it.polimi.ingsw.utils.text.LocalizedString;
 import javafx.application.Application;
@@ -50,6 +51,8 @@ public class ClientApp {
                 System.out.println("  ╚════██║██╔══██║██║   ██║██╔══██╗██╔══██║██║  ██║██╔══██║");
                 System.out.println("  ███████║██║  ██║╚██████╔╝██║  ██║██║  ██║██████╔╝██║  ██║");
                 System.out.println("  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝");
+
+                StartScreenGUIView.render();
             }
         }
         catch (Exception e) {

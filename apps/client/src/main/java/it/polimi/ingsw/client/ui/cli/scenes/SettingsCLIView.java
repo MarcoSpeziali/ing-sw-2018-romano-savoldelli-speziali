@@ -6,7 +6,7 @@ public class SettingsCLIView  {
 
     Scanner in = new Scanner(System.in);
 
-    public void render() {
+    public static void render() {
         System.out.println("");
     }
 }
