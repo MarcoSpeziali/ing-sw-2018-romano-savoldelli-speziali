@@ -268,14 +268,14 @@ class ActionGroupCompilerTest {
                         "        <action effect=\"choose_position $window$\" result=\"POS\"/>\n" +
                         "        <action effect=\"pick_at $window$ $POS$\" result=\"DIE\"/>\n" +
                         "        <action-group repetitions=\"1..2\">\n" +
-                        "            <action effect=\"choose_die $window$ [color=$DIE_COLOR$]\" result=\"DIE\"/>\n" +
-                        "            <action effect=\"pick_die $window$ $DIE$\" result=\"DIE\"/>\n" +
+                        "            <action effect=\"choose_position $window$ [color=$DIE_COLOR$]\" result=\"POS\"/>\n" +
+                        "            <action effect=\"pick_at $window$ $POS$\" result=\"DIE\"/>\n" +
                         "            <action effect=\"choose_position_for_die $window$ $DIE$\" result=\"POS\"/>\n" +
                         "            <action effect=\"place $DIE$ $window$ $POS$\"/>\n" +
                         "        </action-group>\n" +
                         "    </action-group>\n" +
                         "    <action-group repetitions=\"0..4\" chooseBetween=\"1..7\">\n" +
-                        "        <action effect=\"choose_die $draft_pool$\" result=\"DIE\" />\n" +
+                        "        <action effect=\"choose_position $draft_pool$\" result=\"DIE\" />\n" +
                         "        <action effect=\"flip $DIE$\" />\n" +
                         "    </action-group>\n" +
                         "    <action effect=\"choose_position_for_die $window$ $DIE$ [ignore_color=true]\" result=\"POS\"/>\n" +
@@ -338,10 +338,10 @@ class ActionGroupCompilerTest {
         Assertions.assertEquals(4, firstInnerInnerInnerActions.size());
 
         Assertions.assertEquals(CompiledAction.class, firstInnerInnerInnerActions.get(0).getClass());
-        Assertions.assertEquals(ChooseDieAction.class, firstInnerInnerInnerActions.get(0).getClassToInstantiate());
+        Assertions.assertEquals(ChoosePositionAction.class, firstInnerInnerInnerActions.get(0).getClassToInstantiate());
 
         Assertions.assertEquals(CompiledAction.class, firstInnerInnerInnerActions.get(1).getClass());
-        Assertions.assertEquals(PickDieAction.class, firstInnerInnerInnerActions.get(1).getClassToInstantiate());
+        Assertions.assertEquals(PickAtAction.class, firstInnerInnerInnerActions.get(1).getClassToInstantiate());
 
         Assertions.assertEquals(CompiledAction.class, firstInnerInnerInnerActions.get(2).getClass());
         Assertions.assertEquals(ChoosePositionForDieAction.class, firstInnerInnerInnerActions.get(2).getClassToInstantiate());
@@ -360,7 +360,7 @@ class ActionGroupCompilerTest {
         Assertions.assertEquals(2, secondInnerInnerActions.size());
 
         Assertions.assertEquals(CompiledAction.class, secondInnerInnerActions.get(0).getClass());
-        Assertions.assertEquals(ChooseDieAction.class, secondInnerInnerActions.get(0).getClassToInstantiate());
+        Assertions.assertEquals(ChoosePositionAction.class, secondInnerInnerActions.get(0).getClassToInstantiate());
 
         Assertions.assertEquals(CompiledAction.class, secondInnerInnerActions.get(1).getClass());
         Assertions.assertEquals(FlipAction.class, secondInnerInnerActions.get(1).getClassToInstantiate());

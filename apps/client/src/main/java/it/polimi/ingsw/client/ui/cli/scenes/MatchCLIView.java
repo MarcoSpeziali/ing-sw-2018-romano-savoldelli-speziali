@@ -1,24 +1,15 @@
 package it.polimi.ingsw.client.ui.cli.scenes;
 
-import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.Match;
-import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.ui.cli.*;
-import it.polimi.ingsw.client.ui.gui.scenes.ResultsGUIView;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.core.Move;
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
