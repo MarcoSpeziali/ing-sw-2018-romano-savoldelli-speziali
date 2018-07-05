@@ -8,6 +8,10 @@ import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -147,7 +151,7 @@ public class MatchCLIView extends CLIView<MatchController> {
                         System.out.println("Choose Window (0:4)");
 
                         int cmd = scanner.nextInt();
-
+                        loadOwnedWindow(iWindows[cmd]);
                         this.model.respondToWindowRequest(iWindows[cmd]);
                     }));
                 });
