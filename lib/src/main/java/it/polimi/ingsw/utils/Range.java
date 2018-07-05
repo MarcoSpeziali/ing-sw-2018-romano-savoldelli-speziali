@@ -34,7 +34,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements JS
     /**
      * Needed by {@link Serializable}.
      */
-    protected Range() {
+    public Range() {
         this.start = null;
         this.end = null;
     }

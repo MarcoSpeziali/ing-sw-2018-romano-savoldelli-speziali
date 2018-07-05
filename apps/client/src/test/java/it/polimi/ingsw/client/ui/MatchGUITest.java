@@ -577,7 +577,16 @@ public class MatchGUITest extends Application {
     
             @Override
             public ChoosePositionForLocationRequest waitForChoosePositionFromLocation() throws IOException, InterruptedException {
+                /*synchronized (this.updateSyncObject) {
 
+                    try {
+                        this.updateSyncObject.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+
+                    }
+                }
+                return null;*/
                 JSONSerializable object = new IDraftPool() {
                     DieMock dieMock11 = new DieMock(3, GlassColor.PURPLE);
                     DieMock dieMock21 = new DieMock(1, GlassColor.YELLOW);
@@ -643,22 +652,9 @@ public class MatchGUITest extends Application {
                         this.updateSyncObject.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
-                }
-        
-            }
-    
-            @Override
-            public ChooseBetweenActionsRequest waitForChooseBetweenActions() throws IOException {
-                synchronized (this.updateSyncObject) {
 
-                    try {
-                        this.updateSyncObject.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }
-                return null;
             }
     
             @Override
@@ -676,28 +672,23 @@ public class MatchGUITest extends Application {
     
             @Override
             public IAction waitForContinueToRepeat() throws IOException {
-                synchronized (this.updateSyncObject) {
-
-                    try {
-                        this.updateSyncObject.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-
+                return new IAction() {
+                    @Override
+                    public String getDescription() {
+                        return "action";
                     }
-                }
-                return null;
+                };
             }
-    
-            public Map.Entry<IEffect[], Range<Integer>> waitForChooseBetweenEffect(IEffect[] availableEffects, Range<Integer> chooseBetween) {
-                synchronized (this.updateSyncObject) {
 
-                    try {
-                        this.updateSyncObject.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
+            @Override
+            public ChooseBetweenActionsRequest waitForChooseBetweenActions() {
+
+                ActionMock[] actions = { new ActionMock("1st action"),
+                        new ActionMock("2nds action"),
+                        new ActionMock("3rd action"),
+                        new ActionMock("4th action")};
+
+                return new ChooseBetweenActionsRequest(1,actions,Range.singleValued(1));
             }
     
             @Override
@@ -714,13 +705,7 @@ public class MatchGUITest extends Application {
     
             @Override
             public IDie waitForSetShade() {
-                synchronized (this.updateSyncObject) {
 
-                    try {
-                        this.updateSyncObject.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     return new IDie() {
 
                         private static final long serialVersionUID = -8144175517603151757L;
@@ -736,7 +721,7 @@ public class MatchGUITest extends Application {
                         }
                     };
                 }
-            }
+
 
             @Override
             public void postSetShade(Integer shade) {

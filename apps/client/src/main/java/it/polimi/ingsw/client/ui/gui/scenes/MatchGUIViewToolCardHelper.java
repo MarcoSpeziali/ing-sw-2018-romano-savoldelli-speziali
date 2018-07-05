@@ -11,6 +11,8 @@ import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -44,10 +46,10 @@ public class MatchGUIViewToolCardHelper {
     }
 
     public void init() {
-        setUpChoosePosition();
-        setUpContinueToRepeat();
+        //setUpChoosePosition();
+        //setUpContinueToRepeat();
         setUpEffect();
-        setUpShade();
+        //setUpShade();
     }
 
     private void setUpShade() {
@@ -132,13 +134,17 @@ public class MatchGUIViewToolCardHelper {
                 list.setDepth(10);
                 Arrays.stream(iActions).forEach(iAction -> {
                     JFXCheckBox checkBox = new JFXCheckBox(iAction.getDescription());
-
-                    if (checkBox.isSelected()) {
-                        chosenActions.add(iAction);
-                    }
-                    if (!checkBox.isSelected()) {
-                        chosenActions.remove(iAction);
-                    }
+                    checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                            if (newValue) {
+                                chosenActions.add(iAction);
+                            }
+                            if (!newValue) {
+                                chosenActions.remove(iAction);
+                            }
+                        }
+                    });
                     list.getItems().add(checkBox);
                 });
 
@@ -163,6 +169,7 @@ public class MatchGUIViewToolCardHelper {
                 content.setHeading(new Text((Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_HELPER_CHOOSE) + range.getStart() + " to " + range.getEnd() +
                         Constants.Strings.toLocalized(Constants.Strings.TOOL_CARD_HELPER_ACTION_PERFORM))));
                 content.setBody(list);
+                content.setActions(button);
                 dialog.show();
             });
 
@@ -201,6 +208,7 @@ public class MatchGUIViewToolCardHelper {
                     dialog.close();
                 });
                 dialog.show();
+                content.setActions(stop, again);
             }));
 
             return null;
@@ -212,7 +220,6 @@ public class MatchGUIViewToolCardHelper {
             ChoosePositionForLocationRequest choosePosition = this.model.waitForChoosePositionFromLocation();
 
             Platform.runLater(unsafe(() -> {
-                boolean chosen = false;
                 JFXDialogLayout content = new JFXDialogLayout();
                 Match.dialog = new JFXDialog(outerPane, content, CENTER);
                 Match.dialog.setOverlayClose(false);
