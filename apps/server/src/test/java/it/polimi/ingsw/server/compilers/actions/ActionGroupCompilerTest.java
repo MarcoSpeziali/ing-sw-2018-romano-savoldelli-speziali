@@ -218,7 +218,7 @@ class ActionGroupCompilerTest {
 
         Assertions.assertSame(1, firstCompiledParameters.get(1).getPosition());
         Assertions.assertEquals(VariableSupplier.class, firstCompiledParameters.get(1).getType());
-        Assertions.assertNull(firstCompiledParameters.get(1).getParameterValue());
+        Assertions.assertEquals(1, firstCompiledParameters.get(1).getParameterValue().get(null));
         Assertions.assertTrue(firstCompiledParameters.get(1).isOptional());
         Assertions.assertEquals(1, firstCompiledParameters.get(1).getDefaultValue());
         Assertions.assertEquals("by", firstCompiledParameters.get(1).getOptionalName());

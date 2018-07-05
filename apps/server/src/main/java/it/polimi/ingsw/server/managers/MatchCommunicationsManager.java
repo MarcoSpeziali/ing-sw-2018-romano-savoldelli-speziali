@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.managers;
 
+import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.controllers.proxies.rmi.MatchRMIProxyController;
 import it.polimi.ingsw.core.Move;
-import it.polimi.ingsw.core.ToolCardConditionException;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
@@ -22,6 +22,9 @@ import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
@@ -39,6 +42,7 @@ public class MatchCommunicationsManager {
     private final Map<DatabasePlayer, AuthenticatedClientHandler> socketPlayersHandler = new HashMap<>();
     private final IMatch match;
     private final MatchCommunicationsListener matchCommunicationsListener;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     // ------ LOCK OBJECTS ------
 
@@ -292,6 +296,68 @@ public class MatchCommunicationsManager {
             return Arrays.asList(temp);
         }
     }
+
+    public void sendNotEnoughTokensException(DatabasePlayer databasePlayer, NotEnoughTokensException e) throws IOException {
+        this.sendToPlayer(databasePlayer, (authenticatedClientHandler, rmiProxyController) -> {
+            NotEnoughTokensResponse r = new NotEnoughTokensResponse(
+                    this.match.getId(),
+                    e.getRequiredTokens(),
+                    e.getCurrentTokensCount()
+            );
+
+            Response<NotEnoughTokensResponse> response = new Response<>(
+                    new Header(EndPointFunction.MATCH_PLAYER_TOOL_CARD_REQUEST),
+                    r
+            );
+
+            if (authenticatedClientHandler != null) {
+                authenticatedClientHandler.sendResponse(response);
+            }
+            else {
+                rmiProxyController.setToolCardResponse(response);
+            }
+        });
+    }
+
+    public void sendConstraintNotMetException(DatabasePlayer databasePlayer) throws IOException {
+        this.sendToPlayer(databasePlayer, (authenticatedClientHandler, rmiProxyController) -> {
+            ConstraintNotMetResponse r = new ConstraintNotMetResponse(
+                    this.match.getId()
+            );
+
+            Response<ConstraintNotMetResponse> response = new Response<>(
+                    new Header(EndPointFunction.MATCH_PLAYER_TOOL_CARD_REQUEST),
+                    r
+            );
+
+            if (authenticatedClientHandler != null) {
+                authenticatedClientHandler.sendResponse(response);
+            }
+            else {
+                rmiProxyController.setToolCardResponse(response);
+            }
+        });
+    }
+
+    public void sendToolCardRequestAccepted(DatabasePlayer databasePlayer) throws IOException {
+        this.sendToPlayer(databasePlayer, (authenticatedClientHandler, rmiProxyController) -> {
+            ToolCardUsageResponse r = new ToolCardUsageResponse(
+                    this.match.getId()
+            );
+
+            Response<ToolCardUsageResponse> response = new Response<>(
+                    new Header(EndPointFunction.MATCH_PLAYER_TOOL_CARD_REQUEST),
+                    r
+            );
+
+            if (authenticatedClientHandler != null) {
+                authenticatedClientHandler.sendResponse(response);
+            }
+            else {
+                rmiProxyController.setToolCardResponse(response);
+            }
+        });
+    }
     
     // ------ RESULTS ------
 
@@ -371,12 +437,27 @@ public class MatchCommunicationsManager {
     }
     
     public void onToolCardRequested(DatabasePlayer databasePlayer, IToolCard toolCard) {
-        try {
-            this.matchCommunicationsListener.onPlayerRequestedToolCard(this, databasePlayer, toolCard);
-        }
-        catch (ConstraintEvaluationException e) {
-            throw new ToolCardConditionException();
-        }
+        executorService.submit((Callable<Void>) () -> {
+            try {
+                this.matchCommunicationsListener.onPlayerRequestedToolCard(
+                        this,
+                        databasePlayer,
+                        toolCard
+                );
+            }
+            catch (NotEnoughTokensException e) {
+                this.sendNotEnoughTokensException(databasePlayer, e);
+                return null;
+            }
+            catch (ConstraintEvaluationException e) {
+                this.sendConstraintNotMetException(databasePlayer);
+                return null;
+            }
+
+            this.sendToolCardRequestAccepted(databasePlayer);
+
+            return null;
+        });
     }
 
     public void onPositionChosen(Integer position) {

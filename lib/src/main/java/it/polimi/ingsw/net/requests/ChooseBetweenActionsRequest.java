@@ -6,6 +6,7 @@ import it.polimi.ingsw.net.mocks.IAction;
 import it.polimi.ingsw.utils.Range;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
+import org.json.JSONObject;
 
 public class ChooseBetweenActionsRequest implements MatchInteraction {
 
@@ -15,15 +16,21 @@ public class ChooseBetweenActionsRequest implements MatchInteraction {
     private final ActionMock[] actions;
     private final Range<Integer> actionsRange;
 
-    @JSONDesignatedConstructor
-    public ChooseBetweenActionsRequest(
-            @JSONElement("match-id") int matchId,
-            @JSONElement("actions") ActionMock[] actions,
-            @JSONElement("actions-range") Range<Integer> actionsRange
-    ) {
+    public ChooseBetweenActionsRequest(int matchId, ActionMock[] actions, Range<Integer> range) {
         this.matchId = matchId;
         this.actions = actions;
-        this.actionsRange = actionsRange;
+        this.actionsRange = range;
+    }
+
+    @JSONDesignatedConstructor
+    ChooseBetweenActionsRequest(
+            @JSONElement("match-id") int matchId,
+            @JSONElement("actions") ActionMock[] actions,
+            @JSONElement(value = "actions-range", keepRaw = true) JSONObject jsonObject
+            ) {
+        this.matchId = matchId;
+        this.actions = actions;
+        this.actionsRange = Range.fromString(jsonObject.getString("range-str"), "::", Integer::valueOf);
     }
 
     @Override

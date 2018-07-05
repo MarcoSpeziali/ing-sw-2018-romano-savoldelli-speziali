@@ -8,12 +8,10 @@ import it.polimi.ingsw.core.ToolCardConditionException;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.ResponseError;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.requests.*;
 import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.net.utils.ResponseFields;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -121,12 +119,40 @@ public class MatchSocketProxyController implements MatchController {
                 EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_BETWEEN_ACTIONS_REQUEST,
                 request -> {
                     @SuppressWarnings("unchecked")
-                    Request<ChoosePositionForLocationRequest> choosePositionForLocationRequest = (Request<ChoosePositionForLocationRequest>) request;
+                    Request<ChooseBetweenActionsRequest> chooseBetweenActionsRequest = (Request<ChooseBetweenActionsRequest>) request;
 
-                    synchronized (choosePositionSyncObject) {
-                        this.choosePositionRequest = choosePositionForLocationRequest.getBody();
+                    synchronized (chooseBetweenActionsSyncObject) {
+                        this.chooseBetweenActionsRequest = chooseBetweenActionsRequest.getBody();
 
-                        this.choosePositionSyncObject.notifyAll();
+                        this.chooseBetweenActionsSyncObject.notifyAll();
+                    }
+                }
+        );
+
+        this.persistentSocketInteractionProvider.listenForRequest(
+                EndPointFunction.MATCH_PLAYER_TOOL_CARD_CHOOSE_SHADE_REQUEST,
+                request -> {
+                    @SuppressWarnings("unchecked")
+                    Request<SetShadeRequest> setShadeRequest = (Request<SetShadeRequest>) request;
+
+                    synchronized (setShadeSyncObject) {
+                        this.setShadeRequest = setShadeRequest.getBody();
+
+                        this.setShadeSyncObject.notifyAll();
+                    }
+                }
+        );
+
+        this.persistentSocketInteractionProvider.listenForRequest(
+                EndPointFunction.MATCH_PLAYER_TOOL_CARD_SHOULD_CONTINUE_TO_REPEAT_REQUEST,
+                request -> {
+                    @SuppressWarnings("unchecked")
+                    Request<ShouldRepeatRequest> shouldRepeatRequest = (Request<ShouldRepeatRequest>) request;
+
+                    synchronized (shouldRepeatSyncObject) {
+                        this.shouldRepeatRequest = shouldRepeatRequest.getBody();
+
+                        this.shouldRepeatSyncObject.notifyAll();
                     }
                 }
         );
@@ -237,7 +263,7 @@ public class MatchSocketProxyController implements MatchController {
     
     @Override
     public void requestToolCardUsage(IToolCard toolCard) throws IOException {
-        ResponseError responseError = this.persistentSocketInteractionProvider.getSyncResponseFor(
+        Response<?> response = this.persistentSocketInteractionProvider.getSyncResponseFor(
                 new Request<>(
                         new Header(
                                 this.clientToken,
@@ -248,15 +274,16 @@ public class MatchSocketProxyController implements MatchController {
                                 new ToolCardMock(toolCard)
                         )
                 )
-        ).getError();
+        );
 
-        if (responseError != null) {
-            if (responseError.getErrorCode() == ResponseFields.Error.NOT_ENOUGH_TOKENS.getCode()) {
-                throw new NotEnoughTokensException(-1, -1);
-            }
-            else if (responseError.getErrorCode() == ResponseFields.Error.CONSTRAINT_EVALUATION.getCode()) {
-                throw new ToolCardConditionException();
-            }
+        if (response.getBody() instanceof NotEnoughTokensResponse) {
+            throw new NotEnoughTokensException(
+                    ((NotEnoughTokensResponse) response.getBody()).getRequiredTokens(),
+                    ((NotEnoughTokensResponse) response.getBody()).getCurrentTokens()
+            );
+        }
+        else if (response.getBody() instanceof ConstraintNotMetResponse) {
+            throw new ToolCardConditionException();
         }
     }
     

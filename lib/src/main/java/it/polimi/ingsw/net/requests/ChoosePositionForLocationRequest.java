@@ -62,6 +62,6 @@ public class ChoosePositionForLocationRequest implements MatchInteraction {
         jsonObject.getJSONObject("location")
                 .put("class", this.location.getClass().getName());
         
-        return null;
+        return jsonObject;
     }
 }

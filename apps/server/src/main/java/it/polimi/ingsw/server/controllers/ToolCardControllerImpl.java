@@ -5,10 +5,7 @@ import it.polimi.ingsw.core.UserInteractionProvider;
 import it.polimi.ingsw.models.ToolCard;
 import it.polimi.ingsw.net.mocks.ILivePlayer;
 import it.polimi.ingsw.server.Effect;
-import it.polimi.ingsw.server.actions.Action;
-import it.polimi.ingsw.server.actions.ActionGroup;
-import it.polimi.ingsw.server.actions.ExecutableAction;
-import it.polimi.ingsw.server.actions.UnCompletableActionException;
+import it.polimi.ingsw.server.actions.*;
 import it.polimi.ingsw.server.managers.MatchObjectsManager;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 import it.polimi.ingsw.server.utils.GlobalContext;
@@ -55,7 +52,23 @@ public class ToolCardControllerImpl {
     }
 
     public void setUserInteractionProvider(UserInteractionProvider userInteractionProvider) {
-        ((Effect) this.toolCard.getEffect()).getActions().forEach(ea -> this.setUserInteractionProvider(userInteractionProvider, ea));
+        ((Effect) this.toolCard.getEffect()).getActions()
+                .forEach(ea -> this.setUserInteractionProvider(userInteractionProvider, ea));
+    }
+
+    public void setActionGroupCallbacks(ActionGroupCallbacks actionGroupCallbacks) {
+        ((Effect) this.toolCard.getEffect()).getActions().stream()
+                .filter(ActionGroup.class::isInstance)
+                .map(executableAction -> ((ActionGroup) executableAction))
+                .forEach(actionGroup -> this.setActionGroupCallbacks(actionGroupCallbacks, actionGroup));
+    }
+
+    private void setActionGroupCallbacks(ActionGroupCallbacks actionGroupCallbacks, ActionGroup actionGroup) {
+        actionGroup.setCallbacks(actionGroupCallbacks);
+        actionGroup.getActions().stream()
+                .filter(ActionGroup.class::isInstance)
+                .map(executableAction -> ((ActionGroup) executableAction))
+                .forEach(actionGroup1 -> this.setActionGroupCallbacks(actionGroupCallbacks, actionGroup1));
     }
 
     private void setUserInteractionProvider(UserInteractionProvider userInteractionProvider, ExecutableAction executableAction) {

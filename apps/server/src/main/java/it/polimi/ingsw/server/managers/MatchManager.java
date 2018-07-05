@@ -10,6 +10,7 @@ import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.server.Objective;
 import it.polimi.ingsw.server.Settings;
+import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
 import it.polimi.ingsw.server.controllers.*;
 import it.polimi.ingsw.server.events.*;
 import it.polimi.ingsw.server.managers.turns.RoundManager;
@@ -453,7 +454,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
             since we are interested only in the first be the phase gets masked with 0b10
             */
-        if ((currentTurn.getPhase() & 0b10) == 0b00) {
+        if ((currentTurn.getPhase() & 0b01) == 0b00) {
             try {
                 IDie requested = this.matchObjectsManager.getDraftPoolController()
                         .getDieAtLocation(move.getDraftPoolPickPosition());
@@ -477,15 +478,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                         false,
                         false
                 );
-
-                this.matchExecutorService.schedule(() -> {
-                    try {
-                        onModelsUpdated();
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }, 150, TimeUnit.MILLISECONDS);
 
                 onModelsUpdated();
 
@@ -524,7 +516,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 this.matchObjectsManager
         );
 
-
         this.matchCommunicationsManager.sendResults(partialResults);
     }
 
@@ -537,8 +528,11 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             DatabaseMatch.removePlayer(this.databaseMatch.getId(), player.getId());
             this.matchCommunicationsManager.removePlayer(player);
             this.matchObjectsManager.setPlayersLeft(new HashSet<>(this.databaseMatch.getLeftPlayers()));
+            this.matchPlayers.remove(player);
+
+            this.onModelsUpdated();
         }
-        catch (SQLException e) {
+        catch (SQLException | IOException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
             throw new RuntimeException(e);
         }
@@ -587,14 +581,14 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 throw new RuntimeException(e);
             }
             catch (IOException e) {
-                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while sending mocks:", e);
+                ServerLogger.getLogger().log(Level.WARNING, "Error occurred while sending mocks:", e);
             }
         }
     }
 
     @Override
     public MoveResponse onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move) {
-         if (this.roundManager.current().getPlayer().getId() != databasePlayer.getId()) {
+        if (this.roundManager.current().getPlayer().getId() != databasePlayer.getId()) {
             return new MoveResponse(databaseMatch.getId(), false);
         }
 
@@ -607,7 +601,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             return moveResponse;
         }
         catch (IOException e) {
-            ServerLogger.getLogger().log(Level.SEVERE, "Error while sending move response to user: " + databasePlayer.toString(), e);
+            ServerLogger.getLogger().log(Level.WARNING, "Error while sending move response to user: " + databasePlayer.toString(), e);
             return null;
         }
     }
@@ -636,27 +630,60 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         ToolCardControllerImpl controller = optionalController.get();
         
         Integer tokens = this.matchObjectsManager.getFavourTokensMap().get(databasePlayer);
-        
+
         if (!controller.canUse(tokens)) {
             throw new NotEnoughTokensException(
                     controller.getToolCard().getEffect().getCost(),
                     tokens
             );
         }
-        
-        controller.setUserInteractionProvider(
-                new UserInteractionAndCallbacksManager(
-                        databasePlayer,
-                        this.matchObjectsManager,
-                        this.matchCommunicationsManager
-                )
-        );
-        
-        controller.requestUsage(
-                databasePlayer, tokens
+
+        Integer tokensAfterEffect = tokens - controller.getToolCard().getEffect().getCost();
+        byte previousPhase = this.roundManager.current().getPhase();
+
+
+        UserInteractionAndCallbacksManager manager = new UserInteractionAndCallbacksManager(
+                databasePlayer,
+                this.matchObjectsManager,
+                this.matchCommunicationsManager
         );
 
-        controller.setUserInteractionProvider(null);
+        controller.setUserInteractionProvider(manager);
+        controller.setActionGroupCallbacks(manager);
+
+        try {
+            this.roundManager.current().appendPhase(Turn.TOOL_CARD_USED);
+
+            controller.requestUsage(
+                    databasePlayer, tokens
+            );
+        }
+        catch (ConstraintEvaluationException e) {
+            this.roundManager.current().setPhase(previousPhase);
+
+            throw e;
+        }
+        catch (Exception e) {
+            ServerLogger.getLogger().log(Level.WARNING, "Error while executing effect: ", e);
+        }
+        finally {
+            controller.setUserInteractionProvider(null);
+            controller.setActionGroupCallbacks(null);
+        }
+
+        this.roundManager.current().appendPhase(Turn.TOOL_CARD_USED);
+
+        try {
+            onModelsUpdated();
+        }
+        catch (IOException e) {
+            ServerLogger.getLogger().log(Level.WARNING, "Error occurred while sending mocks:", e);
+        }
+
+        this.matchObjectsManager.getFavourTokensMap().put(
+                databasePlayer,
+                tokensAfterEffect
+        );
     }
     
     private enum MatchState {

@@ -17,24 +17,28 @@ public class Turn {
     public byte getPhase() {
         return phase;
     }
-    
+
+    public void setPhase(byte previousPhase) {
+        this.phase = previousPhase;
+    }
+
     public DatabasePlayer getPlayer() {
         return player;
     }
-    
+
     public byte getRound() {
         return round;
     }
-    
+
     public byte getTurnIndex() {
         return turnIndex;
     }
-    
+
     public Turn(DatabasePlayer player, byte round, byte turnIndex) {
         this.player = player;
         this.round = round;
         this.turnIndex = turnIndex;
-        
+
         this.phase = STARTED;
     }
 
@@ -47,16 +51,16 @@ public class Turn {
             }
         }
     }
-    
+
     public void end() {
         synchronized (waitObject) {
             this.phase = ENDED;
             waitObject.notifyAll();
         }
     }
-    
+
     private final Object waitObject = new Object();
-    
+
     public void waitUntilEnded() throws InterruptedException {
         synchronized (waitObject) {
             while (this.phase != ENDED) {

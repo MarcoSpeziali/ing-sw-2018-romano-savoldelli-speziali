@@ -3,9 +3,9 @@ package it.polimi.ingsw.utils;
 import it.polimi.ingsw.utils.io.json.JSONDesignatedConstructor;
 import it.polimi.ingsw.utils.io.json.JSONElement;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
+import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -34,7 +34,7 @@ public class Range<T extends Comparable<? super T> & Serializable> implements JS
     /**
      * Needed by {@link Serializable}.
      */
-    public Range() {
+    protected Range() {
         this.start = null;
         this.end = null;
     }
@@ -50,11 +50,8 @@ public class Range<T extends Comparable<? super T> & Serializable> implements JS
             @JSONElement("start") T start,
             @JSONElement("end") T end
     ) {
-        Objects.requireNonNull(start);
-        Objects.requireNonNull(end);
-
-        this.start = start;
-        this.end = end;
+        this.start = Objects.requireNonNull(start);
+        this.end = Objects.requireNonNull(end);
 
         if (!this.isValid()) {
             throw new IllegalArgumentException(
@@ -68,6 +65,15 @@ public class Range<T extends Comparable<? super T> & Serializable> implements JS
         }
     }
 
+    @Override
+    public JSONObject serialize() {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("range-str", this.start + "::" + this.end);
+
+        return jsonObject;
+    }
+
     /**
      * Creates a {@link Range} from a string representation.
      *
@@ -77,11 +83,10 @@ public class Range<T extends Comparable<? super T> & Serializable> implements JS
      * @param <K>                The desired object type.
      * @return An instance of {@link Range}
      */
-    @SuppressWarnings("WeakerAccess")
     public static <K extends Comparable<? super K> & Serializable> Range<K> fromString(String range, String separator, Function<String, K> conversionProvider) {
         String[] tokens = range.split(Pattern.quote(separator));
 
-        if (tokens.length == 1 && tokens[0].equals("")) {
+        if (tokens.length == 1 && tokens[0].equals("") || tokens.length > 2 || tokens.length < 1) {
             return null;
         }
 
@@ -91,15 +96,9 @@ public class Range<T extends Comparable<? super T> & Serializable> implements JS
             return new Range<>(singleValue, singleValue);
         }
 
-        Object[] convertedTokens = Arrays.stream(tokens)
-                .map(conversionProvider)
-                .toArray();
+        K start = conversionProvider.apply(tokens[0]);
 
-        @SuppressWarnings("unchecked")
-        K start = (K) convertedTokens[0];
-
-        @SuppressWarnings("unchecked")
-        K end = (K) convertedTokens[1];
+        K end = conversionProvider.apply(tokens[1]);
 
         return new Range<>(start, end);
     }

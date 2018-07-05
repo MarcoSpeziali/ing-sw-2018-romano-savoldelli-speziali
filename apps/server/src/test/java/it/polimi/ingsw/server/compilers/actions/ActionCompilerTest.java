@@ -66,14 +66,14 @@ class ActionCompilerTest {
 
         Assertions.assertEquals(1, parameters.get(1).getPosition().intValue());
         Assertions.assertEquals(VariableSupplier.class, parameters.get(1).getType());
-        Assertions.assertNull(parameters.get(1).getParameterValue());
+        Assertions.assertNull(parameters.get(1).getParameterValue().get(null));
         Assertions.assertTrue(parameters.get(1).isOptional());
         Assertions.assertNull(parameters.get(1).getDefaultValue());
         Assertions.assertEquals("color", parameters.get(1).getOptionalName());
 
         Assertions.assertEquals(2, parameters.get(2).getPosition().intValue());
         Assertions.assertEquals(VariableSupplier.class, parameters.get(2).getType());
-        Assertions.assertNull(parameters.get(2).getParameterValue());
+        Assertions.assertEquals(0, parameters.get(2).getParameterValue().get(null));
         Assertions.assertTrue(parameters.get(2).isOptional());
         Assertions.assertEquals(0, parameters.get(2).getDefaultValue());
         Assertions.assertEquals("shade", parameters.get(2).getOptionalName());
@@ -116,7 +116,7 @@ class ActionCompilerTest {
 
         Assertions.assertEquals(2, parameters.get(2).getPosition().intValue());
         Assertions.assertEquals(VariableSupplier.class, parameters.get(2).getType());
-        Assertions.assertNull(parameters.get(2).getParameterValue());
+        Assertions.assertEquals(0, parameters.get(2).getParameterValue().get(null));
         Assertions.assertTrue(parameters.get(2).isOptional());
         Assertions.assertEquals(0, parameters.get(2).getDefaultValue());
         Assertions.assertEquals("shade", parameters.get(2).getOptionalName());

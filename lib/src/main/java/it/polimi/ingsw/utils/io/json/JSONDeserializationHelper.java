@@ -10,10 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 // TODO: 20/06/18 document
 class JSONDeserializationHelper {
@@ -164,7 +161,11 @@ class JSONDeserializationHelper {
             if (obj == null) {
                 return null;
             }
-    
+
+            if (obj instanceof JSONArray) {
+                return new HashSet<>(((JSONArray) obj).toList());
+            }
+
             return Set.of((Object[]) obj);
         }
         else if (Map.class.isAssignableFrom(targetClass)) {

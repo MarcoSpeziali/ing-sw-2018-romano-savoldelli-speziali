@@ -1,16 +1,15 @@
 package it.polimi.ingsw.server.net.sockets.middlewares;
 
-import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.Move;
-import it.polimi.ingsw.core.ToolCardConditionException;
 import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
-import it.polimi.ingsw.net.ResponseError;
-import it.polimi.ingsw.net.requests.*;
+import it.polimi.ingsw.net.requests.MatchEndRequest;
+import it.polimi.ingsw.net.requests.MoveRequest;
+import it.polimi.ingsw.net.requests.NullRequest;
+import it.polimi.ingsw.net.requests.ToolCardUsageRequest;
 import it.polimi.ingsw.net.responses.*;
 import it.polimi.ingsw.net.utils.EndPointFunction;
-import it.polimi.ingsw.net.utils.ResponseFields;
 import it.polimi.ingsw.server.managers.MatchCommunicationsManager;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.net.sockets.ClientHandler;
@@ -68,13 +67,16 @@ public class MatchControllerMiddleware implements Middleware {
         else if (endPointFunction == EndPointFunction.MATCH_PLAYER_TOOL_CARD_REQUEST && request.getBody() instanceof ToolCardUsageRequest) {
             Request<ToolCardUsageRequest> toolCardUsageRequest = (Request<ToolCardUsageRequest>) request;
 
-            try {
-                this.matchCommunicationsManager.onToolCardRequested(
-                        ((AuthenticatedClientHandler) clientHandler).getPlayer(),
-                        toolCardUsageRequest.getBody().getToolCard()
-                );
-            }
-            catch (ToolCardConditionException e) {
+            this.matchCommunicationsManager.onToolCardRequested(
+                    ((AuthenticatedClientHandler) clientHandler).getPlayer(),
+                    toolCardUsageRequest.getBody().getToolCard()
+            );
+
+            return new Response(
+                    request.getHeader(),
+                    new NullResponse()
+            );
+            /*catch (ToolCardConditionException e) {
                 return new Response<>(
                         new Header(endPointFunction),
                         new ResponseError(
@@ -89,7 +91,7 @@ public class MatchControllerMiddleware implements Middleware {
                                 ResponseFields.Error.NOT_ENOUGH_TOKENS
                         )
                 );
-            }
+            }*/
         }
         
         return null;

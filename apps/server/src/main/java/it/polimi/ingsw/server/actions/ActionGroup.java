@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.actions;
 
 import it.polimi.ingsw.core.Context;
 import it.polimi.ingsw.server.constraints.ConstraintEvaluationException;
+import it.polimi.ingsw.server.constraints.EvaluableConstraint;
 import it.polimi.ingsw.utils.IterableRange;
 import it.polimi.ingsw.utils.Range;
 
@@ -157,12 +158,13 @@ public class ActionGroup implements ExecutableAction {
             this.actions.forEach(getActionConsumer(snapshot));
         }
         // Otherwise only a subset of them get executed
-        else {
+        else if (actions != null) {
             List<ExecutableAction> constraintsMetActions = this.actions.stream()
                     .filter(executableAction -> {
                         try {
-                            executableAction.getActionData().getConstraint().evaluate(snapshot);
-                            return true;
+                            EvaluableConstraint constraint = executableAction.getActionData().getConstraint();
+
+                            return constraint == null || constraint.evaluate(snapshot);
                         }
                         catch (ConstraintEvaluationException e) {
                             return false;

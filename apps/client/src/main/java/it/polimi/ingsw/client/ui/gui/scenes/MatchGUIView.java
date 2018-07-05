@@ -8,7 +8,6 @@ import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
@@ -66,6 +65,8 @@ public class MatchGUIView extends GUIView<MatchController> {
     @FXML
     public BorderPane centerPane;
 
+    VBox turnBox;
+
     private DraftPoolGUIView draftPoolGUIView;
     private WindowGUIView ownedWindowGUIView;
     private WindowGUIView[] opponentsWindowsGUIViews;
@@ -75,6 +76,8 @@ public class MatchGUIView extends GUIView<MatchController> {
     private ObjectiveCardGUIView privateObjectiveCardGUIView;
 
     private MatchGUIViewToolCardHelper helper;
+
+    private ILivePlayer currentPlayer;
 
     private ExecutorService matchExecutorService = Executors.newFixedThreadPool(10);
 
@@ -89,8 +92,6 @@ public class MatchGUIView extends GUIView<MatchController> {
         loadElementsFuture();
 
         helper = new MatchGUIViewToolCardHelper(this.model, outerPane);
-        helper.init();
-
 
         setUpWaitForTurnToBegin();
         setUpWaitForMatchToEnd();
@@ -107,7 +108,9 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loadPrivateObjectiveCard(iMatch.getPrivateObjectiveCard());
                 loadPublicObjectiveCards(iMatch.getPublicObjectiveCards());
                 loadOpponentsWindows(iMatch.getPlayers());
-                //loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
+                loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
+
+                this.currentPlayer = iMatch.getCurrentPlayer();
 
                 updateSyncObject.notifyAll();
             }
@@ -190,8 +193,10 @@ public class MatchGUIView extends GUIView<MatchController> {
         this.matchExecutorService.submit((Callable<Void>) () -> {
             this.remainingTime = this.model.waitForTurnToBegin();
 
+            Match.performedAction = 0b00;
+
             Platform.runLater(unsafe(() -> {
-                        VBox turnBox = new VBox();
+                        turnBox = new VBox();
                         JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
                         timerLabel.setPrefSize(182, 109);
                         timerLabel.setFont(new Font(50));
@@ -201,7 +206,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                         bottomBar.getChildren().add(turnBox);
                         HBox.setMargin(turnBox, new Insets(0, 0, 320, 0));
 
-                        this.remainingTime = remainingTime;
                         startTimer();
                         ownedWindowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
                         draftPoolGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
@@ -217,8 +221,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                             catch (IOException e1) {
                                 e1.printStackTrace();
                             }
-                            bottomBar.getChildren().remove(turnBox);
-
                         });
                     }
             ));
@@ -243,7 +245,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         this.matchExecutorService.submit((Callable<Void>) () -> {
             this.model.waitForTurnToEnd();
 
-            setUpWaitForTurnToBegin();
+            bottomBar.getChildren().removeAll();
 
             Match.performedAction = 0;
 
@@ -255,6 +257,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 node.setDisable(true);
             }
 
+            setUpWaitForTurnToBegin();
 
             return null;
         });
@@ -271,10 +274,10 @@ public class MatchGUIView extends GUIView<MatchController> {
                     FXMLLoader loader = new FXMLLoader();
                     Parent root = loader.load();
                     ResultsGUIView resultsGUIView = loader.getController();
-                    String currentPlayerName = Player.getCurrentPlayer().getUsername();
+                    String currentPlayerName = this.currentPlayer.getPlayer().getUsername();
 
                     for (IResult result : results) {
-                        Label label = new Label(result.getPlayer().getUsername() + " " + result.getPoints());
+                        Label label = new Label(this.currentPlayer.getPlayer().getUsername() + " " + result.getPoints());
                         label.setStyle("-fx-alignment: CENTER; " +
                                 "-fx-font-size: 14+" +
                                 (result.getPlayer().getUsername().equals(currentPlayerName) ?
@@ -355,7 +358,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 HBox.setMargin(vBox, new Insets(10, 0, 0, 0));
             }
 
-            //opponentsWindowsGUIViews[i].setModel(player.getWindow());
+            opponentsWindowsGUIViews[i].setModel(player.getWindow());
         }
     }
 
@@ -431,11 +434,12 @@ public class MatchGUIView extends GUIView<MatchController> {
 
                         if ((Match.performedAction & 0b10) != 0b10) {
                             helper.init();
-                            this.matchExecutorService.submit(() -> {
+                            this.matchExecutorService.submit((Callable<Void>) () -> {
                                 try {
                                     this.model.requestToolCardUsage(iToolCards[finalI]);
 
                                     dialog.close();
+                                    helper.close();
 
                                     Match.performedAction |= 0b10;
                                 }
@@ -451,6 +455,8 @@ public class MatchGUIView extends GUIView<MatchController> {
                                         dialog2.show();
                                     });
                                 }
+
+                                return null;
                             });
                         }
                         else {

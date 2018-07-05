@@ -10,14 +10,10 @@ import it.polimi.ingsw.controllers.LobbyController;
 import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.net.utils.ResponseFields;
-import javafx.application.Platform;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
-import java.util.concurrent.CompletableFuture;
-
-import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class SignInCLIView {
 
@@ -46,7 +42,8 @@ public class SignInCLIView {
                                    Settings.getSettings().getServerSocketPort(),
                                    SignInManager.getManager().getToken()
                            );
-                       } else {
+                       }
+                       else {
                            OneTimeRMIResponseProvider<LobbyInterface> oneTimeRMIResponseProvider = new OneTimeRMIResponseProvider<>(
                                    Settings.getSettings().getServerAddress(),
                                    Settings.getSettings().getServerRMIPort(),
@@ -54,12 +51,9 @@ public class SignInCLIView {
                            );
 
                            lobbyController = oneTimeRMIResponseProvider.getSyncRemoteObject(EndPointFunction.LOBBY_JOIN_REQUEST_RMI, SignInManager.getManager().getToken());
-
-                           LobbyCLIView.setProxy(lobbyController);
-
                        }
 
-
+                       LobbyCLIView.setProxy(lobbyController);
                    } catch (RemoteException | NotBoundException e) {
                        e.printStackTrace();
                    }
@@ -74,8 +68,8 @@ public class SignInCLIView {
                   else {
                       error = Constants.Strings.toLocalized(Constants.Strings.CONNECTION_ERROR_CONTENT_TEXT);
                   }
-                  System.err.println(error);
 
+                  System.err.println(error);
                });
 
         System.out.println("Back to main menu...");

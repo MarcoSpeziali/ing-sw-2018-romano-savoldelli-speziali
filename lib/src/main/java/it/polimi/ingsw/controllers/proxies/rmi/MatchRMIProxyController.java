@@ -1,13 +1,18 @@
 package it.polimi.ingsw.controllers.proxies.rmi;
 
 import it.polimi.ingsw.controllers.MatchController;
+import it.polimi.ingsw.controllers.NotEnoughTokensException;
 import it.polimi.ingsw.core.Move;
+import it.polimi.ingsw.core.ToolCardConditionException;
+import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.requests.ChooseBetweenActionsRequest;
 import it.polimi.ingsw.net.requests.ChoosePositionForLocationRequest;
 import it.polimi.ingsw.net.requests.SetShadeRequest;
 import it.polimi.ingsw.net.requests.ShouldRepeatRequest;
+import it.polimi.ingsw.net.responses.ConstraintNotMetResponse;
 import it.polimi.ingsw.net.responses.MoveResponse;
+import it.polimi.ingsw.net.responses.NotEnoughTokensResponse;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -188,16 +193,44 @@ public class MatchRMIProxyController extends UnicastRemoteObject implements Matc
             return temp;
         }
     }
-    
+
+    private final transient Object toolCardRequestSyncObject = new Object();
+    private Response<?> toolCardResponse;
     private transient Consumer<IToolCard> toolCardConsumer;
-    
+
+    public void setToolCardResponse(Response<?> toolCardResponse) {
+        synchronized (toolCardRequestSyncObject) {
+            this.toolCardResponse = toolCardResponse;
+            toolCardRequestSyncObject.notifyAll();
+        }
+    }
+
     public void setToolCardConsumer(Consumer<IToolCard> toolCardConsumer) {
         this.toolCardConsumer = toolCardConsumer;
     }
     
     @Override
-    public void requestToolCardUsage(IToolCard toolCard) throws IOException {
-        toolCardConsumer.accept(toolCard);
+    public void requestToolCardUsage(IToolCard toolCard) throws IOException, InterruptedException {
+        synchronized (toolCardRequestSyncObject) {
+            toolCardConsumer.accept(toolCard);
+
+            while (toolCardResponse == null) {
+                toolCardRequestSyncObject.wait();
+            }
+
+            Response<?> response = toolCardResponse;
+            toolCardResponse = null;
+
+            if (response.getBody() instanceof NotEnoughTokensResponse) {
+                throw new NotEnoughTokensException(
+                        ((NotEnoughTokensResponse) response.getBody()).getRequiredTokens(),
+                        ((NotEnoughTokensResponse) response.getBody()).getCurrentTokens()
+                );
+            }
+            else if (response.getBody() instanceof ConstraintNotMetResponse) {
+                throw new ToolCardConditionException();
+            }
+        }
     }
     
     private final transient Object choosePositionSyncObject = new Object();

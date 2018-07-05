@@ -65,6 +65,12 @@ public class UserInteractionAndCallbacksManager implements UserInteractionProvid
 
                 jsonSerializable = new DraftPoolMock(draftPool);
             }
+            else if (location instanceof Window) {
+                Window window = ((Window) location);
+                unavailableLocations = new HashSet<>(window.getEmptyLocations());
+
+                jsonSerializable = new WindowMock(window);
+            }
             else {
                 return null;
             }

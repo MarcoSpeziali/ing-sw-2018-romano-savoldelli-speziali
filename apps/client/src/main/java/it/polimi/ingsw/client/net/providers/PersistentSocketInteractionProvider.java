@@ -254,11 +254,8 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     private void handleData(String jsonData, Consumer<Response<? extends JSONSerializable>> responseHandler) {
         //executorService.submit(() -> {
             synchronized (dataSyncObject) {
-                ClientLogger.getLogger().log(Level.FINEST, "Lock acquired");
 
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                ClientLogger.getLogger().log(Level.FINEST, "Data successfully deserialized in a JSONObject");
 
                 if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
                     @SuppressWarnings("unchecked") Response<? extends JSONSerializable> response = JSONSerializable.deserialize(Response.class, jsonData);
