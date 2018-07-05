@@ -1,6 +1,5 @@
 package it.polimi.ingsw.utils.io;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -22,9 +21,9 @@ public class Resources {
          * using classLoader.getResource("folder/../resource.xyz").
          */
 
-        // return classLoader.getResource(relativePath);
+        return classLoader.getResource(relativePath);
         
-        try {
+        /*try {
             // splits the relative path by '/'
             String[] tokens = relativePath.split("/");
 
@@ -55,7 +54,7 @@ public class Resources {
         }
         catch (MalformedURLException ignored) {
             return null;
-        }
+        }*/
     }
 
     /**
