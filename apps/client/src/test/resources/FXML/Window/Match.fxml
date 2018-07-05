@@ -17,6 +17,16 @@
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
+               <children>
+                  <Label onMouseClicked="#onCloseClicked" prefHeight="47.0" prefWidth="32.0" text="×" textFill="#ff1515">
+                     <font>
+                        <Font name="System Bold" size="44.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
             </HBox>
          </top>
          <left>

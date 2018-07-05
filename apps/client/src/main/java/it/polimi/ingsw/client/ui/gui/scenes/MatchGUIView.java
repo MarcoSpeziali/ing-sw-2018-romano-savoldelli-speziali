@@ -565,6 +565,12 @@ public class MatchGUIView extends GUIView<MatchController> {
             BorderPane.setMargin(privateCardNode, new Insets(0, 10, 220, 10));
         }
     }
+
+    @FXML
+    public void onCloseClicked() throws IOException {
+        this.model.close();
+        System.exit(0);
+    }
 }
 
 
