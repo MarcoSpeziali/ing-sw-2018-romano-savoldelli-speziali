@@ -16,10 +16,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
-
-import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 
 public class CellGUIView extends GUIView<ICell> {
 
@@ -90,7 +87,7 @@ public class CellGUIView extends GUIView<ICell> {
                 }
             }
             else if (!dieAnchorPane.getChildren().isEmpty())
-                dieAnchorPane.getChildren().removeAll();
+                dieAnchorPane.getChildren().remove(0);
         });
     }
 

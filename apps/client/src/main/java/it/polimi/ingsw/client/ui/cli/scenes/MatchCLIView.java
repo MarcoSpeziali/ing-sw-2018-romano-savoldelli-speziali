@@ -8,7 +8,10 @@ import it.polimi.ingsw.net.mocks.*;
 import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 
 import java.io.IOException;
 import java.util.Arrays;

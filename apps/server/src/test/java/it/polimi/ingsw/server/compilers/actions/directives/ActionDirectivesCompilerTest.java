@@ -17,33 +17,17 @@ class ActionDirectivesCompilerTest {
     void testSuccessfulCompilation() throws ClassNotFoundException, SAXException, ParserConfigurationException, IOException {
         List<ActionDirective> directives = ActionDirectivesCompiler.compile();
 
-        Assertions.assertEquals(5, directives.size());
+        Assertions.assertEquals(3, directives.size());
 
-        ActionDirective chooseDie = directives.get(0);
-        Assertions.assertNotNull(chooseDie);
-        Assertions.assertEquals(ChooseDieAction.class, chooseDie.getTargetClass());
-        Assertions.assertEquals("choose_die", chooseDie.getId());
+        ActionDirective actionDirective1 = directives.get(0);
+        Assertions.assertNotNull(actionDirective1);
+        Assertions.assertEquals(ChoosePositionAction.class, actionDirective1.getTargetClass());
+        Assertions.assertEquals("choose_position", actionDirective1.getId());
 
-        List<ParameterDirective> chooseDieParameters = chooseDie.getParametersDirectives();
+        List<ParameterDirective> chooseDieParameters = actionDirective1.getParametersDirectives();
         testChooseDieParameters(chooseDieParameters);
 
-        ActionDirective chooseColor = directives.get(1);
-        Assertions.assertNotNull(chooseColor);
-        Assertions.assertEquals(ChooseColorAction.class, chooseColor.getTargetClass());
-        Assertions.assertEquals("choose_color", chooseColor.getId());
-
-        List<ParameterDirective> chooseColorParameters = chooseColor.getParametersDirectives();
-        testChooseColorParameters(chooseColorParameters);
-
-        ActionDirective chooseShade = directives.get(2);
-        Assertions.assertNotNull(chooseShade);
-        Assertions.assertEquals(ChooseShadeAction.class, chooseShade.getTargetClass());
-        Assertions.assertEquals("choose_shade", chooseShade.getId());
-
-        List<ParameterDirective> chooseShadeParameters = chooseShade.getParametersDirectives();
-        testChooseShadeParameters(chooseShadeParameters);
-
-        ActionDirective choosePosition = directives.get(3);
+        ActionDirective choosePosition = directives.get(1);
         Assertions.assertNotNull(choosePosition);
         Assertions.assertEquals(ChoosePositionAction.class, choosePosition.getTargetClass());
         Assertions.assertEquals("choose_position", choosePosition.getId());
@@ -51,7 +35,7 @@ class ActionDirectivesCompilerTest {
         List<ParameterDirective> choosePositionParameters = choosePosition.getParametersDirectives();
         testChoosePositionParameters(choosePositionParameters);
 
-        ActionDirective choosePositionForDie = directives.get(4);
+        ActionDirective choosePositionForDie = directives.get(2);
         Assertions.assertNotNull(choosePositionForDie);
         Assertions.assertEquals(ChoosePositionForDieAction.class, choosePositionForDie.getTargetClass());
         Assertions.assertEquals("choose_position_for_die", choosePositionForDie.getId());
@@ -88,6 +72,7 @@ class ActionDirectivesCompilerTest {
         Assertions.assertFalse(chooseLocation.isOptional());
         Assertions.assertNull(chooseLocation.getName());
         Assertions.assertNull(chooseLocation.getDefaultValue());
+        Assertions.assertFalse(chooseLocation.isMultiple());
 
         ParameterDirective glassColor = chooseDieParameters.get(1);
         Assertions.assertNotNull(glassColor);
@@ -96,6 +81,7 @@ class ActionDirectivesCompilerTest {
         Assertions.assertTrue(glassColor.isOptional());
         Assertions.assertEquals("color", glassColor.getName());
         Assertions.assertNull(glassColor.getDefaultValue());
+        Assertions.assertFalse(glassColor.isMultiple());
 
         ParameterDirective shade = chooseDieParameters.get(2);
         Assertions.assertNotNull(shade);
@@ -104,52 +90,7 @@ class ActionDirectivesCompilerTest {
         Assertions.assertTrue(shade.isOptional());
         Assertions.assertEquals("shade", shade.getName());
         Assertions.assertEquals(0, shade.getDefaultValue());
-    }
-
-    private void testChooseColorParameters(List<ParameterDirective> chooseColorParameters) {
-        Assertions.assertNotNull(chooseColorParameters);
-        Assertions.assertEquals(2, chooseColorParameters.size());
-
-        ParameterDirective chooseLocation = chooseColorParameters.get(0);
-        Assertions.assertNotNull(chooseLocation);
-        Assertions.assertEquals(VariableSupplier.class, chooseLocation.getParameterType());
-        Assertions.assertEquals(0, chooseLocation.getPosition().intValue());
-        Assertions.assertFalse(chooseLocation.isOptional());
-        Assertions.assertNull(chooseLocation.getName());
-        Assertions.assertNull(chooseLocation.getDefaultValue());
-        Assertions.assertFalse(chooseLocation.isMultiple());
-
-        ParameterDirective shade = chooseColorParameters.get(1);
-        Assertions.assertNotNull(shade);
-        Assertions.assertEquals(VariableSupplier.class, shade.getParameterType());
-        Assertions.assertEquals(1, shade.getPosition().intValue());
-        Assertions.assertTrue(shade.isOptional());
-        Assertions.assertEquals("shade", shade.getName());
-        Assertions.assertEquals(0, shade.getDefaultValue());
         Assertions.assertFalse(shade.isMultiple());
-    }
-
-    private void testChooseShadeParameters(List<ParameterDirective> chooseShadeParameters) {
-        Assertions.assertNotNull(chooseShadeParameters);
-        Assertions.assertEquals(2, chooseShadeParameters.size());
-
-        ParameterDirective chooseLocation = chooseShadeParameters.get(0);
-        Assertions.assertNotNull(chooseLocation);
-        Assertions.assertEquals(VariableSupplier.class, chooseLocation.getParameterType());
-        Assertions.assertEquals(0, chooseLocation.getPosition().intValue());
-        Assertions.assertFalse(chooseLocation.isOptional());
-        Assertions.assertNull(chooseLocation.getName());
-        Assertions.assertNull(chooseLocation.getDefaultValue());
-        Assertions.assertFalse(chooseLocation.isMultiple());
-
-        ParameterDirective color = chooseShadeParameters.get(1);
-        Assertions.assertNotNull(color);
-        Assertions.assertEquals(VariableSupplier.class, color.getParameterType());
-        Assertions.assertEquals(1, color.getPosition().intValue());
-        Assertions.assertTrue(color.isOptional());
-        Assertions.assertEquals("color", color.getName());
-        Assertions.assertNull(color.getDefaultValue());
-        Assertions.assertFalse(color.isMultiple());
     }
 
     private void testChoosePositionParameters(List<ParameterDirective> choosePositionParameters) {

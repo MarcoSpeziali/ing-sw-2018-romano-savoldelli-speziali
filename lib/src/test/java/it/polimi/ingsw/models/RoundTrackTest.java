@@ -24,7 +24,6 @@ class RoundTrackTest {
         roundTrack.setDieForRoundAtIndex(die1, (byte) 1, (byte) 0);
 
         Assertions.assertEquals(roundTrack.getDiceForRound(1).get(0), die1);
-        System.out.println(roundTrack.getNumberOfDice());
     }
 
     @Test
@@ -58,7 +57,6 @@ class RoundTrackTest {
     @Test
     void pickDie1() {
         roundTrack.setDieForRoundAtIndex(die2, (byte) 1, (byte) 0);
-        System.out.println(roundTrack.getNumberOfDice());
         Die die = roundTrack.pickDie(0x00000100);
         Assertions.assertEquals(die2, die);
     }
