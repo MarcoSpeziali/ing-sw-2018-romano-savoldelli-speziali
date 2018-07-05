@@ -638,7 +638,10 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
 
         try {
             MoveResponse moveResponse = this.handleMove(move, databasePlayer, currentTurn);
-            currentTurn.appendPhase(Turn.DIE_PLACED);
+
+            if (moveResponse.isValid()) {
+                currentTurn.appendPhase(Turn.DIE_PLACED);
+            }
 
             return moveResponse;
         }
