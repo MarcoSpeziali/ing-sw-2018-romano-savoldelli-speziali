@@ -41,6 +41,9 @@ import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
 public class MatchGUIView extends GUIView<MatchController> {
 
+    @FXML
+    public JFXButton endTurnButton;
+
     private Timer timer = new Timer();
     private int remainingTime = -1;
 
@@ -65,7 +68,8 @@ public class MatchGUIView extends GUIView<MatchController> {
     @FXML
     public BorderPane centerPane;
 
-    VBox turnBox;
+    @FXML
+    public VBox turnBox;
 
     private DraftPoolGUIView draftPoolGUIView;
     private WindowGUIView ownedWindowGUIView;
@@ -82,6 +86,7 @@ public class MatchGUIView extends GUIView<MatchController> {
     private ExecutorService matchExecutorService = Executors.newFixedThreadPool(10);
 
     public List<Node> toolCardNodes = new LinkedList<>();
+    @FXML
     private Label timerLabel = new Label("00");
 
 
@@ -93,6 +98,16 @@ public class MatchGUIView extends GUIView<MatchController> {
 
         helper = new MatchGUIViewToolCardHelper(this.model, outerPane);
 
+        endTurnButton.setText(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
+        endTurnButton.setOnMouseClicked(event -> {
+            try {
+                onEndTurnClicked();
+            }
+            catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+        
         setUpWaitForTurnToBegin();
         setUpWaitForMatchToEnd();
     }
@@ -196,16 +211,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             Match.performedAction = 0b00;
 
             Platform.runLater(unsafe(() -> {
-                        turnBox = new VBox();
-                        JFXButton endTurnButton = new JFXButton(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
-                        timerLabel.setPrefSize(182, 109);
-                        timerLabel.setFont(new Font(50));
-                        endTurnButton.setPrefSize(182, 37);
-                        turnBox.getChildren().add(timerLabel);
-                        turnBox.getChildren().add(endTurnButton);
-                        bottomBar.getChildren().add(turnBox);
-                        HBox.setMargin(turnBox, new Insets(0, 0, 320, 0));
-
+                        turnBox.setVisible(true);
                         startTimer();
                         ownedWindowGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
                         draftPoolGUIView.setStatus(Constants.Status.OWNER_UNLOCKED);
@@ -213,15 +219,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                         for (Node node : toolCardNodes) {
                             node.setDisable(false);
                         }
-
-                        endTurnButton.setOnMouseClicked(event -> {
-                            try {
-                                onEndTurnClicked();
-                            }
-                            catch (IOException e1) {
-                                e1.printStackTrace();
-                            }
-                        });
                     }
             ));
 
@@ -245,7 +242,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         this.matchExecutorService.submit((Callable<Void>) () -> {
             this.model.waitForTurnToEnd();
 
-            bottomBar.getChildren().removeAll();
+            turnBox.setVisible(false);
 
             Match.performedAction = 0;
 

@@ -282,7 +282,8 @@ public class MatchGUIViewToolCardHelper {
                             roundTrackGUIView.setModel((IRoundTrack) object);
                             roundTrackGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
                             for (Integer location : set) {
-                                VBox vBox = (VBox) roundTrackGUIView.gridPane.getChildren().get(location);
+                                byte index = (byte) ((location & 0x0000FF00) >> 8);
+                                VBox vBox = (VBox) roundTrackGUIView.gridPane.getChildren().get(index);
 
                                 if (vBox.getChildren().size() >= 2) {
                                     vBox.getChildren().get(1).setDisable(true);

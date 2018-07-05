@@ -32,10 +32,10 @@
                      <BorderPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" />
                      </BorderPane.margin>
-                    <!-- <children>
+                     <children>
                         <VBox fx:id="turnBox">
                            <children>
-                             <Label id="seconds" fx:id="secondsLabel" alignment="CENTER" prefHeight="109.0" prefWidth="182.0" text="00" textFill="#e54a3c">
+                             <Label id="seconds" fx:id="timerLabel" alignment="CENTER" prefHeight="109.0" prefWidth="182.0" text="00" textFill="#e54a3c">
                                 <font>
                                     <Font size="75.0" />
                                 </font>
@@ -46,7 +46,7 @@
                               <JFXButton fx:id="endTurnButton" onAction="#onEndTurnClicked" prefHeight="37.0" prefWidth="182.0" text="Button" />
                            </children>
                         </VBox>
-                     </children>-->
+                     </children>
                   </HBox>
                </bottom>
             </BorderPane>
