@@ -73,7 +73,6 @@ public class LobbyGUIView implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Localized.Updater.update(this);
-        this.titleLabel.setText(this.titleLabel.getText() + " - " + Settings.getSettings().getProtocol().toString());
 
         for (int i = 0; i < 4; i++) {
             Label lbl = new Label();
@@ -150,7 +149,7 @@ public class LobbyGUIView implements Initializable {
                 IPlayer player = update.getPlayers()[i];
 
                 this.playersListView.getItems().get(i)
-                        .setText(String.format("(%d) %s", player.getId(), player.getUsername()));
+                        .setText(player.getUsername());
             }
 
             for (int i = update.getPlayers().length; i < 4; i++) {

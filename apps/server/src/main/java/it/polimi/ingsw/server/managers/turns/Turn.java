@@ -47,9 +47,13 @@ public class Turn {
             this.phase |= toAppend;
 
             if (this.phase == ENDED) {
-                waitObject.notifyAll();
+                this.end();
             }
         }
+    }
+
+    public void appendTemporaryPhase(byte toAppend) {
+        this.phase |= toAppend;
     }
 
     public void end() {

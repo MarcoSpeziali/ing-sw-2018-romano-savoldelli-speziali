@@ -2,27 +2,31 @@ package it.polimi.ingsw.server.net.endpoints;
 
 import it.polimi.ingsw.controllers.LobbyController;
 import it.polimi.ingsw.controllers.proxies.rmi.LobbyRMIProxyController;
+import it.polimi.ingsw.net.Header;
 import it.polimi.ingsw.net.Request;
 import it.polimi.ingsw.net.Response;
 import it.polimi.ingsw.net.interfaces.LobbyInterface;
 import it.polimi.ingsw.net.mocks.ILobby;
+import it.polimi.ingsw.net.mocks.LobbyMock;
 import it.polimi.ingsw.net.requests.LobbyJoinRequest;
+import it.polimi.ingsw.net.utils.EndPointFunction;
 import it.polimi.ingsw.server.Constants;
 import it.polimi.ingsw.server.events.EventDispatcher;
 import it.polimi.ingsw.server.events.LobbyEventsListener;
-import it.polimi.ingsw.server.utils.AuthenticationHelper;
 import it.polimi.ingsw.server.managers.LobbyManager;
 import it.polimi.ingsw.server.managers.LockManager;
 import it.polimi.ingsw.server.net.ResponseFactory;
 import it.polimi.ingsw.server.net.sockets.AuthenticatedClientHandler;
 import it.polimi.ingsw.server.sql.DatabaseLobby;
+import it.polimi.ingsw.server.sql.DatabaseMatch;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
+import it.polimi.ingsw.server.utils.AuthenticationHelper;
 import it.polimi.ingsw.server.utils.ServerLogger;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 
 public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface, LobbyEventsListener {
@@ -45,6 +49,8 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
         return instance;
     }
 
+    private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
     @Override
     public Response<ILobby> joinLobby(Request<LobbyJoinRequest> request) {
         try {
@@ -55,6 +61,21 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
             if (player == null) {
                 // so an unauthorised response is created and sent
                 return ResponseFactory.createUnauthorisedError(request);
+            }
+
+            DatabaseMatch match = DatabaseMatch.getMatchForPlayerLeft(player);
+
+            if (match != null) {
+                executorService.schedule((Callable<Void>) () -> {
+                    AuthenticatedClientHandler.getHandlerForPlayer(player).sendResponse(new Response<>(
+                            new Header(EndPointFunction.MATCH_MIGRATION),
+                            match.toMatchMock()
+                    ));
+
+                    return null;
+                }, 150, TimeUnit.MILLISECONDS);
+
+                return ResponseFactory.createLobbyResponse(request, new LobbyMock(match.getLobby()));
             }
 
             // since this method can be accessed by multiple users at the same time
@@ -93,8 +114,17 @@ public class LobbyEndPoint extends UnicastRemoteObject implements LobbyInterface
             // if the player is null then the request did not contain the client-token or the token is invalid
             if (player == null) {
                 // so an unauthorised response is created and sent
-                // FIXME
                 throw new IllegalCallerException();
+            }
+
+            DatabaseMatch match = DatabaseMatch.getMatchForPlayerLeft(player);
+
+            if (match != null) {
+                LobbyRMIProxyController lobbyRMIProxyController = new LobbyRMIProxyController();
+                lobbyRMIProxyController.setStartingLobbyValue(new LobbyMock(match.getLobby()));
+                lobbyRMIProxyController.postMigrationRequest(match.toMatchMock());
+
+                return lobbyRMIProxyController;
             }
     
             synchronized (LockManager.getLockObject(Constants.LockTargets.LOBBY)) {

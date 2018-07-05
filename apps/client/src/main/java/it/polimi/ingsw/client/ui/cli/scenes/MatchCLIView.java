@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.ui.cli.scenes;
 
 import it.polimi.ingsw.client.ui.cli.*;
 import it.polimi.ingsw.controllers.MatchController;
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.net.mocks.*;
 import javafx.application.Platform;
 

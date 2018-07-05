@@ -7,7 +7,7 @@ import it.polimi.ingsw.net.responses.MoveResponse;
 import it.polimi.ingsw.server.managers.MatchCommunicationsManager;
 import it.polimi.ingsw.server.sql.DatabasePlayer;
 
-public interface MatchCommunicationsListener extends IEvent {
+public interface MatchCommunicationsListener {
     void onWindowChosen(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, IWindow window);
 
     MoveResponse onPlayerTriedToMove(MatchCommunicationsManager matchCommunicationsManager, DatabasePlayer databasePlayer, Move move);

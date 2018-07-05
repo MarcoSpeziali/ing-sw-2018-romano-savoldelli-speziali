@@ -1,14 +1,11 @@
 package it.polimi.ingsw.net.mocks;
 
-import it.polimi.ingsw.core.Player;
 import it.polimi.ingsw.utils.io.json.JSONSerializable;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.utils.io.json.JSONSerializable.deserialize;
-import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerMockTest {
 
