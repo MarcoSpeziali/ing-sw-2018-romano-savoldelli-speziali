@@ -273,6 +273,7 @@ public class MatchGUIView extends GUIView<MatchController> {
             try {
                 Platform.runLater(wrap(() -> {
                     FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(Constants.Resources.RESULTS_FXML.getURL());
                     Parent root = loader.load();
                     ResultsGUIView resultsGUIView = loader.getController();
                     String currentPlayerName = this.currentPlayer.getPlayer().getUsername();
@@ -290,7 +291,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                         resultsGUIView.winningMessage.setDisable(false);
                     }
 
-                    SagradaGUI.showStage(root, 353, 546);
+                    SagradaGUI.showStage(root, 910, 720);
                 }));
             }
             catch (FunctionalExceptionWrapper e) {

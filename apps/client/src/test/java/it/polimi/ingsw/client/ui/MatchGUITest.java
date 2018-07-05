@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.ui;
 
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.SagradaGUI;
 import it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
@@ -738,14 +739,13 @@ public class MatchGUITest extends Application {
 
             @Override
             public IResult[] waitForMatchToEnd() throws InterruptedException {
-                synchronized (this.updateSyncObject) {
-
-                    this.updateSyncObject.wait();
-                    return null;
-                }
+                IResult[] results =  {new ResultMock(1, new PlayerMock(9,"Davide"), 30), new ResultMock(1, new PlayerMock(3,"Marco"), 0), new ResultMock(1, new PlayerMock(3, "lu"), 3) };
+                return results;
             }
+
         });
        // primaryStage.setFullScreen(true);
+        SagradaGUI.primaryStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
     }

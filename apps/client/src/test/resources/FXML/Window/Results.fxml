@@ -12,26 +12,26 @@
     <center>
         <Pane prefHeight="720.0" prefWidth="550.0" BorderPane.alignment="CENTER">
             <children>
-                <JFXListView fx:id="resultsListView" depth="4" fixedCellSize="180.0" prefHeight="720.0" prefWidth="550.0"/>
+                <JFXListView fx:id="resultsListView" depth="4" fixedCellSize="80.0" prefHeight="720.0" prefWidth="550.0"/>
             </children>
         </Pane>
     </center>
     <left>
         <Pane prefHeight="720.0" prefWidth="360.0" style="-fx-background-color: #2ecc71;" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="titleLabel" layoutX="141.0" layoutY="86.0" text="RESULTS" textFill="#c7ffde">
+                <Label fx:id="titleLabel" layoutX="141.0" layoutY="86.0" text="RESULTS" textFill="white">
                     <font>
                         <Font name="System Bold" size="25.0"/>
                     </font>
                 </Label>
-                <Label fx:id="winningMessage" disable="true" layoutX="56.0" layoutY="129.0" text="Congratulations! You won!" textFill="#c7ffde">
+                <Label fx:id="winningMessage" disable="true" layoutX="70.0" layoutY="130.0" text="Congratulations! You won!" textFill="white">
                     <font>
                         <Font size="17.0"/>
                     </font>
                 </Label>
                 <JFXButton fx:id="backButton" cancelButton="true" layoutX="55.0" layoutY="642.0" onAction="#onBackClicked"
                            prefHeight="44.0" prefWidth="250.0" style="-fx-background-color: #27ae60;" text="BACK"
-                           textFill="#c8ffdf">
+                           textFill="white">
                     <font>
                         <Font name="System Bold" size="15.0"/>
                     </font>

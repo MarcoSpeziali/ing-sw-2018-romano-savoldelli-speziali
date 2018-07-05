@@ -77,6 +77,7 @@ public class Constants {
         ROUNDTRACK_VIEW_FXML("FXML/RoundTrackView.fxml"),
         TOOL_CARD_VIEW_FXML("FXML/ToolCardView.fxml"),
         OBJECTIVE_CARD_VIEW_FXML("FXML/ObjectiveCardView.fxml"),
+        RESULTS_FXML("FXML/Window/Results.fxml"),
 
         TOOL_CARD_GROZING_PLIERS("images/toolCards/grozing_pliers.jpg"),
         TOOL_CARD_EGLOMISE_BRUSH("images/toolCards/eglomise_brush.jpg"),
