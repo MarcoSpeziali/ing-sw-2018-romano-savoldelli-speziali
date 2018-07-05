@@ -28,11 +28,6 @@ import java.util.stream.IntStream;
 
 public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
-    public boolean isChosen() {
-        return chosen;
-    }
-
-    private boolean chosen = false;
 
     private Constants.Status status;
 
@@ -91,7 +86,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
                         try {
                             source.setCursor(Cursor.HAND);
                             Match.getMatchController().postChosenPosition(location);
-                            chosen = true;
+                            Match.dialog.close();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

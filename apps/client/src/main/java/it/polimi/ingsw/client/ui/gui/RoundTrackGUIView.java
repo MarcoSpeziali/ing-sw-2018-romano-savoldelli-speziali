@@ -23,11 +23,6 @@ import java.util.stream.Collector;
 
 public class RoundTrackGUIView extends GUIView<IRoundTrack> {
 
-    public boolean isChosen() {
-        return chosen;
-    }
-
-    private boolean chosen = false;
 
     @FXML
     public GridPane gridPane;
@@ -83,8 +78,8 @@ public class RoundTrackGUIView extends GUIView<IRoundTrack> {
                 if (Status == Constants.Status.SELECTION_UNLOCKED) {
                     try {
                         die.setCursor(Cursor.HAND);
-                        chosen = true;
                         Match.getMatchController().postChosenPosition(location);
+                        Match.dialog.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

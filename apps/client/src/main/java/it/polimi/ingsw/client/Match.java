@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import com.jfoenix.controls.JFXDialog;
 import it.polimi.ingsw.controllers.MatchController;
 import javafx.scene.layout.StackPane;
 
@@ -26,4 +27,5 @@ public final class Match {
         Match.outerPane = outerPane;
     }
 
+    public static JFXDialog dialog;
 }

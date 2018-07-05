@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui.gui.scenes;
 
 import com.jfoenix.controls.*;
 import it.polimi.ingsw.client.Constants;
+import it.polimi.ingsw.client.Match;
 import it.polimi.ingsw.client.ui.gui.*;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.net.mocks.*;
@@ -213,10 +214,8 @@ public class MatchGUIViewToolCardHelper {
             Platform.runLater(unsafe(() -> {
                 boolean chosen = false;
                 JFXDialogLayout content = new JFXDialogLayout();
-                JFXDialog dialog = new JFXDialog(outerPane, content, CENTER);
-                dialog.setOverlayClose(false);
-                JFXButton button = new JFXButton("OK");
-                button.setOnMouseClicked(event -> dialog.close());
+                Match.dialog = new JFXDialog(outerPane, content, CENTER);
+                Match.dialog.setOverlayClose(false);
                 FXMLLoader loader = new FXMLLoader();
                 Parent node = null;
                 JSONSerializable object = choosePosition.getLocation();
@@ -233,8 +232,6 @@ public class MatchGUIViewToolCardHelper {
                         for (Integer location : set) {
                             windowGUIView.gridPane.getChildren().get(location).setDisable(true);
                         }
-                        chosen = windowGUIView.isChosen();
-
                     }
                     catch (IOException e) {
                         e.printStackTrace();
@@ -248,11 +245,11 @@ public class MatchGUIViewToolCardHelper {
                         DraftPoolGUIView draftPoolGUIView = loader.getController();
                         draftPoolGUIView.setModel((IDraftPool) object);
                         draftPoolGUIView.setStatus(Constants.Status.SELECTION_UNLOCKED);
+                        content.setMinSize(800, 262);
                         for (Integer location : set) {
                             AnchorPane anchorPane = (AnchorPane) draftPoolGUIView.pane.getChildren().get(location);
                             anchorPane.getChildren().get(0).setDisable(true);
                         }
-                        chosen = draftPoolGUIView.isChosen();
                     }
                     catch (IOException e) {
                         e.printStackTrace();
@@ -270,25 +267,15 @@ public class MatchGUIViewToolCardHelper {
                             VBox vBox = (VBox) roundTrackGUIView.gridPane.getChildren().get(location);
                             vBox.getChildren().get(1).setDisable(true);
                         }
-                        chosen = roundTrackGUIView.isChosen();
                     }
                     catch (IOException e) {
                         e.printStackTrace();
                     }
 
                 }
-                boolean finalChosen = chosen;
-
-                button.setOnMouseClicked(event -> {
-                    if (finalChosen) {
-                        dialog.close();
-                    }
-                });
-
                 content.setBody(node);
-                content.setActions(button);
                 content.setHeading(new Text(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_CHOOSE_LOCATION) + ": "));
-                dialog.show();
+                Match.dialog.show();
             }));
 
             return null;

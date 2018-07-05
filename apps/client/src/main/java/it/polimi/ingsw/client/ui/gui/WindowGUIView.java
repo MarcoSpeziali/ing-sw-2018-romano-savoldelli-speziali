@@ -27,12 +27,6 @@ import java.io.IOException;
 
 public class WindowGUIView extends GUIView<IWindow> {
 
-    public boolean isChosen() {
-        return chosen;
-    }
-
-    private boolean chosen = false;
-
     public void setStatus(Constants.Status status) {
         this.Status = status;
     }
@@ -132,7 +126,8 @@ public class WindowGUIView extends GUIView<IWindow> {
                         try {
                             target.setCursor(Cursor.HAND);
                             Match.getMatchController().postChosenPosition(finalI * iWindow.getColumns() + finalJ);
-                            chosen = true; }
+                            Match.dialog.close();
+                        }
                             catch (IOException e) {
                             e.printStackTrace();
                             }
