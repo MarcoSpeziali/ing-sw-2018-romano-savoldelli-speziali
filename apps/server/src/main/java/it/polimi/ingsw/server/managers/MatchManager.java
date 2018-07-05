@@ -105,7 +105,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
                 .collect(Collectors.toList());
 
         // creates the scheduled executor service
-        this.matchExecutorService = Executors.newScheduledThreadPool(2);
+        this.matchExecutorService = Executors.newScheduledThreadPool(5);
         // creates the executor service
         this.roundsExecutorService = Executors.newSingleThreadExecutor();
         
