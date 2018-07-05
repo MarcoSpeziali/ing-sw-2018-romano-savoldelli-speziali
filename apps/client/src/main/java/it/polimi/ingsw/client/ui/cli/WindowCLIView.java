@@ -36,7 +36,7 @@ public class WindowCLIView extends CLIView<IWindow> {
     @Override
     public void render() {
 
-        char c = 'A';
+        int c = 0;
         System.out.println("Window name:\t" + this.model.getId());
         System.out.println("Difficulty:\t\t" + this.model.getDifficulty() + "\n");
 
@@ -50,7 +50,7 @@ public class WindowCLIView extends CLIView<IWindow> {
                     c++;
                 }
                 else if (i == -1) {
-                    System.out.print(" " + (j + 1) + " ");
+                    System.out.print(" " + (j) + " ");
                 }
                 else {
                     cellCLIViews[i][j].render();

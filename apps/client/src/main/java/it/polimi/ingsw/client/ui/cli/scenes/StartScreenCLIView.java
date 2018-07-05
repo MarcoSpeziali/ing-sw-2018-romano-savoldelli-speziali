@@ -3,7 +3,7 @@ package it.polimi.ingsw.client.ui.cli.scenes;
 
 import java.util.Scanner;
 
-public class StartScreenGUIView {
+public class StartScreenCLIView {
 
     private static Scanner reader = new Scanner(System.in);
 

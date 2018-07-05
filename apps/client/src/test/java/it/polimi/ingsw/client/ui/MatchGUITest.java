@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.ui;
 
 import it.polimi.ingsw.client.Constants;
 import it.polimi.ingsw.client.SagradaGUI;
+import it.polimi.ingsw.client.ui.cli.scenes.MatchCLIView;
 import it.polimi.ingsw.client.ui.gui.scenes.MatchGUIView;
 import it.polimi.ingsw.controllers.MatchController;
 import it.polimi.ingsw.controllers.NotEnoughTokensException;
@@ -69,8 +70,8 @@ public class MatchGUITest extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root, 1280, 720);
         MatchGUIView matchGUIView = loader.getController();
-
-        matchGUIView.setModel(new MatchController() {
+        MatchCLIView matchCLIView = new MatchCLIView();
+        MatchController matchController = new MatchController() {
     
             private static final long serialVersionUID = 5104576545583400399L;
 
@@ -743,8 +744,12 @@ public class MatchGUITest extends Application {
                 return results;
             }
 
-        });
-       // primaryStage.setFullScreen(true);
+        };
+
+        matchGUIView.setModel(matchController);
+        matchCLIView.setModel(matchController);
+        matchCLIView.init();
+        primaryStage.setFullScreen(true);
         SagradaGUI.primaryStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -98,7 +98,7 @@ public class MatchGUIView extends GUIView<MatchController> {
         chooseWindow();
         loadElementsFuture();
 
-        helper = new MatchGUIViewToolCardHelper(this.model, outerPane);
+        helper = new MatchGUIViewToolCardHelper(this.model);
 
         endTurnButton.setText(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
         endTurnButton.setOnMouseClicked(event -> {
@@ -279,7 +279,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                     String currentPlayerName = this.currentPlayer.getPlayer().getUsername();
 
                     for (IResult result : results) {
-                        Label label = new Label(this.currentPlayer.getPlayer().getUsername() + " " + result.getPoints());
+                        Label label = new Label(result.getPlayer().getUsername() + " " + result.getPoints());
                         label.setStyle("-fx-alignment: CENTER; " +
                                 "-fx-font-size: 14+" +
                                 (result.getPlayer().getUsername().equals(currentPlayerName) ?

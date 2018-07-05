@@ -41,9 +41,9 @@ public class MatchGUIViewToolCardHelper {
     private ExecutorService toolCardExecutorService = Executors.newFixedThreadPool(4);
     private boolean closed = true;
 
-    public MatchGUIViewToolCardHelper(MatchController matchController, StackPane outerPane) {
+    public MatchGUIViewToolCardHelper(MatchController matchController) {
         this.model = matchController;
-        this.outerPane = outerPane;
+        this.outerPane = Match.getOuterPane();
     }
 
     public void init() {
