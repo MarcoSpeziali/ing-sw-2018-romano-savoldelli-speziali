@@ -333,11 +333,11 @@ public class MatchGUIView extends GUIView<MatchController> {
     }
 
     private void loadOpponentsWindows(ILivePlayer[] players) throws IOException {
-        for (int i = 0; i < players.length; i++) {
-            ILivePlayer player = players[i];
+        if (opponentsWindowsGUIViews == null) {
+            opponentsWindowsGUIViews = new WindowGUIView[players.length];
 
-            if (opponentsWindowsGUIViews == null) {
-                opponentsWindowsGUIViews = new WindowGUIView[players.length];
+            for (int i = 0; i < players.length; i++) {
+                ILivePlayer player = players[i];
 
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
@@ -357,6 +357,11 @@ public class MatchGUIView extends GUIView<MatchController> {
                 hBoxWindows.setAlignment(Pos.TOP_CENTER);
                 HBox.setMargin(vBox, new Insets(10, 0, 0, 0));
             }
+        }
+
+
+        for (int i = 0; i < players.length; i++) {
+            ILivePlayer player = players[i];
 
             opponentsWindowsGUIViews[i].setModel(player.getWindow());
         }

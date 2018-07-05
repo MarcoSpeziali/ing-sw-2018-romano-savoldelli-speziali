@@ -119,6 +119,8 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         this.matchPlayers = new ArrayList<>(this.lobbyPlayers.size());
 
         matchManagerMap.putIfAbsent(this.databaseMatch.getId(), this);
+
+        EventDispatcher.register(this);
     }
     
     // ------ LIFE CYCLE ------
@@ -517,6 +519,22 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         );
 
         this.matchCommunicationsManager.sendResults(partialResults);
+
+        closeMatch();
+    }
+
+    private void closeMatch() {
+        try {
+            this.roundManager.close();
+            DatabaseMatch.endMatch(this.databaseMatch.getId());
+        }
+        catch (SQLException e) {
+            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
+            throw new RuntimeException(e);
+        }
+        finally {
+            this.matchExecutorService.shutdownNow();
+        }
     }
 
     // ------ PLAYER EVENTS ------
@@ -531,6 +549,10 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
             this.matchPlayers.remove(player);
 
             this.onModelsUpdated();
+
+            if (this.matchPlayers.size() == 1) {
+                calculateAndSendResults();
+            }
         }
         catch (SQLException | IOException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);

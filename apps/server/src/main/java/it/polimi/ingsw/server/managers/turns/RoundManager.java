@@ -102,6 +102,10 @@ public class RoundManager implements PlayerEventsListener, AutoCloseable {
         // if the connected player was in this match then it is removed from the turn list
         if (this.originalPlayers.contains(player)) {
             this.playerTurnList.removePlayer(player);
+
+            if (current().getPlayer().equals(player)) {
+                current().end();
+            }
         }
     }
     

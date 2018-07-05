@@ -21,6 +21,8 @@ public class Resources {
          * mode". So, since the target directory for the "test mode" is "test-classes", in "test mode" the resource is retrieved
          * using classLoader.getResource("folder/../resource.xyz").
          */
+
+        // return classLoader.getResource(relativePath);
         
         try {
             // splits the relative path by '/'
