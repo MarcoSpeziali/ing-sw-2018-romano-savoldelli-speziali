@@ -151,32 +151,44 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
     
     @SuppressWarnings("squid:S1450")
     private void addPlayerCommons(DatabasePlayer databasePlayer) throws SQLException {
-        DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
-        this.matchPlayers.add(databasePlayer);
-    
-        DatabasePlayer[] players = this.databaseMatch.getDatabasePlayers();
 
-        // if the number of players in the match is equal to the number of players in the lobby
-        // then the connection timer is stopped and the windows can be sent
-        if (players.length == this.lobbyPlayers.size()) {
-            this.connectionTimerScheduledFuture.cancel(true);
-            
-            try {
-                // the pre-processing is done by connectionTask, so it can be run
-                // manually instead of waiting for the timer to expire
-                connectionTask.run();
+        try {
+            if (DatabaseMatch.hasPlayerLeft(this.databaseMatch.getId(), databasePlayer.getId())) {
+                DatabaseMatch.reAddPlayer(this.databaseMatch.getId(), databasePlayer.getId());
+
+                this.matchPlayers.add(databasePlayer);
+                this.matchObjectsManager.setPlayersLeft(new HashSet<>(this.databaseMatch.getLeftPlayers()));
+
+                this.onModelsUpdated();
             }
-            catch (Exception e) {
-                ServerLogger.getLogger().log(Level.SEVERE, "Error occurred in the connection task:", e);
-                throw new RuntimeException(e);
+            else {
+                DatabaseMatch.insertPlayer(this.databaseMatch.getId(), databasePlayer.getId());
+
+                this.matchPlayers.add(databasePlayer);
+
+                DatabasePlayer[] players = this.databaseMatch.getDatabasePlayers();
+
+                // if the number of players in the match is equal to the number of players in the lobby
+                // then the connection timer is stopped and the windows can be sent
+                if (players.length == this.lobbyPlayers.size()) {
+                    this.connectionTimerScheduledFuture.cancel(true);
+
+                    // the pre-processing is done by connectionTask, so it can be run
+                    // manually instead of waiting for the timer to expire
+                    connectionTask.run();
+                }
+
+                EventDispatcher.dispatch(
+                        EventType.MATCH_EVENTS,
+                        MatchEventListeners.class,
+                        matchEventListeners -> matchEventListeners.onPlayerMigrated(this.databaseMatch, databasePlayer)
+                );
             }
         }
-
-        EventDispatcher.dispatch(
-                EventType.MATCH_EVENTS,
-                MatchEventListeners.class,
-                matchEventListeners -> matchEventListeners.onPlayerMigrated(this.databaseMatch, databasePlayer)
-        );
+        catch (Exception e) {
+            ServerLogger.getLogger().log(Level.SEVERE, "Error occurred in the connection task:", e);
+            throw new RuntimeException(e);
+        }
     }
     
     // ------ NETWORK COMMUNICATION ------
@@ -527,6 +539,13 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         try {
             this.roundManager.close();
             DatabaseMatch.endMatch(this.databaseMatch.getId());
+            this.matchCommunicationsManager.forEachSocket((databasePlayer, authenticatedClientHandler) -> {
+                try {
+                    authenticatedClientHandler.close();
+                }
+                catch (IOException ignoredAsItShouldRaise) {
+                }
+            });
         }
         catch (SQLException e) {
             ServerLogger.getLogger().log(Level.SEVERE, "Error occurred while querying the database:", e);
@@ -534,6 +553,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         }
         finally {
             this.matchExecutorService.shutdownNow();
+            this.roundsExecutorService.shutdownNow();
         }
     }
 
@@ -663,7 +683,6 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         Integer tokensAfterEffect = tokens - controller.getToolCard().getEffect().getCost();
         byte previousPhase = this.roundManager.current().getPhase();
 
-
         UserInteractionAndCallbacksManager manager = new UserInteractionAndCallbacksManager(
                 databasePlayer,
                 this.matchObjectsManager,
@@ -674,7 +693,7 @@ public class MatchManager implements PlayerEventsListener, MatchCommunicationsLi
         controller.setActionGroupCallbacks(manager);
 
         try {
-            this.roundManager.current().appendPhase(Turn.TOOL_CARD_USED);
+            this.roundManager.current().appendTemporaryPhase(Turn.TOOL_CARD_USED);
 
             controller.requestUsage(
                     databasePlayer, tokens

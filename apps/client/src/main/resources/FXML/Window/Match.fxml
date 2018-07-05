@@ -17,6 +17,16 @@
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
+               <children>
+                  <JFXButton onMouseClicked="#onCloseClicked" prefHeight="47.0" prefWidth="32.0" text="×" textFill="#ff1515">
+                     <font>
+                        <Font name="System Bold" size="44.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
             </HBox>
          </top>
          <left>
@@ -32,10 +42,10 @@
                      <BorderPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" />
                      </BorderPane.margin>
-                     <!--<children>
+                     <children>
                         <VBox fx:id="turnBox">
                            <children>
-                              <Label id="seconds" fx:id="secondsLabel" alignment="CENTER" prefHeight="109.0" prefWidth="182.0" text="00" textFill="#e54a3c">
+                              <Label id="seconds" fx:id="timerLabel" alignment="CENTER" prefHeight="109.0" prefWidth="182.0" text="00" textFill="#e54a3c">
                                  <font>
                                     <Font size="75.0" />
                                  </font>
@@ -45,8 +55,11 @@
                               </Label>
                               <JFXButton fx:id="endTurnButton" onAction="#onEndTurnClicked" prefHeight="37.0" prefWidth="182.0" text="Button" />
                            </children>
+                           <HBox.margin>
+                              <Insets bottom="300.0" />
+                           </HBox.margin>
                         </VBox>
-                     </children>-->
+                     </children>
                   </HBox>
                </bottom>
             </BorderPane>

@@ -280,5 +280,10 @@ public class PlayerTurnList {
         public void setShouldSkip(boolean shouldSkip) {
             this.shouldSkip = shouldSkip;
         }
+
+        @Override
+        public String toString() {
+            return String.format("p: %s; t: %d", player, turn);
+        }
     }
 }

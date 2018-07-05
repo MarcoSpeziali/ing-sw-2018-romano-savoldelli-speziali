@@ -13,6 +13,7 @@ import it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -22,10 +23,10 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -36,10 +37,7 @@ import static com.jfoenix.controls.JFXDialog.DialogTransition.CENTER;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.unsafe;
 import static it.polimi.ingsw.utils.streams.FunctionalExceptionWrapper.wrap;
 
-//import static it.polimi.ingsw.client.ui.gui.WindowGUIView.Status;
-
-
-public class MatchGUIView extends GUIView<MatchController> {
+public class MatchGUIView extends GUIView<MatchController> implements Initializable {
 
     @FXML
     public JFXButton endTurnButton;
@@ -87,9 +85,9 @@ public class MatchGUIView extends GUIView<MatchController> {
 
     public List<Node> toolCardNodes = new LinkedList<>();
     @FXML
-    private Label timerLabel = new Label("00");
+    public Label timerLabel = new Label("00");
 
-    public Label[] playerLabel;
+    private Label[] playerLabel;
 
 
     @Override
@@ -99,19 +97,15 @@ public class MatchGUIView extends GUIView<MatchController> {
         loadElementsFuture();
 
         helper = new MatchGUIViewToolCardHelper(this.model);
-
-        endTurnButton.setText(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
-        endTurnButton.setOnMouseClicked(event -> {
-            try {
-                onEndTurnClicked();
-            }
-            catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
         
         setUpWaitForTurnToBegin();
         setUpWaitForMatchToEnd();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        endTurnButton.setText(Constants.Strings.toLocalized(Constants.Strings.MATCH_GUI_END_TURN));
+        turnBox.setVisible(false);
     }
 
     private final Object updateSyncObject = new Object();
@@ -126,8 +120,6 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loadPublicObjectiveCards(iMatch.getPublicObjectiveCards());
                 loadOpponentsWindows(iMatch.getPlayers());
                 loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
-
-
 
                 this.currentPlayer = iMatch.getCurrentPlayer();
 
@@ -248,6 +240,8 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             turnBox.setVisible(false);
 
+            this.timer.cancel();
+
             Match.performedAction = 0;
 
             this.timer.cancel();
@@ -291,6 +285,12 @@ public class MatchGUIView extends GUIView<MatchController> {
                         resultsGUIView.winningMessage.setDisable(false);
                     }
 
+                    try {
+                        this.model.close();
+                    }
+                    catch (Exception ignoredAsItShouldRaise) {
+                    }
+
                     SagradaGUI.showStage(root, 910, 720);
                 }));
             }
@@ -328,7 +328,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             bottomBar.getChildren().add(roundTrackNode);
             BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
-            //HBox.setMargin(roundTrackNode, new Insets(0, 0, 300, 0));
+            HBox.setMargin(roundTrackNode, new Insets(0, 0, 300, 0));
         }
 
         roundTrackGUIView.setModel(iRoundTrack);
@@ -346,6 +346,7 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
                 Node node = loader.load();
                 VBox vBox = new VBox();
+                playerLabel[i] = new Label();
                 playerLabel[i].setAlignment(Pos.CENTER);
                 playerLabel[i].setStyle("-fx-font-size: 12; -fx-font-weight: bold");
                 vBox.getChildren().addAll(node, playerLabel[i]);

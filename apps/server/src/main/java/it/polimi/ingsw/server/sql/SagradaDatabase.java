@@ -34,13 +34,17 @@ public class SagradaDatabase implements AutoCloseable {
     }
 
     public <T> T executeQuery(String query, ResultSetMappingFunction<T> mapper) throws SQLException {
+        return executeQuery(query, mapper, null);
+    }
+
+    public <T> T executeQuery(String query, ResultSetMappingFunction<T> mapper, T defaultValue) throws SQLException {
         try (Statement statement = this.connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(query)) {
                 if (mapper != null && resultSet.next()) {
                     return mapper.map(resultSet);
                 }
 
-                return null;
+                return defaultValue;
             }
         }
     }

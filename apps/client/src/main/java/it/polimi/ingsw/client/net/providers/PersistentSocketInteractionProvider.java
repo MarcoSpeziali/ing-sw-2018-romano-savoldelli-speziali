@@ -252,31 +252,32 @@ public class PersistentSocketInteractionProvider extends PersistentNetworkIntera
     private final Object dataSyncObject = new Object();
 
     private void handleData(String jsonData, Consumer<Response<? extends JSONSerializable>> responseHandler) {
-        //executorService.submit(() -> {
-            synchronized (dataSyncObject) {
+        synchronized (dataSyncObject) {
+            if (jsonData == null) {
+                return;
+            }
 
-                JSONObject jsonObject = new JSONObject(jsonData);
+            JSONObject jsonObject = new JSONObject(jsonData);
 
-                if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
-                    @SuppressWarnings("unchecked") Response<? extends JSONSerializable> response = JSONSerializable.deserialize(Response.class, jsonData);
+            if (jsonObject.has(ResponseFields.RESPONSE.toString())) {
+                @SuppressWarnings("unchecked") Response<? extends JSONSerializable> response = JSONSerializable.deserialize(Response.class, jsonData);
 
-                    ClientLogger.getLogger().log(Level.FINER, "Data is response: {0}", response);
+                ClientLogger.getLogger().log(Level.FINER, "Data is response: {0}", response);
 
-                    this.handleResponse(response);
-                }
-                else if (jsonObject.has(RequestFields.REQUEST.toString())) {
-                    @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = JSONSerializable.deserialize(Request.class, jsonData);
+                this.handleResponse(response);
+            }
+            else if (jsonObject.has(RequestFields.REQUEST.toString())) {
+                @SuppressWarnings("unchecked") Request<? extends JSONSerializable> request = JSONSerializable.deserialize(Request.class, jsonData);
 
-                    ClientLogger.getLogger().log(Level.FINER, "Data is request: {0}", request);
+                ClientLogger.getLogger().log(Level.FINER, "Data is request: {0}", request);
 
-                    Response<? extends JSONSerializable> response = handleRequest(request);
+                Response<? extends JSONSerializable> response = handleRequest(request);
 
-                    if (response != null) {
-                        responseHandler.accept(response);
-                    }
+                if (response != null) {
+                    responseHandler.accept(response);
                 }
             }
-        //});
+        }
     }
 
     private <T extends JSONSerializable> void handleResponse(Response<T> response) {

@@ -158,15 +158,26 @@ public class DatabaseMatch {
         }
     }
     
-    public static boolean hasPlayer(int matchId, int playerId) throws SQLException {
+    public static boolean hasPlayerLeft(int matchId, int playerId) throws SQLException {
         String query = String.format(
-                "SELECT EXISTS(SELECT 1 FROM match_player WHERE match = %d AND player = %d)",
+                "SELECT EXISTS(SELECT 1 FROM match_player WHERE match = %d AND player = %d AND leaving_time IS NOT NULL)",
                 matchId,
                 playerId
         );
     
         try (SagradaDatabase database = new SagradaDatabase()) {
-            return database.executeQuery(query, Objects::nonNull);
+            return database.executeQuery(query, resultSet -> resultSet.getBoolean(1));
+        }
+    }
+
+    public static DatabaseMatch getMatchForPlayerLeft(DatabasePlayer databasePlayer) throws SQLException {
+        String query = String.format(
+                "SELECT m.* FROM match m JOIN match_player mp ON mp.match = m.id AND mp.player = %d WHERE mp.leaving_time IS NOT NULL AND m.ending_time IS NULL",
+                databasePlayer.getId()
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            return database.executeQuery(query, DatabaseMatch::new);
         }
     }
 
@@ -212,6 +223,18 @@ public class DatabaseMatch {
     public static void removePlayer(int matchId, int playerId) throws SQLException {
         String query = String.format(
                 "UPDATE match_player SET leaving_time = current_timestamp WHERE match = '%d' AND player = '%d'",
+                matchId,
+                playerId
+        );
+
+        try (SagradaDatabase database = new SagradaDatabase()) {
+            database.executeVoidQuery(query);
+        }
+    }
+
+    public static void reAddPlayer(int matchId, int playerId) throws SQLException {
+        String query = String.format(
+                "UPDATE match_player SET leaving_time = NULL WHERE match = '%d' AND player = '%d'",
                 matchId,
                 playerId
         );

@@ -65,6 +65,8 @@ public class MatchGUITest extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        SagradaGUI.primaryStage = primaryStage;
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Constants.Resources.MATCH_FXML.getURL());
         Parent root = loader.load();
@@ -444,7 +446,7 @@ public class MatchGUITest extends Application {
                 }
 
                 @Override
-                public Player getCurrentPlayer() {
+                public ILivePlayer getCurrentPlayer() {
                     return null;
                 }
             };
