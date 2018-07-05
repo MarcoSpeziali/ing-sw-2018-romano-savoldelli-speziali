@@ -109,6 +109,7 @@ public class WindowGUIView extends GUIView<IWindow> {
                             button.setOnMousePressed(event1 -> dialog.close());
                             dialog.show();
                         }
+                        else Match.performedAction |= 0b01;
 
                         target.setCursor(Cursor.CROSSHAIR);
                         event.setDropCompleted(true);

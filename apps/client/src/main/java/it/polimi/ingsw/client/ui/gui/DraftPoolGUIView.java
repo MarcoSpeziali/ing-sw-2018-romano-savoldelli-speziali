@@ -69,7 +69,7 @@ public class DraftPoolGUIView extends GUIView<IDraftPool> {
 
                 Node finalSource = source;
                 source.setOnDragDetected(event -> {
-                    if (status == Constants.Status.OWNER_UNLOCKED && (Match.performedAction & 1) != 1) {
+                    if (status == Constants.Status.OWNER_UNLOCKED && (Match.performedAction & 0b01) != 0b01) {
                         Move.build().begin(location);
 
                         Dragboard db = finalSource.startDragAndDrop(TransferMode.ANY);

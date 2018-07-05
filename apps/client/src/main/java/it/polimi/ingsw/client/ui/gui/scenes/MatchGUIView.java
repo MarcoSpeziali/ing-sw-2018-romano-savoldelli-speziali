@@ -89,6 +89,8 @@ public class MatchGUIView extends GUIView<MatchController> {
     @FXML
     private Label timerLabel = new Label("00");
 
+    public Label[] playerLabel;
+
 
     @Override
     public void init() {
@@ -124,6 +126,8 @@ public class MatchGUIView extends GUIView<MatchController> {
                 loadPublicObjectiveCards(iMatch.getPublicObjectiveCards());
                 loadOpponentsWindows(iMatch.getPlayers());
                 loadOwnedWindow(iMatch.getCurrentPlayer().getWindow());
+
+
 
                 this.currentPlayer = iMatch.getCurrentPlayer();
 
@@ -323,7 +327,7 @@ public class MatchGUIView extends GUIView<MatchController> {
 
             bottomBar.getChildren().add(roundTrackNode);
             BorderPane.setAlignment(bottomBar, Pos.TOP_CENTER);
-            HBox.setMargin(roundTrackNode, new Insets(0, 0, 300, 0));
+            //HBox.setMargin(roundTrackNode, new Insets(0, 0, 300, 0));
         }
 
         roundTrackGUIView.setModel(iRoundTrack);
@@ -333,18 +337,17 @@ public class MatchGUIView extends GUIView<MatchController> {
         if (opponentsWindowsGUIViews == null) {
             opponentsWindowsGUIViews = new WindowGUIView[players.length];
 
+            this.playerLabel = new Label[players.length];
+
             for (int i = 0; i < players.length; i++) {
-                ILivePlayer player = players[i];
 
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Constants.Resources.WINDOW_VIEW_FXML.getURL());
                 Node node = loader.load();
                 VBox vBox = new VBox();
-                Label label = new Label(player.hasLeft() ? player.getPlayer().getUsername() + " (Offline)" :
-                        player.getPlayer().getUsername());
-                label.setAlignment(Pos.CENTER);
-                label.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
-                vBox.getChildren().addAll(node, label);
+                playerLabel[i].setAlignment(Pos.CENTER);
+                playerLabel[i].setStyle("-fx-font-size: 12; -fx-font-weight: bold");
+                vBox.getChildren().addAll(node, playerLabel[i]);
                 opponentsWindowsGUIViews[i] = loader.getController();
                 opponentsWindowsGUIViews[i].setStatus(Constants.Status.OPPONENT_LOCKED);
                 hBoxWindows.setAlignment(Pos.TOP_CENTER);
@@ -361,6 +364,8 @@ public class MatchGUIView extends GUIView<MatchController> {
             ILivePlayer player = players[i];
 
             opponentsWindowsGUIViews[i].setModel(player.getWindow());
+            playerLabel[i].setText(player.hasLeft() ? player.getPlayer().getUsername() + " (Offline)" :
+                    player.getPlayer().getUsername());
         }
     }
 
