@@ -33,8 +33,8 @@ Modulo | Coverage (classi) | Coverage (metodi) | Coverage (istruzioni)
 ## 4. UML finale
 
 - [lib](https://github.com/MarcoSpeziali/ing-sw-2018-romano-savoldelli-speziali/tree/master/lib/docs/final-lib-uml.pdf)
-- [client](https://github.com/MarcoSpeziali/ing-sw-2018-romano-savoldelli-speziali/tree/master/apps/client/docs/final-client-uml.pdf)
-- [server](https://github.com/MarcoSpeziali/ing-sw-2018-romano-savoldelli-speziali/tree/master/apps/server/docs/final-server-uml.pdf)
+- [client](https://github.com/MarcoSpeziali/ing-sw-2018-romano-savoldelli-speziali/tree/master/apps/client/docs/final-client-UML.pdf)
+- [server](https://github.com/MarcoSpeziali/ing-sw-2018-romano-savoldelli-speziali/tree/master/apps/server/docs/final-server-UML.pdf)
 
 ## 5. Funzionalità implementate
 
